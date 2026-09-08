@@ -102,6 +102,39 @@ def standings_rows(teams):
     return rows
 
 
+def merge_standings_blocks(payload):
+    """A flight's standings as one list of teams.
+
+    TGS occasionally publishes a conference flight as two blocks: an unnamed
+    group (flightGroupID 0) holding one or two teams beside "Group A" with the
+    rest — seven 2021-22 U13 flights and three in 2022-23. The largest block
+    keeps its published order; every other block's teams are slotted in by
+    points per game (then goal difference, goals for), after any published team
+    with the same key. PPG never increases down a published table, so the
+    insertion is faithful; a full re-sort would not be, because TGS's own
+    tie-breaks aren't reproducible from the stats it publishes.
+    Mirrors mergeStandingsBlocks() in public/index.html.
+    """
+    blocks = payload if isinstance(payload, list) else ([payload] if payload else [])
+    live = [b for b in blocks if isinstance(b, dict) and b.get("teamStandings")]
+    if not live:
+        return []
+    main = max(live, key=lambda b: len(b["teamStandings"]))
+    merged = list(main["teamStandings"])
+
+    def key(t):
+        return (-(t.get("ppg") or 0), -(t.get("goaldifferential") or 0), -(t.get("goalsfor") or 0))
+
+    for b in live:
+        if b is main:
+            continue
+        for t in b["teamStandings"]:
+            k = key(t)
+            i = next((j for j, m in enumerate(merged) if k < key(m)), len(merged))
+            merged.insert(i, t)
+    return merged
+
+
 def schedule_rows(games):
     rows = []
     for g in sorted(games, key=lambda x: (x.get("gameDate") or "", x.get("gameTime") or "")):
@@ -221,8 +254,7 @@ def archive_event(sources, season_key, kind, name, event, stats, force, dry_run)
             # Standings
             try:
                 payload = api.unwrap(get_json(api.p_standings(div_id, flight_id, eid), stats, force))
-                block = payload[0] if isinstance(payload, list) and payload else (payload or {})
-                teams = block.get("teamStandings") or []
+                teams = merge_standings_blocks(payload)
                 record["teams"] = len(teams)
                 div_team_names.setdefault(div_name, []).extend(
                     t.get("name") or "" for t in teams)
@@ -480,24 +512,54 @@ def is_match_day(calendar, today, padding_days):
 
 
 def export_flight_csv(sources, season, fl):
-    """Regenerate one flight's standings/schedule CSVs from the archive."""
+    """Regenerate one flight's standings/schedule CSVs from the archive.
+
+    Returns the standings rows so callers can rebuild _all.standings.csv.
+    """
     base = os.path.join(api.EXPORT_DIR, api.slug(season), api.slug(fl["conference"]))
     stem = f"{api.slug(fl['divisionName'])}-{api.slug(fl['flightName'])}"
 
+    standings = []
     raw, _ = api.read_archive(api.p_standings(fl["divisionID"], fl["flightID"], fl["eventId"]))
     if raw:
         try:
             payload = json.loads(raw).get("data")
-            block = payload[0] if isinstance(payload, list) and payload else (payload or {})
-            rows = standings_rows(block.get("teamStandings") or [])
-            if rows:
-                write_csv(os.path.join(base, stem + ".standings.csv"), STANDINGS_COLUMNS, rows)
+            standings = standings_rows(merge_standings_blocks(payload))
+            if standings:
+                write_csv(os.path.join(base, stem + ".standings.csv"), STANDINGS_COLUMNS, standings)
         except (ValueError, AttributeError, TypeError):
             pass
 
     rows = schedule_rows(archived_games(fl["eventId"], fl["flightID"]))
     if rows:
         write_csv(os.path.join(base, stem + ".schedule.csv"), SCHEDULE_COLUMNS, rows)
+    return standings
+
+
+def cmd_export(sources, season):
+    """Rebuild every CSV under export/ from the archive, with no API calls.
+
+    Per-flight files come from export_flight_csv; each conference's
+    _all.standings.csv is rebuilt from those rows in the same order
+    archive_event writes it.
+    """
+    seasons = [season] if season else list(sources["seasons"].keys())
+    for s in seasons:
+        flights = season_flights(sources, s)
+        per_conf = {}
+        for fl in flights:
+            if fl["kind"] != "conference":
+                continue
+            rows = export_flight_csv(sources, s, fl)
+            per_conf.setdefault(fl["conference"], []).extend(
+                dict(r, division=fl["divisionName"], flight=fl["flightName"]) for r in rows)
+        for conf, rows in per_conf.items():
+            if rows:
+                write_csv(os.path.join(api.EXPORT_DIR, api.slug(s), api.slug(conf), "_all.standings.csv"),
+                          STANDINGS_COLUMNS + ["division", "flight"], rows)
+        print(f"{s}: exported {sum(1 for f in flights if f['kind'] == 'conference')} flights "
+              f"across {len(per_conf)} conferences")
+    return 0
 
 
 def refresh_policy(sources):
@@ -706,6 +768,8 @@ def main():
                     help="With --refresh: pretend today is this date (for testing).")
     ap.add_argument("--at-hour", type=int, metavar="H",
                     help="With --refresh: pretend the current UTC hour is H (for testing).")
+    ap.add_argument("--export", action="store_true",
+                    help="Rebuild the CSVs under export/ from the archive (no API calls).")
     args = ap.parse_args()
 
     try:
@@ -731,6 +795,9 @@ def main():
 
     if args.verify:
         return verify(sources, season, args.conference)
+
+    if args.export:
+        return cmd_export(sources, season)
 
     stats = Stats()
     manifest = load_manifest()

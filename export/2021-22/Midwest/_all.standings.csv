@@ -1,6 +1,11 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd,division,flight
-1,Michigan Hawks ECNL GU13,Michigan Hawks,50646,19,15,3,1,46,2.42,44,9,35,GU13,East
-2,Michigan Hawks Magic ECNL GU13,Michigan Hawks,54823,19,2,14,3,9,0.47,18,54,-36,GU13,East
+1,Eclipse Select SC ECNL GU13,Eclipse Select Soccer Club,59906,19,16,1,2,50,2.63,52,12,40,GU13,East
+2,Michigan Hawks ECNL GU13,Michigan Hawks,50646,19,15,3,1,46,2.42,44,9,35,GU13,East
+3,Midwest United FC ECNL GU13,Midwest United FC,59338,19,8,9,2,26,1.37,34,28,6,GU13,East
+4,Eclipse Select SC North ECNL GU13,Eclipse Select Soccer Club,59824,19,7,8,4,25,1.32,18,18,0,GU13,East
+5,Liverpool FC IA Michigan ECNL GU13,Liverpool FC-IA Michigan,58647,19,5,13,1,16,0.84,21,47,-26,GU13,East
+6,FC Wisconsin ECNL GU13,FC Wisconsin Girls,53835,19,2,13,4,10,0.53,7,42,-35,GU13,East
+7,Michigan Hawks Magic ECNL GU13,Michigan Hawks,54823,19,2,14,3,9,0.47,18,54,-36,GU13,East
 1,SLSG Navy ECNL GU13,St. Louis Scott Gallagher,54343,18,15,1,2,47,2.61,52,7,45,GU13,West
 2,Kansas City Athletics ECNL GU13,KC Athletics,46766,19,11,3,5,38,2.0,32,17,15,GU13,West
 3,Minnesota Thunder ECNL GU13,Minnesota Thunder Academy,52518,19,10,3,6,36,1.89,37,7,30,GU13,West

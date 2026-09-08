@@ -1,7 +1,27 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd,division,flight
-1,Marin FC ECNL GU13,Marin FC,56277,18,5,10,3,18,1.0,24,34,-10,GU13,Bay Area
-1,Utah Avalanche ECNL GU13,Utah Avalanche,58149,16,8,4,4,28,1.75,33,14,19,GU13,Mountain
-1,Boise Thorns FC ECNL GU13,Boise Timbers | Thorns,59556,20,5,11,4,19,0.95,37,40,-3,GU13,Pacific
+1,San Juan SC ECNL GU13,San Juan Soccer Club,31488,18,15,2,1,46,2.56,57,13,44,GU13,Bay Area
+2, MVLA ECNL GU13,MVLA,33438,18,11,5,2,35,1.94,45,23,22,GU13,Bay Area
+3,Santa Rosa United ECNL GU13,Santa Rosa United Soccer,49621,18,11,5,2,35,1.94,38,25,13,GU13,Bay Area
+4,Davis Legacy ECNL GU13,Davis Legacy Soccer Club,60301,18,9,7,2,29,1.61,41,28,13,GU13,Bay Area
+5,Mustang SC ECNL GU13,Mustang Soccer,31328,18,6,10,2,20,1.11,29,39,-10,GU13,Bay Area
+6,Marin FC ECNL GU13,Marin FC,56277,18,5,10,3,18,1.0,24,34,-10,GU13,Bay Area
+7,Pleasanton RAGE ECNL GU13,Pleasanton Rage,39256,18,4,11,3,15,0.83,18,39,-21,GU13,Bay Area
+8,DeAnza Force ECNL GU13,Force,60044,18,1,12,5,8,0.44,15,56,-41,GU13,Bay Area
+1,Real Colorado National ECNL GU13,Real Colorado,58631,16,12,2,2,38,2.38,41,6,35,GU13,Mountain
+2,Utah Avalanche ECNL GU13,Utah Avalanche,58149,16,8,4,4,28,1.75,33,14,19,GU13,Mountain
+3,Colorado Rapids ECNL GU13,Colorado Storm,59850,16,7,8,1,22,1.38,25,27,-2,GU13,Mountain
+4,Pride SC ECNL GU13,Pride SC,59883,16,6,7,3,21,1.31,13,23,-10,GU13,Mountain
+5,Real Colorado Athletico ECNL GU13,Real Colorado,58634,16,3,8,5,14,0.88,19,23,-4,GU13,Mountain
+6,La Roca FC ECNL GU13,La Roca FC,45847,16,3,12,1,10,0.63,7,34,-27,GU13,Mountain
+1,Crossfire Premier ECNL GU13,Crossfire Premier,60436,20,18,1,1,55,2.75,54,4,50,GU13,Pacific
+2,Seattle United ECNL GU13,Seattle United,56728,20,14,4,2,44,2.2,54,15,39,GU13,Pacific
+3,Portland Thorns ECNL GU13,Portland Thorns FC,59582,20,14,6,0,42,2.1,42,18,24,GU13,Pacific
+4,Washington Premier ECNL GU13,Washington Premier FC,54576,20,11,5,4,37,1.85,48,24,24,GU13,Pacific
+5,Eastside FC ECNL GU13,Eastside FC (WA),59855,20,7,7,6,27,1.35,24,29,-5,GU13,Pacific
+6,PacNW SC ECNL GU13,PacNW,46755,20,9,11,0,27,1.35,27,38,-11,GU13,Pacific
+7,Boise Thorns FC ECNL GU13,Boise Timbers | Thorns,59556,20,5,11,4,19,0.95,37,40,-3,GU13,Pacific
+8,Northwest Elite FC ECNL GU13,Oregon Surf SC,44063,20,4,15,1,13,0.65,19,44,-25,GU13,Pacific
+9,FC Portland ECNL GU13,FC Portland Academy,57358,20,0,20,0,0,0.0,3,117,-114,GU13,Pacific
 1,San Juan SC ECNL GU14,No Club Selection,39174,18,16,2,0,48,2.67,75,13,62,GU14,Bay Area
 2,DeAnza Force ECNL GU14,Force,45841,18,14,2,2,44,2.44,42,8,34,GU14,Bay Area
 3,Mustang SC ECNL GU14,Mustang Soccer,4653,18,11,2,5,38,2.11,42,11,31,GU14,Bay Area

@@ -255,3 +255,10 @@ season, and shows it on hover over an age-group tab. It refreshes on each
   believe the archive was just written and skip all work.
 - Some games are never scored upstream — 14 from 2025-26 are still blank — so the
   missing-results chase is capped by `refresh.pending.maxPendingAgeDays`.
+- TGS publishes a few conference flights as two standings blocks: an unnamed group
+  holding one or two teams beside "Group A" with the rest (seven 2021-22 U13 flights,
+  three in 2022-23). The page and the CSV export merge them into one table: the
+  larger block keeps its published order and the stray teams are slotted in by
+  points per game (`mergeStandingsBlocks` in the page, `merge_standings_blocks` in
+  `archive.py`). `python archive.py --export --season <key>` rebuilds the CSVs from
+  the archive without any API calls.

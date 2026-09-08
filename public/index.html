@@ -759,6 +759,7 @@
       flex-shrink: 0;
     }
     .observed { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+    .table-footnote-extra { display: block; margin-top: 2px; }
     .rank-help { margin-top: 4px; }
     .rank-help summary { cursor: pointer; font-weight: 600; color: var(--text-secondary); }
     .rank-help summary:hover { color: var(--text-primary); }
@@ -2214,9 +2215,36 @@
       return eventHierarchy[eventId];
     }
 
+    // A flight's standings as one table. TGS occasionally publishes a conference
+    // flight as two blocks — an unnamed group holding one or two teams beside
+    // "Group A" with the rest (seven 2021-22 U13 flights, three in 2022-23) —
+    // so the blocks are merged; see mergeStandingsBlocks.
     async function getStandings(divId, flightId, eventId, opts) {
       const data = await fetchJSON(`Event/get-standings-by-div-and-flight/${divId}/${flightId}/${eventId}`, opts);
-      return (data.data && data.data[0]) ? data.data[0] : data.data || data;
+      const blocks = Array.isArray(data.data) ? data.data : (data.data ? [data.data] : []);
+      return mergeStandingsBlocks(blocks) || data.data || data;
+    }
+
+    // Keeps the largest block's published order and slots every other block's
+    // teams in by points per game (then goal difference, goals for), after any
+    // published team with the same key. PPG never increases down a published
+    // table, so the insertion is faithful; a full re-sort would not be, since
+    // TGS's own tie-breaks aren't reproducible from the stats it publishes.
+    function mergeStandingsBlocks(blocks) {
+      const live = (blocks || []).filter(b => b && (b.teamStandings || []).length);
+      if (!live.length) return null;
+      if (live.length === 1) return live[0];
+      const main = live.reduce((a, b) => (b.teamStandings.length > a.teamStandings.length ? b : a));
+      const key = t => [-(t.ppg || 0), -(t.goaldifferential || 0), -(t.goalsfor || 0)];
+      const before = (a, b) => { for (let i = 0; i < a.length; i++) { if (a[i] !== b[i]) return a[i] < b[i]; } return false; };
+      const merged = [...main.teamStandings];
+      live.filter(b => b !== main).forEach(b => b.teamStandings.forEach(t => {
+        const k = key(t);
+        let i = merged.findIndex(m => before(k, key(m)));
+        if (i < 0) i = merged.length;
+        merged.splice(i, 0, t);
+      }));
+      return { ...main, teamStandings: merged, mergedBlocks: live.length, strayTeams: merged.length - main.teamStandings.length };
     }
 
     // Every standings block for a flight. Playoff flights with a group stage
@@ -3774,6 +3802,7 @@
     </table>
     ${footnote ? `<div class="table-footnote">
       <span>Order as published by TGS · PPG = points per game${selectable ? ' · Select a team for details' : ''}</span>
+      ${standings.strayTeams ? `<span class="table-footnote-extra">TGS lists ${standings.strayTeams} team${standings.strayTeams === 1 ? '' : 's'} outside the group; placed here by points per game.</span>` : ''}
       <details class="rank-help"><summary>How ranking works</summary>
         <p>Teams are listed in the order TGS publishes: by points per game, then goal difference. A team that has played fewer games can sit above one with more points.</p>
       </details>

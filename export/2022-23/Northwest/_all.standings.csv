@@ -27,7 +27,20 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd,division,flight
 12,Real Colorado Athletico ECNL G06,Real Colorado,46445,13,2,9,2,8,0.62,5,22,-17,G2006,ECNL
 13,Pride SC ECNL G06,No Club Selection,35222,13,0,12,1,1,0.08,8,40,-32,G2006,ECNL
 14,Boise Thorns FC ECNL G06,Boise Timbers | Thorns,20416,13,0,12,1,1,0.08,6,60,-54,G2006,ECNL
-1,Northwest Elite FC ECNL G07,Oregon Surf SC,66434,13,3,9,1,10,0.77,15,46,-31,G2007,ECNL
+1,Crossfire Premier ECNL G07,No Club Selection,26840,13,12,1,0,36,2.77,41,7,34,G2007,ECNL
+2,Utah Avalanche ECNL G07,Utah Avalanche,35178,13,10,1,2,32,2.46,30,7,23,G2007,ECNL
+3,Seattle United ECNL G07,Seattle United,35177,13,9,3,1,28,2.15,28,9,19,G2007,ECNL
+4,La Roca FC ECNL G07,La Roca FC,45849,13,8,3,2,26,2.0,25,14,11,G2007,ECNL
+5,Portland Thorns ECNL G07,Portland Thorns FC,45860,13,8,4,1,25,1.92,20,11,9,G2007,ECNL
+6,Real Colorado National ECNL G07,Real Colorado,45854,13,8,5,0,24,1.85,41,11,30,G2007,ECNL
+7,Eastside FC ECNL G07,Eastside FC (WA),35153,13,7,5,1,22,1.69,19,15,4,G2007,ECNL
+8,Colorado Rapids ECNL G07,Colorado Storm,35218,13,4,7,2,14,1.08,17,23,-6,G2007,ECNL
+9,Washington Premier ECNL G07,Washington Premier FC,35179,13,4,9,0,12,0.92,22,36,-14,G2007,ECNL
+10,Boise Thorns FC ECNL G07,Boise Timbers | Thorns,35152,13,3,8,2,11,0.85,13,22,-9,G2007,ECNL
+11,Pride SC ECNL G07,No Club Selection,35221,13,3,9,1,10,0.77,12,27,-15,G2007,ECNL
+12,Northwest Elite FC ECNL G07,Oregon Surf SC,66434,13,3,9,1,10,0.77,15,46,-31,G2007,ECNL
+13,PacNW SC ECNL G07,PacNW,19484,13,3,10,0,9,0.69,12,36,-24,G2007,ECNL
+14,Real Colorado Athletico ECNL G07,Real Colorado,46444,13,2,10,1,7,0.54,8,39,-31,G2007,ECNL
 1,Crossfire Premier ECNL G08,No Club Selection,21818,13,12,0,1,37,2.85,55,5,50,G2008,ECNL
 2,Real Colorado National ECNL G08,Real Colorado,45853,13,10,1,2,32,2.46,41,5,36,G2008,ECNL
 3,Colorado Rapids ECNL G08,Colorado Storm,46752,13,7,0,6,27,2.08,27,9,18,G2008,ECNL
@@ -56,4 +69,17 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd,division,flight
 12,Pride SC ECNL G09,Pride SC,48226,13,3,9,1,10,0.77,15,28,-13,G2009,ECNL
 13,Real Colorado Athletico ECNL G09,Real Colorado,58634,13,1,8,4,7,0.54,8,29,-21,G2009,ECNL
 14,La Roca FC ECNL G09,La Roca FC,45847,13,1,11,1,4,0.31,9,35,-26,G2009,ECNL
-1,Boise Thorns FC ECNL G10,Boise Timbers | Thorns,69320,13,7,4,2,23,1.77,23,20,3,G2010,ECNL
+1,Eastside FC ECNL G10,Eastside FC (WA),69451,13,10,0,3,33,2.54,35,2,33,G2010,ECNL
+2,Real Colorado Athletico ECNL G10,Real Colorado,69250,13,10,1,2,32,2.46,24,10,14,G2010,ECNL
+3,Real Colorado National ECNL G10,Real Colorado,69251,13,9,1,3,30,2.31,34,2,32,G2010,ECNL
+4,Seattle United ECNL G10,Seattle United,62229,13,7,3,3,24,1.85,26,7,19,G2010,ECNL
+5,Boise Thorns FC ECNL G10,Boise Timbers | Thorns,69320,13,7,4,2,23,1.77,23,20,3,G2010,ECNL
+6,Portland Thorns ECNL G10,Portland Thorns FC,69551,13,6,4,3,21,1.62,24,12,12,G2010,ECNL
+7,Pride SC ECNL G10,Pride SC,59883,13,5,4,4,19,1.46,17,17,0,G2010,ECNL
+8,Crossfire Premier ECNL G10,Crossfire Premier,62279,13,4,5,4,16,1.23,18,11,7,G2010,ECNL
+9,La Roca FC ECNL G10,La Roca FC,69014,13,4,6,3,15,1.15,14,22,-8,G2010,ECNL
+10,Utah Avalanche ECNL G10,Utah Avalanche,69486,13,3,7,3,12,0.92,11,19,-8,G2010,ECNL
+11,Washington Premier ECNL G10,Washington Premier FC,68860,13,2,5,6,12,0.92,12,21,-9,G2010,ECNL
+12,Northwest Elite FC ECNL G10,Oregon Surf SC,66440,13,1,8,4,7,0.54,11,28,-17,G2010,ECNL
+13,Colorado Rapids ECNL G10,Colorado Storm,69485,13,1,9,3,6,0.46,10,35,-25,G2010,ECNL
+14,PacNW SC ECNL G10,PacNW,68795,13,0,12,1,1,0.08,5,58,-53,G2010,ECNL

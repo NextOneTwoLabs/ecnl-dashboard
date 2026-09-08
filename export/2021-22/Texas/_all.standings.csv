@@ -1,5 +1,16 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd,division,flight
-1,Dallas Texans ECNL GU13,Dallas Texans,59998,22,9,9,4,31,1.41,36,36,0,GU13,Flight 1
+1,Solar SC ECNL GU13,Solar SC,59562,22,20,0,2,62,2.82,113,4,109,GU13,Flight 1
+2,DKSC ECNL GU13,DKSC,47082,22,18,2,2,56,2.55,74,11,63,GU13,Flight 1
+3,FC Dallas ECNL GU13,FC Dallas Youth,58541,22,17,2,3,54,2.45,57,19,38,GU13,Flight 1
+4,Challenge SC ECNL GU13,Challenge SC,55881,22,10,6,6,36,1.64,39,34,5,GU13,Flight 1
+5,Sting Dallas Royal ECNL GU13,Sting Soccer Club,59553,22,11,10,1,34,1.55,36,27,9,GU13,Flight 1
+6,OK Energy FC ECNL GU13,Oklahoma Energy FC,59502,22,9,9,4,31,1.41,43,37,6,GU13,Flight 1
+7,AHFC ECNL GU13,Albion Hurricanes FC,59340,22,9,9,4,31,1.41,35,29,6,GU13,Flight 1
+8,Dallas Texans ECNL GU13,Dallas Texans,59998,22,9,9,4,31,1.41,36,36,0,GU13,Flight 1
+9,Sting Dallas Black ECNL GU13,Sting Soccer Club,58426,22,4,15,3,15,0.68,24,65,-41,GU13,Flight 1
+10,Classics Elite ECNL GU13,Classics Elite Soccer Academy,40417,22,4,16,2,14,0.64,23,84,-61,GU13,Flight 1
+11,Tulsa SC ECNL GU13,No Club Selection,43250,22,3,14,5,14,0.64,16,36,-20,GU13,Flight 1
+12,Sting Austin ECNL GU13,Sting Austin,45246,22,0,22,0,0,0.0,6,120,-114,GU13,Flight 1
 1,Solar SC ECNL GU14,Solar SC,46791,22,22,0,0,66,3.0,100,7,93,GU14,Flight 1
 2,Sting Dallas Black ECNL GU14,Sting Soccer Club,11429,22,16,4,2,50,2.27,58,15,43,GU14,Flight 1
 3,Sting Austin ECNL GU14,Sting Austin,46779,22,11,6,5,38,1.73,48,27,21,GU14,Flight 1
