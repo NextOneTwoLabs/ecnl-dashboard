@@ -1097,6 +1097,94 @@
     .form-chip.l { background: #d9534f; }
 
     .summary-stack { display: flex; flex-direction: column; gap: 20px; width: 100%; min-width: 0; }
+
+    /* ===== CONFERENCE LAYOUT + TEAM AT A GLANCE ===== */
+    .conf-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 20px;
+      align-items: start;
+      width: 100%;
+    }
+    .conf-main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+    .conf-main .flight-panel { min-width: 0; flex: none; }
+    .glance-panel {
+      position: sticky;
+      top: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      min-width: 0;
+    }
+    .glance-head { padding: 16px 18px; background: var(--teal-surface); border-bottom: 1px solid var(--border); }
+    .glance-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--teal);
+    }
+    .glance-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      min-width: 0;
+    }
+    .glance-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .glance-name .team-logo { width: 32px; height: 32px; }
+    .glance-meta { margin-top: 2px; font-size: 12px; color: var(--text-secondary); }
+    .glance-follow { margin-top: 12px; }
+    .glance-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .glance-form { grid-column: span 2; }
+    .glance-next { padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
+    .glance-next-opp { margin-top: 4px; font-size: 16px; font-weight: 700; }
+    .glance-next-opp.muted { font-weight: 500; color: var(--text-secondary); }
+    .glance-next-when { margin-top: 4px; font-size: 13px; font-weight: 600; }
+    .glance-next-where, .glance-last { margin-top: 3px; font-size: 12px; color: var(--text-secondary); }
+    .glance-last { margin-top: 10px; display: flex; align-items: center; gap: 6px; }
+    .form-chip.inline { width: 18px; height: 18px; border-radius: 4px; font-size: 10px; }
+    .glance-more summary {
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .glance-more summary::-webkit-details-marker { display: none; }
+    .glance-more summary::before { content: '▸ '; color: var(--text-secondary); }
+    .glance-more[open] summary::before { content: '▾ '; }
+    .glance-dl {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px 12px;
+      margin: 0;
+      padding: 0 18px 14px;
+      font-size: 13px;
+    }
+    .glance-dl dt { color: var(--text-secondary); }
+    .glance-dl dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+    .glance-actions { padding: 12px 18px; border-top: 1px solid var(--border-light); }
+    .glance-link { font-size: 13px; font-weight: 600; color: var(--teal); text-decoration: none; }
+    .glance-link:hover { text-decoration: underline; }
+    .glance-empty { padding: 18px; font-size: 13px; color: var(--text-secondary); }
+    .glance-empty p { margin-top: 8px; line-height: 1.5; }
+
+    @media (max-width: 1024px) {
+      .conf-layout { grid-template-columns: 1fr; }
+      .glance-panel { order: -1; position: static; }
+    }
     .summary-stack .flight-panel { min-width: 0; flex: none; }
 
     .team-row-highlight td { background: var(--teal-glow) !important; }
@@ -2172,7 +2260,7 @@
       globalSearchDebounce = setTimeout(() => searchAllConferences(val.trim()), 300);
     }
 
-    function clearGlobalSearch() {
+    function clearGlobalSearch({ reload = true } = {}) {
       const inp = document.getElementById('globalTeamSearch');
       if (inp) inp.value = '';
       const clearBtn = document.getElementById('globalSearchClear');
@@ -2180,7 +2268,7 @@
       document.getElementById('globalSearchStatus').textContent = '';
       if (globalSearchActive) {
         globalSearchActive = false;
-        loadStandings();
+        if (reload) loadStandings();
       }
     }
 
@@ -2254,8 +2342,8 @@
               row.dataset.conf = confName;
               row.title = `Open ${displayName(team.name, team.clubName)} in ${confName}`;
               const open = () => {
-                clearGlobalSearch();
-                selectConference(confName);
+                clearGlobalSearch({ reload: false });
+                openTeamInContext({ season: currentSeason, ageGroup: currentAgeGroup, confName, teamID: team.teamID });
               };
               row.addEventListener('click', e => { if (!e.target.closest('.star-btn')) open(); });
               row.addEventListener('keydown', e => {
@@ -2307,7 +2395,7 @@
       }
     }
 
-    function switchTab(tab) {
+    function switchTab(tab, { silent = false } = {}) {
       currentTab = tab;
       const isConf = tab === 'conferences';
       const isFav  = tab === 'favorites';
@@ -2322,7 +2410,7 @@
       if (isPO)  loadPlayoffsPanel();
       // Returning to Conferences must repaint the main pane, which the
       // Playoffs panel writes into as well.
-      if (isConf && currentAgeGroup) loadCurrentView();
+      if (isConf && currentAgeGroup && !silent) loadCurrentView();
     }
 
     // ========== PLAYOFFS & FINALS ==========
@@ -2836,7 +2924,7 @@
         document.getElementById('contentSubtitle').textContent =
           [`${currentSeason} · National Event`, evt.location, formatDateRange(evt.startDate, evt.endDate)]
             .filter(Boolean).join(' · ') + freshnessText();
-        updateViewTabsUI(brackets ? 'Bracket' : 'Standings');
+        updateViewTabsUI(brackets ? 'Bracket' : 'Standings', 'Schedule');
 
         const notes = evt.tierNotes || {};
         const note = notes[flight.flightName] || notes[tierName];
@@ -3300,30 +3388,21 @@
           `<a class="open-external" href="${getSchedulesUrl(rec.eventID, rec.flightID)}" target="_blank">${EXTERNAL_ICON} Schedules</a>` +
           `<a class="open-external" href="${getStandingsUrl(rec.eventID, rec.flightID)}" target="_blank">${EXTERNAL_ICON} Standings</a>`;
 
-        // Stat strip
-        const gd = row ? (row.goaldifferential || 0) : 0;
-        const nextText = next
-          ? `${formatShortDate(next.gameDate)} · ${next.hometeamID === teamID ? 'vs' : 'at'} ${shortTeamName(next.hometeamID === teamID ? next.awayTeam : next.homeTeam)}`
-          : (mine.length ? 'Season complete' : 'No fixtures published');
-        const nextSub = next ? [next.gameTimeText, next.complex, next.venue].filter(Boolean).join(' · ') : '';
-        const formHtml = form.length
-          ? `<div class="form-chips">${form.map(r => `<span class="form-chip ${r.toLowerCase()}">${r}</span>`).join('')}</div>`
-          : `<div class="stat-sub">No games played yet</div>`;
-        const strip = `<div class="team-stats">` +
-          statCard('Rank', row ? `${idx + 1}<span class="stat-of"> of ${teams.length}</span>` : '—', row ? `${ctx.name} · ${ageLabel}` : 'Not in this table') +
-          statCard('Points', row ? (row.standingpoints || 0) : '—', row ? `${row.gp || 0} played · ${(row.ppg || 0).toFixed(2)} PPG` : '') +
-          statCard('Record', row ? `${row.wins || 0}-${row.draws || 0}-${row.losses || 0}` : '—', 'W-D-L') +
-          statCard('Goals', row ? `${row.goalsfor || 0}–${row.goalsagainst || 0}` : '—', row ? `${gd > 0 ? '+' : ''}${gd} goal difference` : '') +
-          `<div class="stat-card"><div class="stat-label">Form · last ${form.length || 5}</div>${formHtml}</div>` +
-          statCard('Next game', esc(nextText), nextSub, 'wide') +
-          `</div>`;
-
-        container.innerHTML = strip;
-        // Panels stack vertically here (the default container wraps them side by side,
-        // which squeezes the standings columns).
+        // Same layout as the conference view: tables on the left, the team's
+        // "at a glance" panel on the right.
+        const summary = computeTeamSummary(teamID, teams, games);
+        container.innerHTML = '';
+        const layout = document.createElement('div');
+        layout.className = 'conf-layout';
         const stack = document.createElement('div');
-        stack.className = 'summary-stack';
-        container.appendChild(stack);
+        stack.className = 'conf-main summary-stack';
+        const aside = document.createElement('aside');
+        aside.className = 'glance-panel';
+        aside.setAttribute('aria-label', 'Team at a glance');
+        aside.innerHTML = glancePanelHtml(row || { name: rec.name, teamID, clubName: rec.clubName, clublogo: rec.logo }, summary,
+          { confName: ctx.name, ageLabel, flightName: flightName && division && division.flightList && division.flightList.length > 1 ? flightName : '' });
+        layout.append(stack, aside);
+        container.appendChild(layout);
 
         // Standings with the team's row highlighted
         if (teams.length) {
@@ -3660,7 +3739,7 @@
 
     // ========== MAIN LOADER ==========
     // `firstLabel` renames the first tab: "Standings" for tables, "Bracket" for knockouts.
-    function updateViewTabsUI(firstLabel) {
+    function updateViewTabsUI(firstLabel, secondLabel) {
       const tabs = document.getElementById('viewTabs');
       if (tabs) tabs.style.display = '';
       const s = document.getElementById('viewTabStandings');
@@ -3669,7 +3748,10 @@
         s.classList.toggle('active', currentView === 'standings');
         s.textContent = firstLabel || 'Standings';
       }
-      if (c) c.classList.toggle('active', currentView === 'schedule');
+      if (c) {
+        c.classList.toggle('active', currentView === 'schedule');
+        if (secondLabel) c.textContent = secondLabel;
+      }
     }
 
     function selectView(view) {
@@ -3678,81 +3760,69 @@
       const s = document.getElementById('viewTabStandings');
       updateViewTabsUI(s ? s.textContent : undefined);
       if (currentTab === 'playoffs') loadPlayoffFlight();
+      else if (currentConfMeta && currentFlightData.length) { renderConferenceView(); saveState(); pushHash(); }
       else loadCurrentView();
     }
 
     // Backwards-compatible entry point used by the selectors and rebuildAll.
     function loadStandings() { return loadCurrentView(); }
 
+    // Conference view. The fetch half fills currentFlightData (standings AND
+    // schedule for every flight, so tab switches, the schedule filter and the
+    // glance panel are pure re-renders); renderConferenceView paints it.
+    let currentConfMeta = null;   // { conf, division, flights, ageLabel }
+    let loadToken = 0;            // drops responses from a navigation that was superseded
+
     async function loadCurrentView(opts = {}) {
       const conf = getSeasonData().conferences[currentConference];
       if (!conf) return;
 
       buildBreadcrumb();
-      updateViewTabsUI('Standings');
+      updateViewTabsUI('Standings', 'Matches');
       document.getElementById('formatNote').style.display = 'none';
       const ageLabel = AGE_LABELS[currentAgeGroup] || currentAgeGroup;
-      document.getElementById('contentTitle').textContent = `${currentConference} — ${ageLabel} (${currentAgeGroup})`;
-      document.getElementById('contentSubtitle').textContent = `${currentSeason} Season${freshnessText()}`;
+      document.getElementById('contentTitle').textContent = `${currentConference} · ${ageLabel}`;
+      document.getElementById('contentSubtitle').textContent = `Girls · ${seasonLabel(currentSeason)}${freshnessText()}`;
+      document.getElementById('extLinks').innerHTML = '';
 
       clearTeamFilter();
 
-      const isSchedule = currentView === 'schedule';
       const container = document.getElementById('standingsContainer');
-      container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading ${isSchedule ? 'schedule' : 'standings'}…</div></div>`;
+      container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading ${currentView === 'schedule' ? 'matches' : 'standings'}…</div></div>`;
+      const token = ++loadToken;
+      currentFlightData = [];
+      currentConfMeta = null;
 
       try {
-        // Fetch event hierarchy to find divisions + flights for this age group
         const hierarchy = await getEventHierarchy(conf.eventId, opts);
         const divList = hierarchy.girlsDivAndFlightList || [];
-
-        // Find matching division for current age group
         const division = divList.find(d => d.divisionName === currentAgeGroup);
+        if (token !== loadToken) return;
         if (!division) {
-          container.innerHTML = `<div class="error-message">No data found for ${ageLabel} in ${currentConference}</div>`;
+          container.innerHTML = `<div class="error-message">No data found for ${esc(ageLabel)} in ${esc(currentConference)}</div>`;
           return;
         }
 
         const flights = division.flightList || [];
-        document.getElementById('contentSubtitle').textContent =
-          `${currentSeason} Season` + (flights.length > 1 ? ` · ${flights.length} flights` : '')
-          + freshnessText();
+        const results = await Promise.all(flights.map(async f => {
+          const [standings, games] = await Promise.all([
+            getStandings(division.divisionID, f.flightID, conf.eventId, opts).catch(() => ({ teamStandings: [] })),
+            getSchedule(conf.eventId, f.flightID, opts).catch(() => []),
+          ]);
+          (standings.teamStandings || []).forEach((t, i) => { t._origRank = i + 1; });
+          return { flight: f, division, standings, games: games || [] };
+        }));
+        if (token !== loadToken) return;
 
-        // The original public website links, kept as the canonical upstream
-        // source for whatever is shown here.
-        const extLinks = document.getElementById('extLinks');
-        extLinks.innerHTML = flights.map(f => {
-          const schedUrl = getSchedulesUrl(conf.eventId, f.flightID);
-          const standUrl = getStandingsUrl(conf.eventId, f.flightID);
-          const prefix = flights.length > 1 ? f.flightName + ' ' : '';
-          return `<a class="open-external" href="${schedUrl}" target="_blank">${EXTERNAL_ICON} ${prefix}Schedules</a>` +
-                 `<a class="open-external" href="${standUrl}" target="_blank">${EXTERNAL_ICON} ${prefix}Standings</a>`;
-        }).join('');
-
-        // Fetch every flight in parallel, then render in the flight order the API gave us
-        const results = await Promise.all(flights.map(f =>
-          (isSchedule
-            ? getSchedule(conf.eventId, f.flightID, opts)
-            : getStandings(division.divisionID, f.flightID, conf.eventId, opts)
-          ).then(data => ({ flight: f, data }))
-        ));
-
-        container.innerHTML = '';
-        results.forEach(({ flight, data }) => {
-          let panel;
-          if (isSchedule) {
-            panel = renderScheduleTable(data || [], flight.flightName, flight.flightID, conf.eventId);
-          } else {
-            const teams = data.teamStandings || [];
-            teams.forEach((t, i) => { t._origRank = i + 1; });
-            panel = renderStandingsTable(data, flight.flightName, flight.flightID, conf.eventId, { selectable: true, highlightTeamID: selectedTeamID });
-          }
-          container.appendChild(panel);
-        });
-
+        currentFlightData = results;
+        currentConfMeta = { conf, division, flights, ageLabel };
+        selectedTeamID = defaultSelection();
+        renderConferenceView();
       } catch (err) {
+        console.error(err);
+        if (token !== loadToken) return;
         container.innerHTML = `<div class="error-message">
-      <strong>Couldn't load the ${isSchedule ? 'schedule' : 'standings'}.</strong><br>
+      <strong>Couldn't load ${currentConference}.</strong><br>
       <small>Please try again shortly.</small>
     </div>`;
       }
@@ -3761,9 +3831,178 @@
       pushHash();
     }
 
+    function seasonLabel(season) { return String(season || '').replace('-', '–'); }
+
+    function findTeamInFlights(teamID) {
+      for (const fd of currentFlightData) {
+        const team = (fd.standings.teamStandings || []).find(x => x.teamID === teamID);
+        if (team) return { team, fd };
+      }
+      return null;
+    }
+
+    // Selection precedence: the hash/saved team when it is in these tables,
+    // else the first followed team in them, else nothing.
+    function defaultSelection() {
+      if (selectedTeamID && findTeamInFlights(selectedTeamID)) return selectedTeamID;
+      for (const fd of currentFlightData) {
+        const t = (fd.standings.teamStandings || []).find(x => favorites.has(x.name));
+        if (t) return t.teamID;
+      }
+      return null;
+    }
+
+    function renderConferenceView() {
+      if (!currentConfMeta) return;
+      const { conf, flights } = currentConfMeta;
+      const isSchedule = currentView === 'schedule';
+      const container = document.getElementById('standingsContainer');
+      const multi = flights.length > 1;
+
+      const teamCount = currentFlightData.reduce((n, fd) => n + (fd.standings.teamStandings || []).length, 0);
+      document.getElementById('contentSubtitle').textContent =
+        ['Girls', `${teamCount} teams`, seasonLabel(currentSeason)].join(' · ') +
+        (multi ? ` · ${flights.length} flights` : '') + freshnessText();
+
+      // The original public pages remain the canonical source for what is shown.
+      document.getElementById('extLinks').innerHTML = flights.map(f => {
+        const url = isSchedule ? getSchedulesUrl(conf.eventId, f.flightID) : getStandingsUrl(conf.eventId, f.flightID);
+        const prefix = multi ? `${esc(f.flightName)}: ` : '';
+        return `<a class="open-external" href="${url}" target="_blank" rel="noopener">${EXTERNAL_ICON} ${prefix}View source on TGS</a>`;
+      }).join('');
+
+      container.innerHTML = '';
+      const layout = document.createElement('div');
+      layout.className = 'conf-layout';
+      const main = document.createElement('div');
+      main.className = 'conf-main';
+      const aside = document.createElement('aside');
+      aside.className = 'glance-panel';
+      aside.id = 'glancePanel';
+      aside.setAttribute('aria-label', 'Team at a glance');
+      layout.append(main, aside);
+      container.appendChild(layout);
+
+      currentFlightData.forEach(({ flight, standings, games }) => {
+        const title = multi ? `${flight.flightName} flight` : (isSchedule ? 'Matches' : 'Conference standings');
+        if (isSchedule) {
+          main.appendChild(renderScheduleTable(games, flight.flightName, flight.flightID, conf.eventId, null, title));
+        } else {
+          main.appendChild(renderStandingsTable(standings, flight.flightName, flight.flightID, conf.eventId,
+            { selectable: true, highlightTeamID: selectedTeamID, title }));
+        }
+      });
+      updateGlancePanel();
+    }
+
+    // ========== TEAM AT A GLANCE ==========
+    function updateGlancePanel() {
+      const el = document.getElementById('glancePanel');
+      if (!el || !currentConfMeta) return;
+      const hit = selectedTeamID ? findTeamInFlights(selectedTeamID) : null;
+      if (!hit) {
+        el.innerHTML = `<div class="glance-empty"><div class="glance-eyebrow">Team at a glance</div>
+          <p>Select a team in the table to see its position, form and next match.</p></div>`;
+        return;
+      }
+      const summary = computeTeamSummary(hit.team.teamID, hit.fd.standings.teamStandings || [], hit.fd.games);
+      el.innerHTML = glancePanelHtml(hit.team, summary, {
+        season: currentSeason, confName: currentConference, ageLabel: currentConfMeta.ageLabel,
+        flightName: currentConfMeta.flights.length > 1 ? hit.fd.flight.flightName : '',
+        link: true,
+      });
+    }
+
+    function opponentText(g, teamID) {
+      const home = g.hometeamID === teamID;
+      return `${home ? 'vs' : 'at'} ${displayName(home ? g.awayTeam : g.homeTeam, home ? g.awayTeamClub : g.homeTeamClub)}`;
+    }
+
+    // `team` is a standings row; `s` comes from computeTeamSummary.
+    function glancePanelHtml(team, s, ctx = {}) {
+      const short = displayName(team.name, team.clubName);
+      const logo = team.clublogo ? `<img class="team-logo" src="${esc(team.clublogo)}" alt="" onerror="this.style.display='none'">` : '';
+      const meta = [ctx.confName, ctx.ageLabel ? `Girls ${ctx.ageLabel}` : '', ctx.flightName ? `${ctx.flightName} flight` : ''].filter(Boolean).join(' · ');
+      const row = s.row;
+      const gd = row ? (row.goaldifferential || 0) : 0;
+      const formHtml = s.form.length
+        ? `<div class="form-chips">${s.form.map(r => `<span class="form-chip ${r.toLowerCase()}" title="${r === 'W' ? 'Win' : r === 'L' ? 'Loss' : 'Draw'}">${r}</span>`).join('')}</div>`
+        : `<div class="stat-sub">No games played yet</div>`;
+
+      let nextHtml;
+      if (s.next) {
+        const where = [s.next.complex, s.next.venue].filter(Boolean).join(' · ');
+        nextHtml = `<div class="glance-next-opp">${esc(opponentText(s.next, team.teamID))}</div>` +
+          `<div class="glance-next-when">${esc(formatGameDate(s.next.gameDate))}${s.next.gameTimeText ? ` · ${esc(s.next.gameTimeText)}` : ''}</div>` +
+          (where ? `<div class="glance-next-where">${esc(where)}</div>` : '');
+      } else {
+        nextHtml = `<div class="glance-next-opp muted">${s.mine.length ? 'Season complete' : 'No fixtures published yet'}</div>`;
+      }
+      let lastHtml = '';
+      if (s.last) {
+        const g = s.last, home = g.hometeamID === team.teamID;
+        const r = resultFor(g, team.teamID);
+        const score = home ? `${g.hometeamscore}–${g.awayteamscore}` : `${g.awayteamscore}–${g.hometeamscore}`;
+        lastHtml = `<div class="glance-last">Last: <span class="form-chip inline ${r.toLowerCase()}">${r}</span> ${score} ${esc(opponentText(g, team.teamID))}</div>`;
+      }
+      const link = ctx.link && ctx.season
+        ? `<div class="glance-actions"><a class="glance-link" href="#tab=teams&season=${encodeURIComponent(ctx.season)}&team=${encodeURIComponent(team.teamID)}&name=${encodeURIComponent(team.name)}">Full team page →</a></div>`
+        : '';
+
+      return `
+        <div class="glance-head">
+          <div class="glance-eyebrow">Team at a glance</div>
+          <div class="glance-name">${logo}<span title="${esc(team.name)}">${esc(short)}</span></div>
+          ${meta ? `<div class="glance-meta">${esc(meta)}</div>` : ''}
+          <div class="glance-follow">${starButton(team, { label: true })}</div>
+        </div>
+        <div class="glance-stats">
+          <div class="glance-stat"><div class="stat-label">Position</div>
+            <div class="stat-value">${s.position != null ? `${s.position}<span class="stat-of"> / ${s.total}</span>` : '—'}</div></div>
+          <div class="glance-stat"><div class="stat-label">Points</div>
+            <div class="stat-value">${row ? (row.standingpoints || 0) : '—'}</div>
+            ${row ? `<div class="stat-sub">${row.gp || 0} played · ${(row.ppg || 0).toFixed(2)} PPG</div>` : ''}</div>
+          <div class="glance-stat glance-form"><div class="stat-label">Recent form</div>
+            <div class="stat-sub">Oldest → latest</div>${formHtml}</div>
+        </div>
+        <div class="glance-next">
+          <div class="glance-eyebrow">Next match</div>
+          ${nextHtml}
+          ${lastHtml}
+        </div>
+        <details class="glance-more">
+          <summary>More statistics</summary>
+          <dl class="glance-dl">
+            <dt>Record (W-D-L)</dt><dd>${row ? `${row.wins || 0}-${row.draws || 0}-${row.losses || 0}` : '—'}</dd>
+            <dt>Goals for</dt><dd>${row ? (row.goalsfor || 0) : '—'}</dd>
+            <dt>Goals against</dt><dd>${row ? (row.goalsagainst || 0) : '—'}</dd>
+            <dt>Goal difference</dt><dd>${row ? `${gd > 0 ? '+' : ''}${gd}` : '—'}</dd>
+            <dt>Points per game</dt><dd>${row ? (row.ppg || 0).toFixed(2) : '—'}</dd>
+          </dl>
+        </details>
+        ${link}`;
+    }
+
+    // From a search result: land on the team's conference page with it selected.
+    async function openTeamInContext({ season, ageGroup, confName, teamID }) {
+      if (season && SEASONS[season] && season !== currentSeason) {
+        currentSeason = season;
+        eventHierarchy = {};
+        document.getElementById('seasonSelect').value = season;
+      }
+      if (ageGroup) currentAgeGroup = ageGroup;
+      if (confName) currentConference = confName;
+      selectedTeamID = teamID || null;
+      currentView = 'standings';
+      switchTab('conferences', { silent: true });
+      closeSidebarIfMobile();
+      await rebuildAll();
+    }
+
     // ========== SELECTORS ==========
     function selectAgeGroup(ag) {
       currentAgeGroup = ag;
+      selectedTeamID = null;
       buildAgeGroupTabs();
       loadStandings();
       closeSidebarIfMobile();
@@ -3771,6 +4010,7 @@
 
     function selectConference(name) {
       currentConference = name;
+      selectedTeamID = null;
       buildConferenceList();
       loadStandings();
       closeSidebarIfMobile();
@@ -3783,6 +4023,7 @@
     async function changeSeason(season) {
       currentSeason = season;
       eventHierarchy = {};
+      selectedTeamID = null;
       currentPlayoffAgeGroup = null;
       currentPlayoffTier = null;
       currentPlayoffStage = null;   // resolved from the season's national events
