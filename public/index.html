@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ECNL Girls Conference Standings</title>
+  <title>ECNL Girls · nextonetwo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -22,62 +22,63 @@
 
     /* Light theme */
     [data-theme="light"] {
-      --bg-body: #f0f4f8;
+      --bg-body: #f5f6f8;
       --bg-surface: #ffffff;
-      --bg-surface-alt: #f8fafc;
-      --bg-header: linear-gradient(135deg, #1a2332 0%, #243044 50%, #1e2d40 100%);
-      --text-primary: #1a2332;
-      --text-secondary: #6b7280;
-      --text-header: #ffffff;
-      --border: #d1d5db;
-      --border-light: #e5e7eb;
-      --teal: #2a9d8f;
-      --teal-glow: rgba(42, 157, 143, 0.12);
-      --teal-surface: #e6f7f5;
-      --gold: #e9c46a;
-      --gold-glow: rgba(233, 196, 106, 0.2);
-      --row-hover: #f1f5f9;
-      --row-stripe: #fafbfc;
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
-      --star-color: #e9c46a;
-      --accent-text: #1f7a70;      /* teal dark enough for 4.5:1 on white */
-      --accent-contrast: #ffffff;  /* text on an accent-filled control */
+      --bg-surface-alt: #f8f9fb;
+      --bg-header: #ffffff;
+      --text-primary: #111827;
+      --text-secondary: #5b6472;
+      --text-header: #111827;
+      --border: #e3e6ea;
+      --border-light: #eef0f3;
+      --accent: #1d4ed8;             /* selection + interaction */
+      --accent-hover: #1e40af;
+      --accent-text: #1d4ed8;        /* accent as text: 6.7:1 on white */
+      --accent-contrast: #ffffff;    /* text on an accent fill */
+      --accent-surface: #eef4ff;
+      --accent-glow: rgba(29, 78, 216, 0.12);
       --danger-text: #b91c1c;
-      --rank-1: linear-gradient(135deg, #fef3c7, #fde68a);
-      --rank-2: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-      --rank-3: linear-gradient(135deg, #fef3e2, #fde0be);
+      --gold: #d97706;
+      --gold-glow: rgba(217, 119, 6, 0.14);
+      --star-color: #d97706;
+      --row-hover: #f3f5f8;
+      --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05);
+      --shadow-md: 0 4px 12px rgba(17, 24, 39, 0.08);
+      --shadow-lg: 0 8px 24px rgba(17, 24, 39, 0.14);
+      /* Legacy aliases kept until every rule is migrated */
+      --teal: var(--accent);
+      --teal-glow: var(--accent-glow);
+      --teal-surface: var(--accent-surface);
     }
 
     /* Dark theme */
     [data-theme="dark"] {
-      --bg-body: #0f1419;
-      --bg-surface: #1a2332;
-      --bg-surface-alt: #1e2d40;
-      --bg-header: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1a2332 100%);
-      --text-primary: #e6edf3;
-      --text-secondary: #8b949e;
-      --text-header: #e6edf3;
-      --border: #30363d;
-      --border-light: #21262d;
-      --teal: #3fbfb0;
-      --teal-glow: rgba(63, 191, 176, 0.15);
-      --teal-surface: rgba(63, 191, 176, 0.08);
-      --gold: #e9c46a;
-      --gold-glow: rgba(233, 196, 106, 0.15);
-      --row-hover: #21262d;
-      --row-stripe: #161b22;
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+      --bg-body: #0f1115;
+      --bg-surface: #171a21;
+      --bg-surface-alt: #1d2129;
+      --bg-header: #171a21;
+      --text-primary: #e8eaee;
+      --text-secondary: #9aa3b2;
+      --text-header: #e8eaee;
+      --border: #2a2f3a;
+      --border-light: #232833;
+      --accent: #60a5fa;
+      --accent-hover: #93c5fd;
+      --accent-text: #7cb3fb;
+      --accent-contrast: #0b1220;    /* white on the light blue fails, dark text passes */
+      --accent-surface: rgba(96, 165, 250, 0.12);
+      --accent-glow: rgba(96, 165, 250, 0.16);
+      --danger-text: #f87171;
+      --gold: #fbbf24;
+      --gold-glow: rgba(251, 191, 36, 0.14);
+      --star-color: #fbbf24;
+      --row-hover: #1f242e;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-      --star-color: #e9c46a;
-      --accent-text: #3fbfb0;
-      --accent-contrast: #0b1a17;
-      --danger-text: #f87171;
-      --rank-1: linear-gradient(135deg, #3a2f0b, #4a3d12);
-      --rank-2: linear-gradient(135deg, #1e2d40, #243044);
-      --rank-3: linear-gradient(135deg, #3a2a0b, #4a3512);
+      --teal: var(--accent);
+      --teal-glow: var(--accent-glow);
+      --teal-surface: var(--accent-surface);
     }
 
     * {
@@ -113,7 +114,7 @@
     .header {
       background: var(--bg-header);
       color: var(--text-header);
-      padding: 0 24px;
+      padding: 0 20px;
       height: var(--header-height);
       display: flex;
       align-items: center;
@@ -123,80 +124,96 @@
       left: 0;
       right: 0;
       z-index: 100;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition-med), border-color var(--transition-med);
     }
 
     .header-left {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
+      min-width: 0;
     }
 
+    /* Sidebar toggle: collapses the sidebar on desktop, opens the drawer on phones */
     .hamburger {
-      display: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      padding: 0;
       background: none;
-      border: none;
-      color: var(--text-header);
-      font-size: 22px;
-      cursor: pointer;
-      padding: 6px;
+      border: 1px solid transparent;
       border-radius: var(--radius-sm);
-      transition: background var(--transition-fast);
-      line-height: 1;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
     }
 
     .hamburger:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--bg-surface-alt);
+      color: var(--text-primary);
     }
 
-    .header-logo {
-      font-size: 22px;
+    .hamburger svg { width: 20px; height: 20px; }
+
+    .wordmark {
+      font-size: 21px;
       font-weight: 800;
-      letter-spacing: 2px;
-      color: var(--gold);
-      text-shadow: 0 1px 4px rgba(233, 196, 106, 0.3);
+      letter-spacing: -0.6px;
+      line-height: 1;
+      color: var(--text-primary);
+      text-decoration: none;
+      white-space: nowrap;
     }
+
+    .wordmark .accent { color: var(--accent); }
 
     .header-divider {
       width: 1px;
-      height: 28px;
-      background: rgba(255, 255, 255, 0.15);
+      height: 24px;
+      background: var(--border);
     }
 
-    .header-title {
+    .section-label {
       font-size: 14px;
-      font-weight: 500;
-      opacity: 0.85;
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
     }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
     .season-label {
       font-size: 13px;
       font-weight: 500;
-      opacity: 0.85;
+      color: var(--text-secondary);
       white-space: nowrap;
     }
 
     .theme-toggle {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: var(--text-header);
-      padding: 6px 10px;
-      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1;
-      transition: all var(--transition-fast);
+      transition: background var(--transition-fast), border-color var(--transition-fast);
     }
 
-    .theme-toggle:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
+    .theme-toggle:hover { background: var(--bg-surface-alt); }
 
     /* ===== LAYOUT ===== */
     .layout {
@@ -471,16 +488,24 @@
     }
 
     .content-header {
-      padding: 14px 28px;
+      display: flex;
+      flex-direction: column;
+      padding: 18px 28px 0;
       background: var(--bg-surface);
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       flex-shrink: 0;
-      gap: 16px;
       transition: background var(--transition-med);
     }
+
+    .content-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+    }
+
+    .content-header-main { min-width: 0; }
 
     .breadcrumb {
       display: flex;
@@ -488,7 +513,7 @@
       gap: 6px;
       font-size: 12px;
       color: var(--text-secondary);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       flex-wrap: wrap;
     }
 
@@ -503,48 +528,58 @@
     }
 
     .content-title {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 700;
-      letter-spacing: -0.2px;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
     }
 
     .content-subtitle {
       font-size: 13px;
       color: var(--text-secondary);
-      margin-top: 3px;
+      margin-top: 4px;
     }
+
+    .content-header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .observed { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
 
     .ext-links {
       display: flex;
-      gap: 8px;
+      gap: 4px;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
 
+    /* Quiet text links to the original TGS pages */
     .open-external {
-      padding: 8px 16px;
+      padding: 6px 8px;
       font-size: 12px;
       font-weight: 600;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg-surface);
-      color: var(--text-primary);
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      background: none;
+      color: var(--accent-text);
       cursor: pointer;
       text-decoration: none;
-      transition: all var(--transition-fast);
+      transition: background var(--transition-fast), color var(--transition-fast);
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      box-shadow: var(--shadow-sm);
       font-family: var(--font);
+      white-space: nowrap;
     }
 
     .open-external:hover {
-      background: var(--teal-glow);
-      border-color: var(--teal);
-      color: var(--teal);
-      box-shadow: var(--shadow-md);
-      transform: translateY(-1px);
+      background: var(--accent-surface);
+      color: var(--accent-hover);
     }
 
     .open-external svg {
@@ -553,34 +588,33 @@
       flex-shrink: 0;
     }
 
-    /* ===== VIEW TABS (Standings | Schedule) ===== */
+    /* ===== VIEW TABS (Standings | Matches) ===== */
     .view-tabs {
       display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 12px;
+      align-items: stretch;
+      gap: 24px;
+      margin-bottom: -1px;   /* the active underline sits on the header border */
     }
 
     .view-tab {
       font-family: inherit;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 600;
-      padding: 6px 14px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      background: var(--bg-surface);
+      padding: 6px 2px 12px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      border-radius: 0;
+      background: none;
       color: var(--text-secondary);
       cursor: pointer;
-      transition: background var(--transition-fast), color var(--transition-fast),
-                  border-color var(--transition-fast);
+      transition: color var(--transition-fast), border-color var(--transition-fast);
     }
 
-    .view-tab:hover { color: var(--text-primary); border-color: var(--teal); }
+    .view-tab:hover { color: var(--text-primary); }
 
     .view-tab.active {
-      background: var(--accent-text);
-      border-color: var(--accent-text);
-      color: var(--accent-contrast);
+      color: var(--accent-text);
+      border-bottom-color: var(--accent);
     }
 
     /* ===== SCHEDULE TABLE ===== */
@@ -863,39 +897,19 @@
       background: var(--row-hover);
     }
 
-    /* Top 3 rank badges */
-    .rank-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      font-weight: 800;
-      font-size: 13px;
-    }
-
-    .rank-1 {
-      background: var(--rank-1);
-      color: #b45309;
-    }
-
-    .rank-2 {
-      background: var(--rank-2);
+    /* Published position: a plain numeral, the top three in the accent colour */
+    .rank-num {
+      display: inline-block;
+      min-width: 24px;
+      text-align: center;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
       color: var(--text-secondary);
     }
 
-    .rank-3 {
-      background: var(--rank-3);
-      color: #b45309;
-    }
-
-    [data-theme="dark"] .rank-1 {
-      color: #fbbf24;
-    }
-
-    [data-theme="dark"] .rank-3 {
-      color: #fbbf24;
+    .rank-num.rank-top {
+      color: var(--accent-text);
+      font-weight: 700;
     }
 
     .team-cell {
@@ -957,12 +971,6 @@
     .gd-negative {
       color: var(--danger-text);
       font-weight: 600;
-    }
-
-    .rank-plain {
-      padding-left: 8px;
-      font-weight: 600;
-      color: var(--text-secondary);
     }
 
     /* Column config: numeric cells, compact/expanded column sets, sort buttons */
@@ -1103,13 +1111,13 @@
       }
     }
 
-    @media (max-width: 768px) {
-      .hamburger {
-        display: block;
-      }
+    /* Desktop: the toggle collapses the sidebar entirely */
+    @media (min-width: 769px) {
+      .layout.sidebar-collapsed .sidebar { display: none; }
+    }
 
-      .header-title,
-      .header-divider {
+    @media (max-width: 768px) {
+      .season-label {
         display: none;
       }
 
@@ -1130,10 +1138,10 @@
       }
 
       .content-header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 12px 16px;
+        padding: 14px 16px 0;
       }
+
+      .content-header-row { flex-direction: column; gap: 10px; }
 
       .content-header-right { align-items: flex-start; }
 
@@ -1159,8 +1167,9 @@
         padding: 0 12px;
       }
 
-      .header-logo {
-        font-size: 18px;
+      .header-divider,
+      .section-label {
+        display: none;
       }
 
       .standings-scroll {
@@ -1168,7 +1177,7 @@
       }
 
       .content-title {
-        font-size: 15px;
+        font-size: 18px;
       }
     }
 
@@ -1503,7 +1512,7 @@
     .bracket-list .bracket-round-title { grid-column: 1 / -1; padding-top: 8px; }
 
     .format-note {
-      margin-top: 10px;
+      margin: 0 0 12px;
       max-width: 720px;
       font-size: 12px;
       color: var(--text-secondary);
@@ -1513,7 +1522,7 @@
       cursor: pointer;
       font-size: 12px;
       font-weight: 600;
-      color: var(--teal);
+      color: var(--accent-text);
     }
 
     .format-note div { padding: 6px 0 0 4px; line-height: 1.5; }
@@ -1884,10 +1893,14 @@
 
   <div class="header">
     <div class="header-left">
-      <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">&#9776;</button>
-      <div class="header-logo">ECNL</div>
+      <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="true">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="4" width="15" height="12" rx="2"/><path d="M7.5 4v12"/>
+        </svg>
+      </button>
+      <a class="wordmark" href="#" onclick="event.preventDefault(); if (currentTab !== 'conferences') switchTab('conferences');">next<span class="accent">one</span>two</a>
       <div class="header-divider"></div>
-      <div class="header-title">Girls Conference Standings</div>
+      <div class="section-label">ECNL Girls</div>
     </div>
     <div class="header-right">
       <span class="season-label" id="seasonLabel"></span>
@@ -1968,23 +1981,25 @@
 
     <div class="main">
       <div class="content-header">
-        <div>
-          <div class="breadcrumb" id="breadcrumb"></div>
-          <div class="content-title" id="contentTitle">Select a conference</div>
-          <div class="content-subtitle" id="contentSubtitle">Choose an age group and conference from the sidebar</div>
-          <div class="view-tabs" id="viewTabs" role="tablist" aria-label="View" style="display:none">
-            <button class="view-tab active" id="viewTabStandings" role="tab" aria-selected="true" onclick="selectView('standings')">Standings</button>
-            <button class="view-tab" id="viewTabSchedule" role="tab" aria-selected="false" onclick="selectView('schedule')">Schedule</button>
+        <div class="content-header-row">
+          <div class="content-header-main">
+            <div class="breadcrumb" id="breadcrumb"></div>
+            <h1 class="content-title" id="contentTitle">Select a conference</h1>
+            <div class="content-subtitle" id="contentSubtitle">Choose an age group and conference from the sidebar</div>
           </div>
-          <details class="format-note" id="formatNote" style="display:none">
-            <summary>ⓘ Format</summary>
-            <div id="formatNoteText"></div>
-          </details>
+          <div class="content-header-right">
+            <div class="observed" id="observed"></div>
+            <div class="ext-links" id="extLinks"></div>
+          </div>
         </div>
-        <div class="content-header-right">
-          <div class="observed" id="observed"></div>
-          <div class="ext-links" id="extLinks"></div>
+        <div class="view-tabs" id="viewTabs" role="tablist" aria-label="View" style="display:none">
+          <button class="view-tab active" id="viewTabStandings" role="tab" aria-selected="true" onclick="selectView('standings')">Standings</button>
+          <button class="view-tab" id="viewTabSchedule" role="tab" aria-selected="false" onclick="selectView('schedule')">Schedule</button>
         </div>
+        <details class="format-note" id="formatNote" style="display:none">
+          <summary>ⓘ Format</summary>
+          <div id="formatNoteText"></div>
+        </details>
       </div>
       <div class="standings-scroll" id="standingsScroll">
         <div class="standings-container" id="standingsContainer"></div>
@@ -2535,13 +2550,35 @@
     }
 
     // ========== SIDEBAR ==========
+    const SIDEBAR_KEY = 'ecnl-sidebar';
+    const isPhone = () => window.innerWidth <= 768;
+
     function toggleSidebar() {
       const sb = document.getElementById('sidebar');
       const ov = document.getElementById('sidebarOverlay');
-      const open = sb.classList.toggle('open');
-      ov.classList.toggle('visible', open);
+      let open;
+      if (isPhone()) {
+        open = sb.classList.toggle('open');
+        ov.classList.toggle('visible', open);
+      } else {
+        open = !document.querySelector('.layout').classList.toggle('sidebar-collapsed');
+        try { localStorage.setItem(SIDEBAR_KEY, open ? 'open' : 'collapsed'); } catch (e) { }
+      }
+      setSidebarToggle(open);
+    }
+
+    function setSidebarToggle(open) {
       const hb = document.querySelector('.hamburger');
-      if (hb) hb.setAttribute('aria-expanded', String(open));
+      if (!hb) return;
+      hb.setAttribute('aria-expanded', String(open));
+      hb.title = open ? 'Hide navigation' : 'Show navigation';
+    }
+
+    function loadSidebarState() {
+      let collapsed = false;
+      try { collapsed = localStorage.getItem(SIDEBAR_KEY) === 'collapsed'; } catch (e) { }
+      if (!isPhone() && collapsed) document.querySelector('.layout').classList.add('sidebar-collapsed');
+      setSidebarToggle(isPhone() ? document.getElementById('sidebar').classList.contains('open') : !collapsed);
     }
 
     function closeSidebarIfMobile() {
@@ -3655,7 +3692,7 @@
     const SEARCH_COLS = colSet(['rank', 'star', 'name', 'conf', 'flight', 'gp', 'w', 'l', 'd', 'pts', 'gd']);
 
     function rankHtml(rank) {
-      return rank <= 3 ? `<span class="rank-badge rank-${rank}">${rank}</span>` : `<span class="rank-plain">${rank}</span>`;
+      return `<span class="rank-num${rank <= 3 ? ' rank-top' : ''}">${rank}</span>`;
     }
     // Logo + short name; the full API name lives in the title attribute.
     function teamCellHtml(team, ctx = {}) {
@@ -4386,6 +4423,7 @@
     // ========== INIT ==========
     (async () => {
       loadTheme();
+      loadSidebarState();
       loadFavorites();
       purgeLegacyCache();
 
