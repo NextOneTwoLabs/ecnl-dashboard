@@ -12,7 +12,7 @@
     :root {
       --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --header-height: 60px;
-      --sidebar-width: 260px;
+      --sidebar-width: 280px;
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
@@ -246,18 +246,18 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      padding: 20px 0 0;
+      padding: 12px 0 0;
       transition: transform var(--transition-med), background var(--transition-med);
       z-index: 50;
     }
 
     .sidebar-section-title {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: var(--text-secondary);
-      padding: 10px 20px 6px;
+      padding: 12px 20px 6px;
     }
 
     .age-group-tabs {
@@ -316,49 +316,47 @@
     .btn-primary:hover { filter: brightness(0.92); }
 
     .age-tab {
-      padding: 8px 12px;
+      padding: 6px 12px;
       font-size: 12px;
       font-weight: 600;
-      border-radius: 8px;
+      border-radius: 999px;
       cursor: pointer;
       border: 1px solid var(--border);
       background: var(--bg-surface);
       color: var(--text-primary);
-      transition: all var(--transition-fast);
+      transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
       text-align: center;
-      line-height: 1.3;
-      min-width: 64px;
+      line-height: 1.25;
+      min-width: 60px;
       font-family: var(--font);
     }
 
     .age-tab:hover {
-      border-color: var(--teal);
-      color: var(--teal);
-      box-shadow: var(--shadow-sm);
-      transform: translateY(-1px);
+      border-color: var(--accent);
+      color: var(--accent-text);
     }
 
     .age-tab.active {
-      background: var(--accent-text);
+      background: var(--accent);
       color: var(--accent-contrast);
-      border-color: var(--accent-text);
-      box-shadow: 0 2px 8px rgba(42, 157, 143, 0.35);
-      transform: translateY(-1px);
+      border-color: var(--accent);
     }
+    .age-tab.active .age-tab-sub { opacity: 0.8; }
 
     /* Search */
     .sidebar-search {
-      padding: 4px 16px 10px;
+      padding: 4px 16px 8px;
     }
 
     .search-input {
       width: 100%;
-      padding: 8px 12px 8px 32px;
+      height: 40px;
+      padding: 8px 12px 8px 34px;
       font-size: 13px;
       font-family: var(--font);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg-body) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 10px center no-repeat;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 10px center no-repeat;
       transition: all var(--transition-fast);
       color: var(--text-primary);
     }
@@ -369,8 +367,8 @@
     }
 
     .search-input:focus {
-      border-color: var(--teal);
-      box-shadow: 0 0 0 3px var(--teal-glow);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
       background-color: var(--bg-surface);
       outline: none;
     }
@@ -382,7 +380,7 @@
 
     .conference-item {
       width: 100%;
-      padding: 11px 20px;
+      padding: 9px 20px 9px 17px;
       font-size: 13px;
       font-weight: 500;
       font-family: var(--font);
@@ -391,7 +389,7 @@
       background: none;
       border: none;
       border-left: 3px solid transparent;
-      transition: all var(--transition-fast);
+      transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -399,31 +397,15 @@
     }
 
     .conference-item:hover {
-      background: var(--teal-glow);
-      border-left-color: var(--teal);
-      color: var(--teal);
+      background: var(--bg-surface-alt);
+      color: var(--accent-text);
     }
 
     .conference-item.active {
-      background: var(--teal-surface);
-      border-left-color: var(--teal);
+      background: var(--accent-surface);
+      border-left-color: var(--accent);
       color: var(--accent-text);
-      font-weight: 700;
-    }
-
-    .conference-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--border);
-      flex-shrink: 0;
-      transition: all var(--transition-fast);
-    }
-
-    .conference-item:hover .conference-dot,
-    .conference-item.active .conference-dot {
-      background: var(--teal);
-      transform: scale(1.3);
+      font-weight: 600;
     }
 
     /* Favorites tab */
@@ -435,8 +417,8 @@
 
     .sidebar-tab {
       flex: 1;
-      padding: 10px 8px;
-      font-size: 12px;
+      padding: 12px 8px;
+      font-size: 13px;
       font-weight: 600;
       text-align: center;
       cursor: pointer;
@@ -451,22 +433,26 @@
     }
 
     .sidebar-tab:hover {
-      color: var(--teal);
+      color: var(--text-primary);
     }
 
     .sidebar-tab.active {
       color: var(--accent-text);
-      border-bottom-color: var(--teal);
+      border-bottom-color: var(--accent);
     }
 
     .shortcut-hint {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
       font-size: 11px;
       color: var(--text-secondary);
-      padding: 14px 20px;
+      padding: 10px 16px;
       border-top: 1px solid var(--border);
       margin-top: auto;
       background: var(--bg-surface-alt);
     }
+    .shortcut-hint span { white-space: nowrap; }
 
     .shortcut-hint kbd {
       background: var(--bg-surface);
@@ -737,7 +723,7 @@
       border-top: 1px solid var(--border-light);
       transition: background var(--transition-fast);
     }
-    .match-row.is-selected { background: var(--teal-glow); box-shadow: inset 3px 0 0 var(--teal); }
+    .match-row.is-selected { background: var(--accent-surface); box-shadow: inset 3px 0 0 var(--accent); }
     .match-time { font-size: 12px; color: var(--text-secondary); padding-top: 2px; white-space: nowrap; }
     .match-teams {
       display: flex;
@@ -751,7 +737,14 @@
     .match-team:hover { color: var(--teal); }
     .match-team.winner { font-weight: 800; }
     .match-vs { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
-    .match-score { font-weight: 800; font-variant-numeric: tabular-nums; padding: 0 4px; }
+    .match-score {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      padding: 1px 8px;
+      border-radius: 6px;
+      background: var(--bg-surface-alt);
+      border: 1px solid var(--border-light);
+    }
     .match-pk { font-size: 11px; font-weight: 500; color: var(--text-secondary); }
     .match-tag {
       font-size: 10px;
@@ -797,66 +790,58 @@
       min-width: 400px;
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-md);
       overflow: hidden;
-      box-shadow: var(--shadow-sm);
       transition: background var(--transition-med), border-color var(--transition-med);
     }
 
     .flight-header {
-      padding: 14px 20px;
-      background: var(--bg-surface-alt);
-      border-bottom: 1px solid var(--border);
+      padding: 16px 20px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
     }
 
     .flight-title {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: -0.2px;
       display: flex;
       align-items: center;
       gap: 8px;
-    }
-
-    .flight-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--teal);
+      min-width: 0;
     }
 
     .flight-team-count {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-secondary);
       font-weight: 500;
+      white-space: nowrap;
     }
 
     .standings-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13px;
+      font-size: 14px;
     }
 
     .standings-table th {
-      padding: 10px 12px;
+      padding: 8px 12px;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       color: var(--text-secondary);
-      border-bottom: 2px solid var(--border);
+      border-bottom: 1px solid var(--border);
       text-align: left;
       white-space: nowrap;
-      cursor: pointer;
       user-select: none;
       transition: color var(--transition-fast);
       position: sticky;
       top: 0;
       background: var(--bg-surface);
+      z-index: 1;
     }
 
     .standings-table th:hover {
@@ -879,21 +864,15 @@
     .th-sort { white-space: nowrap; }
 
     .standings-table td {
-      padding: 10px 12px;
+      padding: 11px 12px;
       border-bottom: 1px solid var(--border-light);
       vertical-align: middle;
       transition: background var(--transition-fast);
     }
 
+    .standings-table tbody tr:last-child td { border-bottom: none; }
+
     .standings-table tr:hover td {
-      background: var(--row-hover);
-    }
-
-    .standings-table tr:nth-child(even) td {
-      background: var(--row-stripe);
-    }
-
-    .standings-table tr:nth-child(even):hover td {
       background: var(--row-hover);
     }
 
@@ -955,12 +934,11 @@
     .star-btn.starred {
       opacity: 1;
       color: var(--star-color);
-      text-shadow: 0 0 6px var(--gold-glow);
     }
 
     .stat-highlight {
       font-weight: 700;
-      color: var(--accent-text);
+      color: var(--text-primary);
     }
 
     .gd-positive {
@@ -983,7 +961,7 @@
       cursor: pointer;
       display: block;
       width: 100%;
-      padding: 10px 12px;
+      padding: 8px 12px;
       font: inherit;
       color: inherit;
       text-align: inherit;
@@ -1008,8 +986,8 @@
     }
     .more-stats-btn:hover { color: var(--teal); border-color: var(--teal); }
     .table-footnote {
-      padding: 10px 20px;
-      font-size: 11px;
+      padding: 10px 20px 12px;
+      font-size: 12px;
       color: var(--text-secondary);
       border-top: 1px solid var(--border-light);
     }
@@ -1025,8 +1003,9 @@
       border-radius: 999px;
       color: var(--text-primary);
     }
-    .star-btn-label:hover { transform: none; border-color: var(--teal); }
-    .star-btn-label.starred { text-shadow: none; border-color: var(--teal); color: var(--teal); }
+    .star-btn-label { background: var(--bg-surface); }
+    .star-btn-label:hover { transform: none; border-color: var(--accent); }
+    .star-btn-label.starred { text-shadow: none; border-color: var(--accent); color: var(--accent-text); }
     .sr-only {
       position: absolute;
       width: 1px;
@@ -1266,12 +1245,11 @@
       top: 0;
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-sm);
+      border-radius: var(--radius-md);
       overflow: hidden;
       min-width: 0;
     }
-    .glance-head { padding: 16px 18px; background: var(--teal-surface); border-bottom: 1px solid var(--border); }
+    .glance-head { padding: 16px 18px; background: var(--accent-surface); border-bottom: 1px solid var(--border); }
     .glance-eyebrow {
       font-size: 10px;
       font-weight: 700;
@@ -1340,8 +1318,9 @@
     }
     .summary-stack .flight-panel { min-width: 0; flex: none; }
 
-    .team-row-highlight td { background: var(--teal-glow) !important; }
-    .team-row-highlight td:first-child { box-shadow: inset 3px 0 0 var(--teal); }
+    .team-row-highlight td { background: var(--accent-surface) !important; }
+    .team-row-highlight td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+    .team-row-highlight .team-name { color: var(--accent-text); font-weight: 600; }
 
     .fav-item { align-items: flex-start; }
     .fav-name { display: block; }
@@ -1573,13 +1552,13 @@
     }
 
     .stage-tab:hover {
-      border-color: var(--teal);
-      color: var(--teal);
+      border-color: var(--accent);
+      color: var(--accent-text);
     }
 
     .stage-tab.active {
-      background: var(--accent-text);
-      border-color: var(--accent-text);
+      background: var(--accent);
+      border-color: var(--accent);
       color: var(--accent-contrast);
     }
 
@@ -1604,14 +1583,14 @@
     }
 
     .playoff-age-tab:hover {
-      border-color: var(--teal);
-      color: var(--teal);
+      border-color: var(--accent);
+      color: var(--accent-text);
     }
 
     .playoff-age-tab.active {
-      background: var(--teal);
-      border-color: var(--teal);
-      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-contrast);
     }
 
     /* Group stage grid */
@@ -1620,6 +1599,7 @@
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 16px;
       padding: 0;
+      width: 100%;
     }
 
     .group-card {
@@ -1832,7 +1812,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       overflow: hidden;
-      box-shadow: var(--shadow-sm);
+      width: 100%;
     }
 
     .search-results-header {
@@ -1973,9 +1953,9 @@
       </div>
 
       <div class="shortcut-hint">
-        <kbd>/</kbd> Find a team &nbsp;
-        <kbd>&larr;</kbd> <kbd>&rarr;</kbd> Age groups &nbsp;
-        <kbd>&uarr;</kbd> <kbd>&darr;</kbd> Conferences
+        <span><kbd>/</kbd> Find a team</span>
+        <span><kbd>&larr;</kbd> <kbd>&rarr;</kbd> Age groups</span>
+        <span><kbd>&uarr;</kbd> <kbd>&darr;</kbd> Conferences</span>
       </div>
     </div>
 
@@ -2718,7 +2698,7 @@
       if (!c) return;
       c.innerHTML = flights.map(f =>
         `<li class="conference-item ${f.flightID === currentPlayoffTier ? 'active' : ''}" data-flight="${f.flightID}" tabindex="0" onclick="selectPlayoffTier(Number(this.dataset.flight))">
-          <span class="conference-dot"></span><span>${esc(tierLabel(evt, f.flightName))}</span>
+          <span>${esc(tierLabel(evt, f.flightName))}</span>
         </li>`
       ).join('');
     }
@@ -3213,7 +3193,7 @@
       c.innerHTML = names.map(n => {
         const on = n === currentConference;
         return `<li><button type="button" class="conference-item${on ? ' active' : ''}" data-conf="${esc(n)}"${on ? ' aria-current="true"' : ''}>` +
-          `<span class="conference-dot"></span><span>${esc(n)}</span></button></li>`;
+          `<span>${esc(n)}</span></button></li>`;
       }).join('');
     }
 
@@ -3777,7 +3757,7 @@
       panel.className = 'flight-panel standings-panel' + (hasExtra && showMoreStats ? ' show-more' : '');
       panel.innerHTML = `
     <div class="flight-header">
-      <div class="flight-title"><span class="flight-dot"></span>${esc(heading)}</div>
+      <div class="flight-title">${esc(heading)}</div>
       <div class="flight-header-right">
         <span class="flight-team-count">${teams.length} teams</span>
         ${hasExtra ? `<button type="button" class="more-stats-btn" aria-expanded="${showMoreStats}">${showMoreStats ? 'Fewer statistics' : 'More statistics'}</button>` : ''}
@@ -3876,7 +3856,7 @@
       const played = games.filter(g => g.hometeamscore != null && g.awayteamscore != null).length;
       panel.innerHTML = `
     <div class="flight-header">
-      <div class="flight-title"><span class="flight-dot"></span>${title ? esc(title) : esc(flightName) + ' Flight'}</div>
+      <div class="flight-title">${title ? esc(title) : esc(flightName) + ' Flight'}</div>
       <span class="flight-team-count">${games.length} game${games.length !== 1 ? 's' : ''} · ${played} played</span>
     </div>
     <table class="standings-table schedule-table">
@@ -4163,7 +4143,7 @@
       ).join('');
       panel.innerHTML = `
     <div class="flight-header">
-      <div class="flight-title"><span class="flight-dot"></span>${esc(title)}</div>
+      <div class="flight-title">${esc(title)}</div>
       <div class="seg" role="radiogroup" aria-label="Which matches to show">${seg}</div>
     </div>
     <div class="match-groups"></div>`;
