@@ -9,14 +9,17 @@ upstream API or website ever goes away.
 ## Features
 
 - **Conference Standings** — All 10 ECNL conferences across 6 seasons (2021-22 through 2026-27), per-flight tables
-- **Schedules** — Full fixtures and results in-app: date, kickoff time, venue, both teams, final score. No longer just an outbound link
+- **Matches** — Date-grouped match cards per conference: kickoff, both teams, score, venue. Opens on upcoming matches, with Results (newest first) and Full season (scrolled to the next match day) a click away
+- **Team at a glance** — Click any team in a standings table: position, points, recent form, next match, last result and more statistics in a side panel, with a Follow button and a link to the full team page
 - **Fully static** — no backend at runtime; deploys to any static host for free, and works offline once loaded
 - **Self-refreshing** — a scheduled job updates the data on match days and keeps the fixture calendar current
 - **CSV exports** — Human-readable standings and schedule tables under `export/`, openable in Excel
 - **Playoffs & Finals** — National post-season per age group and competition (Champions League, North American Cup, Showcase Cup, Showcase Games): knockout brackets drawn as trees, cup and consolation brackets, group tables where a group stage exists, round-tagged schedules, and a format note per competition
-- **★ My Teams** — Star any team; each favorite opens a summary page: rank, points, record, goals, last-5 form and next game, the full table with the team highlighted, the team's own fixtures and results, and its post-season games when it played any
-- **Age group navigation** — Tabs populated from the API; keyboard arrow-key navigation
-- **Dark mode**, and **deep links** (season, age group, conference, and view in the URL hash)
+- **★ My Teams** — Follow any team; each favorite opens a summary page: the glance panel, the full table with the team highlighted, the team's own fixtures and results, and its post-season games when it played any
+- **One team search** — Find a team across every conference in the current season and age group; a result opens it on its conference page, already selected
+- **Age group navigation** — Tabs populated from the API; keyboard arrow-key navigation, `/` to search
+- **Dark mode**, and **deep links** (season, age group, conference, view, selected team and match filter in the URL hash)
+- **Data explained** — Standings state that the order is as published by TGS (points per game, then goal difference), the header shows when the data was observed, and every view links to its source page on TGS
 
 ## How it works
 
@@ -139,7 +142,11 @@ by the earlier version (name only) are located by scanning the archived standing
 first time My Teams is opened, and upgraded in place.
 
 `#tab=teams&season=2026-27&team=<teamID>` deep-links to a team's summary even in a
-browser where it isn't a favorite.
+browser where it isn't a favorite (it is shown, not added to the list).
+
+A conference view is `#season=2026-27&age=GU16&conf=NorCal`, optionally with
+`&view=schedule`, `&team=<teamID>` (the team shown in the glance panel) and
+`&sched=results` or `&sched=all` (the match filter; upcoming is the default).
 
 ## Layout
 
@@ -188,8 +195,8 @@ App must be installed on the new owner for builds to continue.
 
 - **API**: `https://api.athleteone.com` (TGS / AthleteOne)
 - **Public site**: `https://public.totalglobalsports.com` — the original standings and
-  schedule pages are still linked from every view, and the URL templates live in
-  `data/sources.json` so they can be repointed in one place.
+  schedule pages are linked from every view as "View source on TGS", and the URL
+  templates live in `data/sources.json` so they can be repointed in one place.
 
 Endpoints used (all unauthenticated):
 

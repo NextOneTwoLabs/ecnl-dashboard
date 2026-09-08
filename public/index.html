@@ -45,10 +45,6 @@
       --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05);
       --shadow-md: 0 4px 12px rgba(17, 24, 39, 0.08);
       --shadow-lg: 0 8px 24px rgba(17, 24, 39, 0.14);
-      /* Legacy aliases kept until every rule is migrated */
-      --teal: var(--accent);
-      --teal-glow: var(--accent-glow);
-      --teal-surface: var(--accent-surface);
     }
 
     /* Dark theme */
@@ -76,9 +72,6 @@
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-      --teal: var(--accent);
-      --teal-glow: var(--accent-glow);
-      --teal-surface: var(--accent-surface);
     }
 
     * {
@@ -296,8 +289,8 @@
       cursor: pointer;
       transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
     }
-    .season-select:hover { border-color: var(--teal); }
-    .season-select:focus-visible { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-glow); outline: none; }
+    .season-select:hover { border-color: var(--accent-text); }
+    .season-select:focus-visible { border-color: var(--accent-text); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
 
     .btn-primary {
       display: inline-block;
@@ -734,7 +727,7 @@
       font-weight: 600;
     }
     .match-team { cursor: pointer; border-radius: 4px; }
-    .match-team:hover { color: var(--teal); }
+    .match-team:hover { color: var(--accent-text); }
     .match-team.winner { font-weight: 800; }
     .match-vs { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
     .match-score {
@@ -845,7 +838,7 @@
     }
 
     .standings-table th:hover {
-      color: var(--teal);
+      color: var(--accent-text);
     }
 
     .standings-table th.sort-active {
@@ -984,7 +977,7 @@
       cursor: pointer;
       transition: color var(--transition-fast), border-color var(--transition-fast);
     }
-    .more-stats-btn:hover { color: var(--teal); border-color: var(--teal); }
+    .more-stats-btn:hover { color: var(--accent-text); border-color: var(--accent-text); }
     .table-footnote {
       padding: 10px 20px 12px;
       font-size: 12px;
@@ -993,7 +986,11 @@
     }
     tr.team-row { cursor: pointer; }
     .search-results-table .num { text-align: center; font-variant-numeric: tabular-nums; }
-    .group-standings-table .team-name { display: block; max-width: 150px; }
+    .group-standings-table .team-name { display: block; max-width: 120px; }
+    .group-standings-table th, .group-standings-table td { padding: 5px 5px; }
+    .group-standings-table th[style] { width: auto !important; }   /* the shared column widths are for the wide table */
+    .group-standings-table .rank-num { min-width: 18px; }
+    .group-standings-table .star-btn { padding: 2px; }
     .star-btn-label {
       font-size: 13px;
       font-weight: 600;
@@ -1032,7 +1029,7 @@
       width: 40px;
       height: 40px;
       border: 3px solid var(--border);
-      border-top-color: var(--teal);
+      border-top-color: var(--accent-text);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
@@ -1123,6 +1120,12 @@
       .content-header-row { flex-direction: column; gap: 10px; }
 
       .content-header-right { align-items: flex-start; }
+      .content-header-right .ext-links { justify-content: flex-start; }
+      .content-header-right .open-external { margin-left: -8px; }
+
+      .view-tabs { overflow-x: auto; }
+      .flight-header { flex-wrap: wrap; }
+      .more-stats-btn { white-space: nowrap; }
 
       .standings-scroll {
         padding: 16px;
@@ -1158,28 +1161,30 @@
       .content-title {
         font-size: 18px;
       }
+
+      .flight-panel, .glance-panel { border-radius: var(--radius-sm); }
+      .flight-title { font-size: 15px; }
+      .standings-panel { overflow-x: auto; }
+      .standings-table { font-size: 13px; }
+      .standings-table td { padding: 10px 6px; }
+      .standings-table th.sortable { padding: 0; }
+      .th-sort { padding: 8px 6px; }
+      .standings-table th:first-child { width: 30px !important; }
+      .standings-table th:nth-child(2) { width: 30px !important; }
+      .rank-num { min-width: 20px; }
+      .team-cell { gap: 8px; }
+      .team-logo { width: 24px; height: 24px; }
+      .team-name { max-width: 120px; }
+      .match-row { grid-template-columns: 64px minmax(0, 1fr); padding: 10px 14px; }
+      .match-day-head { padding: 12px 14px 6px; }
+    }
+
+    @media (max-width: 400px) {
+      .team-name { max-width: 96px; }
+      .standings-table td, .th-sort { padding-left: 5px; padding-right: 5px; }
     }
 
     /* ===== MY TEAMS (team summary) ===== */
-    .team-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 10px;
-      width: 100%;
-      margin-bottom: 16px;
-    }
-
-    .stat-card {
-      min-width: 0;
-      padding: 10px 12px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .stat-card.wide { grid-column: span 2; }
-
     .stat-label {
       font-size: 10px;
       font-weight: 700;
@@ -1353,10 +1358,6 @@
 
     .postseason-outcome { margin-top: 3px; font-size: 14px; font-weight: 700; }
 
-    @media (max-width: 768px) {
-      .team-stats { grid-template-columns: repeat(2, 1fr); }
-    }
-
     /* ===== BRACKETS (playoffs) ===== */
     .bracket-wrap { width: 100%; min-width: 0; }
 
@@ -1440,8 +1441,8 @@
       white-space: nowrap;
     }
 
-    .bracket-team.winner { font-weight: 700; color: var(--teal); }
-    .bracket-team.hit { background: var(--teal-glow); }
+    .bracket-team.winner { font-weight: 700; color: var(--accent-text); }
+    .bracket-team.hit { background: var(--accent-glow); }
 
     .bracket-score {
       font-variant-numeric: tabular-nums;
@@ -1509,7 +1510,7 @@
     .sched-tag {
       font-size: 10px;
       font-weight: 600;
-      color: var(--teal);
+      color: var(--accent-text);
       white-space: normal;
       line-height: 1.2;
       margin-top: 2px;
@@ -1596,7 +1597,7 @@
     /* Group stage grid */
     .group-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
       gap: 16px;
       padding: 0;
       width: 100%;
@@ -1607,7 +1608,8 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       overflow: hidden;
-      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+      min-width: 0;
     }
 
     .group-card-header {
@@ -1633,10 +1635,10 @@
     .group-card-link {
       font-size: 10px;
       font-weight: 600;
-      color: var(--teal);
+      color: var(--accent-text);
       text-decoration: none;
       padding: 2px 7px;
-      border: 1px solid var(--teal);
+      border: 1px solid var(--accent);
       border-radius: 4px;
       transition: all var(--transition-fast);
       display: inline-flex;
@@ -1646,7 +1648,7 @@
     }
 
     .group-card-link:hover {
-      background: var(--teal);
+      background: var(--accent);
       color: #fff;
     }
 
@@ -1796,8 +1798,8 @@
       font-weight: 600;
       padding: 2px 7px;
       border-radius: 10px;
-      background: var(--teal-surface);
-      color: var(--teal);
+      background: var(--accent-surface);
+      color: var(--accent-text);
       white-space: nowrap;
     }
 
@@ -1862,7 +1864,7 @@
 
     .search-progress-fill {
       height: 100%;
-      background: var(--teal);
+      background: var(--accent);
       border-radius: 2px;
       transition: width 0.2s ease;
     }
@@ -2110,9 +2112,6 @@
     let currentConference = "Mid-Atlantic";
     let eventHierarchy = {};     // cached: { eventId -> { divisions, flights } }
     let seasonAgeGroups = {};    // cached: { season -> [divisionName, ...] }
-    let currentStandings = [];   // current flight data for sorting
-    let currentSortCol = 'rank';
-    let currentSortAsc = true;
     let favorites = new Set();   // Set of "teamName" strings
     // Conference view: the team shown in the "at a glance" panel, the schedule
     // filter, and whether the extra standings columns are expanded.
@@ -3502,11 +3501,6 @@
       if (!w) return 'D';
       const home = g.hometeamID === teamID;
       return (w === 'home') === home ? 'W' : 'L';
-    }
-
-    function statCard(label, value, sub, extraClass) {
-      return `<div class="stat-card ${extraClass || ''}"><div class="stat-label">${esc(label)}</div>` +
-        `<div class="stat-value">${value}</div>${sub ? `<div class="stat-sub" title="${esc(sub)}">${esc(sub)}</div>` : ''}</div>`;
     }
 
     // The My Teams summary: rank + stat strip + full table (team highlighted),
