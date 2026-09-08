@@ -617,6 +617,98 @@
       margin-left: 6px;
     }
 
+    /* ===== MATCH CARDS (conference Matches view) ===== */
+    .matches-panel .flight-header { flex-wrap: wrap; gap: 10px; }
+    .seg {
+      display: inline-flex;
+      gap: 2px;
+      padding: 2px;
+      background: var(--bg-body);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+    .seg-btn {
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: none;
+      background: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+    .seg-btn:hover { color: var(--text-primary); }
+    .seg-btn.active { background: var(--bg-surface); color: var(--text-primary); box-shadow: var(--shadow-sm); }
+    .seg-count { font-weight: 500; opacity: 0.7; margin-left: 2px; }
+    .match-day { border-bottom: 1px solid var(--border-light); }
+    .match-day:last-child { border-bottom: none; }
+    .match-day-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin: 0;
+      padding: 14px 20px 8px;
+      font-size: 14px;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      background: var(--bg-surface);
+      z-index: 1;
+    }
+    .match-day-count { font-size: 11px; font-weight: 500; color: var(--text-secondary); white-space: nowrap; }
+    .match-row {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 12px;
+      padding: 12px 20px;
+      border-top: 1px solid var(--border-light);
+      transition: background var(--transition-fast);
+    }
+    .match-row.is-selected { background: var(--teal-glow); box-shadow: inset 3px 0 0 var(--teal); }
+    .match-time { font-size: 12px; color: var(--text-secondary); padding-top: 2px; white-space: nowrap; }
+    .match-teams {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .match-team { cursor: pointer; border-radius: 4px; }
+    .match-team:hover { color: var(--teal); }
+    .match-team.winner { font-weight: 800; }
+    .match-vs { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+    .match-score { font-weight: 800; font-variant-numeric: tabular-nums; padding: 0 4px; }
+    .match-pk { font-size: 11px; font-weight: 500; color: var(--text-secondary); }
+    .match-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--bg-surface-alt);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .match-where { margin-top: 3px; font-size: 12px; color: var(--text-secondary); }
+    .matches-empty { padding: 40px 20px; text-align: center; color: var(--text-secondary); font-size: 13px; }
+
+    .content-header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .observed { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+    .rank-help { margin-top: 4px; }
+    .rank-help summary { cursor: pointer; font-weight: 600; color: var(--text-secondary); }
+    .rank-help summary:hover { color: var(--text-primary); }
+    .rank-help p { margin: 6px 0 0; line-height: 1.5; max-width: 60ch; }
+
     /* ===== STANDINGS TABLE ===== */
     .standings-scroll {
       flex: 1;
@@ -1005,6 +1097,8 @@
         align-items: flex-start;
         padding: 12px 16px;
       }
+
+      .content-header-right { align-items: flex-start; }
 
       .standings-scroll {
         padding: 16px;
@@ -1845,7 +1939,10 @@
             <div id="formatNoteText"></div>
           </details>
         </div>
-        <div class="ext-links" id="extLinks"></div>
+        <div class="content-header-right">
+          <div class="observed" id="observed"></div>
+          <div class="ext-links" id="extLinks"></div>
+        </div>
       </div>
       <div class="standings-scroll" id="standingsScroll">
         <div class="standings-container" id="standingsContainer"></div>
@@ -2053,9 +2150,16 @@
       return days === 1 ? 'yesterday' : `${days} days ago`;
     }
 
-    function freshnessText() {
-      if (!refreshState || !refreshState.updatedAt) return '';
-      return ` · Updated ${relativeTime(refreshState.updatedAt)}`;
+    // "Data observed Sep 6, 2026" in the content header; the exact time and
+    // the relative age go in the tooltip. Set once: it is the same for every view.
+    function setObserved() {
+      const el = document.getElementById('observed');
+      if (!el) return;
+      const iso = refreshState && refreshState.updatedAt;
+      if (!iso) { el.textContent = ''; return; }
+      el.textContent = `Data observed ${formatObservedDate(iso)}`;
+      const d = new Date(iso);
+      el.title = `Archive refreshed ${d.toLocaleString()} (${relativeTime(iso)})`;
     }
 
     async function getEventHierarchy(eventId, opts) {
@@ -2923,7 +3027,7 @@
         document.getElementById('contentTitle').textContent = `${tierName} — ${ageLabel} (${currentPlayoffAgeGroup})`;
         document.getElementById('contentSubtitle').textContent =
           [`${currentSeason} · National Event`, evt.location, formatDateRange(evt.startDate, evt.endDate)]
-            .filter(Boolean).join(' · ') + freshnessText();
+            .filter(Boolean).join(' · ');
         updateViewTabsUI(brackets ? 'Bracket' : 'Standings', 'Schedule');
 
         const notes = evt.tierNotes || {};
@@ -2935,8 +3039,8 @@
         }
 
         document.getElementById('extLinks').innerHTML =
-          `<a class="open-external" href="${getSchedulesUrl(evt.eventId, flight.flightID)}" target="_blank">${EXTERNAL_ICON} Schedule</a>` +
-          `<a class="open-external" href="${getStandingsUrl(evt.eventId, flight.flightID)}" target="_blank">${EXTERNAL_ICON} Standings</a>` +
+          `<a class="open-external" href="${getSchedulesUrl(evt.eventId, flight.flightID)}" target="_blank">${EXTERNAL_ICON} Schedule on TGS</a>` +
+          `<a class="open-external" href="${getStandingsUrl(evt.eventId, flight.flightID)}" target="_blank">${EXTERNAL_ICON} Standings on TGS</a>` +
           `<a class="open-external" href="${publicUrl('eventHome', evt.eventId, flight.flightID)}" target="_blank">${EXTERNAL_ICON} Brackets on TGS</a>`;
 
         // Body
@@ -3383,10 +3487,9 @@
           (logo ? `<img class="team-title-logo" src="${esc(logo)}" alt="" onerror="this.style.display='none'">` : '') + esc(rec.name);
         document.getElementById('contentSubtitle').textContent =
           [ctx.name, ageLabel ? `${ageLabel} (${divisionName})` : divisionName, flightName ? `${flightName} flight` : '']
-            .filter(Boolean).join(' · ') + freshnessText();
+            .filter(Boolean).join(' · ');
         document.getElementById('extLinks').innerHTML =
-          `<a class="open-external" href="${getSchedulesUrl(rec.eventID, rec.flightID)}" target="_blank">${EXTERNAL_ICON} Schedules</a>` +
-          `<a class="open-external" href="${getStandingsUrl(rec.eventID, rec.flightID)}" target="_blank">${EXTERNAL_ICON} Standings</a>`;
+          `<a class="open-external" href="${getStandingsUrl(rec.eventID, rec.flightID)}" target="_blank" rel="noopener">${EXTERNAL_ICON} View source on TGS</a>`;
 
         // Same layout as the conference view: tables on the left, the team's
         // "at a glance" panel on the right.
@@ -3549,6 +3652,10 @@
         tr.classList.toggle('team-row-highlight', on);
         if (on) tr.setAttribute('aria-current', 'true'); else tr.removeAttribute('aria-current');
       });
+      document.querySelectorAll('#standingsContainer .match-row').forEach(r => {
+        r.classList.toggle('is-selected', !!selectedTeamID &&
+          (Number(r.dataset.home) === selectedTeamID || Number(r.dataset.away) === selectedTeamID));
+      });
       if (typeof updateGlancePanel === 'function') updateGlancePanel();
       saveState();
       pushHash();
@@ -3578,7 +3685,12 @@
       <thead>${standingsHeadHtml(cols, 'rank', true)}</thead>
       <tbody></tbody>
     </table>
-    ${footnote ? `<div class="table-footnote">Order as published by TGS: points per game, then goal difference · PPG = points per game${selectable ? ' · Select a team for details' : ''}</div>` : ''}`;
+    ${footnote ? `<div class="table-footnote">
+      <span>Order as published by TGS · PPG = points per game${selectable ? ' · Select a team for details' : ''}</span>
+      <details class="rank-help"><summary>How ranking works</summary>
+        <p>Teams are listed in the order TGS publishes: by points per game, then goal difference. A team that has played fewer games can sit above one with more points.</p>
+      </details>
+    </div>` : ''}`;
 
       const thead = panel.querySelector('thead');
       const tbody = panel.querySelector('tbody');
@@ -3782,7 +3894,7 @@
       document.getElementById('formatNote').style.display = 'none';
       const ageLabel = AGE_LABELS[currentAgeGroup] || currentAgeGroup;
       document.getElementById('contentTitle').textContent = `${currentConference} · ${ageLabel}`;
-      document.getElementById('contentSubtitle').textContent = `Girls · ${seasonLabel(currentSeason)}${freshnessText()}`;
+      document.getElementById('contentSubtitle').textContent = `Girls · ${seasonLabel(currentSeason)}`;
       document.getElementById('extLinks').innerHTML = '';
 
       clearTeamFilter();
@@ -3862,7 +3974,7 @@
       const teamCount = currentFlightData.reduce((n, fd) => n + (fd.standings.teamStandings || []).length, 0);
       document.getElementById('contentSubtitle').textContent =
         ['Girls', `${teamCount} teams`, seasonLabel(currentSeason)].join(' · ') +
-        (multi ? ` · ${flights.length} flights` : '') + freshnessText();
+        (multi ? ` · ${flights.length} flights` : '');
 
       // The original public pages remain the canonical source for what is shown.
       document.getElementById('extLinks').innerHTML = flights.map(f => {
@@ -3886,13 +3998,123 @@
       currentFlightData.forEach(({ flight, standings, games }) => {
         const title = multi ? `${flight.flightName} flight` : (isSchedule ? 'Matches' : 'Conference standings');
         if (isSchedule) {
-          main.appendChild(renderScheduleTable(games, flight.flightName, flight.flightID, conf.eventId, null, title));
+          main.appendChild(renderMatchCards(games, { title, filter: scheduleFilter }));
         } else {
           main.appendChild(renderStandingsTable(standings, flight.flightName, flight.flightID, conf.eventId,
             { selectable: true, highlightTeamID: selectedTeamID, title }));
         }
       });
       updateGlancePanel();
+      if (isSchedule && scheduleFilter === 'all') {
+        // Scroll only the content pane (scrollIntoView would also nudge the body).
+        const next = main.querySelector('.match-day.is-next');
+        const scroller = document.getElementById('standingsScroll');
+        if (next && scroller) requestAnimationFrame(() => {
+          scroller.scrollTop += next.getBoundingClientRect().top - scroller.getBoundingClientRect().top - 4;
+        });
+      }
+    }
+
+    function setScheduleFilter(filter) {
+      if (!['upcoming', 'results', 'all'].includes(filter) || filter === scheduleFilter) return;
+      scheduleFilter = filter;
+      saveState();
+      pushHash();
+      renderConferenceView();
+    }
+
+    // ========== MATCH CARDS (conference Matches view) ==========
+    function formatMatchDate(key) {   // 'YYYY-MM-DD' -> "Saturday, September 12"
+      const [y, m, d] = String(key || '').split('-').map(Number);
+      if (!y) return 'Date TBD';
+      return new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+    }
+
+    // Upcoming: games without a result, soonest first (an unscored past game is
+    // tagged "Result pending" rather than hidden). Results: played, newest first.
+    // Full season: everything, scrolled to the next match day.
+    function renderMatchCards(games, { title = 'Matches', filter = 'upcoming', rowTag = null } = {}) {
+      const today = todayKey();
+      const all = sortGames(games || []);
+      const played = all.filter(isPlayed);
+      const unplayed = all.filter(g => !isPlayed(g));
+      const counts = { upcoming: unplayed.length, results: played.length, all: all.length };
+      let list, empty;
+      if (filter === 'results') {
+        list = [...played].sort((a, b) => gameDateKey(b).localeCompare(gameDateKey(a)) || (a.gameTime || '').localeCompare(b.gameTime || ''));
+        empty = all.length ? 'No results yet' : 'Fixtures haven\'t been published yet';
+      } else if (filter === 'all') {
+        list = all;
+        empty = 'Fixtures haven\'t been published yet';
+      } else {
+        list = unplayed;
+        empty = all.length ? 'No upcoming matches — the season is complete' : 'Fixtures haven\'t been published yet';
+      }
+
+      const panel = document.createElement('div');
+      panel.className = 'flight-panel matches-panel';
+      const seg = [['upcoming', 'Upcoming'], ['results', 'Results'], ['all', 'Full season']].map(([k, l]) =>
+        `<button type="button" class="seg-btn${filter === k ? ' active' : ''}" role="radio" aria-checked="${filter === k}" data-filter="${k}">${l} <span class="seg-count">${counts[k]}</span></button>`
+      ).join('');
+      panel.innerHTML = `
+    <div class="flight-header">
+      <div class="flight-title"><span class="flight-dot"></span>${esc(title)}</div>
+      <div class="seg" role="radiogroup" aria-label="Which matches to show">${seg}</div>
+    </div>
+    <div class="match-groups"></div>`;
+
+      const wrap = panel.querySelector('.match-groups');
+      if (!list.length) {
+        wrap.innerHTML = `<div class="matches-empty">${esc(empty)}</div>`;
+      } else {
+        let nextMarked = false;
+        wrap.innerHTML = groupGamesByDate(list).map(grp => {
+          const isNext = !nextMarked && filter === 'all' && grp.key >= today;
+          if (isNext) nextMarked = true;
+          return `<section class="match-day${isNext ? ' is-next' : ''}" id="d-${esc(grp.key)}">
+            <h3 class="match-day-head"><span>${esc(formatMatchDate(grp.key))}</span>` +
+            `<span class="match-day-count">${grp.games.length} match${grp.games.length !== 1 ? 'es' : ''}</span></h3>
+            ${grp.games.map(g => matchRowHtml(g, { today, rowTag })).join('')}
+          </section>`;
+        }).join('');
+      }
+
+      panel.querySelector('.seg').addEventListener('click', e => {
+        const b = e.target.closest('.seg-btn');
+        if (b) setScheduleFilter(b.dataset.filter);
+      });
+      // A team name in a match row selects that team.
+      wrap.addEventListener('click', e => {
+        const t = e.target.closest('.match-team[data-team-id]');
+        if (t) selectTeam(Number(t.dataset.teamId));
+      });
+      return panel;
+    }
+
+    function matchRowHtml(g, { today, rowTag } = {}) {
+      const played = isPlayed(g);
+      const home = displayName(g.homeTeam, g.homeTeamClub), away = displayName(g.awayTeam, g.awayTeamClub);
+      const sel = !!selectedTeamID && (g.hometeamID === selectedTeamID || g.awayteamID === selectedTeamID);
+      const homeWin = played && g.hometeamscore > g.awayteamscore;
+      const awayWin = played && g.awayteamscore > g.hometeamscore;
+      const team = (name, full, id, win) =>
+        `<span class="match-team${win ? ' winner' : ''}" data-team-id="${esc(id)}" title="${esc(full)}" role="button" tabindex="0">${esc(name)}</span>`;
+      const pk = played && g.hometeamPKscore != null && g.awayteamPKscore != null
+        ? `<span class="match-pk">(${g.hometeamPKscore}–${g.awayteamPKscore} PK)</span>` : '';
+      const pending = !played && gameDateKey(g) && gameDateKey(g) < today ? '<span class="match-tag">Result pending</span>' : '';
+      const status = g.status && g.status !== 'On Time' ? `<span class="sched-status">${esc(g.status)}</span>` : '';
+      const where = [g.complex, g.venue].filter(Boolean).join(' · ');
+      const tag = rowTag ? rowTag(g) : '';
+      const teams = played
+        ? `${team(home, g.homeTeam, g.hometeamID, homeWin)}<span class="match-score">${g.hometeamscore}–${g.awayteamscore}</span>${team(away, g.awayTeam, g.awayteamID, awayWin)}${pk}`
+        : `${team(home, g.homeTeam, g.hometeamID)}<span class="match-vs">vs</span>${team(away, g.awayTeam, g.awayteamID)}`;
+      return `<div class="match-row${sel ? ' is-selected' : ''}" data-home="${esc(g.hometeamID)}" data-away="${esc(g.awayteamID)}">
+        <div class="match-time">${esc(g.gameTimeText || 'TBD')}${tag ? `<div class="sched-tag">${esc(tag)}</div>` : ''}</div>
+        <div class="match-body">
+          <div class="match-teams">${teams}${pending}${status}</div>
+          ${where ? `<div class="match-where">${esc(where)}</div>` : ''}
+        </div>
+      </div>`;
     }
 
     // ========== TEAM AT A GLANCE ==========
@@ -4082,6 +4304,7 @@
 
       try {
         await Promise.all([loadSources(), loadRefreshState()]);
+        setObserved();
       } catch (err) {
         document.getElementById('standingsContainer').innerHTML = `<div class="error-message">
           <strong>Couldn't load the dashboard data.</strong><br>
