@@ -42,6 +42,9 @@
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
       --star-color: #e9c46a;
+      --accent-text: #1f7a70;      /* teal dark enough for 4.5:1 on white */
+      --accent-contrast: #ffffff;  /* text on an accent-filled control */
+      --danger-text: #b91c1c;
       --rank-1: linear-gradient(135deg, #fef3c7, #fde68a);
       --rank-2: linear-gradient(135deg, #f1f5f9, #e2e8f0);
       --rank-3: linear-gradient(135deg, #fef3e2, #fde0be);
@@ -69,6 +72,9 @@
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
       --star-color: #e9c46a;
+      --accent-text: #3fbfb0;
+      --accent-contrast: #0b1a17;
+      --danger-text: #f87171;
       --rank-1: linear-gradient(135deg, #3a2f0b, #4a3d12);
       --rank-2: linear-gradient(135deg, #1e2d40, #243044);
       --rank-3: linear-gradient(135deg, #3a2a0b, #4a3512);
@@ -78,6 +84,20 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent-text);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
     }
 
     body {
@@ -269,9 +289,9 @@
       font: inherit;
       font-size: 13px;
       font-weight: 600;
-      color: #fff;
-      background: var(--teal);
-      border: 1px solid var(--teal);
+      color: var(--accent-contrast);
+      background: var(--accent-text);
+      border: 1px solid var(--accent-text);
       border-radius: 8px;
       cursor: pointer;
       transition: filter var(--transition-fast);
@@ -302,9 +322,9 @@
     }
 
     .age-tab.active {
-      background: var(--teal);
-      color: #fff;
-      border-color: var(--teal);
+      background: var(--accent-text);
+      color: var(--accent-contrast);
+      border-color: var(--accent-text);
       box-shadow: 0 2px 8px rgba(42, 157, 143, 0.35);
       transform: translateY(-1px);
     }
@@ -322,7 +342,6 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       background: var(--bg-body) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 10px center no-repeat;
-      outline: none;
       transition: all var(--transition-fast);
       color: var(--text-primary);
     }
@@ -336,6 +355,7 @@
       border-color: var(--teal);
       box-shadow: 0 0 0 3px var(--teal-glow);
       background-color: var(--bg-surface);
+      outline: none;
     }
 
     .conference-list {
@@ -370,7 +390,7 @@
     .conference-item.active {
       background: var(--teal-surface);
       border-left-color: var(--teal);
-      color: var(--teal);
+      color: var(--accent-text);
       font-weight: 700;
     }
 
@@ -418,7 +438,7 @@
     }
 
     .sidebar-tab.active {
-      color: var(--teal);
+      color: var(--accent-text);
       border-bottom-color: var(--teal);
     }
 
@@ -558,9 +578,9 @@
     .view-tab:hover { color: var(--text-primary); border-color: var(--teal); }
 
     .view-tab.active {
-      background: var(--teal);
-      border-color: var(--teal);
-      color: #fff;
+      background: var(--accent-text);
+      border-color: var(--accent-text);
+      color: var(--accent-contrast);
     }
 
     /* ===== SCHEDULE TABLE ===== */
@@ -810,17 +830,19 @@
     }
 
     .standings-table th.sort-active {
-      color: var(--teal);
+      color: var(--accent-text);
     }
 
-    .standings-table th.sort-active::after {
+    /* The sort glyph lives inside the header button so it never wraps below the label */
+    .standings-table th.sort-active .th-sort::after {
       content: ' ▾';
       font-size: 9px;
     }
 
-    .standings-table th.sort-active.sort-asc::after {
+    .standings-table th.sort-active.sort-asc .th-sort::after {
       content: ' ▴';
     }
+    .th-sort { white-space: nowrap; }
 
     .standings-table td {
       padding: 10px 12px;
@@ -924,16 +946,16 @@
 
     .stat-highlight {
       font-weight: 700;
-      color: var(--teal);
+      color: var(--accent-text);
     }
 
     .gd-positive {
-      color: var(--teal);
+      color: var(--accent-text);
       font-weight: 600;
     }
 
     .gd-negative {
-      color: #ef4444;
+      color: var(--danger-text);
       font-weight: 600;
     }
 
@@ -1120,6 +1142,18 @@
       }
     }
 
+    /* Comfortable targets on touch screens */
+    @media (max-width: 768px), (pointer: coarse) {
+      .age-tab, .conference-item, .view-tab, .sidebar-tab, .seg-btn, .stage-tab, .playoff-age-tab,
+      .more-stats-btn, .open-external, .btn-primary, .theme-toggle, .hamburger {
+        min-height: 44px;
+      }
+      .star-btn { min-width: 40px; min-height: 40px; }
+      .th-sort { min-height: 44px; }
+      .standings-table td { padding: 12px 10px; }
+      .match-team { padding: 4px 0; }
+    }
+
     @media (max-width: 480px) {
       .header {
         padding: 0 12px;
@@ -1201,9 +1235,10 @@
       color: #fff;
     }
 
-    .form-chip.w { background: var(--teal); }
-    .form-chip.d { background: #8c96a3; }
-    .form-chip.l { background: #d9534f; }
+    .form-chip.w { background: var(--accent-text); color: var(--accent-contrast); }
+    .form-chip.d { background: #64748b; }
+    .form-chip.l { background: var(--danger-text); }
+    [data-theme="dark"] .form-chip.l { color: #1a0505; }
 
     .summary-stack { display: flex; flex-direction: column; gap: 20px; width: 100%; min-width: 0; }
 
@@ -1233,7 +1268,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.6px;
-      color: var(--teal);
+      color: var(--accent-text);
     }
     .glance-name {
       display: flex;
@@ -1285,7 +1320,7 @@
     .glance-dl dt { color: var(--text-secondary); }
     .glance-dl dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
     .glance-actions { padding: 12px 18px; border-top: 1px solid var(--border-light); }
-    .glance-link { font-size: 13px; font-weight: 600; color: var(--teal); text-decoration: none; }
+    .glance-link { font-size: 13px; font-weight: 600; color: var(--accent-text); text-decoration: none; }
     .glance-link:hover { text-decoration: underline; }
     .glance-empty { padding: 18px; font-size: 13px; color: var(--text-secondary); }
     .glance-empty p { margin-top: 8px; line-height: 1.5; }
@@ -1534,9 +1569,9 @@
     }
 
     .stage-tab.active {
-      background: var(--teal);
-      border-color: var(--teal);
-      color: #fff;
+      background: var(--accent-text);
+      border-color: var(--accent-text);
+      color: var(--accent-contrast);
     }
 
     .playoff-age-group-tabs {
@@ -1849,7 +1884,7 @@
 
   <div class="header">
     <div class="header-left">
-      <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu">&#9776;</button>
+      <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">&#9776;</button>
       <div class="header-logo">ECNL</div>
       <div class="header-divider"></div>
       <div class="header-title">Girls Conference Standings</div>
@@ -1864,13 +1899,13 @@
 
   <div class="layout">
     <div class="sidebar" id="sidebar">
-      <div class="sidebar-tabs">
-        <button class="sidebar-tab active" id="tabConferences" onclick="switchTab('conferences')">Conferences</button>
-        <button class="sidebar-tab" id="tabFavorites" onclick="switchTab('favorites')">★ My Teams</button>
-        <button class="sidebar-tab" id="tabPlayoffs" onclick="switchTab('playoffs')">🏆 Playoffs</button>
+      <div class="sidebar-tabs" role="tablist" aria-label="Sections">
+        <button class="sidebar-tab active" id="tabConferences" role="tab" aria-selected="true" aria-controls="conferencesPanel" onclick="switchTab('conferences')">Conferences</button>
+        <button class="sidebar-tab" id="tabFavorites" role="tab" aria-selected="false" aria-controls="favoritesPanel" onclick="switchTab('favorites')">★ My Teams</button>
+        <button class="sidebar-tab" id="tabPlayoffs" role="tab" aria-selected="false" aria-controls="playoffsPanel" onclick="switchTab('playoffs')">🏆 Playoffs</button>
       </div>
 
-      <div id="conferencesPanel">
+      <div id="conferencesPanel" role="tabpanel" aria-labelledby="tabConferences">
         <div class="sidebar-section-title">Find a team</div>
         <div class="sidebar-search global-search-wrap" role="search">
           <input type="search" class="search-input" id="globalTeamSearch"
@@ -1895,7 +1930,7 @@
         <ul class="conference-list" id="conferenceList"></ul>
       </div>
 
-      <div id="favoritesPanel" style="display:none;flex:1;overflow-y:auto;">
+      <div id="favoritesPanel" role="tabpanel" aria-labelledby="tabFavorites" style="display:none;flex:1;overflow-y:auto;">
         <div class="favorites-empty" id="favoritesEmpty">
           <span class="star-icon">☆</span>
           No teams followed yet
@@ -1904,7 +1939,7 @@
         <ul class="conference-list" id="favoritesList"></ul>
       </div>
 
-      <div id="playoffsPanel" style="display:none;flex:1;overflow-y:auto;flex-direction:column;">
+      <div id="playoffsPanel" role="tabpanel" aria-labelledby="tabPlayoffs" style="display:none;flex:1;overflow-y:auto;flex-direction:column;">
         <!-- Stages come from the registry's `national` keys (e.g. Playoffs / Finals,
              or a single combined event); the row is hidden when there is only one. -->
         <div id="stageSection">
@@ -1937,9 +1972,9 @@
           <div class="breadcrumb" id="breadcrumb"></div>
           <div class="content-title" id="contentTitle">Select a conference</div>
           <div class="content-subtitle" id="contentSubtitle">Choose an age group and conference from the sidebar</div>
-          <div class="view-tabs" id="viewTabs" style="display:none">
-            <button class="view-tab active" id="viewTabStandings" onclick="selectView('standings')">Standings</button>
-            <button class="view-tab" id="viewTabSchedule" onclick="selectView('schedule')">Schedule</button>
+          <div class="view-tabs" id="viewTabs" role="tablist" aria-label="View" style="display:none">
+            <button class="view-tab active" id="viewTabStandings" role="tab" aria-selected="true" onclick="selectView('standings')">Standings</button>
+            <button class="view-tab" id="viewTabSchedule" role="tab" aria-selected="false" onclick="selectView('schedule')">Schedule</button>
           </div>
           <details class="format-note" id="formatNote" style="display:none">
             <summary>ⓘ Format</summary>
@@ -2335,8 +2370,16 @@
       const html = document.documentElement;
       const isDark = html.getAttribute('data-theme') === 'dark';
       html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      document.getElementById('themeToggle').textContent = isDark ? '🌙' : '☀️';
+      setThemeToggle(!isDark);
       try { localStorage.setItem('ecnl-theme', isDark ? 'light' : 'dark'); } catch (e) { }
+    }
+
+    function setThemeToggle(isDark) {
+      const b = document.getElementById('themeToggle');
+      if (!b) return;
+      b.textContent = isDark ? '☀️' : '🌙';
+      b.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      b.title = b.getAttribute('aria-label');
     }
 
     function loadTheme() {
@@ -2344,7 +2387,7 @@
         const t = localStorage.getItem('ecnl-theme');
         if (t === 'dark') {
           document.documentElement.setAttribute('data-theme', 'dark');
-          document.getElementById('themeToggle').textContent = '☀️';
+          setThemeToggle(true);
         }
       } catch (e) { }
     }
@@ -2407,7 +2450,7 @@
         <div class="search-results-panel" id="searchResultsPanel">
           <div class="search-results-header">
             <div class="search-results-title">🔍 "${query}"</div>
-            <div class="search-results-count" id="searchResultsCount">Searching ${total} conferences…</div>
+            <div class="search-results-count" id="searchResultsCount" role="status" aria-live="polite">Searching ${total} conferences…</div>
           </div>
           <div class="search-progress" id="searchProgress">
             <span id="searchProgressText">0 / ${total}</span>
@@ -2497,6 +2540,8 @@
       const ov = document.getElementById('sidebarOverlay');
       const open = sb.classList.toggle('open');
       ov.classList.toggle('visible', open);
+      const hb = document.querySelector('.hamburger');
+      if (hb) hb.setAttribute('aria-expanded', String(open));
     }
 
     function closeSidebarIfMobile() {
@@ -2514,9 +2559,11 @@
       document.getElementById('conferencesPanel').style.display = isConf ? '' : 'none';
       document.getElementById('favoritesPanel').style.display   = isFav  ? 'flex' : 'none';
       document.getElementById('playoffsPanel').style.display    = isPO   ? 'flex' : 'none';
-      document.getElementById('tabConferences').classList.toggle('active', isConf);
-      document.getElementById('tabFavorites').classList.toggle('active', isFav);
-      document.getElementById('tabPlayoffs').classList.toggle('active', isPO);
+      [['tabConferences', isConf], ['tabFavorites', isFav], ['tabPlayoffs', isPO]].forEach(([id, on]) => {
+        const b = document.getElementById(id);
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', String(on));
+      });
       if (isFav) openFavoritesTab();
       if (isPO)  loadPlayoffsPanel();
       // Returning to Conferences must repaint the main pane, which the
@@ -3877,10 +3924,12 @@
       const c = document.getElementById('viewTabSchedule');
       if (s) {
         s.classList.toggle('active', currentView === 'standings');
+        s.setAttribute('aria-selected', String(currentView === 'standings'));
         s.textContent = firstLabel || 'Standings';
       }
       if (c) {
         c.classList.toggle('active', currentView === 'schedule');
+        c.setAttribute('aria-selected', String(currentView === 'schedule'));
         if (secondLabel) c.textContent = secondLabel;
       }
     }
@@ -4308,6 +4357,7 @@
       const typing = t.closest && t.closest('input, select, textarea, [contenteditable="true"]');
       if (typing) return;
       if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); focusTeamSearch(); return; }
+      if (e.key === 'Escape' && document.getElementById('sidebar').classList.contains('open')) { toggleSidebar(); return; }
       // Enter/Space activates focusable list items that aren't native buttons.
       if ((e.key === 'Enter' || e.key === ' ') && t.matches && t.matches('li[tabindex]')) { e.preventDefault(); t.click(); return; }
       // Arrow shortcuts browse conferences only, and never steal keys from a focused control.
