@@ -1820,6 +1820,13 @@
     let currentSortCol = 'rank';
     let currentSortAsc = true;
     let favorites = new Set();   // Set of "teamName" strings
+    // Conference view: the team shown in the "at a glance" panel, the schedule
+    // filter, and whether the extra standings columns are expanded.
+    let selectedTeamID = null;
+    let scheduleFilter = 'upcoming';  // 'upcoming' | 'results' | 'all'
+    let showMoreStats = false;
+    let currentFlightData = [];       // [{ flight, standings, games }] for the loaded conference + age group
+    let previewTeam = null;           // a #tab=teams deep link to a team that isn't a favourite
     // Playoffs state
     let currentPlayoffStage = null;      // a key of the season's `national` map, e.g. "Playoffs & Finals"
     let currentPlayoffAgeGroup = null;
@@ -1936,7 +1943,8 @@
           conference: currentConference, view: currentView,
           tab: currentTab, stage: currentPlayoffStage,
           playoffAgeGroup: currentPlayoffAgeGroup, tier: currentPlayoffTier,
-          favorite: currentFavorite
+          favorite: currentFavorite,
+          team: selectedTeamID, sched: scheduleFilter, moreStats: showMoreStats
         }));
       } catch (e) { }
     }
@@ -1955,6 +1963,9 @@
           if (s.stage) currentPlayoffStage = s.stage;              // validated in buildStageTabs
           if (s.playoffAgeGroup) currentPlayoffAgeGroup = s.playoffAgeGroup;
           if (s.tier) currentPlayoffTier = Number(s.tier) || null;
+          if (s.team) selectedTeamID = Number(s.team) || null;   // validated once the tables load
+          if (['upcoming', 'results', 'all'].includes(s.sched)) scheduleFilter = s.sched;
+          showMoreStats = !!s.moreStats;
         }
       } catch (e) { }
     }
@@ -1992,14 +2003,16 @@
     function pushHash() {
       const e = encodeURIComponent;
       const view = currentView !== 'standings' ? `&view=${e(currentView)}` : '';
-      const fav = currentFavorite ? favoriteMeta.get(currentFavorite) : null;
+      const fav = currentFavorite ? favoriteMeta.get(currentFavorite) : previewTeam;
       const h = currentTab === 'playoffs'
         ? `#tab=playoffs&season=${e(currentSeason)}&stage=${e(currentPlayoffStage || '')}` +
           `&age=${e(currentPlayoffAgeGroup || '')}&tier=${e(currentPlayoffTier || '')}${view}`
         : currentTab === 'favorites'
         ? `#tab=teams&season=${e(currentSeason)}` +
           (fav && fav.teamID ? `&team=${e(fav.teamID)}` : '') + (fav ? `&name=${e(fav.name)}` : '')
-        : `#season=${e(currentSeason)}&age=${e(currentAgeGroup)}&conf=${e(currentConference)}${view}`;
+        : `#season=${e(currentSeason)}&age=${e(currentAgeGroup)}&conf=${e(currentConference)}${view}` +
+          (selectedTeamID ? `&team=${e(selectedTeamID)}` : '') +
+          (scheduleFilter !== 'upcoming' ? `&sched=${e(scheduleFilter)}` : '');
       if (window.location.hash !== h) history.replaceState(null, '', h);
     }
 
@@ -2015,10 +2028,11 @@
         const teamID = Number(p.get('team')) || null;
         const name = p.get('name') || null;
         let rec = [...favoriteMeta.values()].find(r => (teamID && r.teamID === teamID) || (name && r.name === name));
+        previewTeam = null;
         if (!rec && (teamID || name)) {
-          // Not one of this browser's favourites: show it anyway, resolved from the archive.
-          rec = { name: name || `Team ${teamID}`, teamID: teamID || undefined };
-          favorites.add(rec.name); favoriteMeta.set(rec.name, rec);
+          // Not one of this browser's favourites: show it anyway, resolved from
+          // the archive, without adding it to the list.
+          previewTeam = { name: name || `Team ${teamID}`, teamID: teamID || undefined };
         }
         currentFavorite = rec ? rec.name : null;
         return true;
@@ -2033,6 +2047,8 @@
       currentTab = 'conferences';
       if (p.get('age')) { currentAgeGroup = p.get('age'); changed = true; } // validated after API fetch
       if (p.get('conf') && SEASONS[currentSeason].conferences[p.get('conf')]) { currentConference = p.get('conf'); changed = true; }
+      if (p.get('team')) { selectedTeamID = Number(p.get('team')) || null; changed = true; } // validated once the tables load
+      if (['upcoming', 'results', 'all'].includes(p.get('sched'))) { scheduleFilter = p.get('sched'); changed = true; }
       return changed;
     }
 
@@ -2942,6 +2958,10 @@
       } else {
         favorites.add(name);
         favoriteMeta.set(name, rec);
+        if (previewTeam && previewTeam.name === name) {
+          previewTeam = null;
+          if (currentTab === 'favorites') currentFavorite = name;
+        }
       }
       saveFavorites();
       document.querySelectorAll('#standingsContainer .star-btn').forEach(btn => {
@@ -3003,6 +3023,7 @@
     function selectFavorite(name) {
       if (!favorites.has(name)) return;
       currentFavorite = name;
+      previewTeam = null;
       buildFavoritesList();
       loadTeamSummary(favoriteMeta.get(name) || { name });
       closeSidebarIfMobile();
@@ -3013,6 +3034,12 @@
       buildFavoritesList();
       document.getElementById('viewTabs').style.display = 'none';
       document.getElementById('formatNote').style.display = 'none';
+      if (previewTeam && !favorites.has(previewTeam.name)) {
+        // A shared link to a team this browser doesn't follow.
+        currentFavorite = null;
+        loadTeamSummary(previewTeam);
+        return;
+      }
       if (!favorites.size) {
         currentFavorite = null;
         document.getElementById('breadcrumb').innerHTML =
@@ -3056,6 +3083,67 @@
       return s || n || '';
     }
 
+    // Short label for tables and cards. The API's clubName is often the long
+    // legal name ("California Odyssey Soccer Club"), so the stripped team name
+    // ("COSC") is preferred; the full name goes in a title attribute.
+    function displayName(fullName, clubName) {
+      return shortTeamName(fullName) || clubName || fullName || '';
+    }
+
+    // Game dates are local wall-clock strings; compare their date part as text
+    // so a late kickoff never slides into the next day (see formatGameDate).
+    function todayKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+    function gameDateKey(g) { return (g.gameDate || '').slice(0, 10); }
+    function isPlayed(g) { return g.hometeamscore != null && g.awayteamscore != null; }
+    function sortGames(games) {
+      return [...games].sort((a, b) =>
+        (a.gameDate || '').localeCompare(b.gameDate || '') ||
+        (a.gameTime || '').localeCompare(b.gameTime || ''));
+    }
+    // [{ key: 'YYYY-MM-DD', games: [...] }] in the order the games are given.
+    function groupGamesByDate(games) {
+      const groups = [];
+      let cur = null;
+      games.forEach(g => {
+        const key = gameDateKey(g);
+        if (!cur || cur.key !== key) { cur = { key, games: [] }; groups.push(cur); }
+        cur.games.push(g);
+      });
+      return groups;
+    }
+    // refresh-state.json carries a real instant, so Date parsing is right here.
+    function formatObservedDate(iso) {
+      const d = iso ? new Date(iso) : null;
+      if (!d || isNaN(d)) return '';
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // Everything the glance panel and the My Teams summary derive for one team:
+    // its standings row and position, its own games, last-5 form and next game.
+    function computeTeamSummary(teamID, teams, games, formLen = 5) {
+      const idx = teams.findIndex(t => t.teamID === teamID);
+      const row = idx >= 0 ? teams[idx] : null;
+      const mine = sortGames((games || []).filter(g => g.hometeamID === teamID || g.awayteamID === teamID));
+      const played = mine.filter(isPlayed);
+      const form = played.slice(-formLen).map(g => resultFor(g, teamID));   // oldest -> latest
+      const next = mine.find(g => !isPlayed(g)) || null;
+      const last = played.length ? played[played.length - 1] : null;
+      return { row, position: idx >= 0 ? idx + 1 : null, total: teams.length, mine, played, form, next, last };
+    }
+
+    // Copy a standings row's identity into a favourite/preview record.
+    function adoptStandingsRow(rec, t, extra) {
+      Object.assign(rec, {
+        name: t.name, teamID: t.teamID, clubID: t.clubID, clubName: t.clubName,
+        eventID: t.eventID, divisionID: t.divisionID, divisionName: t.division,
+        flightID: t.flightID, logo: t.clublogo || rec.logo,
+      }, extra || {});
+      if (favorites.has(rec.name)) { favoriteMeta.set(rec.name, rec); saveFavorites(); }
+    }
+
     function favoriteResolved(rec) {
       return !!(rec && rec.eventID && rec.divisionID && rec.flightID && (rec.teamID || rec.name));
     }
@@ -3064,31 +3152,36 @@
     // teamID) by scanning archived standings, this season first.
     async function resolveFavorite(rec) {
       if (favoriteResolved(rec)) return true;
+      // Cheapest first: the team may be in a table already on screen.
+      for (const fd of currentFlightData) {
+        const teams = (fd.standings && fd.standings.teamStandings) || [];
+        const t = teams.find(x => rec.teamID ? x.teamID === rec.teamID : x.name === rec.name);
+        if (t) { adoptStandingsRow(rec, t); return true; }
+      }
       const seasons = [currentSeason, ...Object.keys(SEASONS).filter(s => s !== currentSeason)];
       for (const season of seasons) {
         const confs = Object.entries(SEASONS[season].conferences || {});
         const hits = await Promise.all(confs.map(async ([confName, conf]) => {
           try {
             const h = await getEventHierarchy(conf.eventId);
-            for (const d of (h.girlsDivAndFlightList || [])) {
-              for (const f of (d.flightList || [])) {
-                const data = await getStandings(d.divisionID, f.flightID, conf.eventId).catch(() => null);
-                const teams = (data && data.teamStandings) || [];
-                const t = teams.find(x => rec.teamID ? x.teamID === rec.teamID : x.name === rec.name);
-                if (t) return { t, d, f, conf };
-              }
-            }
+            const pairs = [];
+            for (const d of (h.girlsDivAndFlightList || [])) for (const f of (d.flightList || [])) pairs.push({ d, f });
+            const found = await Promise.all(pairs.map(async ({ d, f }) => {
+              const data = await getStandings(d.divisionID, f.flightID, conf.eventId).catch(() => null);
+              const teams = (data && data.teamStandings) || [];
+              const t = teams.find(x => rec.teamID ? x.teamID === rec.teamID : x.name === rec.name);
+              return t ? { t, d, f, conf } : null;
+            }));
+            return found.find(Boolean) || null;
           } catch (e) { }
           return null;
         }));
         const hit = hits.find(Boolean);
         if (hit) {
-          Object.assign(rec, {
-            name: hit.t.name, teamID: hit.t.teamID, clubID: hit.t.clubID, clubName: hit.t.clubName,
-            eventID: hit.conf.eventId, divisionID: hit.d.divisionID, divisionName: hit.d.divisionName,
-            flightID: hit.f.flightID, logo: hit.t.clublogo || rec.logo,
+          adoptStandingsRow(rec, hit.t, {
+            eventID: hit.conf.eventId, divisionID: hit.d.divisionID,
+            divisionName: hit.d.divisionName, flightID: hit.f.flightID,
           });
-          if (favorites.has(rec.name)) { favoriteMeta.set(rec.name, rec); saveFavorites(); }
           return true;
         }
       }
@@ -3158,11 +3251,7 @@
         const row = idx >= 0 ? teams[idx] : null;
         const teamID = row ? row.teamID : rec.teamID;
 
-        const mine = games.filter(g => g.hometeamID === teamID || g.awayteamID === teamID)
-          .sort((a, b) => (a.gameDate || '').localeCompare(b.gameDate || '') || (a.gameTime || '').localeCompare(b.gameTime || ''));
-        const played = mine.filter(g => g.hometeamscore != null && g.awayteamscore != null);
-        const form = played.slice(-5).map(g => resultFor(g, teamID));
-        const next = mine.find(g => g.hometeamscore == null || g.awayteamscore == null);
+        const { mine, form, next } = computeTeamSummary(teamID, teams, games);
 
         // Header
         document.getElementById('breadcrumb').innerHTML =
