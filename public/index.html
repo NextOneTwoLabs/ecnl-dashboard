@@ -155,37 +155,11 @@
       gap: 12px;
     }
 
-    .season-selector {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .season-selector label {
+    .season-label {
       font-size: 13px;
-      opacity: 0.7;
-    }
-
-    .season-select {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: var(--text-header);
-      padding: 7px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      cursor: pointer;
-      outline: none;
-      transition: all var(--transition-fast);
-      font-family: var(--font);
-    }
-
-    .season-select:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .season-select option {
-      background: #1a2332;
-      color: #fff;
+      font-weight: 500;
+      opacity: 0.85;
+      white-space: nowrap;
     }
 
     .theme-toggle {
@@ -253,8 +227,56 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      padding: 6px 16px 14px;
+      padding: 4px 16px 10px;
     }
+
+    .age-tab-sub { font-size: 10px; font-weight: 400; opacity: 0.7; }
+
+    /* Browse group: season select + labelled sub-sections */
+    .browse-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 2px 16px 8px;
+    }
+    .browse-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 6px 16px 4px;
+    }
+    .browse-row .browse-label { padding: 0; min-width: 52px; }
+    .season-select {
+      flex: 1;
+      min-width: 0;
+      padding: 7px 10px;
+      font-size: 13px;
+      font-family: var(--font);
+      color: var(--text-primary);
+      background: var(--bg-body);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .season-select:hover { border-color: var(--teal); }
+    .season-select:focus-visible { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-glow); outline: none; }
+
+    .btn-primary {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 16px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--teal);
+      border: 1px solid var(--teal);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: filter var(--transition-fast);
+    }
+    .btn-primary:hover { filter: brightness(0.92); }
 
     .age-tab {
       padding: 8px 12px;
@@ -322,10 +344,15 @@
     }
 
     .conference-item {
+      width: 100%;
       padding: 11px 20px;
       font-size: 13px;
       font-weight: 500;
+      font-family: var(--font);
+      text-align: left;
       cursor: pointer;
+      background: none;
+      border: none;
       border-left: 3px solid transparent;
       transition: all var(--transition-fast);
       display: flex;
@@ -347,10 +374,6 @@
       font-weight: 700;
     }
 
-    .conference-item.search-hidden {
-      display: none;
-    }
-
     .conference-dot {
       width: 7px;
       height: 7px;
@@ -364,14 +387,6 @@
     .conference-item.active .conference-dot {
       background: var(--teal);
       transform: scale(1.3);
-    }
-
-    .search-no-results {
-      padding: 16px 20px;
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-style: italic;
-      display: none;
     }
 
     /* Favorites tab */
@@ -1840,12 +1855,8 @@
       <div class="header-title">Girls Conference Standings</div>
     </div>
     <div class="header-right">
-      <div class="season-selector">
-        <label>Season:</label>
-        <!-- Options are built from data/sources.json at startup -->
-        <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)"></select>
-      </div>
-      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
+      <span class="season-label" id="seasonLabel"></span>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Switch to dark mode">🌙</button>
     </div>
   </div>
 
@@ -1860,40 +1871,35 @@
       </div>
 
       <div id="conferencesPanel">
-        <div class="sidebar-section-title">Age Group</div>
-        <div class="age-group-tabs" id="ageGroupTabs"></div>
-
-        <div class="sidebar-section-title" style="margin-top:4px;">Conference</div>
-        <div class="sidebar-search">
-          <input type="text" class="search-input" id="confSearch" placeholder="Filter conferences…"
-            oninput="filterConferences(this.value)">
-        </div>
-        <ul class="conference-list" id="conferenceList"></ul>
-        <div class="search-no-results" id="searchNoResults">No conferences match</div>
-
-        <div class="sidebar-section-title" style="margin-top:4px;">Filter Teams</div>
-        <div class="sidebar-search">
-          <input type="text" class="search-input" id="teamSearch" placeholder="Search teams…"
-            oninput="filterTeams(this.value)">
-        </div>
-        <div class="team-filter-count" id="teamFilterCount"></div>
-
-        <div class="sidebar-section-title" style="margin-top:4px;">Search All Conferences</div>
-        <div class="sidebar-search global-search-wrap">
-          <input type="text" class="search-input" id="globalTeamSearch"
-            placeholder="Team name across all conferences…"
+        <div class="sidebar-section-title">Find a team</div>
+        <div class="sidebar-search global-search-wrap" role="search">
+          <input type="search" class="search-input" id="globalTeamSearch"
+            placeholder="Team or club name…" autocomplete="off"
+            aria-label="Find a team in any conference"
             oninput="onGlobalSearchInput(this.value)"
             onkeydown="if(event.key==='Escape')clearGlobalSearch()">
-          <button class="global-search-clear" id="globalSearchClear"
-            onclick="clearGlobalSearch()" title="Clear search">✕</button>
+          <button type="button" class="global-search-clear" id="globalSearchClear"
+            onclick="clearGlobalSearch()" title="Clear search" aria-label="Clear search">✕</button>
         </div>
-        <div class="global-search-status" id="globalSearchStatus"></div>
+        <div class="global-search-status" id="globalSearchStatus" role="status" aria-live="polite"></div>
+
+        <div class="sidebar-section-title">Browse</div>
+        <div class="browse-row">
+          <label class="browse-label" for="seasonSelect">Season</label>
+          <!-- Options are built from data/sources.json at startup -->
+          <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)"></select>
+        </div>
+        <div class="browse-label">Age group</div>
+        <div class="age-group-tabs" id="ageGroupTabs" role="tablist" aria-label="Age group"></div>
+        <div class="browse-label">Conference</div>
+        <ul class="conference-list" id="conferenceList"></ul>
       </div>
 
       <div id="favoritesPanel" style="display:none;flex:1;overflow-y:auto;">
         <div class="favorites-empty" id="favoritesEmpty">
           <span class="star-icon">☆</span>
-          Click the ★ next to any team to add them here
+          No teams followed yet
+          <button type="button" class="btn-primary" onclick="focusTeamSearch()">Find a team</button>
         </div>
         <ul class="conference-list" id="favoritesList"></ul>
       </div>
@@ -1919,6 +1925,7 @@
       </div>
 
       <div class="shortcut-hint">
+        <kbd>/</kbd> Find a team &nbsp;
         <kbd>&larr;</kbd> <kbd>&rarr;</kbd> Age groups &nbsp;
         <kbd>&uarr;</kbd> <kbd>&darr;</kbd> Conferences
       </div>
@@ -2318,7 +2325,7 @@
 
     window.addEventListener('hashchange', () => {
       if (!loadFromHash()) return;
-      document.getElementById('seasonSelect').value = currentSeason;
+      syncSeasonUI();
       if (currentTab === 'playoffs' || currentTab === 'favorites') switchTab(currentTab);
       else { switchTab('conferences'); rebuildAll(); }
     });
@@ -2626,7 +2633,7 @@
       const c = document.getElementById('playoffTierList');
       if (!c) return;
       c.innerHTML = flights.map(f =>
-        `<li class="conference-item ${f.flightID === currentPlayoffTier ? 'active' : ''}" data-flight="${f.flightID}" onclick="selectPlayoffTier(Number(this.dataset.flight))">
+        `<li class="conference-item ${f.flightID === currentPlayoffTier ? 'active' : ''}" data-flight="${f.flightID}" tabindex="0" onclick="selectPlayoffTier(Number(this.dataset.flight))">
           <span class="conference-dot"></span><span>${esc(tierLabel(evt, f.flightName))}</span>
         </li>`
       ).join('');
@@ -2636,10 +2643,14 @@
       const natEvents = getNationalEventsForSeason();
 
       if (!natEvents) {
+        // The active season's playoffs haven't happened yet; an older season
+        // with no `national` entry was simply never archived.
+        const notYet = SOURCES.refresh && currentSeason === SOURCES.refresh.activeSeason;
+        const label = seasonLabel(currentSeason);
         document.getElementById('breadcrumb').innerHTML =
-          `<span>${currentSeason}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Playoffs & Finals</span>`;
+          `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Playoffs & Finals</span>`;
         document.getElementById('contentTitle').textContent = 'Playoffs & Finals';
-        document.getElementById('contentSubtitle').textContent = 'No events available for this season';
+        document.getElementById('contentSubtitle').textContent = notYet ? `${label} · not played yet` : `${label} · not archived`;
         document.getElementById('extLinks').innerHTML = '';
         document.getElementById('viewTabs').style.display = 'none';
         document.getElementById('formatNote').style.display = 'none';
@@ -2649,8 +2660,10 @@
         document.getElementById('standingsContainer').innerHTML = `
           <div class="no-national-events">
             <div class="no-national-events-icon">🏆</div>
-            <div class="no-national-events-text">No National Events</div>
-            <div class="no-national-events-sub">No Playoffs or Finals data is available for the ${currentSeason} season.</div>
+            <div class="no-national-events-text">${notYet ? `${label} Playoffs &amp; Finals haven't been played yet` : `${label} playoff data isn't available here`}</div>
+            <div class="no-national-events-sub">${notYet
+              ? 'The national playoffs run at the end of the season. Results appear here once TGS publishes them.'
+              : 'This season\'s national events were not archived.'}</div>
           </div>`;
         return;
       }
@@ -3077,17 +3090,6 @@
       pushHash();
     }
 
-    function filterConferences(q) {
-      const query = q.trim().toLowerCase();
-      let visible = 0;
-      document.querySelectorAll('#conferenceList .conference-item').forEach(item => {
-        const match = !query || (item.dataset.conf || '').toLowerCase().includes(query);
-        item.classList.toggle('search-hidden', !match);
-        if (match) visible++;
-      });
-      document.getElementById('searchNoResults').style.display = visible === 0 ? 'block' : 'none';
-    }
-
     // ========== DYNAMIC AGE GROUPS ==========
     async function loadAgeGroupsForSeason() {
       if (seasonAgeGroups[currentSeason]) {
@@ -3114,21 +3116,37 @@
       c.innerHTML = AGE_GROUPS.map(ag => {
         const l = AGE_LABELS[ag] || ag;
         const by = getBirthYearText(ag);
-        const tip = by ? ` title="${l} · birth years ${by}"` : '';
-        return `<div class="age-tab ${ag === currentAgeGroup ? 'active' : ''}"${tip} onclick="selectAgeGroup('${ag}')"><span>${l}</span><br><span style="font-size:10px;font-weight:400;opacity:.7">${ag}</span></div>`;
+        const on = ag === currentAgeGroup;
+        const tip = by ? ` title="${esc(l)} · birth years ${esc(by)}"` : '';
+        return `<button type="button" class="age-tab${on ? ' active' : ''}" role="tab" aria-selected="${on}"${tip} data-age="${esc(ag)}">` +
+          `<span>${esc(l)}</span><br><span class="age-tab-sub">${esc(ag)}</span></button>`;
       }).join('');
     }
 
     function buildConferenceList() {
       const c = document.getElementById('conferenceList');
       const names = Object.keys(getSeasonData().conferences);
-      c.innerHTML = names.map(n =>
-        `<li class="conference-item ${n === currentConference ? 'active' : ''}" onclick="selectConference('${n}')" data-conf="${n}">
-      <span class="conference-dot"></span><span>${n}</span>
-    </li>`
-      ).join('');
-      const sv = document.getElementById('confSearch').value;
-      if (sv) filterConferences(sv);
+      c.innerHTML = names.map(n => {
+        const on = n === currentConference;
+        return `<li><button type="button" class="conference-item${on ? ' active' : ''}" data-conf="${esc(n)}"${on ? ' aria-current="true"' : ''}>` +
+          `<span class="conference-dot"></span><span>${esc(n)}</span></button></li>`;
+      }).join('');
+    }
+
+    // Season select (sidebar) and the header label always agree.
+    function syncSeasonUI() {
+      const sel = document.getElementById('seasonSelect');
+      if (sel && sel.value !== currentSeason) sel.value = currentSeason;
+      const lbl = document.getElementById('seasonLabel');
+      if (lbl) lbl.textContent = currentSeason ? `${seasonLabel(currentSeason)} season` : '';
+    }
+
+    function focusTeamSearch() {
+      if (currentTab !== 'conferences') switchTab('conferences');
+      const sb = document.getElementById('sidebar');
+      if (window.innerWidth <= 768 && sb && !sb.classList.contains('open')) toggleSidebar();
+      const inp = document.getElementById('globalTeamSearch');
+      if (inp) { inp.focus(); inp.select(); }
     }
 
     function buildBreadcrumb() {
@@ -3238,7 +3256,7 @@
       }
       empty.style.display = 'none';
       c.innerHTML = sortedFavorites().map(rec =>
-        `<li class="conference-item fav-item ${rec.name === currentFavorite ? 'active' : ''}" data-fav="${esc(rec.name)}" onclick="selectFavorite(this.dataset.fav)">
+        `<li class="conference-item fav-item ${rec.name === currentFavorite ? 'active' : ''}" data-fav="${esc(rec.name)}" tabindex="0" onclick="selectFavorite(this.dataset.fav)">
           <button class="star-btn starred" data-fav="${esc(rec.name)}" onclick="event.stopPropagation(); toggleFavorite(this.dataset.fav)" title="Remove from My Teams">★</button>
           <span><span class="fav-name">${esc(rec.name)}</span><span class="fav-meta">${esc(favoriteLabel(rec))}</span></span>
         </li>`
@@ -3270,13 +3288,14 @@
         document.getElementById('breadcrumb').innerHTML =
           `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">My Teams</span>`;
         document.getElementById('contentTitle').textContent = 'My Teams';
-        document.getElementById('contentSubtitle').textContent = 'Star a team in any standings table to follow it here';
+        document.getElementById('contentSubtitle').textContent = 'Follow a team to see its position, form and next match here';
         document.getElementById('extLinks').innerHTML = '';
         document.getElementById('standingsContainer').innerHTML = `
           <div class="no-national-events">
             <div class="no-national-events-icon">☆</div>
-            <div class="no-national-events-text">No teams yet</div>
-            <div class="no-national-events-sub">Click the ★ next to any team in a standings table, then it appears here with its rank and schedule.</div>
+            <div class="no-national-events-text">No teams followed yet</div>
+            <div class="no-national-events-sub">Search for a team, or click the ★ next to any team in a standings table.</div>
+            <button type="button" class="btn-primary" onclick="focusTeamSearch()">Find a team</button>
           </div>`;
         saveState(); pushHash();
         return;
@@ -3456,7 +3475,7 @@
         const ctx = eventContext(rec.eventID) || { season: currentSeason, name: '', kind: 'conference' };
         if (ctx.season !== currentSeason) {
           currentSeason = ctx.season;
-          document.getElementById('seasonSelect').value = currentSeason;
+          syncSeasonUI();
         }
 
         const hierarchy = await getEventHierarchy(rec.eventID);
@@ -4210,7 +4229,7 @@
       if (season && SEASONS[season] && season !== currentSeason) {
         currentSeason = season;
         eventHierarchy = {};
-        document.getElementById('seasonSelect').value = season;
+        syncSeasonUI();
       }
       if (ageGroup) currentAgeGroup = ageGroup;
       if (confName) currentConference = confName;
@@ -4246,6 +4265,7 @@
       currentSeason = season;
       eventHierarchy = {};
       selectedTeamID = null;
+      syncSeasonUI();
       currentPlayoffAgeGroup = null;
       currentPlayoffTier = null;
       currentPlayoffStage = null;   // resolved from the season's national events
@@ -4284,7 +4304,15 @@
 
     // ========== KEYBOARD NAV ==========
     document.addEventListener('keydown', (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+      const t = e.target;
+      const typing = t.closest && t.closest('input, select, textarea, [contenteditable="true"]');
+      if (typing) return;
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); focusTeamSearch(); return; }
+      // Enter/Space activates focusable list items that aren't native buttons.
+      if ((e.key === 'Enter' || e.key === ' ') && t.matches && t.matches('li[tabindex]')) { e.preventDefault(); t.click(); return; }
+      // Arrow shortcuts browse conferences only, and never steal keys from a focused control.
+      if (currentTab !== 'conferences') return;
+      if (t.closest && t.closest('button, a, [tabindex], [role="tab"]')) return;
       const names = Object.keys(getSeasonData().conferences);
       const ci = names.indexOf(currentConference);
       const ai = AGE_GROUPS.indexOf(currentAgeGroup);
@@ -4294,6 +4322,15 @@
         case 'ArrowUp': e.preventDefault(); if (ci > 0) selectConference(names[ci - 1]); break;
         case 'ArrowDown': e.preventDefault(); if (ci < names.length - 1) selectConference(names[ci + 1]); break;
       }
+    });
+
+    document.getElementById('ageGroupTabs').addEventListener('click', e => {
+      const b = e.target.closest('.age-tab[data-age]');
+      if (b) selectAgeGroup(b.dataset.age);
+    });
+    document.getElementById('conferenceList').addEventListener('click', e => {
+      const b = e.target.closest('.conference-item[data-conf]');
+      if (b) selectConference(b.dataset.conf);
     });
 
     // ========== INIT ==========
@@ -4316,7 +4353,7 @@
       }
 
       if (!loadFromHash()) loadSavedState();
-      document.getElementById('seasonSelect').value = currentSeason;
+      syncSeasonUI();
       if (currentTab === 'playoffs' || currentTab === 'favorites') {
         // Build the conference sidebar so switching back is instant, but land on the saved tab.
         await loadAgeGroupsForSeason();
