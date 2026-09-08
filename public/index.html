@@ -830,6 +830,78 @@
       font-weight: 600;
     }
 
+    .rank-plain {
+      padding-left: 8px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* Column config: numeric cells, compact/expanded column sets, sort buttons */
+    .standings-table .num { text-align: center; font-variant-numeric: tabular-nums; }
+    .standings-table .num-strong { font-weight: 600; }
+    .standings-table th.sortable { padding: 0; }
+    .th-sort {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      padding: 10px 12px;
+      font: inherit;
+      color: inherit;
+      text-align: inherit;
+      text-transform: inherit;
+      letter-spacing: inherit;
+    }
+    .standings-table th.num .th-sort { text-align: center; }
+    .standings-panel .col-extra { display: none; }
+    .standings-panel.show-more .col-extra { display: table-cell; }
+    .flight-header-right { display: flex; align-items: center; gap: 12px; }
+    .more-stats-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 4px 10px;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color var(--transition-fast), border-color var(--transition-fast);
+    }
+    .more-stats-btn:hover { color: var(--teal); border-color: var(--teal); }
+    .table-footnote {
+      padding: 10px 20px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border-light);
+    }
+    tr.team-row { cursor: pointer; }
+    .search-results-table .num { text-align: center; font-variant-numeric: tabular-nums; }
+    .group-standings-table .team-name { display: block; max-width: 150px; }
+    .star-btn-label {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 1;
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-primary);
+    }
+    .star-btn-label:hover { transform: none; border-color: var(--teal); }
+    .star-btn-label.starred { text-shadow: none; border-color: var(--teal); color: var(--teal); }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     /* Loading state */
     .loading-container {
       display: flex;
@@ -2143,19 +2215,7 @@
             <div class="search-progress-bar"><div class="search-progress-fill" id="searchProgressFill" style="width:0%"></div></div>
           </div>
           <table class="search-results-table" id="searchResultsTable">
-            <thead><tr>
-              <th style="width:44px">#</th>
-              <th style="width:32px"></th>
-              <th>Team</th>
-              <th>Conference</th>
-              <th>Flight</th>
-              <th class="col-right">GP</th>
-              <th class="col-right">W</th>
-              <th class="col-right">L</th>
-              <th class="col-right">D</th>
-              <th class="col-right">PTS</th>
-              <th class="col-right">GD</th>
-            </tr></thead>
+            <thead>${standingsHeadHtml(SEARCH_COLS, null, null, false)}</thead>
             <tbody id="searchResultsTbody"></tbody>
           </table>
         </div>`;
@@ -2186,35 +2246,20 @@
             teams.forEach((team, i) => {
               if (!team.name.toLowerCase().includes(q)) return;
               totalMatches++;
-              const rank = i + 1;
-              const gd = team.goaldifferential || 0;
-              const gdStr = gd > 0 ? `+${gd}` : `${gd}`;
-              const gdClass = gd > 0 ? 'gd-positive' : gd < 0 ? 'gd-negative' : '';
-              const isFav = favorites.has(team.name);
-              const rankHtml = rank <= 3
-                ? `<span class="rank-badge rank-${rank}">${rank}</span>`
-                : `<span style="padding-left:8px;font-weight:600;color:var(--text-secondary)">${rank}</span>`;
-              const row = document.createElement('tr');
+              const tmp = document.createElement('tbody');
+              tmp.innerHTML = standingsRowHtml(team, SEARCH_COLS, {
+                rank: i + 1, selectable: true, ctx: { confName, flightName: result.flight.flightName },
+              });
+              const row = tmp.firstElementChild;
               row.dataset.conf = confName;
-              row.title = `Go to ${confName}`;
-              row.innerHTML = `
-                <td>${rankHtml}</td>
-                <td>${starButton(team)}</td>
-                <td><div class="team-cell">
-                  ${team.clublogo ? `<img class="team-logo" src="${team.clublogo}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
-                  <span class="team-name">${team.name}</span>
-                </div></td>
-                <td><span class="search-conf-badge">${confName}</span></td>
-                <td><span class="search-flight-badge">${result.flight.flightName}</span></td>
-                <td class="col-right">${team.gp || 0}</td>
-                <td class="col-right" style="font-weight:600">${team.wins || 0}</td>
-                <td class="col-right">${team.losses || 0}</td>
-                <td class="col-right">${team.draws || 0}</td>
-                <td class="col-right stat-highlight">${team.standingpoints || 0}</td>
-                <td class="col-right ${gdClass}">${gdStr}</td>`;
-              row.addEventListener('click', () => {
+              row.title = `Open ${displayName(team.name, team.clubName)} in ${confName}`;
+              const open = () => {
                 clearGlobalSearch();
                 selectConference(confName);
+              };
+              row.addEventListener('click', e => { if (!e.target.closest('.star-btn')) open(); });
+              row.addEventListener('keydown', e => {
+                if ((e.key === 'Enter' || e.key === ' ') && e.target === row) { e.preventDefault(); open(); }
               });
               if (tbody) tbody.appendChild(row);
               const countEl = document.getElementById('searchResultsCount');
@@ -2711,34 +2756,13 @@
         card.innerHTML = `
           <div class="group-card-header"><div class="group-card-title">${esc(title)}</div></div>
           <table class="group-standings-table">
-            <thead><tr>
-              <th>#</th><th></th><th>Team</th>
-              <th>GP</th><th>W</th><th>L</th><th>D</th><th>PTS</th><th>GD</th>
-            </tr></thead>
+            <thead>${standingsHeadHtml(GROUP_COLS, null, null, false)}</thead>
             <tbody></tbody>
           </table>`;
         const tbody = card.querySelector('tbody');
-        tbody.innerHTML = teams.map((team, i) => {
-          const rank = i + 1;
-          const gd = team.goaldifferential || 0;
-          const gdStr = gd > 0 ? `+${gd}` : `${gd}`;
-          const gdClass = gd > 0 ? 'gd-positive' : gd < 0 ? 'gd-negative' : '';
-          const isFav = favorites.has(team.name);
-          const rankHtml = rank <= 3
-            ? `<span class="rank-badge rank-${rank}">${rank}</span>`
-            : `<span style="padding-left:4px;font-weight:600;color:var(--text-secondary)">${rank}</span>`;
-          return `<tr class="${highlightTeamID && team.teamID === highlightTeamID ? 'team-row-highlight' : ''}">
-            <td>${rankHtml}</td>
-            <td>${starButton(team)}</td>
-            <td><span class="team-name" style="max-width:150px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(team.name)}">${esc(team.name)}</span></td>
-            <td>${team.gp || 0}</td>
-            <td style="font-weight:600">${team.wins || 0}</td>
-            <td>${team.losses || 0}</td>
-            <td>${team.draws || 0}</td>
-            <td class="stat-highlight">${team.standingpoints || 0}</td>
-            <td class="${gdClass}">${gdStr}</td>
-          </tr>`;
-        }).join('');
+        tbody.innerHTML = teams.map((team, i) => standingsRowHtml(team, GROUP_COLS, {
+          rank: i + 1, highlight: !!highlightTeamID && team.teamID === highlightTeamID, ctx: { logo: false },
+        })).join('');
         grid.appendChild(card);
       });
       return grid;
@@ -2845,7 +2869,7 @@
                 <div class="no-national-events-sub">Nothing has been published for ${esc(tierName)} — ${esc(ageLabel)}.</div>
               </div>`;
             } else {
-              container.appendChild(renderStandingsTable(data, tierName, flight.flightID, evt.eventId));
+              container.appendChild(renderStandingsTable(data, tierName, flight.flightID, evt.eventId, { footnote: false }));
             }
           }
         }
@@ -2926,14 +2950,20 @@
     // ========== FAVORITES ==========
     // Every star button carries the IDs that locate its team, so a favourite
     // is captured with full context the moment it is starred.
-    function starButton(team) {
+    // `opts.label` renders the wide "★ Following" / "☆ Follow" variant.
+    function starButton(team, opts = {}) {
       const isFav = favorites.has(team.name);
       const d = (k, v) => v == null || v === '' ? '' : ` data-${k}="${esc(v)}"`;
-      return `<button class="star-btn ${isFav ? 'starred' : ''}" data-team="${esc(team.name)}"` +
+      const label = displayName(team.name, team.clubName);
+      return `<button type="button" class="star-btn${isFav ? ' starred' : ''}${opts.label ? ' star-btn-label' : ''}" data-team="${esc(team.name)}"` +
         d('team-id', team.teamID) + d('club-id', team.clubID) + d('club', team.clubName) +
         d('event', team.eventID) + d('div', team.divisionID) + d('div-name', team.division) +
-        d('flight', team.flightID) + d('logo', team.clublogo) +
-        ` onclick="event.stopPropagation(); toggleFavorite(this)" title="${isFav ? 'Remove from My Teams' : 'Add to My Teams'}">${isFav ? '★' : '☆'}</button>`;
+        d('flight', team.flightID) + d('logo', team.clublogo) + (opts.label ? ' data-label="1"' : '') +
+        ` aria-pressed="${isFav}" aria-label="${isFav ? 'Unfollow' : 'Follow'} ${esc(label)}"` +
+        ` onclick="event.stopPropagation(); toggleFavorite(this)" title="${isFav ? 'Remove from My Teams' : 'Add to My Teams'}">${starText(isFav, !!opts.label)}</button>`;
+    }
+    function starText(isFav, wide) {
+      return wide ? (isFav ? '★ Following' : '☆ Follow') : (isFav ? '★' : '☆');
     }
 
     function recordFromButton(btn) {
@@ -2965,9 +2995,12 @@
       }
       saveFavorites();
       document.querySelectorAll('#standingsContainer .star-btn').forEach(btn => {
-        const n = btn.dataset.team;
-        btn.classList.toggle('starred', favorites.has(n));
-        btn.textContent = favorites.has(n) ? '★' : '☆';
+        const n = btn.dataset.team, on = favorites.has(n);
+        btn.classList.toggle('starred', on);
+        btn.setAttribute('aria-pressed', String(on));
+        btn.setAttribute('aria-label', `${on ? 'Unfollow' : 'Follow'} ${displayName(n, btn.dataset.club)}`);
+        btn.title = on ? 'Remove from My Teams' : 'Add to My Teams';
+        btn.textContent = starText(on, !!btn.dataset.label);
       });
       if (currentTab === 'favorites') {
         buildFavoritesList();
@@ -3294,7 +3327,7 @@
 
         // Standings with the team's row highlighted
         if (teams.length) {
-          stack.appendChild(renderStandingsTable(standings, flightName, rec.flightID, rec.eventID, teamID));
+          stack.appendChild(renderStandingsTable(standings, flightName, rec.flightID, rec.eventID, { highlightTeamID: teamID }));
         }
 
         // The team's own games
@@ -3348,130 +3381,176 @@
     }
 
     // ========== STANDINGS RENDERING ==========
-    // `highlightTeamID` marks one row (the My Teams summary); it survives re-sorting.
-    function renderStandingsTable(standings, flightName, flightId, eventId, highlightTeamID) {
-      const teams = standings.teamStandings || standings;
-      const rowClass = team => (highlightTeamID && team.teamID === highlightTeamID) ? ' class="team-row-highlight"' : '';
-      const panel = document.createElement('div');
-      panel.className = 'flight-panel';
+    // One column config drives every standings table: the conference tables,
+    // the My Teams summary, the playoff group cards and the search results.
+    // `extra` columns stay hidden until "More statistics" is expanded.
+    const COL = {
+      rank:   { label: '#', sort: 'rank', title: 'Position', width: 44, render: (t, r) => rankHtml(r) },
+      star:   { label: '', width: 36, render: t => starButton(t) },
+      name:   { label: 'Team', sort: 'name', render: (t, r, ctx) => teamCellHtml(t, ctx) },
+      gp:     { label: 'GP', sort: 'gp', num: true, title: 'Games played', render: t => t.gp || 0 },
+      pts:    { label: 'Pts', sort: 'standingpoints', num: true, cls: 'stat-highlight', title: 'Points', render: t => t.standingpoints || 0 },
+      ppg:    { label: 'PPG', sort: 'ppg', num: true, title: 'Points per game', render: t => (t.ppg || 0).toFixed(2) },
+      w:      { label: 'W', sort: 'wins', num: true, cls: 'num-strong', title: 'Wins', render: t => t.wins || 0 },
+      l:      { label: 'L', sort: 'losses', num: true, title: 'Losses', render: t => t.losses || 0 },
+      d:      { label: 'D', sort: 'draws', num: true, title: 'Draws', render: t => t.draws || 0 },
+      gf:     { label: 'GF', sort: 'goalsfor', num: true, title: 'Goals for', render: t => t.goalsfor || 0 },
+      ga:     { label: 'GA', sort: 'goalsagainst', num: true, title: 'Goals against', render: t => t.goalsagainst || 0 },
+      gd:     { label: 'GD', sort: 'goaldifferential', num: true, title: 'Goal difference', render: gdHtml },
+      conf:   { label: 'Conference', render: (t, r, ctx) => `<span class="search-conf-badge">${esc(ctx.confName || '')}</span>` },
+      flight: { label: 'Flight', render: (t, r, ctx) => `<span class="search-flight-badge">${esc(ctx.flightName || '')}</span>` },
+    };
+    const colSet = (keys, extraKeys = []) =>
+      keys.map(k => ({ key: k, ...COL[k] })).concat(extraKeys.map(k => ({ key: k, ...COL[k], extra: true })));
+    const CONF_COLS   = colSet(['rank', 'star', 'name', 'gp', 'pts', 'ppg'], ['w', 'l', 'd', 'gf', 'ga', 'gd']);
+    const GROUP_COLS  = colSet(['rank', 'star', 'name', 'gp', 'w', 'l', 'd', 'pts', 'gd']);
+    const SEARCH_COLS = colSet(['rank', 'star', 'name', 'conf', 'flight', 'gp', 'w', 'l', 'd', 'pts', 'gd']);
 
+    function rankHtml(rank) {
+      return rank <= 3 ? `<span class="rank-badge rank-${rank}">${rank}</span>` : `<span class="rank-plain">${rank}</span>`;
+    }
+    // Logo + short name; the full API name lives in the title attribute.
+    function teamCellHtml(team, ctx = {}) {
+      const logo = ctx.logo !== false && team.clublogo
+        ? `<img class="team-logo" src="${esc(team.clublogo)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
+      return `<div class="team-cell">${logo}<span class="team-name" title="${esc(team.name)}">${esc(displayName(team.name, team.clubName))}</span></div>`;
+    }
+    function gdHtml(t) {
+      const gd = t.goaldifferential || 0;
+      return `<span class="${gd > 0 ? 'gd-positive' : gd < 0 ? 'gd-negative' : ''}">${gd > 0 ? '+' : ''}${gd}</span>`;
+    }
+
+    function standingsHeadHtml(cols, sortKey, sortAsc, sortable = true) {
+      return '<tr>' + cols.map(c => {
+        const classes = [c.num ? 'num' : '', c.extra ? 'col-extra' : ''].filter(Boolean);
+        const width = c.width ? ` style="width:${c.width}px"` : '';
+        const title = c.title ? ` title="${esc(c.title)}"` : '';
+        if (!sortable || !c.sort) {
+          return `<th class="${classes.join(' ')}"${width}${title}>${c.label || '<span class="sr-only">Follow</span>'}</th>`;
+        }
+        const active = c.sort === sortKey;
+        if (active) classes.push('sort-active');
+        if (active && sortAsc) classes.push('sort-asc');
+        classes.push('sortable');
+        return `<th class="${classes.join(' ')}"${width} data-col="${c.sort}" aria-sort="${active ? (sortAsc ? 'ascending' : 'descending') : 'none'}">` +
+          `<button type="button" class="th-sort"${title}>${c.label}</button></th>`;
+      }).join('') + '</tr>';
+    }
+
+    // `rank` is the published position (survives re-sorting); `highlight` marks
+    // the selected/followed row; `selectable` rows are focusable and clickable.
+    function standingsRowHtml(team, cols, { rank, highlight = false, selectable = false, ctx = {} } = {}) {
+      const r = rank || team._origRank || 0;
+      const cls = [highlight ? 'team-row-highlight' : '', selectable ? 'team-row' : ''].filter(Boolean).join(' ');
+      const attrs = ` data-team-id="${esc(team.teamID)}"` + (cls ? ` class="${cls}"` : '') +
+        (selectable ? ' tabindex="0"' : '') + (highlight ? ' aria-current="true"' : '');
+      return `<tr${attrs}>` + cols.map(c => {
+        const classes = [c.num ? 'num' : '', c.extra ? 'col-extra' : '', c.cls || ''].filter(Boolean).join(' ');
+        return `<td${classes ? ` class="${classes}"` : ''}>${c.render(team, r, ctx)}</td>`;
+      }).join('') + '</tr>';
+    }
+
+    // Expanded/compact columns are a CSS toggle so sort state and handlers survive.
+    function setShowMoreStats(on) {
+      showMoreStats = !!on;
+      document.querySelectorAll('.standings-panel').forEach(p => {
+        p.classList.toggle('show-more', showMoreStats);
+        const b = p.querySelector('.more-stats-btn');
+        if (b) { b.setAttribute('aria-expanded', String(showMoreStats)); b.textContent = showMoreStats ? 'Fewer statistics' : 'More statistics'; }
+      });
+      saveState();
+    }
+
+    // Select a team in the conference view: highlight its rows everywhere and
+    // show it in the "at a glance" panel.
+    function selectTeam(teamID) {
+      selectedTeamID = teamID || null;
+      document.querySelectorAll('#standingsContainer tr[data-team-id]').forEach(tr => {
+        const on = Number(tr.dataset.teamId) === selectedTeamID;
+        tr.classList.toggle('team-row-highlight', on);
+        if (on) tr.setAttribute('aria-current', 'true'); else tr.removeAttribute('aria-current');
+      });
+      if (typeof updateGlancePanel === 'function') updateGlancePanel();
+      saveState();
+      pushHash();
+    }
+
+    // opts: { highlightTeamID, selectable, cols, title, footnote }
+    function renderStandingsTable(standings, flightName, flightId, eventId, opts) {
+      if (opts != null && typeof opts !== 'object') opts = { highlightTeamID: opts };
+      const { highlightTeamID = null, selectable = false, cols = CONF_COLS, title = null, footnote = true } = opts || {};
+      const teams = standings.teamStandings || standings;
+      teams.forEach((t, i) => { if (!t._origRank) t._origRank = i + 1; });
+      const hasExtra = cols.some(c => c.extra);
+      const heading = title || `${flightName} Flight`;
+
+      const panel = document.createElement('div');
+      panel.className = 'flight-panel standings-panel' + (hasExtra && showMoreStats ? ' show-more' : '');
       panel.innerHTML = `
     <div class="flight-header">
-      <div class="flight-title"><span class="flight-dot"></span>${flightName} Flight</div>
-      <span class="flight-team-count">${teams.length} teams</span>
+      <div class="flight-title"><span class="flight-dot"></span>${esc(heading)}</div>
+      <div class="flight-header-right">
+        <span class="flight-team-count">${teams.length} teams</span>
+        ${hasExtra ? `<button type="button" class="more-stats-btn" aria-expanded="${showMoreStats}">${showMoreStats ? 'Fewer statistics' : 'More statistics'}</button>` : ''}
+      </div>
     </div>
     <table class="standings-table">
-      <thead><tr>
-        <th data-col="rank" class="sort-active" style="width:48px">#</th>
-        <th style="width:36px"></th>
-        <th data-col="name">Team</th>
-        <th data-col="gp" style="text-align:center">GP</th>
-        <th data-col="wins" style="text-align:center">W</th>
-        <th data-col="losses" style="text-align:center">L</th>
-        <th data-col="draws" style="text-align:center">D</th>
-        <th data-col="standingpoints" style="text-align:center">PTS</th>
-        <th data-col="goalsfor" style="text-align:center">GF</th>
-        <th data-col="goalsagainst" style="text-align:center">GA</th>
-        <th data-col="goaldifferential" style="text-align:center">GD</th>
-        <th data-col="ppg" style="text-align:center">PPG</th>
-      </tr></thead>
+      <caption class="sr-only">${esc(heading)} standings</caption>
+      <thead>${standingsHeadHtml(cols, 'rank', true)}</thead>
       <tbody></tbody>
-    </table>`;
+    </table>
+    ${footnote ? `<div class="table-footnote">Order as published by TGS: points per game, then goal difference · PPG = points per game${selectable ? ' · Select a team for details' : ''}</div>` : ''}`;
 
+      const thead = panel.querySelector('thead');
       const tbody = panel.querySelector('tbody');
-      teams.forEach((team, i) => {
-        const rank = i + 1;
-        const isFav = favorites.has(team.name);
-        const gd = team.goaldifferential || 0;
-        const gdClass = gd > 0 ? 'gd-positive' : gd < 0 ? 'gd-negative' : '';
-        const gdStr = gd > 0 ? `+${gd}` : `${gd}`;
+      // Selectable tables follow the live selection so a re-sort keeps the highlight.
+      const highlighted = () => selectable ? selectedTeamID : highlightTeamID;
+      const renderRows = list => {
+        const hl = highlighted();
+        tbody.innerHTML = list.map(t => standingsRowHtml(t, cols, {
+          rank: t._origRank, selectable, highlight: hl != null && t.teamID === hl,
+        })).join('');
+      };
+      renderRows(teams);
 
-        let rankHtml;
-        if (rank <= 3) {
-          rankHtml = `<span class="rank-badge rank-${rank}">${rank}</span>`;
-        } else {
-          rankHtml = `<span style="padding-left:8px;font-weight:600;color:var(--text-secondary)">${rank}</span>`;
-        }
-
-        tbody.innerHTML += `
-      <tr${rowClass(team)}>
-        <td>${rankHtml}</td>
-        <td>${starButton(team)}</td>
-        <td><div class="team-cell">
-          ${team.clublogo ? `<img class="team-logo" src="${team.clublogo}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
-          <span class="team-name">${team.name}</span>
-        </div></td>
-        <td style="text-align:center">${team.gp || 0}</td>
-        <td style="text-align:center;font-weight:600">${team.wins || 0}</td>
-        <td style="text-align:center">${team.losses || 0}</td>
-        <td style="text-align:center">${team.draws || 0}</td>
-        <td style="text-align:center" class="stat-highlight">${team.standingpoints || 0}</td>
-        <td style="text-align:center">${team.goalsfor || 0}</td>
-        <td style="text-align:center">${team.goalsagainst || 0}</td>
-        <td style="text-align:center" class="${gdClass}">${gdStr}</td>
-        <td style="text-align:center">${(team.ppg || 0).toFixed(2)}</td>
-      </tr>`;
-      });
-
-      // Column sort
-      panel.querySelectorAll('th[data-col]').forEach(th => {
-        th.addEventListener('click', () => {
-          const col = th.dataset.col;
-          const allTh = panel.querySelectorAll('th[data-col]');
-          allTh.forEach(t => { t.classList.remove('sort-active', 'sort-asc'); });
-
-          // Determine sort direction
-          const rows = [...tbody.querySelectorAll('tr')];
-          const isNumeric = col !== 'name';
-
-          // Toggle direction
-          if (th._lastSortAsc === undefined) th._lastSortAsc = true;
-          else th._lastSortAsc = !th._lastSortAsc;
-          const asc = th._lastSortAsc;
-
-          th.classList.add('sort-active');
-          if (asc) th.classList.add('sort-asc');
-
-          const sorted = [...teams].sort((a, b) => {
-            let va = a[col], vb = b[col];
-            if (col === 'rank') { va = a._origRank; vb = b._origRank; }
-            if (isNumeric) return asc ? (va || 0) - (vb || 0) : (vb || 0) - (va || 0);
-            return asc ? String(va || '').localeCompare(vb || '') : String(vb || '').localeCompare(va || '');
-          });
-
-          // Re-render tbody
-          tbody.innerHTML = '';
-          sorted.forEach((team, i) => {
-            const rank = team._origRank;
-            const isFav = favorites.has(team.name);
-            const gd = team.goaldifferential || 0;
-            const gdClass = gd > 0 ? 'gd-positive' : gd < 0 ? 'gd-negative' : '';
-            const gdStr = gd > 0 ? `+${gd}` : `${gd}`;
-            let rankHtml;
-            if (rank <= 3) rankHtml = `<span class="rank-badge rank-${rank}">${rank}</span>`;
-            else rankHtml = `<span style="padding-left:8px;font-weight:600;color:var(--text-secondary)">${rank}</span>`;
-
-            tbody.innerHTML += `
-          <tr${rowClass(team)}>
-            <td>${rankHtml}</td>
-            <td>${starButton(team)}</td>
-            <td><div class="team-cell">
-              ${team.clublogo ? `<img class="team-logo" src="${team.clublogo}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
-              <span class="team-name">${team.name}</span>
-            </div></td>
-            <td style="text-align:center">${team.gp || 0}</td>
-            <td style="text-align:center;font-weight:600">${team.wins || 0}</td>
-            <td style="text-align:center">${team.losses || 0}</td>
-            <td style="text-align:center">${team.draws || 0}</td>
-            <td style="text-align:center" class="stat-highlight">${team.standingpoints || 0}</td>
-            <td style="text-align:center">${team.goalsfor || 0}</td>
-            <td style="text-align:center">${team.goalsagainst || 0}</td>
-            <td style="text-align:center" class="${gdClass}">${gdStr}</td>
-            <td style="text-align:center">${(team.ppg || 0).toFixed(2)}</td>
-          </tr>`;
-          });
+      // Column sort. Stats sort descending first (best on top); rank and name ascending.
+      let sortKey = 'rank', sortAsc = true;
+      thead.addEventListener('click', e => {
+        const th = e.target.closest('th[data-col]');
+        if (!th) return;
+        const key = th.dataset.col;
+        if (key === sortKey) sortAsc = !sortAsc;
+        else { sortKey = key; sortAsc = key === 'rank' || key === 'name'; }
+        thead.innerHTML = standingsHeadHtml(cols, sortKey, sortAsc);
+        const sorted = [...teams].sort((a, b) => {
+          if (sortKey === 'rank') return sortAsc ? a._origRank - b._origRank : b._origRank - a._origRank;
+          if (sortKey === 'name') {
+            const r = displayName(a.name, a.clubName).localeCompare(displayName(b.name, b.clubName));
+            return sortAsc ? r : -r;
+          }
+          const va = a[sortKey] || 0, vb = b[sortKey] || 0;
+          return (sortAsc ? va - vb : vb - va) || a._origRank - b._origRank;
         });
+        renderRows(sorted);
       });
+
+      const more = panel.querySelector('.more-stats-btn');
+      if (more) more.addEventListener('click', () => setShowMoreStats(!showMoreStats));
+
+      if (selectable) {
+        tbody.addEventListener('click', e => {
+          if (e.target.closest('.star-btn, a, button')) return;
+          const tr = e.target.closest('tr[data-team-id]');
+          if (tr) selectTeam(Number(tr.dataset.teamId));
+        });
+        tbody.addEventListener('keydown', e => {
+          if (e.key !== 'Enter' && e.key !== ' ') return;
+          const tr = e.target.closest('tr[data-team-id]');
+          if (!tr || e.target !== tr) return;
+          e.preventDefault();
+          selectTeam(Number(tr.dataset.teamId));
+        });
+      }
 
       return panel;
     }
@@ -3666,7 +3745,7 @@
           } else {
             const teams = data.teamStandings || [];
             teams.forEach((t, i) => { t._origRank = i + 1; });
-            panel = renderStandingsTable(data, flight.flightName, flight.flightID, conf.eventId);
+            panel = renderStandingsTable(data, flight.flightName, flight.flightID, conf.eventId, { selectable: true, highlightTeamID: selectedTeamID });
           }
           container.appendChild(panel);
         });
