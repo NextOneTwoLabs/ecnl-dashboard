@@ -2090,6 +2090,15 @@
       return info.birthYears.join('/');
     }
 
+    // Compact band label in the form the team names use: [2010, 2011] -> "G2010/11",
+    // [2009] -> "G2009". Empty when the registry has no band for the division.
+    function birthYearLabel(divName, season) {
+      const info = getAgeGroupInfo(divName, season);
+      const years = (info && info.birthYears) || [];
+      if (!years.length) return '';
+      return `G${years[0]}` + (years[1] ? `/${String(years[1]).slice(-2)}` : '');
+    }
+
     function sortAgeGroups(names, season) {
       return [...names].sort((a, b) =>
         getAgeGroupAnchor(a, season) - getAgeGroupAnchor(b, season));  // oldest first
@@ -3181,8 +3190,9 @@
         const by = getBirthYearText(ag);
         const on = ag === currentAgeGroup;
         const tip = by ? ` title="${esc(l)} · birth years ${esc(by)}"` : '';
+        const sub = birthYearLabel(ag) || ag;   // division name only when no band is recorded
         return `<button type="button" class="age-tab${on ? ' active' : ''}" role="tab" aria-selected="${on}"${tip} data-age="${esc(ag)}">` +
-          `<span>${esc(l)}</span><br><span class="age-tab-sub">${esc(ag)}</span></button>`;
+          `<span>${esc(l)}</span><br><span class="age-tab-sub">${esc(sub)}</span></button>`;
       }).join('');
     }
 
