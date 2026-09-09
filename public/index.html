@@ -2306,7 +2306,7 @@
           if (s.ageGroup) currentAgeGroup = s.ageGroup; // validated after API fetch
           if (SEASONS[currentSeason].conferences[s.conference]) currentConference = s.conference;
           if (s.view === 'schedule' || s.view === 'standings') currentView = s.view;
-          if (s.tab === 'playoffs' && NATIONAL_EVENTS[currentSeason]) currentTab = 'playoffs';
+          if (s.tab === 'playoffs') currentTab = 'playoffs';
           if (s.tab === 'favorites' && favorites.size) currentTab = 'favorites';
           if (s.favorite && favorites.has(s.favorite)) currentFavorite = s.favorite;
           if (s.stage) currentPlayoffStage = s.stage;              // validated in buildStageTabs
@@ -2354,8 +2354,11 @@
       const view = currentView !== 'standings' ? `&view=${e(currentView)}` : '';
       const fav = currentFavorite ? favoriteMeta.get(currentFavorite) : previewTeam;
       const h = currentTab === 'playoffs'
-        ? `#tab=playoffs&season=${e(currentSeason)}&stage=${e(currentPlayoffStage || '')}` +
-          `&age=${e(currentPlayoffAgeGroup || '')}&tier=${e(currentPlayoffTier || '')}${view}`
+        // stage/age/tier are unset when the season has no national events yet
+        ? `#tab=playoffs&season=${e(currentSeason)}` +
+          (currentPlayoffStage ? `&stage=${e(currentPlayoffStage)}` : '') +
+          (currentPlayoffAgeGroup ? `&age=${e(currentPlayoffAgeGroup)}` : '') +
+          (currentPlayoffTier ? `&tier=${e(currentPlayoffTier)}` : '') + view
         : currentTab === 'favorites'
         ? `#tab=teams&season=${e(currentSeason)}` +
           (fav && fav.teamID ? `&team=${e(fav.teamID)}` : '') + (fav ? `&name=${e(fav.name)}` : '')
@@ -2386,7 +2389,7 @@
         currentFavorite = rec ? rec.name : null;
         return true;
       }
-      if (p.get('tab') === 'playoffs' && NATIONAL_EVENTS[currentSeason]) {
+      if (p.get('tab') === 'playoffs') {
         currentTab = 'playoffs';
         if (p.get('stage')) currentPlayoffStage = p.get('stage');     // validated in buildStageTabs
         if (p.get('age')) currentPlayoffAgeGroup = p.get('age');       // validated in loadPlayoffsPanel
@@ -2777,6 +2780,10 @@
               ? 'The national playoffs run at the end of the season. Results appear here once TGS publishes them.'
               : 'This season\'s national events were not archived.'}</div>
           </div>`;
+        currentPlayoffStage = null;
+        currentPlayoffAgeGroup = null;
+        currentPlayoffTier = null;
+        saveState(); pushHash();
         return;
       }
 
