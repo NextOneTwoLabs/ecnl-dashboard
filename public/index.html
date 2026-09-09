@@ -161,6 +161,7 @@
       white-space: nowrap;
     }
 
+    .wordmark:hover { color: var(--accent-text); }
     .wordmark .accent { color: var(--accent); }
 
     .header-divider {
@@ -174,6 +175,17 @@
       font-weight: 600;
       color: var(--text-secondary);
       white-space: nowrap;
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .section-label:hover { color: var(--accent-text); }
+
+    .wordmark, .section-label {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      border-radius: var(--radius-sm);
     }
 
     .header-right {
@@ -1136,7 +1148,7 @@
     /* Comfortable targets on touch screens */
     @media (max-width: 768px), (pointer: coarse) {
       .age-tab, .conference-item, .view-tab, .sidebar-tab, .seg-btn, .stage-tab, .playoff-age-tab,
-      .more-stats-btn, .open-external, .btn-primary, .theme-toggle, .hamburger {
+      .more-stats-btn, .open-external, .btn-primary, .theme-toggle, .hamburger, .wordmark, .section-label {
         min-height: 44px;
       }
       .star-btn { min-width: 40px; min-height: 40px; }
@@ -1881,9 +1893,9 @@
           <rect x="2.5" y="4" width="15" height="12" rx="2"/><path d="M7.5 4v12"/>
         </svg>
       </button>
-      <a class="wordmark" href="#" onclick="event.preventDefault(); if (currentTab !== 'conferences') switchTab('conferences');">next<span class="accent">one</span>two</a>
+      <a class="wordmark" href="https://www.nextonetwo.com/">next<span class="accent">one</span>two</a>
       <div class="header-divider"></div>
-      <div class="section-label">ECNL Girls</div>
+      <a class="section-label" href="https://ecnl.nextonetwo.com/" onclick="return goHome(event)">ECNL Girls</a>
     </div>
     <div class="header-right">
       <span class="season-label" id="seasonLabel"></span>
@@ -3240,6 +3252,26 @@
       if (sel && sel.value !== currentSeason) sel.value = currentSeason;
       const lbl = document.getElementById('seasonLabel');
       if (lbl) lbl.textContent = currentSeason ? `${seasonLabel(currentSeason)} season` : '';
+    }
+
+    // "ECNL Girls" links to the dashboard's own address. Followed from elsewhere
+    // that is a normal navigation; on the dashboard itself a bare-URL link would
+    // only clear the hash (a same-document change that shows nothing), so it
+    // acts as "home" instead: the Conferences tab at the season's default view.
+    function goHome(e) {
+      const link = e.currentTarget;
+      if (!link || link.host !== location.host) return true;   // let the browser navigate
+      e.preventDefault();
+      clearGlobalSearch({ reload: false });
+      currentConference = Object.keys(getSeasonData().conferences)[0];
+      currentAgeGroup = AGE_GROUPS[0] || null;
+      currentView = 'standings';
+      scheduleFilter = 'upcoming';
+      selectedTeamID = null;
+      switchTab('conferences', { silent: true });
+      closeSidebarIfMobile();
+      rebuildAll();
+      return false;
     }
 
     function focusTeamSearch() {
