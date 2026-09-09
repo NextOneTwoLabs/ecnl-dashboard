@@ -10,7 +10,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-05,01:00 PM,Group Play,Challenge SC ECNL G2008/09,1,1,Real Colorado Athletico ECNL G2008/09,Burroughs Park,Field 4,On Time,1073433
 2026-09-05,02:30 PM,Group Play,Colorado Storm ECNL G2008/09,2,2,Lonestar ATX Red ECNL G2008/09,Regis University,West Turf,On Time,1073415
 2026-09-06,11:15 AM,Group Play,Colorado Storm ECNL G2008/09,2,3,FC Westlake ECNL G2008/09,Stargate Charter School,Field 1,On Time,1073439
-2026-09-06,12:15 PM,Group Play,Challenge SC ECNL G2008/09,,,Colorado Rush ECNL G2008/09,Burroughs Park,Field 4,On Time,1073451
 2026-09-06,01:00 PM,Group Play,Albion Hurricanes FC ECNL G2008/09,1,1,Real Colorado Athletico ECNL G2008/09,Campbell Road Sports Park,Field 2,On Time,1073457
 2026-09-06,01:30 PM,Group Play,Real Colorado National ECNL G2008/09,8,0,Lonestar ATX Red ECNL G2008/09,Real Colorado Soccer Complex,RCSC Grass,On Time,1073445
 2026-09-13,02:00 PM,Group Play,Sting Black ECNL G2008/09,,,Sting Royal ECNL G2008/09,Sting National Training Center,TBD,On Time,1073481
@@ -89,10 +88,11 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-08,01:00 PM,Group Play,FC Westlake ECNL G2008/09,,,FC Dallas Youth ECNL G2008/09,Westlake High School,Field 1 & 2,On Time,1073859
 2026-11-08,01:30 PM,Group Play,Real Colorado Athletico ECNL G2008/09,,,Dallas Texans ECNL G2008/09,Real Colorado Soccer Complex,RCSC Grass,On Time,1073847
 2026-11-08,03:00 PM,Group Play,OK Energy FC ECNL G2008/09,,,West Side Alliance ECNL G2008/09,North Oklahoma City FC,NOKC Red 4,On Time,1073865
+2026-11-13,TBD,Group Play,Challenge SC ECNL G2008/09,,,Colorado Rush ECNL G2008/09,,,On Time,1073451
 2026-11-21,01:00 PM,Group Play,Dallas Texans ECNL G2008/09,,,OK Energy FC ECNL G2008/09,Independence High School,Field 1,On Time,1073883
 2026-11-21,03:00 PM,Group Play,Albion Hurricanes FC ECNL G2008/09,,,Sting Royal ECNL G2008/09,Campbell Road Sports Park,Field 1,On Time,1073871
 2026-11-21,03:00 PM,Group Play,Challenge SC ECNL G2008/09,,,FC Dallas Youth ECNL G2008/09,Burroughs Park,Field 4,On Time,1073877
-2026-11-22,09:00 AM,Group Play,SOLAR SC ECNL G2008/09,,,Sting Black ECNL G2008/09,OAK GROVE ,Field 1,On Time,1073901
+2026-11-22,11:00 AM,Group Play,SOLAR SC ECNL G2008/09,,,Sting Black ECNL G2008/09,Dragon Stadium,Field 1,On Time,1073901
 2026-11-22,01:00 PM,Group Play,Albion Hurricanes FC ECNL G2008/09,,,FC Dallas Youth ECNL G2008/09,Campbell Road Sports Park,Field 1,On Time,1073889
 2026-11-22,03:00 PM,Group Play,Challenge SC ECNL G2008/09,,,Sting Royal ECNL G2008/09,Burroughs Park,Field 4,On Time,1073895
 2026-12-05,10:00 AM,Group Play,DKSC ECNL G2008/09,,,Sting Royal ECNL G2008/09,JUNE SHELTON SCHOOL,Field 1,On Time,1074009
