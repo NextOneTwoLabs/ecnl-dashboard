@@ -1805,9 +1805,13 @@
 
     .search-results-table tbody tr:last-child td { border-bottom: none; }
 
-    .search-group-row { cursor: default; }
+    .search-results-table .search-group-row { cursor: default; }
     .search-group-row[hidden] { display: none; }
-    .search-group-row td {
+    .search-group-row th {
+      position: static;
+      text-align: left;
+      white-space: normal;
+      border-bottom: 1px solid var(--border-light);
       padding: 6px 12px;
       font-size: 11px;
       font-weight: 600;
@@ -2255,8 +2259,9 @@
         const blocks = Array.isArray(data.data) ? data.data : (data.data ? [data.data] : []);
         return mergeStandingsBlocks(blocks) || data.data || data;
       });
-      standingsMemo[key] = p.catch(e => { delete standingsMemo[key]; throw e; });
-      return standingsMemo[key];
+      const entry = p.catch(e => { if (standingsMemo[key] === entry) delete standingsMemo[key]; throw e; });
+      standingsMemo[key] = entry;
+      return entry;
     }
 
     // Keeps the largest block's published order and slots every other block's
@@ -2516,7 +2521,9 @@
       const container = document.getElementById('standingsContainer');
       const conferences = Object.entries(getSeasonData().conferences);
       const total = conferences.length;
-      const groups = AGE_GROUPS.slice();   // oldest first, as the tabs
+      // Oldest first, as the tabs. AGE_GROUPS comes from the first conference's
+      // hierarchy; a division named differently in another conference is skipped.
+      const groups = AGE_GROUPS.slice();
       let done = 0;
 
       // Show progress panel immediately: one body per age group, its header
@@ -2535,13 +2542,14 @@
             <thead>${standingsHeadHtml(SEARCH_COLS, null, null, false)}</thead>
             ${groups.map(ag => {
               const by = birthYearLabel(ag);
-              return `<tbody data-age="${esc(ag)}"><tr class="search-group-row" aria-hidden="true" hidden>` +
-                `<td colspan="${SEARCH_COLS.length}">${esc(AGE_LABELS[ag] || ag)}${by ? ' · ' + esc(by) : ''}</td></tr></tbody>`;
+              return `<tbody data-age="${esc(ag)}"><tr class="search-group-row" hidden>` +
+                `<th scope="colgroup" colspan="${SEARCH_COLS.length}">${esc(AGE_LABELS[ag] || ag)}${by ? ' · ' + esc(by) : ''}</th></tr></tbody>`;
             }).join('')}
           </table>
         </div>`;
 
       let totalMatches = 0;
+      const matchedAges = new Set(), matchedConfs = new Set();
 
       // A result row goes into its age group's body, kept sorted by conference name
       const addRow = (ag, confName, flight, team, rank) => {
@@ -2589,6 +2597,7 @@
               (result.data.teamStandings || []).forEach((team, i) => {
                 if (!`${team.name || ''} ${team.clubName || ''}`.toLowerCase().includes(q)) return;
                 totalMatches++;
+                matchedAges.add(ag); matchedConfs.add(confName);
                 addRow(ag, confName, result.flight, team, i + 1);
               });
             });
@@ -2610,7 +2619,11 @@
       const prog = document.getElementById('searchProgress');
       if (prog) prog.style.display = 'none';
 
-      const summary = `${totalMatches} match${totalMatches !== 1 ? 'es' : ''} across ${groups.length} age groups · ${total} conferences`;
+      // Counts the age groups and conferences that have a hit, not the ones searched
+      const n = (count, one, many) => `${count} ${count === 1 ? one : many}`;
+      const summary = totalMatches === 0
+        ? `0 matches (${groups.length} age groups · ${total} conferences searched)`
+        : `${n(totalMatches, 'match', 'matches')} in ${n(matchedAges.size, 'age group', 'age groups')} · ${n(matchedConfs.size, 'conference', 'conferences')}`;
       const countEl = document.getElementById('searchResultsCount');
       if (countEl) countEl.textContent = summary;
 
@@ -4067,12 +4080,17 @@
     }
 
     function selectView(view) {
-      if (view === currentView) return;
+      // Leaving search mode: the results panel owns the breadcrumb, title and
+      // container, so rebuild the view with one loadCurrentView (fetches are
+      // memoised) instead of clearGlobalSearch's own reload plus a render here.
+      const leavingSearch = globalSearchActive;
+      if (leavingSearch) clearGlobalSearch({ reload: false });
+      else if (view === currentView) return;
       currentView = view;
       const s = document.getElementById('viewTabStandings');
       updateViewTabsUI(s ? s.textContent : undefined);
       if (currentTab === 'playoffs') loadPlayoffFlight();
-      else if (currentConfMeta && currentFlightData.length) { renderConferenceView(); saveState(); pushHash(); }
+      else if (!leavingSearch && currentConfMeta && currentFlightData.length) { renderConferenceView(); saveState(); pushHash(); }
       else loadCurrentView();
     }
 
