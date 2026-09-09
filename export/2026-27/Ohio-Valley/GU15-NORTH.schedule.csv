@@ -3,8 +3,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-22,08:30 AM,Group Play,Pittsburgh Riverhounds ECNL G2011/12,,,FC Alliance TN ECNL G2011/12,Highmark Stadium,Field 1,On Time,1133048
 2026-11-22,09:00 AM,Group Play,WNY Flash ECNL G2011/12,,,Tennessee SC ECNL G2011/12,Flash Fields,Field A,On Time,1133045
 2026-12-12,TBD,Group Play,Internationals SC ECNL G2011/2012,,,Cleveland Force SC ECNL G2011/12,,,On Time,1132859
-2026-12-12,TBD,Group Play,Pittsburgh Riverhounds ECNL G2011/12,,,WNY Flash ECNL G2011/12,,,On Time,1132862
 2026-12-12,TBD,Group Play,Ohio Premier ECNL G2011/12,,,GTFC Impact ECNL G2011/12,,,On Time,1132865
+2026-12-13,10:30 AM,Group Play,Pittsburgh Riverhounds ECNL G2011/12,,,WNY Flash ECNL G2011/12,Highmark Stadium,Field 1,On Time,1132862
 2027-03-06,TBD,Group Play,Ohio Premier ECNL G2011/12,,,WNY Flash ECNL G2011/12,,,On Time,1132907
 2027-03-06,TBD,Group Play,GTFC Impact ECNL G2011/12,,,Pittsburgh Riverhounds ECNL G2011/12,,,On Time,1132910
 2027-03-07,TBD,Group Play,Ohio Premier ECNL G2011/12,,,Pittsburgh Riverhounds ECNL G2011/12,,,On Time,1132922
@@ -14,9 +14,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-03-20,TBD,Group Play,Ohio Premier ECNL G2011/12,,,FC Pride Elite ECNL G2011/12,,,On Time,1132967
 2027-03-20,09:00 AM,Group Play,Internationals SC ECNL G2011/2012,,,Pittsburgh Riverhounds ECNL G2011/12,Pinnacle Sports,OT 11v11,On Time,1132961
 2027-03-21,TBD,Group Play,Cleveland Force SC ECNL G2011/12,,,Pittsburgh Riverhounds ECNL G2011/12,,,On Time,1132970
-2027-03-21,TBD,Group Play,Internationals SC ECNL G2011/2012,,,WNY Flash ECNL G2011/12,,,On Time,1132973
 2027-03-21,TBD,Group Play,GTFC Impact ECNL G2011/12,,,FC Pride Elite ECNL G2011/12,,,On Time,1132976
 2027-03-21,TBD,Group Play,Ohio Premier ECNL G2011/12,,,Indy Eleven ECNL G2011/12,,,On Time,1132979
+2027-03-21,09:00 AM,Group Play,Internationals SC ECNL G2011/2012,,,WNY Flash ECNL G2011/12,Pinnacle Sports,OT 11v11,On Time,1132973
 2027-04-10,TBD,Group Play,GTFC Impact ECNL G2011/12,,,Cleveland Force SC ECNL G2011/12,,,On Time,1132985
 2027-04-10,TBD,Group Play,Ohio Premier ECNL G2011/12,,,Internationals SC ECNL G2011/2012,,,On Time,1132988
 2027-04-10,10:00 AM,Group Play,WNY Flash ECNL G2011/12,,,Pittsburgh Riverhounds ECNL G2011/12,Flash Fields,Field A,On Time,1132991
@@ -28,9 +28,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-04-17,08:30 AM,Group Play,Pittsburgh Riverhounds ECNL G2011/12,,,FC Pride Elite ECNL G2011/12,Montour Junction Sports Complex,Field 1,On Time,1133021
 2027-04-17,09:00 AM,Group Play,Internationals SC ECNL G2011/2012,,,Ohio Elite SA ECNL G2011/12,Pinnacle Sports,OT 11v11,On Time,1133015
 2027-04-18,TBD,Group Play,Cleveland Force SC ECNL G2011/12,,,Ohio Elite SA ECNL G2011/12,,,On Time,1133027
-2027-04-18,TBD,Group Play,Internationals SC ECNL G2011/2012,,,Racing Louisville Academy ECNL G2011/12,,,On Time,1133030
 2027-04-18,TBD,Group Play,Pittsburgh Riverhounds ECNL G2011/12,,,Indy Eleven ECNL G2011/12,,,On Time,1133036
 2027-04-18,08:00 AM,Group Play,WNY Flash ECNL G2011/12,,,FC Pride Elite ECNL G2011/12,Flash Fields,Field A,On Time,1133033
+2027-04-18,09:00 AM,Group Play,Internationals SC ECNL G2011/2012,,,Racing Louisville Academy ECNL G2011/12,Pinnacle Sports,OT 11v11,On Time,1133030
 2027-04-24,TBD,Group Play,GTFC Impact ECNL G2011/12,,,Racing Louisville Academy ECNL G2011/12,,,On Time,1133051
 2027-04-24,TBD,Group Play,Ohio Premier ECNL G2011/12,,,Ohio Elite SA ECNL G2011/12,,,On Time,1133054
 2027-04-25,TBD,Group Play,Pittsburgh Riverhounds ECNL G2011/12,,,Tennessee SC ECNL G2011/12,,,On Time,1133066

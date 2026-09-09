@@ -26,7 +26,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-19,11:00 AM,Group Play,Santa Rosa United ECNL G2011/12,,,Pleasanton RAGE ECNL G2011/12,Trione Fields,Trione West,On Time,1094538
 2026-09-19,12:00 PM,Group Play,Davis Legacy ECNL G2011/12,,,COSC ECNL G2011/12,Davis Legacy Soccer Complex,Field 11,On Time,1094514
 2026-09-19,01:00 PM,Group Play,Marin FC ECNL G2011/12,,,Mustang SC ECNL G2011/12,College of Marin,Stadium,On Time,1094526
-2026-09-19,02:35 PM,Group Play,Stanislaus Surf - ECNL G2011/12,,,Placer United ECNL G2011/12,Thomas Downey High School,Field 1,On Time,1094544
+2026-09-19,02:35 PM,Group Play,Stanislaus Surf - ECNL G2011/12,,,Placer United ECNL G2011/12,Modesto Junior College,MJC West,On Time,1094544
 2026-09-19,06:00 PM,Group Play,Force (CA) ECNL G2011/12,,,MVLA ECNL G2011/12,De Anza College,Soccer Field,On Time,1094520
 2026-09-20,TBD,Group Play,Bay Area Surf - ECNL G2011/12,,,Stanislaus Surf - ECNL G2011/12,,,On Time,1094550
 2026-09-20,TBD,Group Play,San Juan SC ECNL G2011/12,,,Force (CA) ECNL G2011/12,,,On Time,1094580
@@ -34,9 +34,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-20,12:00 PM,Group Play,COSC ECNL G2011/12,,,MVLA ECNL G2011/12,Edison High School Fields,field 2,On Time,1094556
 2026-09-20,12:00 PM,Group Play,Davis Legacy ECNL G2011/12,,,Santa Rosa United ECNL G2011/12,Davis Legacy Soccer Complex,Field 11,On Time,1094562
 2026-09-20,02:00 PM,Group Play,Placer United ECNL G2011/12,,,Mustang SC ECNL G2011/12,Placer Valley Soccer Complex,Field 5,On Time,1094568
-2026-09-26,TBD,Group Play,Force (CA) ECNL G2011/12,,,Bay Area Surf - ECNL G2011/12,,,On Time,1094592
 2026-09-26,09:00 AM,Group Play,Mustang SC ECNL G2011/12,,,Stanislaus Surf - ECNL G2011/12,Provident Field @ MSC, Lower,On Time,1094604
 2026-09-26,12:00 PM,Group Play,COSC ECNL G2011/12,,,San Juan SC ECNL G2011/12,Edison High School Fields,field 2,On Time,1094586
+2026-09-26,12:00 PM,Group Play,Force (CA) ECNL G2011/12,,,Bay Area Surf - ECNL G2011/12,Kathleen MacDonald High School,Stadium,On Time,1094592
 2026-09-26,12:20 PM,Group Play,MVLA ECNL G2011/12,,,Santa Rosa United ECNL G2011/12,Foothill College,Top Hill Soccer Field,On Time,1094610
 2026-09-26,02:00 PM,Group Play,Placer United ECNL G2011/12,,,Pleasanton RAGE ECNL G2011/12,Placer Valley Soccer Complex,Field 5,On Time,1094616
 2026-09-26,04:45 PM,Group Play,Marin FC ECNL G2011/12,,,Davis Legacy ECNL G2011/12,Marin Catholic High School,Stadium,On Time,1094598
@@ -60,7 +60,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-17,10:00 AM,Group Play,Placer United ECNL G2011/12,,,MVLA ECNL G2011/12,Placer Valley Soccer Complex,Field 6,On Time,1094706
 2026-10-17,11:00 AM,Group Play,Pleasanton RAGE ECNL G2011/12,,,Mustang SC ECNL G2011/12,Val Vista,Field 2,On Time,1094712
 2026-10-24,TBD,Group Play,Bay Area Surf - ECNL G2011/12,,,MVLA ECNL G2011/12,,,On Time,1094730
-2026-10-24,TBD,Group Play,Force (CA) ECNL G2011/12,,,Pleasanton RAGE ECNL G2011/12,,,On Time,1094742
 2026-10-24,11:00 AM,Group Play,Marin FC ECNL G2011/12,,,Placer United ECNL G2011/12,College of Marin,Stadium,On Time,1094748
 2026-10-24,12:00 PM,Group Play,Davis Legacy ECNL G2011/12,,,San Juan SC ECNL G2011/12,Davis Legacy Soccer Complex,Field 9,On Time,1094736
 2026-10-24,12:00 PM,Group Play,Santa Rosa United ECNL G2011/12,,,Stanislaus Surf - ECNL G2011/12,Trione Fields,Trione West,On Time,1094760
@@ -129,5 +128,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-05-08,TBD,Group Play,Placer United ECNL G2011/12,,,Marin FC ECNL G2011/12,,,On Time,1095144
 2027-05-08,TBD,Group Play,Pleasanton RAGE ECNL G2011/12,,,Force (CA) ECNL G2011/12,,,On Time,1095150
 2027-05-08,TBD,Group Play,San Juan SC ECNL G2011/12,,,Davis Legacy ECNL G2011/12,,,On Time,1095156
+2027-05-08,06:00 AM,Group Play,Force (CA) ECNL G2011/12,,,Pleasanton RAGE ECNL G2011/12,De Anza College,Stadium Field,On Time,1094742
 2027-05-08,10:00 AM,Group Play,Stanislaus Surf - ECNL G2011/12,,,Santa Rosa United ECNL G2011/12,Mary Grogan Community Park,Field 3,On Time,1095162
 2027-05-08,02:00 PM,Group Play,COSC ECNL G2011/12,,,Mustang SC ECNL G2011/12,Edison High School Fields,field 2,On Time,1095132

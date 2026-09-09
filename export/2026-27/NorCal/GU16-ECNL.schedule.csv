@@ -25,7 +25,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-19,09:00 AM,Group Play,Santa Rosa United ECNL G2010/11,,,Pleasanton RAGE ECNL G2010/11,Trione Fields,Trione West,On Time,1094537
 2026-09-19,10:00 AM,Group Play,Marin FC ECNL G2010/11,,,Mustang SC ECNL G2010/11,Terra Linda High School,Stadium,On Time,1094525
 2026-09-19,12:00 PM,Group Play,Davis Legacy ECNL G2010/11,,,COSC ECNL G2010/11,Davis Legacy Soccer Complex,Field 12,On Time,1094513
-2026-09-19,12:50 PM,Group Play,Stanislaus Surf - ECNL G2010/11,,,Placer United ECNL G2010/11,Thomas Downey High School,Field 1,On Time,1094543
+2026-09-19,12:50 PM,Group Play,Stanislaus Surf - ECNL G2010/11,,,Placer United ECNL G2010/11,Modesto Junior College,MJC West,On Time,1094543
 2026-09-19,01:00 PM,Group Play,San Juan SC ECNL G2010/11,,,Bay Area Surf - ECNL G2010/11,Tiemann Law Firm Fields at San Juan Soccer Complex,White Field,On Time,1094531
 2026-09-19,04:00 PM,Group Play,Force (CA) ECNL G2010/11,,,MVLA ECNL G2010/11,De Anza College,Soccer Field,On Time,1094519
 2026-09-20,TBD,Group Play,Bay Area Surf - ECNL G2010/11,,,Stanislaus Surf - ECNL G2010/11,,,On Time,1094549
@@ -34,7 +34,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-20,12:00 PM,Group Play,Placer United ECNL G2010/11,,,Mustang SC ECNL G2010/11,Placer Valley Soccer Complex,Field 6,On Time,1094567
 2026-09-20,01:00 PM,Group Play,Pleasanton RAGE ECNL G2010/11,,,Marin FC ECNL G2010/11,Val Vista,Field 2,On Time,1094573
 2026-09-20,02:00 PM,Group Play,COSC ECNL G2010/11,,,MVLA ECNL G2010/11,Edison High School Fields,field 1,On Time,1094555
-2026-09-26,TBD,Group Play,Force (CA) ECNL G2010/11,,,Bay Area Surf - ECNL G2010/11,,,On Time,1094591
+2026-09-26,10:00 AM,Group Play,Force (CA) ECNL G2010/11,,,Bay Area Surf - ECNL G2010/11,Kathleen MacDonald High School,soccer field,On Time,1094591
 2026-09-26,10:00 AM,Group Play,Placer United ECNL G2010/11,,,Pleasanton RAGE ECNL G2010/11,Placer Valley Soccer Complex,Field 6,On Time,1094615
 2026-09-26,01:00 PM,Group Play,Marin FC ECNL G2010/11,,,Davis Legacy ECNL G2010/11,College of Marin,Stadium,On Time,1094597
 2026-09-26,01:00 PM,Group Play,Mustang SC ECNL G2010/11,,,Stanislaus Surf - ECNL G2010/11,Provident Field @ MSC, Upper,On Time,1094603
@@ -60,7 +60,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-17,01:00 PM,Group Play,San Juan SC ECNL G2010/11,,,Marin FC ECNL G2010/11,Tiemann Law Firm Fields at San Juan Soccer Complex,White Field,On Time,1094717
 2026-10-17,01:00 PM,Group Play,Santa Rosa United ECNL G2010/11,,,Force (CA) ECNL G2010/11,Trione Fields,Trione East,On Time,1094723
 2026-10-24,TBD,Group Play,Bay Area Surf - ECNL G2010/11,,,MVLA ECNL G2010/11,,,On Time,1094729
-2026-10-24,TBD,Group Play,Force (CA) ECNL G2010/11,,,Pleasanton RAGE ECNL G2010/11,,,On Time,1094741
 2026-10-24,10:00 AM,Group Play,Davis Legacy ECNL G2010/11,,,San Juan SC ECNL G2010/11,Davis Legacy Soccer Complex,Field 9,On Time,1094735
 2026-10-24,10:00 AM,Group Play,Mustang SC ECNL G2010/11,,,COSC ECNL G2010/11,Provident Field @ MSC, Upper,On Time,1094753
 2026-10-24,10:00 AM,Group Play,Santa Rosa United ECNL G2010/11,,,Stanislaus Surf - ECNL G2010/11,Trione Fields,Trione West,On Time,1094759
@@ -129,5 +128,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-05-08,TBD,Group Play,Placer United ECNL G2010/11,,,Marin FC ECNL G2010/11,,,On Time,1095143
 2027-05-08,TBD,Group Play,Pleasanton RAGE ECNL G2010/11,,,Force (CA) ECNL G2010/11,,,On Time,1095149
 2027-05-08,TBD,Group Play,San Juan SC ECNL G2010/11,,,Davis Legacy ECNL G2010/11,,,On Time,1095155
+2027-05-08,06:00 AM,Group Play,Force (CA) ECNL G2010/11,,,Pleasanton RAGE ECNL G2010/11,De Anza College,Soccer Field,On Time,1094741
 2027-05-08,02:00 PM,Group Play,COSC ECNL G2010/11,,,Mustang SC ECNL G2010/11,Edison High School Fields,field 1,On Time,1095131
 2027-05-08,02:00 PM,Group Play,Stanislaus Surf - ECNL G2010/11,,,Santa Rosa United ECNL G2010/11,Mary Grogan Community Park,field 2,On Time,1095161
