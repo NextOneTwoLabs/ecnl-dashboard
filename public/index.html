@@ -1805,6 +1805,22 @@
 
     .search-results-table tbody tr:last-child td { border-bottom: none; }
 
+    .search-results-table .search-group-row { cursor: default; }
+    .search-group-row[hidden] { display: none; }
+    .search-group-row th {
+      position: static;
+      text-align: left;
+      white-space: normal;
+      border-bottom: 1px solid var(--border-light);
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: var(--bg-surface-alt);
+    }
+
     .search-conf-badge {
       display: inline-block;
       font-size: 10px;
@@ -1917,8 +1933,8 @@
         <div class="sidebar-section-title">Find a team</div>
         <div class="sidebar-search global-search-wrap" role="search">
           <input type="search" class="search-input" id="globalTeamSearch"
-            placeholder="Team or club name…" autocomplete="off"
-            aria-label="Find a team in any conference"
+            placeholder="Team or club, any age group…" autocomplete="off"
+            aria-label="Find a team in any age group or conference"
             oninput="onGlobalSearchInput(this.value)"
             onkeydown="if(event.key==='Escape')clearGlobalSearch()">
           <button type="button" class="global-search-clear" id="globalSearchClear"
@@ -2231,10 +2247,21 @@
     // flight as two blocks — an unnamed group holding one or two teams beside
     // "Group A" with the rest (seven 2021-22 U13 flights, three in 2022-23) —
     // so the blocks are merged; see mergeStandingsBlocks.
+    // Memoised per session by request path (in ?live=1 mode too, like
+    // eventHierarchy) so a search across every division and the conference
+    // page that follows share one fetch per flight; a rejection is evicted so
+    // the next call retries. opts.refresh bypasses the memo.
+    const standingsMemo = {};
     async function getStandings(divId, flightId, eventId, opts) {
-      const data = await fetchJSON(`Event/get-standings-by-div-and-flight/${divId}/${flightId}/${eventId}`, opts);
-      const blocks = Array.isArray(data.data) ? data.data : (data.data ? [data.data] : []);
-      return mergeStandingsBlocks(blocks) || data.data || data;
+      const key = `Event/get-standings-by-div-and-flight/${divId}/${flightId}/${eventId}`;
+      if (standingsMemo[key] && !(opts && opts.refresh)) return standingsMemo[key];
+      const p = fetchJSON(key, opts).then(data => {
+        const blocks = Array.isArray(data.data) ? data.data : (data.data ? [data.data] : []);
+        return mergeStandingsBlocks(blocks) || data.data || data;
+      });
+      const entry = p.catch(e => { if (standingsMemo[key] === entry) delete standingsMemo[key]; throw e; });
+      standingsMemo[key] = entry;
+      return entry;
     }
 
     // Keeps the largest block's published order and slots every other block's
@@ -2461,6 +2488,7 @@
     }
 
     function clearGlobalSearch({ reload = true } = {}) {
+      clearTimeout(globalSearchDebounce);
       const inp = document.getElementById('globalTeamSearch');
       if (inp) inp.value = '';
       const clearBtn = document.getElementById('globalSearchClear');
@@ -2472,31 +2500,39 @@
       }
     }
 
+    let searchToken = 0;          // drops results from a search that was superseded
+
     async function searchAllConferences(query) {
-      if (!currentAgeGroup) return;
+      if (!AGE_GROUPS.length) return;
       globalSearchActive = true;
+      const token = ++searchToken;
+      ++loadToken;                // a conference load still in flight must not paint over the results
+      const live = () => token === searchToken && globalSearchActive;
       const q = query.toLowerCase();
 
       // Update header
       document.getElementById('breadcrumb').innerHTML =
         `<span>${currentSeason}</span><span class="breadcrumb-sep">›</span>` +
-        `<span>${AGE_LABELS[currentAgeGroup] || currentAgeGroup}</span><span class="breadcrumb-sep">›</span>` +
-        `<span class="breadcrumb-current">Search: "${query}"</span>`;
+        `<span class="breadcrumb-current">Search: "${esc(query)}"</span>`;
       document.getElementById('contentTitle').textContent = `Search results for "${query}"`;
-      document.getElementById('contentSubtitle').textContent = `${currentSeason} · ${AGE_LABELS[currentAgeGroup] || currentAgeGroup} · all conferences`;
+      document.getElementById('contentSubtitle').textContent = `${currentSeason} · all age groups · all conferences`;
       document.getElementById('extLinks').innerHTML = '';
 
       const container = document.getElementById('standingsContainer');
       const conferences = Object.entries(getSeasonData().conferences);
       const total = conferences.length;
+      // Oldest first, as the tabs. AGE_GROUPS comes from the first conference's
+      // hierarchy; a division named differently in another conference is skipped.
+      const groups = AGE_GROUPS.slice();
       let done = 0;
 
-      // Show progress panel immediately
+      // Show progress panel immediately: one body per age group, its header
+      // row hidden until the group has a match
       container.innerHTML = `
         <div class="search-results-panel" id="searchResultsPanel">
           <div class="search-results-header">
-            <div class="search-results-title">🔍 "${query}"</div>
-            <div class="search-results-count" id="searchResultsCount" role="status" aria-live="polite">Searching ${total} conferences…</div>
+            <div class="search-results-title">🔍 "${esc(query)}"</div>
+            <div class="search-results-count" id="searchResultsCount" role="status" aria-live="polite">Searching ${total} conferences · ${groups.length} age groups…</div>
           </div>
           <div class="search-progress" id="searchProgress">
             <span id="searchProgressText">0 / ${total}</span>
@@ -2504,59 +2540,72 @@
           </div>
           <table class="search-results-table" id="searchResultsTable">
             <thead>${standingsHeadHtml(SEARCH_COLS, null, null, false)}</thead>
-            <tbody id="searchResultsTbody"></tbody>
+            ${groups.map(ag => {
+              const by = birthYearLabel(ag);
+              return `<tbody data-age="${esc(ag)}"><tr class="search-group-row" hidden>` +
+                `<th scope="colgroup" colspan="${SEARCH_COLS.length}">${esc(AGE_LABELS[ag] || ag)}${by ? ' · ' + esc(by) : ''}</th></tr></tbody>`;
+            }).join('')}
           </table>
         </div>`;
 
-      const tbody = document.getElementById('searchResultsTbody');
       let totalMatches = 0;
+      const matchedAges = new Set(), matchedConfs = new Set();
 
-      // Fetch all conferences in parallel, append results as each arrives
+      // A result row goes into its age group's body, kept sorted by conference name
+      const addRow = (ag, confName, flight, team, rank) => {
+        const group = container.querySelector(`tbody[data-age="${CSS.escape(ag)}"]`);
+        if (!group) return;
+        const tmp = document.createElement('tbody');
+        tmp.innerHTML = standingsRowHtml(team, SEARCH_COLS, {
+          rank, selectable: true, ctx: { confName, flightName: flight.flightName },
+        });
+        const row = tmp.firstElementChild;
+        row.dataset.conf = confName;
+        row.dataset.age = ag;
+        row.title = `Open ${displayName(team.name, team.clubName)} in ${AGE_LABELS[ag] || ag} · ${confName}`;
+        const open = () => {
+          clearGlobalSearch({ reload: false });
+          openTeamInContext({ season: currentSeason, ageGroup: ag, confName, teamID: team.teamID });
+        };
+        row.addEventListener('click', e => { if (!e.target.closest('.star-btn')) open(); });
+        row.addEventListener('keydown', e => {
+          if ((e.key === 'Enter' || e.key === ' ') && e.target === row) { e.preventDefault(); open(); }
+        });
+        group.firstElementChild.hidden = false;
+        const next = [...group.querySelectorAll('tr[data-conf]')].find(r => r.dataset.conf.localeCompare(confName) > 0);
+        group.insertBefore(row, next || null);
+      };
+
+      // Fetch every division of every conference in parallel, append results as each arrives
       const fetchPromises = conferences.map(async ([confName, conf]) => {
         try {
           const hierarchy = await getEventHierarchy(conf.eventId);
           const divList = hierarchy.girlsDivAndFlightList || [];
-          const division = divList.find(d => d.divisionName === currentAgeGroup);
-          if (!division) return;
-
-          const flights = division.flightList || [];
-          const standingsResults = await Promise.all(
-            flights.map(f =>
-              getStandings(division.divisionID, f.flightID, conf.eventId)
-                .then(data => ({ flight: f, data }))
-                .catch(() => null)
-            )
-          );
-
-          standingsResults.forEach(result => {
-            if (!result || !result.data) return;
-            const teams = result.data.teamStandings || [];
-            teams.forEach((team, i) => {
-              if (!team.name.toLowerCase().includes(q)) return;
-              totalMatches++;
-              const tmp = document.createElement('tbody');
-              tmp.innerHTML = standingsRowHtml(team, SEARCH_COLS, {
-                rank: i + 1, selectable: true, ctx: { confName, flightName: result.flight.flightName },
+          await Promise.all(groups.map(async ag => {
+            const division = divList.find(d => d.divisionName === ag);
+            if (!division) return;
+            const standingsResults = await Promise.all(
+              (division.flightList || []).map(f =>
+                getStandings(division.divisionID, f.flightID, conf.eventId)
+                  .then(data => ({ flight: f, data }))
+                  .catch(() => null)
+              )
+            );
+            if (!live()) return;
+            standingsResults.forEach(result => {
+              if (!result || !result.data) return;
+              (result.data.teamStandings || []).forEach((team, i) => {
+                if (!`${team.name || ''} ${team.clubName || ''}`.toLowerCase().includes(q)) return;
+                totalMatches++;
+                matchedAges.add(ag); matchedConfs.add(confName);
+                addRow(ag, confName, result.flight, team, i + 1);
               });
-              const row = tmp.firstElementChild;
-              row.dataset.conf = confName;
-              row.title = `Open ${displayName(team.name, team.clubName)} in ${confName}`;
-              const open = () => {
-                clearGlobalSearch({ reload: false });
-                openTeamInContext({ season: currentSeason, ageGroup: currentAgeGroup, confName, teamID: team.teamID });
-              };
-              row.addEventListener('click', e => { if (!e.target.closest('.star-btn')) open(); });
-              row.addEventListener('keydown', e => {
-                if ((e.key === 'Enter' || e.key === ' ') && e.target === row) { e.preventDefault(); open(); }
-              });
-              if (tbody) tbody.appendChild(row);
-              const countEl = document.getElementById('searchResultsCount');
-              if (countEl) countEl.textContent = `${totalMatches} match${totalMatches !== 1 ? 'es' : ''}`;
             });
-          });
+          }));
         } catch (e) { /* skip failed conference */ }
 
         done++;
+        if (!live()) return;
         const pText = document.getElementById('searchProgressText');
         const pFill  = document.getElementById('searchProgressFill');
         if (pText) pText.textContent = `${done} / ${total}`;
@@ -2564,20 +2613,27 @@
       });
 
       await Promise.all(fetchPromises);
+      if (!live()) return;
 
       // Hide progress bar when done
       const prog = document.getElementById('searchProgress');
       if (prog) prog.style.display = 'none';
 
+      // Counts the age groups and conferences that have a hit, not the ones searched
+      const n = (count, one, many) => `${count} ${count === 1 ? one : many}`;
+      const summary = totalMatches === 0
+        ? `0 matches (${groups.length} age groups · ${total} conferences searched)`
+        : `${n(totalMatches, 'match', 'matches')} in ${n(matchedAges.size, 'age group', 'age groups')} · ${n(matchedConfs.size, 'conference', 'conferences')}`;
       const countEl = document.getElementById('searchResultsCount');
-      if (countEl) countEl.textContent = `${totalMatches} match${totalMatches !== 1 ? 'es' : ''} found`;
+      if (countEl) countEl.textContent = summary;
 
-      if (totalMatches === 0 && tbody) {
-        tbody.innerHTML = `<tr><td colspan="11"><div class="search-no-results-msg">No teams found matching "${query}"</div></td></tr>`;
+      if (totalMatches === 0) {
+        const table = document.getElementById('searchResultsTable');
+        if (table) table.insertAdjacentHTML('beforeend', `<tbody><tr><td colspan="${SEARCH_COLS.length}"><div class="search-no-results-msg">` +
+          `No teams found matching "${esc(query)}" in any age group or conference (${esc(currentSeason)})</div></td></tr></tbody>`);
       }
 
-      document.getElementById('globalSearchStatus').textContent =
-        `${totalMatches} match${totalMatches !== 1 ? 'es' : ''} across ${total} conferences`;
+      document.getElementById('globalSearchStatus').textContent = summary;
     }
 
     // ========== SIDEBAR ==========
@@ -4024,12 +4080,17 @@
     }
 
     function selectView(view) {
-      if (view === currentView) return;
+      // Leaving search mode: the results panel owns the breadcrumb, title and
+      // container, so rebuild the view with one loadCurrentView (fetches are
+      // memoised) instead of clearGlobalSearch's own reload plus a render here.
+      const leavingSearch = globalSearchActive;
+      if (leavingSearch) clearGlobalSearch({ reload: false });
+      else if (view === currentView) return;
       currentView = view;
       const s = document.getElementById('viewTabStandings');
       updateViewTabsUI(s ? s.textContent : undefined);
       if (currentTab === 'playoffs') loadPlayoffFlight();
-      else if (currentConfMeta && currentFlightData.length) { renderConferenceView(); saveState(); pushHash(); }
+      else if (!leavingSearch && currentConfMeta && currentFlightData.length) { renderConferenceView(); saveState(); pushHash(); }
       else loadCurrentView();
     }
 

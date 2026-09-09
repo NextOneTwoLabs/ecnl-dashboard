@@ -16,7 +16,7 @@ upstream API or website ever goes away.
 - **CSV exports** — Human-readable standings and schedule tables under `export/`, openable in Excel
 - **Playoffs & Finals** — National post-season per age group and competition (Champions League, North American Cup, Showcase Cup, Showcase Games): knockout brackets drawn as trees, cup and consolation brackets, group tables where a group stage exists, round-tagged schedules, and a format note per competition
 - **★ My Teams** — Follow any team; each favorite opens a summary page: the glance panel, the full table with the team highlighted, the team's own fixtures and results, and its post-season games when it played any
-- **One team search** — Find a team across every conference in the current season and age group; a result opens it on its conference page, already selected
+- **One team search** — Find a team across every age group and conference in the current season; a result opens it on its conference page with the age group and team selected
 - **Age group navigation** — Tabs populated from the API; keyboard arrow-key navigation, `/` to search
 - **Dark mode**, and **deep links** (season, age group, conference, view, selected team and match filter in the URL hash)
 - **Data explained** — Standings state that the order is as published by TGS (points per game, then goal difference), the header shows when the data was observed, and every view links to its source page on TGS
