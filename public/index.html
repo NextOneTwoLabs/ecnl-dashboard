@@ -2418,9 +2418,11 @@
       }
       if (p.get('tab') === 'playoffs') {
         currentTab = 'playoffs';
-        if (p.get('stage')) currentPlayoffStage = p.get('stage');     // validated in buildStageTabs
-        if (p.get('age')) currentPlayoffAgeGroup = p.get('age');       // validated in loadPlayoffsPanel
-        if (p.get('tier')) currentPlayoffTier = Number(p.get('tier')) || null;
+        // Keys the link omits fall back to the first stage / age group / competition
+        if (!p.has('view')) currentView = 'standings';
+        currentPlayoffStage = p.get('stage') || null;                  // validated in buildStageTabs
+        currentPlayoffAgeGroup = p.get('age') || null;                 // validated in loadPlayoffsPanel
+        currentPlayoffTier = Number(p.get('tier')) || null;
         return true;
       }
       currentTab = 'conferences';
@@ -2428,7 +2430,13 @@
       if (p.get('conf') && SEASONS[currentSeason].conferences[p.get('conf')]) { currentConference = p.get('conf'); changed = true; }
       if (p.get('team')) { selectedTeamID = Number(p.get('team')) || null; changed = true; } // validated once the tables load
       if (['upcoming', 'results', 'all'].includes(p.get('sched'))) { scheduleFilter = p.get('sched'); changed = true; }
-      return changed;
+      if (!changed) return false;   // an unknown-only hash such as #foo stays a no-op
+      // A link describes the whole view: what it omits is the default, not what
+      // this browser showed last (same-document navigation reuses live state).
+      if (!p.has('view')) currentView = 'standings';
+      if (!p.has('sched')) scheduleFilter = 'upcoming';
+      if (!p.has('team')) selectedTeamID = null;
+      return true;
     }
 
     window.addEventListener('hashchange', () => {
