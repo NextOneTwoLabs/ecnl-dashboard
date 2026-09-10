@@ -2105,13 +2105,17 @@
           <textarea id="feedbackMessage" name="message" rows="4" maxlength="2000" required></textarea>
           <label for="feedbackEmail">Email (optional, for a reply)</label>
           <input id="feedbackEmail" name="email" type="email" autocomplete="email" maxlength="254">
-          <input class="hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <!-- Honeypot. The odd name is deliberate: Chrome's address autofill ignores
+               autocomplete="off" and fills fields called "website", which would silently
+               discard a real visitor's message. -->
+          <input class="hp" name="hp-note" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button class="btn-primary" type="submit">Send</button>
         </form>
         <p class="feedback-note" id="feedbackNote" aria-live="polite"></p>
         <p class="feedback-privacy">Your message goes to our own private storage and is deleted
-          automatically after 180&nbsp;days. We can't delete an individual message on request.
-          Email is optional and used only to reply to you.</p>
+          automatically after 180&nbsp;days. We don't offer per-message deletion.
+          Email is optional and used only to reply to you. We also store which view of the site
+          you were on.</p>
       </details>
     </div>
 
@@ -4678,15 +4682,19 @@
       const t = e.target;
       const typing = t.closest && t.closest('input, select, textarea, [contenteditable="true"]');
       if (typing) return;
-      // An open feedback panel owns the keyboard: '/' would otherwise jump to the team search
-      // from the panel's Send button or summary, which are not caught by the check above.
-      if (t.closest && t.closest('#feedback[open]')) return;
-      if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); focusTeamSearch(); return; }
+      // An open feedback panel owns '/' and the arrow shortcuts: they would otherwise act from
+      // the panel's Send button or summary, which are not caught by the check above. Only those
+      // are suppressed — Escape still reaches the handler below and closes the sidebar drawer.
+      const inFeedback = !!(t.closest && t.closest('#feedback[open]'));
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        if (inFeedback) return;
+        e.preventDefault(); focusTeamSearch(); return;
+      }
       if (e.key === 'Escape' && document.getElementById('sidebar').classList.contains('open')) { toggleSidebar(); return; }
       // Enter/Space activates focusable list items that aren't native buttons.
       if ((e.key === 'Enter' || e.key === ' ') && t.matches && t.matches('li[tabindex]')) { e.preventDefault(); t.click(); return; }
       // Arrow shortcuts browse conferences only, and never steal keys from a focused control.
-      if (currentTab !== 'conferences') return;
+      if (currentTab !== 'conferences' || inFeedback) return;
       if (t.closest && t.closest('button, a, [tabindex], [role="tab"]')) return;
       const names = Object.keys(getSeasonData().conferences);
       const ci = names.indexOf(currentConference);
@@ -4729,7 +4737,8 @@
             body: JSON.stringify({
               message: feedbackForm.elements.message.value,
               email: feedbackForm.elements.email.value,
-              website: feedbackForm.elements.website.value,
+              // See the markup: the honeypot's name is odd on purpose, to dodge autofill.
+              'hp-note': feedbackForm.elements['hp-note'].value,
               // Which view was open, so "the standings look wrong" says which standings.
               hash: location.hash,
             }),

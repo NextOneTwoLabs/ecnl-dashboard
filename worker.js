@@ -36,10 +36,12 @@ export default {
         return Response.redirect(url.toString(), 301);
       }
       if (isFeedback) return await feedback(request, env);
-    } catch {
+    } catch (err) {
       // A fault in the feedback handler must not take page serving down with it. The request
       // body may already be spent by now, so the feedback path answers for itself instead of
-      // handing a consumed request to the assets binding.
+      // handing a consumed request to the assets binding. The fault is logged first, so a
+      // production 503 leaves a trace in `wrangler tail` instead of failing silently.
+      console.error('feedback', err);
       if (isFeedback) return json({ ok: false, error: 'Something went wrong. Please try again.' }, 503);
     }
     return env.ASSETS.fetch(request);
@@ -64,11 +66,13 @@ async function feedback(request, env) {
   // A deploy that lost the binding should say so rather than throw on the put below.
   if (!env.FEEDBACK) return reply(503, 'Feedback is not available right now. Please try again later.');
 
-  // Measure before reading (see MAX_BODY).
+  // Measure before reading (see MAX_BODY). A negative length is as bogus as an unparseable one,
+  // and Number('-5') is finite, so it needs a check of its own.
   const declared = request.headers.get('content-length');
   const size = declared ? Number(declared) : NaN;
-  if (!Number.isFinite(size)) return reply(411, 'Please try again.');
-  if (size > MAX_BODY) return reply(413, 'Please keep it under 2,000 characters.');
+  if (!Number.isFinite(size) || size < 0) return reply(411, 'Please try again.');
+  // This one is about the whole body, not the message: say so rather than talk about characters.
+  if (size > MAX_BODY) return reply(413, 'That request was too large.');
 
   let body = {};
   try {
@@ -79,20 +83,26 @@ async function feedback(request, env) {
   // JSON.parse can return null or a scalar; neither can be dereferenced below.
   if (!body || typeof body !== 'object') body = {};
 
-  // Honeypot: real visitors never see the "website" field. Pretend it worked and store nothing.
-  if (body.website) return reply(200);
+  // Honeypot: real visitors never see this field. The name is deliberately odd because browser
+  // address autofill ignores autocomplete="off" and recognises ordinary names like "website" —
+  // a visitor whose browser filled it would be thanked while their message was dropped.
+  if (body['hp-note']) return reply(200);
 
   const message = String(body.message || '').trim();
   if (!message) return reply(400, 'Please add a message.');
   if (message.length > MAX_MESSAGE) return reply(400, 'Please keep it under 2,000 characters.');
 
-  // The email is optional, so it is only checked when the visitor gave one.
+  // The email is optional, so it is only checked when the visitor gave one. This regex and the
+  // browser's type="email" check disagree at the edges; the server's answer is the one that
+  // counts, and a disagreement just shows the 400 copy instead of storing anything.
   const email = String(body.email || '').trim().toLowerCase();
   if (email && (!EMAIL.test(email) || email.length > 254)) {
     return reply(400, 'Please enter a valid email address.');
   }
 
-  // The one thing recorded about the page rather than the person: which view was open.
+  // The one thing recorded about the page rather than the person: which view was open. slice()
+  // can cut a surrogate pair at the cap; the leftover is still a storable string, and no hash the
+  // site produces comes near MAX_HASH anyway.
   const hash = String(body.hash || '').trim().slice(0, MAX_HASH);
 
   // One key per submission. The email cannot be the key: it is optional and not unique. The ISO

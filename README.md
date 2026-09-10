@@ -180,8 +180,10 @@ address without fetching every record. `hash` is the deep link the visitor was l
 (`#season=2026-27&age=GU16&conf=NorCal`), so "the standings look wrong" says which standings.
 
 **Records expire after 180 days.** Each `put` carries an `expirationTtl`, so KV deletes the record
-by itself — there is no cron job and no manual cleanup. There is no deletion path for an individual
-message, and the panel says so.
+by itself — there is no cron job and no manual cleanup. **We don't offer per-message deletion**, and
+the panel says so: nothing automates a request. A specific record can still be removed by hand with
+`npx wrangler kv key delete <key> --binding FEEDBACK --remote` — a key listing prints the reply
+address as metadata, so an emailed record is findable — but that is a manual, unadvertised path.
 
 **The message is free text.** It can contain anything a visitor chooses to type, including a name,
 a club, a player, or contact details the site never asked for and cannot validate. It is stored in
@@ -205,7 +207,9 @@ on your own machine.
 
 ### Spam and limits
 
-A hidden honeypot field drops the crudest bots, the message is capped at 2,000 characters and the
+A hidden honeypot field (`hp-note` — the name is deliberately odd, because browser address autofill
+ignores `autocomplete="off"` and fills anything called `website`, which would silently drop a real
+visitor's message) drops the crudest bots, the message is capped at 2,000 characters and the
 request body at 8 KB. Those bound each write, not how many arrive. **KV writes on the free plan are
 capped at 1,000 a day for the whole Cloudflare account**, and that budget is shared with the
 sibling site's waiting list — a flood of feedback here would break signups on `nextonetwo.com` too.
