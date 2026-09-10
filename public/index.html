@@ -3366,8 +3366,11 @@
 
     function focusTeamSearch() {
       if (currentTab !== 'conferences') switchTab('conferences');
-      const sb = document.getElementById('sidebar');
-      if (window.innerWidth <= 768 && sb && !sb.classList.contains('open')) toggleSidebar();
+      const sidebar = document.getElementById('sidebar');
+      const hidden = isPhone()
+        ? !sidebar.classList.contains('open')
+        : document.querySelector('.layout').classList.contains('sidebar-collapsed');
+      if (hidden) toggleSidebar();
       const inp = document.getElementById('globalTeamSearch');
       if (inp) { inp.focus(); inp.select(); }
     }
