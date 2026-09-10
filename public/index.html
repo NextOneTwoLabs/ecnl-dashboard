@@ -2002,8 +2002,8 @@
 
       <div class="shortcut-hint">
         <span><kbd>/</kbd> Find a team</span>
-        <span><kbd>&larr;</kbd> <kbd>&rarr;</kbd> Age groups</span>
-        <span><kbd>&uarr;</kbd> <kbd>&darr;</kbd> Conferences</span>
+        <span class="hint-conf"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> Age groups</span>
+        <span class="hint-conf"><kbd>&uarr;</kbd> <kbd>&darr;</kbd> Conferences</span>
       </div>
     </div>
 
@@ -2716,6 +2716,8 @@
         b.classList.toggle('active', on);
         b.setAttribute('aria-selected', String(on));
       });
+      // The arrow shortcuts only work on Conferences, so only advertise them there.
+      document.querySelectorAll('.shortcut-hint .hint-conf').forEach(el => { el.hidden = !isConf; });
       if (isFav) openFavoritesTab();
       if (isPO)  loadPlayoffsPanel();
       // Returning to Conferences must repaint the main pane, which the
