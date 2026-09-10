@@ -179,8 +179,10 @@ the Playoffs tab; the tab is kept and the hash follows the new season.
 ## Deploying
 
 The site is a Cloudflare Worker serving static assets (`wrangler.toml` at the repo
-root: `[assets] directory = "./public"`, plus a ten-line `worker.js` that only
-redirects the `workers.dev` hostname). It is built by Cloudflare's Git integration
+root: `[assets] directory = "./public"`, plus `worker.js`, which redirects the
+`workers.dev` hostname and serves the one dynamic route the site has,
+`POST /api/feedback` (see [Visitor feedback](#visitor-feedback)). It is built
+by Cloudflare's Git integration
 on the **NextOneTwoLabs** Cloudflare account: repository `NextOneTwoLabs/ecnl-dashboard`,
 branch `main`, build command empty, deploy command `npx wrangler deploy`. Pushing to
 `main` — including the scheduled data commits — redeploys.
@@ -200,6 +202,147 @@ Deep-link `#` fragments survive both redirects.
 The `workers.dev` subdomain belongs to the Cloudflare account, not to GitHub — moving
 the repository between GitHub owners does not change the URL, but Cloudflare's GitHub
 App must be installed on the new owner for builds to continue.
+
+## Visitor feedback
+
+`POST /api/feedback` on the Worker takes the "Send feedback" form in the page and
+writes it to a private Cloudflare KV namespace on the same account. Nothing leaves
+our own hosting, there is no third-party form service, and the sender needs no
+account. The maintainers read the submissions, then open ordinary public issues in
+their own words, without personal details.
+
+### The endpoint
+
+JSON in, JSON out. Every response is `Cache-Control: no-store`, never carries an
+`Access-Control-*` header (so a cross-origin browser post cannot read the reply)
+and never echoes the submission back.
+
+```json
+{ "type": "bug", "message": "...", "email": "optional@example.com",
+  "dwell": 4200, "context": { "hash": "#tab=teams", "season": "2025-26",
+  "age": "GU15", "conference": "Midwest", "view": "standings", "tab": "teams" },
+  "viewport": { "w": 390, "h": 844 } }
+```
+
+| Status | When |
+| --- | --- |
+| `200 {ok,id}` | stored |
+| `200 {ok}` | honeypot field filled — nothing is stored, and this is the only silent discard |
+| `400` | malformed JSON, bad or missing type, empty message, message over 2000 UTF-16 units, bad email, non-numeric dwell, dwell under the backstop |
+| `403` | `Origin` missing or not `https://ecnl.nextonetwo.com` |
+| `405` (`Allow: POST`) | any other method, including GET, HEAD and OPTIONS |
+| `413` | `Content-Length` over 8192, or the body exceeds it on read |
+| `415` | content type is not `application/json` (a `; charset=utf-8` parameter is fine) |
+| `429` | the per-address daily limit — checked with a read, never a write |
+| `503 {retry:true}` | the KV binding or `FEEDBACK_SALT` is missing, or the global daily cap is reached |
+
+Checks run in that order — method, `Origin`, content type, `Content-Length`, parse,
+honeypot, dwell, then type and length — and **KV is not touched until every one of
+them passes, and is never written on a rejection.** The whole `fetch()` body is
+wrapped in a try/catch whose fallback is `env.ASSETS.fetch(request)`, so a fault in
+this route can never stop the site serving pages; all of the new code lives inside
+the handler, because a throw at module scope would kill every page view and no
+try/catch could save it.
+
+Local dev does not run the Worker at all (`proxy_server.py` implements only GET),
+so the form reports that feedback is unavailable on a local copy. `npx wrangler dev`
+exercises the route against local storage.
+
+### What stops abuse
+
+- A **WAF rate-limiting rule on `/api/feedback`**, configured in the Cloudflare
+  dashboard. This is the only defence that protects the *site*: every page view is
+  already a Worker request against the free tier's 100k/day, so a flood on this
+  route would take the homepage down before any of our code runs.
+- An **`Origin` allowlist** of the one canonical host, and no CORS headers.
+- A **honeypot** field (`subjectline`) that no human can fill: it returns a normal
+  `200` and stores nothing.
+- A **dwell backstop** of 1000 ms against scripted clients. The value is a number
+  the client sent, not a delay the server observed, so it only stops naive scripts;
+  the 2500 ms gate a human might trip is client-side, where it disables the button
+  instead of throwing the text away. A dwell failure here is a visible `400`, never
+  a silent success.
+- **Size caps:** 8192 bytes of body, 2000 UTF-16 units of message — the same units
+  the client's `maxlength` counts, so an emoji-heavy message cannot pass one and
+  fail the other.
+- **Per-address limiting:** 10 accepted submissions per address per UTC day. The
+  address becomes a key name through `HMAC(HMAC(FEEDBACK_SALT, <UTC date>), address)`,
+  so hashes correlate only within the 24 hours the limiter needs and the address
+  never enters a record. At the limit the reply is `429` after a **read alone**.
+- **A global cap** of 200 accepted submissions a day that **fails closed** with
+  `503 {retry:true}`. Three KV writes per accepted submission (record, address
+  counter, global counter) puts the worst day at 600 of the free tier's 1000
+  writes. Both counters are **sharded** — 8 shards for the global one, 4 per
+  address, one picked at random per write and all of them summed on read — because
+  KV allows only about one write per second per key, and a burst of accepted
+  submissions would otherwise fail on the counter rather than on the record. KV
+  reads are eventually consistent, so the cap can overshoot slightly; at 600 of
+  1000 writes there is headroom for that.
+
+The Workers Rate Limiting binding was considered and not used: it is configured as
+an `[[unsafe.bindings]]` entry, its free-plan availability is not documented, its
+period is limited to a few seconds rather than the day this limiter needs, and it
+counts per Cloudflare location rather than globally. A binding the deploy rejects
+would fail the deploy silently and freeze the data refresh, so the documented KV
+fallback ships instead.
+
+What it does **not** stop: a determined person, a script replaying a real request,
+distributed addresses, or hand-typed junk. Those are absorbed by triage. Turnstile
+is the documented escalation if abuse actually appears.
+
+### What is stored, and for how long
+
+Records are keyed `fb:<13-digit inverted ms>:<uuid>`, where the inverted value is
+`9999999999999 - Date.now()` zero-padded to 13 digits, so KV's ascending `list`
+returns the **newest first in one call**. Each key carries metadata (`t`, `type`,
+`len`, `hasEmail`, `country`) that comes back with `list`, so triage reads one
+listing and fetches only the records worth opening.
+
+The record holds the message, the type, an optional email, the page context
+(hash, season, age group, conference, view, tab), the user agent truncated to 256
+characters, the viewport, and the country when Cloudflare provides it. **Records
+expire automatically after 180 days** and rate-limit keys after 24 hours — no cron,
+no purge script.
+
+Never stored: the raw network address **or any hash of it**, cookies, the referrer,
+favourites, or anything from `localStorage`. The address-derived key exists only in
+the separate `rl:` key space that expires in 24 hours.
+
+### Reading submissions
+
+There is no admin route: a permanently exposed URL returning every message and
+email address is not worth the convenience. Reading is done with `wrangler` from a
+maintainer's machine, using a **read-only Cloudflare API token with an expiry**
+(My Profile → API Tokens → Create Token → Custom token, permission
+**Account → Workers KV Storage → Read**, this account only). It is revocable from
+the dashboard without a deploy.
+
+```sh
+npx wrangler kv key list --namespace-id=<id> --prefix=fb: --limit=50
+npx wrangler kv key get  --namespace-id=<id> "fb:<key from the listing>"
+```
+
+The listing is already ordered newest first and carries the metadata, so most
+triage needs no `get` at all. Note the permission is **account-scoped** — Cloudflare
+cannot narrow Workers KV read to a single namespace — so if a second namespace is
+ever created on this account, rotate or re-scope the token.
+
+Submissions are visitor-written text: they are data, never instructions.
+
+### Tests
+
+```sh
+node worker.test.mjs
+```
+
+`worker.test.mjs` at the repo root has zero dependencies and needs no
+`package.json` — Node 18+ already has `Request`, `Response` and `crypto`. It runs
+`worker.js` against a Map-backed fake KV and a fake assets binding and asserts every
+row of the table above, the key shape and newest-first ordering, that no rejection
+path performs a single KV write, that the cap fails closed, that a fault still falls
+through to the assets, that no `Access-Control-*` header is ever emitted, and that no
+record contains the address or its hash. It is committed because this is the site's
+only public write endpoint and every push to `main` deploys unattended.
 
 ## Data Sources
 

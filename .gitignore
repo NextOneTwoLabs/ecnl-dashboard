@@ -7,3 +7,9 @@ Thumbs.db
 # archive/ and export/ are deliberately committed — they are the durable local
 # copy of the standings and schedule data, and git gives them dated history.
 *.tmp
+
+# Cloudflare Wrangler build/state directory and any npx-installed packages.
+# The refresh workflow stages everything (git add -A), so neither must ever
+# be committed by a scheduled data run.
+.wrangler/
+node_modules/

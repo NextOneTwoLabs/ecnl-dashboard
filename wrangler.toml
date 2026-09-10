@@ -2,9 +2,12 @@
 #
 # The site is the static files in public/ — the same directory the local
 # server serves, so the deployed site is byte-identical to a local run. The
-# tiny worker.js only redirects the workers.dev address to the canonical
-# custom domain; it runs ahead of the assets for "/" alone, so everything
-# else is served as free static assets without invoking the Worker.
+# worker.js beside this file redirects the workers.dev address to the
+# canonical custom domain and serves POST /api/feedback; it runs ahead of the
+# assets for "/" alone, so everything else is served as free static assets
+# without invoking the Worker. /api/feedback matches no file in public/, so it
+# reaches the Worker without any change to run_worker_first — do not add it
+# there, that line also governs page serving.
 #
 # Canonical address: https://ecnl.nextonetwo.com  (custom domain, attached to
 # this Worker in the Cloudflare dashboard under Settings -> Domains & Routes).
@@ -17,3 +20,23 @@ compatibility_date = "2026-08-31"
 directory = "./public"
 binding = "ASSETS"
 run_worker_first = ["/"]
+
+# Private storage for visitor feedback (POST /api/feedback). Records expire on
+# their own after 180 days; rate-limit counters after 24 hours.
+#
+# >>> PLACEHOLDER — THIS PR MUST NOT MERGE UNTIL THE OWNER REPLACES IT <<<
+# The owner runs:  npx wrangler kv namespace create FEEDBACK
+# and pastes the printed id below in place of the placeholder. A deploy with
+# the placeholder id FAILS, and a failed deploy is silent — it would also
+# freeze the two-hourly data refresh, which ships through the same deploy.
+[[kv_namespaces]]
+binding = "FEEDBACK"
+id = "REPLACE_ME_WITH_THE_REAL_FEEDBACK_NAMESPACE_ID"
+
+# Also required before this route works, both owner actions:
+#   npx wrangler secret put FEEDBACK_SALT   (32 random bytes; keys the per-day
+#     address hash used only for rate limiting — without it the endpoint fails
+#     closed with 503 and stores nothing)
+#   a WAF rate-limiting rule on /api/feedback (free plan includes one) — every
+#     page view is already a Worker request against a 100k/day budget, so a
+#     flood on this route would take the homepage down before our code runs.
