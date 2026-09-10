@@ -149,7 +149,7 @@ A conference view is `#season=2026-27&age=GU16&conf=NorCal`, optionally with
 `&sched=results` or `&sched=all` (the match filter; upcoming is the default).
 
 Playoffs is `#tab=playoffs&season=2026-27`, with `&stage=`, `&age=` and `&tier=`
-appended once the season has national events.
+appended once the season has national events. Keys omitted from a link take their defaults (Standings, upcoming matches, no selected team; for Playoffs the first stage, age group and competition) rather than the viewer's last state.
 
 ## Layout
 
