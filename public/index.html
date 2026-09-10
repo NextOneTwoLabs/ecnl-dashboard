@@ -187,12 +187,13 @@
     .wordmark .accent { color: var(--accent); }
 
     /* The badge mark. .wordmark is an inline-flex with align-items:center, so
-       upstream's vertical-align:middle would be inert here; the flex centre sits
-       above the text's optical centre. Measured at high device scale, the ink
-       centre of the "n" in "next" sits 1.62px below the image's bounding-box
-       centre, so the mark is nudged down 2px, leaving a +0.38px residual at both
-       the 32px and 26px sizes. flex:none is a guard only; the image's intrinsic
-       min-width already stops it shrinking. */
+       upstream's vertical-align:middle is inert here and the mark's box centre
+       sits above the text's x-height centre. Measured at device scale 8 (the
+       high scale is what makes it stable), the ink centre of the "n" of "next"
+       sits ~1.69px below the image's bounding-box centre, so the mark is nudged
+       down 2px, leaving a +0.31px residual at both the 32px and 26px sizes.
+       flex:none is a guard only; the image's intrinsic min-width already stops
+       it shrinking. */
     .wordmark img {
       width: 32px;
       height: 32px;
