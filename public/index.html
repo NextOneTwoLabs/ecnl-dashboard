@@ -188,10 +188,11 @@
 
     /* The badge mark. .wordmark is an inline-flex with align-items:center, so
        upstream's vertical-align:middle would be inert here; the flex centre sits
-       above the text's optical centre. With Inter at 21px and line-height:1
-       (ascent .9688em, x-height .546em) the x-height centre falls ~1.91px below
-       the flex centre, so the mark is nudged down 2px. flex:none is a guard only;
-       the image's intrinsic min-width already stops it shrinking. */
+       above the text's optical centre. Measured at high device scale, the ink
+       centre of the "n" in "next" sits 1.62px below the image's bounding-box
+       centre, so the mark is nudged down 2px, leaving a +0.38px residual at both
+       the 32px and 26px sizes. flex:none is a guard only; the image's intrinsic
+       min-width already stops it shrinking. */
     .wordmark img {
       width: 32px;
       height: 32px;
