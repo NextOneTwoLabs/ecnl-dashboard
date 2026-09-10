@@ -1147,6 +1147,13 @@
       .standings-scroll {
         padding: 16px;
       }
+
+      /* Search results: the table is wider than the panel, so it scrolls sideways
+         inside its own wrapper (the panel keeps overflow hidden for its corners) */
+      .search-results-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
     }
 
     /* Comfortable targets on touch screens */
@@ -2557,6 +2564,7 @@
             <span id="searchProgressText">0 / ${total}</span>
             <div class="search-progress-bar"><div class="search-progress-fill" id="searchProgressFill" style="width:0%"></div></div>
           </div>
+          <div class="search-results-scroll">
           <table class="search-results-table" id="searchResultsTable">
             <thead>${standingsHeadHtml(SEARCH_COLS, null, null, false)}</thead>
             ${groups.map(ag => {
@@ -2565,6 +2573,7 @@
                 `<th scope="colgroup" colspan="${SEARCH_COLS.length}">${esc(AGE_LABELS[ag] || ag)}${by ? ' · ' + esc(by) : ''}</th></tr></tbody>`;
             }).join('')}
           </table>
+          </div>
         </div>`;
 
       let totalMatches = 0;
