@@ -20,14 +20,15 @@ directory = "./public"
 binding = "ASSETS"
 run_worker_first = ["/", "/api/*"]
 
-# Visitor feedback, one key per submission. Create the namespace once with
-# `npx wrangler kv namespace create FEEDBACK` and paste the id it prints in
-# place of the placeholder below.
+# Visitor feedback, one key per submission. The namespace already exists on the
+# NextOneTwoLabs account and its real id is in place, so there is nothing to
+# swap before merge.
 #
-# !!! DO NOT MERGE WHILE THE ID BELOW IS STILL THE PLACEHOLDER !!!
-# Pushes to main deploy automatically. A placeholder id fails the deploy, the
-# failure is silent, and a Worker that will not deploy also freezes the data
-# refresh that pushes to this repo.
+# Its title there is ECNL_FEEDBACK, not FEEDBACK: the account already holds a
+# FEEDBACK namespace belonging to the sibling marketing site (see
+# NextOneTwoLabs/nextonetwo-website), and two stores sharing one name would be
+# indistinguishable in the dashboard. The binding stays FEEDBACK, so the
+# handler's env.FEEDBACK is unaffected by the title.
 [[kv_namespaces]]
 binding = "FEEDBACK"
-id = "REPLACE_ME_WITH_REAL_KV_NAMESPACE_ID_BEFORE_MERGE"
+id = "caf080c2c3f94556ad15cbcedca25ccd"

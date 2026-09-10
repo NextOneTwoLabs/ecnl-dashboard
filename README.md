@@ -193,7 +193,8 @@ the visitor is stored: no IP address, no user agent, no country, no viewport.
     npx wrangler kv key list --binding FEEDBACK --remote
     npx wrangler kv key get "2026-09-10T18:04:21.512Z-9f3ac1b2" --binding FEEDBACK --remote
 
-or in the Cloudflare dashboard under **Storage & Databases → KV**. Keys are not guessable, so
+or in the Cloudflare dashboard under **Storage & Databases → KV**, where the namespace is listed
+as `ECNL_FEEDBACK` (the binding is `FEEDBACK`; the title differs). Keys are not guessable, so
 reading feedback back is list-then-get, one call per submission — it is storage, not an inbox.
 
 > **A listing prints the metadata, so it prints every reply email.** Never paste a `kv key list`
@@ -259,16 +260,13 @@ The `workers.dev` subdomain belongs to the Cloudflare account, not to GitHub —
 the repository between GitHub owners does not change the URL, but Cloudflare's GitHub
 App must be installed on the new owner for builds to continue.
 
-**One-time setup for feedback.** The KV namespace must exist before the first deploy that
-references it, or the binding is missing and the panel fails:
+**Feedback KV namespace.** The namespace already exists on the NextOneTwoLabs account and its
+real id is in `wrangler.toml`, so there is nothing to create or paste before the first deploy.
 
-```bash
-npx wrangler kv namespace create FEEDBACK
-```
-
-Paste the id it prints into `wrangler.toml` under `[[kv_namespaces]]`. Because every push to
-`main` deploys — including the scheduled data commits — **never merge a binding that still holds
-the placeholder id**: the deploy fails silently and the data refresh stops reaching the live site.
+Its title on the account is `ECNL_FEEDBACK`, not `FEEDBACK`: the account already holds a
+`FEEDBACK` namespace belonging to the sibling marketing site, and two stores sharing one name
+would be indistinguishable in the dashboard. The binding is still `FEEDBACK`, so `env.FEEDBACK`
+in the Worker and the `--binding FEEDBACK` commands above are unaffected by the title.
 
 To run the Worker and the panel locally, `npx wrangler dev` and open
 <http://localhost:8787>. KV is simulated on your machine, so test submissions stay there.
