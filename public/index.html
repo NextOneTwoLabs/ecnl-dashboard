@@ -288,6 +288,8 @@
       padding: 6px 16px 4px;
     }
     .browse-row .browse-label { padding: 0; min-width: 52px; }
+    /* Season row above the tab panels; the tab strip supplies the border */
+    .sidebar-season { padding: 6px 16px 10px; background: var(--bg-surface-alt); }
     .season-select {
       flex: 1;
       min-width: 0;
@@ -1148,7 +1150,8 @@
     /* Comfortable targets on touch screens */
     @media (max-width: 768px), (pointer: coarse) {
       .age-tab, .conference-item, .view-tab, .sidebar-tab, .seg-btn, .stage-tab, .playoff-age-tab,
-      .more-stats-btn, .open-external, .btn-primary, .theme-toggle, .hamburger, .wordmark, .section-label {
+      .more-stats-btn, .open-external, .btn-primary, .theme-toggle, .hamburger, .wordmark, .section-label,
+      .season-select {
         min-height: 44px;
       }
       .star-btn { min-width: 40px; min-height: 40px; }
@@ -1929,6 +1932,14 @@
         <button class="sidebar-tab" id="tabPlayoffs" role="tab" aria-selected="false" aria-controls="playoffsPanel" onclick="switchTab('playoffs')">🏆 Playoffs</button>
       </div>
 
+      <!-- Shared by Conferences and Playoffs; My Teams hides it because a
+           favourite is bound to its own season (see changeSeason). -->
+      <div class="browse-row sidebar-season" id="sidebarSeason">
+        <label class="browse-label" for="seasonSelect">Season</label>
+        <!-- Options are built from data/sources.json at startup -->
+        <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)"></select>
+      </div>
+
       <div id="conferencesPanel" role="tabpanel" aria-labelledby="tabConferences">
         <div class="sidebar-section-title">Find a team</div>
         <div class="sidebar-search global-search-wrap" role="search">
@@ -1943,11 +1954,6 @@
         <div class="global-search-status" id="globalSearchStatus" role="status" aria-live="polite"></div>
 
         <div class="sidebar-section-title">Browse</div>
-        <div class="browse-row">
-          <label class="browse-label" for="seasonSelect">Season</label>
-          <!-- Options are built from data/sources.json at startup -->
-          <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)"></select>
-        </div>
         <div class="browse-label">Age group</div>
         <div class="age-group-tabs" id="ageGroupTabs" role="tablist" aria-label="Age group"></div>
         <div class="browse-label">Conference</div>
@@ -2691,6 +2697,7 @@
       const isConf = tab === 'conferences';
       const isFav  = tab === 'favorites';
       const isPO   = tab === 'playoffs';
+      document.getElementById('sidebarSeason').style.display    = isFav  ? 'none' : '';
       document.getElementById('conferencesPanel').style.display = isConf ? '' : 'none';
       document.getElementById('favoritesPanel').style.display   = isFav  ? 'flex' : 'none';
       document.getElementById('playoffsPanel').style.display    = isPO   ? 'flex' : 'none';
@@ -2829,6 +2836,8 @@
         // with no `national` entry was simply never archived.
         const notYet = SOURCES.refresh && currentSeason === SOURCES.refresh.activeSeason;
         const label = seasonLabel(currentSeason);
+        // Newest season with archived brackets, in the registry's order
+        const latest = Object.keys(SEASONS).find(s => NATIONAL_EVENTS[s]) || null;
         document.getElementById('breadcrumb').innerHTML =
           `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Playoffs & Finals</span>`;
         document.getElementById('contentTitle').textContent = 'Playoffs & Finals';
@@ -2845,7 +2854,8 @@
             <div class="no-national-events-text">${notYet ? `${label} Playoffs &amp; Finals haven't been played yet` : `${label} playoff data isn't available here`}</div>
             <div class="no-national-events-sub">${notYet
               ? 'The national playoffs run at the end of the season. Results appear here once TGS publishes them.'
-              : 'This season\'s national events were not archived.'}</div>
+              : 'This season\'s national events were not archived.'} Choose another season in the sidebar to see past brackets.</div>
+            ${latest ? `<button type="button" class="btn-primary" data-season="${esc(latest)}" onclick="changeSeason(this.dataset.season)">See the ${esc(seasonLabel(latest))} brackets</button>` : ''}
           </div>`;
         currentPlayoffStage = null;
         currentPlayoffAgeGroup = null;
