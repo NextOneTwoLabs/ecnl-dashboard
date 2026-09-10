@@ -2502,6 +2502,7 @@
       if (clearBtn) clearBtn.style.display = val.length > 0 ? '' : 'none';
 
       clearTimeout(globalSearchDebounce);
+      globalSearchDebounce = null;
       if (val.trim().length < 2) {
         document.getElementById('globalSearchStatus').textContent =
           val.length === 1 ? 'Type at least 2 characters…' : '';
@@ -2512,11 +2513,15 @@
         return;
       }
       document.getElementById('globalSearchStatus').textContent = 'Searching…';
-      globalSearchDebounce = setTimeout(() => searchAllConferences(val.trim()), 300);
+      globalSearchDebounce = setTimeout(() => {
+        globalSearchDebounce = null;
+        searchAllConferences(val.trim());
+      }, 300);
     }
 
     function clearGlobalSearch({ reload = true } = {}) {
       clearTimeout(globalSearchDebounce);
+      globalSearchDebounce = null;
       const inp = document.getElementById('globalTeamSearch');
       if (inp) inp.value = '';
       const clearBtn = document.getElementById('globalSearchClear');
@@ -2792,11 +2797,15 @@
         if (el) el.value = '';
       });
       filterTeams('');
+      const pending = !!globalSearchDebounce;   // a search still waiting on its 300 ms timer
       clearTimeout(globalSearchDebounce);
+      globalSearchDebounce = null;
       // Silently reset global search UI (loadStandings is already handling the navigation).
       // onGlobalSearchInput flips the flag before reloading standings when the query
-      // drops under 2 characters, so the letter still being typed survives.
-      if (globalSearchActive) {
+      // drops under 2 characters, so the letter still being typed survives. A search that
+      // was still pending on its timer will never run now, so its "Searching…" status and
+      // ✕ button must be cleared here too.
+      if (globalSearchActive || pending) {
         globalSearchActive = false;
         const gInp = document.getElementById('globalTeamSearch');
         if (gInp) gInp.value = '';
