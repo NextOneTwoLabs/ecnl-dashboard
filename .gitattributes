@@ -1,0 +1,8 @@
+# The badge artwork is copied byte for byte from the entrance site
+# (NextOneTwoLabs/nextonetwo-website). This repo has no other .gitattributes
+# and core.autocrlf=true on the maintainer machine, so without these rules
+# badge.svg (which contains LF line breaks) would be committed correctly and
+# then expanded to CRLF on the next checkout, breaking byte-identity with the
+# entrance site. Treat all image assets as binary: no line-ending conversion.
+*.svg -text
+*.png -text

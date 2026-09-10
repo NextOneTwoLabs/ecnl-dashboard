@@ -222,9 +222,11 @@ the one rule covers both sites.
 |---|---|
 | **`public/`** | **Everything the site serves** — Pages output dir and local server root |
 | `public/index.html` | The whole app — HTML, CSS and JS in one file |
-| `public/favicon.svg` | Browser-tab icon — the nextonetwo mark |
-| `public/apple-touch-icon.png` | 180×180 iOS home-screen icon |
-| `public/og.png` | 1200×630 share preview; regenerate by hand, no build step |
+| `public/favicon.svg` | The NextOneTwo badge mark alone (no wordmark text) — browser-tab icon and the mark in the page header; byte-identical to the entrance site's |
+| `public/badge.svg` | The owner's full badge, mark plus wordmark — kept as the source the two badge PNGs can be regenerated from; byte-identical to the entrance site's |
+| `public/apple-touch-icon.png` | The full badge at 180×180 — iOS home-screen icon; copied from the entrance site, no build step |
+| `public/og.png` | The full badge centred on black at 1200×630 — link-preview card; copied from the entrance site, no build step |
+| `public/favicon-180.png` | The mark alone at 180×180, transparent — Safari ignores SVG favicons, so this is the PNG tab icon; rendered from `favicon.svg` at 720×720, downscaled and quantised to a 144-colour palette, no build step |
 | `public/data/sources.json` | Season → conference → event ID registry, refresh policy, birth-year anchor |
 | `public/archive/api/…` | Raw API responses keyed by endpoint path — what the site reads |
 | `public/archive/match-days.json` | Fixture calendar that drives the refresh schedule |
@@ -236,6 +238,7 @@ the one rule covers both sites.
 | `export/<season>/<conf>/` | CSVs — not published; `*.standings.csv`, `*.schedule.csv` |
 | `worker.js` | Redirects the `workers.dev` hostname, and handles `POST /api/feedback` |
 | `wrangler.toml` | Cloudflare Workers config: the `public/` assets and the `FEEDBACK` KV binding |
+| `.gitattributes` | Pins the image assets (`*.svg`, `*.png`) as binary, so the files copied from the entrance site stay byte-identical across checkouts instead of being line-ending converted |
 | `.github/workflows/refresh.yml` | The 2-hourly scheduled refresh |
 | `ecnl-standings.html` | Deprecated first version, kept for reference |
 
