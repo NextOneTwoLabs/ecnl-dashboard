@@ -328,7 +328,9 @@
       transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
     }
     .season-select:hover { border-color: var(--accent-text); }
-    .season-select:focus-visible { border-color: var(--accent-text); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
+    .season-select:focus-visible,
+    .feedback textarea:focus-visible,
+    .feedback input[type="email"]:focus-visible { border-color: var(--accent-text); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
 
     .btn-primary {
       display: inline-block;
@@ -494,6 +496,69 @@
       font-family: var(--font);
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
     }
+
+    /* ===== FEEDBACK PANEL ===== */
+    .feedback {
+      border-top: 1px solid var(--border);
+      background: var(--bg-surface-alt);
+      padding: 10px 16px 14px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .feedback summary {
+      display: inline-block;
+      list-style: none;
+      color: var(--accent-text);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+    .feedback summary::-webkit-details-marker { display: none; }
+    .feedback summary:hover { color: var(--accent-hover); }
+
+    .feedback-prompt { margin-top: 8px; }
+
+    .feedback form {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 10px;
+    }
+    .feedback form[hidden] { display: none; }
+
+    .feedback label {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .feedback textarea,
+    .feedback input[type="email"] {
+      width: 100%;
+      font: inherit;
+      font-size: 16px;              /* 16px keeps iOS from zooming the page on focus */
+      padding: 8px 10px;
+      color: var(--text-primary);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .feedback textarea { resize: vertical; min-height: 76px; }
+    .feedback .btn-primary { align-self: flex-start; margin-top: 8px; }
+
+    /* The honeypot. Off-screen rather than display:none, which some bots skip. */
+    .feedback .hp {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .feedback-note { margin-top: 8px; min-height: 1.5em; }
+    .feedback-note.is-ok { color: var(--accent-text); font-weight: 600; }
+    .feedback-privacy { margin-top: 10px; line-height: 1.5; }
 
     /* ===== MAIN CONTENT ===== */
     .main {
@@ -1191,6 +1256,8 @@
       .match-team { padding: 4px 0; }
       .glance-panel .glance-actions { display: flex; align-items: center; padding: 0 18px; }  /* outranks the later base rule */
       .glance-link { display: inline-flex; align-items: center; min-height: 44px; }
+      .feedback summary { display: inline-flex; align-items: center; min-height: 44px; }
+      .feedback input[type="email"] { min-height: 44px; }
     }
 
     @media (max-width: 480px) {
@@ -2027,6 +2094,25 @@
         <span class="hint-conf"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> Age groups</span>
         <span class="hint-conf"><kbd>&uarr;</kbd> <kbd>&darr;</kbd> Conferences</span>
       </div>
+
+      <!-- Hidden until the script reveals it: the form has no plain-POST fallback, and the
+           dashboard needs JavaScript to show anything anyway. -->
+      <details class="feedback" id="feedback" hidden>
+        <summary>Send feedback</summary>
+        <p class="feedback-prompt">Wrong result, a missing team, something confusing? Tell us.</p>
+        <form id="feedbackForm">
+          <label for="feedbackMessage">Message</label>
+          <textarea id="feedbackMessage" name="message" rows="4" maxlength="2000" required></textarea>
+          <label for="feedbackEmail">Email (optional, for a reply)</label>
+          <input id="feedbackEmail" name="email" type="email" autocomplete="email" maxlength="254">
+          <input class="hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn-primary" type="submit">Send</button>
+        </form>
+        <p class="feedback-note" id="feedbackNote" aria-live="polite"></p>
+        <p class="feedback-privacy">Your message goes to our own private storage and is deleted
+          automatically after 180&nbsp;days. We can't delete an individual message on request.
+          Email is optional and used only to reply to you.</p>
+      </details>
     </div>
 
     <div class="main">
@@ -4592,6 +4678,9 @@
       const t = e.target;
       const typing = t.closest && t.closest('input, select, textarea, [contenteditable="true"]');
       if (typing) return;
+      // An open feedback panel owns the keyboard: '/' would otherwise jump to the team search
+      // from the panel's Send button or summary, which are not caught by the check above.
+      if (t.closest && t.closest('#feedback[open]')) return;
       if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); focusTeamSearch(); return; }
       if (e.key === 'Escape' && document.getElementById('sidebar').classList.contains('open')) { toggleSidebar(); return; }
       // Enter/Space activates focusable list items that aren't native buttons.
@@ -4618,6 +4707,50 @@
       const b = e.target.closest('.conference-item[data-conf]');
       if (b) selectConference(b.dataset.conf);
     });
+
+    // ========== FEEDBACK ==========
+    // POST /api/feedback (worker.js) writes one record into the FEEDBACK KV namespace. The
+    // panel is revealed here rather than in the markup because there is no no-JavaScript path.
+    const feedbackPanel = document.getElementById('feedback');
+    const feedbackForm = document.getElementById('feedbackForm');
+    const feedbackNote = document.getElementById('feedbackNote');
+    if (feedbackPanel && feedbackForm && feedbackNote) {
+      feedbackPanel.hidden = false;
+      feedbackForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const button = feedbackForm.querySelector('button[type="submit"]');
+        button.disabled = true;
+        feedbackNote.classList.remove('is-ok');
+        feedbackNote.textContent = 'Sending…';
+        try {
+          const res = await fetch('/api/feedback', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              message: feedbackForm.elements.message.value,
+              email: feedbackForm.elements.email.value,
+              website: feedbackForm.elements.website.value,
+              // Which view was open, so "the standings look wrong" says which standings.
+              hash: location.hash,
+            }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (res.ok) {
+            feedbackForm.hidden = true;
+            feedbackNote.textContent = 'Thanks — got it.';
+            feedbackNote.classList.add('is-ok');
+            feedbackNote.tabIndex = -1;
+            feedbackNote.focus({ preventScroll: true });
+            return;
+          }
+          // Anything the server refused leaves the form up with the typed text intact.
+          feedbackNote.textContent = data.error || 'Something went wrong. Please try again.';
+        } catch {
+          feedbackNote.textContent = 'Couldn’t reach the server. Please try again.';
+        }
+        button.disabled = false;
+      });
+    }
 
     // ========== INIT ==========
     (async () => {

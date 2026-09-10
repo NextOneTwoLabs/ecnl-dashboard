@@ -7,3 +7,8 @@ Thumbs.db
 # archive/ and export/ are deliberately committed — they are the durable local
 # copy of the standings and schedule data, and git gives them dated history.
 *.tmp
+
+# `npx wrangler dev` writes both of these. The data refresh workflow commits
+# with `git add -A`, so anything left untracked here would be pushed.
+.wrangler/
+node_modules/
