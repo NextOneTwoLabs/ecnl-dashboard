@@ -93,8 +93,9 @@ hardcoded in the HTML.
 3. Archive it: `python archive.py --season 2026-27`
 
 The season dropdown rebuilds itself from the registry, so no HTML edit is needed.
-It sits above the sidebar tabs and is available on Conferences and Playoffs (My
-Teams hides it, since a favorite belongs to one season).
+It sits under the sidebar tabs, above the tab panels, and is available on
+Conferences and Playoffs (My Teams hides it, since a favorite belongs to one
+season).
 
 ## National playoffs
 
