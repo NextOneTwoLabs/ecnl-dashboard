@@ -11,9 +11,15 @@
 //
 // EVERYTHING lives inside fetch(). A throw at module scope would kill every
 // page view and no try/catch could save it, so there is no module-scope work
-// here beyond these constants, and the whole handler body is wrapped with
-// env.ASSETS.fetch(request) as the fallback: a fault in the feedback route
-// can never take the site down with it.
+// here beyond these constants, and the whole handler body is wrapped in a
+// catch that ALWAYS returns a Response. That catch is deliberately not a
+// single env.ASSETS.fetch(request): on the feedback path the body may already
+// be consumed, and fetching a used Request throws, so the feedback path
+// returns the retry-later JSON instead (which is what the client expects
+// anyway); every other path falls through to the assets inside its own
+// try/catch, so even a missing or broken ASSETS binding degrades to a plain
+// 503 rather than an unhandled rejection. A fault in the feedback route can
+// never take the site down with it.
 const CANONICAL_HOST = 'ecnl.nextonetwo.com';
 
 // Origins allowed to post feedback. The dashboard is served from exactly one
@@ -24,7 +30,7 @@ const CANONICAL_HOST = 'ecnl.nextonetwo.com';
 const ALLOWED_ORIGINS = ['https://' + CANONICAL_HOST];
 
 const FEEDBACK_PATH = '/api/feedback';
-const MAX_BODY_BYTES = 8192;       // 413 above this, on Content-Length and on read
+const MAX_BODY_BYTES = 8192;       // 411 without a length, 413 above this
 const MAX_MESSAGE_UNITS = 2000;    // UTF-16 code units, to match the client's maxlength
 const MAX_EMAIL_UNITS = 254;
 const MAX_UA_UNITS = 256;
@@ -53,6 +59,9 @@ const ADDRESS_SHARDS = 4;
 
 export default {
   async fetch(request, env, ctx) {
+    // Tracked outside the try so the catch knows which path faulted even if
+    // the fault happened while working out the path.
+    let isFeedback = false;
     try {
       const url = new URL(request.url);
 
@@ -63,15 +72,37 @@ export default {
       }
 
       const path = url.pathname.replace(/\/+$/, '') || '/';
-      if (path === FEEDBACK_PATH) {
+      isFeedback = path === FEEDBACK_PATH;
+      if (isFeedback) {
         return await handleFeedback(request, env, ctx);
       }
 
-      return env.ASSETS.fetch(request);
+      // Awaited on purpose: a rejected promise returned bare would escape the
+      // try and become an unhandled rejection instead of reaching the catch.
+      return await env.ASSETS.fetch(request);
     } catch (err) {
       // Last-ditch fallback. A fault anywhere above — including in the
-      // feedback route — must still leave the site serving pages.
-      return env.ASSETS.fetch(request);
+      // feedback route — must still produce a Response.
+      //
+      // The feedback path never retries the assets: by the time anything can
+      // fault there the request body has usually been read, and env.ASSETS
+      // .fetch() on a consumed Request throws ("Cannot construct a Request
+      // with a Request object that has already been used"), which would turn
+      // a storage fault into a 500. The client posts JSON and expects JSON,
+      // so it gets the same retry-later reply as a missing binding.
+      if (isFeedback) {
+        return retryLater();
+      }
+      try {
+        return await env.ASSETS.fetch(request);
+      } catch (fallbackErr) {
+        // env.ASSETS missing, or the asset fetch itself faulting. Nothing is
+        // left to try, but something MUST be returned.
+        return new Response('Temporarily unavailable.', {
+          status: 503,
+          headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' },
+        });
+      }
     }
   },
 };
@@ -81,7 +112,7 @@ export default {
 // Every response is JSON and no-store, and NEVER carries an Access-Control-*
 // header: without CORS a cross-origin browser post cannot read the reply, and
 // an accidentally cached reply cannot leak anything.
-function json(status, body, extraHeaders) {
+function jsonHeaders(extraHeaders) {
   const headers = {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store',
@@ -89,7 +120,11 @@ function json(status, body, extraHeaders) {
   if (extraHeaders) {
     for (const name of Object.keys(extraHeaders)) headers[name] = extraHeaders[name];
   }
-  return new Response(JSON.stringify(body), { status, headers });
+  return headers;
+}
+
+function json(status, body, extraHeaders) {
+  return new Response(JSON.stringify(body), { status, headers: jsonHeaders(extraHeaders) });
 }
 
 // Rejections never echo the submission back — only a stable machine-readable
@@ -105,6 +140,11 @@ function reject(status, reason, message, extraHeaders) {
 // them pass, and is NEVER written on a rejection.
 async function handleFeedback(request, env, ctx) {
   if (request.method !== 'POST') {
+    // A response to HEAD carries no body, by definition — same status and
+    // headers as the GET/PUT/... rejection, an empty body.
+    if (request.method === 'HEAD') {
+      return new Response(null, { status: 405, headers: jsonHeaders({ Allow: 'POST' }) });
+    }
     return reject(405, 'method_not_allowed', 'Use POST.', { Allow: 'POST' });
   }
 
@@ -118,19 +158,36 @@ async function handleFeedback(request, env, ctx) {
     return reject(415, 'unsupported_media_type', 'Send application/json.');
   }
 
-  const declared = Number(request.headers.get('Content-Length'));
-  if (Number.isFinite(declared) && declared > MAX_BODY_BYTES) {
+  // A DECLARED length is required, and Number() is not the way to check it:
+  // Number(null) is 0, so an absent or chunked Content-Length used to sail
+  // through this gate and the body was then buffered whole — up to
+  // Cloudflare's 100 MB — into a 128 MB isolate before anything measured it.
+  // An OOM there kills the isolate and every concurrent page request in it.
+  // So: a run of digits or nothing doing. \d+ is a single character class,
+  // so the test is linear and cannot backtrack.
+  const declaredHeader = request.headers.get('Content-Length');
+  if (typeof declaredHeader !== 'string' || !/^\d+$/.test(declaredHeader.trim())) {
+    return reject(411, 'length_required', 'That request could not be read.');
+  }
+  const declared = Number(declaredHeader.trim());
+  if (!Number.isFinite(declared) || declared > MAX_BODY_BYTES) {
     return reject(413, 'too_large', 'That message is too long.');
   }
 
-  const buffer = await request.arrayBuffer();
-  if (buffer.byteLength > MAX_BODY_BYTES) {
+  // ...and the header is only a claim, so the read is bounded too: the body
+  // is pulled through a reader that cancels the stream the moment the
+  // accumulated byte count passes the cap. A lying or chunked length can cost
+  // one chunk over 8192 bytes, never a buffered 100 MB.
+  const read = await readBounded(request, MAX_BODY_BYTES);
+  // Belt and braces: the reader already refuses to return an over-cap body,
+  // and the byte count it reports is checked again here.
+  if (read === null || read.bytes > MAX_BODY_BYTES) {
     return reject(413, 'too_large', 'That message is too long.');
   }
 
   let payload;
   try {
-    payload = JSON.parse(new TextDecoder().decode(buffer));
+    payload = JSON.parse(read.text);
   } catch (err) {
     return reject(400, 'malformed_json', 'That request could not be read.');
   }
@@ -208,16 +265,21 @@ async function handleFeedback(request, env, ctx) {
   // it becomes a key name derived through a per-UTC-day HMAC, so yesterday's
   // hashes cannot be correlated with today's, and the derived keys expire in
   // 24 hours.
-  const address = request.headers.get('CF-Connecting-IP')
-    || (request.headers.get('X-Forwarded-For') || '').split(',')[0].trim()
-    || 'unknown';
+  // CF-Connecting-IP or nothing. X-Forwarded-For used to be the fallback; it
+  // is client-supplied, so if CF-Connecting-IP were ever absent the limiter's
+  // bucket would become attacker-chosen — a fresh daily allowance per spoofed
+  // value. A single shared 'unknown' bucket fails the other way, which is the
+  // right way for a limiter.
+  const address = request.headers.get('CF-Connecting-IP') || 'unknown';
   const addressHash = await dailyAddressHash(env.FEEDBACK_SALT, day, address);
 
   // Read-only check. At the limit this returns 429 having written nothing.
   const addressCount = await sumShards(env.FEEDBACK, 'rl:' + day + ':' + addressHash + ':', ADDRESS_SHARDS);
   if (addressCount >= ADDRESS_DAILY_LIMIT) {
+    // The bucket is keyed on the UTC date, so it resets at UTC midnight, not
+    // 24 hours from now.
     return reject(429, 'rate_limited', 'That is enough feedback from here for today — thank you.', {
-      'Retry-After': String(LIMIT_TTL_SECONDS),
+      'Retry-After': String(secondsUntilUtcMidnight(now)),
     });
   }
 
@@ -282,6 +344,55 @@ function retryLater() {
 }
 
 // --- helpers --------------------------------------------------------------
+
+// Read the request body without ever holding more than the cap (plus the one
+// chunk that crossed it) in memory. Returns { text, bytes }, or null if the
+// body is over the cap — in which case the stream is cancelled so the rest is
+// never pulled across.
+//
+// request.body is a ReadableStream on Workers and on Node 18+. Anything that
+// does not expose one falls back to arrayBuffer(), which the Content-Length
+// gate above has already bounded, with the post-read byte check as the net.
+async function readBounded(request, max) {
+  const stream = request.body;
+  if (!stream || typeof stream.getReader !== 'function') {
+    const buffer = await request.arrayBuffer();
+    if (buffer.byteLength > max) return null;
+    return { text: new TextDecoder().decode(buffer), bytes: buffer.byteLength };
+  }
+
+  const reader = stream.getReader();
+  const decoder = new TextDecoder();
+  let bytes = 0;
+  let text = '';
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > max) {
+        // Stop pulling. cancel() releases the lock on its own; the catch is
+        // there because a cancel on an already-errored stream can throw and
+        // that must not turn a 413 into a 500.
+        try { await reader.cancel(); } catch (err) { /* nothing to do */ }
+        return null;
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+    text += decoder.decode();
+  } finally {
+    try { reader.releaseLock(); } catch (err) { /* already released */ }
+  }
+  return { text, bytes };
+}
+
+// Seconds from now to the next UTC midnight, which is when the day-keyed
+// rate-limit buckets roll over. At least 1, so Retry-After is never 0.
+function secondsUntilUtcMidnight(now) {
+  const d = new Date(now);
+  const nextMidnight = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1);
+  return Math.max(1, Math.ceil((nextMidnight - now) / 1000));
+}
 
 function clip(value, max) {
   if (typeof value !== 'string' || value === '') return null;

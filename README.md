@@ -231,18 +231,32 @@ and never echoes the submission back.
 | `400` | malformed JSON, bad or missing type, empty message, message over 2000 UTF-16 units, bad email, non-numeric dwell, dwell under the backstop |
 | `403` | `Origin` missing or not `https://ecnl.nextonetwo.com` |
 | `405` (`Allow: POST`) | any other method, including GET, HEAD and OPTIONS |
+| `411` | `Content-Length` absent or not a plain integer — a chunked or unlabelled body is refused before it is read |
 | `413` | `Content-Length` over 8192, or the body exceeds it on read |
 | `415` | content type is not `application/json` (a `; charset=utf-8` parameter is fine) |
-| `429` | the per-address daily limit — checked with a read, never a write |
+| `429` (`Retry-After`) | the per-address daily limit — checked with a read, never a write. `Retry-After` is the seconds left until UTC midnight, when the day-keyed bucket actually resets |
 | `503 {retry:true}` | the KV binding or `FEEDBACK_SALT` is missing, or the global daily cap is reached |
 
 Checks run in that order — method, `Origin`, content type, `Content-Length`, parse,
 honeypot, dwell, then type and length — and **KV is not touched until every one of
-them passes, and is never written on a rejection.** The whole `fetch()` body is
-wrapped in a try/catch whose fallback is `env.ASSETS.fetch(request)`, so a fault in
-this route can never stop the site serving pages; all of the new code lives inside
-the handler, because a throw at module scope would kill every page view and no
-try/catch could save it.
+them passes, and is never written on a rejection.**
+
+The body is never read unbounded. A request must **declare** a `Content-Length` that
+is a plain integer no greater than 8192, or it is refused with `411`/`413` before a
+byte is pulled; and because the header is only a claim, the body is then read through
+a reader that cancels the stream the moment the accumulated byte count crosses the
+cap. A chunked or lying request costs one chunk, not the 100 MB Cloudflare would
+otherwise let it buffer into a 128 MB isolate.
+
+The whole `fetch()` body is wrapped in a catch that **always returns a Response**, so
+a fault in this route can never stop the site serving pages. It is deliberately not a
+bare `env.ASSETS.fetch(request)`: on the feedback path the request body has usually
+already been read, and fetching a consumed `Request` throws, so the feedback path
+returns the same `503 {retry:true}` JSON the client already handles. Every other path
+falls through to the assets inside its own try/catch, so a missing or broken `ASSETS`
+binding degrades to a plain `503` rather than an unhandled rejection. All of the new
+code lives inside the handler, because a throw at module scope would kill every page
+view and no try/catch could save it.
 
 Local dev does not run the Worker at all (`proxy_server.py` implements only GET),
 so the form reports that feedback is unavailable on a local copy. `npx wrangler dev`
@@ -254,6 +268,21 @@ exercises the route against local storage.
   dashboard. This is the only defence that protects the *site*: every page view is
   already a Worker request against the free tier's 100k/day, so a flood on this
   route would take the homepage down before any of our code runs.
+
+  It is also **the only bound on KV read spend**, which matters just as much.
+  Measured against the harness: an accepted submission costs **14 reads and 3
+  writes** (4 address shards + 8 global shards + one read per counter bump; record
+  + two counter shards), and a rate-limited one costs **4 reads and 0 writes**.
+  Two hundred accepted submissions is 2,800 reads of the free 100,000/day, which is
+  comfortable — but 4 reads on the *rejected* path means roughly **25,000 rejected
+  requests exhaust the daily read budget**, and after that the reads themselves fail:
+  the limiter check throws, lands in the outer catch, and the endpoint degrades to
+  `503 {retry:true}` for the rest of the UTC day. Pages keep serving — they are
+  static assets and touch no KV — but feedback stops until midnight. Nothing in
+  this Worker can prevent that, because the spend happens before any of our checks
+  can be cheap enough to matter; only the WAF rule, in front of the route, can.
+  The read and write counts per path are asserted in `worker.test.mjs`, so the
+  arithmetic above cannot drift out of date without a test failing.
 - An **`Origin` allowlist** of the one canonical host, and no CORS headers.
 - A **honeypot** field (`subjectline`) that no human can fill: it returns a normal
   `200` and stores nothing.
