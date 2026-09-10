@@ -2433,6 +2433,9 @@
       if (!changed) return false;   // an unknown-only hash such as #foo stays a no-op
       // A link describes the whole view: what it omits is the default, not what
       // this browser showed last (same-document navigation reuses live state).
+      // A null age group / conference is repaired to the first one by rebuildAll.
+      if (!p.has('age')) currentAgeGroup = null;
+      if (!p.has('conf')) currentConference = null;
       if (!p.has('view')) currentView = 'standings';
       if (!p.has('sched')) scheduleFilter = 'upcoming';
       if (!p.has('team')) selectedTeamID = null;
