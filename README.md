@@ -164,6 +164,9 @@ the Playoffs tab; the tab is kept and the hash follows the new season.
 |---|---|
 | **`public/`** | **Everything the site serves** — Pages output dir and local server root |
 | `public/index.html` | The whole app — HTML, CSS and JS in one file |
+| `public/favicon.svg` | Browser-tab icon — the nextonetwo mark |
+| `public/apple-touch-icon.png` | 180×180 iOS home-screen icon |
+| `public/og.png` | 1200×630 share preview; regenerate by hand, no build step |
 | `public/data/sources.json` | Season → conference → event ID registry, refresh policy, birth-year anchor |
 | `public/archive/api/…` | Raw API responses keyed by endpoint path — what the site reads |
 | `public/archive/match-days.json` | Fixture calendar that drives the refresh schedule |
