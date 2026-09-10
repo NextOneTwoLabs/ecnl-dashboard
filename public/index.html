@@ -1147,6 +1147,13 @@
       .standings-scroll {
         padding: 16px;
       }
+
+      /* Search results: the table is wider than the panel, so it scrolls sideways
+         inside its own wrapper (the panel keeps overflow hidden for its corners) */
+      .search-results-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
     }
 
     /* Comfortable targets on touch screens */
@@ -1160,6 +1167,8 @@
       .th-sort { min-height: 44px; }
       .standings-table td { padding: 12px 10px; }
       .match-team { padding: 4px 0; }
+      .glance-panel .glance-actions { display: flex; align-items: center; padding: 0 18px; }  /* outranks the later base rule */
+      .glance-link { display: inline-flex; align-items: center; min-height: 44px; }
     }
 
     @media (max-width: 480px) {
@@ -1993,8 +2002,8 @@
 
       <div class="shortcut-hint">
         <span><kbd>/</kbd> Find a team</span>
-        <span><kbd>&larr;</kbd> <kbd>&rarr;</kbd> Age groups</span>
-        <span><kbd>&uarr;</kbd> <kbd>&darr;</kbd> Conferences</span>
+        <span class="hint-conf"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> Age groups</span>
+        <span class="hint-conf"><kbd>&uarr;</kbd> <kbd>&darr;</kbd> Conferences</span>
       </div>
     </div>
 
@@ -2493,6 +2502,7 @@
       if (clearBtn) clearBtn.style.display = val.length > 0 ? '' : 'none';
 
       clearTimeout(globalSearchDebounce);
+      globalSearchDebounce = null;
       if (val.trim().length < 2) {
         document.getElementById('globalSearchStatus').textContent =
           val.length === 1 ? 'Type at least 2 characters…' : '';
@@ -2503,11 +2513,15 @@
         return;
       }
       document.getElementById('globalSearchStatus').textContent = 'Searching…';
-      globalSearchDebounce = setTimeout(() => searchAllConferences(val.trim()), 300);
+      globalSearchDebounce = setTimeout(() => {
+        globalSearchDebounce = null;
+        searchAllConferences(val.trim());
+      }, 300);
     }
 
     function clearGlobalSearch({ reload = true } = {}) {
       clearTimeout(globalSearchDebounce);
+      globalSearchDebounce = null;
       const inp = document.getElementById('globalTeamSearch');
       if (inp) inp.value = '';
       const clearBtn = document.getElementById('globalSearchClear');
@@ -2557,6 +2571,7 @@
             <span id="searchProgressText">0 / ${total}</span>
             <div class="search-progress-bar"><div class="search-progress-fill" id="searchProgressFill" style="width:0%"></div></div>
           </div>
+          <div class="search-results-scroll">
           <table class="search-results-table" id="searchResultsTable">
             <thead>${standingsHeadHtml(SEARCH_COLS, null, null, false)}</thead>
             ${groups.map(ag => {
@@ -2565,6 +2580,7 @@
                 `<th scope="colgroup" colspan="${SEARCH_COLS.length}">${esc(AGE_LABELS[ag] || ag)}${by ? ' · ' + esc(by) : ''}</th></tr></tbody>`;
             }).join('')}
           </table>
+          </div>
         </div>`;
 
       let totalMatches = 0;
@@ -2688,10 +2704,7 @@
     }
 
     function closeSidebarIfMobile() {
-      if (window.innerWidth <= 768) {
-        document.getElementById('sidebar').classList.remove('open');
-        document.getElementById('sidebarOverlay').classList.remove('visible');
-      }
+      if (isPhone() && document.getElementById('sidebar').classList.contains('open')) toggleSidebar();
     }
 
     function switchTab(tab, { silent = false } = {}) {
@@ -2708,6 +2721,8 @@
         b.classList.toggle('active', on);
         b.setAttribute('aria-selected', String(on));
       });
+      // The arrow shortcuts only work on Conferences, so only advertise them there.
+      document.querySelectorAll('.shortcut-hint .hint-conf').forEach(el => { el.hidden = !isConf; });
       if (isFav) openFavoritesTab();
       if (isPO)  loadPlayoffsPanel();
       // Returning to Conferences must repaint the main pane, which the
@@ -2782,15 +2797,23 @@
         if (el) el.value = '';
       });
       filterTeams('');
-      // Silently reset global search UI (loadStandings is already handling the navigation)
-      globalSearchActive = false;
+      const pending = !!globalSearchDebounce;   // a search still waiting on its 300 ms timer
       clearTimeout(globalSearchDebounce);
-      const gInp = document.getElementById('globalTeamSearch');
-      if (gInp) gInp.value = '';
-      const gClear = document.getElementById('globalSearchClear');
-      if (gClear) gClear.style.display = 'none';
-      const gStatus = document.getElementById('globalSearchStatus');
-      if (gStatus) gStatus.textContent = '';
+      globalSearchDebounce = null;
+      // Silently reset global search UI (loadStandings is already handling the navigation).
+      // onGlobalSearchInput flips the flag before reloading standings when the query
+      // drops under 2 characters, so the letter still being typed survives. A search that
+      // was still pending on its timer will never run now, so its "Searching…" status and
+      // ✕ button must be cleared here too.
+      if (globalSearchActive || pending) {
+        globalSearchActive = false;
+        const gInp = document.getElementById('globalTeamSearch');
+        if (gInp) gInp.value = '';
+        const gClear = document.getElementById('globalSearchClear');
+        if (gClear) gClear.style.display = 'none';
+        const gStatus = document.getElementById('globalSearchStatus');
+        if (gStatus) gStatus.textContent = '';
+      }
     }
 
     function currentNationalEvent() {
@@ -3369,8 +3392,11 @@
 
     function focusTeamSearch() {
       if (currentTab !== 'conferences') switchTab('conferences');
-      const sb = document.getElementById('sidebar');
-      if (window.innerWidth <= 768 && sb && !sb.classList.contains('open')) toggleSidebar();
+      const sidebar = document.getElementById('sidebar');
+      const hidden = isPhone()
+        ? !sidebar.classList.contains('open')
+        : document.querySelector('.layout').classList.contains('sidebar-collapsed');
+      if (hidden) toggleSidebar();
       const inp = document.getElementById('globalTeamSearch');
       if (inp) { inp.focus(); inp.select(); }
     }
