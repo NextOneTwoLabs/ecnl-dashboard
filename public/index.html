@@ -8,6 +8,7 @@
   <meta name="description" content="ECNL Girls conference standings, match schedules and results, and national playoff brackets for every conference and age group, updated on match days.">
   <link rel="canonical" href="https://ecnl.nextonetwo.com/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/apple-touch-icon.png" sizes="180x180" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta name="theme-color" content="#ffffff">
   <meta property="og:type" content="website">
@@ -19,6 +20,7 @@
   <meta property="og:image" content="https://ecnl.nextonetwo.com/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:alt" content="ECNL Girls — standings, matches, playoffs — nextonetwo">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ECNL Girls · nextonetwo">
@@ -2512,11 +2514,12 @@
     function loadTheme() {
       try {
         const t = localStorage.getItem('ecnl-theme');
-        if (t === 'dark') {
+        const dark = t === 'dark';
+        if (dark) {
           document.documentElement.setAttribute('data-theme', 'dark');
           setThemeToggle(true);
-          applyThemeColor(true);
         }
+        applyThemeColor(dark);
       } catch (e) { }
     }
 
