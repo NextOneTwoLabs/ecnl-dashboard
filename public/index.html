@@ -2779,15 +2779,19 @@
         if (el) el.value = '';
       });
       filterTeams('');
-      // Silently reset global search UI (loadStandings is already handling the navigation)
-      globalSearchActive = false;
       clearTimeout(globalSearchDebounce);
-      const gInp = document.getElementById('globalTeamSearch');
-      if (gInp) gInp.value = '';
-      const gClear = document.getElementById('globalSearchClear');
-      if (gClear) gClear.style.display = 'none';
-      const gStatus = document.getElementById('globalSearchStatus');
-      if (gStatus) gStatus.textContent = '';
+      // Silently reset global search UI (loadStandings is already handling the navigation).
+      // onGlobalSearchInput flips the flag before reloading standings when the query
+      // drops under 2 characters, so the letter still being typed survives.
+      if (globalSearchActive) {
+        globalSearchActive = false;
+        const gInp = document.getElementById('globalTeamSearch');
+        if (gInp) gInp.value = '';
+        const gClear = document.getElementById('globalSearchClear');
+        if (gClear) gClear.style.display = 'none';
+        const gStatus = document.getElementById('globalSearchStatus');
+        if (gStatus) gStatus.textContent = '';
+      }
     }
 
     function currentNationalEvent() {
