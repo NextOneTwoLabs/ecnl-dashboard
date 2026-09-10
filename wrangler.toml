@@ -1,10 +1,12 @@
 # Cloudflare Workers config for the site.
 #
 # The site is the static files in public/ — the same directory the local
-# server serves, so the deployed site is byte-identical to a local run. The
-# tiny worker.js only redirects the workers.dev address to the canonical
-# custom domain; it runs ahead of the assets for "/" alone, so everything
-# else is served as free static assets without invoking the Worker.
+# server serves, so the deployed site is byte-identical to a local run (minus
+# the feedback panel, which needs the Worker; use `npx wrangler dev` to run
+# the full thing). worker.js redirects the workers.dev address to the
+# canonical custom domain and handles POST /api/feedback; it runs ahead of the
+# assets for "/" and "/api/*" alone, so everything else is served as free
+# static assets without invoking the Worker.
 #
 # Canonical address: https://ecnl.nextonetwo.com  (custom domain, attached to
 # this Worker in the Cloudflare dashboard under Settings -> Domains & Routes).
@@ -16,4 +18,17 @@ compatibility_date = "2026-08-31"
 [assets]
 directory = "./public"
 binding = "ASSETS"
-run_worker_first = ["/"]
+run_worker_first = ["/", "/api/*"]
+
+# Visitor feedback, one key per submission. The namespace already exists on the
+# NextOneTwoLabs account and its real id is in place, so there is nothing to
+# swap before merge.
+#
+# Its title there is ECNL_FEEDBACK, not FEEDBACK: the account already holds a
+# FEEDBACK namespace belonging to the sibling marketing site (see
+# NextOneTwoLabs/nextonetwo-website), and two stores sharing one name would be
+# indistinguishable in the dashboard. The binding stays FEEDBACK, so the
+# handler's env.FEEDBACK is unaffected by the title.
+[[kv_namespaces]]
+binding = "FEEDBACK"
+id = "caf080c2c3f94556ad15cbcedca25ccd"

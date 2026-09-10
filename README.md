@@ -19,6 +19,8 @@ upstream API or website ever goes away.
 - **One team search** — Find a team across every age group and conference in the current season; a result opens it on its conference page with the age group and team selected
 - **Age group navigation** — Tabs populated from the API; keyboard arrow-key navigation, `/` to search
 - **Dark mode**, and **deep links** (season, age group, conference, view, selected team and match filter in the URL hash)
+- **Send feedback** — A panel at the foot of the sidebar posts a message (and an optional reply
+  address) to the site's own Cloudflare Worker; see [Feedback](#feedback)
 - **Data explained** — Standings state that the order is as published by TGS (points per game, then goal difference), the header shows when the data was observed, and every view links to its source page on TGS
 
 ## How it works
@@ -158,6 +160,62 @@ falls back to a favourite, if any; for Playoffs the first stage, age group and
 competition) rather than the viewer's last state. The season can be changed from
 the Playoffs tab; the tab is kept and the hash follows the new season.
 
+## Feedback
+
+The **Send feedback** panel at the foot of the sidebar posts JSON to `POST /api/feedback`, handled
+by `worker.js` (the same Worker that serves the site). It writes one key per submission into the
+`FEEDBACK` KV namespace:
+
+    key:      <sent, ISO 8601>-<8 random hex characters>
+              e.g. 2026-09-10T18:04:21.512Z-9f3ac1b2
+    value:    { "sent": "<ISO 8601>", "message": "<what the visitor typed>",
+                "email": "<optional>", "hash": "<the URL hash the visitor was on>" }
+    metadata: { "email": "<the same address, or null>" }
+
+`email` and `hash` are left out of the value entirely when empty. The email cannot be the key: it
+is optional and not unique. The timestamp prefix makes a key listing come back in chronological
+order and readable by eye; the random suffix keeps two submissions in the same millisecond apart.
+The address is repeated as key metadata so a listing shows the date and whether there is a reply
+address without fetching every record. `hash` is the deep link the visitor was looking at
+(`#season=2026-27&age=GU16&conf=NorCal`), so "the standings look wrong" says which standings.
+
+**Records expire after 180 days.** Each `put` carries an `expirationTtl`, so KV deletes the record
+by itself — there is no cron job and no manual cleanup. **We don't offer per-message deletion**, and
+the panel says so: nothing automates a request. A specific record can still be removed by hand with
+`npx wrangler kv key delete <key> --binding FEEDBACK --remote` — a key listing prints the reply
+address as metadata, so an emailed record is findable — but that is a manual, unadvertised path.
+
+**The message is free text.** It can contain anything a visitor chooses to type, including a name,
+a club, a player, or contact details the site never asked for and cannot validate. It is stored in
+plain text, readable by anyone with Cloudflare dashboard or `wrangler` access. Nothing else about
+the visitor is stored: no IP address, no user agent, no country, no viewport.
+
+### Reading submissions back
+
+    npx wrangler kv key list --binding FEEDBACK --remote
+    npx wrangler kv key get "2026-09-10T18:04:21.512Z-9f3ac1b2" --binding FEEDBACK --remote
+
+or in the Cloudflare dashboard under **Storage & Databases → KV**, where the namespace is listed
+as `ECNL_FEEDBACK` (the binding is `FEEDBACK`; the title differs). Keys are not guessable, so
+reading feedback back is list-then-get, one call per submission — it is storage, not an inbox.
+
+> **A listing prints the metadata, so it prints every reply email.** Never paste a `kv key list`
+> output, or a screenshot of one, into a public issue, a PR, or a commit message.
+
+Add `--local` instead of `--remote` to read the simulated namespace that `npx wrangler dev` writes
+on your own machine.
+
+### Spam and limits
+
+A hidden honeypot field (`hp-note` — the name is deliberately odd, because browser address autofill
+ignores `autocomplete="off"` and fills anything called `website`, which would silently drop a real
+visitor's message) drops the crudest bots, the message is capped at 2,000 characters and the
+request body at 8 KB. Those bound each write, not how many arrive. **KV writes on the free plan are
+capped at 1,000 a day for the whole Cloudflare account**, and that budget is shared with the
+sibling site's waiting list — a flood of feedback here would break signups on `nextonetwo.com` too.
+If junk appears, the free plan includes one WAF rate-limiting rule per account; match `/api/*` so
+the one rule covers both sites.
+
 ## Layout
 
 | Path | What it is |
@@ -176,14 +234,16 @@ the Playoffs tab; the tab is kept and the hash follows the new season.
 | `ecnl_api.py` | Shared API/archive helpers |
 | `proxy_server.py` | Local static server, plus the `?live=1` API proxy |
 | `export/<season>/<conf>/` | CSVs — not published; `*.standings.csv`, `*.schedule.csv` |
+| `worker.js` | Redirects the `workers.dev` hostname, and handles `POST /api/feedback` |
+| `wrangler.toml` | Cloudflare Workers config: the `public/` assets and the `FEEDBACK` KV binding |
 | `.github/workflows/refresh.yml` | The 2-hourly scheduled refresh |
 | `ecnl-standings.html` | Deprecated first version, kept for reference |
 
 ## Deploying
 
 The site is a Cloudflare Worker serving static assets (`wrangler.toml` at the repo
-root: `[assets] directory = "./public"`, plus a ten-line `worker.js` that only
-redirects the `workers.dev` hostname). It is built by Cloudflare's Git integration
+root: `[assets] directory = "./public"`, plus a small `worker.js` that redirects the
+`workers.dev` hostname and handles `POST /api/feedback`). It is built by Cloudflare's Git integration
 on the **NextOneTwoLabs** Cloudflare account: repository `NextOneTwoLabs/ecnl-dashboard`,
 branch `main`, build command empty, deploy command `npx wrangler deploy`. Pushing to
 `main` — including the scheduled data commits — redeploys.
@@ -192,8 +252,8 @@ branch `main`, build command empty, deploy command `npx wrangler deploy`. Pushin
   Worker (the `nextonetwo.com` zone lives in the same Cloudflare account, so DNS and
   the certificate are managed automatically).
 - `https://ecnl-dashboard.nextonetwolabs.workers.dev` permanently redirects there
-  (`worker.js`, which runs ahead of the assets for `/` only, so page views cost one
-  Worker request and every other file is a free static asset).
+  (`worker.js`, which runs ahead of the assets for `/` and `/api/*` only, so page views
+  cost one Worker request and every other file is a free static asset).
 - `https://ecnl-dashboard.zhenyisx.workers.dev` — the original address — also
   redirects there, served by the tiny Worker in [`redirect/`](redirect/) from the
   original personal account.
@@ -203,6 +263,19 @@ Deep-link `#` fragments survive both redirects.
 The `workers.dev` subdomain belongs to the Cloudflare account, not to GitHub — moving
 the repository between GitHub owners does not change the URL, but Cloudflare's GitHub
 App must be installed on the new owner for builds to continue.
+
+**Feedback KV namespace.** The namespace already exists on the NextOneTwoLabs account and its
+real id is in `wrangler.toml`, so there is nothing to create or paste before the first deploy.
+
+Its title on the account is `ECNL_FEEDBACK`, not `FEEDBACK`: the account already holds a
+`FEEDBACK` namespace belonging to the sibling marketing site, and two stores sharing one name
+would be indistinguishable in the dashboard. The binding is still `FEEDBACK`, so `env.FEEDBACK`
+in the Worker and the `--binding FEEDBACK` commands above are unaffected by the title.
+
+To run the Worker and the panel locally, `npx wrangler dev` and open
+<http://localhost:8787>. KV is simulated on your machine, so test submissions stay there.
+A plain `python -m http.server` in `public/` serves the page fine, but `/api/feedback`
+404s there — expected.
 
 ## Data Sources
 
