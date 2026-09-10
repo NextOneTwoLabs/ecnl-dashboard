@@ -288,6 +288,10 @@
       padding: 6px 16px 4px;
     }
     .browse-row .browse-label { padding: 0; min-width: 52px; }
+    /* Season row under the tab strip, above the tab panels; the strip supplies
+       the border, and the negative margin swallows its 4px gap so the tinted
+       block sits flush against it (the gap is kept for My Teams). */
+    .sidebar-season { margin-top: -4px; padding: 6px 16px 10px; background: var(--bg-surface-alt); }
     .season-select {
       flex: 1;
       min-width: 0;
@@ -1148,7 +1152,8 @@
     /* Comfortable targets on touch screens */
     @media (max-width: 768px), (pointer: coarse) {
       .age-tab, .conference-item, .view-tab, .sidebar-tab, .seg-btn, .stage-tab, .playoff-age-tab,
-      .more-stats-btn, .open-external, .btn-primary, .theme-toggle, .hamburger, .wordmark, .section-label {
+      .more-stats-btn, .open-external, .btn-primary, .theme-toggle, .hamburger, .wordmark, .section-label,
+      .season-select {
         min-height: 44px;
       }
       .star-btn { min-width: 40px; min-height: 40px; }
@@ -1929,6 +1934,14 @@
         <button class="sidebar-tab" id="tabPlayoffs" role="tab" aria-selected="false" aria-controls="playoffsPanel" onclick="switchTab('playoffs')">🏆 Playoffs</button>
       </div>
 
+      <!-- Shared by Conferences and Playoffs; My Teams hides it because a
+           favourite is bound to its own season (see changeSeason). -->
+      <div class="browse-row sidebar-season" id="sidebarSeason">
+        <label class="browse-label" for="seasonSelect">Season</label>
+        <!-- Options are built from data/sources.json at startup -->
+        <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)"></select>
+      </div>
+
       <div id="conferencesPanel" role="tabpanel" aria-labelledby="tabConferences">
         <div class="sidebar-section-title">Find a team</div>
         <div class="sidebar-search global-search-wrap" role="search">
@@ -1943,11 +1956,6 @@
         <div class="global-search-status" id="globalSearchStatus" role="status" aria-live="polite"></div>
 
         <div class="sidebar-section-title">Browse</div>
-        <div class="browse-row">
-          <label class="browse-label" for="seasonSelect">Season</label>
-          <!-- Options are built from data/sources.json at startup -->
-          <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)"></select>
-        </div>
         <div class="browse-label">Age group</div>
         <div class="age-group-tabs" id="ageGroupTabs" role="tablist" aria-label="Age group"></div>
         <div class="browse-label">Conference</div>
@@ -1995,7 +2003,7 @@
         <div class="content-header-row">
           <div class="content-header-main">
             <div class="breadcrumb" id="breadcrumb"></div>
-            <h1 class="content-title" id="contentTitle">Select a conference</h1>
+            <h1 class="content-title" id="contentTitle" tabindex="-1">Select a conference</h1>
             <div class="content-subtitle" id="contentSubtitle">Choose an age group and conference from the sidebar</div>
           </div>
           <div class="content-header-right">
@@ -2691,6 +2699,7 @@
       const isConf = tab === 'conferences';
       const isFav  = tab === 'favorites';
       const isPO   = tab === 'playoffs';
+      document.getElementById('sidebarSeason').style.display    = isFav  ? 'none' : '';
       document.getElementById('conferencesPanel').style.display = isConf ? '' : 'none';
       document.getElementById('favoritesPanel').style.display   = isFav  ? 'flex' : 'none';
       document.getElementById('playoffsPanel').style.display    = isPO   ? 'flex' : 'none';
@@ -2821,6 +2830,13 @@
       ).join('');
     }
 
+    // The Playoffs empty-state button lives in #standingsContainer, which
+    // loadPlayoffsPanel replaces, so focus would fall back to <body>; park it
+    // on the page title instead (tabindex="-1" keeps it out of the Tab order).
+    function focusContentTitle() {
+      document.getElementById('contentTitle').focus({ preventScroll: true });
+    }
+
     async function loadPlayoffsPanel() {
       const natEvents = getNationalEventsForSeason();
 
@@ -2829,6 +2845,8 @@
         // with no `national` entry was simply never archived.
         const notYet = SOURCES.refresh && currentSeason === SOURCES.refresh.activeSeason;
         const label = seasonLabel(currentSeason);
+        // Newest season with archived brackets (YYYY-YY keys sort lexically)
+        const latest = Object.keys(NATIONAL_EVENTS).sort().reverse()[0] || null;
         document.getElementById('breadcrumb').innerHTML =
           `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Playoffs & Finals</span>`;
         document.getElementById('contentTitle').textContent = 'Playoffs & Finals';
@@ -2845,7 +2863,8 @@
             <div class="no-national-events-text">${notYet ? `${label} Playoffs &amp; Finals haven't been played yet` : `${label} playoff data isn't available here`}</div>
             <div class="no-national-events-sub">${notYet
               ? 'The national playoffs run at the end of the season. Results appear here once TGS publishes them.'
-              : 'This season\'s national events were not archived.'}</div>
+              : 'This season\'s national events were not archived.'} Choose another season to see past brackets.</div>
+            ${latest ? `<button type="button" class="btn-primary" data-season="${esc(latest)}" onclick="changeSeason(this.dataset.season).then(focusContentTitle)">See the ${esc(seasonLabel(latest))} brackets</button>` : ''}
           </div>`;
         currentPlayoffStage = null;
         currentPlayoffAgeGroup = null;

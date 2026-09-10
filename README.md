@@ -93,6 +93,9 @@ hardcoded in the HTML.
 3. Archive it: `python archive.py --season 2026-27`
 
 The season dropdown rebuilds itself from the registry, so no HTML edit is needed.
+It sits under the sidebar tabs, above the tab panels, and is available on
+Conferences and Playoffs (My Teams hides it, since a favorite belongs to one
+season).
 
 ## National playoffs
 
@@ -152,7 +155,8 @@ Playoffs is `#tab=playoffs&season=2026-27`, with `&stage=`, `&age=` and `&tier=`
 appended once the season has national events. Keys omitted from a link take
 their defaults (Standings, upcoming matches, no selected team — the glance panel
 falls back to a favourite, if any; for Playoffs the first stage, age group and
-competition) rather than the viewer's last state.
+competition) rather than the viewer's last state. The season can be changed from
+the Playoffs tab; the tab is kept and the hash follows the new season.
 
 ## Layout
 
