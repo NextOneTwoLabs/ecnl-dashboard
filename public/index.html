@@ -2688,10 +2688,7 @@
     }
 
     function closeSidebarIfMobile() {
-      if (window.innerWidth <= 768) {
-        document.getElementById('sidebar').classList.remove('open');
-        document.getElementById('sidebarOverlay').classList.remove('visible');
-      }
+      if (isPhone() && document.getElementById('sidebar').classList.contains('open')) toggleSidebar();
     }
 
     function switchTab(tab, { silent = false } = {}) {
