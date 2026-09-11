@@ -29,15 +29,15 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-03,01:00 PM,Group Play,FC Alliance TN ECNL G2013/14,,,Tennessee SC ECNL G2013/14,Hardin Valley Academy Stadium,Field 1,On Time,1072841
 2026-10-04,11:00 AM,Group Play,Racing Louisville Academy ECNL G2013/14,,,Ohio Elite SA ECNL G2013/14,Lynn Family Sports Vision & Training Facility,Field 3,On Time,1072843
 2026-10-04,03:00 PM,Group Play,Internationals SC ECNL G2013/2014,,,Cleveland Force SC ECNL G2013/14,Pinnacle Sports,OT 11v11,On Time,1072833
-2026-10-17,TBD,Group Play,Ohio Premier ECNL G2013/14,,,FC Alliance TN ECNL G2013/14,,,On Time,1072851
 2026-10-17,09:00 AM,Group Play,Internationals SC ECNL G2013/2014,,,Racing Louisville Academy ECNL G2013/14,Pinnacle Sports,OT 11v11,On Time,1072847
 2026-10-17,09:00 AM,Group Play,GTFC Impact ECNL G2013/14,,,Tennessee SC ECNL G2013/14,Rossford Soccer Center Dome,Indoor 11v11,On Time,1072849
 2026-10-17,09:00 AM,Group Play,FC Pride Elite ECNL G2013/14,,,Pittsburgh Riverhounds ECNL G2013/14,FC Pride Performance Center,Field 1,On Time,1072855
+2026-10-17,10:00 AM,Group Play,Ohio Premier ECNL G2013/14,,,FC Alliance TN ECNL G2013/14,OP Training Facility,Field 1,On Time,1072851
 2026-10-17,10:00 AM,Group Play,Indy Eleven ECNL G2013/14,,,WNY Flash ECNL G2013/14,Grand Park ,Field 1,On Time,1072853
 2026-10-17,10:45 AM,Group Play,Cleveland Force SC ECNL G2013/14,,,Ohio Elite SA ECNL G2013/14,Victory Park,Field 4,On Time,1072845
-2026-10-18,TBD,Group Play,Ohio Premier ECNL G2013/14,,,Tennessee SC ECNL G2013/14,,,On Time,1072863
 2026-10-18,09:00 AM,Group Play,Internationals SC ECNL G2013/2014,,,Ohio Elite SA ECNL G2013/14,Pinnacle Sports,OT 11v11,On Time,1072859
 2026-10-18,09:00 AM,Group Play,GTFC Impact ECNL G2013/14,,,FC Alliance TN ECNL G2013/14,Springfield High School,11v11,On Time,1072861
+2026-10-18,09:00 AM,Group Play,Ohio Premier ECNL G2013/14,,,Tennessee SC ECNL G2013/14,OP Training Facility,Field 1,On Time,1072863
 2026-10-18,09:00 AM,Group Play,Indy Eleven ECNL G2013/14,,,Pittsburgh Riverhounds ECNL G2013/14,Grand Park ,Field 1,On Time,1072865
 2026-10-18,09:00 AM,Group Play,FC Pride Elite ECNL G2013/14,,,WNY Flash ECNL G2013/14,FC Pride Performance Center,Field 1,On Time,1072867
 2026-10-18,10:45 AM,Group Play,Cleveland Force SC ECNL G2013/14,,,Racing Louisville Academy ECNL G2013/14,Victory Park,Field 3,On Time,1072857
@@ -54,10 +54,10 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-25,10:00 AM,Group Play,Ohio Elite SA ECNL G2013/14,,,FC Alliance TN ECNL G2013/14,Ohio Elite Training Center,Field 9,On Time,1072889
 2026-10-25,10:45 AM,Group Play,Cleveland Force SC ECNL G2013/14,,,FC Pride Elite ECNL G2013/14,Victory Park,Field 3,On Time,1072881
 2026-10-31,10:30 AM,Group Play,GTFC Impact ECNL G2013/14,,,Internationals SC ECNL G2013/2014,Rossford Soccer Center Dome,Indoor 11v11,On Time,1072973
-2026-11-01,TBD,Group Play,Ohio Premier ECNL G2013/14,,,Internationals SC ECNL G2013/2014,,,On Time,1072895
 2026-11-01,09:00 AM,Group Play,FC Pride Elite ECNL G2013/14,,,Racing Louisville Academy ECNL G2013/14,FC Pride Performance Center,Field 1,On Time,1072899
 2026-11-01,10:00 AM,Group Play,Indy Eleven ECNL G2013/14,,,Ohio Elite SA ECNL G2013/14,Grand Park ,Field 1,On Time,1072897
 2026-11-01,11:00 AM,Group Play,GTFC Impact ECNL G2013/14,,,Cleveland Force SC ECNL G2013/14,Findlay High School ,Elmer Graham Stadium,On Time,1072893
+2026-11-01,11:00 AM,Group Play,Ohio Premier ECNL G2013/14,,,Internationals SC ECNL G2013/2014,OP Training Facility,Field 1,On Time,1072895
 2026-11-07,TBD,Group Play,Cleveland Force SC ECNL G2013/14,,,Ohio Premier ECNL G2013/14,,,On Time,1072901
 2026-11-07,09:00 AM,Group Play,FC Alliance TN ECNL G2013/14,,,Pittsburgh Riverhounds ECNL G2013/14,Hardin Valley Academy Stadium,Field 1,On Time,1072907
 2026-11-07,09:30 AM,Group Play,Tennessee SC ECNL G2013/14,,,WNY Flash ECNL G2013/14,Bethesda Sports Park,Field 1,On Time,1072905
@@ -87,7 +87,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-03-21,09:00 AM,Group Play,Ohio Elite SA ECNL G2013/14,,,Internationals SC ECNL G2013/2014,Seven Hills School,Lower Field,On Time,1072955
 2027-03-21,09:00 AM,Group Play,Racing Louisville Academy ECNL G2013/14,,,Cleveland Force SC ECNL G2013/14,Lynn Family Sports Vision & Training Facility,Field 3,On Time,1072957
 2027-04-10,TBD,Group Play,Cleveland Force SC ECNL G2013/14,,,GTFC Impact ECNL G2013/14,,,On Time,1072959
-2027-04-10,TBD,Group Play,Internationals SC ECNL G2013/2014,,,Ohio Premier ECNL G2013/14,,,On Time,1072961
+2027-04-10,09:00 AM,Group Play,Internationals SC ECNL G2013/2014,,,Ohio Premier ECNL G2013/14,Pinnacle Sports,OT 11v11,On Time,1072961
 2027-04-10,09:00 AM,Group Play,FC Pride Elite ECNL G2013/14,,,FC Alliance TN ECNL G2013/14,Lawrence Soccer Complex,Field #1,On Time,1072969
 2027-04-10,10:00 AM,Group Play,Ohio Elite SA ECNL G2013/14,,,WNY Flash ECNL G2013/14,Ohio Elite Training Center,Field 10,On Time,1072963
 2027-04-10,10:00 AM,Group Play,Indy Eleven ECNL G2013/14,,,Tennessee SC ECNL G2013/14,Grand Park ,Field 1,On Time,1072967
