@@ -57,18 +57,26 @@ is provably nothing to fetch:
 
 | Run | Work done |
 |---|---|
-| Non-match day, not the sweep hour | exits in seconds, **0 requests** |
-| Sweep hour (daily) | all flight schedules, rebuilding the calendar |
+| Non-match day, no sweep due, nothing pending | **0 requests**, exits at once |
+| Sweep due (first run at or after the hour) | all schedules, and the calendar |
 | Match day | the flights that played, on every scheduled run |
+| A past game still missing a score | that flight, on any day, until it lands |
 
 The workflow asks for a run every two hours, but GitHub delays and drops
-scheduled jobs on shared runners. Measured over eight consecutive runs the gaps
-were 3.3 to 5.4 hours, a mean of 4.6 — so in practice it is **roughly every 3 to
-5 hours**, and on a match day that is how quickly scores appear. The daily sweep
-is not at risk from this: `archive.py` treats a sweep as due once the hour is at
-or past the configured one **and** the day has not been swept yet (the
-`due_by_hour` / `lastSweepDate` logic in `cmd_refresh`), rather than requiring a
-run to land inside a particular hour — so a late or dropped cron never skips it.
+scheduled jobs on shared runners. Over the 57 gaps between the 58 scheduled
+runs from 1 to 12 September 2026 the spread was 2.9 to 6.5 hours, mean 4.6,
+median 5.0, and 27 of the 57 ran over five hours — so in practice it is
+**roughly every 3 to 5½ hours**, and on a match day that is how quickly scores
+appear. Those are measured figures from one snapshot rather than a guarantee:
+GitHub schedules on a best-effort basis, so expect them to drift.
+
+The daily sweep is not at risk from this. `archive.py` treats a sweep as due
+once the hour is at or past the configured one (06:00 UTC) **and** the day has
+not been swept yet — the `due_by_hour` / `lastSweepDate` logic in
+`cmd_refresh` — rather than requiring a run to land inside a particular hour,
+so a late or dropped run never skips it. Losing *every* run from 06:00 UTC
+onward on a given day is the one case that does: nothing is left that day to
+notice the sweep is due.
 
 Standings are only refetched where a **result actually changed** — schedule
 payloads carry scores, so a schedule fetch collects results too, and standings
@@ -248,7 +256,7 @@ the one rule covers both sites.
 | `worker.js` | Redirects the `workers.dev` hostname, and handles `POST /api/feedback` |
 | `wrangler.toml` | Cloudflare Workers config: the `public/` assets and the `FEEDBACK` KV binding |
 | `.gitattributes` | Pins the image assets (`*.svg`, `*.png`) as binary, so the files copied from the entrance site stay byte-identical across checkouts instead of being line-ending converted |
-| `.github/workflows/refresh.yml` | The scheduled refresh — asks for every 2 h, in practice every 3-5 |
+| `.github/workflows/refresh.yml` | The scheduled refresh — asks for every 2 h, measured at 3 to 5½ |
 | `ecnl-standings.html` | Deprecated first version, kept for reference |
 
 ## Deploying
