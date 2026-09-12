@@ -1,7 +1,7 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,Florida Premier FC ECNL G2012/13,Florida Premier FC,113726,2,2,0,0,6,3.0,9,2,7
-2,CESA Liberty ECNL G2012/13,Carolina Elite Soccer Academy,87758,2,2,0,0,6,3.0,8,3,5
-3,Sporting SA JAX ECNL G2012/13,Sporting SA,94389,2,2,0,0,6,3.0,6,1,5
+1,Sporting SA JAX ECNL G2012/13,Sporting SA,94389,3,3,0,0,9,3.0,12,1,11
+2,Florida Premier FC ECNL G2012/13,Florida Premier FC,113726,2,2,0,0,6,3.0,9,2,7
+3,CESA Liberty ECNL G2012/13,Carolina Elite Soccer Academy,87758,2,2,0,0,6,3.0,8,3,5
 4,Concorde Fire Premier ECNL G2012/13,Concorde Fire ,112296,2,1,0,1,4,2.0,7,2,5
 5,Florida Kraze Krush ECNL G2012/13,Florida Kraze Krush,106035,2,1,0,1,4,2.0,6,3,3
 6,South Carolina United ECNL G2012/13,South Carolina United FC,98643,2,1,0,1,4,2.0,4,3,1
@@ -14,4 +14,4 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 13,Jacksonville FC ECNL G2012/13,Jacksonville FC,111248,2,0,2,0,0,0.0,0,3,-3
 14,Team Boca ECNL G2012/13,Team Boca,131999,2,0,2,0,0,0.0,3,7,-4
 15,Tampa Bay United ECNL G2012/13,Tampa Bay United,112271,2,0,2,0,0,0.0,1,10,-9
-16,Seminole United ECNL G2012/13,Seminole United,105992,2,0,2,0,0,0.0,0,9,-9
+16,Seminole United ECNL G2012/13,Seminole United,105992,3,0,3,0,0,0.0,0,15,-15
