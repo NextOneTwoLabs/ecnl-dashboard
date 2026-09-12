@@ -17,11 +17,11 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-08-30,12:15 PM,Group Play,Marin FC ECNL G2011/12,0,2,COSC ECNL G2011/12,College of Marin,Stadium,On Time,1094460
 2026-08-30,05:00 PM,Group Play,Mustang SC ECNL G2011/12,1,1,MVLA ECNL G2011/12,Provident Field @ MSC, Lower,On Time,1094466
 2026-09-12,09:00 AM,Group Play,San Juan SC ECNL G2011/12,4,0,Santa Rosa United ECNL G2011/12,Tiemann Law Firm Fields at San Juan Soccer Complex,Black Field,On Time,1094508
-2026-09-12,12:00 PM,Group Play,COSC ECNL G2011/12,,,Force (CA) ECNL G2011/12,Edison High School Fields,field 2,On Time,1094478
-2026-09-12,12:00 PM,Group Play,Davis Legacy ECNL G2011/12,,,Placer United ECNL G2011/12,Davis Legacy Soccer Complex,Field 10,On Time,1094484
-2026-09-12,12:20 PM,Group Play,MVLA ECNL G2011/12,,,Marin FC ECNL G2011/12,Foothill College,Top Hill Soccer Field,On Time,1094496
-2026-09-12,01:00 PM,Group Play,Pleasanton RAGE ECNL G2011/12,,,Stanislaus Surf - ECNL G2011/12,Val Vista,Field 2,On Time,1094502
-2026-09-12,03:00 PM,Group Play,Mustang SC ECNL G2011/12,,,Bay Area Surf - ECNL G2011/12,Provident Field @ MSC, Lower,On Time,1094490
+2026-09-12,12:00 PM,Group Play,COSC ECNL G2011/12,4,0,Force (CA) ECNL G2011/12,Edison High School Fields,field 2,On Time,1094478
+2026-09-12,12:00 PM,Group Play,Davis Legacy ECNL G2011/12,0,0,Placer United ECNL G2011/12,Davis Legacy Soccer Complex,Field 10,On Time,1094484
+2026-09-12,12:20 PM,Group Play,MVLA ECNL G2011/12,9,1,Marin FC ECNL G2011/12,Foothill College,Top Hill Soccer Field,On Time,1094496
+2026-09-12,01:00 PM,Group Play,Pleasanton RAGE ECNL G2011/12,3,1,Stanislaus Surf - ECNL G2011/12,Val Vista,Field 2,On Time,1094502
+2026-09-12,03:00 PM,Group Play,Mustang SC ECNL G2011/12,2,2,Bay Area Surf - ECNL G2011/12,Provident Field @ MSC, Lower,On Time,1094490
 2026-09-19,09:00 AM,Group Play,San Juan SC ECNL G2011/12,,,Bay Area Surf - ECNL G2011/12,Tiemann Law Firm Fields at San Juan Soccer Complex,Black Field,On Time,1094532
 2026-09-19,11:00 AM,Group Play,Santa Rosa United ECNL G2011/12,,,Pleasanton RAGE ECNL G2011/12,Trione Fields,Trione West,On Time,1094538
 2026-09-19,12:00 PM,Group Play,Davis Legacy ECNL G2011/12,,,COSC ECNL G2011/12,Davis Legacy Soccer Complex,Field 11,On Time,1094514
