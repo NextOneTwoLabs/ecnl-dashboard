@@ -1,8 +1,8 @@
 date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
-2026-09-12,09:00 AM,Group Play,Pateadores Soccer Club ECNL G2010/11,,,Slammers FC HB Koge ECNL G2010/11,Orange County Great Park,Field 9,On Time,1085345
-2026-09-12,09:00 AM,Group Play,San Diego Surf ECNL G2010/11,,,Utah Royals FC-AZ ECNL G2010/11,Surf Sports Park,Field 4,On Time,1085363
-2026-09-12,09:00 AM,Group Play,So Cal Blues ECNL G2010/11,,,Sporting California USA ECNL G2010/11,OC Great Park,Field 19,On Time,1085369
-2026-09-12,10:15 AM,Group Play,Rebels SC ECNL G2010/11,,,Legends FC Del Mar ECNL G2010/11,Monte Vista High School,Stadium,On Time,1085357
+2026-09-12,09:00 AM,Group Play,Pateadores Soccer Club ECNL G2010/11,0,4,Slammers FC HB Koge ECNL G2010/11,Orange County Great Park,Field 9,On Time,1085345
+2026-09-12,09:00 AM,Group Play,San Diego Surf ECNL G2010/11,4,0,Utah Royals FC-AZ ECNL G2010/11,Surf Sports Park,Field 4,On Time,1085363
+2026-09-12,09:00 AM,Group Play,So Cal Blues ECNL G2010/11,7,0,Sporting California USA ECNL G2010/11,OC Great Park,Field 19,On Time,1085369
+2026-09-12,10:15 AM,Group Play,Rebels SC ECNL G2010/11,0,5,Legends FC Del Mar ECNL G2010/11,Monte Vista High School,Stadium,On Time,1085357
 2026-09-12,02:00 PM,Group Play,Eagles SC ECNL G2010/11,,,Legends FC (CA) ECNL G2010/11,Pleasant Valley Fields,Field 14,On Time,1085339
 2026-09-12,07:00 PM,Group Play,Beach Futbol Club (CA) ECNL G2010/11,,,LAFC So Cal ECNL G2010/11,Long Beach City College - Liberal Arts Campus,Field 1,On Time,1085333
 2026-09-13,09:00 AM,Group Play,SLAMMERS FC ECNL G2010/11,,,Utah Royals FC-AZ ECNL G2010/11,Arroyo Park,Field 1,On Time,1085375

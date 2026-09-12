@@ -1,6 +1,6 @@
 date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
-2026-09-12,12:00 PM,Group Play,Wilmington Hammerheads ECNL G2012/13,,,NCFC Youth ECNL G2012/13,NCINO Sports Park,Field 10,On Time,1122146
-2026-09-12,01:00 PM,Group Play,Arlington Soccer Association ECNL G2012/13,,,Beach FC (VA) ECNL G2012/13,Long Bridge Park,Boeing #3,On Time,1122144
+2026-09-12,12:00 PM,Group Play,Wilmington Hammerheads ECNL G2012/13,1,1,NCFC Youth ECNL G2012/13,NCINO Sports Park,Field 10,On Time,1122146
+2026-09-12,01:00 PM,Group Play,Arlington Soccer Association ECNL G2012/13,2,0,Beach FC (VA) ECNL G2012/13,Long Bridge Park,Boeing #3,On Time,1122144
 2026-09-19,10:00 AM,Group Play,Wilmington Hammerheads ECNL G2012/13,,,Charlotte SA ECNL G2012/13,NCINO Sports Park,Field 6,On Time,1122150
 2026-09-19,10:00 AM,Group Play,NCFC Youth ECNL G2012/13,,,NC Fusion ECNL G2012/13,WRAL ,Field 3,On Time,1122152
 2026-09-19,03:00 PM,Group Play,Beach FC (VA) ECNL G2012/13,,,NCFC Youth NC Courage ECNL G2012/13,Hampton Roads Soccer Complex,Field 15,On Time,1122148
