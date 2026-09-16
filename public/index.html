@@ -2223,9 +2223,10 @@
     // Ages are relative to the season being viewed, not to today, so historical
     // seasons stay correctly labelled (2021-22 G2013 is U9, not U13).
     function getAgeLabel(divName, season) {
-      // Seasons up to 2021-22 name divisions by age already ("GU13", "GU18/U19");
-      // 2022-23 onward use birth years ("G2010", "G2008/2007").
-      if (/^GU\d/.test(divName)) return divName.slice(1);
+      // Seasons up to 2021-22 name divisions by age already ("GU13", "GU18/U19";
+      // the 2021-22 national events drop the G: "U13"); 2022-23 onward use birth
+      // years ("G2010", "G2008/2007").
+      if (/^G?U\d/.test(divName)) return divName.replace(/^G/, '');
 
       const m = divName.match(/G(\d{4})/);
       if (!m) return divName;
@@ -2245,7 +2246,7 @@
     // Normalized age for a division, used to order age-group tabs oldest-first
     // regardless of which naming scheme a season uses.
     function getDivisionAge(divName, season) {
-      const mu = divName.match(/^GU(\d{1,2})/);
+      const mu = divName.match(/^G?U(\d{1,2})/);
       if (mu) return parseInt(mu[1]);
       const mb = divName.match(/G(\d{4})/);
       if (!mb) return -1;
@@ -3121,7 +3122,7 @@
 
     function formatShortDate(iso) {
       const [y, m, d] = (iso || '').slice(0, 10).split('-').map(Number);
-      if (!y) return '';
+      if (!y || y < 1900) return '';   // TGS dates an unscheduled game 0001-01-01
       return new Date(y, m - 1, d).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
     }
 
@@ -3164,6 +3165,11 @@
     // cup flights type day one "Group Play"). Keyed on the games: group games carry a
     // flightgroupID, those cup games none, so a failed standings fetch cannot pull group games in.
     function knockoutGames(games, blocks) {
+      // TGS typed every 2021-22 national game "Bracket" with group id 0, so type and group
+      // id cannot separate the group stage; in every archived flight with real group
+      // standings the group games are unnumbered and every knockout game is numbered, so an
+      // unnumbered Bracket game in such a flight is a group game.
+      if (blocks.length > 1 && blocks.every(b => b.flightGroupID)) games = games.filter(g => g.type !== 'Bracket' || g.gamenumber != null);
       const knockout = !blocks.length && games.some(g => g.type === 'Bracket');
       return games.filter(g => g.type === 'Bracket' || (knockout && g.flightgroupID == null));
     }
@@ -3984,7 +3990,10 @@
           if (!evt.eventId || evt.eventId === rec.eventID) continue;
           try {
             const nh = await getEventHierarchy(evt.eventId);
-            const nd = (nh.girlsDivAndFlightList || []).find(d => d.divisionName === divisionName);
+            // 2021-22 names national divisions "U13" where its conferences say "GU13"
+            const nds = nh.girlsDivAndFlightList || [];
+            const nd = nds.find(d => d.divisionName === divisionName)
+              || nds.find(d => getAgeLabel(d.divisionName, ctx.season) === getAgeLabel(divisionName, ctx.season));
             if (!nd) continue;
             for (const f of (nd.flightList || [])) {
               const sched = await getSchedule(evt.eventId, f.flightID).catch(() => []);
@@ -4222,7 +4231,7 @@
       // Dates arrive as local wall-clock strings ("2025-09-06T12:00:00"); parsing
       // the date part alone avoids a timezone shift moving games across days.
       const [y, m, d] = iso.slice(0, 10).split('-').map(Number);
-      if (!y) return 'Date TBD';
+      if (!y || y < 1900) return 'Date TBD';   // TGS dates an unscheduled game 0001-01-01
       return new Date(y, m - 1, d).toLocaleDateString(undefined, {
         weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'
       });

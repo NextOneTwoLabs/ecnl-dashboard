@@ -1,0 +1,11 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+0001-01-01,TBD,Bracket,Rockford Raptors FC - 06 ECNL/RL (GU16),,,Bye,,,On Time,337992
+0001-01-01,TBD,Bracket,Chargers Soccer Club RL GU16,,,Bye,,,On Time,337994
+2022-06-22,10:00 AM,Bracket,Cleveland Force SC 06G ECNL-R,1,2,FC Dallas RL GU16,60 Acres Park,Field #05,On Time,337993
+2022-06-22,10:00 AM,Bracket,SLAMMERS FC RL GU16,1,2,Connecticut FC RL GU16,60 Acres Park,Field #04,On Time,337995
+2022-06-22,06:00 PM,Group Play,Rockford Raptors FC - 06 ECNL/RL (GU16),3,1,Chargers Soccer Club RL GU16,60 Acres Park,Field #08,On Time,338014
+2022-06-24,09:45 AM,Bracket,Chargers Soccer Club RL GU16,0,4,FC Dallas RL GU16,60 Acres Park,Field #01,On Time,337996
+2022-06-24,09:45 AM,Bracket,Connecticut FC RL GU16,1,1,Rockford Raptors FC - 06 ECNL/RL (GU16),60 Acres Park,Field #02,On Time,337997
+2022-06-25,04:00 PM,Bracket,FC Dallas RL GU16,2,0,Rockford Raptors FC - 06 ECNL/RL (GU16),60 Acres Park,Field #09,On Time,337998
+2022-06-25,04:00 PM,Group Play,Chargers Soccer Club RL GU16,0,2,SLAMMERS FC RL GU16,60 Acres Park,Field #05,On Time,340861
+2022-06-25,04:00 PM,Group Play,Connecticut FC RL GU16,2,2,Cleveland Force SC 06G ECNL-R,60 Acres Park,Field #10,On Time,340862

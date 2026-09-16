@@ -1,0 +1,10 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2022-07-08,10:00 AM,Bracket,SLSG Navy ECNL GU15,0,3,OK Energy FC ECNL GU15,West Creek Soccer Complex,Field #04,On Time,343040
+2022-07-08,11:00 AM,Bracket,Solar SC ECNL GU15,4,4,PDA Blue ECNL G2007,West Creek Soccer Complex,Field #08,On Time,343038
+2022-07-08,11:00 AM,Bracket,Legends FC ECNL GU15,2,2,MVLA ECNL GU15,West Creek Soccer Complex,Field #05,On Time,343039
+2022-07-08,12:00 PM,Bracket,Slammers FC HB Koge ECNL GU15,4,0,FC Dallas ECNL GU15,West Creek Soccer Complex,Field #03,On Time,343041
+2022-07-09,10:00 AM,Bracket,OK Energy FC ECNL GU15,0,3,Slammers FC HB Koge ECNL GU15,West Creek Soccer Complex,Field #06,On Time,343043
+2022-07-09,10:00 AM,Bracket,Solar SC ECNL GU15,4,1,MVLA ECNL GU15,West Creek Soccer Complex,Field #01,On Time,343045
+2022-07-09,11:00 AM,Bracket,PDA Blue ECNL G2007,2,2,Legends FC ECNL GU15,West Creek Soccer Complex,Field #05,On Time,343042
+2022-07-09,11:00 AM,Bracket,SLSG Navy ECNL GU15,0,5,FC Dallas ECNL GU15,West Creek Soccer Complex,Field #08,On Time,343046
+2022-07-11,08:00 AM,Bracket,Legends FC ECNL GU15,0,1,Slammers FC HB Koge ECNL GU15,West Creek Soccer Complex,Field #04,On Time,343044

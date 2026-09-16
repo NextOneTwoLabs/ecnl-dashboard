@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2022-06-22,05:00 PM,Bracket,Eclipse Select SC ECNL GU17,1,4,Rebels SC ECNL GU17,60 Acres Park,Field #19,On Time,337040
+2022-06-22,05:00 PM,Bracket,Pittsburgh Riverhounds ECNL GU17,1,2,Maryland United FC ECNL GU17,60 Acres Park,Field #17,On Time,337041
+2022-06-22,05:00 PM,Bracket,Alabama FC ECNL GU17,2,5,Heat FC ECNL GU17,60 Acres Park,Field #11,On Time,337042
+2022-06-22,05:00 PM,Bracket,FC Bucks ECNL GU17,6,3,WNY Flash ECNL GU17,60 Acres Park,Field #12,On Time,337043
+2022-06-22,05:00 PM,Bracket,Seattle United ECNL GU17,2,1,Scorpions Soccer - ECNL GU17,60 Acres Park,Field #13,On Time,337044
+2022-06-22,05:00 PM,Bracket,VA Union ECNL GU17,1,2,Classics Elite  ECNL GU17,60 Acres Park,Field #14,On Time,337045
+2022-06-22,05:00 PM,Bracket,CESA ECNL GU17,1,2,Tampa Bay United ECNL GU17,60 Acres Park,Field #16,On Time,337046
+2022-06-22,05:00 PM,Bracket,FC Alliance ECNL GU17,0,0,Legends FC ECNL GU17,60 Acres Park,Field #15,On Time,337047
+2022-06-23,03:00 PM,Bracket,Rebels SC ECNL GU17,0,1,Maryland United FC ECNL GU17,60 Acres Park,Field #11,On Time,337048
+2022-06-23,03:00 PM,Bracket,Heat FC ECNL GU17,1,3,FC Bucks ECNL GU17,60 Acres Park,Field #12,On Time,337049
+2022-06-23,03:00 PM,Bracket,Seattle United ECNL GU17,1,2,Classics Elite  ECNL GU17,60 Acres Park,Field #15,On Time,337050
+2022-06-23,03:00 PM,Bracket,Tampa Bay United ECNL GU17,2,4,Legends FC ECNL GU17,60 Acres Park,Field #14,On Time,337051
+2022-06-23,03:00 PM,Bracket,Eclipse Select SC ECNL GU17,0,2,Pittsburgh Riverhounds ECNL GU17,60 Acres Park,Field #17,On Time,338247
+2022-06-23,03:00 PM,Bracket,Alabama FC ECNL GU17,2,0,WNY Flash ECNL GU17,60 Acres Park,Field #19,On Time,338248
+2022-06-23,03:00 PM,Bracket,Scorpions Soccer - ECNL GU17,1,1,VA Union ECNL GU17,60 Acres Park,Field #21,On Time,338249
+2022-06-23,03:00 PM,Bracket,CESA ECNL GU17,1,2,FC Alliance ECNL GU17,60 Acres Park,Field #20,On Time,338250
+2022-06-25,11:00 AM,Bracket,Maryland United FC ECNL GU17,3,0,FC Bucks ECNL GU17,60 Acres Park,Field #22,On Time,337052
+2022-06-25,11:00 AM,Bracket,Classics Elite  ECNL GU17,1,2,Legends FC ECNL GU17,60 Acres Park,Field #24,On Time,337053
+2022-06-25,12:00 PM,Bracket,Rebels SC ECNL GU17,1,2,Heat FC ECNL GU17,60 Acres Park,Field #07,On Time,338245
+2022-06-25,12:00 PM,Bracket,Seattle United ECNL GU17,2,2,Tampa Bay United ECNL GU17,60 Acres Park,Field #05,On Time,338246
+2022-06-25,12:00 PM,Bracket,Pittsburgh Riverhounds ECNL GU17,2,0,Alabama FC ECNL GU17,60 Acres Park,Field #02,On Time,338251
+2022-06-25,12:00 PM,Bracket,Scorpions Soccer - ECNL GU17,3,1,FC Alliance ECNL GU17,60 Acres Park,Field #01,On Time,338252
+2022-06-25,12:00 PM,Bracket,Eclipse Select SC ECNL GU17,2,4,WNY Flash ECNL GU17,60 Acres Park,Field #04,On Time,338253
+2022-06-25,12:00 PM,Bracket,VA Union ECNL GU17,1,2,CESA ECNL GU17,60 Acres Park,Field #03,On Time,338254
+2022-06-27,08:00 AM,Bracket,Maryland United FC ECNL GU17,1,0,Legends FC ECNL GU17,60 Acres Park,Field #03,On Time,337054

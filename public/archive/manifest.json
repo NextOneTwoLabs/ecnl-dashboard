@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-16T16:22:21Z",
+  "updated": "2026-09-16T18:26:54Z",
   "events": {
     "2025-26/Mid-Atlantic": {
       "season": "2025-26",
@@ -5916,6 +5916,276 @@
             "Championship",
             "Round 1 Losers"
           ]
+        }
+      ]
+    },
+    "2021-22/Playoffs": {
+      "season": "2021-22",
+      "kind": "national",
+      "name": "Playoffs",
+      "eventId": 2436,
+      "eventName": "ECNL National Playoffs",
+      "fetchedAt": "2026-09-16T18:25:49Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2436/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 9749,
+          "divisionName": "U13",
+          "flightID": 15394,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15394",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15394",
+          "teams": 44,
+          "games": 74
+        },
+        {
+          "divisionID": 9749,
+          "divisionName": "U13",
+          "flightID": 15395,
+          "flightName": "Regional League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15395",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15395",
+          "teams": 0,
+          "games": 12,
+          "brackets": []
+        },
+        {
+          "divisionID": 9750,
+          "divisionName": "U14",
+          "flightID": 15396,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15396",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15396",
+          "teams": 44,
+          "games": 74
+        },
+        {
+          "divisionID": 9750,
+          "divisionName": "U14",
+          "flightID": 15397,
+          "flightName": "Regional League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15397",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15397",
+          "teams": 0,
+          "games": 12,
+          "brackets": []
+        },
+        {
+          "divisionID": 9751,
+          "divisionName": "U15",
+          "flightID": 15398,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15398",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15398",
+          "teams": 44,
+          "games": 74
+        },
+        {
+          "divisionID": 9751,
+          "divisionName": "U15",
+          "flightID": 15399,
+          "flightName": "Regional League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15399",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15399",
+          "teams": 0,
+          "games": 11,
+          "brackets": []
+        },
+        {
+          "divisionID": 9752,
+          "divisionName": "U16",
+          "flightID": 15400,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15400",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15400",
+          "teams": 44,
+          "games": 74
+        },
+        {
+          "divisionID": 9752,
+          "divisionName": "U16",
+          "flightID": 15401,
+          "flightName": "North American Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15401",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15401",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 9752,
+          "divisionName": "U16",
+          "flightID": 15404,
+          "flightName": "Regional League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15404",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15404",
+          "teams": 0,
+          "games": 10,
+          "brackets": []
+        },
+        {
+          "divisionID": 9752,
+          "divisionName": "U16",
+          "flightID": 15402,
+          "flightName": "Showcase Cup A",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15402",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15402",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 9752,
+          "divisionName": "U16",
+          "flightID": 15403,
+          "flightName": "Showcase Cup B",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15403",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15403",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 9753,
+          "divisionName": "U17",
+          "flightID": 15405,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15405",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15405",
+          "teams": 44,
+          "games": 74
+        },
+        {
+          "divisionID": 9753,
+          "divisionName": "U17",
+          "flightID": 15406,
+          "flightName": "North American Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15406",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15406",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 9753,
+          "divisionName": "U17",
+          "flightID": 15409,
+          "flightName": "Regional League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15409",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15409",
+          "teams": 0,
+          "games": 11,
+          "brackets": []
+        },
+        {
+          "divisionID": 9753,
+          "divisionName": "U17",
+          "flightID": 15407,
+          "flightName": "Showcase Cup A",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15407",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15407",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 9753,
+          "divisionName": "U17",
+          "flightID": 15408,
+          "flightName": "Showcase Cup B",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15408",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15408",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 9754,
+          "divisionName": "U18/U19",
+          "flightID": 15410,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15410",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15410",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 9754,
+          "divisionName": "U18/U19",
+          "flightID": 15411,
+          "flightName": "Regional League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2436/standings/15411",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2436/schedules/15411",
+          "teams": 0,
+          "games": 11,
+          "brackets": []
+        }
+      ]
+    },
+    "2021-22/Finals": {
+      "season": "2021-22",
+      "kind": "national",
+      "name": "Finals",
+      "eventId": 2437,
+      "eventName": "ECNL National Finals",
+      "fetchedAt": "2026-09-16T18:26:45Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2437/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 9846,
+          "divisionName": "U13",
+          "flightID": 15603,
+          "flightName": "Champions League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2437/standings/15603",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2437/schedules/15603",
+          "teams": 0,
+          "games": 9,
+          "brackets": []
+        },
+        {
+          "divisionID": 9847,
+          "divisionName": "U14",
+          "flightID": 15604,
+          "flightName": "Champions League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2437/standings/15604",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2437/schedules/15604",
+          "teams": 0,
+          "games": 9,
+          "brackets": []
+        },
+        {
+          "divisionID": 9848,
+          "divisionName": "U15",
+          "flightID": 15605,
+          "flightName": "Champions League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2437/standings/15605",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2437/schedules/15605",
+          "teams": 0,
+          "games": 9,
+          "brackets": []
+        },
+        {
+          "divisionID": 9849,
+          "divisionName": "U16",
+          "flightID": 15606,
+          "flightName": "Champions League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2437/standings/15606",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2437/schedules/15606",
+          "teams": 0,
+          "games": 9,
+          "brackets": []
+        },
+        {
+          "divisionID": 9850,
+          "divisionName": "U17",
+          "flightID": 15607,
+          "flightName": "Champions League Finals",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2437/standings/15607",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2437/schedules/15607",
+          "teams": 0,
+          "games": 9,
+          "brackets": []
         }
       ]
     }

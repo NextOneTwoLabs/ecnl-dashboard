@@ -1,0 +1,75 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2022-06-23,10:00 AM,Bracket,Tennessee Soccer Club ECNL GU14,1,2,World Class FC ECNL GU14,60 Acres Park,Field #01,On Time,337455
+2022-06-23,10:00 AM,Bracket,Sting Dallas Black ECNL GU14,4,1,NC Courage ECNL GU14,60 Acres Park,Field #02,On Time,337456
+2022-06-23,10:00 AM,Bracket,Solar SC ECNL GU14,4,1,Kansas City Athletics - ECNL GU14,60 Acres Park,Field #03,On Time,337457
+2022-06-23,10:00 AM,Bracket,Penn Fusion SA ECNL GU14,3,0,Concorde Fire Premier - ECNL GU14,60 Acres Park,Field #04,On Time,337458
+2022-06-23,10:00 AM,Bracket,Crossfire Premier ECNL GU14,4,1,WNY Flash ECNL GU14,60 Acres Park,Field #05,On Time,337459
+2022-06-23,10:00 AM,Bracket,De Anza Force ECNL GU14,0,1,Legends FC ECNL GU14,60 Acres Park,Field #07,On Time,337460
+2022-06-23,10:00 AM,Bracket,FC Stars Blue ECNL GU14,1,0,La Roca FC ECNL GU14,60 Acres Park,Field #08,On Time,337461
+2022-06-23,10:00 AM,Bracket,Slammers FC HB Koge ECNL GU14,5,1,CESA ECNL GU14,60 Acres Park,Field #09,On Time,337462
+2022-06-23,12:00 PM,Bracket,Real Colorado National ECNL GU14,1,0,Sting Austin ECNL GU14,60 Acres Park,Field #01,On Time,337463
+2022-06-23,12:00 PM,Bracket,Arlington Soccer ECNL GU14,3,0,Alabama FC ECNL GU14,60 Acres Park,Field #04,On Time,337464
+2022-06-23,12:00 PM,Bracket,San Diego Surf Soccer Club - San Diego Surf ECNL G,5,1,Indiana Fire ECNL GU14,60 Acres Park,Field #05,On Time,337465
+2022-06-23,12:00 PM,Bracket,PDA Blue ECNL GU14,1,0,Sporting California Arsenal FC - ECNL GU14,60 Acres Park,Field #09,On Time,337466
+2022-06-23,03:00 PM,Bracket,Richmond United ECNL GU14,0,0,Minnesota Thunder ECNL GU14,60 Acres Park,Field #13,On Time,337467
+2022-06-23,03:00 PM,Bracket,Washington Premier ECNL GU14,0,5,Eagles SC ECNL GU14,60 Acres Park,Field #16,On Time,337468
+2022-06-23,04:00 PM,Bracket,So Cal Blues ECNL GU14,2,0,DKSC ECNL GU14,60 Acres Park,Field #05,On Time,337469
+2022-06-23,04:00 PM,Bracket,SLSG Navy ECNL GU14,2,1,MVLA ECNL GU14,60 Acres Park,Field #07,On Time,337470
+2022-06-23,04:00 PM,Bracket,San Juan SC ECNL GU14,3,0,Internationals SC ECNL GU14,60 Acres Park,Field #08,On Time,337471
+2022-06-23,04:00 PM,Bracket,VDA ECNL GU14,3,2,Beach FC ECNL GU14,60 Acres Park,Field #09,On Time,337472
+2022-06-23,06:00 PM,Bracket,Concorde Fire Platinum ECNL GU14,3,1,Pipeline SC ECNL GU14,60 Acres Park,Field #01,On Time,337473
+2022-06-23,06:00 PM,Bracket,Michigan Hawks ECNL GU14,3,1,Mustang SC ECNL GU14,60 Acres Park,Field #02,On Time,337474
+2022-06-23,06:00 PM,Bracket,Eclipse Select SC ECNL GU14,1,0,Connecticut FC ECNL GU14,60 Acres Park,Field #03,On Time,337475
+2022-06-23,06:00 PM,Bracket,GSA ECNL GU14,1,0,Eastside FC ECNL GU14,60 Acres Park,Field #04,On Time,337476
+2022-06-24,09:45 AM,Bracket,CESA ECNL GU14,2,2,FC Stars Blue ECNL GU14,60 Acres Park,Field #04,On Time,337477
+2022-06-24,09:45 AM,Bracket,Legends FC ECNL GU14,1,1,Tennessee Soccer Club ECNL GU14,60 Acres Park,Field #07,On Time,337478
+2022-06-24,09:45 AM,Bracket,La Roca FC ECNL GU14,0,7,Slammers FC HB Koge ECNL GU14,60 Acres Park,Field #08,On Time,337479
+2022-06-24,09:45 AM,Bracket,World Class FC ECNL GU14,2,3,De Anza Force ECNL GU14,60 Acres Park,Field #09,On Time,337480
+2022-06-24,11:30 AM,Bracket,WNY Flash ECNL GU14,0,6,Sting Dallas Black ECNL GU14,60 Acres Park,Field #04,On Time,337481
+2022-06-24,11:30 AM,Bracket,NC Courage ECNL GU14,0,6,Crossfire Premier ECNL GU14,60 Acres Park,Field #05,On Time,337482
+2022-06-24,11:30 AM,Bracket,Alabama FC ECNL GU14,1,3,PDA Blue ECNL GU14,60 Acres Park,Field #09,On Time,337483
+2022-06-24,11:30 AM,Bracket,Sporting California Arsenal FC - ECNL GU14,3,1,Arlington Soccer ECNL GU14,60 Acres Park,Field #10,On Time,337484
+2022-06-24,12:30 PM,Bracket,Concorde Fire Premier - ECNL GU14,0,4,Solar SC ECNL GU14,60 Acres Park,Field #11,On Time,337485
+2022-06-24,12:30 PM,Bracket,Kansas City Athletics - ECNL GU14,4,1,Penn Fusion SA ECNL GU14,60 Acres Park,Field #14,On Time,337486
+2022-06-24,01:15 PM,Bracket,Eagles SC ECNL GU14,0,2,Richmond United ECNL GU14,60 Acres Park,Field #03,On Time,337487
+2022-06-24,01:15 PM,Bracket,Sting Austin ECNL GU14,1,1,San Diego Surf Soccer Club - San Diego Surf ECNL G,60 Acres Park,Field #04,On Time,337488
+2022-06-24,01:15 PM,Bracket,Indiana Fire ECNL GU14,1,3,Real Colorado National ECNL GU14,60 Acres Park,Field #05,On Time,337489
+2022-06-24,01:15 PM,Bracket,Minnesota Thunder ECNL GU14,2,3,Washington Premier ECNL GU14,60 Acres Park,Field #09,On Time,337490
+2022-06-24,04:45 PM,Bracket,Beach FC ECNL GU14,2,1,San Juan SC ECNL GU14,60 Acres Park,Field #01,On Time,337491
+2022-06-24,04:45 PM,Bracket,Internationals SC ECNL GU14,2,5,VDA ECNL GU14,60 Acres Park,Field #02,On Time,337492
+2022-06-24,04:45 PM,Bracket,Pipeline SC ECNL GU14,0,2,Michigan Hawks ECNL GU14,60 Acres Park,Field #03,On Time,337493
+2022-06-24,04:45 PM,Bracket,Connecticut FC ECNL GU14,1,0,GSA ECNL GU14,60 Acres Park,Field #04,On Time,337494
+2022-06-24,04:45 PM,Bracket,MVLA ECNL GU14,2,2,So Cal Blues ECNL GU14,60 Acres Park,Field #07,On Time,337495
+2022-06-24,04:45 PM,Bracket,Eastside FC ECNL GU14,0,0,Eclipse Select SC ECNL GU14,60 Acres Park,Field #08,On Time,337496
+2022-06-24,04:45 PM,Bracket,DKSC ECNL GU14,0,3,SLSG Navy ECNL GU14,60 Acres Park,Field #09,On Time,337497
+2022-06-24,04:45 PM,Bracket,Mustang SC ECNL GU14,2,3,Concorde Fire Platinum ECNL GU14,60 Acres Park,Field #10,On Time,337498
+2022-06-26,08:00 AM,Bracket,PDA Blue ECNL GU14,2,0,Arlington Soccer ECNL GU14,60 Acres Park,Field #01,On Time,337499
+2022-06-26,08:00 AM,Bracket,Alabama FC ECNL GU14,3,1,Sporting California Arsenal FC - ECNL GU14,60 Acres Park,Field #02,On Time,337500
+2022-06-26,08:00 AM,Bracket,Real Colorado National ECNL GU14,1,1,San Diego Surf Soccer Club - San Diego Surf ECNL G,60 Acres Park,Field #03,On Time,337501
+2022-06-26,08:00 AM,Bracket,Indiana Fire ECNL GU14,0,5,Sting Austin ECNL GU14,60 Acres Park,Field #04,On Time,337502
+2022-06-26,08:00 AM,Bracket,So Cal Blues ECNL GU14,2,1,SLSG Navy ECNL GU14,60 Acres Park,Field #05,On Time,337503
+2022-06-26,08:00 AM,Bracket,MVLA ECNL GU14,4,2,DKSC ECNL GU14,60 Acres Park,Field #07,On Time,337504
+2022-06-26,08:00 AM,Bracket,FC Stars Blue ECNL GU14,1,1,Slammers FC HB Koge ECNL GU14,60 Acres Park,Field #08,On Time,337505
+2022-06-26,08:00 AM,Bracket,CESA ECNL GU14,3,2,La Roca FC ECNL GU14,60 Acres Park,Field #09,On Time,337506
+2022-06-26,08:00 AM,Bracket,Solar SC ECNL GU14,0,1,Penn Fusion SA ECNL GU14,60 Acres Park,Field #10,On Time,337507
+2022-06-26,09:00 AM,Bracket,Concorde Fire Premier - ECNL GU14,2,1,Kansas City Athletics - ECNL GU14,60 Acres Park,Field #11,On Time,337508
+2022-06-26,09:00 AM,Bracket,World Class FC ECNL GU14,0,1,Legends FC ECNL GU14,60 Acres Park,Field #12,On Time,337509
+2022-06-26,09:00 AM,Bracket,Tennessee Soccer Club ECNL GU14,0,1,De Anza Force ECNL GU14,60 Acres Park,Field #13,On Time,337510
+2022-06-26,09:00 AM,Bracket,Mustang SC ECNL GU14,2,1,Pipeline SC ECNL GU14,60 Acres Park,Field #14,On Time,337511
+2022-06-26,09:00 AM,Bracket,Concorde Fire Platinum ECNL GU14,4,3,Michigan Hawks ECNL GU14,60 Acres Park,Field #15,On Time,337512
+2022-06-26,09:00 AM,Bracket,Crossfire Premier ECNL GU14,4,2,Sting Dallas Black ECNL GU14,60 Acres Park,Field #16,On Time,337513
+2022-06-26,09:00 AM,Bracket,NC Courage ECNL GU14,5,1,WNY Flash ECNL GU14,60 Acres Park,Field #17,On Time,337514
+2022-06-26,09:00 AM,Bracket,Beach FC ECNL GU14,1,3,Internationals SC ECNL GU14,60 Acres Park,Field #19,On Time,337515
+2022-06-26,09:00 AM,Bracket,San Juan SC ECNL GU14,3,1,VDA ECNL GU14,60 Acres Park,Field #20,On Time,337516
+2022-06-26,09:00 AM,Bracket,Eastside FC ECNL GU14,3,4,Connecticut FC ECNL GU14,60 Acres Park,Field #21,On Time,337517
+2022-06-26,09:00 AM,Bracket,Eclipse Select SC ECNL GU14,4,1,GSA ECNL GU14,60 Acres Park,Field #22,On Time,337518
+2022-06-26,10:00 AM,Bracket,Richmond United ECNL GU14,2,1,Washington Premier ECNL GU14,60 Acres Park,Field #01,On Time,337519
+2022-06-26,10:00 AM,Bracket,Eagles SC ECNL GU14,5,0,Minnesota Thunder ECNL GU14,60 Acres Park,Field #02,On Time,337520
+2022-06-28,08:00 AM,Bracket,Solar SC ECNL GU14,1,5,SLSG Navy ECNL GU14,60 Acres Park,Field #01,On Time,337373
+2022-06-28,08:00 AM,Bracket,Eclipse Select SC ECNL GU14,4,1,Eagles SC ECNL GU14,60 Acres Park,Field #07,On Time,337374
+2022-06-28,08:00 AM,Bracket,Richmond United ECNL GU14,0,2,Legends FC ECNL GU14,60 Acres Park,Field #10,On Time,337375
+2022-06-28,08:00 AM,Bracket,Slammers FC HB Koge ECNL GU14,2,2,Sting Dallas Black ECNL GU14,60 Acres Park,Field #04,On Time,337376
+2022-06-28,08:00 AM,Bracket,So Cal Blues ECNL GU14,1,5,Solar SC ECNL GU14,60 Acres Park,Field #03,On Time,337377
+2022-06-28,08:00 AM,Bracket,Concorde Fire Platinum ECNL GU14,1,5,San Juan SC ECNL GU14,60 Acres Park,Field #09,On Time,337378
+2022-06-28,08:00 AM,Bracket,PDA Blue ECNL GU14,1,0,Crossfire Premier ECNL GU14,60 Acres Park,Field #08,On Time,337379
+2022-06-28,08:00 AM,Bracket,Real Colorado National ECNL GU14,1,1,Michigan Hawks ECNL GU14,60 Acres Park,Field #02,On Time,337380
