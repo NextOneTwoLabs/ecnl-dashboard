@@ -3475,7 +3475,8 @@
         }
         if (currentView === 'schedule') {
           const tagFor = brackets ? (g => brackets.tagByMatch.get(g.matchID) || '') : null;
-          container.appendChild(renderScheduleTable(games, tierName, flight.flightID, evt.eventId, tagFor));
+          container.appendChild(renderScheduleTable(games, tierName, flight.flightID, evt.eventId, tagFor,
+            undefined, gap ? 'No game-by-game schedule was published for this flight.' : undefined));
         } else {
           if (blocks.length > 1) container.appendChild(renderGroupCards(blocks));
           if (brackets) container.appendChild(renderBrackets(brackets));
@@ -4220,7 +4221,7 @@
 
     // `rowTag(game)` optionally returns a label printed under the kickoff time,
     // used by playoff brackets to show the round ("Quarterfinals", "CL Cup · Final").
-    function renderScheduleTable(games, flightName, flightId, eventId, rowTag, title) {
+    function renderScheduleTable(games, flightName, flightId, eventId, rowTag, title, emptyText) {
       const panel = document.createElement('div');
       panel.className = 'flight-panel';
 
@@ -4245,7 +4246,7 @@
 
       if (!games.length) {
         tbody.innerHTML = `<tr><td colspan="5" style="padding:24px;text-align:center;color:var(--text-secondary)">
-          No games scheduled for this flight yet.</td></tr>`;
+          ${esc(emptyText || 'No games scheduled for this flight yet.')}</td></tr>`;
         return panel;
       }
 

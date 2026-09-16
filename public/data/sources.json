@@ -285,17 +285,17 @@
               "note": "TGS published this flight's group tables but not its game-by-game schedule. The group standings are TGS data; the 66 group games and the round of 16 (Jul 2) were never published, and ECNL's recaps carry no scores for this age group. The eight round-of-16 winners are known from the Finals bracket.",
               "hideTgsSchedule": true,
               "sources": [
-                { "label": "ECNL recap: Playoffs Day 5", "url": "https://theecnl.com/news/2025/7/1/ecnl-girls-national-playoffs-recap-day-5.aspx" },
-                { "label": "ECNL recap: Playoffs Day 6", "url": "https://theecnl.com/news/2025/7/2/ecnl-girls-national-playoffs-recap-day-6.aspx" }
+                { "label": "ECNL recap: Playoffs Day 5 (qualifiers and round-of-16 pairings)", "url": "https://theecnl.com/news/2025/7/1/ecnl-girls-national-playoffs-recap-day-5.aspx" }
               ]
             },
             "32792": {
               "flight": "G2011 (U14) Champions League",
-              "note": "TGS published this flight's group tables and its round of 16, but not its 66 group games; ECNL's recaps carry no scores for them.",
+              "note": "TGS published this flight's group tables and its round of 16, but not its 66 group games. ECNL's recaps give scores for four Group D games (San Diego Surf's group, Days 2 and 3) and none of the other 62.",
               "hideTgsSchedule": false,
               "sources": [
-                { "label": "ECNL recap: Playoffs Day 5", "url": "https://theecnl.com/news/2025/7/1/ecnl-girls-national-playoffs-recap-day-5.aspx" },
-                { "label": "ECNL recap: Playoffs Day 6", "url": "https://theecnl.com/news/2025/7/2/ecnl-girls-national-playoffs-recap-day-6.aspx" }
+                { "label": "ECNL recap: Playoffs Day 2 (two Group D scores)", "url": "https://theecnl.com/news/2025/6/28/ecnl-girls-national-playoffs-recap-day-2.aspx" },
+                { "label": "ECNL recap: Playoffs Day 3 (two Group D scores)", "url": "https://theecnl.com/news/2025/6/29/ecnl-girls-national-playoffs-recap-day-3.aspx" },
+                { "label": "ECNL recap: Playoffs Day 5 (qualifiers and round-of-16 pairings)", "url": "https://theecnl.com/news/2025/7/1/ecnl-girls-national-playoffs-recap-day-5.aspx" }
               ]
             }
           }
