@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-05T21:58:25Z",
+  "updated": "2026-09-16T04:37:28Z",
   "events": {
     "2025-26/Mid-Atlantic": {
       "season": "2025-26",
@@ -1661,9 +1661,10 @@
           "flightName": "Champions League",
           "standingsUrl": "https://public.totalglobalsports.com/public/event/3975/standings/34425",
           "schedulesUrl": "https://public.totalglobalsports.com/public/event/3975/schedules/34425",
-          "teams": 0,
-          "games": 0,
-          "brackets": true
+          "teams": 8,
+          "games": 7,
+          "brackets": true,
+          "reconstructed": true
         },
         {
           "divisionID": 19457,
@@ -1672,9 +1673,10 @@
           "flightName": "Champions League",
           "standingsUrl": "https://public.totalglobalsports.com/public/event/3975/standings/34427",
           "schedulesUrl": "https://public.totalglobalsports.com/public/event/3975/schedules/34427",
-          "teams": 0,
-          "games": 0,
-          "brackets": true
+          "teams": 8,
+          "games": 7,
+          "brackets": true,
+          "reconstructed": true
         },
         {
           "divisionID": 19456,
@@ -1683,9 +1685,10 @@
           "flightName": "Champions League",
           "standingsUrl": "https://public.totalglobalsports.com/public/event/3975/standings/34426",
           "schedulesUrl": "https://public.totalglobalsports.com/public/event/3975/schedules/34426",
-          "teams": 0,
-          "games": 0,
-          "brackets": true
+          "teams": 8,
+          "games": 7,
+          "brackets": true,
+          "reconstructed": true
         },
         {
           "divisionID": 19455,
@@ -1694,9 +1697,10 @@
           "flightName": "Champions League",
           "standingsUrl": "https://public.totalglobalsports.com/public/event/3975/standings/34428",
           "schedulesUrl": "https://public.totalglobalsports.com/public/event/3975/schedules/34428",
-          "teams": 0,
-          "games": 0,
-          "brackets": true
+          "teams": 8,
+          "games": 7,
+          "brackets": true,
+          "reconstructed": true
         },
         {
           "divisionID": 19454,
@@ -1705,9 +1709,10 @@
           "flightName": "Champions League",
           "standingsUrl": "https://public.totalglobalsports.com/public/event/3975/standings/34429",
           "schedulesUrl": "https://public.totalglobalsports.com/public/event/3975/schedules/34429",
-          "teams": 0,
-          "games": 0,
-          "brackets": true
+          "teams": 8,
+          "games": 7,
+          "brackets": true,
+          "reconstructed": true
         }
       ]
     },

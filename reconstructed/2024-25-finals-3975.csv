@@ -1,0 +1,36 @@
+division,round,gamenumber,date,winner,loser,winner_score,loser_score,winner_pk,loser_pk,source_url
+G2008,QF,1,2025-07-18,VDA,Michigan Hawks,3,3,5,4,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2008,QF,2,2025-07-18,Real Colorado National,PDA Blue,1,1,4,3,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2008,QF,3,2025-07-18,Slammers FC HB Køge,NC Courage,4,2,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2008,QF,4,2025-07-18,Sting Black,XF Academy,3,0,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2008,SF,5,2025-07-19,Real Colorado National,VDA,2,0,,,https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx
+G2008,SF,6,2025-07-19,Sting Black,Slammers FC HB Køge,1,0,,,https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx
+G2008,F,7,2025-07-21,Real Colorado National,Sting Black,2,1,,,https://theecnl.com/news/2025/7/22/ecnl-girls-national-finals-recap-champions-crowned.aspx
+G2009,QF,1,2025-07-18,Penn Fusion SA,XF Academy,1,0,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2009,QF,2,2025-07-18,MVLA,Utah Royals FC-AZ,1,0,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2009,QF,3,2025-07-18,KC Athletics,Beach FC (CA),4,2,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2009,QF,4,2025-07-18,San Diego Surf,Richmond United,2,0,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2009,SF,5,2025-07-19,MVLA,Penn Fusion SA,1,0,,,https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx
+G2009,SF,6,2025-07-19,KC Athletics,San Diego Surf,2,0,,,https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx
+G2009,F,7,2025-07-21,MVLA,KC Athletics,3,1,,,https://theecnl.com/news/2025/7/22/ecnl-girls-national-finals-recap-champions-crowned.aspx
+G2010,QF,1,2025-07-18,Solar SC,Fairfax VA Union,3,1,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2010,QF,2,2025-07-18,Michigan Hawks,Slammers FC HB Køge,3,0,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2010,QF,3,2025-07-18,Legends FC,MVLA,3,1,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2010,QF,4,2025-07-18,Bay Area Surf,FC Stars Blue,2,0,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2010,SF,5,2025-07-19,Legends FC,Bay Area Surf,1,1,4,2,https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx
+G2010,SF,6,2025-07-19,Michigan Hawks,Solar SC,3,0,,,https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx
+G2010,F,7,2025-07-21,Michigan Hawks,Legends FC,2,0,,,https://theecnl.com/news/2025/7/22/ecnl-girls-national-finals-recap-champions-crowned.aspx
+G2011,QF,1,2025-07-18,So Cal Blues,Eagles SC,4,0,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2011,QF,2,2025-07-18,San Diego Surf,Solar SC,5,3,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2011,QF,3,2025-07-18,Michigan Hawks,FC Stars Blue,2,0,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2011,QF,4,2025-07-18,Concorde Fire Platinum,Eclipse Select,1,1,4,1,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2011,SF,5,2025-07-19,San Diego Surf,So Cal Blues,0,0,5,4,https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx
+G2011,SF,6,2025-07-19,Michigan Hawks,Concorde Fire Platinum,2,1,,,https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx
+G2011,F,7,2025-07-21,San Diego Surf,Michigan Hawks,2,1,,,https://theecnl.com/news/2025/7/22/ecnl-girls-national-finals-recap-champions-crowned.aspx
+G2012,QF,1,2025-07-18,Slammers FC HB Køge,Washington Premier,2,0,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2012,QF,2,2025-07-18,Beach FC (CA),So Cal Blues,3,2,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2012,QF,3,2025-07-18,San Diego Surf,Sting Black,2,0,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2012,QF,4,2025-07-18,Charlotte SA,FC Delco,2,1,,,https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx
+G2012,SF,5,2025-07-19,Slammers FC HB Køge,Beach FC (CA),2,0,,,https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx
+G2012,SF,6,2025-07-19,San Diego Surf,Charlotte SA,2,1,,,https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx
+G2012,F,7,2025-07-21,San Diego Surf,Slammers FC HB Køge,3,1,,,https://theecnl.com/news/2025/7/22/ecnl-girls-national-finals-recap-champions-crowned.aspx

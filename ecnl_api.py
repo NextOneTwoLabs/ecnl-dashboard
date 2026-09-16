@@ -9,6 +9,7 @@ import collections
 import json
 import os
 import re
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -96,11 +97,102 @@ def archive_path_for(api_path):
     return full
 
 
-def write_archive(api_path, raw_bytes):
+# ---------- reconstructed (protected) paths ----------
+#
+# A few archived responses are not mirrors of the live API at all: TGS removed
+# the 2024-25 National Finals schedules, so reconstruct.py rebuilds them from
+# ECNL's published recaps. The live endpoint now returns an empty list, and a
+# routine re-crawl must never replace the reconstruction with it. Every event
+# with a `reconstructed` block in sources.json contributes its flights' schedule
+# paths here; write_archive refuses them unless the caller opts in.
+
+_PROTECTED_PATHS = None
+
+
+def protected_paths(sources=None):
+    """API paths whose archived copies are reconstructed by hand. Computed once,
+    lazily, from the `reconstructed` blocks in sources.json."""
+    global _PROTECTED_PATHS
+    if _PROTECTED_PATHS is None:
+        paths = set()
+        try:
+            src = sources if sources is not None else load_sources()
+        except (OSError, ValueError):
+            src = {"seasons": {}}
+        for season, _kind, name, event in iter_events(src):
+            block = event.get("reconstructed")
+            eid = event.get("eventId")
+            if not block or not eid:
+                continue
+            # This runs on every fetch and write of the scheduled refresh, so a
+            # hand-edit mistake in sources.json degrades to "this block is not
+            # protected" with one warning line - never to a crashed refresh.
+            label = f"sources.json {season} / {name} ({eid})"
+            if not isinstance(block, dict):
+                _warn(f"{label}: `reconstructed` is not an object; its flights are NOT protected")
+                continue
+            flight_ids = block.get("flightIds")
+            if not isinstance(flight_ids, list):
+                _warn(f"{label}: `reconstructed.flightIds` is not a list; its flights are NOT protected")
+                continue
+            bad = []
+            for flight_id in flight_ids:
+                try:
+                    paths.add(p_schedule(eid, int(flight_id)))
+                except (TypeError, ValueError):
+                    bad.append(flight_id)
+            if bad:
+                _warn(f"{label}: `reconstructed.flightIds` entries {bad!r} are not integers; "
+                      f"those flights are NOT protected")
+        _PROTECTED_PATHS = frozenset(paths)
+    return _PROTECTED_PATHS
+
+
+def _warn(msg):
+    sys.stderr.write(f"warning: {msg}\n")
+
+
+def is_protected_path(api_path):
+    return api_path in protected_paths()
+
+
+def read_archive_protected(api_path):
+    """For a protected path with an archived copy: log the notice and return the
+    parsed archive. None for everything else (unprotected, or nothing archived),
+    so callers fall through to their normal fetch."""
+    if not is_protected_path(api_path):
+        return None
+    raw, _ = read_archive(api_path)
+    if raw is None:
+        return None
+    sys.stderr.write(protected_read_notice(api_path) + "\n")
+    return json.loads(raw)
+
+
+def protected_read_notice(api_path):
+    """The log line a reader prints when it answers from the reconstruction.
+    Nothing was attempted or refused, so it does not talk about overwriting."""
+    return f"protected (reconstructed): {api_path} — serving the archived copy"
+
+
+def protected_notice(api_path):
+    """The one log line every writer prints when it refuses to overwrite a reconstruction."""
+    return (f"protected (reconstructed): {api_path} — not overwritten; "
+            f"pass --force-reconstructed")
+
+
+def write_archive(api_path, raw_bytes, allow_protected=False):
     """Atomically write a raw JSON response into the archive. Returns the path
-    written, or None if the path was rejected."""
+    written, or None if the path was rejected.
+
+    Reconstructed paths (see protected_paths) are refused unless
+    `allow_protected` is set — the last line of defence behind the callers'
+    own checks."""
     dest = archive_path_for(api_path)
     if dest is None:
+        return None
+    if not allow_protected and is_protected_path(api_path):
+        sys.stderr.write(protected_notice(api_path) + "\n")
         return None
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     tmp = dest + ".tmp"

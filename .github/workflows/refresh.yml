@@ -56,10 +56,29 @@ jobs:
         if: always()
         run: cat public/archive/refresh-state.json || echo "(no state file written)"
 
-      # Commit whatever was fetched, even if some requests failed, so partial
-      # progress is never lost.
-      - name: Commit changed data
+      # The 2024-25 Finals schedules are reconstructed from ECNL's recaps
+      # (README, "Reconstructed data"). Prove nothing overwrote them before
+      # anything is committed.
+      #
+      # The trade-off, stated plainly: a failing check blocks the data commit
+      # below BY DESIGN, so a broken reconstruction can never be published -
+      # and therefore a check failure for ANY reason (a missing reference file,
+      # a bug in reconstruct.py, a runner problem) pauses data updates until
+      # someone looks at this job. The check compares against one pinned,
+      # past-season archive file, never the live API's shape, so a TGS field
+      # change cannot trip it.
+      - name: Check reconstructed data
+        id: check
         if: always()
+        run: python reconstruct.py --check
+
+      # Commit whatever was fetched, even if some requests failed, so partial
+      # progress is never lost — unless the reconstructed data failed its check:
+      # then nothing is committed and the site keeps serving the previous data
+      # until the check is green again. Safe by construction, silent by nature -
+      # a red run here is the only signal.
+      - name: Commit changed data
+        if: always() && steps.check.outcome == 'success'
         run: |
           if [ -z "$(git status --porcelain)" ]; then
             echo "No data changed; nothing to commit."
