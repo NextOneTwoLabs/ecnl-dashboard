@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2023-06-24,08:00 AM,Group Play,Placer United ECNL G07,2,2,Ohio Elite Soccer Academy ECNL G07,Surf Sports Park,Field #01,On Time,461204
+2023-06-24,08:00 AM,Group Play,Michigan Hawks Magic ECNL G07,0,0,FC Stars White ECNL G07,Surf Sports Park,Field #02,On Time,461205
+2023-06-24,08:00 AM,Group Play,Alabama FC ECNL G07,1,2,SLSG Green ECNL G07,Surf Sports Park,Field #03,On Time,461206
+2023-06-24,08:00 AM,Group Play,Albion Hurricanes FC ECNL G07,3,1,LA Breakers FC ECNL G07,Surf Sports Park,Field #04,On Time,461207
+2023-06-24,03:20 PM,Group Play,Utah Royals FC-AZ ECNL G07,4,1,Charlotte Independence ECNL G07,Surf Sports Park,Field #02,On Time,461235
+2023-06-24,03:20 PM,Group Play,FC Prime ECNL G07,0,1,De Anza Force ECNL G07,Surf Sports Park,Field #04,On Time,461237
+2023-06-24,04:05 PM,Group Play,So Cal Blues ECNL G07,2,1,Northwest Elite FC ECNL G07,Surf Sports Park,Field B,On Time,461247
+2023-06-24,04:05 PM,Group Play,Bethesda SC ECNL G07,3,2,FC Pride Elite ECNL G07,Surf Sports Park,Field C,On Time,461248
+2023-06-26,09:50 AM,Bracket,Placer United ECNL G07,1,1,FC Pride Elite ECNL G07,Surf Sports Park,Field #05,On Time,460245
+2023-06-26,09:50 AM,Bracket,Northwest Elite FC ECNL G07,0,5,LA Breakers FC ECNL G07,Surf Sports Park,Field #08,On Time,460246
+2023-06-26,10:20 AM,Bracket,Charlotte Independence ECNL G07,1,1,FC Prime ECNL G07,Surf Sports Park,Field #16,On Time,460247
+2023-06-26,10:20 AM,Bracket,Michigan Hawks Magic ECNL G07,1,1,Alabama FC ECNL G07,Surf Sports Park,Field #15,On Time,460248
+2023-06-26,01:30 PM,Bracket,Ohio Elite Soccer Academy ECNL G07,1,0,Bethesda SC ECNL G07,Surf Sports Park,Field #03,On Time,460238
+2023-06-26,01:30 PM,Bracket,So Cal Blues ECNL G07,0,0,Albion Hurricanes FC ECNL G07,Surf Sports Park,Field #04,On Time,460239
+2023-06-26,01:30 PM,Bracket,Utah Royals FC-AZ ECNL G07,2,0,De Anza Force ECNL G07,Surf Sports Park,Field #05,On Time,460240
+2023-06-26,01:30 PM,Bracket,FC Stars White ECNL G07,3,0,SLSG Green ECNL G07,Surf Sports Park,Field #06,On Time,460241
+2023-06-27,09:50 AM,Bracket,Placer United ECNL G07,2,3,LA Breakers FC ECNL G07,Surf Sports Park,Field #02,On Time,460249
+2023-06-27,09:50 AM,Bracket,Bethesda SC ECNL G07,1,2,Albion Hurricanes FC ECNL G07,Surf Sports Park,Field #03,On Time,460251
+2023-06-27,09:50 AM,Bracket,De Anza Force ECNL G07,0,1,SLSG Green ECNL G07,Surf Sports Park,Field #01,On Time,460252
+2023-06-27,10:20 AM,Bracket,FC Prime ECNL G07,2,3,Alabama FC ECNL G07,Surf Sports Park,Field C,On Time,460250
+2023-06-27,10:20 AM,Bracket,FC Pride Elite ECNL G07,2,1,Northwest Elite FC ECNL G07,Surf Sports Park,Field B,On Time,460253
+2023-06-27,10:20 AM,Bracket,Charlotte Independence ECNL G07,5,1,Michigan Hawks Magic ECNL G07,Surf Sports Park,Field D,On Time,460254
+2023-06-27,03:20 PM,Bracket,Ohio Elite Soccer Academy ECNL G07,3,3,So Cal Blues ECNL G07,Surf Sports Park,Field #08,On Time,460242
+2023-06-27,03:20 PM,Bracket,Utah Royals FC-AZ ECNL G07,1,1,FC Stars White ECNL G07,Surf Sports Park,Field #06,On Time,460243
+2023-06-29,12:00 PM,Bracket,Ohio Elite Soccer Academy ECNL G07,1,3,Utah Royals FC-AZ ECNL G07,Surf Sports Park,Field #10,On Time,460244

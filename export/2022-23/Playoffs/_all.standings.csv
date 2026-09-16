@@ -1,0 +1,221 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd,division,flight
+1,SLSG Navy ECNL G06,St. Louis Scott Gallagher,20075,3,3,0,0,9,3.0,12,1,11,G2006,Champions League
+2,Colorado Rapids ECNL G06,Colorado Storm,21349,3,3,0,0,9,3.0,12,1,11,G2006,Champions League
+3,Solar SC ECNL G06,Solar SC,11423,3,3,0,0,9,3.0,11,1,10,G2006,Champions League
+4,San Diego Surf ECNL G06,San Diego Surf Soccer Club,45877,3,3,0,0,9,3.0,10,1,9,G2006,Champions League
+5,VDA ECNL G06,Virginia Development Academy,14649,3,3,0,0,9,3.0,12,4,8,G2006,Champions League
+6,Charlotte SA ECNL G06,Charlotte Soccer Academy,44723,3,3,0,0,9,3.0,7,1,6,G2006,Champions League
+7,SLAMMERS FC ECNL G06,Slammers FC,9292,3,3,0,0,9,3.0,9,4,5,G2006,Champions League
+8,Connecticut FC ECNL G06,Connecticut FC,11478,3,3,0,0,9,3.0,6,1,5,G2006,Champions League
+9,Internationals SC ECNL G06,Internationals SC,20363,3,2,0,1,7,2.33,12,3,9,G2006,Champions League
+10,PDA Blue ECNL G06,PDA Blue (North),1822,3,2,0,1,7,2.33,8,2,6,G2006,Champions League
+11,Mustang SC ECNL G06,Mustang Soccer,13301,3,2,0,1,7,2.33,4,2,2,G2006,Champions League
+12,So Cal Blues ECNL G06,So Cal Blues,13344,3,2,1,0,6,2.0,9,2,7,G2006,Champions League
+13,NC Courage ECNL G06,NC Courage Academy,44730,3,2,1,0,6,2.0,10,4,6,G2006,Champions League
+14,FC Dallas ECNL G06,FC Dallas Youth,46784,3,2,1,0,6,2.0,7,1,6,G2006,Champions League
+15,MVLA ECNL G06,MVLA,20426,3,2,1,0,6,2.0,6,1,5,G2006,Champions League
+16,Portland Thorns ECNL G06,Portland Thorns FC,45861,3,2,1,0,6,2.0,6,2,4,G2006,Champions League
+17,United Futbol Academy ECNL G06,United Futbol Academy,45836,3,2,1,0,6,2.0,6,4,2,G2006,Champions League
+18,World Class FC ECNL G06,World Class FC,20357,3,2,1,0,6,2.0,5,5,0,G2006,Champions League
+19,La Roca FC ECNL G06,La Roca FC,45850,3,2,1,0,6,2.0,6,7,-1,G2006,Champions League
+20,Slammers FC HB Koge ECNL G06,Slammers FC HB Koge,17118,3,1,1,1,4,1.33,7,6,1,G2006,Champions League
+21,NC Fusion ECNL G06,NC Fusion,20316,3,1,1,1,4,1.33,9,9,0,G2006,Champions League
+22,Legends FC ECNL G06,Legends FC (CA),4624,3,1,1,1,4,1.33,5,6,-1,G2006,Champions League
+23,WNY Flash ECNL G06,WNY Flash Academy,20373,3,1,1,1,4,1.33,6,9,-3,G2006,Champions League
+24,Tennessee Soccer Club ECNL G06,Tennessee SC,20371,3,1,2,0,3,1.0,6,7,-1,G2006,Champions League
+25,FC Prime ECNL G06,Athletic Club Florida,20328,3,1,2,0,3,1.0,3,6,-3,G2006,Champions League
+26,San Juan SC ECNL G06,San Juan Soccer Club,20430,3,1,2,0,3,1.0,2,5,-3,G2006,Champions League
+27,Eclipse Select SC ECNL G06,Eclipse Select Soccer Club,20375,3,1,2,0,3,1.0,7,11,-4,G2006,Champions League
+28,Concorde Fire Platinum ECNL G06,Concorde Fire ,19885,3,1,2,0,3,1.0,4,8,-4,G2006,Champions League
+29,Challenge SC ECNL G06,Challenge SC,20382,3,1,2,0,3,1.0,3,7,-4,G2006,Champions League
+30,Minnesota Thunder ECNL G06,No Club Selection,20378,3,1,2,0,3,1.0,2,7,-5,G2006,Champions League
+31,Penn Fusion SA ECNL G06,Penn Fusion Soccer Academy,44735,3,1,2,0,3,1.0,2,7,-5,G2006,Champions League
+32,Sporting Blue Valley ECNL G06,Sporting Blue Valley,46619,3,1,2,0,3,1.0,5,11,-6,G2006,Champions League
+33,DKSC ECNL G06,No Club Selection,19628,3,1,2,0,3,1.0,2,9,-7,G2006,Champions League
+34,Real Colorado National ECNL G06,Real Colorado,45855,3,0,2,1,1,0.33,2,4,-2,G2006,Champions League
+35,GSA ECNL G06,Gwinnett Soccer Academy,20326,3,0,2,1,1,0.33,6,9,-3,G2006,Champions League
+36,Beach FC ECNL G06,Beach Futbol Club,46286,3,0,2,1,1,0.33,4,7,-3,G2006,Champions League
+37,Bethesda SC ECNL G06,Bethesda SC,20341,3,0,2,1,1,0.33,4,10,-6,G2006,Champions League
+38,VA Union ECNL G06,Fairfax Virginia Union,20314,3,0,2,1,1,0.33,1,10,-9,G2006,Champions League
+39,Michigan Hawks ECNL G06,Michigan Hawks,19884,3,0,3,0,0,0.0,3,7,-4,G2006,Champions League
+40,FC Stars Blue ECNL G06,FC Stars,19892,3,0,3,0,0,0.0,3,8,-5,G2006,Champions League
+41,Crossfire Premier ECNL G06,Crossfire Premier,13932,3,0,3,0,0,0.0,0,5,-5,G2006,Champions League
+42,Tampa Bay United ECNL G06,Tampa Bay United,20339,3,0,3,0,0,0.0,3,12,-9,G2006,Champions League
+43,CESA Liberty ECNL G06,Carolina Elite Soccer Academy,11339,3,0,3,0,0,0.0,0,9,-9,G2006,Champions League
+44,Indiana Fire ECNL G06,Indy Eleven Academy,20361,3,0,3,0,0,0.0,2,13,-11,G2006,Champions League
+1,Solar SC ECNL G07,Solar SC,20122,3,3,0,0,9,3.0,14,3,11,G2007,Champions League
+2,San Diego Surf ECNL G07,San Diego Surf Soccer Club,45876,3,3,0,0,9,3.0,9,1,8,G2007,Champions League
+3,World Class FC ECNL G07,World Class FC,35284,3,3,0,0,9,3.0,10,3,7,G2007,Champions League
+4,Slammers FC HB Koge ECNL G07,Slammers FC HB Koge,8995,3,3,0,0,9,3.0,8,1,7,G2007,Champions League
+5,DKSC ECNL G07,No Club Selection,35219,3,3,0,0,9,3.0,8,2,6,G2007,Champions League
+6,SUSA FC ECNL G07,SUSA FC,33738,3,2,0,1,7,2.33,9,3,6,G2007,Champions League
+7,Legends FC ECNL G07,Legends FC (CA),28540,3,2,0,1,7,2.33,7,1,6,G2007,Champions League
+8,OK Energy FC ECNL G07,Oklahoma Energy FC,59504,3,2,0,1,7,2.33,9,5,4,G2007,Champions League
+9,United Futbol Academy ECNL G07,United Futbol Academy,45835,3,2,0,1,7,2.33,7,3,4,G2007,Champions League
+10,PDA Blue ECNL G07,PDA Blue (North),1967,3,2,1,0,6,2.0,11,3,8,G2007,Champions League
+11,Internationals SC ECNL G07,Internationals SC,35240,3,2,1,0,6,2.0,12,7,5,G2007,Champions League
+12,MVLA ECNL G07,MVLA,35169,3,2,1,0,6,2.0,9,4,5,G2007,Champions League
+13,Crossfire Premier ECNL G07,No Club Selection,26840,3,2,1,0,6,2.0,8,6,2,G2007,Champions League
+14,Bay Area Surf ECNL G07,Bay Area Surf,65152,3,2,1,0,6,2.0,5,4,1,G2007,Champions League
+15,Phoenix Rising ECNL G07,Phoenix Rising FC,35183,3,2,1,0,6,2.0,5,4,1,G2007,Champions League
+16,SLAMMERS FC ECNL G07,Slammers FC,18022,3,1,0,2,5,1.67,7,2,5,G2007,Champions League
+17,Concorde Fire Platinum ECNL G07,Concorde Fire ,35256,3,1,0,2,5,1.67,4,3,1,G2007,Champions League
+18,Penn Fusion SA ECNL G07,No Club Selection,44736,3,1,0,2,5,1.67,2,1,1,G2007,Champions League
+19,Indiana Fire ECNL G07,Indy Eleven Academy,23407,3,1,1,1,4,1.33,7,3,4,G2007,Champions League
+20,Michigan Hawks  ECNL G07,Michigan Hawks,35251,3,1,1,1,4,1.33,6,3,3,G2007,Champions League
+21,Jacksonville FC ECNL G07,No Club Selection,35265,3,1,1,1,4,1.33,4,4,0,G2007,Champions League
+22,Wilmington Hammerheads ECNL G07,No Club Selection,35272,3,1,1,1,4,1.33,4,5,-1,G2007,Champions League
+23,Beach FC ECNL G07,Beach Futbol Club,46284,3,1,1,1,4,1.33,6,8,-2,G2007,Champions League
+24,GSA ECNL G07,Gwinnett Soccer Academy,33371,3,1,1,1,4,1.33,3,5,-2,G2007,Champions League
+25,Tennessee Soccer Club ECNL G07,Tennessee SC,35277,3,1,1,1,4,1.33,1,5,-4,G2007,Champions League
+26,Loudoun Soccer ECNL G07,Northern Virginia Alliance,35287,3,1,2,0,3,1.0,5,5,0,G2007,Champions League
+27,Ohio Premier ECNL G07,Ohio Premier,33377,3,1,2,0,3,1.0,4,4,0,G2007,Champions League
+28,VA Union ECNL G07,Fairfax Virginia Union,25892,3,1,2,0,3,1.0,6,7,-1,G2007,Champions League
+29,San Juan SC ECNL G07,San Juan Soccer Club,35173,3,1,2,0,3,1.0,3,6,-3,G2007,Champions League
+30,Minnesota Thunder ECNL G07,No Club Selection,35253,3,1,2,0,3,1.0,3,6,-3,G2007,Champions League
+31,Match Fit Academy ECNL G07,Match Fit Surf,34504,3,1,2,0,3,1.0,2,7,-5,G2007,Champions League
+32,Atlanta Fire United ECNL G07,Atlanta Fire United,34662,3,1,2,0,3,1.0,3,9,-6,G2007,Champions League
+33,Portland Thorns ECNL G07,Portland Thorns FC,45860,3,1,2,0,3,1.0,5,15,-10,G2007,Champions League
+34,FC Dallas ECNL G07,FC Dallas Youth,46783,3,0,1,2,2,0.67,1,2,-1,G2007,Champions League
+35,Sporting Blue Valley ECNL G07,Sporting Blue Valley,46618,3,0,2,1,1,0.33,6,8,-2,G2007,Champions League
+36,Utah Avalanche ECNL G07,Utah Avalanche,35178,3,0,2,1,1,0.33,3,7,-4,G2007,Champions League
+37,Seattle United ECNL G07,Seattle United,35177,3,0,2,1,1,0.33,3,7,-4,G2007,Champions League
+38,FL Premier FC ECNL G07,Florida Premier FC,69290,3,0,2,1,1,0.33,2,6,-4,G2007,Champions League
+39,SLSG Navy ECNL G07,St. Louis Scott Gallagher,34464,3,0,2,1,1,0.33,4,9,-5,G2007,Champions League
+40,NC Courage ECNL G07,NC Courage Academy,44729,3,0,2,1,1,0.33,4,9,-5,G2007,Champions League
+41,Kansas City Athletics ECNL G07,KC Athletics,19372,3,0,2,1,1,0.33,3,8,-5,G2007,Champions League
+42,La Roca FC ECNL G07,La Roca FC,45849,3,0,3,0,0,0.0,2,10,-8,G2007,Champions League
+43,Connecticut FC ECNL G07,Connecticut FC,24089,3,0,3,0,0,0.0,1,9,-8,G2007,Champions League
+44,Charlotte SA ECNL G07,Charlotte Soccer Academy,44722,3,0,3,0,0,0.0,0,12,-12,G2007,Champions League
+1,Slammers FC HB Koge ECNL G08,Slammers FC HB Koge,29720,3,3,0,0,9,3.0,15,1,14,G2008,Champions League
+2,San Diego Surf ECNL G08,San Diego Surf Soccer Club,45875,3,3,0,0,9,3.0,16,3,13,G2008,Champions League
+3,Penn Fusion SA ECNL G08,Penn Fusion Soccer Academy,44737,3,3,0,0,9,3.0,15,5,10,G2008,Champions League
+4,Real Colorado National ECNL G08,Real Colorado,45853,3,3,0,0,9,3.0,9,0,9,G2008,Champions League
+5,Sting Dallas Black ECNL G08,Sting Soccer Club,11429,3,3,0,0,9,3.0,10,2,8,G2008,Champions League
+6,So Cal Blues ECNL G08,So Cal Blues,29588,3,3,0,0,9,3.0,9,2,7,G2008,Champions League
+7,Beach FC ECNL G08,Beach Futbol Club,60045,3,3,0,0,9,3.0,8,1,7,G2008,Champions League
+8,Legends FC ECNL G08,Legends FC (CA),8362,3,3,0,0,9,3.0,5,0,5,G2008,Champions League
+9,Crossfire Premier ECNL G08,No Club Selection,21818,3,2,0,1,7,2.33,12,2,10,G2008,Champions League
+10,Michigan Hawks ECNL G08,Michigan Hawks,46771,3,2,0,1,7,2.33,9,2,7,G2008,Champions League
+11,FC Dallas ECNL G08,FC Dallas Youth,46900,3,2,0,1,7,2.33,5,2,3,G2008,Champions League
+12,NC Courage ECNL G08,NC Courage Academy,44728,3,2,1,0,6,2.0,8,3,5,G2008,Champions League
+13,Eclipse Select SC ECNL G08,Eclipse Select Soccer Club,46760,3,2,1,0,6,2.0,6,4,2,G2008,Champions League
+14,CESA Liberty ECNL G08,Carolina Elite Soccer Academy,27972,3,2,1,0,6,2.0,6,5,1,G2008,Champions League
+15,Solar SC ECNL G08,Solar SC,46791,3,2,1,0,6,2.0,4,3,1,G2008,Champions League
+16,De Anza Force ECNL G08,Force,45841,3,2,1,0,6,2.0,4,4,0,G2008,Champions League
+17,Sporting Blue Valley ECNL G08,Sporting Blue Valley,46617,3,2,1,0,6,2.0,7,8,-1,G2008,Champions League
+18,MVLA ECNL G08,MVLA,30872,3,2,1,0,6,2.0,4,5,-1,G2008,Champions League
+19,PDA Blue ECNL G08,PDA Blue (North),3701,3,1,0,2,5,1.67,3,2,1,G2008,Champions League
+20,SLSG Navy ECNL G08,St. Louis Scott Gallagher,46768,3,1,1,1,4,1.33,6,3,3,G2008,Champions League
+21,Kings Hammer SC ECNL G08, Kings Hammer Columbus,47017,3,1,1,1,4,1.33,5,5,0,G2008,Champions League
+22,Eagles SC ECNL G08,Eagles SC,6122,3,1,1,1,4,1.33,5,6,-1,G2008,Champions League
+23,Ohio Premier ECNL G08,Ohio Premier,46800,3,1,1,1,4,1.33,5,7,-2,G2008,Champions League
+24,Concorde Fire Premier ECNL G08,Concorde Fire ,46809,3,1,1,1,4,1.33,5,7,-2,G2008,Champions League
+25,Wilmington Hammerheads ECNL G08,Wilmington Hammerheads,46818,3,1,2,0,3,1.0,8,6,2,G2008,Champions League
+26,Bethesda SC ECNL G08,Bethesda SC,46815,3,1,2,0,3,1.0,5,7,-2,G2008,Champions League
+27,Kansas City Athletics ECNL G08,KC Athletics,19672,3,1,2,0,3,1.0,4,7,-3,G2008,Champions League
+28,Colorado Rapids ECNL G08,Colorado Storm,46752,3,1,2,0,3,1.0,3,6,-3,G2008,Champions League
+29,SUSA FC ECNL G08,SUSA FC,14509,3,1,2,0,3,1.0,4,9,-5,G2008,Champions League
+30,Richmond United ECNL G08,Richmond United,46822,3,0,2,1,1,0.33,4,6,-2,G2008,Champions League
+31,Sting Austin ECNL G08,Sting Austin,46779,3,0,2,1,1,0.33,4,6,-2,G2008,Champions League
+32,Arlington Soccer ECNL G08,Arlington Soccer Association,59916,3,0,2,1,1,0.33,5,8,-3,G2008,Champions League
+33,San Juan SC ECNL G08,No Club Selection,39174,3,0,2,1,1,0.33,5,8,-3,G2008,Champions League
+34,Tennessee Soccer Club ECNL G08,Tennessee SC,46804,3,0,2,1,1,0.33,1,4,-3,G2008,Champions League
+35,Connecticut FC ECNL G08,Connecticut FC,46829,3,0,2,1,1,0.33,4,8,-4,G2008,Champions League
+36,Loudoun Soccer ECNL G08,Northern Virginia Alliance,46824,3,0,2,1,1,0.33,1,6,-5,G2008,Champions League
+37,Real Colorado Athletico ECNL G08,Real Colorado,46443,3,0,2,1,1,0.33,3,9,-6,G2008,Champions League
+38,Eastside FC ECNL G08,Eastside FC (WA),46753,3,0,2,1,1,0.33,4,11,-7,G2008,Champions League
+39,Indiana Fire ECNL G08,Indy Eleven Academy,46796,3,0,2,1,1,0.33,3,10,-7,G2008,Champions League
+40,GSA ECNL G08,Gwinnett Soccer Academy,46812,3,0,2,1,1,0.33,0,9,-9,G2008,Champions League
+41,Concorde Fire Platinum ECNL G08,Concorde Fire ,46806,3,0,2,1,1,0.33,5,16,-11,G2008,Champions League
+42,FC Stars Blue ECNL G08,FC Stars,35278,3,0,3,0,0,0.0,2,7,-5,G2008,Champions League
+43,Alabama FC ECNL G08,Alabama FC,46807,3,0,3,0,0,0.0,2,10,-8,G2008,Champions League
+44,Tampa Bay United ECNL G08,Tampa Bay United,36328,3,0,3,0,0,0.0,3,16,-13,G2008,Champions League
+1,PDA Blue ECNL G09,PDA Blue (North),13678,3,3,0,0,9,3.0,14,0,14,G2009,Champions League
+2,So Cal Blues ECNL G09,So Cal Blues,60035,3,3,0,0,9,3.0,13,3,10,G2009,Champions League
+3,Real Colorado National ECNL G09,Real Colorado,58631,3,3,0,0,9,3.0,11,1,10,G2009,Champions League
+4,San Diego Surf ECNL G09,San Diego Surf Soccer Club,61178,3,3,0,0,9,3.0,10,0,10,G2009,Champions League
+5,MVLA ECNL G09,MVLA,33438,3,3,0,0,9,3.0,12,3,9,G2009,Champions League
+6,Legends FC ECNL G09,Legends FC (CA),10361,3,3,0,0,9,3.0,9,1,8,G2009,Champions League
+7,San Juan SC ECNL G09,San Juan Soccer Club,31488,3,2,0,1,7,2.33,11,2,9,G2009,Champions League
+8,Richmond United ECNL G09,Richmond United,59426,3,2,0,1,7,2.33,9,3,6,G2009,Champions League
+9,VDA ECNL G09,Virginia Development Academy,59474,3,2,0,1,7,2.33,9,4,5,G2009,Champions League
+10,Slammers FC HB Koge ECNL G09,Slammers FC HB Koge,54921,3,2,0,1,7,2.33,4,0,4,G2009,Champions League
+11,Crossfire Premier ECNL G09,Crossfire Premier,60436,3,2,0,1,7,2.33,7,4,3,G2009,Champions League
+12,Seattle United ECNL G09,Seattle United,56728,3,2,0,1,7,2.33,6,4,2,G2009,Champions League
+13,DKSC ECNL G09,DKSC,47082,3,2,0,1,7,2.33,5,3,2,G2009,Champions League
+14,United Futbol Academy ECNL G09,United Futbol Academy,59536,3,2,1,0,6,2.0,13,4,9,G2009,Champions League
+15,Kansas City Athletics ECNL G09,KC Athletics,33175,3,2,1,0,6,2.0,6,2,4,G2009,Champions League
+16,Solar SC ECNL G09,Solar SC,59562,3,2,1,0,6,2.0,6,2,4,G2009,Champions League
+17,Eclipse Select SC ECNL G09,Eclipse Select Soccer Club,59906,3,2,1,0,6,2.0,11,8,3,G2009,Champions League
+18,Beach FC ECNL G09,Beach Futbol Club,60046,3,2,1,0,6,2.0,4,2,2,G2009,Champions League
+19,Concorde Fire Platinum ECNL G09,Concorde Fire ,59255,3,2,1,0,6,2.0,7,6,1,G2009,Champions League
+20,Ohio Premier ECNL G09,Ohio Premier,60137,3,2,1,0,6,2.0,3,2,1,G2009,Champions League
+21,SUSA FC ECNL G09,SUSA FC,46963,3,1,0,2,5,1.67,3,2,1,G2009,Champions League
+22,Match Fit Academy ECNL G09,Match Fit Surf,46947,3,1,1,1,4,1.33,7,4,3,G2009,Champions League
+23,SLSG Navy ECNL G09,St. Louis Scott Gallagher,54343,3,1,1,1,4,1.33,5,4,1,G2009,Champions League
+24,FC Stars Blue ECNL G09,FC Stars,36636,3,1,1,1,4,1.33,3,2,1,G2009,Champions League
+25,Eagles SC ECNL G09,Eagles SC,5544,3,0,0,3,3,1.0,4,4,0,G2009,Champions League
+26,Alabama FC ECNL G09,Alabama FC,58734,3,1,2,0,3,1.0,6,8,-2,G2009,Champions League
+27,Bay Area Surf ECNL G09,Bay Area Surf,69035,3,1,2,0,3,1.0,7,10,-3,G2009,Champions League
+28,FC Dallas ECNL G09,FC Dallas Youth,58541,3,1,2,0,3,1.0,5,8,-3,G2009,Champions League
+29,Albion Hurricanes FC ECNL G09,Albion Hurricanes FC,59340,3,1,2,0,3,1.0,2,10,-8,G2009,Champions League
+30,Internationals SC ECNL G09,Internationals SC,47003,3,1,2,0,3,1.0,3,13,-10,G2009,Champions League
+31,Portland Thorns ECNL G09,Portland Thorns FC,59582,3,0,2,1,1,0.33,6,9,-3,G2009,Champions League
+32,Sporting Blue Valley ECNL G09,Sporting Blue Valley,60884,3,0,2,1,1,0.33,2,7,-5,G2009,Champions League
+33,Arlington Soccer ECNL G09,Arlington Soccer Association,59915,3,0,2,1,1,0.33,1,7,-6,G2009,Champions League
+34,CESA Liberty ECNL G09,Carolina Elite Soccer Academy,46817,3,0,2,1,1,0.33,0,7,-7,G2009,Champions League
+35,Michigan Hawks ECNL G09,Michigan Hawks,50646,3,0,2,1,1,0.33,0,7,-7,G2009,Champions League
+36,Charlotte SA ECNL G09,Charlotte Soccer Academy,59885,3,0,2,1,1,0.33,4,13,-9,G2009,Champions League
+37,Utah Avalanche 09 ECNL,Utah Avalanche,58149,3,0,2,1,1,0.33,2,11,-9,G2009,Champions League
+38,Loudoun Soccer ECNL G09,Northern Virginia Alliance,54842,3,0,3,0,0,0.0,3,7,-4,G2009,Champions League
+39,GSA ECNL G09,Gwinnett Soccer Academy,59311,3,0,3,0,0,0.0,2,6,-4,G2009,Champions League
+40,FSA FC ECNL G09,FSA FC,46953,3,0,3,0,0,0.0,5,10,-5,G2009,Champions League
+41,FC Prime ECNL G09,Athletic Club Florida,46728,3,0,3,0,0,0.0,4,9,-5,G2009,Champions League
+42,Tennessee Soccer Club ECNL G09,Tennessee SC,47036,3,0,3,0,0,0.0,1,9,-8,G2009,Champions League
+43,FC Bucks ECNL G09,HEX FC,46941,3,0,3,0,0,0.0,3,14,-11,G2009,Champions League
+44,Racing Louisville Academy ECNL G09,Racing Louisville Academy,59527,3,0,3,0,0,0.0,0,13,-13,G2009,Champions League
+1,So Cal Blues ECNL G10,So Cal Blues,69520,3,3,0,0,9,3.0,13,1,12,G2010,Champions League
+2,MVLA ECNL G10,MVLA,33633,3,3,0,0,9,3.0,14,4,10,G2010,Champions League
+3,Slammers FC HB Koge ECNL G10,Slammers FC HB Koge,64905,3,3,0,0,9,3.0,10,1,9,G2010,Champions League
+4,SUSA FC ECNL G10,SUSA FC,59680,3,3,0,0,9,3.0,7,1,6,G2010,Champions League
+5,FC Dallas ECNL G10,FC Dallas Youth,46266,3,3,0,0,9,3.0,7,2,5,G2010,Champions League
+6,Eclipse Select SC ECNL G10,Eclipse Select Soccer Club,69955,3,3,0,0,9,3.0,5,0,5,G2010,Champions League
+7,Indiana Fire ECNL G10,Indy Eleven Academy,46996,3,2,0,1,7,2.33,7,2,5,G2010,Champions League
+8,Eagles SC ECNL G10,Eagles SC,62045,3,2,0,1,7,2.33,7,2,5,G2010,Champions League
+9,DKSC ECNL G10,DKSC,68923,3,2,0,1,7,2.33,8,5,3,G2010,Champions League
+10,Beach FC ECNL G10,Beach Futbol Club,18443,3,2,0,1,7,2.33,7,4,3,G2010,Champions League
+11,San Diego Surf ECNL G10,San Diego Surf Soccer Club,62104,3,2,1,0,6,2.0,12,5,7,G2010,Champions League
+12,Real Colorado National ECNL G10,Real Colorado,69251,3,2,1,0,6,2.0,9,2,7,G2010,Champions League
+13,World Class FC ECNL G10,World Class FC,14328,3,2,1,0,6,2.0,12,7,5,G2010,Champions League
+14,Penn Fusion SA ECNL G10,Penn Fusion Soccer Academy,59666,3,2,1,0,6,2.0,10,5,5,G2010,Champions League
+15,FL Premier FC ECNL G10,Florida Premier FC,69293,3,2,1,0,6,2.0,7,3,4,G2010,Champions League
+16,Dallas Texans ECNL G10,Dallas Texans,69269,3,2,1,0,6,2.0,7,4,3,G2010,Champions League
+17,Bethesda SC ECNL G10,Bethesda SC,60101,3,2,1,0,6,2.0,6,4,2,G2010,Champions League
+18,Charlotte SA ECNL G10,Charlotte Soccer Academy,63697,3,2,1,0,6,2.0,6,5,1,G2010,Champions League
+19,GSA ECNL G10,Gwinnett Soccer Academy,68924,3,2,1,0,6,2.0,2,4,-2,G2010,Champions League
+20,Solar SC ECNL G10,Solar SC,66050,3,1,0,2,5,1.67,5,1,4,G2010,Champions League
+21,LAFC So Cal ECNL G10,LAFC So Cal,65560,3,1,1,1,4,1.33,4,4,0,G2010,Champions League
+22,FC Pride Elite ECNL G10,FC Pride,45767,3,1,1,1,4,1.33,2,2,0,G2010,Champions League
+23,WNY Flash ECNL G10,WNY Flash Academy,47037,3,1,1,1,4,1.33,10,11,-1,G2010,Champions League
+24,Concorde Fire Platinum ECNL G10,Concorde Fire ,68802,3,1,1,1,4,1.33,9,10,-1,G2010,Champions League
+25,United Futbol Academy ECNL G10,United Futbol Academy,65981,3,1,1,1,4,1.33,3,8,-5,G2010,Champions League
+26,Real Colorado Athletico ECNL G10,Real Colorado,69250,3,1,2,0,3,1.0,5,3,2,G2010,Champions League
+27,VA Union ECNL G10,Fairfax Virginia Union,69871,3,1,2,0,3,1.0,6,5,1,G2010,Champions League
+28,Mustang SC ECNL G10,Mustang Soccer,18712,3,1,2,0,3,1.0,2,3,-1,G2010,Champions League
+29,Internationals SC ECNL G10,Internationals SC,47002,3,1,2,0,3,1.0,8,10,-2,G2010,Champions League
+30,San Juan SC ECNL G10,San Juan Soccer Club,32669,3,1,2,0,3,1.0,5,7,-2,G2010,Champions League
+31,Arlington Soccer ECNL G10,Arlington Soccer Association,60688,3,1,2,0,3,1.0,2,6,-4,G2010,Champions League
+32,FC Prime ECNL G10,Athletic Club Florida,46727,3,1,2,0,3,1.0,2,7,-5,G2010,Champions League
+33,Eastside FC ECNL G10,Eastside FC (WA),69451,3,0,1,2,2,0.67,5,7,-2,G2010,Champions League
+34,SLSG Navy ECNL G10,St. Louis Scott Gallagher,68758,3,0,2,1,1,0.33,2,6,-4,G2010,Champions League
+35,Match Fit Academy ECNL G10,Match Fit Surf,21396,3,0,2,1,1,0.33,5,10,-5,G2010,Champions League
+36,FC Stars Blue ECNL G10,FC Stars,46955,3,0,2,1,1,0.33,0,5,-5,G2010,Champions League
+37,Seattle United ECNL G10,Seattle United,62229,3,0,2,1,1,0.33,0,5,-5,G2010,Champions League
+38,SLSG Green ECNL G10,St. Louis Scott Gallagher,68780,3,0,2,1,1,0.33,5,13,-8,G2010,Champions League
+39,VDA ECNL G10,Virginia Development Academy,19656,3,0,3,0,0,0.0,4,8,-4,G2010,Champions League
+40,Minnesota Thunder ECNL G10,Minnesota Thunder Academy,69526,3,0,3,0,0,0.0,2,8,-6,G2010,Champions League
+41,Michigan Hawks ECNL G10,Michigan Hawks,69108,3,0,3,0,0,0.0,1,8,-7,G2010,Champions League
+42,Fairfax BRAVE SC ECNL G10,Fairfax Virginia Union,68366,3,0,3,0,0,0.0,7,15,-8,G2010,Champions League
+43,Atlanta Fire United ECNL G10,Atlanta Fire United,67127,3,0,3,0,0,0.0,3,15,-12,G2010,Champions League
+44,Boise Thorns FC ECNL G10,Boise Timbers | Thorns,69320,3,0,3,0,0,0.0,0,15,-15,G2010,Champions League

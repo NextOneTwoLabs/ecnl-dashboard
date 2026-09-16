@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2023-06-24,09:50 AM,Group Play,Utah Avalanche ECNL G06,5,0,Atlanta Fire United ECNL G06,Surf Sports Park,Field #01,On Time,461298
+2023-06-24,09:50 AM,Group Play,OK Energy FC ECNL G06,6,2,Concorde Fire Premier ECNL G06,Surf Sports Park,Field #03,On Time,461300
+2023-06-24,10:05 AM,Group Play,East Meadow SC ECNL G06,0,0,SLSG Green ECNL G06,Surf Sports Park,Field D,On Time,461311
+2023-06-24,11:40 AM,Group Play,LA Breakers FC ECNL G06,2,0,Eastside FC ECNL G06,Surf Sports Park,Field #04,On Time,461314
+2023-06-24,01:30 PM,Group Play,Davis Legacy ECNL G06,3,1,Loudoun Soccer ECNL G06,Surf Sports Park,Field #01,On Time,461330
+2023-06-24,01:45 PM,Group Play,Maryland United FC ECNL G06,2,0,Classics Elite ECNL G06,Surf Sports Park,Field #18,On Time,461335
+2023-06-24,01:45 PM,Group Play,Kansas City Athletics ECNL G06,2,4,Richmond United ECNL G06,Surf Sports Park,Field A,On Time,461336
+2023-06-24,03:20 PM,Group Play,Ohio Premier ECNL G06,2,0,Rebels SC ECNL G06,Surf Sports Park,Field #05,On Time,461337
+2023-06-25,09:50 AM,Bracket,Eastside FC ECNL G06,1,2,Concorde Fire Premier ECNL G06,Surf Sports Park,Field #04,On Time,460046
+2023-06-25,09:50 AM,Bracket,Atlanta Fire United ECNL G06,2,0,Kansas City Athletics ECNL G06,Surf Sports Park,Field #05,On Time,460047
+2023-06-25,09:50 AM,Bracket,Classics Elite ECNL G06,1,0,Loudoun Soccer ECNL G06,Surf Sports Park,Field #08,On Time,460048
+2023-06-25,11:40 AM,Bracket,LA Breakers FC ECNL G06,0,2,OK Energy FC ECNL G06,Surf Sports Park,Field #06,On Time,460039
+2023-06-25,11:40 AM,Bracket,SLSG Green ECNL G06,1,1,Rebels SC ECNL G06,Surf Sports Park,Field #08,On Time,460049
+2023-06-25,03:20 PM,Bracket,Utah Avalanche ECNL G06,3,1,Richmond United ECNL G06,Surf Sports Park,Field #04,On Time,460040
+2023-06-25,03:20 PM,Bracket,Maryland United FC ECNL G06,1,0,Davis Legacy ECNL G06,Surf Sports Park,Field #05,On Time,460041
+2023-06-25,05:10 PM,Bracket,East Meadow SC ECNL G06,0,2,Ohio Premier ECNL G06,Surf Sports Park,Field #09,On Time,460042
+2023-06-27,08:30 AM,Bracket,Concorde Fire Premier ECNL G06,2,1,Atlanta Fire United ECNL G06,Surf Sports Park,Field #18,On Time,460050
+2023-06-27,08:30 AM,Bracket,LA Breakers FC ECNL G06,4,1,Richmond United ECNL G06,Surf Sports Park,Field #16,On Time,460052
+2023-06-27,08:30 AM,Bracket,Davis Legacy ECNL G06,1,4,East Meadow SC ECNL G06,Surf Sports Park,Field #17,On Time,460053
+2023-06-27,11:40 AM,Bracket,OK Energy FC ECNL G06,1,1,Utah Avalanche ECNL G06,Surf Sports Park,Field #08,On Time,460043
+2023-06-27,11:40 AM,Bracket,Maryland United FC ECNL G06,3,1,Ohio Premier ECNL G06,Surf Sports Park,Field #06,On Time,460044
+2023-06-27,11:40 AM,Bracket,Classics Elite ECNL G06,2,4,Rebels SC ECNL G06,Surf Sports Park,Field #04,On Time,460051
+2023-06-27,11:40 AM,Bracket,Eastside FC ECNL G06,4,0,Kansas City Athletics ECNL G06,Surf Sports Park,Field #03,On Time,460054
+2023-06-27,11:40 AM,Bracket,Loudoun Soccer ECNL G06,1,2,SLSG Green ECNL G06,Surf Sports Park,Field #05,On Time,460055
+2023-06-29,08:00 AM,Bracket,OK Energy FC ECNL G06,2,3,Maryland United FC ECNL G06,Surf Sports Park,Field #18,On Time,460045

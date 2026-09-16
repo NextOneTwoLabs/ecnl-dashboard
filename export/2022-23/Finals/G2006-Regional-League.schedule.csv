@@ -1,0 +1,10 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2023-07-14,12:00 PM,Bracket,FC Dallas RL G06,4,0,Legends FC RL G06,Striker Park,Field #07,On Time,463709
+2023-07-14,12:00 PM,Bracket,Charlotte SA White RL G06,2,4,Connecticut FC RL G06,Striker Park,Field #08,On Time,463711
+2023-07-14,02:00 PM,Bracket,Chicago Inter Soccer ECNL G06,3,0,Chargers Soccer Club RL G06,Striker Park,Field #03,On Time,463710
+2023-07-14,02:00 PM,Bracket,SLAMMERS FC RL G06,2,0,FC Dayton RL G06,Striker Park,Field #02,On Time,463712
+2023-07-15,12:00 PM,Bracket,FC Dallas RL G06,3,2,Chicago Inter Soccer ECNL G06,Striker Park,Field #07,On Time,463713
+2023-07-15,12:00 PM,Bracket,Connecticut FC RL G06,1,1,SLAMMERS FC RL G06,Striker Park,Field #08,On Time,463714
+2023-07-15,02:00 PM,Bracket,Legends FC RL G06,0,2,Chargers Soccer Club RL G06,Striker Park,Field #07,On Time,463716
+2023-07-15,02:00 PM,Bracket,Charlotte SA White RL G06,2,1,FC Dayton RL G06,Striker Park,Field #08,On Time,463717
+2023-07-17,08:45 AM,Bracket,FC Dallas RL G06,4,3,SLAMMERS FC RL G06,West Creek Complex,Field #02,On Time,463715

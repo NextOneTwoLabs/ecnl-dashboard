@@ -3159,6 +3159,15 @@
       return null;
     }
 
+    // The games a knockout tree is built from. A flight TGS publishes without standings
+    // has no group stage: every game is a knockout game whatever its type says (the 2022-23
+    // cup flights type day one "Group Play"). Keyed on the games: group games carry a
+    // flightgroupID, those cup games none, so a failed standings fetch cannot pull group games in.
+    function knockoutGames(games, blocks) {
+      const knockout = !blocks.length && games.some(g => g.type === 'Bracket');
+      return games.filter(g => g.type === 'Bracket' || (knockout && g.flightgroupID == null));
+    }
+
     function buildBrackets(games, flightName, tierName) {
       const sorted = [...games].sort((a, b) =>
         (a.gameDate || '').localeCompare(b.gameDate || '') ||
@@ -3421,7 +3430,7 @@
           getStandingsBlocks(division.divisionID, flight.flightID, evt.eventId).catch(() => []),
           getSchedule(evt.eventId, flight.flightID).catch(() => []),
         ]);
-        const bracketGames = games.filter(g => g.type === 'Bracket');
+        const bracketGames = knockoutGames(games, blocks);
         const brackets = bracketGames.length ? buildBrackets(bracketGames, flight.flightName, tierName) : null;
 
         // Header
@@ -3982,7 +3991,9 @@
               const ours = sched.filter(g => g.hometeamID === teamID || g.awayteamID === teamID);
               if (!ours.length) continue;
               const tier = tierLabel(evt, f.flightName);
-              const bracketGames = sched.filter(g => g.type === 'Bracket');
+              // Fetch everything first so the section appears in one piece.
+              const blocks = await getStandingsBlocks(nd.divisionID, f.flightID, evt.eventId).catch(() => []);
+              const bracketGames = knockoutGames(sched, blocks);
               const brackets = bracketGames.length ? buildBrackets(bracketGames, f.flightName, tier) : null;
               let outcome = '';
               if (brackets) {
@@ -3993,8 +4004,6 @@
                 const cup = brackets.list.find(b => b.path === 'L1');
                 if (cup && reached(cup).length) outcome += `${outcome ? ' · ' : ''}${cup.name}: ${reached(cup).slice(-1)[0]}`;
               }
-              // Fetch everything first so the section appears in one piece.
-              const blocks = await getStandingsBlocks(nd.divisionID, f.flightID, evt.eventId).catch(() => []);
               const myBlock = blocks.find(b => (b.teamStandings || []).some(t => t.teamID === teamID));
               const panel = document.createElement('div');
               panel.className = 'postseason-note';

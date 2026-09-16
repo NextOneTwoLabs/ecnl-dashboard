@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2023-06-24,09:50 AM,Group Play,SUSA FC ECNL G06,9,0,Orlando City ECNL G06,Surf Sports Park,Field #04,On Time,461301
+2023-06-24,10:05 AM,Group Play,FC Pride Elite ECNL G06,2,1,Arizona Arsenal ECNL G06,Surf Sports Park,Field A,On Time,461308
+2023-06-24,10:05 AM,Group Play,Sting Dallas Royal ECNL G06,3,1,Alabama FC ECNL G06,Surf Sports Park,Field B,On Time,461309
+2023-06-24,10:05 AM,Group Play,Albion Hurricanes FC ECNL G06,5,1,Arlington Soccer ECNL G06,Surf Sports Park,Field C,On Time,461310
+2023-06-24,12:25 PM,Group Play,LAFC So Cal ECNL G06,2,6,Gretna Elite Academy ECNL G06,Surf Sports Park,Field D,On Time,461329
+2023-06-24,01:30 PM,Group Play,Cleveland Force SC ECNL G06,3,0,Washington Premier ECNL G06,Surf Sports Park,Field #02,On Time,461331
+2023-06-24,01:30 PM,Group Play,Rockford Raptors ECNL G06,1,2,Northwest Elite FC ECNL G06,Surf Sports Park,Field #05,On Time,461332
+2023-06-24,01:30 PM,Group Play,Marin FC ECNL G06,1,0,FC DELCO ECNL G06,Surf Sports Park,Field #06,On Time,461333
+2023-06-25,10:20 AM,Bracket,Rockford Raptors ECNL G06,0,5,LAFC So Cal ECNL G06,Surf Sports Park,Field #16,On Time,460071
+2023-06-25,10:20 AM,Bracket,FC DELCO ECNL G06,8,0,Orlando City ECNL G06,Surf Sports Park,Field #17,On Time,460072
+2023-06-25,11:40 AM,Bracket,Arizona Arsenal ECNL G06,0,5,Arlington Soccer ECNL G06,Surf Sports Park,Field #10,On Time,460073
+2023-06-25,01:30 PM,Bracket,Northwest Elite FC ECNL G06,1,0,Gretna Elite Academy ECNL G06,Surf Sports Park,Field #10,On Time,460064
+2023-06-25,01:30 PM,Bracket,Alabama FC ECNL G06,0,2,Washington Premier ECNL G06,Surf Sports Park,Field #09,On Time,460074
+2023-06-25,03:20 PM,Bracket,Marin FC ECNL G06,0,1,SUSA FC ECNL G06,Surf Sports Park,Field #06,On Time,460065
+2023-06-25,03:20 PM,Bracket,FC Pride Elite ECNL G06,0,1,Albion Hurricanes FC ECNL G06,Surf Sports Park,Field #08,On Time,460066
+2023-06-25,03:20 PM,Bracket,Sting Dallas Royal ECNL G06,0,1,Cleveland Force SC ECNL G06,Surf Sports Park,Field #09,On Time,460067
+2023-06-27,08:00 AM,Bracket,Gretna Elite Academy ECNL G06,1,2,Marin FC ECNL G06,Surf Sports Park,Field #08,On Time,460077
+2023-06-27,09:50 AM,Bracket,LAFC So Cal ECNL G06,3,3,FC DELCO ECNL G06,Surf Sports Park,Field #05,On Time,460075
+2023-06-27,09:50 AM,Bracket,FC Pride Elite ECNL G06,1,1,Sting Dallas Royal ECNL G06,Surf Sports Park,Field #04,On Time,460078
+2023-06-27,10:20 AM,Bracket,Arlington Soccer ECNL G06,0,1,Washington Premier ECNL G06,Surf Sports Park,Field #14,On Time,460076
+2023-06-27,10:20 AM,Bracket,Rockford Raptors ECNL G06,3,1,Orlando City ECNL G06,Surf Sports Park,Field #18,On Time,460079
+2023-06-27,03:20 PM,Bracket,Arizona Arsenal ECNL G06,0,0,Alabama FC ECNL G06,Surf Sports Park,Field #01,On Time,460080
+2023-06-27,05:40 PM,Bracket,Northwest Elite FC ECNL G06,1,3,SUSA FC ECNL G06,Surf Sports Park,Field #12,On Time,460068
+2023-06-27,05:40 PM,Bracket,Albion Hurricanes FC ECNL G06,0,2,Cleveland Force SC ECNL G06,Surf Sports Park,Field #18,On Time,460069
+2023-06-29,10:00 AM,Bracket,SUSA FC ECNL G06,1,1,Cleveland Force SC ECNL G06,Surf Sports Park,Field #17,On Time,460070

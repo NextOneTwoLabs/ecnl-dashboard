@@ -1,0 +1,10 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2023-07-14,08:00 AM,Bracket,Solar SC ECNL G09,3,2,So Cal Blues ECNL G09,West Creek Complex,Field #06,On Time,463756
+2023-07-14,09:00 AM,Bracket,PDA Blue ECNL G09,3,0,San Juan SC ECNL G09,West Creek Complex,Field #05,On Time,463754
+2023-07-14,09:00 AM,Bracket,Slammers FC HB Koge ECNL G09,0,2,Richmond United ECNL G09,West Creek Complex,Field #08,On Time,463755
+2023-07-14,09:00 AM,Bracket,Legends FC ECNL G09,1,2,San Diego Surf ECNL G09,West Creek Complex,Field #07,On Time,463757
+2023-07-15,08:00 AM,Bracket,Solar SC ECNL G09,0,1,San Diego Surf ECNL G09,West Creek Complex,Field #06,On Time,463759
+2023-07-15,09:00 AM,Bracket,PDA Blue ECNL G09,1,0,Richmond United ECNL G09,West Creek Complex,Field #05,On Time,463758
+2023-07-15,09:00 AM,Bracket,San Juan SC ECNL G09,4,2,Slammers FC HB Koge ECNL G09,West Creek Complex,Field #07,On Time,463761
+2023-07-15,09:00 AM,Bracket,So Cal Blues ECNL G09,1,2,Legends FC ECNL G09,West Creek Complex,Field #08,On Time,463762
+2023-07-17,10:15 AM,Bracket,PDA Blue ECNL G09,2,1,San Diego Surf ECNL G09,West Creek Complex,Field #03,On Time,463760

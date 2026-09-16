@@ -523,7 +523,22 @@
           "eventName": "ECNL Girls Texas 2022-23"
         }
       },
-      "national": {},
+      "national": {
+        "Playoffs": {
+          "eventId": 2719,
+          "eventName": "ECNL National Playoffs",
+          "location": "Del Mar, CA",
+          "startDate": "2023-06-24",
+          "endDate": "2023-06-30"
+        },
+        "Finals": {
+          "eventId": 2720,
+          "eventName": "ECNL National Finals",
+          "location": "Richmond, VA",
+          "startDate": "2023-07-14",
+          "endDate": "2023-07-17"
+        }
+      },
       "ageGroups": {
         "G2005/2004": {
           "u": 18,

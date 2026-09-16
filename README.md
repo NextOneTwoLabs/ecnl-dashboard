@@ -119,7 +119,7 @@ season).
 ## National playoffs
 
 A season's post-season events live under `national` in `data/sources.json`, keyed
-by the stage name shown in the sidebar. 2023-24 and 2024-25 each had separate
+by the stage name shown in the sidebar. 2022-23, 2023-24 and 2024-25 each had separate
 `Playoffs` and `Finals` events; 2025-26 has one combined event, so its row reads
 `"Playoffs & Finals"` and the stage selector is hidden.
 
@@ -363,7 +363,7 @@ Endpoints used (all unauthenticated):
 | 2025-26 | 10          | birth year (`G2011`) | one               | ✅ event 4251 (combined Playoffs & Finals, U13–U17) | ↑ same event |
 | 2024-25 | 10          | birth year | one | ✅ event 3865 — U13/U14 group games and U13's round of 16 never published by TGS; U13 has group tables only, U14 its tables and round of 16 | ✅ event 3975 — reconstructed from ECNL's recaps |
 | 2023-24 | 10          | birth year | one | ✅ event 3064 | ✅ event 3238 |
-| 2022-23 | 10          | birth year | one | —        | —      |
+| 2022-23 | 10          | birth year | one | ✅ event 2719 | ✅ event 2720 |
 | 2021-22 | 9 (no NorCal) | age (`GU13`) | one | —      | —      |
 
 Age labels are computed relative to the season being viewed, so historical seasons
