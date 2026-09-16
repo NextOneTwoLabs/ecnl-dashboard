@@ -1,0 +1,73 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2020-12-12,03:00 PM,Bracket,World Class FC ECNL GU18/U19,1,0,SUSA FC ECNL GU18/U19,Orangetown Soccer Complex,Field 5,On Time,173332
+2021-03-06,08:30 AM,Bracket,Connecticut FC ECNL GU18/U19,3,4,East Meadow SC ECNL GU18/U19,CFC Park,Field 2,On Time,173339
+2021-03-06,12:30 PM,Bracket,FSA FC ECNL GU18/U19,2,1,World Class FC ECNL GU18/U19,FSA-Farmington Sports Arena,Field 8,On Time,173340
+2021-03-08,07:45 PM,Bracket,FC Stars Blue ECNL GU18/U19,5,0,FC Stars White ECNL GU18/U19,FC Stars Complex,Field 1,On Time,173338
+2021-03-20,10:30 AM,Bracket,East Meadow SC ECNL GU18/U19,2,0,World Class FC ECNL GU18/U19,East Meadow Field of Dreams,North Turf,On Time,173355
+2021-03-27,01:00 PM,Bracket,Connecticut FC ECNL GU18/U19,2,2,FC Stars White ECNL GU18/U19,CFC Park,Field 2,On Time,173354
+2021-03-27,01:30 PM,Bracket,Scorpions Soccer ECNL GU18/U19,0,7,FC Stars Blue ECNL GU18/U19,Fruit Street Fields,Field 2,On Time,173353
+2021-03-28,08:00 AM,Bracket,Connecticut FC ECNL GU18/U19,1,4,FC Stars Blue ECNL GU18/U19,CFC Park,Field 1,On Time,173357
+2021-03-28,11:00 AM,Bracket,East Meadow SC ECNL GU18/U19,0,6,PDA White ECNL GU18/U19,East Meadow Field of Dreams,North Turf,On Time,173360
+2021-03-28,12:10 PM,Bracket,SUSA FC ECNL GU18/U19,0,2,World Class FC ECNL GU18/U19,SUSA - Orlin & Cohen Sports Complex,Field 2,On Time,173359
+2021-03-28,02:30 PM,Bracket,Scorpions Soccer ECNL GU18/U19,2,0,FC Stars White ECNL GU18/U19,Medway High School,Lamson Field(Middle Field),On Time,173358
+2021-04-10,12:30 PM,Bracket,FSA FC ECNL GU18/U19,2,1,SUSA FC ECNL GU18/U19,FSA-Farmington Sports Arena,Field 8,On Time,173347
+2021-04-11,02:00 PM,Bracket,FC Stars Blue ECNL GU18/U19,5,0,Connecticut FC ECNL GU18/U19,FC Stars Complex,Field 1,On Time,173352
+2021-04-17,03:45 PM,Bracket,World Class FC ECNL GU18/U19,0,2,PDA White ECNL GU18/U19,Orangetown Soccer Complex,Field 5,On Time,173362
+2021-04-17,03:50 PM,Bracket,SUSA FC ECNL GU18/U19,0,1,East Meadow SC ECNL GU18/U19,SUSA - Orlin & Cohen Sports Complex,Field 2,On Time,173364
+2021-04-17,04:30 PM,Bracket,Scorpions Soccer ECNL GU18/U19,2,6,FSA FC ECNL GU18/U19,Medway High School,North Field (Lower Turf),On Time,173363
+2021-04-17,05:45 PM,Bracket,FC Stars White ECNL GU18/U19,2,0,Connecticut FC ECNL GU18/U19,FC Stars Soccer Complex,Field 1 ,On Time,173361
+2021-04-18,10:30 AM,Bracket,SUSA FC ECNL GU18/U19,1,1,PDA White ECNL GU18/U19,SUSA - Orlin & Cohen Sports Complex,Field 2,On Time,173368
+2021-04-18,12:00 PM,Bracket,Scorpions Soccer ECNL GU18/U19,3,2,Connecticut FC ECNL GU18/U19,Progin Park,Field 8,On Time,173367
+2021-04-18,03:30 PM,Bracket,World Class FC ECNL GU18/U19,1,0,East Meadow SC ECNL GU18/U19,Orangetown Soccer Complex,Field 5,On Time,173366
+2021-04-18,05:45 PM,Bracket,FC Stars White ECNL GU18/U19,1,2,FSA FC ECNL GU18/U19,FC Stars Soccer Complex,Field 1 ,On Time,173365
+2021-04-24,03:00 PM,Bracket,Scorpions Soccer ECNL GU18/U19,0,0,World Class FC ECNL GU18/U19,Medway High School,Lamson Field(Middle Field),On Time,173342
+2021-04-24,04:00 PM,Bracket,PDA White ECNL GU18/U19,3,0,Connecticut FC ECNL GU18/U19,PDA ,Field 5,On Time,173371
+2021-04-24,04:45 PM,Bracket,FC Stars Blue ECNL GU18/U19,2,1,SUSA FC ECNL GU18/U19,FC Stars Complex,Field 1,On Time,173369
+2021-04-24,04:45 PM,Bracket,FC Stars White ECNL GU18/U19,2,0,East Meadow SC ECNL GU18/U19,FC Stars Soccer Complex,Field 2,On Time,173370
+2021-04-25,01:15 PM,Bracket,Connecticut FC ECNL GU18/U19,1,5,PDA White ECNL GU18/U19,CFC Park,Field 1,On Time,173334
+2021-04-25,04:45 PM,Bracket,FC Stars Blue ECNL GU18/U19,0,1,East Meadow SC ECNL GU18/U19,FC Stars Complex,Field 1,On Time,173372
+2021-04-25,04:45 PM,Bracket,FC Stars White ECNL GU18/U19,2,3,SUSA FC ECNL GU18/U19,FC Stars Soccer Complex,Field 2,On Time,173373
+2021-04-28,07:30 PM,Bracket,FC Stars Blue ECNL GU18/U19,5,0,Scorpions Soccer ECNL GU18/U19,FC Stars Complex,Field 1,On Time,173335
+2021-05-01,02:30 PM,Bracket,PDA White ECNL GU18/U19,0,3,FC Stars Blue ECNL GU18/U19,PDA ,Field 3,On Time,173374
+2021-05-01,03:30 PM,Bracket,World Class FC ECNL GU18/U19,2,2,FC Stars White ECNL GU18/U19,Orangetown Soccer Complex,Field 5,On Time,173375
+2021-05-01,03:50 PM,Bracket,SUSA FC ECNL GU18/U19,2,3,FSA FC ECNL GU18/U19,SUSA - Orlin & Cohen Sports Complex,Field 2,On Time,173377
+2021-05-01,05:00 PM,Bracket,East Meadow SC ECNL GU18/U19,1,2,Scorpions Soccer ECNL GU18/U19,East Meadow Field of Dreams,North Turf,On Time,173376
+2021-05-02,12:00 PM,Bracket,FSA FC ECNL GU18/U19,1,4,East Meadow SC ECNL GU18/U19,FSA-Farmington Sports Arena,Field 5,On Time,173351
+2021-05-02,01:00 PM,Bracket,PDA White ECNL GU18/U19,0,1,FC Stars White ECNL GU18/U19,Morningside Farm,Field 13,On Time,173378
+2021-05-02,01:00 PM,Bracket,SUSA FC ECNL GU18/U19,2,1,Scorpions Soccer ECNL GU18/U19,SUSA - Orlin & Cohen Sports Complex,Field 2,On Time,173381
+2021-05-02,01:45 PM,Bracket,World Class FC ECNL GU18/U19,1,6,FC Stars Blue ECNL GU18/U19,Orangetown Soccer Complex,Field 5,On Time,173379
+2021-05-08,09:00 AM,Bracket,East Meadow SC ECNL GU18/U19,4,0,FC Stars White ECNL GU18/U19,East Meadow Field of Dreams,North Turf,On Time,173382
+2021-05-08,02:00 PM,Bracket,World Class FC ECNL GU18/U19,1,0,FSA FC ECNL GU18/U19,Orangetown Soccer Complex,Field 5,On Time,173384
+2021-05-08,02:00 PM,Bracket,PDA White ECNL GU18/U19,6,0,Scorpions Soccer ECNL GU18/U19,PDA ,Field 5,On Time,173385
+2021-05-08,03:40 PM,Bracket,SUSA FC ECNL GU18/U19,0,9,FC Stars Blue ECNL GU18/U19,SUSA - Orlin & Cohen Sports Complex,Field 2,On Time,173383
+2021-05-09,09:00 AM,Bracket,East Meadow SC ECNL GU18/U19,0,7,FC Stars Blue ECNL GU18/U19,East Meadow Field of Dreams,North Turf,On Time,173386
+2021-05-09,10:00 AM,Bracket,PDA White ECNL GU18/U19,3,0,FSA FC ECNL GU18/U19,Morningside Farm,Field 12,On Time,173389
+2021-05-09,11:20 AM,Bracket,SUSA FC ECNL GU18/U19,1,5,FC Stars White ECNL GU18/U19,SUSA - Orlin & Cohen Sports Complex,Field 2,On Time,173387
+2021-05-09,02:00 PM,Bracket,World Class FC ECNL GU18/U19,1,0,Scorpions Soccer ECNL GU18/U19,Orangetown Soccer Complex,Field 5,On Time,173388
+2021-05-15,09:45 AM,Bracket,Connecticut FC ECNL GU18/U19,2,5,World Class FC ECNL GU18/U19,CFC Park,Field 2,On Time,173392
+2021-05-15,12:00 PM,Bracket,PDA White ECNL GU18/U19,1,2,East Meadow SC ECNL GU18/U19,PDA ,Field 1,On Time,173393
+2021-05-15,02:15 PM,Bracket,FC Stars White ECNL GU18/U19,2,3,Scorpions Soccer ECNL GU18/U19,FC Stars Soccer Complex,Field 1 ,On Time,173391
+2021-05-15,02:30 PM,Bracket,FSA FC ECNL GU18/U19,0,1,FC Stars Blue ECNL GU18/U19,FSA-Farmington Sports Arena,Field 7,On Time,173390
+2021-05-16,02:00 PM,Bracket,PDA White ECNL GU18/U19,1,0,World Class FC ECNL GU18/U19,Morningside Farm,Field 13,On Time,173401
+2021-05-16,02:25 PM,Bracket,Scorpions Soccer ECNL GU18/U19,4,1,SUSA FC ECNL GU18/U19,Progin Park,Field 8,On Time,173350
+2021-05-16,06:30 PM,Bracket,FSA FC ECNL GU18/U19,3,1,Connecticut FC ECNL GU18/U19,FSA-Farmington Sports Arena,Field 8,On Time,173337
+2021-05-22,08:00 AM,Bracket,FC Stars White ECNL GU18/U19,1,7,FC Stars Blue ECNL GU18/U19,FC Stars Soccer Complex,Field 1 ,On Time,173394
+2021-05-22,09:00 AM,Bracket,East Meadow SC ECNL GU18/U19,2,1,SUSA FC ECNL GU18/U19,East Meadow Field of Dreams,North Turf,On Time,173397
+2021-05-22,10:45 AM,Bracket,World Class FC ECNL GU18/U19,1,0,Connecticut FC ECNL GU18/U19,Orangetown Soccer Complex,Field 5,On Time,173395
+2021-05-22,04:00 PM,Bracket,FSA FC ECNL GU18/U19,5,0,Scorpions Soccer ECNL GU18/U19,FSA-Farmington Sports Arena,Field 6,On Time,173396
+2021-05-23,10:00 AM,Bracket,PDA White ECNL GU18/U19,1,0,SUSA FC ECNL GU18/U19,Morningside Farm,Field 12,On Time,173356
+2021-05-23,12:30 PM,Bracket,FSA FC ECNL GU18/U19,3,1,FC Stars White ECNL GU18/U19,FSA-Farmington Sports Arena,Field 8,On Time,173398
+2021-05-23,05:00 PM,Bracket,Scorpions Soccer ECNL GU18/U19,6,1,East Meadow SC ECNL GU18/U19,Walpole Soccer Complex,Field 1,On Time,173346
+2021-05-26,06:00 PM,Bracket,Connecticut FC ECNL GU18/U19,0,2,FSA FC ECNL GU18/U19,CFC Park,Field 2,On Time,173336
+2021-05-28,07:00 PM,Bracket,FSA FC ECNL GU18/U19,,,PDA White ECNL GU18/U19,FSA-Farmington Sports Arena,Field 8,On Time,173343
+2021-05-29,09:00 AM,Bracket,Connecticut FC ECNL GU18/U19,0,5,SUSA FC ECNL GU18/U19,CFC Park,Field 1,On Time,173333
+2021-05-30,12:00 PM,Bracket,East Meadow SC ECNL GU18/U19,2,1,FSA FC ECNL GU18/U19,East Meadow Field of Dreams,North Turf,On Time,173380
+2021-05-31,03:00 PM,Bracket,SUSA FC ECNL GU18/U19,5,0,Connecticut FC ECNL GU18/U19,SUSA - Orlin & Cohen Sports Complex,Field 2,On Time,173400
+2021-06-05,04:45 PM,Bracket,FC Stars Blue ECNL GU18/U19,,,PDA White ECNL GU18/U19,FC Stars Complex,Field 1,On Time,173344
+2021-06-05,04:45 PM,Bracket,FC Stars White ECNL GU18/U19,,,World Class FC ECNL GU18/U19,FC Stars Soccer Complex,Field 2,On Time,173345
+2021-06-06,01:15 PM,Bracket,FC Stars Blue ECNL GU18/U19,,,World Class FC ECNL GU18/U19,FC Stars Complex,Field 1,On Time,173348
+2021-06-06,01:15 PM,Bracket,FC Stars White ECNL GU18/U19,,,PDA White ECNL GU18/U19,FC Stars Soccer Complex,Field 2,On Time,173349
+2021-06-12,11:00 AM,Bracket,East Meadow SC ECNL GU18/U19,1,1,Connecticut FC ECNL GU18/U19,East Meadow Field of Dreams,North Turf,On Time,173331
+2021-06-12,02:00 PM,Bracket,FC Stars Blue ECNL GU18/U19,2,1,FSA FC ECNL GU18/U19,FC Stars Complex,Field 3,On Time,173330
+2021-06-12,04:15 PM,Bracket,Scorpions Soccer ECNL GU18/U19,1,1,PDA White ECNL GU18/U19,Medway High School,North Field (Lower Turf),On Time,173341
+2021-06-13,09:00 AM,Bracket,Connecticut FC ECNL GU18/U19,3,4,Scorpions Soccer ECNL GU18/U19,CFC Park,Field 1,On Time,173399

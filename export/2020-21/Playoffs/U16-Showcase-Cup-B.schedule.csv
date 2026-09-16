@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-07-01,11:30 AM,Bracket,SLAMMERS FC ECNL GU16,1,2,Atlanta Fire United ECNL GU16,Premier Sports Campus,Field #01,On Time,244870
+2021-07-01,11:30 AM,Bracket,FC Bucks ECNL GU16,2,0,Concorde Fire Premier ECNL GU16,Premier Sports Campus,Field #05,On Time,244871
+2021-07-01,01:45 PM,Bracket,MVLA ECNL GU16,5,1,Florida Krush ECNL GU16,Premier Sports Campus,Field #18,On Time,244868
+2021-07-01,01:45 PM,Bracket,Real So Cal ECNL GU16,2,1,Utah Avalanche ECNL 05,Premier Sports Campus,Field #20,On Time,244869
+2021-07-01,05:30 PM,Bracket,Seattle United ECNL GU16,1,2,Eagles SC ECNL GU16,Premier Sports Campus,Field #15,On Time,244872
+2021-07-01,05:30 PM,Bracket,Bethesda SC ECNL GU16,0,4,Challenge SC ECNL GU16,Premier Sports Campus,Field #21,On Time,244873
+2021-07-01,05:45 PM,Bracket,Colorado Rapids ECNL GU16,1,2,Sting Dallas Black ECNL GU16,Premier Sports Campus,Field #18,On Time,244874
+2021-07-01,05:45 PM,Bracket,NC Fusion ECNL GU16,2,2,Boise Thorns FC ECNL GU16,Premier Sports Campus,Field #20,On Time,244875
+2021-07-02,01:45 PM,Bracket,MVLA ECNL GU16,1,1,Real So Cal ECNL GU16,Premier Sports Campus,Field #10,On Time,244876
+2021-07-02,01:45 PM,Bracket,Atlanta Fire United ECNL GU16,2,1,FC Bucks ECNL GU16,Premier Sports Campus,Field #12,On Time,244877
+2021-07-03,03:30 PM,Bracket,Eagles SC ECNL GU16,0,1,Challenge SC ECNL GU16,Premier Sports Campus,Field #11,On Time,244878
+2021-07-03,03:30 PM,Bracket,Sting Dallas Black ECNL GU16,2,3,Boise Thorns FC ECNL GU16,Premier Sports Campus,Field #07,On Time,244879
+2021-07-03,03:30 PM,Bracket,Seattle United ECNL GU16,0,3,Bethesda SC ECNL GU16,Premier Sports Campus,Stadium,On Time,244887
+2021-07-03,03:45 PM,Bracket,Florida Krush ECNL GU16,0,1,Utah Avalanche ECNL 05,Premier Sports Campus,Field #08,On Time,244885
+2021-07-03,03:45 PM,Bracket,SLAMMERS FC ECNL GU16,1,0,Concorde Fire Premier ECNL GU16,Premier Sports Campus,Field #12,On Time,244886
+2021-07-03,03:45 PM,Bracket,Colorado Rapids ECNL GU16,1,1,NC Fusion ECNL GU16,Premier Sports Campus,Field #04,On Time,244888
+2021-07-04,11:30 AM,Bracket,MVLA ECNL GU16,2,0,Atlanta Fire United ECNL GU16,Premier Sports Campus,Field #15,On Time,244880
+2021-07-04,11:30 AM,Bracket,Challenge SC ECNL GU16,0,2,Boise Thorns FC ECNL GU16,Premier Sports Campus,Field #01,On Time,244881
+2021-07-04,11:30 AM,Bracket,Real So Cal ECNL GU16,0,2,FC Bucks ECNL GU16,Premier Sports Campus,Field #17,On Time,244883
+2021-07-04,11:30 AM,Bracket,Eagles SC ECNL GU16,0,1,Sting Dallas Black ECNL GU16,Premier Sports Campus,Field #19,On Time,244884
+2021-07-04,11:30 AM,Bracket,Seattle United ECNL GU16,0,5,NC Fusion ECNL GU16,Premier Sports Campus,Field #21,On Time,244892
+2021-07-04,11:45 AM,Bracket,Utah Avalanche ECNL 05,2,0,SLAMMERS FC ECNL GU16,Premier Sports Campus,Field #20,On Time,244889
+2021-07-04,11:45 AM,Bracket,Bethesda SC ECNL GU16,2,2,Colorado Rapids ECNL GU16,Premier Sports Campus,Field #02,On Time,244890
+2021-07-04,11:45 AM,Bracket,Florida Krush ECNL GU16,3,0,Concorde Fire Premier ECNL GU16,Premier Sports Campus,Field #22,On Time,244891
+2021-07-06,08:30 AM,Bracket,MVLA ECNL GU16,3,1,Boise Thorns FC ECNL GU16,Premier Sports Campus,Field #06,On Time,244882

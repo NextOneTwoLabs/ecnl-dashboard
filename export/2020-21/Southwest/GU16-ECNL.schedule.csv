@@ -1,0 +1,99 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2020-10-04,TBD,Bracket,Phoenix Rising ECNL GU16,7,3,AZ Arsenal ECNL GU16,,,On Time,209712
+2020-10-17,TBD,Bracket,Phoenix Rising ECNL GU16,2,1,SLAMMERS FC ECNL GU16,,,On Time,209717
+2020-10-17,12:00 PM,Bracket,AZ Arsenal ECNL GU16,1,5,LAFC Slammers ECNL GU16,Eagle Sports Complex,Field 3,On Time,209716
+2020-10-18,TBD,Bracket,Phoenix Rising ECNL GU16,0,6,LAFC Slammers ECNL GU16,,,On Time,209722
+2020-10-18,08:00 AM,Bracket,AZ Arsenal ECNL GU16,1,1,SLAMMERS FC ECNL GU16,Desert Sky Park,Field 3,On Time,209723
+2020-10-24,TBD,Bracket,Phoenix Rising ECNL GU16,5,1,Real So Cal ECNL GU16,,,On Time,209728
+2020-10-24,TBD,Bracket,Heat FC ECNL GU16,0,2,LAFC Slammers ECNL GU16,,,On Time,209729
+2020-10-24,05:00 PM,Bracket,AZ Arsenal ECNL GU16,1,3,So Cal Blues ECNL GU16,Santos Soccer Complex,Field 4,On Time,209810
+2020-10-25,TBD,Bracket,AZ Arsenal ECNL GU16,2,1,Real So Cal ECNL GU16,,,On Time,209733
+2020-10-25,TBD,Bracket,Heat FC ECNL GU16,5,1,SLAMMERS FC ECNL GU16,,,On Time,209734
+2020-10-25,TBD,Bracket,Phoenix Rising ECNL GU16,4,2,So Cal Blues ECNL GU16,,,On Time,209816
+2020-10-31,TBD,Bracket,Phoenix Rising ECNL GU16,2,0,LA Breakers FC ECNL GU16,,,On Time,209847
+2020-10-31,TBD,Bracket,AZ Arsenal ECNL GU16,0,2,Arsenal FC ECNL GU16,,,On Time,209848
+2020-11-01,TBD,Bracket,AZ Arsenal ECNL GU16,2,1,LA Breakers FC ECNL GU16,,,On Time,209853
+2020-11-01,TBD,Bracket,Phoenix Rising ECNL GU16,2,0,Arsenal FC ECNL GU16,,,On Time,209854
+2020-11-07,TBD,Bracket,San Diego Surf ECNL GU16,2,0,AZ Arsenal ECNL GU16,,,On Time,209739
+2020-11-07,TBD,Bracket,Rebels SC ECNL GU16,0,5,Phoenix Rising ECNL GU16,,,On Time,209740
+2020-11-07,10:30 AM,Bracket,Heat FC ECNL GU16,5,1,Strikers FC ECNL GU16,Heritage Park Sports Complex,Field 5,On Time,209745
+2020-11-08,TBD,Bracket,Rebels SC ECNL GU16,5,4,AZ Arsenal ECNL GU16,,,On Time,209746
+2020-11-08,TBD,Bracket,San Diego Surf ECNL GU16,2,0,Phoenix Rising ECNL GU16,,,On Time,209747
+2021-03-06,TBD,Bracket,So Cal Blues ECNL GU16,2,2,Arsenal FC ECNL GU16,,,On Time,209892
+2021-03-06,09:00 AM,Bracket,Eagles SC ECNL GU16,2,1,LA Breakers FC ECNL GU16,Pleasant Valley Fields,Field 16ss,On Time,209750
+2021-03-06,09:00 AM,Bracket,San Diego Surf ECNL GU16,2,2,LAFC Slammers ECNL GU16,Surf Sports Park,Field 6,On Time,209757
+2021-03-06,09:00 AM,Bracket,Del Mar Sharks ECNL GU16,1,1,Strikers FC ECNL GU16,Surf Sports Park,Field 9,On Time,209849
+2021-03-06,11:00 AM,Bracket,Rebels SC ECNL GU16,2,3,SLAMMERS FC ECNL GU16,Surf Sports Park,Field 3,On Time,209772
+2021-03-07,TBD,Bracket,So Cal Blues ECNL GU16,2,0,Real So Cal ECNL GU16,,,On Time,209869
+2021-03-07,09:00 AM,Bracket,San Diego Surf ECNL GU16,4,2,SLAMMERS FC ECNL GU16,Surf Sports Park,Field 6,On Time,209754
+2021-03-07,09:00 AM,Bracket,Eagles SC ECNL GU16,0,0,LA Breakers FC ECNL GU16,Pleasant Valley Fields,Field 16ss,On Time,209792
+2021-03-07,09:00 AM,Bracket,Del Mar Sharks ECNL GU16,2,2,Arsenal FC ECNL GU16,Surf Sports Park,Field 9,On Time,209825
+2021-03-07,01:00 PM,Bracket,Rebels SC ECNL GU16,0,4,LAFC Slammers ECNL GU16,Surf Sports Park,Field 4,On Time,209769
+2021-03-13,09:00 AM,Bracket,Arsenal FC ECNL GU16,5,1,Rebels SC ECNL GU16,Ralph M. Lewis Sports Complex,Field 5,On Time,209731
+2021-03-13,09:00 AM,Bracket,Del Mar Sharks ECNL GU16,0,7,LAFC Slammers ECNL GU16,SoCal Sports Complex,Field 19,On Time,209822
+2021-03-13,09:00 AM,Bracket,So Cal Blues ECNL GU16,2,3,SLAMMERS FC ECNL GU16,OC Great Park,Field 7,On Time,209823
+2021-03-13,12:00 PM,Bracket,Real So Cal ECNL GU16,1,2,LA Breakers FC ECNL GU16,Alice C Stelle Middle School,Field 1,On Time,209743
+2021-03-13,01:00 PM,Bracket,Strikers FC ECNL GU16,1,3,San Diego Surf ECNL GU16,SoCal Sports Complex,Field 21,On Time,209890
+2021-03-14,09:00 AM,Bracket,Arsenal FC ECNL GU16,0,0,San Diego Surf ECNL GU16,Galway Downs,Field 19,On Time,209727
+2021-03-14,12:30 PM,Bracket,Strikers FC ECNL GU16,4,2,Rebels SC ECNL GU16,Orange County Great Park,Field 18,On Time,209820
+2021-03-14,01:00 PM,Bracket,So Cal Blues ECNL GU16,0,5,LAFC Slammers ECNL GU16,OC Great Park,Field 7,On Time,209793
+2021-03-14,03:00 PM,Bracket,Del Mar Sharks ECNL GU16,0,2,SLAMMERS FC ECNL GU16,Surf Sports Park,Field 9,On Time,209794
+2021-03-20,09:00 AM,Bracket,Eagles SC ECNL GU16,0,2,Real So Cal ECNL GU16,Pleasant Valley Fields,Field 16ss,On Time,209829
+2021-03-20,01:00 PM,Bracket,So Cal Blues ECNL GU16,2,4,Strikers FC ECNL GU16,OC Great Park,Field 7,On Time,209855
+2021-03-20,01:45 PM,Bracket,LAFC Slammers ECNL GU16,4,0,SLAMMERS FC ECNL GU16,Orange County Great Park,Field 18,On Time,209783
+2021-03-21,TBD,Bracket,LA Breakers FC ECNL GU16,1,4,Strikers FC ECNL GU16,,,On Time,209819
+2021-03-21,11:00 AM,Bracket,So Cal Blues ECNL GU16,3,0,Del Mar Sharks ECNL GU16,OC Great Park,Field 7,On Time,209795
+2021-03-21,12:45 PM,Bracket,San Diego Surf ECNL GU16,2,1,Rebels SC ECNL GU16,So Cal Sports Complex,Field 15,On Time,209790
+2021-03-27,09:00 AM,Bracket,San Diego Surf ECNL GU16,0,1,So Cal Blues ECNL GU16,So Cal Sports Complex,Field 22,On Time,209864
+2021-03-27,10:15 AM,Bracket,SLAMMERS FC ECNL GU16,1,1,LA Breakers FC ECNL GU16,Orange County Great Park,Field 15,On Time,209779
+2021-03-27,12:00 PM,Bracket,AZ Arsenal ECNL GU16,1,4,Heat FC ECNL GU16,Santos Soccer Complex,Field 3,On Time,209800
+2021-03-27,03:00 PM,Bracket,Rebels SC ECNL GU16,1,2,Del Mar Sharks ECNL GU16,Surf Sports Park,Field 2,On Time,209863
+2021-03-28,10:00 AM,Bracket,Phoenix Rising ECNL GU16,0,4,Heat FC ECNL GU16,Talking Stick Resort Soccer Facility,North,On Time,209802
+2021-03-28,11:00 AM,Bracket,Strikers FC ECNL GU16,0,3,LA Breakers FC ECNL GU16,Orange County Great Park,Field 5,On Time,209771
+2021-03-28,01:15 PM,Bracket,Real So Cal ECNL GU16,1,0,Eagles SC ECNL GU16,Pleasant Valley Fields,Field 1,On Time,209846
+2021-03-28,11:00 PM,Bracket,Arsenal FC ECNL GU16,1,1,SLAMMERS FC ECNL GU16,Galway Downs,Field 18,On Time,209843
+2021-04-03,09:00 AM,Bracket,LA Breakers FC ECNL GU16,2,1,Arsenal FC ECNL GU16,Silverlakes Soccer Complex,Field 2,On Time,209715
+2021-04-03,09:00 AM,Bracket,Rebels SC ECNL GU16,1,3,So Cal Blues ECNL GU16,Ryan Park,Field 8,On Time,209859
+2021-04-09,05:00 PM,Bracket,AZ Arsenal ECNL GU16,1,0,Phoenix Rising ECNL GU16,Santos Soccer Complex,Field 2,On Time,209827
+2021-04-09,05:00 PM,Bracket,Heat FC ECNL GU16,5,1,Eagles SC ECNL GU16,Bettye Wilson Soccer Complex,Field 3,On Time,209886
+2021-04-10,09:00 AM,Bracket,San Diego Surf ECNL GU16,3,0,Del Mar Sharks ECNL GU16,So Cal Sports Complex,Field 12,On Time,209858
+2021-04-10,01:30 PM,Bracket,Strikers FC ECNL GU16,2,2,Eagles SC ECNL GU16,Bettye Wilson Soccer Complex,Field 7,On Time,209796
+2021-04-11,12:00 PM,Bracket,Heat FC ECNL GU16,2,1,Strikers FC ECNL GU16,Bettye Wilson Soccer Complex,Field 3,On Time,209826
+2021-04-11,12:30 PM,Bracket,Arsenal FC ECNL GU16,1,3,LAFC Slammers ECNL GU16,Galway Downs,Field 11,On Time,209780
+2021-04-17,09:00 AM,Bracket,Del Mar Sharks ECNL GU16,0,0,LA Breakers FC ECNL GU16,Surf Sports Park,Field 4,On Time,209830
+2021-04-17,09:30 AM,Bracket,Real So Cal ECNL GU16,1,2,LAFC Slammers ECNL GU16,Conejo Creek South ,Field 10,On Time,209865
+2021-04-17,10:30 AM,Bracket,Heat FC ECNL GU16,2,2,Phoenix Rising ECNL GU16,Heritage Park Sports Complex,Field 5,On Time,209803
+2021-04-17,01:15 PM,Bracket,Eagles SC ECNL GU16,3,0,SLAMMERS FC ECNL GU16,Pleasant Valley Fields,Field 11,On Time,209866
+2021-04-18,08:30 AM,Bracket,Heat FC ECNL GU16,6,1,AZ Arsenal ECNL GU16,Heritage Park Sports Complex,Field 5,On Time,209804
+2021-04-18,09:00 AM,Bracket,San Diego Surf ECNL GU16,5,0,LA Breakers FC ECNL GU16,So Cal Sports Complex,Field 12,On Time,209882
+2021-04-18,10:30 AM,Bracket,Real So Cal ECNL GU16,1,1,SLAMMERS FC ECNL GU16,Agoura High School,Field 1,On Time,209764
+2021-04-18,01:15 PM,Bracket,Eagles SC ECNL GU16,0,3,LAFC Slammers ECNL GU16,Pleasant Valley Fields,Field 11,On Time,209860
+2021-05-01,08:00 AM,Bracket,Phoenix Rising ECNL GU16,2,0,Eagles SC ECNL GU16,Talking Stick Resort Soccer Facility,North,On Time,209799
+2021-05-01,10:30 AM,Bracket,Heat FC ECNL GU16,4,2,Rebels SC ECNL GU16,Heritage Park Sports Complex,Field 7,On Time,209841
+2021-05-01,10:45 AM,Bracket,LAFC Slammers ECNL GU16,4,0,Strikers FC ECNL GU16,Surf Sports Park,Field 11,On Time,209871
+2021-05-01,01:15 PM,Bracket,Real So Cal ECNL GU16,0,0,Del Mar Sharks ECNL GU16,Conejo Creek South ,Field 10,On Time,209713
+2021-05-01,03:00 PM,Bracket,LA Breakers FC ECNL GU16,0,2,So Cal Blues ECNL GU16,St. Bernards High School,Field 1,On Time,209889
+2021-05-02,10:00 AM,Bracket,AZ Arsenal ECNL GU16,2,2,Eagles SC ECNL GU16,Desert Sky Park,Field 1,On Time,209801
+2021-05-02,02:30 PM,Bracket,SLAMMERS FC ECNL GU16,2,1,Strikers FC ECNL GU16,Surf Sports Park,Field 11,On Time,209877
+2021-05-08,09:00 AM,Bracket,Strikers FC ECNL GU16,3,4,Arsenal FC ECNL GU16,Orange County Great Park,Field 17,On Time,209768
+2021-05-08,10:00 AM,Bracket,Real So Cal ECNL GU16,1,1,San Diego Surf ECNL GU16,Conejo Creek South ,Field 10,On Time,209778
+2021-05-08,10:45 AM,Bracket,So Cal Blues ECNL GU16,2,4,Heat FC ECNL GU16,OC Great Park,Field 7,On Time,209850
+2021-05-09,11:00 AM,Bracket,So Cal Blues ECNL GU16,2,1,Eagles SC ECNL GU16,OC Great Park,Field 7,On Time,209876
+2021-05-09,01:00 PM,Bracket,Del Mar Sharks ECNL GU16,0,1,Heat FC ECNL GU16,SoCal Sports Complex,Field 18,On Time,209856
+2021-05-15,09:00 AM,Bracket,Strikers FC ECNL GU16,4,0,AZ Arsenal ECNL GU16,Orange County Great Park,Field 24,On Time,209862
+2021-05-15,02:00 PM,Bracket,Del Mar Sharks ECNL GU16,2,0,Phoenix Rising ECNL GU16,Francis Ryan Park ,Field 5,On Time,209809
+2021-05-15,07:00 PM,Bracket,Arsenal FC ECNL GU16,2,0,Eagles SC ECNL GU16,Ralph M. Lewis Sports Complex,Field 2,On Time,209821
+2021-05-16,09:30 AM,Bracket,Strikers FC ECNL GU16,3,0,Phoenix Rising ECNL GU16,Orange County Great Park,Field 20,On Time,209857
+2021-05-16,12:15 PM,Bracket,Del Mar Sharks ECNL GU16,0,0,AZ Arsenal ECNL GU16,Torrey Pines High School,Field 1,On Time,209815
+2021-05-16,03:00 PM,Bracket,Eagles SC ECNL GU16,0,2,San Diego Surf ECNL GU16,Pleasant Valley Fields,Field 16ss,On Time,209774
+2021-05-22,10:30 AM,Bracket,Heat FC ECNL GU16,2,3,Arsenal FC ECNL GU16,Heritage Park Sports Complex,Field 5,On Time,209761
+2021-05-22,01:15 PM,Bracket,LA Breakers FC ECNL GU16,1,3,LAFC Slammers ECNL GU16,St. Bernards High School,Field 1,On Time,209842
+2021-05-22,01:45 PM,Bracket,Real So Cal ECNL GU16,0,1,Rebels SC ECNL GU16,Conejo Creek South ,Field 10,On Time,209773
+2021-05-23,10:30 AM,Bracket,Heat FC ECNL GU16,0,0,San Diego Surf ECNL GU16,Heritage Park Sports Complex,Field 5,On Time,209835
+2021-05-23,12:45 PM,Bracket,Strikers FC ECNL GU16,0,1,Real So Cal ECNL GU16,El Dorado High School,EDHS Turf Field,On Time,209791
+2021-05-23,01:00 PM,Bracket,Eagles SC ECNL GU16,2,2,Rebels SC ECNL GU16,Pleasant Valley Fields,Field 11,On Time,209777
+2021-06-12,11:00 AM,Bracket,Real So Cal ECNL GU16,2,2,Arsenal FC ECNL GU16,Ralph M Lewis Sport Complex ,Field 6,On Time,209751
+2021-06-12,12:00 PM,Bracket,Del Mar Sharks ECNL GU16,1,2,Eagles SC ECNL GU16,San Dieguito Academy,Field 1,On Time,209870
+2021-06-12,01:30 PM,Bracket,LA Breakers FC ECNL GU16,0,2,Heat FC ECNL GU16,St. Bernards High School,Field 1,On Time,209814
+2021-06-13,01:00 PM,Bracket,Real So Cal ECNL GU16,2,2,Heat FC ECNL GU16,Silverlakes Sports Complex,Field 19,On Time,209789
+2021-06-13,01:30 PM,Bracket,LA Breakers FC ECNL GU16,1,0,Rebels SC ECNL GU16,St. Bernards High School,Field 1,On Time,209726

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-16T18:26:54Z",
+  "updated": "2026-09-16T20:50:47Z",
   "events": {
     "2025-26/Mid-Atlantic": {
       "season": "2025-26",
@@ -6185,6 +6185,1163 @@
           "schedulesUrl": "https://public.totalglobalsports.com/public/event/2437/schedules/15607",
           "teams": 0,
           "games": 9,
+          "brackets": []
+        }
+      ]
+    },
+    "2020-21/Mid-Atlantic": {
+      "season": "2020-21",
+      "kind": "conference",
+      "name": "Mid-Atlantic",
+      "eventId": 2040,
+      "eventName": "ECNL Girls Mid-Atlantic Conference 2020-21",
+      "fetchedAt": "2026-09-16T20:47:44Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2040/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 5489,
+          "divisionName": "GU13",
+          "flightID": 8893,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2040/standings/8893",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2040/schedules/8893",
+          "teams": 12,
+          "games": 114
+        },
+        {
+          "divisionID": 5490,
+          "divisionName": "GU14",
+          "flightID": 8894,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2040/standings/8894",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2040/schedules/8894",
+          "teams": 13,
+          "games": 114
+        },
+        {
+          "divisionID": 5491,
+          "divisionName": "GU15",
+          "flightID": 8895,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2040/standings/8895",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2040/schedules/8895",
+          "teams": 13,
+          "games": 76
+        },
+        {
+          "divisionID": 5492,
+          "divisionName": "GU16",
+          "flightID": 8896,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2040/standings/8896",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2040/schedules/8896",
+          "teams": 13,
+          "games": 76
+        },
+        {
+          "divisionID": 5493,
+          "divisionName": "GU17",
+          "flightID": 8897,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2040/standings/8897",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2040/schedules/8897",
+          "teams": 13,
+          "games": 76
+        },
+        {
+          "divisionID": 5494,
+          "divisionName": "GU18/U19",
+          "flightID": 8898,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2040/standings/8898",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2040/schedules/8898",
+          "teams": 13,
+          "games": 76
+        }
+      ]
+    },
+    "2020-21/Midwest": {
+      "season": "2020-21",
+      "kind": "conference",
+      "name": "Midwest",
+      "eventId": 2035,
+      "eventName": "ECNL Girls Midwest Conference 2020-21",
+      "fetchedAt": "2026-09-16T20:47:56Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2035/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 5456,
+          "divisionName": "GU13",
+          "flightID": 9344,
+          "flightName": "East",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2035/standings/9344",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2035/schedules/9344",
+          "teams": 4,
+          "games": 40
+        },
+        {
+          "divisionID": 5456,
+          "divisionName": "GU13",
+          "flightID": 8860,
+          "flightName": "West",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2035/standings/8860",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2035/schedules/8860",
+          "teams": 4,
+          "games": 40
+        },
+        {
+          "divisionID": 5457,
+          "divisionName": "GU14",
+          "flightID": 9345,
+          "flightName": "East",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2035/standings/9345",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2035/schedules/9345",
+          "teams": 6,
+          "games": 40
+        },
+        {
+          "divisionID": 5457,
+          "divisionName": "GU14",
+          "flightID": 8861,
+          "flightName": "West",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2035/standings/8861",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2035/schedules/8861",
+          "teams": 5,
+          "games": 40
+        },
+        {
+          "divisionID": 5458,
+          "divisionName": "GU15",
+          "flightID": 8862,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2035/standings/8862",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2035/schedules/8862",
+          "teams": 11,
+          "games": 55
+        },
+        {
+          "divisionID": 5459,
+          "divisionName": "GU16",
+          "flightID": 8863,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2035/standings/8863",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2035/schedules/8863",
+          "teams": 11,
+          "games": 55
+        },
+        {
+          "divisionID": 5460,
+          "divisionName": "GU17",
+          "flightID": 8864,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2035/standings/8864",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2035/schedules/8864",
+          "teams": 11,
+          "games": 55
+        },
+        {
+          "divisionID": 5461,
+          "divisionName": "GU18/U19",
+          "flightID": 8865,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2035/standings/8865",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2035/schedules/8865",
+          "teams": 11,
+          "games": 55
+        }
+      ]
+    },
+    "2020-21/New England": {
+      "season": "2020-21",
+      "kind": "conference",
+      "name": "New England",
+      "eventId": 2051,
+      "eventName": "ECNL Girls New England Conference 2020-21",
+      "fetchedAt": "2026-09-16T20:48:09Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2051/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 5556,
+          "divisionName": "GU13",
+          "flightID": 8960,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2051/standings/8960",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2051/schedules/8960",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5557,
+          "divisionName": "GU14",
+          "flightID": 8961,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2051/standings/8961",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2051/schedules/8961",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5558,
+          "divisionName": "GU15",
+          "flightID": 8962,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2051/standings/8962",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2051/schedules/8962",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5559,
+          "divisionName": "GU16",
+          "flightID": 8963,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2051/standings/8963",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2051/schedules/8963",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5560,
+          "divisionName": "GU17",
+          "flightID": 8964,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2051/standings/8964",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2051/schedules/8964",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5561,
+          "divisionName": "GU18/U19",
+          "flightID": 8965,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2051/standings/8965",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2051/schedules/8965",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5562,
+          "divisionName": "GU18/U19 Composite",
+          "flightID": 8966,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2051/standings/8966",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2051/schedules/8966",
+          "teams": 9,
+          "games": 72
+        }
+      ]
+    },
+    "2020-21/North Atlantic": {
+      "season": "2020-21",
+      "kind": "conference",
+      "name": "North Atlantic",
+      "eventId": 2039,
+      "eventName": "ECNL Girls North Atlantic Conference 2020-21",
+      "fetchedAt": "2026-09-16T20:48:20Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2039/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 5482,
+          "divisionName": "GU13",
+          "flightID": 8886,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2039/standings/8886",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2039/schedules/8886",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5483,
+          "divisionName": "GU14",
+          "flightID": 8887,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2039/standings/8887",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2039/schedules/8887",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5484,
+          "divisionName": "GU15",
+          "flightID": 8888,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2039/standings/8888",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2039/schedules/8888",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5485,
+          "divisionName": "GU16",
+          "flightID": 8889,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2039/standings/8889",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2039/schedules/8889",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5486,
+          "divisionName": "GU17",
+          "flightID": 8890,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2039/standings/8890",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2039/schedules/8890",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5487,
+          "divisionName": "GU18/U19",
+          "flightID": 8891,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2039/standings/8891",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2039/schedules/8891",
+          "teams": 9,
+          "games": 72
+        },
+        {
+          "divisionID": 5488,
+          "divisionName": "GU18/U19 Composite",
+          "flightID": 8892,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2039/standings/8892",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2039/schedules/8892",
+          "teams": 9,
+          "games": 72
+        }
+      ]
+    },
+    "2020-21/Northwest": {
+      "season": "2020-21",
+      "kind": "conference",
+      "name": "Northwest",
+      "eventId": 2033,
+      "eventName": "ECNL Girls Northwest Conference 2020-21",
+      "fetchedAt": "2026-09-16T20:48:32Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2033/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 5442,
+          "divisionName": "GU13",
+          "flightID": 9529,
+          "flightName": "Bay Area",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9529",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9529",
+          "teams": 8,
+          "games": 28
+        },
+        {
+          "divisionID": 5442,
+          "divisionName": "GU13",
+          "flightID": 8846,
+          "flightName": "Mountain",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/8846",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/8846",
+          "teams": 5,
+          "games": 30
+        },
+        {
+          "divisionID": 5442,
+          "divisionName": "GU13",
+          "flightID": 9530,
+          "flightName": "Pacific",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9530",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9530",
+          "teams": 8,
+          "games": 52
+        },
+        {
+          "divisionID": 5443,
+          "divisionName": "GU14",
+          "flightID": 9531,
+          "flightName": "Bay Area",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9531",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9531",
+          "teams": 8,
+          "games": 28
+        },
+        {
+          "divisionID": 5443,
+          "divisionName": "GU14",
+          "flightID": 8847,
+          "flightName": "Mountain",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/8847",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/8847",
+          "teams": 5,
+          "games": 30
+        },
+        {
+          "divisionID": 5443,
+          "divisionName": "GU14",
+          "flightID": 9532,
+          "flightName": "Pacific",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9532",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9532",
+          "teams": 9,
+          "games": 52
+        },
+        {
+          "divisionID": 5444,
+          "divisionName": "GU15",
+          "flightID": 9533,
+          "flightName": "Bay Area",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9533",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9533",
+          "teams": 8,
+          "games": 28
+        },
+        {
+          "divisionID": 5444,
+          "divisionName": "GU15",
+          "flightID": 8848,
+          "flightName": "Mountain",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/8848",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/8848",
+          "teams": 6,
+          "games": 30
+        },
+        {
+          "divisionID": 5444,
+          "divisionName": "GU15",
+          "flightID": 9534,
+          "flightName": "Pacific",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9534",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9534",
+          "teams": 9,
+          "games": 52
+        },
+        {
+          "divisionID": 5445,
+          "divisionName": "GU16",
+          "flightID": 9535,
+          "flightName": "Bay Area",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9535",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9535",
+          "teams": 8,
+          "games": 28
+        },
+        {
+          "divisionID": 5445,
+          "divisionName": "GU16",
+          "flightID": 8849,
+          "flightName": "Mountain",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/8849",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/8849",
+          "teams": 6,
+          "games": 30
+        },
+        {
+          "divisionID": 5445,
+          "divisionName": "GU16",
+          "flightID": 9536,
+          "flightName": "Pacific",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9536",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9536",
+          "teams": 9,
+          "games": 52
+        },
+        {
+          "divisionID": 5446,
+          "divisionName": "GU17",
+          "flightID": 9537,
+          "flightName": "Bay Area",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9537",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9537",
+          "teams": 8,
+          "games": 28
+        },
+        {
+          "divisionID": 5446,
+          "divisionName": "GU17",
+          "flightID": 8850,
+          "flightName": "Mountain",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/8850",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/8850",
+          "teams": 5,
+          "games": 30
+        },
+        {
+          "divisionID": 5446,
+          "divisionName": "GU17",
+          "flightID": 9538,
+          "flightName": "Pacific",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9538",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9538",
+          "teams": 9,
+          "games": 52
+        },
+        {
+          "divisionID": 5447,
+          "divisionName": "GU18/U19",
+          "flightID": 9539,
+          "flightName": "Bay Area",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9539",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9539",
+          "teams": 8,
+          "games": 28
+        },
+        {
+          "divisionID": 5447,
+          "divisionName": "GU18/U19",
+          "flightID": 8851,
+          "flightName": "Mountain",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/8851",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/8851",
+          "teams": 6,
+          "games": 30
+        },
+        {
+          "divisionID": 5447,
+          "divisionName": "GU18/U19",
+          "flightID": 9540,
+          "flightName": "Pacific",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9540",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9540",
+          "teams": 9,
+          "games": 52
+        },
+        {
+          "divisionID": 5448,
+          "divisionName": "GU18/U19 Composite",
+          "flightID": 8852,
+          "flightName": "Bay Area",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/8852",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/8852",
+          "teams": 8,
+          "games": 28
+        },
+        {
+          "divisionID": 5448,
+          "divisionName": "GU18/U19 Composite",
+          "flightID": 9647,
+          "flightName": "Pacific",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2033/standings/9647",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2033/schedules/9647",
+          "teams": 5,
+          "games": 20
+        }
+      ]
+    },
+    "2020-21/Ohio Valley": {
+      "season": "2020-21",
+      "kind": "conference",
+      "name": "Ohio Valley",
+      "eventId": 2037,
+      "eventName": "ECNL Girls Ohio Valley Conference 2020-21",
+      "fetchedAt": "2026-09-16T20:49:00Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2037/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 5469,
+          "divisionName": "GU13",
+          "flightID": 8873,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2037/standings/8873",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2037/schedules/8873",
+          "teams": 9,
+          "games": 90
+        },
+        {
+          "divisionID": 5470,
+          "divisionName": "GU14",
+          "flightID": 8874,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2037/standings/8874",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2037/schedules/8874",
+          "teams": 10,
+          "games": 90
+        },
+        {
+          "divisionID": 5471,
+          "divisionName": "GU15",
+          "flightID": 8875,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2037/standings/8875",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2037/schedules/8875",
+          "teams": 10,
+          "games": 90
+        },
+        {
+          "divisionID": 5472,
+          "divisionName": "GU16",
+          "flightID": 8876,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2037/standings/8876",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2037/schedules/8876",
+          "teams": 10,
+          "games": 90
+        },
+        {
+          "divisionID": 5473,
+          "divisionName": "GU17",
+          "flightID": 8877,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2037/standings/8877",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2037/schedules/8877",
+          "teams": 10,
+          "games": 90
+        },
+        {
+          "divisionID": 5474,
+          "divisionName": "GU18/U19",
+          "flightID": 8878,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2037/standings/8878",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2037/schedules/8878",
+          "teams": 10,
+          "games": 90
+        }
+      ]
+    },
+    "2020-21/Southeast": {
+      "season": "2020-21",
+      "kind": "conference",
+      "name": "Southeast",
+      "eventId": 2038,
+      "eventName": "ECNL Girls Southeast Conference 2020-21",
+      "fetchedAt": "2026-09-16T20:49:12Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2038/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 5475,
+          "divisionName": "GU13",
+          "flightID": 8879,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2038/standings/8879",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2038/schedules/8879",
+          "teams": 10,
+          "games": 96
+        },
+        {
+          "divisionID": 5476,
+          "divisionName": "GU14",
+          "flightID": 8880,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2038/standings/8880",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2038/schedules/8880",
+          "teams": 12,
+          "games": 96
+        },
+        {
+          "divisionID": 5477,
+          "divisionName": "GU15",
+          "flightID": 8881,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2038/standings/8881",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2038/schedules/8881",
+          "teams": 12,
+          "games": 96
+        },
+        {
+          "divisionID": 5478,
+          "divisionName": "GU16",
+          "flightID": 8882,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2038/standings/8882",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2038/schedules/8882",
+          "teams": 11,
+          "games": 96
+        },
+        {
+          "divisionID": 5479,
+          "divisionName": "GU17",
+          "flightID": 8883,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2038/standings/8883",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2038/schedules/8883",
+          "teams": 12,
+          "games": 96
+        },
+        {
+          "divisionID": 5480,
+          "divisionName": "GU18/U19",
+          "flightID": 8884,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2038/standings/8884",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2038/schedules/8884",
+          "teams": 12,
+          "games": 96
+        },
+        {
+          "divisionID": 5481,
+          "divisionName": "GU18/U19 Composite",
+          "flightID": 8885,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2038/standings/8885",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2038/schedules/8885",
+          "teams": 8,
+          "games": 41
+        }
+      ]
+    },
+    "2020-21/Southwest": {
+      "season": "2020-21",
+      "kind": "conference",
+      "name": "Southwest",
+      "eventId": 2034,
+      "eventName": "ECNL Girls Southwest Conference 2020-21",
+      "fetchedAt": "2026-09-16T20:49:24Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2034/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 5449,
+          "divisionName": "GU13",
+          "flightID": 8853,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2034/standings/8853",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2034/schedules/8853",
+          "teams": 14,
+          "games": 98
+        },
+        {
+          "divisionID": 5450,
+          "divisionName": "GU14",
+          "flightID": 8854,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2034/standings/8854",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2034/schedules/8854",
+          "teams": 14,
+          "games": 98
+        },
+        {
+          "divisionID": 5451,
+          "divisionName": "GU15",
+          "flightID": 8855,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2034/standings/8855",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2034/schedules/8855",
+          "teams": 14,
+          "games": 98
+        },
+        {
+          "divisionID": 5452,
+          "divisionName": "GU16",
+          "flightID": 8856,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2034/standings/8856",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2034/schedules/8856",
+          "teams": 14,
+          "games": 98
+        },
+        {
+          "divisionID": 5453,
+          "divisionName": "GU17",
+          "flightID": 8857,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2034/standings/8857",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2034/schedules/8857",
+          "teams": 14,
+          "games": 98
+        },
+        {
+          "divisionID": 5454,
+          "divisionName": "GU18/U19",
+          "flightID": 8858,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2034/standings/8858",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2034/schedules/8858",
+          "teams": 14,
+          "games": 98
+        },
+        {
+          "divisionID": 5455,
+          "divisionName": "GU18/U19 Composite",
+          "flightID": 8859,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2034/standings/8859",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2034/schedules/8859",
+          "teams": 14,
+          "games": 85
+        }
+      ]
+    },
+    "2020-21/Texas": {
+      "season": "2020-21",
+      "kind": "conference",
+      "name": "Texas",
+      "eventId": 2036,
+      "eventName": "ECNL Girls Texas Conference 2020-21",
+      "fetchedAt": "2026-09-16T20:49:37Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2036/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 5462,
+          "divisionName": "GU13",
+          "flightID": 8866,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2036/standings/8866",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2036/schedules/8866",
+          "teams": 11,
+          "games": 132
+        },
+        {
+          "divisionID": 5463,
+          "divisionName": "GU14",
+          "flightID": 8867,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2036/standings/8867",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2036/schedules/8867",
+          "teams": 12,
+          "games": 132
+        },
+        {
+          "divisionID": 5464,
+          "divisionName": "GU15",
+          "flightID": 8868,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2036/standings/8868",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2036/schedules/8868",
+          "teams": 12,
+          "games": 132
+        },
+        {
+          "divisionID": 5465,
+          "divisionName": "GU16",
+          "flightID": 8869,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2036/standings/8869",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2036/schedules/8869",
+          "teams": 12,
+          "games": 132
+        },
+        {
+          "divisionID": 5466,
+          "divisionName": "GU17",
+          "flightID": 8870,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2036/standings/8870",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2036/schedules/8870",
+          "teams": 12,
+          "games": 132
+        },
+        {
+          "divisionID": 5467,
+          "divisionName": "GU18/U19",
+          "flightID": 8871,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2036/standings/8871",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2036/schedules/8871",
+          "teams": 12,
+          "games": 132
+        },
+        {
+          "divisionID": 5468,
+          "divisionName": "GU18/U19 Composite",
+          "flightID": 8872,
+          "flightName": "ECNL",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2036/standings/8872",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2036/schedules/8872",
+          "teams": 12,
+          "games": 132
+        }
+      ]
+    },
+    "2020-21/Playoffs": {
+      "season": "2020-21",
+      "kind": "national",
+      "name": "Playoffs",
+      "eventId": 2118,
+      "eventName": "ECNL Girls National Playoffs",
+      "fetchedAt": "2026-09-16T20:49:51Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2118/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 5845,
+          "divisionName": "U13",
+          "flightID": 9413,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/9413",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/9413",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5846,
+          "divisionName": "U14",
+          "flightID": 9414,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/9414",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/9414",
+          "teams": 32,
+          "games": 52,
+          "brackets": []
+        },
+        {
+          "divisionID": 5847,
+          "divisionName": "U15",
+          "flightID": 9415,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/9415",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/9415",
+          "teams": 32,
+          "games": 52,
+          "brackets": []
+        },
+        {
+          "divisionID": 5847,
+          "divisionName": "U15",
+          "flightID": 11923,
+          "flightName": "North American Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11923",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11923",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5847,
+          "divisionName": "U15",
+          "flightID": 11926,
+          "flightName": "Open Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11926",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11926",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5847,
+          "divisionName": "U15",
+          "flightID": 11924,
+          "flightName": "Showcase Cup A",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11924",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11924",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5847,
+          "divisionName": "U15",
+          "flightID": 11925,
+          "flightName": "Showcase Cup B",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11925",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11925",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5848,
+          "divisionName": "U16",
+          "flightID": 9416,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/9416",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/9416",
+          "teams": 32,
+          "games": 52,
+          "brackets": []
+        },
+        {
+          "divisionID": 5848,
+          "divisionName": "U16",
+          "flightID": 11927,
+          "flightName": "North American Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11927",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11927",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5848,
+          "divisionName": "U16",
+          "flightID": 11930,
+          "flightName": "Open Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11930",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11930",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5848,
+          "divisionName": "U16",
+          "flightID": 11928,
+          "flightName": "Showcase Cup A",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11928",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11928",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5848,
+          "divisionName": "U16",
+          "flightID": 11929,
+          "flightName": "Showcase Cup B",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11929",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11929",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5849,
+          "divisionName": "U17",
+          "flightID": 9417,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/9417",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/9417",
+          "teams": 32,
+          "games": 52,
+          "brackets": []
+        },
+        {
+          "divisionID": 5849,
+          "divisionName": "U17",
+          "flightID": 11931,
+          "flightName": "North American Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11931",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11931",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5849,
+          "divisionName": "U17",
+          "flightID": 11934,
+          "flightName": "Open Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11934",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11934",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5849,
+          "divisionName": "U17",
+          "flightID": 11932,
+          "flightName": "Showcase Cup A",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11932",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11932",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5849,
+          "divisionName": "U17",
+          "flightID": 11933,
+          "flightName": "Showcase Cup B",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11933",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11933",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5850,
+          "divisionName": "U18/U19",
+          "flightID": 9418,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/9418",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/9418",
+          "teams": 0,
+          "games": 25,
+          "brackets": []
+        },
+        {
+          "divisionID": 5850,
+          "divisionName": "U18/U19",
+          "flightID": 11935,
+          "flightName": "Composite",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11935",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11935",
+          "teams": 0,
+          "games": 12,
+          "brackets": []
+        },
+        {
+          "divisionID": 5850,
+          "divisionName": "U18/U19",
+          "flightID": 11936,
+          "flightName": "Optional Showcase",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2118/standings/11936",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2118/schedules/11936",
+          "teams": 10,
+          "games": 10,
+          "brackets": []
+        }
+      ]
+    },
+    "2020-21/Finals": {
+      "season": "2020-21",
+      "kind": "national",
+      "name": "Finals",
+      "eventId": 2289,
+      "eventName": "ECNL Girls National Finals",
+      "fetchedAt": "2026-09-16T20:50:37Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/2289/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 7671,
+          "divisionName": "GU13",
+          "flightID": 12353,
+          "flightName": "Flight 1",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2289/standings/12353",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2289/schedules/12353",
+          "teams": 0,
+          "games": 4,
+          "brackets": []
+        },
+        {
+          "divisionID": 7672,
+          "divisionName": "GU14",
+          "flightID": 12354,
+          "flightName": "Flight 1",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2289/standings/12354",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2289/schedules/12354",
+          "teams": 0,
+          "games": 4,
+          "brackets": []
+        },
+        {
+          "divisionID": 7673,
+          "divisionName": "GU15",
+          "flightID": 12397,
+          "flightName": "Consolation",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2289/standings/12397",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2289/schedules/12397",
+          "teams": 4,
+          "games": 2,
+          "brackets": []
+        },
+        {
+          "divisionID": 7673,
+          "divisionName": "GU15",
+          "flightID": 12355,
+          "flightName": "Flight 1",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2289/standings/12355",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2289/schedules/12355",
+          "teams": 0,
+          "games": 7,
+          "brackets": []
+        },
+        {
+          "divisionID": 7674,
+          "divisionName": "GU16",
+          "flightID": 12356,
+          "flightName": "Flight 1",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2289/standings/12356",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2289/schedules/12356",
+          "teams": 0,
+          "games": 4,
+          "brackets": []
+        },
+        {
+          "divisionID": 7675,
+          "divisionName": "GU17",
+          "flightID": 12357,
+          "flightName": "Flight 1",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/2289/standings/12357",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/2289/schedules/12357",
+          "teams": 0,
+          "games": 4,
           "brackets": []
         }
       ]

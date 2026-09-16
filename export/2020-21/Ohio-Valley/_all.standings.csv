@@ -1,0 +1,60 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd,division,flight
+1,Ohio Premier ECNL GU13,Ohio Premier,46800,18,12,1,5,41,2.28,44,15,29,GU13,ECNL
+2,FC Alliance ECNL GU13,FC Alliance TN,46371,18,10,4,4,34,1.89,38,25,13,GU13,ECNL
+3,Internationals SC ECNL GU13,Internationals SC,46797,18,10,5,3,33,1.83,53,28,25,GU13,ECNL
+4,WNY Flash Academy ECNL GU13,WNY Flash Academy,12942,18,8,8,2,26,1.44,24,27,-3,GU13,ECNL
+5,FC Pride Elite ECNL GU13,No Club Selection,46794,18,6,9,3,21,1.17,23,22,1,GU13,ECNL
+6,Racing Louisville Academy ECNL GU13,Racing Louisville Academy,45893,18,6,9,3,21,1.17,12,23,-11,GU13,ECNL
+7,Indiana Fire ECNL GU13,Indy Eleven Academy,46796,18,5,12,1,16,0.89,22,42,-20,GU13,ECNL
+8,Ohio Elite Soccer Academy ECNL GU13,Ohio Elite Soccer Academy,46798,18,2,13,3,9,0.5,17,44,-27,GU13,ECNL
+9,Pittsburgh Riverhounds ECNL GU13,Pittsburgh Riverhounds,46802,18,1,15,2,5,0.28,17,81,-64,GU13,ECNL
+1,Internationals SC ECNL GU14,Internationals SC,35240,18,16,1,1,49,2.72,80,12,68,GU14,ECNL
+2,Indiana Fire ECNL GU14,Indy Eleven Academy,23407,18,16,1,1,49,2.72,57,10,47,GU14,ECNL
+3,Tennessee Soccer Club ECNL GU14,Tennessee SC,35277,18,12,4,2,38,2.11,51,16,35,GU14,ECNL
+4,Ohio Premier ECNL GU14,Ohio Premier,33377,17,9,5,3,30,1.76,34,25,9,GU14,ECNL
+5,Pittsburgh Riverhounds ECNL GU14,No Club Selection,35276,18,8,9,1,25,1.39,24,24,0,GU14,ECNL
+6,Ohio Elite Soccer Academy ECNL GU14,Ohio Elite Soccer Academy,35241,18,5,12,1,16,0.89,17,47,-30,GU14,ECNL
+7,WNY Flash Academy ECNL GU14,WNY Flash Academy,35279,17,4,10,3,15,0.88,16,28,-12,GU14,ECNL
+8,FC Pride Elite ECNL GU14,No Club Selection,35239,18,3,11,4,13,0.72,9,33,-24,GU14,ECNL
+9,FC Alliance ECNL GU14,FC Alliance TN,35238,18,3,12,3,12,0.67,9,56,-47,GU14,ECNL
+10,Racing Louisville Academy ECNL GU14,Racing Louisville Academy,45894,18,2,13,3,9,0.5,5,51,-46,GU14,ECNL
+1,Internationals SC ECNL GU15,Internationals SC,20363,18,14,1,3,45,2.5,72,18,54,GU15,ECNL
+2,Ohio Premier ECNL GU15,Ohio Premier,20367,18,13,3,2,41,2.28,40,14,26,GU15,ECNL
+3,WNY Flash Academy ECNL GU15,WNY Flash Academy,20373,18,9,5,4,31,1.72,39,21,18,GU15,ECNL
+4,Tennessee Soccer Club ECNL GU15,Tennessee SC,20371,18,7,6,5,26,1.44,25,21,4,GU15,ECNL
+5,Indiana Fire ECNL GU15,Indy Eleven Academy,20361,18,6,7,5,23,1.28,18,24,-6,GU15,ECNL
+6,FC Pride Elite ECNL GU15,No Club Selection,19737,18,6,8,4,22,1.22,18,27,-9,GU15,ECNL
+7,FC Alliance ECNL GU15,FC Alliance TN,20358,18,4,6,8,20,1.11,15,17,-2,GU15,ECNL
+8,Ohio Elite Soccer Academy ECNL GU15,Ohio Elite Soccer Academy,20365,18,5,11,2,17,0.94,19,33,-14,GU15,ECNL
+9,Racing Louisville Academy ECNL GU15,Racing Louisville Academy,45895,18,4,9,5,17,0.94,14,34,-20,GU15,ECNL
+10,Pittsburgh Riverhounds ECNL GU15,Pittsburgh Riverhounds,20369,18,1,13,4,7,0.39,9,60,-51,GU15,ECNL
+1,WNY Flash Academy ECNL GU16,WNY Flash Academy,12532,18,11,4,3,36,2.0,57,22,35,GU16,ECNL
+2,FC Alliance ECNL GU16,FC Alliance TN,12536,18,10,5,3,33,1.83,39,21,18,GU16,ECNL
+3,Tennessee Soccer Club ECNL GU16,Tennessee SC,11643,18,10,5,3,33,1.83,23,21,2,GU16,ECNL
+4,Ohio Premier ECNL GU16,Ohio Premier,12300,18,8,4,6,30,1.67,28,21,7,GU16,ECNL
+5,Pittsburgh Riverhounds ECNL GU16,Pittsburgh Riverhounds,12533,18,9,6,3,30,1.67,29,28,1,GU16,ECNL
+6,Ohio Elite Soccer Academy ECNL GU16,Ohio Elite Soccer Academy,7589,18,8,6,4,28,1.56,30,24,6,GU16,ECNL
+7,Internationals SC ECNL GU16,Internationals SC,12534,18,7,7,4,25,1.39,28,27,1,GU16,ECNL
+8,FC Pride Elite ECNL GU16,No Club Selection,11110,18,4,7,7,19,1.06,19,27,-8,GU16,ECNL
+9,Indiana Fire ECNL GU16,Indy Eleven Academy,20362,18,2,13,3,9,0.5,10,51,-41,GU16,ECNL
+10,Racing Louisville Academy ECNL GU16,Racing Louisville Academy,45896,18,2,14,2,8,0.44,17,38,-21,GU16,ECNL
+1,FC Pride Elite ECNL GU17,No Club Selection,10871,18,12,4,2,38,2.11,46,25,21,GU17,ECNL
+2,Ohio Elite Soccer Academy ECNL GU17,Ohio Elite Soccer Academy,11602,18,11,3,4,37,2.06,42,13,29,GU17,ECNL
+3,Tennessee Soccer Club ECNL GU17,Tennessee SC,10849,18,8,4,6,30,1.67,27,14,13,GU17,ECNL
+4,WNY Flash Academy ECNL GU17,WNY Flash Academy,7612,18,8,4,6,30,1.67,36,30,6,GU17,ECNL
+5,Ohio Premier ECNL GU17,Ohio Premier,11601,18,8,7,3,27,1.5,28,23,5,GU17,ECNL
+6,Internationals SC ECNL GU17,Internationals SC,7624,18,8,7,3,27,1.5,36,35,1,GU17,ECNL
+7,Indiana Fire ECNL GU17,Indy Eleven Academy,7496,18,7,7,4,25,1.39,30,26,4,GU17,ECNL
+8,Pittsburgh Riverhounds ECNL GU17,Pittsburgh Riverhounds,10889,18,7,9,2,23,1.28,22,35,-13,GU17,ECNL
+9,FC Alliance ECNL GU17,FC Alliance TN,11603,18,5,12,1,16,0.89,20,34,-14,GU17,ECNL
+10,Racing Louisville Academy ECNL GU17,Racing Louisville Academy,45897,18,0,17,1,1,0.06,20,72,-52,GU17,ECNL
+1,Internationals SC ECNL GU18/U19,Internationals SC,7037,18,17,1,0,51,2.83,81,14,67,GU18/U19,ECNL
+2,Tennessee Soccer Club ECNL GU18/U19,Tennessee SC,8454,18,14,3,1,43,2.39,48,22,26,GU18/U19,ECNL
+3,Indiana Fire ECNL GU18/U19,Indy Eleven Academy,6924,18,12,4,2,38,2.11,43,17,26,GU18/U19,ECNL
+4,Ohio Elite Soccer Academy ECNL GU18/U19,Ohio Elite Soccer Academy,6910,18,10,4,4,34,1.89,50,43,7,GU18/U19,ECNL
+5,Pittsburgh Riverhounds ECNL GU18/U19,Pittsburgh Riverhounds,10890,17,6,9,2,20,1.18,32,42,-10,GU18/U19,ECNL
+6,Ohio Premier ECNL GU18/U19,Ohio Premier,6929,16,4,7,5,17,1.06,26,30,-4,GU18/U19,ECNL
+7,WNY Flash Academy ECNL GU18/U19,WNY Flash Academy,7052,17,4,8,5,17,1.0,30,36,-6,GU18/U19,ECNL
+8,FC Alliance ECNL GU18/U19,FC Alliance TN,11604,18,4,13,1,13,0.72,18,54,-36,GU18/U19,ECNL
+9,FC Pride Elite ECNL GU18/U19,No Club Selection,10872,18,3,12,3,12,0.67,22,52,-30,GU18/U19,ECNL
+10,Racing Louisville Academy ECNL GU18/U19,Racing Louisville Academy,45898,18,1,14,3,6,0.33,20,60,-40,GU18/U19,ECNL

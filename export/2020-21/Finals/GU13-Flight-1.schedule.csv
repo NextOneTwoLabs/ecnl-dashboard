@@ -1,0 +1,5 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-07-17,12:30 PM,Bracket,Eclipse Select SC ECNL GU13,3,2,Solar SC ECNL GU13,West Creek Soccer Complex,Field #01,On Time,247625
+2021-07-17,12:30 PM,Bracket,San Juan SC ECNL GU13,1,4,LAFC Slammers ECNL U13,West Creek Soccer Complex,Field #02,On Time,247626
+2021-07-18,12:30 PM,Bracket,Solar SC ECNL GU13,3,3,San Juan SC ECNL GU13,West Creek Soccer Complex,Field #02,On Time,247627
+2021-07-18,12:30 PM,Bracket,Eclipse Select SC ECNL GU13,0,0,LAFC Slammers ECNL U13,West Creek Soccer Complex,Field #01,On Time,247628

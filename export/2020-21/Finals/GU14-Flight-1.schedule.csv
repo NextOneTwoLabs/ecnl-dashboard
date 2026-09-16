@@ -1,0 +1,5 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-07-17,11:30 AM,Bracket,Jacksonville FC ECNL GU14,1,4,Solar SC ECNL GU14,West Creek Soccer Complex,Field #03,On Time,247629
+2021-07-17,11:30 AM,Bracket,LAFC Slammers ECNL GU14,0,1,So Cal Blues ECNL GU14,West Creek Soccer Complex,Field #04,On Time,247630
+2021-07-18,11:30 AM,Bracket,LAFC Slammers ECNL GU14,5,1,Jacksonville FC ECNL GU14,West Creek Soccer Complex,Field #04,On Time,247631
+2021-07-18,11:30 AM,Bracket,Solar SC ECNL GU14,3,1,So Cal Blues ECNL GU14,West Creek Soccer Complex,Field #03,On Time,247632

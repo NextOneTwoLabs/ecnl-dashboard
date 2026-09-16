@@ -3164,7 +3164,22 @@
     // has no group stage: every game is a knockout game whatever its type says (the 2022-23
     // cup flights type day one "Group Play"). Keyed on the games: group games carry a
     // flightgroupID, those cup games none, so a failed standings fetch cannot pull group games in.
-    function knockoutGames(games, blocks) {
+    function knockoutGames(games, blocks, omit = []) {
+      // A flight with no numbered game is a showcase (the 2020-21 U18/U19 Optional Showcase:
+      // two games a team, the stray team's typed "Bracket"): no knockout tree. The limit: a
+      // real knockout TGS numbered 0 throughout would draw no tree either (its Schedule view
+      // still works), so the failure mode is a missing tree, not a wrong one; 2020-21 itself
+      // numbers the GU15 Finals quarterfinal rows 0 beside numbered semifinals. The
+      // group-stage filter below treats `gamenumber: 0` as numbered (`!= null`); this gate
+      // treats it as unnumbered.
+      if (!games.some(g => g.gamenumber)) return [];
+      // TGS fills a knockout slot not yet decided with a nameless side ("Winner Game 13",
+      // "Winner of A": no team id, no score). The 2020-21 Playoffs kept theirs when Tropical
+      // Storm Elsa ended play early; a 2021-22 "Bye" row (one empty side, a real advancement)
+      // stays. `omit` lists match ids the registry's dataGaps declare wrong (2020-21).
+      const undecided = g => g.hometeamscore == null &&
+        [[g.hometeamID, g.homeTeam], [g.awayteamID, g.awayTeam]].some(([id, n]) => id == null && !/^bye$/i.test(n || ''));
+      games = games.filter(g => !undecided(g) && !omit.includes(g.matchID));
       // TGS typed every 2021-22 national game "Bracket" with group id 0, so type and group
       // id cannot separate the group stage; in every archived flight with real group
       // standings the group games are unnumbered and every knockout game is numbered, so an
@@ -3414,7 +3429,9 @@
 
         const flights = division.flightList || [];
         if (!flights.some(f => f.flightID === currentPlayoffTier)) {
-          currentPlayoffTier = flights.length ? flights[0].flightID : null;
+          // The registry's `defaultTier` names the competition to open first where TGS lists
+          // another ahead of it (the 2020-21 Finals list GU15's Consolation before Flight 1).
+          currentPlayoffTier = flights.length ? (flights.find(f => f.flightName === evt.defaultTier) || flights[0]).flightID : null;
         }
         buildPlayoffTierList(flights);
         const flight = flights.find(f => f.flightID === currentPlayoffTier);
@@ -3432,11 +3449,13 @@
         // link when there is no schedule page to open.
         const gap = (evt.dataGaps || {})[flight.flightID] || null;
 
-        const [blocks, games] = await Promise.all([
+        const [rawBlocks, games] = await Promise.all([
           getStandingsBlocks(division.divisionID, flight.flightID, evt.eventId).catch(() => []),
           getSchedule(evt.eventId, flight.flightID).catch(() => []),
         ]);
-        const bracketGames = knockoutGames(games, blocks);
+        // TGS's unnamed remainder block (id 0) beside "Group A" is not a group: one table.
+        const blocks = rawBlocks.every(b => b.flightGroupID) ? rawBlocks : [mergeStandingsBlocks(rawBlocks)];
+        const bracketGames = knockoutGames(games, blocks, (gap && gap.omitFromBracket) || []);
         const brackets = bracketGames.length ? buildBrackets(bracketGames, flight.flightName, tierName) : null;
 
         // Header
@@ -3529,12 +3548,16 @@
         AGE_GROUPS.forEach(ag => { AGE_LABELS[ag] = getAgeLabel(ag); });
         return;
       }
-      // Fetch hierarchy from the first conference to discover age groups
+      // The registry's ageGroups (archive.py derives them from every conference of the
+      // season, oldest first) name each division the season ran, including one only some
+      // conferences had (2020-21 "GU18/U19 Composite"); a season not yet crawled falls
+      // back to the first conference's hierarchy.
+      const known = Object.keys(getSeasonData().ageGroups || {});
       const conf = Object.values(getSeasonData().conferences)[0];
-      const hierarchy = await getEventHierarchy(conf.eventId);
-      const divList = hierarchy.girlsDivAndFlightList || [];
+      const hierarchy = known.length ? null : await getEventHierarchy(conf.eventId);
+      const divList = hierarchy ? (hierarchy.girlsDivAndFlightList || []) : [];
       // Oldest age group first (U18/U19 before U13), whichever naming the season uses
-      const groups = sortAgeGroups(divList.map(d => d.divisionName));
+      const groups = known.length ? known : sortAgeGroups(divList.map(d => d.divisionName));
       AGE_GROUPS = groups;
       AGE_LABELS = {};
       groups.forEach(ag => { AGE_LABELS[ag] = getAgeLabel(ag); });
@@ -3993,7 +4016,8 @@
             // 2021-22 names national divisions "U13" where its conferences say "GU13"
             const nds = nh.girlsDivAndFlightList || [];
             const nd = nds.find(d => d.divisionName === divisionName)
-              || nds.find(d => getAgeLabel(d.divisionName, ctx.season) === getAgeLabel(divisionName, ctx.season));
+              || nds.find(d => getAgeLabel(d.divisionName, ctx.season) === getAgeLabel(divisionName, ctx.season))
+              || nds.find(d => getDivisionAge(d.divisionName, ctx.season) === getDivisionAge(divisionName, ctx.season));   // "GU18/U19 Composite" -> U18/U19
             if (!nd) continue;
             for (const f of (nd.flightList || [])) {
               const sched = await getSchedule(evt.eventId, f.flightID).catch(() => []);
@@ -4002,7 +4026,7 @@
               const tier = tierLabel(evt, f.flightName);
               // Fetch everything first so the section appears in one piece.
               const blocks = await getStandingsBlocks(nd.divisionID, f.flightID, evt.eventId).catch(() => []);
-              const bracketGames = knockoutGames(sched, blocks);
+              const bracketGames = knockoutGames(sched, blocks, (((evt.dataGaps || {})[f.flightID] || {}).omitFromBracket) || []);
               const brackets = bracketGames.length ? buildBrackets(bracketGames, f.flightName, tier) : null;
               let outcome = '';
               if (brackets) {

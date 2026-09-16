@@ -1,0 +1,91 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2020-09-12,02:15 PM,Bracket,FC Pride Elite ECNL GU14,0,1,Indiana Fire ECNL GU14,Pride Performance Center (Turf),Field 1,On Time,172521
+2020-09-12,02:30 PM,Bracket,Racing Louisville Academy ECNL GU14,0,2,Ohio Elite Soccer Academy ECNL GU14,Elizabethtown Sports Park,Field 5,On Time,172520
+2020-09-12,03:00 PM,Bracket,FC Alliance ECNL GU14,0,3,Tennessee Soccer Club ECNL GU14,Mayor Bob Leonard Park,Field 1,On Time,172519
+2020-10-03,11:30 AM,Bracket,WNY Flash Academy ECNL GU14,1,2,Ohio Premier ECNL GU14,Montour Junction Sports Complex,Field 1,On Time,172588
+2020-10-03,11:45 AM,Bracket,Internationals SC ECNL GU14,5,3,Pittsburgh Riverhounds ECNL GU14,Pinnacle Sports,Field 1,On Time,172529
+2020-10-03,01:00 PM,Bracket,Racing Louisville Academy ECNL GU14,0,1,FC Pride Elite ECNL GU14,Richard Wigh Soccer Complex,Field 3,On Time,172526
+2020-10-03,02:30 PM,Bracket,Ohio Elite Soccer Academy ECNL GU14,0,4,Indiana Fire ECNL GU14,Ohio Elite Training Center,Field 9,On Time,172527
+2020-10-04,01:00 PM,Bracket,Racing Louisville Academy ECNL GU14,0,4,Indiana Fire ECNL GU14,Richard Wigh Soccer Complex,Field 3,On Time,172530
+2020-10-04,02:30 PM,Bracket,Ohio Elite Soccer Academy ECNL GU14,2,0,FC Pride Elite ECNL GU14,Ohio Elite Training Center,Field 9,On Time,172531
+2020-10-04,03:00 PM,Bracket,Internationals SC ECNL GU14,3,1,WNY Flash Academy ECNL GU14,Pinnacle Sports,Field 1,On Time,172533
+2020-10-04,04:15 PM,Bracket,Pittsburgh Riverhounds ECNL GU14,2,0,Ohio Premier ECNL GU14,Highmark Stadium,Field 1,On Time,172594
+2020-10-11,11:45 AM,Bracket,Internationals SC ECNL GU14,6,1,Ohio Premier ECNL GU14,Pinnacle Sports,Field 1,On Time,172534
+2020-10-17,10:30 AM,Bracket,Tennessee Soccer Club ECNL GU14,6,0,Ohio Elite Soccer Academy ECNL GU14,Trinity Park,Field 1,On Time,172535
+2020-10-17,11:00 AM,Bracket,FC Alliance ECNL GU14,2,1,Racing Louisville Academy ECNL GU14,Hardin Valley Academy Stadium,Field 1,On Time,172536
+2020-10-18,10:30 AM,Bracket,FC Alliance ECNL GU14,0,2,Ohio Elite Soccer Academy ECNL GU14,Hardin Valley Academy Stadium,Field 1,On Time,172541
+2020-10-18,10:45 AM,Bracket,Tennessee Soccer Club ECNL GU14,6,0,Racing Louisville Academy ECNL GU14,Williamson County Sports Complex,Field 22,On Time,172540
+2020-10-18,02:00 PM,Bracket,Pittsburgh Riverhounds ECNL GU14,3,0,WNY Flash Academy ECNL GU14,Highmark Stadium,Field 1,On Time,172539
+2020-10-25,12:00 PM,Bracket,Pittsburgh Riverhounds ECNL GU14,2,0,FC Pride Elite ECNL GU14,Highmark Stadium,Field 1,On Time,172546
+2020-10-31,10:45 AM,Bracket,Internationals SC ECNL GU14,3,2,Tennessee Soccer Club ECNL GU14,Pinnacle Sports,Field 1,On Time,172549
+2020-10-31,11:00 AM,Bracket,Ohio Premier ECNL GU14,3,0,FC Alliance ECNL GU14,OP Training Facility,Field 1,On Time,172548
+2020-11-01,10:45 AM,Bracket,Internationals SC ECNL GU14,3,0,FC Alliance ECNL GU14,Pinnacle Sports,Field 1,On Time,172551
+2020-11-01,11:00 AM,Bracket,Ohio Premier ECNL GU14,2,2,Tennessee Soccer Club ECNL GU14,OP Training Facility,Field 1,On Time,172550
+2020-11-07,10:30 AM,Bracket,Ohio Elite Soccer Academy ECNL GU14,0,1,Pittsburgh Riverhounds ECNL GU14,Seven Hills School,Lower Field,On Time,172553
+2020-11-07,02:45 PM,Bracket,Racing Louisville Academy ECNL GU14,0,7,Indiana Fire ECNL GU14,Lynn Family Sports Vision & Training Facility,Field 1,On Time,172571
+2020-11-08,09:30 AM,Bracket,Racing Louisville Academy ECNL GU14,1,0,Pittsburgh Riverhounds ECNL GU14,Seven Hills,Upper,On Time,172554
+2020-11-08,03:30 PM,Bracket,Ohio Elite Soccer Academy ECNL GU14,1,2,Indiana Fire ECNL GU14,Seven Hills School,Lower Field,On Time,172567
+2020-11-14,10:45 AM,Bracket,Internationals SC ECNL GU14,4,0,Racing Louisville Academy ECNL GU14,Pinnacle Sports,Field 1,On Time,172559
+2020-11-14,01:00 PM,Bracket,Ohio Premier ECNL GU14,5,0,Ohio Elite Soccer Academy ECNL GU14,OP Training Facility,Field 1,On Time,172558
+2020-11-15,01:30 PM,Bracket,Internationals SC ECNL GU14,8,0,Ohio Elite Soccer Academy ECNL GU14,Pinnacle Sports,Field 1,On Time,172563
+2020-11-15,11:00 PM,Bracket,Ohio Premier ECNL GU14,3,0,Racing Louisville Academy ECNL GU14,OP Training Facility,Field 1,On Time,172562
+2021-02-27,09:00 AM,Bracket,FC Alliance ECNL GU14,0,0,FC Pride Elite ECNL GU14,Powell High School Stadium,Field 1,On Time,172561
+2021-02-27,10:45 AM,Bracket,Tennessee Soccer Club ECNL GU14,2,3,Indiana Fire ECNL GU14,Richard Siegel Soccer Complex,Field 1,On Time,172560
+2021-02-28,08:45 AM,Bracket,Tennessee Soccer Club ECNL GU14,4,1,FC Pride Elite ECNL GU14,Oakland High School ,Field 1,On Time,172556
+2021-02-28,11:00 AM,Bracket,FC Alliance ECNL GU14,0,4,Indiana Fire ECNL GU14,Powell High School Stadium,Field 1,On Time,172557
+2021-03-06,10:30 AM,Bracket,FC Pride Elite ECNL GU14,0,0,Racing Louisville Academy ECNL GU14,Pride Performance Center (Turf),Field 1,On Time,172566
+2021-03-06,11:00 AM,Bracket,FC Alliance ECNL GU14,1,0,Pittsburgh Riverhounds ECNL GU14,Mayor Bob Leonard Park,Field 2,On Time,172565
+2021-03-06,01:45 PM,Bracket,Ohio Premier ECNL GU14,0,3,Internationals SC ECNL GU14,OP Training Facility,Field 1,On Time,172568
+2021-03-06,02:30 PM,Bracket,Tennessee Soccer Club ECNL GU14,4,0,WNY Flash Academy ECNL GU14,Richard Siegel Soccer Complex,Field 2,On Time,172564
+2021-03-07,09:00 AM,Bracket,Tennessee Soccer Club ECNL GU14,2,0,Pittsburgh Riverhounds ECNL GU14,Williamson County Sports Complex,Field 22,On Time,172569
+2021-03-07,10:30 AM,Bracket,FC Pride Elite ECNL GU14,2,1,Ohio Elite Soccer Academy ECNL GU14,Pride Performance Center (Turf),Field 1,On Time,172572
+2021-03-07,11:00 AM,Bracket,FC Alliance ECNL GU14,2,2,WNY Flash Academy ECNL GU14,Mayor Bob Leonard Park,Field 2,On Time,172570
+2021-03-13,09:30 AM,Bracket,Indiana Fire ECNL GU14,3,0,Pittsburgh Riverhounds ECNL GU14,Grand Park,Field 8,On Time,172598
+2021-03-13,01:30 PM,Bracket,FC Pride Elite ECNL GU14,0,0,WNY Flash Academy ECNL GU14,Cardinal Ritter High School,Field 1,On Time,172599
+2021-03-13,04:00 PM,Bracket,Ohio Elite Soccer Academy ECNL GU14,2,0,Racing Louisville Academy ECNL GU14,Seven Hills School,Upper Field,On Time,172577
+2021-03-14,10:30 AM,Bracket,FC Pride Elite ECNL GU14,0,2,Pittsburgh Riverhounds ECNL GU14,Cardinal Ritter High School,Field 1,On Time,172603
+2021-03-14,11:30 AM,Bracket,Indiana Fire ECNL GU14,2,1,WNY Flash Academy ECNL GU14,Grand Park,Field 8,On Time,172602
+2021-03-27,09:00 AM,Bracket,Tennessee Soccer Club ECNL GU14,1,1,Internationals SC ECNL GU14,Richard Siegel Soccer Complex,Field 2,On Time,172575
+2021-03-27,10:00 AM,Bracket,Pittsburgh Riverhounds ECNL GU14,1,4,Indiana Fire ECNL GU14,Montour Junction Sports Complex,Field 1,On Time,172544
+2021-03-27,11:00 AM,Bracket,WNY Flash Academy ECNL GU14,1,4,FC Pride Elite ECNL GU14,Flash Fields,Field B,On Time,172545
+2021-03-27,11:00 AM,Bracket,FC Alliance ECNL GU14,1,6,Ohio Premier ECNL GU14,Central High School,Field 1,On Time,172576
+2021-03-28,10:15 AM,Bracket,Tennessee Soccer Club ECNL GU14,2,0,Ohio Premier ECNL GU14,JP II High School,Field 1,On Time,172573
+2021-03-28,11:00 AM,Bracket,FC Alliance ECNL GU14,0,8,Internationals SC ECNL GU14,Powell High School Stadium,Field 1,On Time,172574
+2021-03-28,01:00 PM,Bracket,WNY Flash Academy ECNL GU14,0,3,Indiana Fire ECNL GU14,Flash Fields,Field B,On Time,172547
+2021-04-02,09:00 AM,Bracket,WNY Flash Academy ECNL GU14,0,1,Pittsburgh Riverhounds ECNL GU14,Flash Fields,Field B,On Time,172606
+2021-04-17,10:00 AM,Bracket,Indiana Fire ECNL GU14,6,0,FC Alliance ECNL GU14,Grand Park,Field 10,On Time,172579
+2021-04-17,10:30 AM,Bracket,FC Pride Elite ECNL GU14,0,1,Tennessee Soccer Club ECNL GU14,Pride Performance Center (Turf),Field 1,On Time,172578
+2021-04-17,11:00 AM,Bracket,Pittsburgh Riverhounds ECNL GU14,2,1,Ohio Elite Soccer Academy ECNL GU14,Montour Junction Sports Complex,Field 1,On Time,172585
+2021-04-17,12:30 PM,Bracket,WNY Flash Academy ECNL GU14,3,0,Racing Louisville Academy ECNL GU14,Flash Fields,Field B,On Time,172584
+2021-04-18,10:00 AM,Bracket,Indiana Fire ECNL GU14,2,0,Tennessee Soccer Club ECNL GU14,Marian University,Field 1,On Time,172583
+2021-04-18,10:30 AM,Bracket,FC Pride Elite ECNL GU14,0,1,FC Alliance ECNL GU14,Pride Performance Center (Turf),Field 1,On Time,172582
+2021-04-18,10:45 AM,Bracket,Pittsburgh Riverhounds ECNL GU14,0,0,Racing Louisville Academy ECNL GU14,Highmark Stadium,Field 1,On Time,172581
+2021-04-18,12:30 PM,Bracket,WNY Flash Academy ECNL GU14,1,2,Ohio Elite Soccer Academy ECNL GU14,Flash Fields,Field B,On Time,172580
+2021-04-24,11:00 AM,Bracket,Ohio Premier ECNL GU14,,,WNY Flash Academy ECNL GU14,OP Training Facility,Field 1,On Time,172528
+2021-04-24,12:45 PM,Bracket,Pittsburgh Riverhounds ECNL GU14,1,3,Internationals SC ECNL GU14,Montour Junction Sports Complex,Field 2,On Time,172589
+2021-04-24,02:45 PM,Bracket,Racing Louisville Academy ECNL GU14,0,2,Tennessee Soccer Club ECNL GU14,Lynn Family Sports Vision & Training Facility,Field 1,On Time,172587
+2021-04-24,04:00 PM,Bracket,Ohio Elite Soccer Academy ECNL GU14,1,1,FC Alliance ECNL GU14,Ohio Elite Training Center,Field 9,On Time,172586
+2021-04-25,10:30 AM,Bracket,Ohio Elite Soccer Academy ECNL GU14,2,5,Tennessee Soccer Club ECNL GU14,Ohio Elite Training Center,Field 9,On Time,172591
+2021-04-25,10:45 AM,Bracket,Racing Louisville Academy ECNL GU14,2,1,FC Alliance ECNL GU14,Lynn Family Sports Vision & Training Facility,Field 1,On Time,172592
+2021-04-25,11:00 AM,Bracket,Ohio Premier ECNL GU14,2,1,Pittsburgh Riverhounds ECNL GU14,OP Training Facility,Field 1,On Time,172532
+2021-05-01,12:00 PM,Bracket,FC Pride Elite ECNL GU14,0,0,Ohio Premier ECNL GU14,Lawrence Soccer Complex,Field #1,On Time,172538
+2021-05-01,01:00 PM,Bracket,Indiana Fire ECNL GU14,3,1,Internationals SC ECNL GU14,Grand Park,Field 10,On Time,172537
+2021-05-02,11:00 AM,Bracket,Ohio Elite Soccer Academy ECNL GU14,0,1,WNY Flash Academy ECNL GU14,Warren County Sports Park,Field 17,On Time,172555
+2021-05-02,12:00 PM,Bracket,Indiana Fire ECNL GU14,3,1,Ohio Premier ECNL GU14,Grand Park,Field 10,On Time,172542
+2021-05-02,12:00 PM,Bracket,FC Pride Elite ECNL GU14,0,6,Internationals SC ECNL GU14,Lawrence Soccer Complex,Field #1,On Time,172543
+2021-05-13,07:30 PM,Bracket,Indiana Fire ECNL GU14,5,0,FC Pride Elite ECNL GU14,Grand Park,Field 1,On Time,172590
+2021-05-15,09:45 AM,Bracket,Pittsburgh Riverhounds ECNL GU14,1,2,Tennessee Soccer Club ECNL GU14,Montour Junction Sports Complex,Field 2,On Time,172522
+2021-05-15,09:45 AM,Bracket,WNY Flash Academy ECNL GU14,4,0,FC Alliance ECNL GU14,Flash Fields,Field B,On Time,172523
+2021-05-15,01:30 PM,Bracket,Ohio Elite Soccer Academy ECNL GU14,0,7,Internationals SC ECNL GU14,Ohio Elite Training Center,Field 9,On Time,172596
+2021-05-15,02:45 PM,Bracket,Racing Louisville Academy ECNL GU14,1,3,Ohio Premier ECNL GU14,Lynn Family Sports Vision & Training Facility,Field 3,On Time,172597
+2021-05-16,09:45 AM,Bracket,Pittsburgh Riverhounds ECNL GU14,4,0,FC Alliance ECNL GU14,Montour Junction Sports Complex,Field 2,On Time,172524
+2021-05-16,09:45 AM,Bracket,WNY Flash Academy ECNL GU14,1,0,Tennessee Soccer Club ECNL GU14,Flash Fields,Field B,On Time,172525
+2021-05-16,10:45 AM,Bracket,Racing Louisville Academy ECNL GU14,0,11,Internationals SC ECNL GU14,Lynn Family Sports Vision & Training Facility,Field 1,On Time,172601
+2021-05-16,01:30 PM,Bracket,Ohio Elite Soccer Academy ECNL GU14,1,2,Ohio Premier ECNL GU14,Ohio Elite Training Center,Field 9,On Time,172600
+2021-05-22,11:00 AM,Bracket,Ohio Premier ECNL GU14,3,1,FC Pride Elite ECNL GU14,OP Training Facility,Field 5,On Time,172604
+2021-05-22,01:00 PM,Bracket,Internationals SC ECNL GU14,2,0,Indiana Fire ECNL GU14,Pinnacle Sports,Field 1,On Time,172605
+2021-05-22,05:00 PM,Bracket,Racing Louisville Academy ECNL GU14,0,0,WNY Flash Academy ECNL GU14,Lynn Family Sports Vision & Training Facility,Field 3,On Time,172552
+2021-05-23,11:00 AM,Bracket,Ohio Premier ECNL GU14,1,1,Indiana Fire ECNL GU14,OP Training Facility,Field 5,On Time,172607
+2021-05-23,12:00 PM,Bracket,Internationals SC ECNL GU14,4,0,FC Pride Elite ECNL GU14,Copley Road Soccer Complex,5,On Time,172608
+2021-06-05,11:00 AM,Bracket,Tennessee Soccer Club ECNL GU14,7,0,FC Alliance ECNL GU14,Williamson County Sports Complex,Field 23,On Time,172595
+2021-06-13,04:30 PM,Bracket,Internationals SC ECNL GU14,2,0,WNY Flash Academy ECNL GU14,Pinnacle Sports,Field 1,On Time,172593

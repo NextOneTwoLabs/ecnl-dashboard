@@ -1,0 +1,115 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2020-09-12,10:00 AM,Bracket,NC Courage ECNL GU14,2,1,Wilmington Hammerheads ECNL GU14,WRAL Soccer Complex,WRAL 05 First Watch,On Time,193989
+2020-09-12,10:00 AM,Bracket,NCFC Youth ECNL GU14,1,3,NC Fusion ECNL GU14,WRAL Soccer Center,Office Mart #13,On Time,193990
+2020-09-12,11:00 AM,Bracket,Richmond United ECNL GU14,2,5,Loudoun Soccer ECNL GU14,West Creek,Field 6,On Time,193988
+2020-09-12,01:00 PM,Bracket,CESA ECNL GU14,0,2,Charlotte SA ECNL GU14,Mesa Soccer Complex,Field 2,On Time,193992
+2020-09-12,02:00 PM,Bracket,Charlotte Independence ECNL GU14,2,2,South Carolina United ECNL GU14,Bailey Road Park,Field 1 (upper),On Time,193991
+2020-09-13,12:00 PM,Bracket,BRYC Elite Academy ECNL GU14,1,3,McLean YSA ECNL GU14,Robinson High School,Stadium Turf,On Time,193993
+2020-09-13,12:00 PM,Bracket,NC Fusion ECNL GU14,1,9,NC Courage ECNL GU14,Truist Sports Park,Field 4,On Time,193994
+2020-09-13,01:00 PM,Bracket,Charlotte Independence ECNL GU14,1,1,CESA ECNL GU14,Bailey Road Park,Field 1 (upper),On Time,193996
+2020-09-13,03:00 PM,Bracket,Wilmington Hammerheads ECNL GU14,7,1,NCFC Youth ECNL GU14,Cape Fear Regional Soccer Park,Field 3,On Time,193995
+2020-09-19,11:00 AM,Bracket,VDA ECNL GU14,0,1,Loudoun Soccer ECNL GU14,Ali Krieger Sports Complex (AKSC),Field 8,On Time,193997
+2020-09-19,12:00 PM,Bracket,NC Courage ECNL GU14,3,2,South Carolina United ECNL GU14,WRAL Soccer Complex,WRAL 05 First Watch,On Time,193999
+2020-09-19,12:00 PM,Bracket,NCFC Youth ECNL GU14,2,4,CESA ECNL GU14,WRAL Soccer Center,Dicks Sporting Goods #1,On Time,194000
+2020-09-19,12:00 PM,Bracket,NC Fusion ECNL GU14,1,1,Wilmington Hammerheads ECNL GU14,Truist Soccer Complex at Bryan Park,BP 08 Secret,On Time,194001
+2020-09-19,12:00 PM,Bracket,Charlotte SA ECNL GU14,1,1,Charlotte Independence ECNL GU14,OrthoCarolina Sportsplex,Field 6,On Time,194002
+2020-09-19,03:00 PM,Bracket,Richmond United ECNL GU14,8,1,BRYC Elite Academy ECNL GU14,West Creek,Field 6,On Time,193998
+2020-09-20,09:00 AM,Bracket,NC Courage ECNL GU14,2,0,CESA ECNL GU14,WRAL Soccer Complex,WRAL 05 First Watch,On Time,194003
+2020-09-20,09:00 AM,Bracket,NCFC Youth ECNL GU14,0,3,South Carolina United ECNL GU14,Wake Competition Center,Field 2,On Time,194004
+2020-09-20,01:00 PM,Bracket,Charlotte SA ECNL GU14,0,0,NC Fusion ECNL GU14,OrthoCarolina Sportsplex,Field 6,On Time,194005
+2020-09-26,11:00 AM,Bracket,VDA ECNL GU14,2,1,BRYC Elite Academy ECNL GU14,Ali Krieger Sports Complex (AKSC),Field 8,On Time,194007
+2020-09-26,12:00 PM,Bracket,NC Courage ECNL GU14,2,3,Charlotte SA ECNL GU14,WRAL Soccer Complex,WRAL 05 First Watch,On Time,194008
+2020-09-26,12:30 PM,Bracket,McLean YSA ECNL GU14,2,0,Richmond United ECNL GU14,Lewinsville Park,Field 3,On Time,194006
+2020-09-26,01:00 PM,Bracket,NC Fusion ECNL GU14,1,1,South Carolina United ECNL GU14,Truist Soccer Complex at Bryan Park,BP 08 Secret,On Time,194010
+2020-09-26,02:00 PM,Bracket,NCFC Youth ECNL GU14,1,2,Charlotte Independence ECNL GU14,WRAL Soccer Center,Soccer.com #12,On Time,194009
+2020-09-27,01:00 PM,Bracket,South Carolina United ECNL GU14,0,0,Charlotte SA ECNL GU14,Southeastern Freight Lines Complex,Stadium B,On Time,194011
+2020-10-03,12:00 PM,Bracket,Charlotte SA ECNL GU14,2,1,South Carolina United ECNL GU14,OrthoCarolina Sportsplex,Field 5,On Time,194014
+2020-10-03,01:00 PM,Bracket,Richmond United ECNL GU14,3,2,VDA ECNL GU14,West Creek,Field 6,On Time,194012
+2020-10-03,01:00 PM,Bracket,Wilmington Hammerheads ECNL GU14,2,0,CESA ECNL GU14,Cape Fear Regional Soccer Park,Field 2,On Time,194013
+2020-10-04,11:00 AM,Bracket,NC Fusion ECNL GU14,3,0,NCFC Youth ECNL GU14,Truist Soccer Complex at Bryan Park,BP 03 Wrangler,On Time,194017
+2020-10-04,01:00 PM,Bracket,NC Courage ECNL GU14,0,1,Charlotte Independence ECNL GU14,WRAL Soccer Complex,WRAL 03 Ricky Horwitz,On Time,194016
+2020-10-04,02:00 PM,Bracket,Loudoun Soccer ECNL GU14,2,0,McLean YSA ECNL GU14,Loudoun Soccer Park,Field 1,On Time,194015
+2020-10-10,12:00 PM,Bracket,BRYC Elite Academy ECNL GU14,2,2,Richmond United ECNL GU14,Robinson High School,Stadium Turf,On Time,194018
+2020-10-10,02:00 PM,Bracket,Loudoun Soccer ECNL GU14,1,0,VDA ECNL GU14,Riverside High School,Practice,On Time,194019
+2020-10-10,02:00 PM,Bracket,Charlotte Independence ECNL GU14,3,1,Wilmington Hammerheads ECNL GU14,Bradford Park,Field 3,On Time,194020
+2020-10-11,11:00 AM,Bracket,NC Courage ECNL GU14,2,0,NC Fusion ECNL GU14,WRAL Soccer Complex,WRAL 06 Stadium,On Time,194021
+2020-10-17,11:00 AM,Bracket,VDA ECNL GU14,1,4,McLean YSA ECNL GU14,Ali Krieger Sports Complex (AKSC),Field 8,On Time,194023
+2020-10-17,11:00 AM,Bracket,Charlotte Independence ECNL GU14,2,1,NC Fusion ECNL GU14,Bradford Park,Field 2,On Time,194025
+2020-10-17,12:00 PM,Bracket,NCFC Youth ECNL GU14,1,3,Wilmington Hammerheads ECNL GU14,WRAL Soccer Center,Accentuate Staffing #4 ,On Time,194024
+2020-10-17,02:00 PM,Bracket,BRYC Elite Academy ECNL GU14,1,3,Loudoun Soccer ECNL GU14,Robinson High School,Stadium Turf,On Time,194022
+2020-10-17,04:00 PM,Bracket,Charlotte SA ECNL GU14,0,1,CESA ECNL GU14,OrthoCarolina Sportsplex,Field 5,On Time,194026
+2020-10-18,11:00 AM,Bracket,Wilmington Hammerheads ECNL GU14,1,2,NC Fusion ECNL GU14,Cape Fear Regional Soccer Park,Field 3,On Time,194028
+2020-10-18,01:00 PM,Bracket,CESA ECNL GU14,1,1,Charlotte Independence ECNL GU14,Mesa Soccer Complex,Field 2,On Time,194029
+2020-10-18,03:00 PM,Bracket,NCFC Youth ECNL GU14,0,3,Charlotte SA ECNL GU14,WRAL Soccer Center,First Watch #5,On Time,194027
+2020-10-24,12:00 PM,Bracket,Loudoun Soccer ECNL GU14,1,0,Richmond United ECNL GU14,Loudoun Soccer Park,Field 2,On Time,194031
+2020-10-24,12:00 PM,Bracket,NC Courage ECNL GU14,6,1,NCFC Youth ECNL GU14,WRAL Soccer Complex,WRAL 04 Accentuate Staffing ,On Time,194032
+2020-10-24,03:00 PM,Bracket,Wilmington Hammerheads ECNL GU14,4,0,South Carolina United ECNL GU14,Cape Fear Regional Soccer Park,Field 3,On Time,194033
+2020-10-24,07:00 PM,Bracket,McLean YSA ECNL GU14,3,0,BRYC Elite Academy ECNL GU14,Lewinsville Park,Field 3,On Time,194030
+2020-10-31,10:00 AM,Bracket,Charlotte SA ECNL GU14,2,0,Wilmington Hammerheads ECNL GU14,OrthoCarolina Sportsplex,Field 6,On Time,194037
+2020-10-31,12:00 PM,Bracket,NCFC Youth ECNL GU14,2,1,NC Courage ECNL GU14,WRAL Soccer Center,Accentuate Staffing #4 ,On Time,194036
+2020-10-31,01:00 PM,Bracket,NC Fusion ECNL GU14,1,2,CESA ECNL GU14,Truist Soccer Complex at Bryan Park,BP 02 Triton Management,On Time,194038
+2020-10-31,01:00 PM,Bracket,South Carolina United ECNL GU14,0,1,Charlotte Independence ECNL GU14,Southeastern Freight Lines Complex,Field 1,On Time,194039
+2020-10-31,04:00 PM,Bracket,BRYC Elite Academy ECNL GU14,0,0,VDA ECNL GU14,Robinson High School,Stadium Turf,On Time,194035
+2020-11-01,11:00 AM,Bracket,Charlotte Independence ECNL GU14,2,3,Charlotte SA ECNL GU14,Bailey Road Park,Field 3 (middle school),On Time,194041
+2020-11-01,02:00 PM,Bracket,Richmond United ECNL GU14,1,2,McLean YSA ECNL GU14,West Creek,Field 6,On Time,194040
+2020-11-07,12:00 PM,Bracket,VDA ECNL GU14,2,3,Richmond United ECNL GU14,Ali Krieger Sports Complex (AKSC),Field 8,On Time,194042
+2020-11-14,12:00 PM,Bracket,Charlotte SA ECNL GU14,1,0,NC Courage ECNL GU14,OrthoCarolina Sportsplex,Field 4,On Time,194045
+2020-11-14,01:00 PM,Bracket,Charlotte Independence ECNL GU14,3,2,NCFC Youth ECNL GU14,Manchester Meadows,Field 1,On Time,194046
+2020-11-14,01:00 PM,Bracket,CESA ECNL GU14,1,3,NC Fusion ECNL GU14,Mesa Soccer Complex,Field 2,On Time,194048
+2020-11-14,05:00 PM,Bracket,South Carolina United ECNL GU14,0,0,Wilmington Hammerheads ECNL GU14,Southeastern Freight Lines Complex,Field 1,On Time,194047
+2020-11-15,11:00 AM,Bracket,Charlotte SA ECNL GU14,1,0,NCFC Youth ECNL GU14,OrthoCarolina Sportsplex,Field 6,On Time,194049
+2020-11-15,11:00 AM,Bracket,Charlotte Independence ECNL GU14,3,0,NC Courage ECNL GU14,Manchester Meadows,Field 1,On Time,194050
+2020-11-15,11:00 AM,Bracket,South Carolina United ECNL GU14,1,3,NC Fusion ECNL GU14,Southeastern Freight Lines Complex,Field 1,On Time,194052
+2020-11-15,01:00 PM,Bracket,CESA ECNL GU14,2,3,Wilmington Hammerheads ECNL GU14,Mesa Soccer Complex,Field 2,On Time,194051
+2020-11-21,09:00 AM,Bracket,Wilmington Hammerheads ECNL GU14,1,2,Charlotte SA ECNL GU14,Cape Fear Regional Soccer Park,Field 2,On Time,194056
+2020-11-21,11:45 AM,Bracket,CESA ECNL GU14,5,0,NCFC Youth ECNL GU14,CFC,Field 4,On Time,194054
+2020-11-21,12:00 PM,Bracket,Loudoun Soccer ECNL GU14,5,0,BRYC Elite Academy ECNL GU14,Riverside High School,Practice,On Time,194044
+2020-11-21,12:30 PM,Bracket,McLean YSA ECNL GU14,1,2,VDA ECNL GU14,Lewinsville Park,Field 3,On Time,194053
+2020-11-21,01:00 PM,Bracket,South Carolina United ECNL GU14,0,1,NC Courage ECNL GU14,Southeastern Freight Lines Complex,Stadium A,On Time,194055
+2020-11-21,03:00 PM,Bracket,NC Fusion ECNL GU14,0,0,Charlotte Independence ECNL GU14,Truist Soccer Complex at Bryan Park,BP 07,On Time,194057
+2020-11-22,09:00 AM,Bracket,CESA ECNL GU14,0,1,NC Courage ECNL GU14,CFC,Field 4,On Time,194058
+2020-11-22,11:00 AM,Bracket,NC Fusion ECNL GU14,0,2,Charlotte SA ECNL GU14,Truist Soccer Complex at Bryan Park,BP 08 Secret,On Time,194061
+2020-11-22,12:00 PM,Bracket,Wilmington Hammerheads ECNL GU14,0,0,Charlotte Independence ECNL GU14,Cape Fear Regional Soccer Park,Field 2,On Time,194060
+2020-11-22,01:00 PM,Bracket,South Carolina United ECNL GU14,1,0,NCFC Youth ECNL GU14,Southeastern Freight Lines Complex,Field 1,On Time,194059
+2021-01-17,01:00 PM,Group Play,CESA ECNL GU14,2,2,South Carolina United ECNL GU14,Wenwood,Field 6,On Time,222009
+2021-01-23,03:00 PM,Group Play,South Carolina United ECNL GU14,0,4,CESA ECNL GU14,SCUFC West Complex,Field 3,On Time,222011
+2021-02-06,12:00 PM,Bracket,Wilmington Hammerheads ECNL GU14,1,0,NC Courage ECNL GU14,Cape Fear Regional Soccer Park,Field 2,On Time,194034
+2021-02-27,11:00 AM,Group Play,South Carolina United ECNL GU14,0,2,CESA ECNL GU14,Southeastern Freight Lines Complex,Stadium A,On Time,227810
+2021-02-27,12:00 PM,Group Play,NCFC Youth ECNL GU14,2,4,NC Courage ECNL GU14,WRAL Soccer Center,First Watch #5,On Time,227812
+2021-02-27,02:00 PM,Group Play,Charlotte Independence ECNL GU14,2,0,Wilmington Hammerheads ECNL GU14,Richard Barry Park,Field 3,On Time,227814
+2021-02-28,09:00 AM,Group Play,CESA ECNL GU14,2,0,Wilmington Hammerheads ECNL GU14,Mesa Soccer Complex,Field 1,On Time,227816
+2021-03-06,12:00 PM,Group Play,CESA ECNL GU14,3,0,NCFC Youth ECNL GU14,Mesa Soccer Complex,Field 1,On Time,227820
+2021-03-06,01:00 PM,Group Play,Charlotte Independence ECNL GU14,0,1,Charlotte SA ECNL GU14,Chestnut Square Park ,Field 1,On Time,227818
+2021-03-06,02:00 PM,Group Play,NC Fusion ECNL GU14,1,0,South Carolina United ECNL GU14,Truist Sports Park,Field 2,On Time,227822
+2021-03-07,11:00 AM,Group Play,Charlotte SA ECNL GU14,0,0,NC Fusion ECNL GU14,OrthoCarolina Sportsplex,Field 5,On Time,227824
+2021-03-20,12:00 PM,Group Play,NC Courage ECNL GU14,2,2,Wilmington Hammerheads ECNL GU14,WRAL Soccer Complex,WRAL 05 First Watch,On Time,227826
+2021-03-20,02:00 PM,Group Play,NCFC Youth ECNL GU14,1,2,South Carolina United ECNL GU14,WRAL Soccer Center,Ricky Horwitz #3,On Time,227828
+2021-03-21,11:00 AM,Group Play,NC Courage ECNL GU14,7,0,South Carolina United ECNL GU14,WRAL Soccer Complex,WRAL 04 Accentuate Staffing ,On Time,227830
+2021-03-21,02:00 PM,Group Play,Wilmington Hammerheads ECNL GU14,2,0,NCFC Youth ECNL GU14,Cape Fear Regional Soccer Park,Field 3,On Time,227842
+2021-03-27,02:00 PM,Group Play,Charlotte Independence ECNL GU14,1,1,CESA ECNL GU14,Richard Barry Park,Field 3,On Time,227832
+2021-03-28,11:00 AM,Group Play,Wilmington Hammerheads ECNL GU14,1,1,NC Fusion ECNL GU14,Cape Fear Regional Soccer Park,Field 3,On Time,227834
+2021-04-17,11:00 AM,Bracket,Loudoun Soccer ECNL GU14,2,0,VDA ECNL GU14,Loudoun Soccer Park,Field 1,On Time,221515
+2021-04-17,12:00 PM,Bracket,BRYC Elite Academy ECNL GU14,2,3,Richmond United ECNL GU14,Robinson High School,Upper Turf,On Time,221514
+2021-04-17,12:00 PM,Group Play,Charlotte SA ECNL GU14,2,0,NC Courage ECNL GU14,OrthoCarolina Sportsplex,Field 6,On Time,227836
+2021-04-17,12:00 PM,Group Play,Charlotte Independence ECNL GU14,2,0,South Carolina United ECNL GU14,Richard Barry Park,Field 3,On Time,227838
+2021-04-17,02:00 PM,Group Play,NC Fusion ECNL GU14,0,3,CESA ECNL GU14,Truist Sports Park,Field 2,On Time,227840
+2021-04-18,01:00 PM,Group Play,South Carolina United ECNL GU14,0,3,Charlotte SA ECNL GU14,SCUFC West Complex,Field 6,On Time,227844
+2021-04-24,09:00 AM,Bracket,VDA ECNL GU14,3,1,BRYC Elite Academy ECNL GU14,Ali Krieger Sports Complex (AKSC),Field 7,On Time,221507
+2021-04-24,12:00 PM,Bracket,Richmond United ECNL GU14,2,5,McLean YSA ECNL GU14,Striker Park,Field 3,On Time,221517
+2021-04-24,12:00 PM,Group Play,Charlotte SA ECNL GU14,3,0,CESA ECNL GU14,OrthoCarolina Sportsplex,Field 5,On Time,227846
+2021-04-24,12:00 PM,Group Play,NCFC Youth ECNL GU14,0,2,NC Fusion ECNL GU14,WRAL Soccer Center,Accentuate Staffing #4 ,On Time,227852
+2021-04-25,01:00 PM,Group Play,NC Courage ECNL GU14,3,1,Charlotte Independence ECNL GU14,Wake Competition Center,Field 1,On Time,227850
+2021-04-25,01:00 PM,Group Play,Charlotte SA ECNL GU14,0,1,NCFC Youth ECNL GU14,OrthoCarolina Sportsplex,Field 6,On Time,227854
+2021-05-01,10:00 AM,Bracket,VDA ECNL GU14,4,2,Richmond United ECNL GU14,Ali Krieger Sports Complex (AKSC),Field 7,On Time,221519
+2021-05-01,11:00 AM,Bracket,McLean YSA ECNL GU14,3,0,Loudoun Soccer ECNL GU14,Lewinsville Park,Field 3,On Time,221518
+2021-05-01,12:00 PM,Group Play,NC Fusion ECNL GU14,3,4,NC Courage ECNL GU14,Truist Soccer Complex at Bryan Park,Field 17,On Time,227858
+2021-05-01,02:00 PM,Group Play,NCFC Youth ECNL GU14,0,2,Charlotte Independence ECNL GU14,WRAL Soccer Center,Ricky Horwitz #3,On Time,227856
+2021-05-01,03:00 PM,Group Play,Wilmington Hammerheads ECNL GU14,2,2,Charlotte SA ECNL GU14,Cape Fear Regional Soccer Park,Field 2,On Time,227860
+2021-05-02,12:00 PM,Group Play,NC Fusion ECNL GU14,0,2,Charlotte Independence ECNL GU14,Truist Soccer Complex at Bryan Park,Field 14,On Time,227862
+2021-05-02,01:00 PM,Group Play,South Carolina United ECNL GU14,3,2,Wilmington Hammerheads ECNL GU14,Southeastern Freight Lines Complex,Stadium A,On Time,227848
+2021-05-15,11:00 AM,Bracket,McLean YSA ECNL GU14,6,0,VDA ECNL GU14,Spring Hill Rec Center,Field 2,On Time,221500
+2021-05-15,11:00 AM,Bracket,Loudoun Soccer ECNL GU14,3,1,BRYC Elite Academy ECNL GU14,Loudoun Soccer Park,Field 1,On Time,221501
+2021-05-22,09:00 AM,Bracket,BRYC Elite Academy ECNL GU14,0,7,McLean YSA ECNL GU14,Robinson High School,Upper Turf,On Time,221502
+2021-05-22,12:00 PM,Bracket,Richmond United ECNL GU14,2,3,Loudoun Soccer ECNL GU14,Striker Park,Field 3,On Time,221503
+2021-05-22,02:00 PM,Group Play,CESA ECNL GU14,2,0,NC Courage ECNL GU14,Mesa Soccer Complex,Field 1,On Time,227864
+2021-05-29,09:30 AM,Bracket,McLean YSA ECNL GU14,3,0,Loudoun Soccer ECNL GU14,Spring Hill Rec Center,Field 2,On Time,194043

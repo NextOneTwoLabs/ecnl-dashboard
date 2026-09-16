@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-06-30,09:30 AM,Bracket,DeAnza Force ECNL GU17,3,2,World Class FC ECNL GU17,Premier Sports Campus,Field #01,On Time,244991
+2021-06-30,09:30 AM,Bracket,Bethesda SC ECNL GU17,2,4,AZ Arsenal ECNL GU17,Premier Sports Campus,Field #03,On Time,244992
+2021-06-30,09:45 AM,Bracket,NC Fusion ECNL GU17,3,4,Gretna Elite Academy ECNL GU17,Premier Sports Campus,Field #02,On Time,244993
+2021-06-30,09:45 AM,Bracket,Indiana Fire ECNL GU17,3,2,Real Colorado Athletico ECNL GU17,Premier Sports Campus,Field #04,On Time,244994
+2021-06-30,09:45 AM,Bracket,Ohio Premier ECNL GU17,3,3,CESA ECNL GU17,Premier Sports Campus,Field #12,On Time,244997
+2021-06-30,09:45 AM,Bracket,SLAMMERS FC ECNL GU17,0,0,Challenge SC ECNL GU17,Premier Sports Campus,Field #16,On Time,244998
+2021-06-30,11:45 AM,Bracket,Sting Dallas Black ECNL GU17,2,1,Maryland United ECNL GU17,Premier Sports Campus,Field #16,On Time,244995
+2021-06-30,11:45 AM,Bracket,FC Alliance ECNL GU17,0,0,Sting Austin ECNL GU17,Premier Sports Campus,Field #18,On Time,244996
+2021-07-01,07:30 AM,Bracket,CESA ECNL GU17,2,1,Challenge SC ECNL GU17,Premier Sports Campus,Field #05,On Time,245002
+2021-07-01,07:45 AM,Bracket,Gretna Elite Academy ECNL GU17,1,0,Indiana Fire ECNL GU17,Premier Sports Campus,Field #06,On Time,245000
+2021-07-01,07:45 AM,Bracket,NC Fusion ECNL GU17,3,2,Real Colorado Athletico ECNL GU17,Premier Sports Campus,Field #12,On Time,245009
+2021-07-01,07:45 AM,Bracket,Ohio Premier ECNL GU17,1,2,SLAMMERS FC ECNL GU17,Premier Sports Campus,Field #14,On Time,245011
+2021-07-01,09:30 AM,Bracket,Sting Dallas Black ECNL GU17,1,1,FC Alliance ECNL GU17,Premier Sports Campus,Field #05,On Time,245001
+2021-07-01,09:45 AM,Bracket,DeAnza Force ECNL GU17,3,3,AZ Arsenal ECNL GU17,Premier Sports Campus,Field #06,On Time,244999
+2021-07-01,09:45 AM,Bracket,World Class FC ECNL GU17,0,4,Bethesda SC ECNL GU17,Premier Sports Campus,Field #10,On Time,245008
+2021-07-01,09:45 AM,Bracket,Maryland United ECNL GU17,1,1,Sting Austin ECNL GU17,Premier Sports Campus,Field #16,On Time,245010
+2021-07-03,07:30 AM,Bracket,Bethesda SC ECNL GU17,3,0,NC Fusion ECNL GU17,Premier Sports Campus,Field #01,On Time,245012
+2021-07-03,07:30 AM,Bracket,World Class FC ECNL GU17,0,2,Real Colorado Athletico ECNL GU17,Premier Sports Campus,Field #05,On Time,245014
+2021-07-03,07:45 AM,Bracket,AZ Arsenal ECNL GU17,3,2,Gretna Elite Academy ECNL GU17,Premier Sports Campus,Field #02,On Time,245003
+2021-07-03,07:45 AM,Bracket,DeAnza Force ECNL GU17,1,2,Indiana Fire ECNL GU17,Premier Sports Campus,Field #04,On Time,245006
+2021-07-03,05:30 PM,Bracket,Sting Austin ECNL GU17,1,1,SLAMMERS FC ECNL GU17,Premier Sports Campus,Field #01,On Time,245013
+2021-07-03,05:30 PM,Bracket,Maryland United ECNL GU17,2,0,Ohio Premier ECNL GU17,Premier Sports Campus,Field #03,On Time,245015
+2021-07-03,05:45 PM,Bracket,Sting Dallas Black ECNL GU17,4,2,CESA ECNL GU17,Premier Sports Campus,Field #02,On Time,245004
+2021-07-03,05:45 PM,Bracket,FC Alliance ECNL GU17,0,3,Challenge SC ECNL GU17,Premier Sports Campus,Field #04,On Time,245007
+2021-07-05,11:45 AM,Bracket,AZ Arsenal ECNL GU17,0,1,Sting Dallas Black ECNL GU17,Premier Sports Campus,Field #04,On Time,245005

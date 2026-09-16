@@ -1,0 +1,78 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd,division,flight
+1,Richmond United ECNL GU13,Richmond United,46822,12,9,1,2,29,2.42,46,5,41,GU13,ECNL
+2,NC Courage ECNL GU13,NC Courage Academy,44728,21,15,1,5,50,2.38,60,9,51,GU13,ECNL
+3,VDA ECNL GU13,Virginia Development Academy,46823,12,8,0,4,28,2.33,29,7,22,GU13,ECNL
+4,CESA ECNL GU13,Carolina Elite Soccer Academy,46817,21,13,1,7,46,2.19,57,14,43,GU13,ECNL
+5,Charlotte SA ECNL GU13,Charlotte Soccer Academy,44721,21,12,3,6,42,2.0,50,23,27,GU13,ECNL
+6,Loudoun Soccer ECNL GU13,Northern Virginia Alliance,46824,12,5,4,3,18,1.5,17,23,-6,GU13,ECNL
+7,South Carolina United ECNL GU13,South Carolina United FC,43173,21,6,7,8,26,1.24,23,21,2,GU13,ECNL
+8,Charlotte Independence ECNL GU13,Charlotte Independence SC,28376,21,5,10,6,21,1.0,21,35,-14,GU13,ECNL
+9,Wilmington Hammerheads ECNL GU13,Wilmington Hammerheads,46818,21,6,13,2,20,0.95,22,46,-24,GU13,ECNL
+10,McLean YSA ECNL GU13,Fairfax Virginia Union,46827,12,2,8,2,8,0.67,19,32,-13,GU13,ECNL
+11,NC Fusion ECNL GU13,NC Fusion,13888,21,1,19,1,4,0.19,11,83,-72,GU13,ECNL
+12,BRYC Elite Academy ECNL GU13,Fairfax Virginia Union,11956,12,0,11,1,1,0.08,6,50,-44,GU13,ECNL
+1,McLean YSA ECNL GU14,Fairfax Virginia Union,25892,12,10,2,0,30,2.5,39,9,30,GU14,ECNL
+2,Loudoun Soccer ECNL GU14,Northern Virginia Alliance,35287,12,10,2,0,30,2.5,26,12,14,GU14,ECNL
+3,Charlotte SA ECNL GU14,Charlotte Soccer Academy,44722,21,14,2,5,47,2.24,33,11,22,GU14,ECNL
+4,Charlotte Independence ECNL GU14,Charlotte Independence SC,35286,21,11,3,7,40,1.9,32,18,14,GU14,ECNL
+5,NC Courage ECNL GU14,NC Courage Academy,44729,21,12,8,1,37,1.76,49,28,21,GU14,ECNL
+6,CESA ECNL GU14,Carolina Elite Soccer Academy,27972,21,10,7,4,34,1.62,36,24,12,GU14,ECNL
+7,Wilmington Hammerheads ECNL GU14,No Club Selection,35272,21,7,8,6,27,1.29,34,28,6,GU14,ECNL
+8,NC Fusion ECNL GU14,NC Fusion,35269,21,7,8,6,27,1.29,26,33,-7,GU14,ECNL
+9,Richmond United ECNL GU14,Richmond United,22314,12,4,7,1,13,1.08,28,31,-3,GU14,ECNL
+10,VDA ECNL GU14,Virginia Development Academy,35271,12,4,7,1,13,1.08,16,25,-9,GU14,ECNL
+11,South Carolina United ECNL GU14,South Carolina United FC,35270,21,4,12,5,17,0.81,18,41,-23,GU14,ECNL
+12,NCFC Youth ECNL GU14,NCFC Youth,35268,21,2,19,0,6,0.29,15,60,-45,GU14,ECNL
+13,BRYC Elite Academy ECNL GU14,Fairfax Virginia Union,11957,12,0,10,2,2,0.17,10,42,-32,GU14,ECNL
+1,VDA ECNL GU15,Virginia Development Academy,19656,8,7,0,1,22,2.75,18,7,11,GU15,ECNL
+2,CESA ECNL GU15,Carolina Elite Soccer Academy,20311,14,12,0,2,38,2.71,37,11,26,GU15,ECNL
+3,Charlotte SA ECNL GU15,Charlotte Soccer Academy,44723,14,9,2,3,30,2.14,34,10,24,GU15,ECNL
+4,NC Fusion ECNL GU15,NC Fusion,20316,14,6,4,4,22,1.57,28,28,0,GU15,ECNL
+5,McLean YSA ECNL GU15,Fairfax Virginia Union,20314,8,3,2,3,12,1.5,13,12,1,GU15,ECNL
+6,Richmond United ECNL GU15,Richmond United,20317,8,3,2,3,12,1.5,15,8,7,GU15,ECNL
+7,NC Courage ECNL GU15,NC Courage Academy,44730,14,5,5,4,19,1.36,24,19,5,GU15,ECNL
+8,South Carolina United ECNL GU15,South Carolina United FC,20318,14,5,7,2,17,1.21,25,25,0,GU15,ECNL
+9,Charlotte Independence ECNL GU15,Charlotte Independence SC,20312,14,3,7,4,13,0.93,14,27,-13,GU15,ECNL
+10,NCFC Youth ECNL GU15,NCFC Youth,20315,14,4,10,0,12,0.86,16,34,-18,GU15,ECNL
+11,BRYC Elite Academy ECNL GU15,Fairfax Virginia Union,13009,8,1,5,2,5,0.63,10,16,-6,GU15,ECNL
+12,Wilmington Hammerheads ECNL GU15,No Club Selection,19665,14,2,11,1,7,0.5,13,37,-24,GU15,ECNL
+13,Loudoun Soccer ECNL GU15,Northern Virginia Alliance,19775,8,1,6,1,4,0.5,10,23,-13,GU15,ECNL
+1,Richmond United ECNL GU16,Richmond United,11507,8,8,0,0,24,3.0,27,7,20,GU16,ECNL
+2,NC Courage ECNL GU16,NC Courage Academy,44731,14,12,1,1,37,2.64,48,19,29,GU16,ECNL
+3,Charlotte SA ECNL GU16,Charlotte Soccer Academy,44724,14,8,4,2,26,1.86,29,15,14,GU16,ECNL
+4,McLean YSA ECNL GU16,McLean Youth Soccer,11505,8,4,3,1,13,1.63,19,11,8,GU16,ECNL
+5,Wilmington Hammerheads ECNL GU16,Wilmington Hammerheads,19666,14,6,5,3,21,1.5,27,25,2,GU16,ECNL
+6,NCFC Youth ECNL GU16,NCFC Youth,11511,14,5,4,5,20,1.43,20,20,0,GU16,ECNL
+7,South Carolina United ECNL GU16,South Carolina United FC,11040,14,5,5,4,19,1.36,17,21,-4,GU16,ECNL
+8,CESA ECNL GU16,Carolina Elite Soccer Academy,11339,14,5,8,1,16,1.14,17,28,-11,GU16,ECNL
+9,NC Fusion ECNL GU16,NC Fusion,13554,14,4,6,4,16,1.14,14,23,-9,GU16,ECNL
+10,Loudoun Soccer ECNL GU16,Loudoun Soccer,19776,8,2,3,3,9,1.13,15,19,-4,GU16,ECNL
+11,VDA ECNL GU16,Virginia Development Academy,20319,8,2,4,2,8,1.0,10,16,-6,GU16,ECNL
+12,BRYC Elite Academy ECNL GU16,McLean Youth Soccer,11501,8,0,6,2,2,0.25,6,24,-18,GU16,ECNL
+13,Charlotte Independence ECNL GU16,Charlotte Independence SC,11116,14,0,12,2,2,0.14,10,31,-21,GU16,ECNL
+1,Richmond United ECNL GU17,Richmond United,7536,8,7,0,1,22,2.75,18,1,17,GU17,ECNL
+2,NC Courage ECNL GU17,NC Courage Academy,44732,14,12,2,0,36,2.57,40,15,25,GU17,ECNL
+3,Charlotte SA ECNL GU17,Charlotte Soccer Academy,44725,14,11,3,0,33,2.36,49,15,34,GU17,ECNL
+4,Charlotte Independence ECNL GU17,Charlotte Independence SC,10705,14,10,4,0,30,2.14,30,16,14,GU17,ECNL
+5,McLean YSA ECNL GU17,McLean Youth Soccer,11504,8,4,3,1,13,1.63,18,10,8,GU17,ECNL
+6,VDA ECNL GU17,Virginia Development Academy,14649,8,4,3,1,13,1.63,15,12,3,GU17,ECNL
+7,CESA ECNL GU17,Carolina Elite Soccer Academy,11512,14,7,7,0,21,1.5,27,25,2,GU17,ECNL
+8,NC Fusion ECNL GU17,NC Fusion,11509,14,6,7,1,19,1.36,24,29,-5,GU17,ECNL
+9,Loudoun Soccer ECNL GU17,Loudoun Soccer,19777,8,3,4,1,10,1.25,9,7,2,GU17,ECNL
+10,South Carolina United ECNL GU17,South Carolina United FC,10988,14,3,8,3,12,0.86,18,27,-9,GU17,ECNL
+11,NCFC Youth ECNL GU17,NCFC Youth,7645,14,3,10,1,10,0.71,14,42,-28,GU17,ECNL
+12,Wilmington Hammerheads ECNL GU17,Wilmington Hammerheads,19667,14,1,12,1,4,0.29,7,40,-33,GU17,ECNL
+13,BRYC Elite Academy ECNL GU17,McLean Youth Soccer,10699,8,0,8,0,0,0.0,0,30,-30,GU17,ECNL
+1,McLean YSA ECNL GU18/U19,McLean Youth Soccer,6902,8,7,0,1,22,2.75,25,6,19,GU18/U19,ECNL
+2,Charlotte SA ECNL GU18/U19,Charlotte Soccer Academy,44726,14,12,2,0,36,2.57,46,15,31,GU18/U19,ECNL
+3,NC Fusion ECNL GU18/U19,NC Fusion,6909,14,10,3,1,31,2.21,35,22,13,GU18/U19,ECNL
+4,NC Courage ECNL GU18/U19,NC Courage Academy,44733,14,10,3,1,31,2.21,31,15,16,GU18/U19,ECNL
+5,BRYC Elite Academy ECNL GU18/U19,Braddock Road Youth Club,1517,8,5,2,1,16,2.0,20,12,8,GU18/U19,ECNL
+6,Wilmington Hammerheads ECNL GU18/U19,Wilmington Hammerheads,19669,14,9,5,0,27,1.93,26,22,4,GU18/U19,ECNL
+7,Richmond United ECNL GU18/U19,Richmond United,6919,8,2,2,4,10,1.25,10,9,1,GU18/U19,ECNL
+8,VDA ECNL GU18/U19,Virginia Development Academy,14003,8,2,5,1,7,0.88,12,17,-5,GU18/U19,ECNL
+9,Charlotte Independence ECNL GU18/U19,Charlotte Independence SC,10706,14,4,10,0,12,0.86,14,26,-12,GU18/U19,ECNL
+10,CESA ECNL GU18/U19,Carolina Elite Soccer Academy,6918,14,3,9,2,11,0.79,13,19,-6,GU18/U19,ECNL
+11,South Carolina United ECNL GU18/U19,South Carolina United FC,10992,14,3,9,2,11,0.79,10,32,-22,GU18/U19,ECNL
+12,NCFC Youth ECNL GU18/U19,NCFC Youth,6876,14,1,11,2,5,0.36,6,30,-24,GU18/U19,ECNL
+13,Loudoun Soccer ECNL GU18/U19,Loudoun Soccer,19778,8,0,7,1,1,0.13,6,29,-23,GU18/U19,ECNL

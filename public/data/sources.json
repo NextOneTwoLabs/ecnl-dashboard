@@ -634,7 +634,7 @@
           "startDate": "2022-06-22",
           "endDate": "2022-06-29",
           "dataGaps": {
-            "_comment": "Flights TGS published with unreliable data, keyed by flight id. The dashboard shows `note` (with `sources`) above the bracket and the schedule, and drops the 'Schedule on TGS' link where `hideTgsSchedule` is true. Not a `reconstructed` block: nothing here is rebuilt, and archive.py still refreshes these paths.",
+            "_comment": "Flights TGS published with unreliable data, keyed by flight id. The dashboard shows `note` (with `sources`) above the bracket and the schedule, drops the 'Schedule on TGS' link where `hideTgsSchedule` is true, and leaves the games listed in `omitFromBracket` (match ids) out of the bracket tree. Not a `reconstructed` block: nothing here is rebuilt, and archive.py still refreshes these paths.",
             "15399": {
               "flight": "U15 Regional League Finals",
               "note": "TGS's bracket for this flight is corrupt: a placeholder 'Connecticut RL GU15' stands in most quarterfinal and semifinal slots — one game reads Connecticut 0–3 Connecticut — so the rounds before the final are not reliable. The final, Beach FC 2–1 Connecticut FC, matches the published result.",
@@ -694,6 +694,171 @@
           "u": 13,
           "birthYears": [
             2009
+          ],
+          "source": "computed"
+        }
+      }
+    },
+    "2020-21": {
+      "startYear": 2020,
+      "_note": "No NorCal conference this season. The first season Bay Area clubs competed in ECNL: they played in the Northwest conference, whose divisions were split into Bay Area, Mountain and Pacific flights. Six conferences also ran a GU18/U19 Composite division beside GU18/U19. COVID season: many conference games were never played.",
+      "conferences": {
+        "Mid-Atlantic": {
+          "eventId": 2040,
+          "eventName": "ECNL Girls Mid-Atlantic Conference 2020-21"
+        },
+        "Midwest": {
+          "eventId": 2035,
+          "eventName": "ECNL Girls Midwest Conference 2020-21"
+        },
+        "New England": {
+          "eventId": 2051,
+          "eventName": "ECNL Girls New England Conference 2020-21"
+        },
+        "North Atlantic": {
+          "eventId": 2039,
+          "eventName": "ECNL Girls North Atlantic Conference 2020-21"
+        },
+        "Northwest": {
+          "eventId": 2033,
+          "eventName": "ECNL Girls Northwest Conference 2020-21"
+        },
+        "Ohio Valley": {
+          "eventId": 2037,
+          "eventName": "ECNL Girls Ohio Valley Conference 2020-21"
+        },
+        "Southeast": {
+          "eventId": 2038,
+          "eventName": "ECNL Girls Southeast Conference 2020-21"
+        },
+        "Southwest": {
+          "eventId": 2034,
+          "eventName": "ECNL Girls Southwest Conference 2020-21"
+        },
+        "Texas": {
+          "eventId": 2036,
+          "eventName": "ECNL Girls Texas Conference 2020-21"
+        }
+      },
+      "national": {
+        "Playoffs": {
+          "eventId": 2118,
+          "eventName": "ECNL Girls National Playoffs",
+          "location": "Lakewood Ranch, FL",
+          "startDate": "2021-06-30",
+          "endDate": "2021-07-07",
+          "tierLabels": {
+            "Composite": "U18/U19 Composite",
+            "Optional Showcase": "Showcase Games"
+          },
+          "tierNotes": {
+            "Champions League": "U14–U17: 32 teams in eight groups of four; the group winners played the quarterfinals here and the semifinals and final at the National Finals in Richmond. U13 and U18/U19: 16-team knockouts with losers brackets. Tropical Storm Elsa cut the event short: the U13 semifinals and final and the U15 quarterfinals were played at the National Finals in Richmond instead.",
+            "North American Cup": "16-team knockout with losers brackets. The U15 competition was never completed: Tropical Storm Elsa cut the event short before the semifinals.",
+            "Open Cup": "16-team knockout with losers brackets, open to ECNL and Regional League teams. The U15 competition was never completed: Tropical Storm Elsa cut the event short before the semifinals.",
+            "Showcase Cup A": "16-team knockout with losers brackets. The U15 competition was never completed: Tropical Storm Elsa cut the event short before the semifinals.",
+            "Showcase Cup B": "16-team knockout with losers brackets. The U15 competition was never completed: Tropical Storm Elsa cut the event short before the semifinals.",
+            "Composite": "8-team knockout for the U18/U19 Composite teams, with placement games.",
+            "Optional Showcase": "Showcase Games: ten U18/U19 teams played two showcase games each. No title at stake."
+          },
+          "dataGaps": {
+            "_comment": "Flights TGS published with unreliable data, keyed by flight id. The dashboard shows `note` (with `sources`) above the bracket and the schedule, drops the 'Schedule on TGS' link where `hideTgsSchedule` is true, and leaves the games listed in `omitFromBracket` (match ids) out of the bracket tree. Not a `reconstructed` block: nothing here is rebuilt, and archive.py still refreshes these paths.",
+            "11935": {
+              "flight": "U18/U19 Composite",
+              "note": "TGS's two placement rows of 3 July name the wrong teams: 'So Cal Blues 0–7 FC Stars Blue' is entered at the same kick-off as the final, and 'Sting Dallas Royal 1–1 Solar SC' repeats two teams that had already played that morning. Both are left out of the bracket. The final, So Cal Blues 2–0 Sting Dallas Royal, is TGS's row; SoccerWire names So Cal Blues as the Composite champion.",
+              "omitFromBracket": [245101, 245102],
+              "hideTgsSchedule": false,
+              "sources": [
+                { "label": "SoccerWire: first ECNL Girls champions decided (2021)", "url": "https://www.soccerwire.com/news/first-ecnl-girls-champions-decided-as-2021-national-finals-field-is-set/" }
+              ]
+            }
+          }
+        },
+        "Finals": {
+          "eventId": 2289,
+          "eventName": "ECNL Girls National Finals",
+          "location": "Richmond, VA",
+          "startDate": "2021-07-17",
+          "endDate": "2021-07-19",
+          "defaultTier": "Flight 1",
+          "tierLabels": {
+            "Flight 1": "Champions League Finals",
+            "Consolation": "Consolation Games"
+          },
+          "tierNotes": {
+            "Flight 1": "The four Champions League quarterfinal winners (U15: all eight quarterfinalists, after Tropical Storm Elsa cut the Playoffs short) played semifinals, a third-place game and the final.",
+            "Consolation": "One placement game each for the four U15 quarterfinal losers."
+          },
+          "dataGaps": {
+            "_comment": "Flights TGS published with unreliable data, keyed by flight id. The dashboard shows `note` (with `sources`) above the bracket and the schedule, drops the 'Schedule on TGS' link where `hideTgsSchedule` is true, and leaves the games listed in `omitFromBracket` (match ids) out of the bracket tree. Not a `reconstructed` block: nothing here is rebuilt, and archive.py still refreshes these paths.",
+            "12355": {
+              "flight": "GU15 Champions League Finals",
+              "note": "TGS's four quarterfinal rows of 17 July carry scores but no losing side (Solar SC 7–6, World Class FC 3–3 on penalties, San Diego Surf 2–1, and one row with no teams at all), and both semifinal rows name the wrong opponent: TGS has Solar SC 1–1 Kansas City Athletics (PK 3–4) and San Diego Surf 2–2 San Diego Surf (PK 0–3), where TopDrawerSoccer reports Kansas City Athletics beat World Class FC on penalties and San Diego Surf beat Solar SC on penalties after 2–2. The rows are shown as TGS published them. The final, Kansas City Athletics 2–1 San Diego Surf, matches the published result.",
+              "hideTgsSchedule": false,
+              "sources": [
+                { "label": "TopDrawerSoccer: 2021 ECNL National Champions crowned", "url": "https://www.topdrawersoccer.com/club-soccer-articles/2021-ecnl-national-champions-crowned_aid49650" }
+              ]
+            },
+            "12357": {
+              "flight": "GU17 Champions League Finals",
+              "note": "TGS's two semifinal rows both pair MVLA with LAFC Slammers at the same kick-off (LAFC Slammers 1–3 MVLA and MVLA 1–3 LAFC Slammers), where TopDrawerSoccer reports MVLA beat Solar SC in the semifinal — a game TGS never recorded; Solar SC and United Futbol Academy appear only in their third-place game. All three rows before the final are left out of the bracket, so the tree shows the final alone; the Schedule view still lists all four rows. The final, MVLA 1–0 LAFC Slammers, matches the published result.",
+              "omitFromBracket": [247637, 247638, 247639],
+              "hideTgsSchedule": false,
+              "sources": [
+                { "label": "TopDrawerSoccer: 2021 ECNL National Champions crowned", "url": "https://www.topdrawersoccer.com/club-soccer-articles/2021-ecnl-national-champions-crowned_aid49650" }
+              ]
+            }
+          }
+        }
+      },
+      "ageGroups": {
+        "GU18/U19": {
+          "u": 18,
+          "birthYears": [
+            2002,
+            2003
+          ],
+          "source": "computed"
+        },
+        "GU18/U19 Composite": {
+          "u": 18,
+          "birthYears": [
+            2002,
+            2003
+          ],
+          "source": "computed"
+        },
+        "GU17": {
+          "u": 17,
+          "birthYears": [
+            2004
+          ],
+          "source": "computed"
+        },
+        "GU16": {
+          "u": 16,
+          "birthYears": [
+            2005
+          ],
+          "source": "computed"
+        },
+        "GU15": {
+          "u": 15,
+          "birthYears": [
+            2006
+          ],
+          "source": "computed"
+        },
+        "GU14": {
+          "u": 14,
+          "birthYears": [
+            2007
+          ],
+          "source": "computed"
+        },
+        "GU13": {
+          "u": 13,
+          "birthYears": [
+            2008
           ],
           "source": "computed"
         }

@@ -1,0 +1,53 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-07-01,07:30 AM,Group Play,Crossfire Premier ECNL GU14,1,4,Sting Dallas Royal ECNL GU14,Premier Sports Campus,Stadium,On Time,244530
+2021-07-01,07:30 AM,Group Play,LAFC Slammers ECNL GU14,5,0,Charlotte SA ECNL GU14,Premier Sports Campus,Field #15,On Time,244531
+2021-07-01,07:30 AM,Group Play,Connecticut FC ECNL GU14,2,2,FC Dallas ECNL GU14,Premier Sports Campus,Field #17,On Time,244554
+2021-07-01,07:30 AM,Group Play,MVLA ECNL GU14,6,2,Eclipse Select SC ECNL GU14,Premier Sports Campus,Field #19,On Time,244555
+2021-07-01,09:30 AM,Group Play,Solar SC ECNL GU14,4,0,Match Fit Academy ECNL GU14,Premier Sports Campus,Field #13,On Time,244536
+2021-07-01,09:30 AM,Group Play,Utah Avalanche ECNL 07,2,3,Tennessee Soccer Club ECNL GU14,Premier Sports Campus,Field #15,On Time,244537
+2021-07-01,09:45 AM,Group Play,PDA Blue ECNL GU14,4,2,Eagles SC ECNL GU14,Premier Sports Campus,Field #12,On Time,244524
+2021-07-01,09:45 AM,Group Play,Jacksonville FC ECNL GU14,5,3,Minnesota Thunder ECNL GU14,Premier Sports Campus,Field #14,On Time,244525
+2021-07-01,11:30 AM,Group Play,SLSG Navy ECNL GU14,3,0,Orlando City ECNL GU14,Premier Sports Campus,Field #19,On Time,244560
+2021-07-01,11:30 AM,Group Play,Loudoun Soccer ECNL GU14,0,5,San Diego Surf ECNL GU14,Premier Sports Campus,Field #17,On Time,244561
+2021-07-01,01:45 PM,Group Play,Internationals SC ECNL GU14,0,2,Michigan Hawks  ECNL GU14,Premier Sports Campus,Field #14,On Time,244548
+2021-07-01,01:45 PM,Group Play,San Juan SC ECNL GU14,4,2,SUSA FC ECNL GU14,Premier Sports Campus,Field #12,On Time,244549
+2021-07-01,05:30 PM,Group Play,McLean YSA ECNL GU14,2,0,GSA ECNL GU14,Premier Sports Campus,Field #17,On Time,244566
+2021-07-01,05:30 PM,Group Play,Indiana Fire ECNL GU14,7,2,FC Portland ECNL GU14,Premier Sports Campus,Field #19,On Time,244567
+2021-07-01,07:30 PM,Group Play,So Cal Blues ECNL GU14,1,0,Bethesda SC ECNL GU14,Premier Sports Campus,Field #03,On Time,244542
+2021-07-01,07:30 PM,Group Play,Real Colorado National ECNL GU14,0,0,Tampa Bay United Rowdies ECNL GU14,Premier Sports Campus,Field #05,On Time,244543
+2021-07-02,07:30 AM,Group Play,FC Dallas ECNL GU14,1,1,MVLA ECNL GU14,Premier Sports Campus,Field #17,On Time,244556
+2021-07-02,07:30 AM,Group Play,Connecticut FC ECNL GU14,1,0,Eclipse Select SC ECNL GU14,Premier Sports Campus,Field #15,On Time,244557
+2021-07-02,07:45 AM,Group Play,Eagles SC ECNL GU14,1,5,Jacksonville FC ECNL GU14,Premier Sports Campus,Field #16,On Time,244526
+2021-07-02,07:45 AM,Group Play,PDA Blue ECNL GU14,5,0,Minnesota Thunder ECNL GU14,Premier Sports Campus,Field #18,On Time,244527
+2021-07-02,07:45 AM,Group Play,Sting Dallas Royal ECNL GU14,2,3,LAFC Slammers ECNL GU14,Premier Sports Campus,Field #22,On Time,244532
+2021-07-02,07:45 AM,Group Play,Crossfire Premier ECNL GU14,0,2,Charlotte SA ECNL GU14,Premier Sports Campus,Field #20,On Time,244533
+2021-07-02,09:45 AM,Group Play,Match Fit Academy ECNL GU14,5,2,Utah Avalanche ECNL 07,Premier Sports Campus,Field #16,On Time,244538
+2021-07-02,09:45 AM,Group Play,Solar SC ECNL GU14,5,1,Tennessee Soccer Club ECNL GU14,Premier Sports Campus,Field #14,On Time,244539
+2021-07-02,11:30 AM,Group Play,Orlando City ECNL GU14,2,0,Loudoun Soccer ECNL GU14,Premier Sports Campus,Field #17,On Time,244562
+2021-07-02,11:30 AM,Group Play,SLSG Navy ECNL GU14,1,6,San Diego Surf ECNL GU14,Premier Sports Campus,Field #15,On Time,244563
+2021-07-02,01:45 PM,Group Play,Michigan Hawks  ECNL GU14,2,1,San Juan SC ECNL GU14,Premier Sports Campus,Field #20,On Time,244550
+2021-07-02,01:45 PM,Group Play,Internationals SC ECNL GU14,4,0,SUSA FC ECNL GU14,Premier Sports Campus,Field #18,On Time,244551
+2021-07-02,05:30 PM,Group Play,GSA ECNL GU14,1,2,Indiana Fire ECNL GU14,Premier Sports Campus,Field #15,On Time,244568
+2021-07-02,05:30 PM,Group Play,McLean YSA ECNL GU14,5,0,FC Portland ECNL GU14,Premier Sports Campus,Field #13,On Time,244569
+2021-07-02,07:30 PM,Group Play,Bethesda SC ECNL GU14,0,1,Real Colorado National ECNL GU14,Premier Sports Campus,Field #03,On Time,244544
+2021-07-02,07:30 PM,Group Play,So Cal Blues ECNL GU14,4,1,Tampa Bay United Rowdies ECNL GU14,Premier Sports Campus,Stadium,On Time,244545
+2021-07-04,07:30 AM,Group Play,Charlotte SA ECNL GU14,1,1,Sting Dallas Royal ECNL GU14,Premier Sports Campus,Field #03,On Time,244534
+2021-07-04,07:30 AM,Group Play,Crossfire Premier ECNL GU14,2,2,LAFC Slammers ECNL GU14,Premier Sports Campus,Field #05,On Time,244535
+2021-07-04,07:45 AM,Group Play,Minnesota Thunder ECNL GU14,2,1,Eagles SC ECNL GU14,Premier Sports Campus,Field #16,On Time,244528
+2021-07-04,07:45 AM,Group Play,PDA Blue ECNL GU14,0,3,Jacksonville FC ECNL GU14,Premier Sports Campus,Field #14,On Time,244529
+2021-07-04,07:45 AM,Group Play,Tennessee Soccer Club ECNL GU14,0,4,Match Fit Academy ECNL GU14,Premier Sports Campus,Field #18,On Time,244540
+2021-07-04,07:45 AM,Group Play,Solar SC ECNL GU14,7,0,Utah Avalanche ECNL 07,Premier Sports Campus,Field #20,On Time,244541
+2021-07-04,09:30 AM,Group Play,Tampa Bay United Rowdies ECNL GU14,1,4,Bethesda SC ECNL GU14,Premier Sports Campus,Field #03,On Time,244546
+2021-07-04,09:30 AM,Group Play,So Cal Blues ECNL GU14,2,1,Real Colorado National ECNL GU14,Premier Sports Campus,Field #05,On Time,244547
+2021-07-04,09:30 AM,Group Play,Eclipse Select SC ECNL GU14,1,6,FC Dallas ECNL GU14,Premier Sports Campus,Field #17,On Time,244558
+2021-07-04,09:30 AM,Group Play,Connecticut FC ECNL GU14,0,2,MVLA ECNL GU14,Premier Sports Campus,Field #19,On Time,244559
+2021-07-04,09:45 AM,Group Play,SUSA FC ECNL GU14,0,3,Michigan Hawks  ECNL GU14,Premier Sports Campus,Field #14,On Time,244552
+2021-07-04,09:45 AM,Group Play,Internationals SC ECNL GU14,2,3,San Juan SC ECNL GU14,Premier Sports Campus,Field #16,On Time,244553
+2021-07-04,09:45 AM,Group Play,FC Portland ECNL GU14,3,6,GSA ECNL GU14,Premier Sports Campus,Field #18,On Time,244570
+2021-07-04,09:45 AM,Group Play,McLean YSA ECNL GU14,0,1,Indiana Fire ECNL GU14,Premier Sports Campus,Field #20,On Time,244571
+2021-07-04,11:30 AM,Group Play,San Diego Surf ECNL GU14,3,1,Orlando City ECNL GU14,Premier Sports Campus,Field #13,On Time,244564
+2021-07-04,11:30 AM,Group Play,SLSG Navy ECNL GU14,4,1,Loudoun Soccer ECNL GU14,Premier Sports Campus,Field #11,On Time,244565
+2021-07-06,08:30 AM,Bracket,Jacksonville FC ECNL GU14,1,0,Indiana Fire ECNL GU14,Premier Sports Campus,Field #07,On Time,245358
+2021-07-06,08:30 AM,Bracket,LAFC Slammers ECNL GU14,2,1,San Diego Surf ECNL GU14,Premier Sports Campus,Field #10,On Time,245359
+2021-07-06,08:30 AM,Bracket,Solar SC ECNL GU14,7,0,MVLA ECNL GU14,Premier Sports Campus,Stadium,On Time,245360
+2021-07-06,08:30 AM,Bracket,So Cal Blues ECNL GU14,2,0,Michigan Hawks  ECNL GU14,Premier Sports Campus,Field #08,On Time,245361

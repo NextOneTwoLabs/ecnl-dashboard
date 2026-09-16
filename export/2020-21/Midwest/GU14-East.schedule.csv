@@ -1,0 +1,41 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2020-10-03,01:00 PM,Bracket,FC Wisconsin ECNL GU14,0,7,Michigan Hawks  ECNL GU14,Fort Wayne Plex,Field 10,On Time,172364
+2020-10-04,11:00 AM,Bracket,FC Wisconsin ECNL GU14,1,1,Michigan Hawks Magic ECNL GU14,Fort Wayne Plex,Field 10,On Time,172350
+2020-10-12,07:35 PM,Bracket,Michigan Hawks  ECNL GU14,1,0,Michigan Hawks Magic ECNL GU14,Schoolcraft Turf,SC Turf,On Time,172349
+2020-10-25,04:30 PM,Bracket,Michigan Hawks Magic ECNL GU14,6,0,Vardar ECNL GU14,St. Joe's Sports Complex,Outdoor Turf,On Time,172365
+2020-10-31,11:00 AM,Bracket,SLSG Navy ECNL GU14,1,1,Michigan Hawks  ECNL GU14,"The TBK Bank Sports Complex, LLC",Field 1,On Time,172378
+2020-10-31,03:00 PM,Bracket,Kansas City Athletics ECNL GU14,4,0,FC Wisconsin ECNL GU14,"The TBK Bank Sports Complex, LLC",Field 2,On Time,172377
+2020-11-22,02:45 PM,Bracket,SLSG Navy ECNL GU14,2,0,Eclipse Select SC ECNL GU14,MO RUSH Sports Park,Field 1,On Time,172374
+2021-02-20,TBD,Bracket,Michigan Hawks  ECNL GU14,3,0,Vardar ECNL GU14,Schoolcraft Turf,SC Turf,On Time,172371
+2021-03-06,TBD,Bracket,Vardar ECNL GU14,0,3,Eclipse Select SC North ECNL GU14,,,On Time,172351
+2021-03-07,01:00 PM,Bracket,Michigan Hawks Magic ECNL GU14,0,4,Eclipse Select SC ECNL GU14,Dowling Park,Field 1,On Time,172353
+2021-03-07,02:00 PM,Bracket,Vardar ECNL GU14,0,3,Eclipse Select SC ECNL GU14,UWM Sports Complex,Field 4 (outdoor),On Time,172355
+2021-03-07,04:00 PM,Bracket,Michigan Hawks  ECNL GU14,2,1,Eclipse Select SC North ECNL GU14,Dowling Park,Field 1,On Time,172368
+2021-03-13,02:00 PM,Bracket,Eclipse Select SC North ECNL GU14,2,3,Eclipse Select SC ECNL GU14,Techny Park,Field 1,On Time,172348
+2021-03-20,TBD,Bracket,Michigan Hawks Magic ECNL GU14,1,3,Eclipse Select SC North ECNL GU14,,,On Time,172352
+2021-03-20,01:15 PM,Bracket,Michigan Hawks  ECNL GU14,1,0,Eclipse Select SC ECNL GU14,Stuarts Sports Complex,Field 21,On Time,172366
+2021-04-10,09:15 AM,Bracket,FC Wisconsin ECNL GU14,3,0,Vardar ECNL GU14,Hart Park Soccer Field,Field 1,On Time,172363
+2021-04-15,07:45 PM,Bracket,Vardar ECNL GU14,0,3,Michigan Hawks Magic ECNL GU14,UWM Sports Complex,Field 4 (outdoor),On Time,172372
+2021-04-17,02:15 PM,Bracket,Eclipse Select SC ECNL GU14,0,0,Michigan Hawks  ECNL GU14,"The TBK Bank Sports Complex, LLC",Field 8,On Time,172387
+2021-04-18,10:15 AM,Bracket,Michigan Hawks Magic ECNL GU14,1,2,Gretna Elite Academy ECNL GU14,"The TBK Bank Sports Complex, LLC",Field 7,On Time,172380
+2021-04-18,10:15 AM,Bracket,Vardar ECNL GU14,0,3,Kansas City Athletics ECNL GU14,,,On Time,172384
+2021-04-24,10:30 AM,Bracket,FC Wisconsin ECNL GU14,1,5,Eclipse Select SC ECNL GU14,FC Wisconsin Soccer Park,Field 1 - Val Olla Field,On Time,172382
+2021-04-24,02:00 PM,Bracket,Vardar ECNL GU14,0,3,Michigan Hawks  ECNL GU14,Oakland University,Field 1,On Time,172354
+2021-05-01,09:45 AM,Bracket,Michigan Hawks Magic ECNL GU14,2,3,SLSG White ECNL GU14,Stuarts Sports Complex,Field 21,On Time,172385
+2021-05-02,09:45 AM,Bracket,Vardar ECNL GU14,0,3,SLSG White ECNL GU14,Stuart Sports Complex,Field 1,On Time,172379
+2021-05-02,09:45 AM,Bracket,Michigan Hawks  ECNL GU14,1,3,Gretna Elite Academy ECNL GU14,Stuarts Sports Complex,Field 20,On Time,172383
+2021-05-02,01:15 PM,Bracket,Eclipse Select SC North ECNL GU14,1,3,FC Wisconsin ECNL GU14,Stuarts Sports Complex,Field 22,On Time,172386
+2021-05-04,06:45 PM,Bracket,Michigan Hawks Magic ECNL GU14,0,3,Michigan Hawks  ECNL GU14,Jaycee Park,JC Turf,On Time,172370
+2021-05-15,TBD,Bracket,Eclipse Select SC ECNL GU14,,,Michigan Hawks Magic ECNL GU14,,,On Time,172361
+2021-05-15,TBD,Bracket,Eclipse Select SC North ECNL GU14,3,0,Vardar ECNL GU14,,,On Time,172376
+2021-05-15,01:00 PM,Bracket,Michigan Hawks Magic ECNL GU14,3,2,Eclipse Select SC North ECNL GU14,The Plex,Field 8,On Time,172367
+2021-05-16,TBD,Bracket,Eclipse Select SC ECNL GU14,3,0,Vardar ECNL GU14,,,On Time,172359
+2021-05-16,11:00 AM,Bracket,Eclipse Select SC North ECNL GU14,0,5,Michigan Hawks  ECNL GU14,The Plex,Field 1,On Time,172357
+2021-05-22,TBD,Bracket,Vardar ECNL GU14,0,3,Minnesota Thunder ECNL GU14,,,On Time,172360
+2021-05-22,03:30 PM,Bracket,Eclipse Select SC ECNL GU14,2,1,FC Wisconsin ECNL GU14,FC Wisconsin Soccer Park,Field 1 - Val Olla Field,On Time,172356
+2021-05-22,03:30 PM,Bracket,Eclipse Select SC North ECNL GU14,1,1,Minnesota Thunder ECNL GU14,FC Wisconsin Soccer Park,Field 2 - Hegarty Field,On Time,172362
+2021-05-23,10:00 AM,Bracket,Eclipse Select SC ECNL GU14,2,1,Minnesota Thunder ECNL GU14,FC Wisconsin Soccer Park,Field 2 - Hegarty Field,On Time,172381
+2021-05-23,11:30 AM,Bracket,FC Wisconsin ECNL GU14,3,0,Vardar ECNL GU14,FC Wisconsin Soccer Park,Field 1 - Val Olla Field,On Time,172358
+2021-05-25,07:30 PM,Bracket,Eclipse Select SC ECNL GU14,4,2,Eclipse Select SC North ECNL GU14,Techny Park,Field 1,On Time,172369
+2021-05-29,03:00 PM,Bracket,Michigan Hawks Magic ECNL GU14,,,FC Wisconsin ECNL GU14,Academy of Holy Angels,South Turf,On Time,172373
+2021-05-30,10:15 AM,Bracket,Michigan Hawks  ECNL GU14,3,0,FC Wisconsin ECNL GU14,Academy of Holy Angels,South Turf,On Time,172375

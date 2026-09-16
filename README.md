@@ -8,7 +8,7 @@ upstream API or website ever goes away.
 
 ## Features
 
-- **Conference Standings** — All 10 ECNL conferences across 6 seasons (2021-22 through 2026-27), per-flight tables
+- **Conference Standings** — All 10 ECNL conferences across 7 seasons (2020-21 through 2026-27), per-flight tables
 - **Matches** — Date-grouped match cards per conference: kickoff, both teams, score, venue. Opens on upcoming matches, with Results (newest first) and Full season (scrolled to the next match day) a click away
 - **Team at a glance** — Click any team in a standings table: position, points, recent form, next match, last result and more statistics in a side panel, with a Follow button and a link to the full team page
 - **Fully static** — no backend at runtime; deploys to any static host for free, and works offline once loaded
@@ -119,7 +119,7 @@ season).
 ## National playoffs
 
 A season's post-season events live under `national` in `data/sources.json`, keyed
-by the stage name shown in the sidebar. 2021-22 through 2024-25 each had separate
+by the stage name shown in the sidebar. 2020-21 through 2024-25 each had separate
 `Playoffs` and `Finals` events; 2025-26 has one combined event, so its row reads
 `"Playoffs & Finals"` and the stage selector is hidden.
 
@@ -140,6 +140,15 @@ by the stage name shown in the sidebar. 2021-22 through 2024-25 each had separat
   refresh from a week before it starts until two weeks after it ends, then drop out.
 - `tierLabels` renames TGS flight names for display; `tierNotes` is the collapsible
   "Format" text under each competition, taken from ECNL's post-season structure doc.
+- `defaultTier` names the TGS flight to open first when an age group is selected, where
+  TGS lists another ahead of it (the 2020-21 Finals list GU15's `Consolation` before
+  `Flight 1`); without it the first flight opens.
+- `dataGaps` lists flights TGS published with unreliable or incomplete data, keyed by
+  flight id. Each entry carries a `note` and its `sources`, shown above the bracket and
+  the schedule; `hideTgsSchedule: true` drops the "Schedule on TGS" link where there is
+  no schedule page to open; `omitFromBracket` lists match ids the bracket tree leaves
+  out (the Schedule view still lists them). Nothing is rebuilt — that is the
+  `reconstructed` block below.
 
 **Brackets are derived from the schedule, not from TGS's bracket HTML.** Knockout
 flights have no standings, but every game carries both team IDs, scores, PK scores
@@ -365,6 +374,7 @@ Endpoints used (all unauthenticated):
 | 2023-24 | 10          | birth year | one | ✅ event 3064 | ✅ event 3238 |
 | 2022-23 | 10          | birth year | one | ✅ event 2719 | ✅ event 2720 |
 | 2021-22 | 9 (no NorCal) | age (`GU13`; the national events say `U13`) | one | ✅ event 2436 — U15 Regional League Finals bracket corrupt at TGS (placeholder team before the final); final correct | ✅ event 2437 |
+| 2020-21 | 9 (no NorCal) | age (`GU13`; the national events say `U13`, the Finals `GU13`) | one | ✅ event 2118 — Tropical Storm Elsa cut the event short: the U13 Champions League and the four U15 cups have no final and the U15 Champions League no knockout (U13 and U15 finished at the Finals); U18/U19 Composite placement rows corrupt at TGS, left out of the bracket; finals correct | ✅ event 2289 — GU15 quarterfinal and semifinal rows and GU17 semifinal rows corrupt at TGS (GU17's left out of the bracket); finals correct |
 
 Age labels are computed relative to the season being viewed, so historical seasons
 stay correctly labelled.
@@ -384,7 +394,7 @@ season. `archive.py` derives it per division and records it under `ageGroups` in
 |---|---|---|
 | `division-name` | Years read from the division name (`G2008/2007`) | 2022-23 … 2025-26 |
 | `team-names` | Years read from the team names (`ECNL G2013/14`) | 2026-27 |
-| `computed` | Derived from the U-number and season start year | 2021-22 (names carry no years) |
+| `computed` | Derived from the U-number and season start year | 2020-21, 2021-22 (names carry no years) |
 
 The dashboard uses this band to order age groups oldest-first consistently in every
 season, and shows it on hover over an age-group tab. It refreshes on each
@@ -404,8 +414,14 @@ season, and shows it on hover over an age-group tab. It refreshes on each
   missing-results chase is capped by `refresh.pending.maxPendingAgeDays`.
 - TGS publishes a few conference flights as two standings blocks: an unnamed group
   holding one or two teams beside "Group A" with the rest (seven 2021-22 U13 flights,
-  three in 2022-23). The page and the CSV export merge them into one table: the
+  three in 2022-23, Southwest GU13 in 2020-21). The page and the CSV export merge them into one table: the
   larger block keeps its published order and the stray teams are slotted in by
   points per game (`mergeStandingsBlocks` in the page, `merge_standings_blocks` in
   `archive.py`). `python archive.py --export --season <key>` rebuilds the CSVs from
   the archive without any API calls.
+- 2020-21 had no NorCal conference: the Bay Area clubs' first ECNL season was played
+  in the Northwest conference, whose divisions were split into Bay Area, Mountain and
+  Pacific flights (the page shows one panel per flight). Six conferences also ran a
+  `GU18/U19 Composite` division beside `GU18/U19`; the Conferences tab takes its age
+  chips from the registry's `ageGroups` keys, so a division only some conferences ran
+  still gets a chip (a conference without it shows "No data found").
