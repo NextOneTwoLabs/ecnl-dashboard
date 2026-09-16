@@ -1,0 +1,97 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2020-08-22,01:00 PM,Bracket,Concorde Fire Platinum ECNL GU17,4,0,Concorde Fire Premier ECNL GU17,Georgia Soccer Park,Field 1,On Time,169011
+2020-08-22,04:00 PM,Bracket,GSA ECNL GU17,3,4,Alabama FC ECNL GU17,GSA South,Spencer,On Time,169012
+2020-08-23,10:00 AM,Bracket,Concorde Fire Platinum ECNL GU17,8,0,Alabama FC ECNL GU17,Georgia Soccer Park,Field 1,On Time,169015
+2020-08-23,04:00 PM,Bracket,GSA ECNL GU17,2,1,Concorde Fire Premier ECNL GU17,GSA South,Spencer,On Time,169016
+2020-08-30,11:00 AM,Bracket,United Futbol Academy ECNL GU17,3,0,Atlanta Fire United ECNL GU17,Fowler Park,Field 6,On Time,173982
+2020-09-12,03:00 PM,Bracket,Concorde Fire Premier ECNL GU17,0,1,GSA ECNL GU17,Georgia Soccer Park,Field 4,On Time,169018
+2020-09-12,04:00 PM,Bracket,Alabama FC ECNL GU17,0,2,Concorde Fire Platinum ECNL GU17,Dunnavant Valley Fields (DVF),Field #1,On Time,169017
+2020-09-13,01:00 PM,Bracket,Concorde Fire Premier ECNL GU17,1,8,Concorde Fire Platinum ECNL GU17,Georgia Soccer Park,Field 4,On Time,169019
+2020-09-13,04:00 PM,Bracket,Alabama FC ECNL GU17,1,3,GSA ECNL GU17,Dunnavant Valley Fields (DVF),Field #1,On Time,169020
+2020-09-19,10:00 AM,Bracket,Florida Elite SA ECNL GU17,0,6,United Futbol Academy ECNL GU17,Veterans Park,Field 1,On Time,169021
+2020-09-19,10:30 AM,Bracket,Jacksonville FC ECNL GU17,1,3,Atlanta Fire United ECNL GU17,Patton Park,Field 3,On Time,169022
+2020-09-19,11:00 AM,Bracket,GSA ECNL GU17,2,3,Sunrise Prime FC ECNL GU17,Silverbacks Park,Stadium Field,On Time,169025
+2020-09-20,10:00 AM,Bracket,Florida Elite SA ECNL GU17,1,3,Atlanta Fire United ECNL GU17,Veterans Park,Field 1,On Time,169027
+2020-09-20,11:00 AM,Bracket,Jacksonville FC ECNL GU17,1,6,United Futbol Academy ECNL GU17,Patton Park,Field 3,On Time,169026
+2020-09-20,11:00 AM,Bracket,Concorde Fire Platinum ECNL GU17,4,1,Sunrise Prime FC ECNL GU17,Georgia Soccer Park,Field 3,On Time,169029
+2020-09-26,10:00 AM,Bracket,Concorde Fire Premier ECNL GU17,3,1,Jacksonville FC ECNL GU17,Georgia Soccer Park,Field 3,On Time,169031
+2020-09-26,11:00 AM,Bracket,Alabama FC ECNL GU17,2,2,Florida Elite SA ECNL GU17,Dunnavant Valley Fields (DVF),Field # 5,On Time,169030
+2020-09-26,01:00 PM,Bracket,Atlanta Fire United ECNL GU17,2,1,Florida Krush ECNL GU17,Pinecrest Academy,Grass,On Time,169032
+2020-09-26,01:00 PM,Bracket,United Futbol Academy ECNL GU17,2,0,Orlando City ECNL GU17,Fowler Park,Field 6,On Time,169033
+2020-09-27,09:00 AM,Bracket,Concorde Fire Premier ECNL GU17,2,3,Florida Elite SA ECNL GU17,Georgia Soccer Park,Field 5,On Time,169035
+2020-09-27,11:00 AM,Bracket,Alabama FC ECNL GU17,4,3,Jacksonville FC ECNL GU17,Dunnavant Valley Fields (DVF),Field # 5,On Time,169034
+2020-09-27,01:00 PM,Bracket,United Futbol Academy ECNL GU17,4,1,Florida Krush ECNL GU17,Fowler Park,Field 6,On Time,169036
+2020-09-27,01:00 PM,Bracket,Atlanta Fire United ECNL GU17,3,2,Orlando City ECNL GU17,Pinecrest Academy,Grass,On Time,169037
+2020-10-03,TBD,Bracket,Orlando City ECNL GU17,0,1,GSA ECNL GU17,,,On Time,168943
+2020-10-03,11:00 AM,Bracket,Tampa Bay United Rowdies ECNL GU17,2,0,Concorde Fire Premier ECNL GU17,Waters Sportsplex,Field 2,On Time,168944
+2020-10-03,01:00 PM,Bracket,Sunrise Prime FC ECNL GU17,2,5,Alabama FC ECNL GU17,Max K. Rodes Park,Field 4,On Time,168945
+2020-10-03,01:00 PM,Bracket,Atlanta Fire United ECNL GU17,1,3,United Futbol Academy ECNL GU17,Pinecrest Academy,Turf,On Time,168946
+2020-10-03,04:00 PM,Bracket,Florida Krush ECNL GU17,0,6,Concorde Fire Platinum ECNL GU17,Central Winds,Field B,On Time,168942
+2020-10-04,TBD,Bracket,Orlando City ECNL GU17,0,2,Concorde Fire Platinum ECNL GU17,,,On Time,168954
+2020-10-04,11:00 AM,Bracket,Tampa Bay United Rowdies ECNL GU17,2,1,Alabama FC ECNL GU17,Waters Sportsplex,Field 3,On Time,168955
+2020-10-04,11:00 AM,Bracket,Sunrise Prime FC ECNL GU17,5,2,Concorde Fire Premier ECNL GU17,Max K. Rodes Park,Field 3,On Time,168956
+2020-10-04,01:00 PM,Bracket,Florida Krush ECNL GU17,0,1,GSA ECNL GU17,Central Winds,Field B,On Time,168953
+2020-10-10,01:00 PM,Bracket,Concorde Fire Platinum ECNL GU17,2,0,Tampa Bay United Rowdies ECNL GU17,Georgia Soccer Park,Field 2,On Time,169024
+2020-10-11,09:00 AM,Bracket,GSA ECNL GU17,0,0,Tampa Bay United Rowdies ECNL GU17,Rabbit Hill Park,Field 3,On Time,169028
+2020-10-17,11:00 AM,Bracket,Alabama FC ECNL GU17,3,2,Florida Krush ECNL GU17,Dunnavant Valley Fields (DVF),Field #1,On Time,168930
+2020-10-17,11:00 AM,Bracket,Tampa Bay United Rowdies ECNL GU17,2,2,United Futbol Academy ECNL GU17,Waters Sportsplex,Field 2,On Time,169042
+2020-10-17,12:00 PM,Bracket,Concorde Fire Premier ECNL GU17,1,2,Orlando City ECNL GU17,Georgia Soccer Park,Field 4,On Time,168931
+2020-10-17,01:00 PM,Bracket,Sunrise Prime FC ECNL GU17,2,1,Atlanta Fire United ECNL GU17,Chapel Trail Park,CTSP 4,On Time,169043
+2020-10-18,09:00 AM,Bracket,Concorde Fire Premier ECNL GU17,0,1,Florida Krush ECNL GU17,Georgia Soccer Park,Field 4,On Time,168936
+2020-10-18,11:00 AM,Bracket,Alabama FC ECNL GU17,2,0,Orlando City ECNL GU17,Dunnavant Valley Fields (DVF),Field # 5,On Time,168937
+2020-10-18,11:00 AM,Bracket,Tampa Bay United Rowdies ECNL GU17,1,2,Atlanta Fire United ECNL GU17,Waters Sportsplex,Field 2,On Time,169048
+2020-10-18,01:00 PM,Bracket,Sunrise Prime FC ECNL GU17,2,5,United Futbol Academy ECNL GU17,Chapel Trail Park,CTSP 4,On Time,169049
+2020-10-25,10:00 AM,Bracket,Florida Elite SA ECNL GU17,1,0,Jacksonville FC ECNL GU17,Veterans Park,Field 1,On Time,169008
+2020-10-25,01:00 PM,Bracket,Concorde Fire Premier ECNL GU17,2,2,Alabama FC ECNL GU17,Georgia Soccer Park,Field 4,On Time,168941
+2020-10-31,10:30 AM,Bracket,Jacksonville FC ECNL GU17,1,1,Orlando City ECNL GU17,Patton Park,Field 3,On Time,168986
+2020-10-31,11:00 AM,Bracket,United Futbol Academy ECNL GU17,3,0,GSA ECNL GU17,Fowler Park,Field 6,On Time,168978
+2020-10-31,01:00 PM,Bracket,Florida Elite SA ECNL GU17,1,0,Florida Krush ECNL GU17,Veterans Park,Field 1,On Time,168985
+2020-11-01,01:00 PM,Bracket,Florida Elite SA ECNL GU17,0,0,Orlando City ECNL GU17,Veterans Park,Field 1,On Time,168987
+2020-11-01,03:00 PM,Bracket,Jacksonville FC ECNL GU17,1,3,Florida Krush ECNL GU17,Patton Park,Field 2,On Time,168988
+2020-11-01,05:00 PM,Bracket,United Futbol Academy ECNL GU17,3,4,Concorde Fire Platinum ECNL GU17,Fowler Park,Field 6,On Time,168979
+2020-11-07,01:00 PM,Bracket,Concorde Fire Premier ECNL GU17,1,4,United Futbol Academy ECNL GU17,Georgia Soccer Park,Field 4,On Time,168968
+2020-11-08,11:00 AM,Bracket,Alabama FC ECNL GU17,1,1,United Futbol Academy ECNL GU17,Dunnavant Valley Fields (DVF),Field #1,On Time,168970
+2020-11-18,07:00 PM,Bracket,Atlanta Fire United ECNL GU17,0,2,Concorde Fire Platinum ECNL GU17,Pinecrest Academy,Turf,On Time,168977
+2020-11-21,11:00 AM,Bracket,Concorde Fire Platinum ECNL GU17,6,0,United Futbol Academy ECNL GU17,Georgia Soccer Park,Field 4,On Time,168963
+2020-11-21,11:00 AM,Bracket,GSA ECNL GU17,,,Atlanta Fire United ECNL GU17,GSA South,Spencer,On Time,168964
+2020-11-21,11:00 AM,Bracket,Alabama FC ECNL GU17,4,1,Concorde Fire Premier ECNL GU17,Dunnavant Valley Fields (DVF),Field #1,On Time,168965
+2020-11-22,11:00 AM,Bracket,Concorde Fire Platinum ECNL GU17,1,0,Atlanta Fire United ECNL GU17,Georgia Soccer Park,Field 3,On Time,168966
+2020-12-12,02:00 PM,Bracket,Atlanta Fire United ECNL GU17,3,1,Concorde Fire Premier ECNL GU17,Pinecrest Academy,Grass,On Time,168973
+2020-12-12,03:00 PM,Bracket,United Futbol Academy ECNL GU17,7,1,Alabama FC ECNL GU17,Fowler Park,Field 6,On Time,168972
+2020-12-13,11:00 AM,Bracket,United Futbol Academy ECNL GU17,8,0,Concorde Fire Premier ECNL GU17,Fowler Park,Field 6,On Time,168975
+2020-12-13,11:00 AM,Bracket,Atlanta Fire United ECNL GU17,3,2,Alabama FC ECNL GU17,Pinecrest Academy,Grass,On Time,168976
+2021-01-16,02:00 PM,Bracket,Concorde Fire Premier ECNL GU17,,,Atlanta Fire United ECNL GU17,Georgia Soccer Park,Field 5,On Time,168971
+2021-01-17,12:00 PM,Bracket,Concorde Fire Platinum ECNL GU17,4,1,GSA ECNL GU17,Georgia Soccer Park,Field 3,On Time,168940
+2021-03-06,10:30 AM,Bracket,Jacksonville FC ECNL GU17,,,Florida Elite SA ECNL GU17,Patton Park,Field 3,On Time,168994
+2021-03-13,03:00 PM,Bracket,Florida Krush ECNL GU17,1,0,Orlando City ECNL GU17,East Orange District Park,Field 2,On Time,169023
+2021-03-27,01:00 PM,Bracket,Florida Krush ECNL GU17,3,3,Jacksonville FC ECNL GU17,Central Winds,Field C,On Time,168990
+2021-03-28,09:30 AM,Bracket,Orlando City ECNL GU17,4,0,Jacksonville FC ECNL GU17,Seminole,Field 8,On Time,168992
+2021-04-17,11:00 AM,Bracket,Florida Elite SA ECNL GU17,1,2,Sunrise Prime FC ECNL GU17,Veterans Park,Field 1,On Time,168995
+2021-04-17,11:00 AM,Bracket,Orlando City ECNL GU17,4,2,Florida Krush ECNL GU17,Seminole,Field 1,On Time,168997
+2021-04-17,12:30 PM,Bracket,Jacksonville FC ECNL GU17,0,7,Tampa Bay United Rowdies ECNL GU17,Patton Park,Stadium,On Time,168996
+2021-04-18,09:00 AM,Bracket,Jacksonville FC ECNL GU17,0,3,Sunrise Prime FC ECNL GU17,Patton Park,Field 2,On Time,168999
+2021-04-18,10:00 AM,Bracket,Florida Elite SA ECNL GU17,0,2,Tampa Bay United Rowdies ECNL GU17,Veterans Park,Field 1,On Time,168998
+2021-04-24,11:00 AM,Bracket,Florida Krush ECNL GU17,2,3,Tampa Bay United Rowdies ECNL GU17,Central Winds,Field A,On Time,169000
+2021-04-24,01:30 PM,Bracket,Orlando City ECNL GU17,0,2,Sunrise Prime FC ECNL GU17,Seminole,Field 2,On Time,169001
+2021-04-25,09:00 AM,Bracket,Florida Krush ECNL GU17,2,4,Sunrise Prime FC ECNL GU17,Central Winds,Field B,On Time,169002
+2021-04-25,09:00 AM,Bracket,Orlando City ECNL GU17,0,2,Tampa Bay United Rowdies ECNL GU17,Seminole,Field 2,On Time,169003
+2021-05-01,09:00 AM,Bracket,Sunrise Prime FC ECNL GU17,3,0,Tampa Bay United Rowdies ECNL GU17,Waters Sportsplex,Field 2,On Time,168993
+2021-05-02,01:00 PM,Bracket,Tampa Bay United Rowdies ECNL GU17,2,3,Sunrise Prime FC ECNL GU17,Waters Sportsplex,Field 2,On Time,173989
+2021-05-15,11:00 AM,Bracket,Tampa Bay United Rowdies ECNL GU17,2,2,Orlando City ECNL GU17,Waters Sportsplex,Field 2,On Time,169005
+2021-05-15,02:00 PM,Bracket,Sunrise Prime FC ECNL GU17,4,0,Florida Krush ECNL GU17,Chapel Trail Park,CTSP 4,On Time,169004
+2021-05-16,01:00 PM,Bracket,Sunrise Prime FC ECNL GU17,0,1,Orlando City ECNL GU17,Chapel Trail Park,CTSP 4,On Time,169006
+2021-05-16,01:00 PM,Bracket,Tampa Bay United Rowdies ECNL GU17,4,0,Florida Krush ECNL GU17,Waters Sportsplex,Field 3,On Time,169007
+2021-05-19,07:30 PM,Bracket,GSA ECNL GU17,2,1,United Futbol Academy ECNL GU17,GSA South,Spencer,On Time,168967
+2021-05-22,09:00 AM,Bracket,Sunrise Prime FC ECNL GU17,8,1,Jacksonville FC ECNL GU17,Chapel Trail Park,CTSP 3,On Time,168982
+2021-05-22,11:00 AM,Bracket,Tampa Bay United Rowdies ECNL GU17,2,0,Florida Elite SA ECNL GU17,Waters Sportsplex,Field 1,On Time,168981
+2021-05-22,12:00 PM,Bracket,Alabama FC ECNL GU17,2,3,Atlanta Fire United ECNL GU17,Dunnavant Valley Fields (DVF),Field # 5,On Time,168969
+2021-05-23,09:00 AM,Bracket,Sunrise Prime FC ECNL GU17,4,0,Florida Elite SA ECNL GU17,Chapel Trail Park,CTSP 3,On Time,168983
+2021-05-23,09:00 AM,Bracket,Tampa Bay United Rowdies ECNL GU17,5,0,Jacksonville FC ECNL GU17,Waters Sportsplex,Field 3,On Time,168984
+2021-05-23,12:00 PM,Bracket,Atlanta Fire United ECNL GU17,1,4,GSA ECNL GU17,Pinecrest Academy,Grass,On Time,168980
+2021-05-29,12:30 PM,Bracket,Jacksonville FC ECNL GU17,1,8,Concorde Fire Platinum ECNL GU17,Patton Park,Field 12,On Time,200506
+2021-05-29,02:00 PM,Bracket,Florida Elite SA ECNL GU17,1,1,GSA ECNL GU17,Veterans Park,Field 1,On Time,168932
+2021-05-30,10:00 AM,Bracket,Florida Elite SA ECNL GU17,0,4,Concorde Fire Platinum ECNL GU17,Veterans Park,Field 1,On Time,168938
+2021-05-30,11:00 AM,Bracket,Jacksonville FC ECNL GU17,0,4,GSA ECNL GU17,Patton Park,Field 12,On Time,168939
+2021-06-10,05:30 PM,Bracket,Orlando City ECNL GU17,1,0,Florida Elite SA ECNL GU17,Seminole,Field 1,On Time,168989
+2021-06-12,03:00 PM,Bracket,GSA ECNL GU17,1,1,Concorde Fire Platinum ECNL GU17,GSA South,Schrader,On Time,168974
+2021-06-13,09:00 AM,Bracket,Florida Krush ECNL GU17,,,Florida Elite SA ECNL GU17,Daytona State Game Field,Game Field,On Time,168991

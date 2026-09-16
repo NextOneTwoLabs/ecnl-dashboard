@@ -1,0 +1,12 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
+1,GSA ECNL GU16,Gwinnett Soccer Academy,11636,16,14,0,2,44,2.75,41,8,33
+2,Florida Elite SA ECNL GU16,Sporting SA,11546,15,13,1,1,40,2.67,28,9,19
+3,Sunrise Prime FC ECNL GU16,Athletic Club Florida,19371,16,10,3,3,33,2.06,30,9,21
+4,Tampa Bay United Rowdies ECNL GU16,Tampa Bay United,11775,16,9,5,2,29,1.81,36,25,11
+5,Concorde Fire Platinum ECNL GU16,Concorde Fire ,19902,16,6,8,2,20,1.25,22,24,-2
+6,Concorde Fire Premier ECNL GU16,Concorde Fire ,12255,16,3,7,6,15,0.94,12,24,-12
+7,Alabama FC ECNL GU16,Alabama FC,11332,16,4,10,2,14,0.88,24,35,-11
+8,Atlanta Fire United ECNL GU16,Atlanta Fire United,11274,16,3,9,4,13,0.81,19,24,-5
+9,Jacksonville FC ECNL GU16,No Club Selection,12063,15,4,11,0,12,0.8,15,44,-29
+10,Florida Krush ECNL GU16,No Club Selection,11093,16,3,11,2,11,0.69,15,27,-12
+11,Orlando City ECNL GU16,Seminole United,11637,16,2,12,2,8,0.5,17,36,-19

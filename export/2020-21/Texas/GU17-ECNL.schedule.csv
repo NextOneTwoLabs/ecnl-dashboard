@@ -1,0 +1,133 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2020-08-29,10:00 AM,Bracket,Oklahoma Celtic ECNL GU17,0,6,DKSC ECNL GU17,Oklahoma Celtic,Field 8,On Time,171652
+2020-09-05,09:00 AM,Bracket,DKSC ECNL GU17,3,4,FC Dallas ECNL GU17,Cox Soccer Complex,Field 1,On Time,171659
+2020-09-05,01:00 PM,Bracket,Oklahoma Celtic ECNL GU17,0,2,Dallas Texans ECNL GU17,Oklahoma Celtic,Field 11,On Time,171656
+2020-09-05,02:00 PM,Bracket,Challenge SC ECNL GU17,3,1,Classics Elite ECNL GU17,Burroughs Park,Field 6,On Time,171654
+2020-09-05,03:00 PM,Bracket,Sting Dallas Black ECNL GU17,2,0,Sting Dallas Royal ECNL GU17,Sting Complex,Field 1,On Time,171658
+2020-09-05,05:00 PM,Bracket,Tulsa SC ECNL GU17,0,7,Solar ECNL GU17,ISSC,Field 37,On Time,171657
+2020-09-13,11:00 AM,Bracket,AHFC ECNL GU17,3,1,Classics Elite ECNL GU17,Campbell Road Sports Park,Field 1,On Time,171661
+2020-09-13,11:00 AM,Bracket,Solar ECNL GU17,7,0,Oklahoma Celtic ECNL GU17,Fairview Soccer Park ,Field 2,On Time,171663
+2020-09-13,11:00 AM,Bracket,Sting Dallas Royal ECNL GU17,2,8,DKSC ECNL GU17,Fairview Soccer Park ,Field 6,On Time,171665
+2020-09-13,01:00 PM,Bracket,Challenge SC ECNL GU17,0,2,Sting Austin ECNL GU17,Burroughs Park,Field 1,On Time,171660
+2020-09-13,01:00 PM,Bracket,Dallas Texans ECNL GU17,1,3,Tulsa SC ECNL GU17,Ross Stewart Soccer Complex,Field 2,On Time,171662
+2020-09-13,03:00 PM,Bracket,FC Dallas ECNL GU17,0,0,Sting Dallas Black ECNL GU17,Toyota Soccer Center,Field 7,On Time,171664
+2020-09-19,11:00 AM,Bracket,Classics Elite ECNL GU17,1,2,Tulsa SC ECNL GU17,CE Soccer Complex,Field 5 d don't use,On Time,171668
+2020-09-19,11:00 AM,Bracket,Solar ECNL GU17,4,0,Dallas Texans ECNL GU17,Gateway Park,Field 3,On Time,171671
+2020-09-19,01:00 PM,Bracket,Challenge SC ECNL GU17,1,1,AHFC ECNL GU17,Burroughs Park,Field 2,On Time,171666
+2020-09-19,01:00 PM,Bracket,Sting Austin ECNL GU17,3,0,Oklahoma Celtic ECNL GU17,1849 Park,Field 3A,On Time,171667
+2020-09-19,01:00 PM,Bracket,DKSC ECNL GU17,2,1,Sting Dallas Black ECNL GU17,Cox Soccer Complex,Field 1,On Time,171669
+2020-09-20,11:00 AM,Bracket,Classics Elite ECNL GU17,0,0,Oklahoma Celtic ECNL GU17,CE Soccer Complex,Field 6 d don't use,On Time,171672
+2020-09-20,03:00 PM,Bracket,Sting Austin ECNL GU17,1,3,Tulsa SC ECNL GU17,1849 Park,Field 3A,On Time,171673
+2020-09-26,11:00 AM,Bracket,FC Dallas ECNL GU17,3,1,DKSC ECNL GU17,Toyota Soccer Center,Field 6,On Time,171678
+2020-09-26,03:00 PM,Bracket,AHFC ECNL GU17,2,2,Sting Austin ECNL GU17,Campbell Road Sports Park,Field 1,On Time,171674
+2020-09-27,03:00 PM,Bracket,Classics Elite ECNL GU17,0,1,Challenge SC ECNL GU17,CE Soccer Complex,Field 6,On Time,171679
+2020-10-04,11:00 AM,Bracket,Classics Elite ECNL GU17,1,1,AHFC ECNL GU17,CE Soccer Complex,Field 6 d don't use,On Time,171680
+2020-10-04,12:45 PM,Bracket,Sting Austin ECNL GU17,1,1,Challenge SC ECNL GU17,1849 Park,Field 3A,On Time,171681
+2020-10-04,01:00 PM,Bracket,Sting Dallas Black ECNL GU17,0,1,FC Dallas ECNL GU17,Sting Complex,Field 1,On Time,171684
+2020-10-04,03:00 PM,Bracket,DKSC ECNL GU17,8,0,Sting Dallas Royal ECNL GU17,MoneyGram Soccer Park,Field 5,On Time,171685
+2020-10-10,09:00 AM,Bracket,Sting Dallas Black ECNL GU17,1,1,Challenge SC ECNL GU17,Carpenter Park,Field C,On Time,171686
+2020-10-10,09:00 AM,Bracket,DKSC ECNL GU17,3,1,AHFC ECNL GU17,Cox Soccer Complex,Field 1,On Time,171687
+2020-10-10,11:00 AM,Bracket,FC Dallas ECNL GU17,5,0,Tulsa SC ECNL GU17,Toyota Soccer Center,Field 5,On Time,171688
+2020-10-10,12:00 PM,Bracket,Solar ECNL GU17,5,0,Sting Austin ECNL GU17,Gateway Park,Field 3,On Time,171690
+2020-10-10,03:00 PM,Bracket,Sting Dallas Royal ECNL GU17,6,1,Oklahoma Celtic ECNL GU17,Sting Complex,Field 1,On Time,171689
+2020-10-10,03:00 PM,Bracket,Dallas Texans ECNL GU17,1,2,Classics Elite ECNL GU17,Dallas Texans Lewisville,Field 1,On Time,171691
+2020-10-11,09:00 AM,Bracket,DKSC ECNL GU17,8,0,Challenge SC ECNL GU17,Cox Soccer Complex,Field 1,On Time,171693
+2020-10-11,10:00 AM,Bracket,Solar ECNL GU17,3,0,Classics Elite ECNL GU17,Fairview Soccer Park ,Field 1,On Time,171696
+2020-10-11,11:00 AM,Bracket,FC Dallas ECNL GU17,6,0,Oklahoma Celtic ECNL GU17,Toyota Soccer Center,Field 6,On Time,171694
+2020-10-11,11:00 AM,Bracket,Sting Dallas Royal ECNL GU17,2,1,Tulsa SC ECNL GU17,TBD,Field 1,On Time,171695
+2020-10-11,01:00 PM,Bracket,Sting Dallas Black ECNL GU17,2,1,AHFC ECNL GU17,Carpenter Park,Field C,On Time,171692
+2020-10-11,03:00 PM,Bracket,Dallas Texans ECNL GU17,0,0,Sting Austin ECNL GU17,Dallas Texans Lewisville,Field 1,On Time,171697
+2020-10-17,09:00 AM,Bracket,Sting Dallas Royal ECNL GU17,1,1,Dallas Texans ECNL GU17,Sting Complex,Field 2,On Time,171701
+2020-10-17,03:00 PM,Bracket,Challenge SC ECNL GU17,5,1,Oklahoma Celtic ECNL GU17,Burroughs Park,Field 2,On Time,171699
+2020-10-18,09:00 AM,Bracket,Sting Dallas Royal ECNL GU17,0,6,Solar ECNL GU17,Sting Complex,Field 2,On Time,171705
+2020-10-18,10:15 AM,Bracket,AHFC ECNL GU17,8,0,Oklahoma Celtic ECNL GU17,Campbell Road Sports Park,Field 1,On Time,171702
+2020-10-24,11:00 AM,Bracket,Sting Austin ECNL GU17,0,1,DKSC ECNL GU17,1849 Park,Field 3A,On Time,171707
+2020-10-24,01:00 PM,Bracket,Classics Elite ECNL GU17,2,3,Sting Dallas Black ECNL GU17,CE Soccer Complex,Field 6 d don't use,On Time,171706
+2020-10-25,11:00 AM,Bracket,Classics Elite ECNL GU17,1,3,DKSC ECNL GU17,CE Soccer Complex,Field 6,On Time,171708
+2020-10-25,01:00 PM,Bracket,Sting Dallas Royal ECNL GU17,0,5,FC Dallas ECNL GU17,Sting Complex,Field 2,On Time,171670
+2020-10-25,01:00 PM,Bracket,Sting Austin ECNL GU17,3,2,Sting Dallas Black ECNL GU17,1849 Park,Field 3B,On Time,171709
+2020-10-31,09:00 AM,Bracket,FC Dallas ECNL GU17,1,0,AHFC ECNL GU17,Toyota Soccer Center,Field 5,On Time,171710
+2020-10-31,09:00 AM,Bracket,Sting Dallas Royal ECNL GU17,1,3,Challenge SC ECNL GU17,Carpenter Pak,Field C,On Time,171711
+2020-10-31,11:00 AM,Bracket,Solar ECNL GU17,2,0,DKSC ECNL GU17,Gateway Park,Field 5,On Time,171715
+2020-10-31,02:00 PM,Bracket,Dallas Texans ECNL GU17,0,1,Sting Dallas Black ECNL GU17,Arlington Heights High School,Field 1,On Time,171714
+2020-11-01,09:00 AM,Bracket,Sting Dallas Royal ECNL GU17,0,6,AHFC ECNL GU17,Carpenter Pak,Field C,On Time,171717
+2020-11-01,09:45 AM,Bracket,FC Dallas ECNL GU17,1,0,Challenge SC ECNL GU17,Toyota Soccer Center,Field 5,On Time,171716
+2020-11-01,02:00 PM,Bracket,Dallas Texans ECNL GU17,0,3,DKSC ECNL GU17,Arlington Heights High School,Field 1,On Time,171720
+2020-11-01,03:00 PM,Bracket,Solar ECNL GU17,3,0,Sting Dallas Black ECNL GU17,John Paul II High School,Field 1,On Time,171721
+2020-11-07,01:00 PM,Bracket,DKSC ECNL GU17,2,0,Tulsa SC ECNL GU17,Cox Soccer Complex,Field 2,On Time,171722
+2020-11-07,01:00 PM,Bracket,Sting Dallas Black ECNL GU17,3,2,Oklahoma Celtic ECNL GU17,Toyota of Lewisville Railroad Park,Field 3,On Time,171723
+2020-11-08,09:00 AM,Bracket,FC Dallas ECNL GU17,6,1,Sting Dallas Royal ECNL GU17,Toyota Soccer Center,Field 5,On Time,171728
+2020-11-08,11:00 AM,Bracket,DKSC ECNL GU17,5,0,Oklahoma Celtic ECNL GU17,Cox Soccer Complex,Field 1,On Time,171724
+2020-11-08,11:00 AM,Bracket,Sting Dallas Black ECNL GU17,3,2,Tulsa SC ECNL GU17,Toyota of Lewisville Railroad Park,Field 3,On Time,171725
+2020-11-08,12:00 PM,Bracket,Dallas Texans ECNL GU17,0,1,Solar ECNL GU17,Ross Stewart Soccer Complex,Field 1,On Time,171729
+2020-11-08,01:00 PM,Bracket,AHFC ECNL GU17,3,1,Challenge SC ECNL GU17,Campbell Road Sports Park,Field 1,On Time,171726
+2020-11-08,03:00 PM,Bracket,Classics Elite ECNL GU17,0,1,Sting Austin ECNL GU17,CE Soccer Complex,Field 5,On Time,171727
+2020-11-21,09:00 AM,Bracket,Dallas Texans ECNL GU17,0,2,Challenge SC ECNL GU17,Ross Stewart Soccer Complex,Field 3,On Time,171730
+2020-11-21,11:00 AM,Bracket,Solar ECNL GU17,1,0,AHFC ECNL GU17,Fairview Soccer Park ,Field 2,On Time,171731
+2020-11-22,09:00 AM,Bracket,Dallas Texans ECNL GU17,0,5,AHFC ECNL GU17,Ross Stewart Soccer Complex,Field 3,On Time,171733
+2020-11-22,11:00 AM,Bracket,Solar ECNL GU17,7,0,Challenge SC ECNL GU17,Fairview Soccer Park ,Field 2,On Time,171734
+2020-11-22,11:00 AM,Bracket,Sting Dallas Black ECNL GU17,2,2,DKSC ECNL GU17,Fairview Soccer Park ,Field 5,On Time,171735
+2020-12-05,01:00 PM,Bracket,FC Dallas ECNL GU17,5,0,Dallas Texans ECNL GU17,Toyota Soccer Center,Field 8,On Time,171704
+2020-12-12,11:00 AM,Bracket,Classics Elite ECNL GU17,1,1,Solar ECNL GU17,CE Soccer Complex,Field 4 don't use,On Time,171741
+2020-12-12,01:00 PM,Bracket,Oklahoma Celtic ECNL GU17,1,7,FC Dallas ECNL GU17,Oklahoma Celtic,Field 9,On Time,171738
+2020-12-12,01:00 PM,Bracket,Tulsa SC ECNL GU17,3,2,Sting Dallas Royal ECNL GU17,ISSC,Field 37,On Time,171739
+2020-12-12,03:00 PM,Bracket,Sting Austin ECNL GU17,0,0,Dallas Texans ECNL GU17,Lake Travis High School Track ,Field 1,On Time,171740
+2020-12-13,11:00 AM,Bracket,Classics Elite ECNL GU17,0,0,Dallas Texans ECNL GU17,CE Soccer Complex,Field 6 d don't use,On Time,171747
+2020-12-13,01:00 PM,Bracket,Sting Austin ECNL GU17,0,2,Solar ECNL GU17,George Wagner Middle School Stadium,Stadium Field,On Time,171746
+2021-01-30,10:00 AM,Bracket,Tulsa SC ECNL GU17,3,1,Oklahoma Celtic ECNL GU17,Titan Main,Field 2,On Time,171732
+2021-01-31,01:00 PM,Bracket,Oklahoma Celtic ECNL GU17,1,5,Solar ECNL GU17,Oklahoma Celtic,Field 8,On Time,171682
+2021-02-07,11:00 AM,Bracket,Sting Dallas Royal ECNL GU17,1,1,Sting Dallas Black ECNL GU17,Sting Complex,Field 1,On Time,171677
+2021-03-06,07:00 PM,Bracket,FC Dallas ECNL GU17,,,Solar ECNL GU17,MoneyGram Soccer Park,Field 8,On Time,171700
+2021-04-17,01:00 PM,Bracket,Classics Elite ECNL GU17,4,2,Sting Dallas Royal ECNL GU17,CE Soccer Complex,Field 6 d don't use,On Time,171750
+2021-04-17,03:00 PM,Bracket,Sting Austin ECNL GU17,0,2,FC Dallas ECNL GU17,Charles A. Forbes Middle School,Stadium Field,On Time,171749
+2021-04-18,11:00 AM,Bracket,Classics Elite ECNL GU17,0,9,FC Dallas ECNL GU17,CE Soccer Complex,Field 6 d don't use,On Time,171754
+2021-04-18,01:15 PM,Bracket,Tulsa SC ECNL GU17,3,2,Sting Dallas Black ECNL GU17,Mohawk,Field 15,On Time,171653
+2021-04-18,02:00 PM,Bracket,Dallas Texans ECNL GU17,2,1,Oklahoma Celtic ECNL GU17,Ross Stewart Soccer Complex,Field 2,On Time,171675
+2021-04-18,03:00 PM,Bracket,Sting Austin ECNL GU17,3,2,Sting Dallas Royal ECNL GU17,Benold Middle School,Track Field,On Time,171753
+2021-04-24,09:00 AM,Bracket,Tulsa SC ECNL GU17,1,3,Challenge SC ECNL GU17,Titan Main,Field 2,On Time,171755
+2021-04-24,11:00 AM,Bracket,Oklahoma Celtic ECNL GU17,,,AHFC ECNL GU17,Oklahoma Celtic,Field 8,On Time,171756
+2021-04-24,11:00 AM,Bracket,DKSC ECNL GU17,6,0,Classics Elite ECNL GU17,Cox Soccer Complex,Field 2,On Time,171758
+2021-04-24,12:00 PM,Bracket,Solar ECNL GU17,9,0,Sting Dallas Royal ECNL GU17,Gateway Park,Field 4,On Time,171759
+2021-04-24,01:00 PM,Bracket,Sting Dallas Black ECNL GU17,2,1,Sting Austin ECNL GU17,Carpenter Park,Field A,On Time,171757
+2021-04-25,08:30 AM,Bracket,Oklahoma Celtic ECNL GU17,0,1,Challenge SC ECNL GU17,Oklahoma Celtic,Field 8,On Time,171762
+2021-04-25,11:00 AM,Bracket,DKSC ECNL GU17,6,0,Sting Austin ECNL GU17,Cox Soccer Complex,Field 1,On Time,171764
+2021-04-25,12:00 PM,Bracket,Tulsa SC ECNL GU17,0,2,AHFC ECNL GU17,Titan Main,Field 2,On Time,171761
+2021-04-25,01:00 PM,Bracket,Sting Dallas Black ECNL GU17,0,0,Classics Elite ECNL GU17,Sting Complex,Field 1,On Time,171763
+2021-05-01,09:30 AM,Bracket,Oklahoma Celtic ECNL GU17,2,1,Tulsa SC ECNL GU17,Oklahoma Celtic,Field 8,On Time,171748
+2021-05-01,01:00 PM,Bracket,Sting Dallas Black ECNL GU17,0,1,Solar ECNL GU17,Lebanon Trail High School,Stadium FIeld,On Time,171769
+2021-05-01,01:00 PM,Bracket,DKSC ECNL GU17,2,0,Dallas Texans ECNL GU17,Cox Soccer Complex,Field 2,On Time,171770
+2021-05-02,08:00 AM,Bracket,Challenge SC ECNL GU17,,,Sting Dallas Royal ECNL GU17,Burroughs Park,Field 4,On Time,171772
+2021-05-02,01:00 PM,Bracket,Sting Dallas Black ECNL GU17,2,1,Dallas Texans ECNL GU17,Curtis Middle School,Field 1,On Time,171773
+2021-05-02,01:00 PM,Bracket,Sting Austin ECNL GU17,,,Classics Elite ECNL GU17,1849 Park,Field 3A,On Time,171775
+2021-05-02,03:00 PM,Bracket,DKSC ECNL GU17,1,0,Solar ECNL GU17,Cox Soccer Complex,Field 1,On Time,171774
+2021-05-08,03:00 PM,Bracket,Sting Austin ECNL GU17,0,3,AHFC ECNL GU17,Parkway Church,Field 1,On Time,171655
+2021-05-08,03:00 PM,Bracket,Oklahoma Celtic ECNL GU17,1,2,Sting Dallas Royal ECNL GU17,Oklahoma Celtic,Field 11,On Time,171744
+2021-05-08,03:00 PM,Bracket,Tulsa SC ECNL GU17,0,3,FC Dallas ECNL GU17,Titan Main,Field 1,On Time,171745
+2021-05-09,12:00 PM,Bracket,Tulsa SC ECNL GU17,1,1,Dallas Texans ECNL GU17,Titan Main,Field 2,On Time,171683
+2021-05-15,09:00 AM,Bracket,AHFC ECNL GU17,4,3,Dallas Texans ECNL GU17,Campbell Road Sports Park,Field 1,On Time,171776
+2021-05-15,11:00 AM,Bracket,FC Dallas ECNL GU17,5,0,Classics Elite ECNL GU17,Toyota Soccer Center,Field 6,On Time,171778
+2021-05-15,12:30 PM,Bracket,Challenge SC ECNL GU17,1,6,Solar ECNL GU17,Burroughs Park,Field 4,On Time,171777
+2021-05-15,01:00 PM,Bracket,Sting Dallas Royal ECNL GU17,0,1,Sting Austin ECNL GU17,Sting Complex,Field 2,On Time,171779
+2021-05-16,09:00 AM,Bracket,Challenge SC ECNL GU17,0,1,Dallas Texans ECNL GU17,Burroughs Park,Field 4,On Time,171781
+2021-05-16,09:00 AM,Bracket,Sting Dallas Royal ECNL GU17,1,2,Classics Elite ECNL GU17,Lowery Freshman Center Stadium,Field 1,On Time,171783
+2021-05-16,09:45 AM,Bracket,FC Dallas ECNL GU17,5,0,Sting Austin ECNL GU17,Frisco High School,Field 1,On Time,171782
+2021-05-16,12:00 PM,Bracket,Oklahoma Celtic ECNL GU17,,,Sting Dallas Black ECNL GU17,Oklahoma Celtic,Field 8,On Time,171751
+2021-05-16,01:00 PM,Bracket,AHFC ECNL GU17,0,3,Solar ECNL GU17,Campbell Road Sports Park,Field 1,On Time,171780
+2021-05-16,02:00 PM,Bracket,Tulsa SC ECNL GU17,0,3,DKSC ECNL GU17,ISSC,Field 37,On Time,171752
+2021-05-19,08:30 PM,Bracket,Dallas Texans ECNL GU17,1,3,FC Dallas ECNL GU17,Arlington Heights High School,Field 1,On Time,171760
+2021-05-22,09:15 AM,Bracket,Challenge SC ECNL GU17,0,6,DKSC ECNL GU17,Matias Almeyda,Field 1,On Time,171736
+2021-05-22,11:00 AM,Bracket,Oklahoma Celtic ECNL GU17,3,1,Classics Elite ECNL GU17,Oklahoma Celtic,Field 8,On Time,171712
+2021-05-22,11:00 AM,Bracket,AHFC ECNL GU17,1,0,Sting Dallas Black ECNL GU17,Campbell Road Sports Park,Field 1,On Time,171737
+2021-05-22,01:00 PM,Bracket,Tulsa SC ECNL GU17,0,2,Sting Austin ECNL GU17,ISSC,Field 37,On Time,171713
+2021-05-23,11:30 AM,Bracket,AHFC ECNL GU17,1,1,DKSC ECNL GU17,Campbell Road Sports Park,Field 1,On Time,171743
+2021-05-23,01:00 PM,Bracket,Oklahoma Celtic ECNL GU17,2,2,Sting Austin ECNL GU17,Oklahoma Celtic,Field 11,On Time,171718
+2021-05-23,01:00 PM,Bracket,Challenge SC ECNL GU17,2,5,Sting Dallas Black ECNL GU17,Matias Almeyda,Field 2,On Time,171742
+2021-05-23,02:00 PM,Bracket,Tulsa SC ECNL GU17,2,2,Classics Elite ECNL GU17,ISSC,Field 37,On Time,171719
+2021-05-26,08:00 PM,Bracket,Solar ECNL GU17,3,0,FC Dallas ECNL GU17,Memorial High School,Field 1,On Time,171765
+2021-05-29,01:00 PM,Bracket,Challenge SC ECNL GU17,1,8,FC Dallas ECNL GU17,Burroughs Park,Field 4,On Time,171768
+2021-05-29,03:30 PM,Bracket,AHFC ECNL GU17,4,0,Tulsa SC ECNL GU17,Campbell Road Sports Park,Field 1,On Time,171698
+2021-05-30,10:00 AM,Bracket,AHFC ECNL GU17,0,1,FC Dallas ECNL GU17,Campbell Road Sports Park,Field 1,On Time,171771
+2021-05-30,12:00 PM,Bracket,Challenge SC ECNL GU17,4,1,Tulsa SC ECNL GU17,Burroughs Park,Field 4,On Time,171703
+2021-06-01,04:30 PM,Bracket,Dallas Texans ECNL GU17,3,0,Sting Dallas Royal ECNL GU17,Wakeland High School,Field 1,On Time,171766
+2021-06-04,06:00 PM,Bracket,AHFC ECNL GU17,2,3,Sting Dallas Royal ECNL GU17,Meyer Park,Field 4,On Time,171767
+2021-06-10,03:00 PM,Bracket,Solar ECNL GU17,4,0,Tulsa SC ECNL GU17,Titan Sports Performance Center,Field 2,On Time,171676

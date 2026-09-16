@@ -1,0 +1,41 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2020-09-19,10:00 AM,Bracket,Gretna Elite Academy ECNL GU13,0,7,Minnesota Thunder ECNL GU13,Papillion Landing ,#1 Turf,On Time,172313
+2020-09-26,09:00 AM,Bracket,Kansas City Athletics ECNL GU13,1,1,Minnesota Thunder ECNL GU13,Olathe District Activity Complex,Soccer Field,On Time,172314
+2020-10-03,09:00 AM,Bracket,Minnesota Thunder ECNL GU13,1,0,Gretna Elite Academy ECNL GU13,Academy of Holy Angels,South Turf 1 (11v11),On Time,172316
+2020-10-24,09:00 AM,Bracket,SLSG White ECNL GU13,0,2,Eclipse Select SC North ECNL GU13,Trinity Sports Park,Field 1,On Time,172326
+2020-10-31,01:00 PM,Bracket,SLSG White ECNL GU13,6,0,Gretna Elite Academy ECNL GU13,"The TBK Bank Sports Complex, LLC",Field 1,On Time,172318
+2020-11-01,08:30 AM,Bracket,Gretna Elite Academy ECNL GU13,0,5,SLSG Navy ECNL GU13,"The TBK Bank Sports Complex, LLC",Field 7,On Time,172322
+2020-11-01,10:15 AM,Bracket,FC Wisconsin ECNL GU13,0,1,SLSG White ECNL GU13,"The TBK Bank Sports Complex, LLC",Field 2,On Time,172317
+2020-11-01,10:15 AM,Bracket,Michigan Hawks ECNL GU13,1,0,Kansas City Athletics ECNL GU13,"The TBK Bank Sports Complex, LLC",Field 1,On Time,172344
+2020-11-21,06:30 PM,Bracket,SLSG White ECNL GU13,1,1,Eclipse Select SC ECNL GU13,MO RUSH Sports Park,Field 1,On Time,172334
+2020-12-12,12:00 PM,Bracket,SLSG Navy ECNL GU13,1,1,Kansas City Athletics ECNL GU13,MO RUSH Sports Park,Field 3,On Time,172319
+2020-12-13,10:15 AM,Bracket,SLSG White ECNL GU13,1,1,Kansas City Athletics ECNL GU13,Missouri Rush Sports Park,Field 3,On Time,172321
+2021-01-31,08:00 AM,Bracket,Minnesota Thunder ECNL GU13,1,1,Kansas City Athletics ECNL GU13,Academy of Holy Angels,South Turf 1 (11v11),On Time,172337
+2021-03-27,08:00 AM,Bracket,SLSG Navy ECNL GU13,1,0,FC Wisconsin ECNL GU13,MO RUSH Sports Park,Field 1,On Time,172329
+2021-03-27,08:00 AM,Bracket,SLSG White ECNL GU13,1,0,Minnesota Thunder ECNL GU13,MO RUSH Sports Park,Field 2,On Time,172330
+2021-03-27,08:00 AM,Bracket,Gretna Elite Academy ECNL GU13,0,11,Eclipse Select SC ECNL GU13,MO RUSH Sports Park,Field 4,On Time,172331
+2021-03-27,09:45 AM,Bracket,Kansas City Athletics ECNL GU13,3,1,Eclipse Select SC North ECNL GU13,MO RUSH Sports Park,Field 3,On Time,172328
+2021-03-28,08:00 AM,Bracket,Minnesota Thunder ECNL GU13,0,3,SLSG Navy ECNL GU13,MO RUSH Sports Park,Field 2,On Time,172325
+2021-03-28,08:00 AM,Bracket,FC Wisconsin ECNL GU13,2,1,Gretna Elite Academy ECNL GU13,MO RUSH Sports Park,Field 3,On Time,172327
+2021-03-28,09:45 AM,Bracket,Eclipse Select SC ECNL GU13,3,0,Kansas City Athletics ECNL GU13,MO RUSH Sports Park,Field 1,On Time,172324
+2021-04-17,09:00 AM,Bracket,SLSG Navy ECNL GU13,3,0,Vardar ECNL GU13,,,On Time,172340
+2021-04-17,09:00 AM,Bracket,SLSG Navy ECNL GU13,3,1,Michigan Hawks Magic ECNL GU13,"The TBK Bank Sports Complex, LLC",Field 7,On Time,172345
+2021-04-17,09:00 AM,Bracket,SLSG White ECNL GU13,1,0,Minnesota Thunder ECNL GU13,"The TBK Bank Sports Complex, LLC",Field 8,On Time,172346
+2021-04-17,12:30 PM,Bracket,Gretna Elite Academy ECNL GU13,2,3,Eclipse Select SC North ECNL GU13,"The TBK Bank Sports Complex, LLC",Field 7,On Time,172342
+2021-04-18,08:30 AM,Bracket,Michigan Hawks ECNL GU13,0,1,SLSG White ECNL GU13,"The TBK Bank Sports Complex, LLC",Field 8,On Time,172341
+2021-04-18,12:00 PM,Bracket,Eclipse Select SC North ECNL GU13,1,0,SLSG Navy ECNL GU13,"The TBK Bank Sports Complex, LLC",Field 7,On Time,172315
+2021-04-18,12:00 PM,Bracket,FC Wisconsin ECNL GU13,1,1,Minnesota Thunder ECNL GU13,"The TBK Bank Sports Complex, LLC",Field 8,On Time,172343
+2021-04-24,TBD,Bracket,SLSG Navy ECNL GU13,1,0,SLSG White ECNL GU13,,,On Time,172332
+2021-04-24,05:30 PM,Bracket,Gretna Elite Academy ECNL GU13,1,9,Kansas City Athletics ECNL GU13,Papillion Landing ,#1 Turf,On Time,172323
+2021-05-01,TBD,Bracket,Gretna Elite Academy ECNL GU13,3,0,Vardar ECNL GU13,,,On Time,172347
+2021-05-01,08:00 AM,Bracket,Kansas City Athletics ECNL GU13,3,0,Gretna Elite Academy ECNL GU13,Stuarts Sports Complex,Field 20,On Time,172333
+2021-05-01,08:00 AM,Bracket,Minnesota Thunder ECNL GU13,1,4,SLSG Navy ECNL GU13,Stuarts Sports Complex,Field 10,On Time,172338
+2021-05-02,08:00 AM,Bracket,Kansas City Athletics ECNL GU13,1,1,Michigan Hawks Magic ECNL GU13,Stuarts Sports Complex,Field 10,On Time,172339
+2021-05-16,09:00 AM,Bracket,SLSG White ECNL GU13,2,4,SLSG Navy ECNL GU13,WWT Soccer Park,Field 6,On Time,172312
+2021-05-22,09:00 AM,Bracket,Kansas City Athletics ECNL GU13,0,4,SLSG Navy ECNL GU13,Olathe District Activity Complex,Soccer Field,On Time,172308
+2021-05-22,02:15 PM,Bracket,SLSG White ECNL GU13,,,Gretna Elite Academy ECNL GU13,Olathe District Activity Complex,Soccer Field,On Time,172309
+2021-05-23,10:00 AM,Bracket,FC Wisconsin ECNL GU13,0,1,Eclipse Select SC North ECNL GU13,FC Wisconsin Soccer Park,Field 1 - Val Olla Field,On Time,172320
+2021-05-23,01:15 PM,Bracket,Kansas City Athletics ECNL GU13,4,2,SLSG White ECNL GU13,Olathe District Activity Complex,Football Field,On Time,172310
+2021-05-23,01:15 PM,Bracket,SLSG Navy ECNL GU13,3,0,Gretna Elite Academy ECNL GU13,Olathe District Complex,Soccer Field,On Time,172311
+2021-05-29,09:00 AM,Bracket,Minnesota Thunder ECNL GU13,0,3,Michigan Hawks ECNL GU13,Academy of Holy Angels,South Turf 1 (11v11),On Time,172335
+2021-05-30,10:15 AM,Bracket,Minnesota Thunder ECNL GU13,1,1,Michigan Hawks Magic ECNL GU13,Academy of Holy Angels,Field 2 - Star Dome,On Time,172336

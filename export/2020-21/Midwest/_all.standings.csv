@@ -1,0 +1,64 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd,division,flight
+1,Eclipse Select SC ECNL GU13,Eclipse Select Soccer Club,46760,14,11,1,2,35,2.5,52,5,47,GU13,East
+2,Eclipse Select SC North ECNL GU13,Eclipse Select Soccer Club,46762,13,8,4,1,25,1.92,18,15,3,GU13,East
+3,FC Wisconsin ECNL GU13,FC Wisconsin Girls,46764,15,3,11,1,10,0.67,10,40,-30,GU13,East
+4,Vardar ECNL GU13,Vardar,46776,15,0,15,0,0,0.0,0,54,-54,GU13,East
+1,SLSG Navy ECNL GU13,St. Louis Scott Gallagher,46768,14,11,2,1,34,2.43,35,7,28,GU13,West
+2,Kansas City Athletics ECNL GU13,KC Athletics,46766,14,6,3,5,23,1.64,32,18,14,GU13,West
+3,Minnesota Thunder ECNL GU13,Minnesota Thunder Academy,46774,14,3,7,4,13,0.93,16,20,-4,GU13,West
+4,Gretna Elite Academy ECNL GU13,Gretna Elite Academy,46765,13,1,12,0,3,0.23,7,54,-47,GU13,West
+1,Eclipse Select SC ECNL GU14,Eclipse Select Soccer Club,13614,14,10,3,1,31,2.21,34,15,19,GU14,East
+2,Michigan Hawks  ECNL GU14,Michigan Hawks,35251,15,9,2,4,31,2.07,31,7,24,GU14,East
+3,Michigan Hawks Magic ECNL GU14,Michigan Hawks,35252,13,3,8,2,11,0.85,18,24,-6,GU14,East
+4,FC Wisconsin ECNL GU14,FC Wisconsin Girls,35250,14,3,9,2,11,0.79,13,43,-30,GU14,East
+5,Eclipse Select SC North ECNL GU14,Eclipse Select Soccer Club,35248,15,3,10,2,11,0.73,22,42,-20,GU14,East
+6,Vardar ECNL GU14,Vardar,35255,15,0,15,0,0,0.0,0,48,-48,GU14,East
+1,SLSG Navy ECNL GU14,St. Louis Scott Gallagher,34464,13,11,1,1,34,2.62,37,6,31,GU14,West
+2,Minnesota Thunder ECNL GU14,No Club Selection,35253,13,9,2,2,29,2.23,26,7,19,GU14,West
+3,SLSG White ECNL GU14,St. Louis Scott Gallagher,35254,14,6,5,3,21,1.5,22,19,3,GU14,West
+4,Gretna Elite Academy ECNL GU14,No Club Selection,35249,14,6,6,2,20,1.43,19,21,-2,GU14,West
+5,Kansas City Athletics ECNL GU14,KC Athletics,33175,14,5,4,5,20,1.43,23,13,10,GU14,West
+1,Minnesota Thunder ECNL GU15,No Club Selection,20378,6,5,0,1,16,2.67,23,5,18,GU15,ECNL
+2,SLSG Navy ECNL GU15,St. Louis Scott Gallagher,20075,8,5,0,3,18,2.25,33,3,30,GU15,ECNL
+3,Kansas City Athletics ECNL GU15,KC Athletics,19672,9,6,2,1,19,2.11,23,9,14,GU15,ECNL
+4,Michigan Hawks ECNL GU15,Michigan Hawks,19884,10,5,0,5,20,2.0,23,8,15,GU15,ECNL
+5,SLSG White ECNL GU15,St. Louis Scott Gallagher,20379,9,5,2,2,17,1.89,24,8,16,GU15,ECNL
+6,Eclipse Select SC ECNL GU15,Eclipse Select Soccer Club,20375,9,4,3,2,14,1.56,11,17,-6,GU15,ECNL
+7,Eclipse Select SC North ECNL GU15,Eclipse Select Soccer Club,20099,7,3,3,1,10,1.43,10,6,4,GU15,ECNL
+8,FC Wisconsin ECNL GU15,FC Wisconsin Girls,20376,7,1,3,3,6,0.86,5,21,-16,GU15,ECNL
+9,Gretna Elite Academy ECNL GU15,Gretna Elite Academy,11467,9,2,7,0,6,0.67,12,25,-13,GU15,ECNL
+10,Michigan Hawks Magic ECNL GU15,Michigan Hawks,20377,10,0,8,2,2,0.2,4,22,-18,GU15,ECNL
+11,Vardar ECNL GU15,Vardar,12525,10,0,8,2,2,0.2,3,47,-44,GU15,ECNL
+1,SLSG Navy ECNL GU16,St. Louis Scott Gallagher,11283,8,7,0,1,22,2.75,23,5,18,GU16,ECNL
+2,Kansas City Athletics ECNL GU16,KC Athletics,19372,10,9,1,0,27,2.7,23,7,16,GU16,ECNL
+3,Michigan Hawks ECNL GU16,Michigan Hawks,19897,10,8,1,1,25,2.5,33,4,29,GU16,ECNL
+4,Minnesota Thunder ECNL GU16,No Club Selection,12530,6,4,2,0,12,2.0,25,7,18,GU16,ECNL
+5,Gretna Elite Academy ECNL GU16,No Club Selection,11096,10,6,4,0,18,1.8,16,17,-1,GU16,ECNL
+6,SLSG White ECNL GU16,St. Louis Scott Gallagher,12529,9,4,4,1,13,1.44,16,12,4,GU16,ECNL
+7,FC Wisconsin ECNL GU16,No Club Selection,11102,9,3,6,0,9,1.0,9,23,-14,GU16,ECNL
+8,Eclipse Select SC ECNL GU16,Eclipse Select Soccer Club,12526,9,2,5,2,8,0.89,8,12,-4,GU16,ECNL
+9,Michigan Hawks Magic ECNL GU16,Michigan Hawks,11290,10,2,7,1,7,0.7,6,18,-12,GU16,ECNL
+10,Eclipse Select SC North ECNL GU16,Eclipse Select Soccer Club,20189,7,1,6,0,3,0.43,8,20,-12,GU16,ECNL
+11,Vardar ECNL GU16,Vardar,20380,10,0,10,0,0,0.0,3,45,-42,GU16,ECNL
+1,Michigan Hawks ECNL GU17,Michigan Hawks,19898,10,8,0,2,26,2.6,30,2,28,GU17,ECNL
+2,SLSG Navy ECNL GU17,St. Louis Scott Gallagher,11284,8,6,0,2,20,2.5,16,4,12,GU17,ECNL
+3,Minnesota Thunder ECNL GU17,No Club Selection,11564,7,4,1,2,14,2.0,20,11,9,GU17,ECNL
+4,Vardar ECNL GU17,Vardar,11556,8,3,1,4,13,1.63,9,9,0,GU17,ECNL
+5,Kansas City Athletics ECNL GU17,KC Athletics,19378,10,4,5,1,13,1.3,17,14,3,GU17,ECNL
+6,Gretna Elite Academy ECNL GU17,No Club Selection,10865,10,2,3,5,11,1.1,13,15,-2,GU17,ECNL
+7,FC Wisconsin ECNL GU17,FC Wisconsin Girls,11558,9,2,4,3,9,1.0,9,19,-10,GU17,ECNL
+8,Eclipse Select SC ECNL GU17,Eclipse Select Soccer Club,11557,9,2,5,2,8,0.89,12,15,-3,GU17,ECNL
+9,Michigan Hawks Magic ECNL GU17,Michigan Hawks,11315,9,1,5,3,6,0.67,5,18,-13,GU17,ECNL
+10,SLSG White ECNL GU17,St. Louis Scott Gallagher,11563,6,0,4,2,2,0.33,5,18,-13,GU17,ECNL
+11,Eclipse Select SC North ECNL GU17,Eclipse Select Soccer Club,20190,4,0,4,0,0,0.0,2,13,-11,GU17,ECNL
+1,Eclipse Select SC ECNL GU18/U19,Eclipse Select Soccer Club,6889,9,9,0,0,27,3.0,44,5,39,GU18/U19,ECNL
+2,SLSG Navy ECNL GU18/U19,St. Louis Scott Gallagher,6922,8,7,1,0,21,2.63,23,7,16,GU18/U19,ECNL
+3,Kansas City Athletics ECNL GU18/U19,KC Athletics,19379,10,6,2,2,20,2.0,22,12,10,GU18/U19,ECNL
+4,Michigan Hawks ECNL GU18/U19,Michigan Hawks,19899,10,5,3,2,17,1.7,20,15,5,GU18/U19,ECNL
+5,Minnesota Thunder ECNL GU18/U19,No Club Selection,6904,7,3,3,1,10,1.43,10,12,-2,GU18/U19,ECNL
+6,Vardar ECNL GU18/U19,Vardar,6936,10,4,4,2,14,1.4,14,22,-8,GU18/U19,ECNL
+7,SLSG White ECNL GU18/U19,St. Louis Scott Gallagher,6933,8,2,3,3,9,1.13,10,15,-5,GU18/U19,ECNL
+8,Gretna Elite Academy ECNL GU18/U19,No Club Selection,10866,10,2,5,3,9,0.9,12,21,-9,GU18/U19,ECNL
+9,Eclipse Select SC North ECNL GU18/U19,Eclipse Select Soccer Club,20191,7,1,5,1,4,0.57,10,20,-10,GU18/U19,ECNL
+10,Michigan Hawks Magic ECNL GU18/U19,Michigan Hawks,6903,10,1,7,2,5,0.5,8,30,-22,GU18/U19,ECNL
+11,FC Wisconsin ECNL GU18/U19,FC Wisconsin Girls,6895,9,0,7,2,2,0.22,6,20,-14,GU18/U19,ECNL

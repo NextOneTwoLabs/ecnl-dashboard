@@ -1,0 +1,12 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
+1,SLSG Navy ECNL GU16,St. Louis Scott Gallagher,11283,8,7,0,1,22,2.75,23,5,18
+2,Kansas City Athletics ECNL GU16,KC Athletics,19372,10,9,1,0,27,2.7,23,7,16
+3,Michigan Hawks ECNL GU16,Michigan Hawks,19897,10,8,1,1,25,2.5,33,4,29
+4,Minnesota Thunder ECNL GU16,No Club Selection,12530,6,4,2,0,12,2.0,25,7,18
+5,Gretna Elite Academy ECNL GU16,No Club Selection,11096,10,6,4,0,18,1.8,16,17,-1
+6,SLSG White ECNL GU16,St. Louis Scott Gallagher,12529,9,4,4,1,13,1.44,16,12,4
+7,FC Wisconsin ECNL GU16,No Club Selection,11102,9,3,6,0,9,1.0,9,23,-14
+8,Eclipse Select SC ECNL GU16,Eclipse Select Soccer Club,12526,9,2,5,2,8,0.89,8,12,-4
+9,Michigan Hawks Magic ECNL GU16,Michigan Hawks,11290,10,2,7,1,7,0.7,6,18,-12
+10,Eclipse Select SC North ECNL GU16,Eclipse Select Soccer Club,20189,7,1,6,0,3,0.43,8,20,-12
+11,Vardar ECNL GU16,Vardar,20380,10,0,10,0,0,0.0,3,45,-42

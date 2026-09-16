@@ -1,0 +1,42 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2020-08-23,12:00 PM,Bracket,GSA ECNL GU18/U19 Composite,1,2,Concorde Fire Premier ECNL U18/U19 Composite,GSA South,Spencer,On Time,169210
+2020-08-23,01:00 PM,Bracket,Concorde Fire Premier ECNL U18/U19 Composite,4,1,Alabama FC  ECNL GU18/U19 Composite ,Georgia Soccer Park,Field 5,On Time,169176
+2020-09-12,03:00 PM,Bracket,Concorde Fire Premier ECNL U18/U19 Composite,2,2,GSA ECNL GU18/U19 Composite,Georgia Soccer Park,Field 3,On Time,169211
+2020-09-13,12:00 PM,Bracket,Alabama FC  ECNL GU18/U19 Composite ,1,0,GSA ECNL GU18/U19 Composite,Dunnavant Valley Fields (DVF),Field # 2,On Time,169212
+2020-09-19,09:00 AM,Bracket,GSA ECNL GU18/U19 Composite,1,0,Sunrise Prime FC ECNL GU18/U19 Composite,Silverbacks Park,Floor and Decor Field,On Time,169214
+2020-09-19,10:30 AM,Bracket,Jacksonville FC ECNL GU18/U19 Composite,1,4,Atlanta Fire United ECNL GU18/U19 Composite,Patton Park,Field 1,On Time,169213
+2020-09-20,09:00 AM,Bracket,Jacksonville FC ECNL GU18/U19 Composite,0,6,United Futbol Academy ECNL GU18/U19 Composite ,Patton Park,Field 1,On Time,169215
+2020-09-26,12:00 PM,Bracket,Concorde Fire Premier ECNL U18/U19 Composite,2,2,Jacksonville FC ECNL GU18/U19 Composite,Georgia Soccer Park,Field 3,On Time,169217
+2020-09-27,09:00 AM,Bracket,Alabama FC  ECNL GU18/U19 Composite ,3,1,Jacksonville FC ECNL GU18/U19 Composite,Dunnavant Valley Fields (DVF),Field # 4,On Time,169218
+2020-10-03,11:00 AM,Bracket,Sunrise Prime FC ECNL GU18/U19 Composite,3,1,Alabama FC  ECNL GU18/U19 Composite ,Max K. Rodes Park,Field 2,On Time,169178
+2020-10-03,01:00 PM,Bracket,Tampa Bay United Rowdies ECNL GU18/U19 Composite,2,0,Concorde Fire Premier ECNL U18/U19 Composite,Waters Sportsplex,Field 3,On Time,169177
+2020-10-03,03:00 PM,Bracket,Atlanta Fire United ECNL GU18/U19 Composite,1,2,United Futbol Academy ECNL GU18/U19 Composite ,Pinecrest Academy,Turf,On Time,169179
+2020-10-04,09:00 AM,Bracket,Tampa Bay United Rowdies ECNL GU18/U19 Composite,2,1,Alabama FC  ECNL GU18/U19 Composite ,Waters Sportsplex,Field 2,On Time,169182
+2020-10-04,11:00 AM,Bracket,Sunrise Prime FC ECNL GU18/U19 Composite,3,2,Concorde Fire Premier ECNL U18/U19 Composite,Max K. Rodes Park,Field 2,On Time,169183
+2020-10-11,11:00 AM,Bracket,GSA ECNL GU18/U19 Composite,1,1,Tampa Bay United Rowdies ECNL GU18/U19 Composite,Rabbit Hill Park,Field 2,On Time,169216
+2020-10-17,11:00 AM,Bracket,Sunrise Prime FC ECNL GU18/U19 Composite,0,2,Atlanta Fire United ECNL GU18/U19 Composite,Chapel Trail Park,CTSP 2,On Time,169221
+2020-10-17,01:00 PM,Bracket,Tampa Bay United Rowdies ECNL GU18/U19 Composite,1,1,United Futbol Academy ECNL GU18/U19 Composite ,Waters Sportsplex,Field 2,On Time,169220
+2020-10-18,09:00 AM,Bracket,Sunrise Prime FC ECNL GU18/U19 Composite,1,4,United Futbol Academy ECNL GU18/U19 Composite ,Chapel Trail Park,CTSP 2,On Time,169224
+2020-10-18,01:00 PM,Bracket,Tampa Bay United Rowdies ECNL GU18/U19 Composite,0,1,Atlanta Fire United ECNL GU18/U19 Composite,Waters Sportsplex,Field 2,On Time,169223
+2020-10-31,01:00 PM,Bracket,United Futbol Academy ECNL GU18/U19 Composite ,1,0,GSA ECNL GU18/U19 Composite,Fowler Park,Field 6,On Time,169198
+2020-11-01,06:00 PM,Bracket,Atlanta Fire United ECNL GU18/U19 Composite,2,1,GSA ECNL GU18/U19 Composite,Pinecrest Academy,Turf,On Time,169199
+2020-11-07,09:00 AM,Bracket,Concorde Fire Premier ECNL U18/U19 Composite,1,0,United Futbol Academy ECNL GU18/U19 Composite ,Georgia Soccer Park,Field 5,On Time,169190
+2020-11-08,03:00 PM,Bracket,Alabama FC  ECNL GU18/U19 Composite ,0,2,United Futbol Academy ECNL GU18/U19 Composite ,Dunnavant Valley Fields (DVF),Field #1,On Time,169192
+2020-11-15,03:00 PM,Bracket,GSA ECNL GU18/U19 Composite,2,0,Alabama FC  ECNL GU18/U19 Composite ,GSA South,Spencer,On Time,169207
+2020-11-15,03:00 PM,Bracket,United Futbol Academy ECNL GU18/U19 Composite ,0,1,Atlanta Fire United ECNL GU18/U19 Composite,Fowler Park,Field 7,On Time,173984
+2020-11-21,03:00 PM,Bracket,Alabama FC  ECNL GU18/U19 Composite ,1,0,Concorde Fire Premier ECNL U18/U19 Composite,Dunnavant Valley Fields (DVF),Field # 2,On Time,169188
+2020-12-12,02:00 PM,Bracket,Atlanta Fire United ECNL GU18/U19 Composite,2,1,Concorde Fire Premier ECNL U18/U19 Composite,Pinecrest Academy,Turf,On Time,169195
+2020-12-12,05:00 PM,Bracket,United Futbol Academy ECNL GU18/U19 Composite ,6,0,Alabama FC  ECNL GU18/U19 Composite ,Fowler Park,Field 6,On Time,169194
+2020-12-13,01:00 PM,Bracket,United Futbol Academy ECNL GU18/U19 Composite ,2,1,Concorde Fire Premier ECNL U18/U19 Composite,Fowler Park,Field 6,On Time,169196
+2020-12-13,01:00 PM,Bracket,Atlanta Fire United ECNL GU18/U19 Composite,2,1,Alabama FC  ECNL GU18/U19 Composite ,Pinecrest Academy,Grass,On Time,169197
+2021-01-16,01:00 PM,Bracket,GSA ECNL GU18/U19 Composite,1,2,United Futbol Academy ECNL GU18/U19 Composite ,GSA South,Spencer,On Time,169189
+2021-01-16,02:00 PM,Bracket,Concorde Fire Premier ECNL U18/U19 Composite,0,1,Atlanta Fire United ECNL GU18/U19 Composite,Georgia Soccer Park,Field 4,On Time,169193
+2021-01-17,01:00 PM,Bracket,GSA ECNL GU18/U19 Composite,0,0,Atlanta Fire United ECNL GU18/U19 Composite,GSA South,Spencer,On Time,169187
+2021-01-23,02:00 PM,Bracket,Alabama FC  ECNL GU18/U19 Composite ,1,3,Atlanta Fire United ECNL GU18/U19 Composite,Dunnavant Valley Fields (DVF),Field # 2,On Time,169191
+2021-03-28,11:00 AM,Bracket,Sunrise Prime FC ECNL GU18/U19 Composite,4,2,Tampa Bay United Rowdies ECNL GU18/U19 Composite,Chapel Trail Park,CTSP 2,On Time,169202
+2021-04-17,10:30 AM,Bracket,Jacksonville FC ECNL GU18/U19 Composite,0,4,Tampa Bay United Rowdies ECNL GU18/U19 Composite,Patton Park,Field 1,On Time,169203
+2021-04-18,11:00 AM,Bracket,Jacksonville FC ECNL GU18/U19 Composite,1,0,Sunrise Prime FC ECNL GU18/U19 Composite,Patton Park,Field 1,On Time,169204
+2021-05-02,11:00 AM,Bracket,Tampa Bay United Rowdies ECNL GU18/U19 Composite,5,2,Sunrise Prime FC ECNL GU18/U19 Composite,Waters Sportsplex,Field 3,On Time,173991
+2021-05-22,11:00 AM,Bracket,Sunrise Prime FC ECNL GU18/U19 Composite,1,1,Jacksonville FC ECNL GU18/U19 Composite,Chapel Trail Park,CTSP 2,On Time,169200
+2021-05-23,09:00 AM,Bracket,Tampa Bay United Rowdies ECNL GU18/U19 Composite,,,Jacksonville FC ECNL GU18/U19 Composite,Waters Sportsplex,Field 3,On Time,169201
+2021-06-06,11:00 AM,Bracket,Jacksonville FC ECNL GU18/U19 Composite,,,GSA ECNL GU18/U19 Composite,Patton Park,Field 1,On Time,169175

@@ -1,0 +1,9 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
+1,San Juan SC ECNL GU13,No Club Selection,39174,7,7,0,0,21,3.0,41,2,39
+2,MVLA ECNL GU13,MVLA,30872,7,4,1,2,14,2.0,23,4,19
+3,Mustang SC ECNL GU13,Mustang Soccer,4653,7,4,1,2,14,2.0,21,8,13
+4,DeAnza Force ECNL GU13,Force,45841,7,3,1,3,12,1.71,15,7,8
+5,Davis Legacy ECNL GU13,No Club Selection,39186,7,3,4,0,9,1.29,14,12,2
+6,Pleasanton Rage ECNL GU13,Pleasanton Rage,39255,7,2,4,1,7,1.0,9,20,-11
+7,Santa Rosa United ECNL GU13,Santa Rosa United Soccer,39258,7,1,6,0,3,0.43,8,32,-24
+8,Marin FC ECNL GU13,Marin FC,39517,7,0,7,0,0,0.0,0,46,-46

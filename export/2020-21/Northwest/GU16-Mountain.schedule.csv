@@ -1,0 +1,31 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2020-09-13,09:00 AM,Group Play,Colorado Rapids ECNL GU16,0,3,Real Colorado Athletico ECNL GU16,Gates South Soccer Complex,6,On Time,209156
+2020-09-13,11:15 AM,Group Play,Real Colorado National ECNL GU16,6,0,Pride SC ECNL GU16,Real Colorado Soccer Complex,RCSC 1,On Time,209150
+2020-09-19,09:00 AM,Group Play,Real Colorado National ECNL GU16,4,0,Real Colorado Athletico ECNL GU16,Real Colorado Soccer Complex,RCSC Grass,On Time,210447
+2020-09-19,12:00 PM,Group Play,Pride SC ECNL GU16,2,2,Colorado Rapids ECNL GU16,Pride Soccer Complex,Field 2,On Time,209162
+2020-09-26,09:00 AM,Bracket,Real Colorado Athletico ECNL GU16,5,0,Pride SC ECNL GU16,Real Colorado Soccer Complex,RCSC 1,On Time,207240
+2020-09-26,09:00 AM,Bracket,Colorado Rapids ECNL GU16,0,2,Real Colorado National ECNL GU16,Gates South Soccer Complex,5,On Time,207241
+2020-10-03,09:00 AM,Bracket,Real Colorado Athletico ECNL GU16,2,1,Colorado Rapids ECNL GU16,Real Colorado Soccer Complex,RCSC Grass,On Time,207242
+2020-10-03,12:00 PM,Bracket,Pride SC ECNL GU16,0,7,Real Colorado National ECNL GU16,Pride Soccer Complex,Field 2,On Time,207243
+2020-10-24,09:00 AM,Bracket,Real Colorado Athletico ECNL GU16,1,3,Real Colorado National ECNL GU16,Real Colorado Soccer Complex,RCSC Grass,On Time,207245
+2020-10-24,11:15 AM,Bracket,Colorado Rapids ECNL GU16,2,0,Pride SC ECNL GU16,Gates South Soccer Complex,6,On Time,207244
+2021-02-27,11:15 AM,Bracket,Colorado Rapids ECNL GU16,4,0,Utah Avalanche ECNL GU16,Douglas County Fairgrounds,Field #5,On Time,207256
+2021-02-27,01:00 PM,Bracket,Pride SC ECNL GU16,1,2,La Roca FC ECNL GU16,Pride Soccer Complex,Field 1,On Time,207257
+2021-02-28,09:00 AM,Bracket,Pride SC ECNL GU16,0,3,Utah Avalanche ECNL GU16,Pride Soccer Complex,Field 1,On Time,207258
+2021-02-28,11:15 AM,Bracket,Colorado Rapids ECNL GU16,1,3,La Roca FC ECNL GU16,Dick's Sporting Goods Park,DSGP - 8,On Time,207259
+2021-03-21,09:00 AM,Bracket,Pride SC ECNL GU16,1,2,Real Colorado Athletico ECNL GU16,Pride Soccer Complex,Field 2,On Time,207247
+2021-03-27,11:00 AM,Bracket,Utah Avalanche ECNL GU16,0,0,Real Colorado Athletico ECNL GU16,Legacy Events Center,Field 2,On Time,207264
+2021-03-27,12:00 PM,Bracket,La Roca FC ECNL GU16,0,1,Real Colorado National ECNL GU16,Spence Eccles Ogden Community Sports Complex,Field 1,On Time,207265
+2021-03-28,12:00 PM,Bracket,La Roca FC ECNL GU16,1,1,Real Colorado Athletico ECNL GU16,La Roca Park,Field 1,On Time,207266
+2021-03-28,01:00 PM,Bracket,Utah Avalanche ECNL GU16,0,6,Real Colorado National ECNL GU16,Legacy Events Center,Field 2,On Time,207267
+2021-04-03,09:00 AM,Bracket,Real Colorado National ECNL GU16,4,0,Colorado Rapids ECNL GU16,Real Colorado Soccer Complex,RCSC Grass,On Time,207246
+2021-04-17,09:00 AM,Bracket,Real Colorado National ECNL GU16,2,0,Utah Avalanche ECNL GU16,Real Colorado Soccer Complex,RCSC Grass,On Time,207252
+2021-04-17,09:00 AM,Bracket,Real Colorado Athletico ECNL GU16,0,0,La Roca FC ECNL GU16,Highland Heritage Regional Park,HHRP Stadium,On Time,207253
+2021-04-18,09:00 AM,Bracket,Real Colorado Athletico ECNL GU16,1,0,Utah Avalanche ECNL GU16,Highland Heritage Regional Park,HHRP Stadium,On Time,207254
+2021-04-18,09:00 AM,Bracket,Real Colorado National ECNL GU16,2,0,La Roca FC ECNL GU16,Real Colorado Soccer Complex,RCSC Grass,On Time,207255
+2021-04-24,08:30 AM,Bracket,La Roca FC ECNL GU16,2,1,Pride SC ECNL GU16,La Roca Park,Field 1,On Time,207249
+2021-04-24,01:00 PM,Bracket,Utah Avalanche ECNL GU16,2,1,Colorado Rapids ECNL GU16,Woods Cross High School,Field 1,On Time,207248
+2021-04-25,11:30 AM,Bracket,La Roca FC ECNL GU16,0,1,Colorado Rapids ECNL GU16,Legacy Events Center,Field 2 #2022,On Time,207250
+2021-04-25,01:00 PM,Bracket,Utah Avalanche ECNL GU16,2,1,Pride SC ECNL GU16,Legacy Events Center,Field 2,On Time,207251
+2021-05-16,11:30 AM,Bracket,La Roca FC ECNL GU16,0,0,Utah Avalanche ECNL GU16,Legacy Events Center,Field 3 #2025,On Time,207272
+2021-05-23,11:30 AM,Bracket,Utah Avalanche ECNL GU16,0,2,La Roca FC ECNL GU16,Legacy Events Center,Field 2,On Time,207273
