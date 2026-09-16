@@ -785,6 +785,8 @@ def main():
     ap = argparse.ArgumentParser(description="Archive ECNL standings and schedules locally.")
     ap.add_argument("--season", help="Season key, e.g. 2024-25. Defaults to the newest season.")
     ap.add_argument("--conference", help="Single conference name, e.g. Texas.")
+    ap.add_argument("--national", action="store_true",
+                    help="Only the season's national (Playoffs/Finals) events; skips conferences.")
     ap.add_argument("--all", action="store_true", help="Every season in the registry.")
     ap.add_argument("--verify", action="store_true",
                     help="Only check that event IDs resolve to the expected names.")
@@ -808,6 +810,8 @@ def main():
     ap.add_argument("--export", action="store_true",
                     help="Rebuild the CSVs under export/ from the archive (no API calls).")
     args = ap.parse_args()
+    if args.national and args.conference:
+        ap.error("--national cannot be combined with --conference (the conference filter drops national events)")
 
     global FORCE_RECONSTRUCTED
     FORCE_RECONSTRUCTED = args.force_reconstructed
@@ -845,6 +849,8 @@ def main():
 
     age_changes = []
     for season_key, kind, name, event in api.iter_events(sources, season, args.conference):
+        if args.national and kind != "national":
+            continue
         entry = archive_event(sources, season_key, kind, name, event, stats, args.force, args.dry_run)
         if entry:
             div_team_names = entry.pop("_divTeamNames", {})
