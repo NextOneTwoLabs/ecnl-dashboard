@@ -626,7 +626,33 @@
           "eventName": "ECNL Girls Texas Conference 2021-22"
         }
       },
-      "national": {},
+      "national": {
+        "Playoffs": {
+          "eventId": 2436,
+          "eventName": "ECNL National Playoffs",
+          "location": "Redmond, WA",
+          "startDate": "2022-06-22",
+          "endDate": "2022-06-29",
+          "dataGaps": {
+            "_comment": "Flights TGS published with unreliable data, keyed by flight id. The dashboard shows `note` (with `sources`) above the bracket and the schedule, and drops the 'Schedule on TGS' link where `hideTgsSchedule` is true. Not a `reconstructed` block: nothing here is rebuilt, and archive.py still refreshes these paths.",
+            "15399": {
+              "flight": "U15 Regional League Finals",
+              "note": "TGS's bracket for this flight is corrupt: a placeholder 'Connecticut RL GU15' stands in most quarterfinal and semifinal slots — one game reads Connecticut 0–3 Connecticut — so the rounds before the final are not reliable. The final, Beach FC 2–1 Connecticut FC, matches the published result.",
+              "hideTgsSchedule": false,
+              "sources": [
+                { "label": "New England Soccer Journal: Connecticut FC U-15 at the National Finals", "url": "https://www.soccerjournal.com/ecnl-girls-connecticut-fc-u-15s-post-strong-showing-at-national-finals/" }
+              ]
+            }
+          }
+        },
+        "Finals": {
+          "eventId": 2437,
+          "eventName": "ECNL National Finals",
+          "location": "Richmond, VA",
+          "startDate": "2022-07-08",
+          "endDate": "2022-07-11"
+        }
+      },
       "ageGroups": {
         "GU18/U19": {
           "u": 18,
