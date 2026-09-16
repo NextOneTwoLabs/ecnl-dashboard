@@ -361,7 +361,7 @@ Endpoints used (all unauthenticated):
 |---------|-------------|-----------------|-----------------------|----------|--------|
 | 2026-27 | 10          | age (`GU15`)         | two (`2011/2012`) | —   | —      |
 | 2025-26 | 10          | birth year (`G2011`) | one               | ✅ event 4251 (combined Playoffs & Finals, U13–U17) | ↑ same event |
-| 2024-25 | 10          | birth year | one | ✅ event 3865 | ✅ event 3975 — reconstructed from ECNL's recaps |
+| 2024-25 | 10          | birth year | one | ✅ event 3865 — U13/U14 group games (and U13's round of 16) never published by TGS; group tables only | ✅ event 3975 — reconstructed from ECNL's recaps |
 | 2023-24 | 10          | birth year | one | ✅ event 3064 | ✅ event 3238 |
 | 2022-23 | 10          | birth year | one | —        | —      |
 | 2021-22 | 9 (no NorCal) | age (`GU13`) | one | —      | —      |

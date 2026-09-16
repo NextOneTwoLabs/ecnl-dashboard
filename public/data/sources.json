@@ -277,7 +277,28 @@
       "national": {
         "Playoffs": {
           "eventId": 3865,
-          "eventName": "ECNL Girls National Playoffs"
+          "eventName": "ECNL Girls National Playoffs",
+          "dataGaps": {
+            "_comment": "Flights TGS only partly published, keyed by flight id. The dashboard shows `note` (with `sources`) above the bracket and the schedule, and drops the 'Schedule on TGS' link where `hideTgsSchedule` is true. Not a `reconstructed` block: nothing here is rebuilt, and archive.py still refreshes these paths.",
+            "32791": {
+              "flight": "G2012 (U13) Champions League",
+              "note": "TGS published this flight's group tables but not its game-by-game schedule. The group standings are TGS data; the 66 group games and the round of 16 (Jul 2) were never published, and ECNL's recaps carry no scores for this age group. The eight round-of-16 winners are known from the Finals bracket.",
+              "hideTgsSchedule": true,
+              "sources": [
+                { "label": "ECNL recap: Playoffs Day 5", "url": "https://theecnl.com/news/2025/7/1/ecnl-girls-national-playoffs-recap-day-5.aspx" },
+                { "label": "ECNL recap: Playoffs Day 6", "url": "https://theecnl.com/news/2025/7/2/ecnl-girls-national-playoffs-recap-day-6.aspx" }
+              ]
+            },
+            "32792": {
+              "flight": "G2011 (U14) Champions League",
+              "note": "TGS published this flight's group tables and its round of 16, but not its 66 group games; ECNL's recaps carry no scores for them.",
+              "hideTgsSchedule": false,
+              "sources": [
+                { "label": "ECNL recap: Playoffs Day 5", "url": "https://theecnl.com/news/2025/7/1/ecnl-girls-national-playoffs-recap-day-5.aspx" },
+                { "label": "ECNL recap: Playoffs Day 6", "url": "https://theecnl.com/news/2025/7/2/ecnl-girls-national-playoffs-recap-day-6.aspx" }
+              ]
+            }
+          }
         },
         "Finals": {
           "eventId": 3975,

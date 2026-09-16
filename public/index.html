@@ -1657,6 +1657,9 @@
       border-radius: var(--radius-md);
     }
 
+    /* Same box for a flight TGS only partly published (`dataGaps`). */
+    .data-gap-note a { color: var(--accent-text); }
+
     .sched-tag {
       font-size: 10px;
       font-weight: 600;
@@ -3409,6 +3412,10 @@
         // the schedule): link to the recaps instead of TGS, and say so.
         const recon = evt.reconstructed && (evt.reconstructed.flightIds || []).includes(flight.flightID)
           ? evt.reconstructed : null;
+        // A flight TGS only partly published (data/sources.json `dataGaps`):
+        // say what is missing, cite ECNL's recaps, and skip the TGS schedule
+        // link when there is no schedule page to open.
+        const gap = (evt.dataGaps || {})[flight.flightID] || null;
 
         const [blocks, games] = await Promise.all([
           getStandingsBlocks(division.divisionID, flight.flightID, evt.eventId).catch(() => []),
@@ -3440,7 +3447,8 @@
         document.getElementById('extLinks').innerHTML = recon
           ? (recon.sources || []).map(s =>
               `<a class="open-external" href="${esc(s.url)}" target="_blank">${EXTERNAL_ICON} ${esc(s.label || 'ECNL recap')}</a>`).join('')
-          : `<a class="open-external" href="${getSchedulesUrl(evt.eventId, flight.flightID)}" target="_blank">${EXTERNAL_ICON} Schedule on TGS</a>` +
+          : (gap && gap.hideTgsSchedule ? '' :
+              `<a class="open-external" href="${getSchedulesUrl(evt.eventId, flight.flightID)}" target="_blank">${EXTERNAL_ICON} Schedule on TGS</a>`) +
             `<a class="open-external" href="${getStandingsUrl(evt.eventId, flight.flightID)}" target="_blank">${EXTERNAL_ICON} Standings on TGS</a>` +
             `<a class="open-external" href="${publicUrl('eventHome', evt.eventId, flight.flightID)}" target="_blank">${EXTERNAL_ICON} Brackets on TGS</a>`;
 
@@ -3450,6 +3458,19 @@
           const note = document.createElement('div');
           note.className = 'reconstructed-note';
           note.textContent = recon.note;
+          container.appendChild(note);
+        }
+        if (gap && gap.note) {
+          const note = document.createElement('div');
+          note.className = 'reconstructed-note data-gap-note';
+          note.textContent = gap.note;
+          (gap.sources || []).forEach((s, i) => {
+            note.appendChild(document.createTextNode(i ? ' · ' : ' '));
+            const a = document.createElement('a');
+            a.href = s.url; a.target = '_blank'; a.rel = 'noopener';
+            a.textContent = s.label || 'ECNL recap';
+            note.appendChild(a);
+          });
           container.appendChild(note);
         }
         if (currentView === 'schedule') {
@@ -3462,11 +3483,11 @@
             const data = blocks[0] || { teamStandings: [] };
             (data.teamStandings || []).forEach((t, i) => { t._origRank = i + 1; });
             if (!(data.teamStandings || []).length && !games.length) {
-              container.innerHTML = `<div class="no-national-events">
+              container.insertAdjacentHTML('beforeend', `<div class="no-national-events">
                 <div class="no-national-events-icon">📋</div>
                 <div class="no-national-events-text">No results yet</div>
                 <div class="no-national-events-sub">Nothing has been published for ${esc(tierName)} — ${esc(ageLabel)}.</div>
-              </div>`;
+              </div>`);
             } else {
               container.appendChild(renderStandingsTable(data, tierName, flight.flightID, evt.eventId, { footnote: false }));
             }
