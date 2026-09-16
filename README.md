@@ -179,8 +179,13 @@ flight, semifinalists are the quarterfinal winners and finalists the semifinal w
 the five expected champions, PK scores exactly on draws, dates by round, every name
 equal to its conference-standings name with the flight's age suffix, and for U14–U17
 the eight quarterfinalists equal the eight last-day winners of the Playoffs event by
-team id. To regenerate after editing the CSV: `python reconstruct.py
-reconstructed/2024-25-finals-3975.csv`, then `python reconstruct.py --check`.
+team id. The 41-key shape is compared against one pinned past-season archive file
+(`3865/32795`, the 2024-25 U17 Playoffs), never against a file the refresh rewrites.
+The trade-off is deliberate: a failing check blocks the data commit so a broken
+reconstruction can never be published, which also means a check failure for any
+reason pauses data updates until someone looks at the workflow run. To regenerate
+after editing the CSV: `python reconstruct.py reconstructed/2024-25-finals-3975.csv`,
+then `python reconstruct.py --check`.
 
 The honest limit: the check can prove the right teams advanced, but not a score. A
 wrong score with the right winner cannot be caught, and for four of the five finals

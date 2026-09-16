@@ -119,15 +119,37 @@ def protected_paths(sources=None):
             src = sources if sources is not None else load_sources()
         except (OSError, ValueError):
             src = {"seasons": {}}
-        for _season, _kind, _name, event in iter_events(src):
+        for season, _kind, name, event in iter_events(src):
             block = event.get("reconstructed")
             eid = event.get("eventId")
             if not block or not eid:
                 continue
-            for flight_id in block.get("flightIds") or []:
-                paths.add(p_schedule(eid, flight_id))
+            # This runs on every fetch and write of the scheduled refresh, so a
+            # hand-edit mistake in sources.json degrades to "this block is not
+            # protected" with one warning line - never to a crashed refresh.
+            label = f"sources.json {season} / {name} ({eid})"
+            if not isinstance(block, dict):
+                _warn(f"{label}: `reconstructed` is not an object; its flights are NOT protected")
+                continue
+            flight_ids = block.get("flightIds")
+            if not isinstance(flight_ids, list):
+                _warn(f"{label}: `reconstructed.flightIds` is not a list; its flights are NOT protected")
+                continue
+            bad = []
+            for flight_id in flight_ids:
+                try:
+                    paths.add(p_schedule(eid, int(flight_id)))
+                except (TypeError, ValueError):
+                    bad.append(flight_id)
+            if bad:
+                _warn(f"{label}: `reconstructed.flightIds` entries {bad!r} are not integers; "
+                      f"those flights are NOT protected")
         _PROTECTED_PATHS = frozenset(paths)
     return _PROTECTED_PATHS
+
+
+def _warn(msg):
+    sys.stderr.write(f"warning: {msg}\n")
 
 
 def is_protected_path(api_path):
@@ -143,12 +165,18 @@ def read_archive_protected(api_path):
     raw, _ = read_archive(api_path)
     if raw is None:
         return None
-    sys.stderr.write(protected_notice(api_path) + "\n")
+    sys.stderr.write(protected_read_notice(api_path) + "\n")
     return json.loads(raw)
 
 
+def protected_read_notice(api_path):
+    """The log line a reader prints when it answers from the reconstruction.
+    Nothing was attempted or refused, so it does not talk about overwriting."""
+    return f"protected (reconstructed): {api_path} — serving the archived copy"
+
+
 def protected_notice(api_path):
-    """The one log line every writer prints when it leaves a reconstruction alone."""
+    """The one log line every writer prints when it refuses to overwrite a reconstruction."""
     return (f"protected (reconstructed): {api_path} — not overwritten; "
             f"pass --force-reconstructed")
 

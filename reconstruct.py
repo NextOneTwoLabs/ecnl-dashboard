@@ -326,7 +326,7 @@ class Checker:
         return cond
 
 
-def check_block(sources, block, chk, real_keys):
+def check_block(sources, block, chk, real_keys, ref_path):
     eid = block["eventId"]
     print(f"\n{block['season']} / {block['name']} ({eid}) — {block['csv']}")
     rows = read_rows(os.path.join(api.ROOT, block["csv"]))
@@ -398,8 +398,9 @@ def check_block(sources, block, chk, real_keys):
                f"{tag}: matchIDs are negative and unique ({mids[0]}..{mids[-1]})")
         all_ids |= set(mids)
         chk.ok(all(list(g)[:len(RECORD_KEYS)] == RECORD_KEYS and list(g)[len(RECORD_KEYS):] == PROVENANCE_KEYS
-                   for g in games) and set(RECORD_KEYS) == real_keys,
-               f"{tag}: {len(RECORD_KEYS)} keys equal a real schedule record's, plus {PROVENANCE_KEYS}")
+                   for g in games) and real_keys is not None and set(RECORD_KEYS) == real_keys,
+               f"{tag}: {len(RECORD_KEYS)} keys equal a real record's in {ref_path}.json, plus {PROVENANCE_KEYS}"
+               + ("" if real_keys is not None else " (reference file missing or unreadable)"))
         chk.ok(all(g["type"] == "Bracket" and g["isactive"] == 1 and g["friendly"] == 0 and g["flightgroupID"] is None
                    and g["reconstructed"] is True and g["source"] in block["sources"] for g in games),
                f"{tag}: type Bracket, isactive 1, friendly 0, flightgroupID null, source is a registered recap URL")
@@ -463,30 +464,49 @@ def check_block(sources, block, chk, real_keys):
     print("  champions: " + "; ".join(f"{d} {n}" for d, n in champions.items()))
 
 
+# The one real schedule record the key comparison is pinned to: the 2024-25 U17
+# Playoffs flight. A past season, never touched by the refresh, so the day TGS
+# adds or renames a field in the live API this check stays green and the data
+# commit keeps flowing; it goes red only if the reconstruction itself changes
+# shape (or this file disappears, which it reports by name).
+REFERENCE_EVENT_ID = 3865
+REFERENCE_FLIGHT_ID = 32795
+
+
 def real_record_keys():
-    """Key set of a genuine schedule record, from any archived non-empty schedule."""
-    base = os.path.join(api.ARCHIVE_API_DIR, "Event", "get-schedules-by-flight")
-    for root, _dirs, files in os.walk(base):
-        for name in files:
-            if not name.endswith(".json"):
-                continue
-            try:
-                with open(os.path.join(root, name), "r", encoding="utf-8") as f:
-                    games = (json.load(f) or {}).get("data") or []
-            except (OSError, ValueError):
-                continue
-            for g in games:
-                if isinstance(g, dict) and not g.get("reconstructed"):
-                    return set(g)
-    raise ReconstructError("no real schedule record found in the archive to compare keys against")
+    """Key set of a genuine schedule record, read from the pinned reference file.
+
+    Returns (keys, api_path). keys is None, with the reason printed, if the file
+    is missing, unreadable, or holds no real record - the caller then fails the
+    key comparison and nothing else, so every other check still runs."""
+    path = api.p_schedule(REFERENCE_EVENT_ID, REFERENCE_FLIGHT_ID)
+    label = f"reference schedule {path}.json"
+    try:
+        raw, _ = api.read_archive(path)
+    except OSError as e:
+        print(f"  info {label}: unreadable ({e})")
+        return None, path
+    if raw is None:
+        print(f"  info {label}: missing from the archive")
+        return None, path
+    try:
+        games = (json.loads(raw) or {}).get("data") or []
+    except ValueError as e:
+        print(f"  info {label}: not valid JSON ({e})")
+        return None, path
+    for g in games:
+        if isinstance(g, dict) and not g.get("reconstructed"):
+            return set(g), path
+    print(f"  info {label}: holds no real (non-reconstructed) record")
+    return None, path
 
 
 def cmd_check(sources, blocks):
     chk = Checker()
-    keys = real_record_keys()
+    keys, ref_path = real_record_keys()
     for block in blocks:
         try:
-            check_block(sources, block, chk, keys)
+            check_block(sources, block, chk, keys, ref_path)
         except ReconstructError as e:
             chk.ok(False, str(e))
     print(f"\n{chk.passed} checks passed, {len(chk.failures)} failed.")
