@@ -1,0 +1,45 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
+1,Crossfire Premier ECNL GU14,No Club Selection,21818,3,3,0,0,9,3.0,14,3,11
+2,PDA Blue ECNL GU14,PDA Blue (North),3701,3,3,0,0,9,3.0,6,1,5
+3,Concorde Fire Platinum ECNL GU14,Concorde Fire ,46806,3,3,0,0,9,3.0,10,6,4
+4,Slammers FC HB Koge ECNL GU14,Slammers FC HB Koge,29720,3,2,0,1,7,2.33,13,2,11
+5,Eclipse Select SC ECNL GU14,Eclipse Select Soccer Club,46760,3,2,0,1,7,2.33,5,1,4
+6,So Cal Blues ECNL GU14,So Cal Blues,29588,3,2,0,1,7,2.33,6,3,3
+7,Real Colorado National ECNL GU14,Real Colorado,45853,3,2,0,1,7,2.33,5,2,3
+8,Richmond United ECNL GU14,Richmond United,46822,3,2,0,1,7,2.33,4,1,3
+9,Legends FC ECNL GU14,Legends FC (CA),8362,3,2,0,1,7,2.33,3,1,2
+10,Eagles SC ECNL GU14,Eagles SC,6122,3,2,1,0,6,2.0,10,2,8
+11,Sting Dallas Black ECNL GU14,Sting Soccer Club,11429,3,2,1,0,6,2.0,12,5,7
+12,Solar SC ECNL GU14,Solar SC,46791,3,2,1,0,6,2.0,8,2,6
+13,San Juan SC ECNL GU14,No Club Selection,39174,3,2,1,0,6,2.0,7,3,4
+14,Michigan Hawks ECNL GU14,Michigan Hawks,46771,3,2,1,0,6,2.0,8,5,3
+15,SLSG Navy ECNL GU14,St. Louis Scott Gallagher,46768,3,2,1,0,6,2.0,6,3,3
+16,VDA ECNL GU14,Virginia Development Academy,46823,3,2,1,0,6,2.0,9,7,2
+17,Penn Fusion SA ECNL GU14,Penn Fusion Soccer Academy,44737,3,2,1,0,6,2.0,5,4,1
+18,Connecticut FC ECNL GU14,Connecticut FC,46829,3,2,1,0,6,2.0,5,4,1
+19,De Anza Force ECNL GU14,Force,45841,3,2,1,0,6,2.0,4,3,1
+20,San Diego Surf Soccer Club - San Diego Surf ECNL G,San Diego Surf Soccer Club,45875,3,1,0,2,5,1.67,7,3,4
+21,FC Stars Blue ECNL GU14,FC Stars,35278,3,1,0,2,5,1.67,4,3,1
+22,Sting Austin ECNL GU14,Sting Austin,46779,3,1,1,1,4,1.33,6,2,4
+23,MVLA ECNL GU14,MVLA,30872,3,1,1,1,4,1.33,7,6,1
+24,CESA ECNL GU14,Carolina Elite Soccer Academy,27972,3,1,1,1,4,1.33,6,9,-3
+25,Kansas City Athletics - ECNL GU14,KC Athletics,33175,3,1,2,0,3,1.0,6,7,-1
+26,Sporting California Arsenal FC - ECNL GU14,Sporting California USA,28062,3,1,2,0,3,1.0,4,5,-1
+27,Arlington Soccer ECNL GU14,Arlington Soccer Association,59916,3,1,2,0,3,1.0,4,5,-1
+28,World Class FC ECNL GU14,World Class FC,36640,3,1,2,0,3,1.0,4,5,-1
+29,Mustang SC ECNL GU14,Mustang Soccer,4653,3,1,2,0,3,1.0,5,7,-2
+30,Beach FC ECNL GU14,Beach Futbol Club,60045,3,1,2,0,3,1.0,5,7,-2
+31,Alabama FC ECNL GU14,Alabama FC,46807,3,1,2,0,3,1.0,4,7,-3
+32,GSA ECNL GU14,Gwinnett Soccer Academy,46812,3,1,2,0,3,1.0,2,5,-3
+33,Internationals SC ECNL GU14,Internationals SC,46797,3,1,2,0,3,1.0,5,9,-4
+34,NC Courage ECNL GU14,NC Courage Academy,44728,3,1,2,0,3,1.0,6,11,-5
+35,Washington Premier ECNL GU14,Washington Premier FC,39098,3,1,2,0,3,1.0,4,9,-5
+36,Concorde Fire Premier - ECNL GU14,Concorde Fire ,46809,3,1,2,0,3,1.0,2,8,-6
+37,Eastside FC ECNL GU14,Eastside FC (WA),46753,3,0,2,1,1,0.33,3,5,-2
+38,Tennessee Soccer Club ECNL GU14,Tennessee SC,46804,3,0,2,1,1,0.33,2,4,-2
+39,Minnesota Thunder ECNL GU14,Minnesota Thunder Academy,46774,3,0,2,1,1,0.33,2,8,-6
+40,Pipeline SC ECNL GU14,Pipeline SC,45827,3,0,3,0,0,0.0,2,7,-5
+41,DKSC ECNL GU14,No Club Selection,45734,3,0,3,0,0,0.0,2,9,-7
+42,La Roca FC ECNL GU14,La Roca FC,45848,3,0,3,0,0,0.0,2,11,-9
+43,Indiana Fire ECNL GU14,Indy Eleven Academy,46796,3,0,3,0,0,0.0,2,13,-11
+44,WNY Flash ECNL GU14,WNY Flash Academy,12942,3,0,3,0,0,0.0,2,15,-13

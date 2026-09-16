@@ -1,0 +1,12 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+0001-01-01,TBD,Bracket,Connecticut RL GU15,,,Bye,,,On Time,337987
+2022-06-23,TBD,Bracket,Connecticut RL GU15,,,Bye,,,On Time,337985
+2022-06-23,11:00 AM,Group Play,Connecticut RL GU15,1,0,Pacesetter SC ECNL RL GU 15,60 Acres Park,Field #21,On Time,338013
+2022-06-23,06:00 PM,Bracket,Connecticut RL GU15,0,3,Connecticut RL GU15,60 Acres Park,Field #09,On Time,337986
+2022-06-23,06:00 PM,Bracket,Connecticut RL GU15,1,4,Beach FC  (CA) - Beach FC RL GU15,60 Acres Park,Field #08,On Time,337988
+2022-06-24,05:45 PM,Bracket,Pacesetter SC ECNL RL GU 15,1,4,Connecticut RL GU15,60 Acres Park,Field #17,On Time,337989
+2022-06-24,05:45 PM,Bracket,Beach FC  (CA) - Beach FC RL GU15,4,2,Crossfire Premier RL GU15,60 Acres Park,Field #19,On Time,337990
+2022-06-24,06:30 PM,Group Play,Connecticut RL GU15,3,2,Albion Hurricanes FC RL GU15,60 Acres Park,Field #08,On Time,340635
+2022-06-26,03:00 PM,Bracket,Connecticut RL GU15,1,2,Beach FC  (CA) - Beach FC RL GU15,60 Acres Park,Field #12,On Time,337991
+2022-06-26,03:00 PM,Group Play,Connecticut RL GU15,1,2,Washington Premier RL GU15,,,On Time,341122
+2022-06-26,03:00 PM,Group Play,Crossfire Premier RL GU15,0,2,Albion Hurricanes FC RL GU15,60 Acres Park,Field #19,On Time,341123

@@ -1,0 +1,13 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2022-06-24,05:45 PM,Bracket,Tennessee SC ECNL RL GU13,0,4,Slammers FC HB Koge - RL GU13 ,60 Acres Park,Field #11,On Time,340436
+2022-06-24,05:45 PM,Bracket,So Cal Blues RL GU13,5,0,United Futbol Academy RL GU13,60 Acres Park,Field #12,On Time,340437
+2022-06-24,05:45 PM,Bracket,Beach FC RL GU13,2,0,Match Fit Academy RL GU13,60 Acres Park,Field #13,On Time,340438
+2022-06-24,05:45 PM,Bracket,SLSG MO ECNL RL GU13,1,4,Solar SC RL GU13,60 Acres Park,Field #14,On Time,340439
+2022-06-26,04:00 PM,Bracket,Slammers FC HB Koge - RL GU13 ,0,2,So Cal Blues RL GU13,60 Acres Park,Field #01,On Time,340440
+2022-06-26,04:00 PM,Bracket,Beach FC RL GU13,1,0,Solar SC RL GU13,60 Acres Park,Field #02,On Time,340552
+2022-06-26,04:00 PM,Bracket,Tennessee SC ECNL RL GU13,3,1,United Futbol Academy RL GU13,60 Acres Park,Field #07,On Time,340555
+2022-06-26,04:00 PM,Bracket,Match Fit Academy RL GU13,0,1,SLSG MO ECNL RL GU13,60 Acres Park,Field #08,On Time,340556
+2022-06-27,08:00 AM,Bracket,United Futbol Academy RL GU13,0,2,Match Fit Academy RL GU13,60 Acres Park,Field #04,On Time,340441
+2022-06-27,08:00 AM,Bracket,So Cal Blues RL GU13,3,2,Beach FC RL GU13,60 Acres Park,Field #10,On Time,340553
+2022-06-27,08:00 AM,Bracket,Slammers FC HB Koge - RL GU13 ,2,7,Solar SC RL GU13,60 Acres Park,Field #07,On Time,340554
+2022-06-27,08:00 AM,Bracket,Tennessee SC ECNL RL GU13,2,1,SLSG MO ECNL RL GU13,60 Acres Park,Field #05,On Time,340557
