@@ -9,6 +9,7 @@ import collections
 import json
 import os
 import re
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -96,11 +97,74 @@ def archive_path_for(api_path):
     return full
 
 
-def write_archive(api_path, raw_bytes):
+# ---------- reconstructed (protected) paths ----------
+#
+# A few archived responses are not mirrors of the live API at all: TGS removed
+# the 2024-25 National Finals schedules, so reconstruct.py rebuilds them from
+# ECNL's published recaps. The live endpoint now returns an empty list, and a
+# routine re-crawl must never replace the reconstruction with it. Every event
+# with a `reconstructed` block in sources.json contributes its flights' schedule
+# paths here; write_archive refuses them unless the caller opts in.
+
+_PROTECTED_PATHS = None
+
+
+def protected_paths(sources=None):
+    """API paths whose archived copies are reconstructed by hand. Computed once,
+    lazily, from the `reconstructed` blocks in sources.json."""
+    global _PROTECTED_PATHS
+    if _PROTECTED_PATHS is None:
+        paths = set()
+        try:
+            src = sources if sources is not None else load_sources()
+        except (OSError, ValueError):
+            src = {"seasons": {}}
+        for _season, _kind, _name, event in iter_events(src):
+            block = event.get("reconstructed")
+            eid = event.get("eventId")
+            if not block or not eid:
+                continue
+            for flight_id in block.get("flightIds") or []:
+                paths.add(p_schedule(eid, flight_id))
+        _PROTECTED_PATHS = frozenset(paths)
+    return _PROTECTED_PATHS
+
+
+def is_protected_path(api_path):
+    return api_path in protected_paths()
+
+
+def read_archive_protected(api_path):
+    """For a protected path with an archived copy: log the notice and return the
+    parsed archive. None for everything else (unprotected, or nothing archived),
+    so callers fall through to their normal fetch."""
+    if not is_protected_path(api_path):
+        return None
+    raw, _ = read_archive(api_path)
+    if raw is None:
+        return None
+    sys.stderr.write(protected_notice(api_path) + "\n")
+    return json.loads(raw)
+
+
+def protected_notice(api_path):
+    """The one log line every writer prints when it leaves a reconstruction alone."""
+    return (f"protected (reconstructed): {api_path} — not overwritten; "
+            f"pass --force-reconstructed")
+
+
+def write_archive(api_path, raw_bytes, allow_protected=False):
     """Atomically write a raw JSON response into the archive. Returns the path
-    written, or None if the path was rejected."""
+    written, or None if the path was rejected.
+
+    Reconstructed paths (see protected_paths) are refused unless
+    `allow_protected` is set — the last line of defence behind the callers'
+    own checks."""
     dest = archive_path_for(api_path)
     if dest is None:
+        return None
+    if not allow_protected and is_protected_path(api_path):
+        sys.stderr.write(protected_notice(api_path) + "\n")
         return None
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     tmp = dest + ".tmp"

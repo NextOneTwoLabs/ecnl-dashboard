@@ -18,6 +18,10 @@ Manual/bulk use:
     python archive.py --season 2026-27        full crawl of one season
     python archive.py --all                   every season (~1200+ requests)
     python archive.py --all --force           ignore the freshness check
+
+Schedules reconstructed by reconstruct.py (listed under `reconstructed` in
+sources.json) are never re-fetched or overwritten unless --force-reconstructed
+is passed; the archived copy is used instead.
 """
 
 import argparse
@@ -34,6 +38,10 @@ import ecnl_api as api
 FRESH_SECONDS = 12 * 3600
 # Politeness delay between API calls.
 DELAY = 0.25
+# Reconstructed schedules (ecnl_api.protected_paths) are never re-fetched or
+# overwritten unless --force-reconstructed is passed. --force is routine and
+# does not imply it.
+FORCE_RECONSTRUCTED = False
 
 
 class Stats:
@@ -51,8 +59,16 @@ class Stats:
 def get_json(path, stats, force):
     """Fetch an API path, archive the raw bytes, return parsed JSON.
 
-    Uses the archived copy when it is fresh and --force was not passed.
+    Uses the archived copy when it is fresh and --force was not passed, and
+    always for a reconstructed path unless --force-reconstructed was passed —
+    so the manifest and CSV export rebuild from the reconstruction, not from
+    the empty live response.
     """
+    protected = api.read_archive_protected(path) if not FORCE_RECONSTRUCTED else None
+    if protected is not None:
+        stats.skipped += 1
+        return protected
+
     age = api.archive_age_seconds(path)
     if not force and age is not None and age < FRESH_SECONDS:
         raw, _ = api.read_archive(path)
@@ -62,7 +78,7 @@ def get_json(path, stats, force):
 
     raw = api.fetch_api_raw(path)
     data = json.loads(raw)  # validate before writing
-    api.write_archive(path, raw)
+    api.write_archive(path, raw, allow_protected=FORCE_RECONSTRUCTED)
     stats.fetched += 1
     time.sleep(DELAY)
     return data
@@ -205,6 +221,11 @@ def archive_event(sources, season_key, kind, name, event, stats, force, dry_run)
     label = f"{season_key} / {name} ({eid})"
     if dry_run:
         print(f"  would archive {label}")
+        for path in sorted(p for p in api.protected_paths() if p.startswith(f"Event/get-schedules-by-flight/{eid}/")):
+            if FORCE_RECONSTRUCTED:
+                print(f"    would overwrite reconstructed {path} (--force-reconstructed)")
+            else:
+                print(f"    {api.protected_notice(path)}")
         return None
     print(f"  {label}")
 
@@ -272,6 +293,13 @@ def archive_event(sources, season_key, kind, name, event, stats, force, dry_run)
             try:
                 games = api.unwrap(get_json(api.p_schedule(eid, flight_id), stats, force)) or []
                 record["games"] = len(games)
+                if api.is_protected_path(api.p_schedule(eid, flight_id)):
+                    # Reconstructed flight (reconstruct.py): keep the manifest
+                    # marker across re-crawls, and count teams from the games
+                    # since TGS publishes no standings for it.
+                    record["reconstructed"] = True
+                    if not record.get("teams"):
+                        record["teams"] = len({t for g in games for t in (g.get("hometeamID"), g.get("awayteamID")) if t})
                 rows = schedule_rows(games)
                 if rows:
                     write_csv(os.path.join(export_base, stem + ".schedule.csv"),
@@ -363,10 +391,16 @@ def fetch_json(path, stats):
     Refresh mode must never trust mtime: a CI checkout resets every file's mtime
     to clone time, which would make everything look fresh and silently skip all
     work. refresh-state.json is the authority instead.
+
+    Reconstructed paths are returned from the archive (see get_json).
     """
+    protected = api.read_archive_protected(path) if not FORCE_RECONSTRUCTED else None
+    if protected is not None:
+        return protected
+
     raw = api.fetch_api_raw(path)
     data = json.loads(raw)  # validate before writing
-    api.write_archive(path, raw)
+    api.write_archive(path, raw, allow_protected=FORCE_RECONSTRUCTED)
     stats.fetched += 1
     time.sleep(DELAY)
     return data
@@ -757,6 +791,9 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="List what would be fetched.")
     ap.add_argument("--force", action="store_true",
                     help="Re-fetch even if the archived copy is less than 12h old.")
+    ap.add_argument("--force-reconstructed", action="store_true",
+                    help="Also re-fetch and overwrite the reconstructed schedules listed in "
+                         "sources.json (never implied by --force; see reconstruct.py).")
     ap.add_argument("--no-update-sources", action="store_true",
                     help="Do not write derived age-group birth years back to data/sources.json.")
     ap.add_argument("--refresh", action="store_true",
@@ -771,6 +808,9 @@ def main():
     ap.add_argument("--export", action="store_true",
                     help="Rebuild the CSVs under export/ from the archive (no API calls).")
     args = ap.parse_args()
+
+    global FORCE_RECONSTRUCTED
+    FORCE_RECONSTRUCTED = args.force_reconstructed
 
     try:
         sources = api.load_sources()

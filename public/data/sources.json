@@ -281,7 +281,29 @@
         },
         "Finals": {
           "eventId": 3975,
-          "eventName": "ECNL Girls National Finals"
+          "eventName": "ECNL Girls National Finals",
+          "location": "Richmond, VA",
+          "startDate": "2025-07-18",
+          "endDate": "2025-07-21",
+          "reconstructed": {
+            "_comment": "TGS removed this event's schedules after the event; the five Champions League flights below are rebuilt from ECNL's recaps by reconstruct.py (see README, 'Reconstructed data'). archive.py and proxy_server.py never overwrite these paths without --force-reconstructed.",
+            "csv": "reconstructed/2024-25-finals-3975.csv",
+            "flightIds": [34425, 34427, 34426, 34428, 34429],
+            "qualifiedFrom": 3865,
+            "champions": {
+              "G2008": "Real Colorado National",
+              "G2009": "MVLA",
+              "G2010": "Michigan Hawks",
+              "G2011": "San Diego Surf",
+              "G2012": "San Diego Surf"
+            },
+            "sources": [
+              { "label": "ECNL recap: Day 1 (quarterfinals)", "url": "https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx" },
+              { "label": "ECNL recap: Day 2 (semifinals)", "url": "https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx" },
+              { "label": "ECNL recap: Champions crowned (finals)", "url": "https://theecnl.com/news/2025/7/22/ecnl-girls-national-finals-recap-champions-crowned.aspx" }
+            ],
+            "note": "Results reconstructed from ECNL's published recaps; TGS removed this event's schedule. Kick-off times, fields and home/away sides are not published — the winner is listed first."
+          }
         }
       },
       "ageGroups": {

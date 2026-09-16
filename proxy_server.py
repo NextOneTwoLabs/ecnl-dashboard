@@ -12,8 +12,9 @@ Usage:
 
     Then open http://localhost:5000/ecnl-dashboard.html
 
-Responses carry X-ECNL-Source: live | archive so the dashboard can show where
-the data came from.
+Responses carry X-ECNL-Source: live | archive | reconstructed so the dashboard
+can show where the data came from. Reconstructed schedules (ecnl_api.protected_paths)
+are always served from the archive, even with ?live=1.
 """
 
 import argparse
@@ -59,6 +60,16 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             self._send_json(400, {"error": "Invalid API path"})
             return
 
+        # Reconstructed schedules (see ecnl_api.protected_paths): the live
+        # endpoint returns an empty list, so the archived copy is the answer
+        # even under ?live=1, and the write-through below must not run.
+        if api.is_protected_path(api_path):
+            if self._send_from_archive(api_path, note="reconstructed; live response not used"):
+                return
+            self._send_json(404, {"error": f"Protected (reconstructed) path {api_path} "
+                                           f"has no archived copy. Run: python reconstruct.py"})
+            return
+
         if OFFLINE:
             if not self._send_from_archive(api_path):
                 self._send_json(
@@ -90,7 +101,8 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         raw, stamp = api.read_archive(api_path)
         if raw is None:
             return False
-        self._send_bytes(raw, source="archive", archived_at=stamp,
+        source = "reconstructed" if api.is_protected_path(api_path) else "archive"
+        self._send_bytes(raw, source=source, archived_at=stamp,
                          cache="no-store", note=note)
         return True
 

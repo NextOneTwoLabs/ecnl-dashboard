@@ -150,9 +150,43 @@ any template. A game that ended level with no PK score recorded is settled from 
 next game each team plays. TGS's bracket HTML is archived for durability only.
 
 Not included: the U18/19 National Finals is a separate TGS event (St. Louis, June)
-and can be added as a second `national` entry when its event ID is known. The
-2024-25 Finals event (3975) publishes no games through the API, so that bracket
-ends at the round played at the Playoffs event.
+and can be added as a second `national` entry when its event ID is known.
+
+### Reconstructed data
+
+TGS removed the 2024-25 National Finals schedules (event 3975) after the event: every
+schedule endpoint returns an empty list and the public site shows nothing. The 35
+results — five Champions League brackets, U13 to U17 — are rebuilt from ECNL's three
+published recaps ([Day 1](https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx),
+[Day 2](https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx),
+[Champions crowned](https://theecnl.com/news/2025/7/22/ecnl-girls-national-finals-recap-champions-crowned.aspx))
+by `reconstruct.py`. `reconstructed/2024-25-finals-3975.csv` is the human-readable
+source of truth, one line per game with its recap URL; the script turns it into five
+archive files shaped exactly like a real schedule response (the 41 keys of a real
+record plus `source` and `reconstructed: true`), taking division and flight ids from
+the archived hierarchy and each team's id, name, club and logo from the same season's
+conference standings — so a team's name here equals its name everywhere else on the
+site, which My Teams relies on. What the recaps do not publish is left null and said
+so on the page: kick-off times, fields, and which side was home — the winner is listed
+first. The finals date, 21 July, comes from the archived event-details response.
+
+`archive.py` and `proxy_server.py` never overwrite these five paths — the log says
+`protected (reconstructed): … not overwritten` and the archived copy is used instead,
+even under `?live=1` — unless `--force-reconstructed` is passed (`--force` alone does
+not imply it). The scheduled refresh runs `python reconstruct.py --check` before it
+commits, which asserts the brackets are internally consistent: 7 games and 8 teams per
+flight, semifinalists are the quarterfinal winners and finalists the semifinal winners,
+the five expected champions, PK scores exactly on draws, dates by round, every name
+equal to its conference-standings name with the flight's age suffix, and for U14–U17
+the eight quarterfinalists equal the eight last-day winners of the Playoffs event by
+team id. To regenerate after editing the CSV: `python reconstruct.py
+reconstructed/2024-25-finals-3975.csv`, then `python reconstruct.py --check`.
+
+The honest limit: the check can prove the right teams advanced, but not a score. A
+wrong score with the right winner cannot be caught, and for four of the five finals
+the score rests on a single sentence of ECNL prose (the U17 final is corroborated by
+Real Colorado's own club page). The Day 1 recap itself contradicts its own score list
+in one place, which is why the Playoffs cross-check exists.
 
 ## My Teams
 
@@ -252,6 +286,8 @@ the one rule covers both sites.
 | `archive.py` | Crawler: match-day refresh, bulk backfill, CSV exports, `--verify` |
 | `ecnl_api.py` | Shared API/archive helpers |
 | `proxy_server.py` | Local static server, plus the `?live=1` API proxy |
+| `reconstruct.py` | Rebuilds schedules TGS removed from a hand-entered CSV; `--check` validates them (see "Reconstructed data") |
+| `reconstructed/` | The CSVs behind the reconstructed archive files — one line per game, with its source URL |
 | `export/<season>/<conf>/` | CSVs — not published; `*.standings.csv`, `*.schedule.csv` |
 | `worker.js` | Redirects the `workers.dev` hostname, and handles `POST /api/feedback` |
 | `wrangler.toml` | Cloudflare Workers config: the `public/` assets and the `FEEDBACK` KV binding |
@@ -320,7 +356,7 @@ Endpoints used (all unauthenticated):
 |---------|-------------|-----------------|-----------------------|----------|--------|
 | 2026-27 | 10          | age (`GU15`)         | two (`2011/2012`) | —   | —      |
 | 2025-26 | 10          | birth year (`G2011`) | one               | ✅ event 4251 (combined Playoffs & Finals, U13–U17) | ↑ same event |
-| 2024-25 | 10          | birth year | one | ✅ event 3865 | ✅ event 3975 |
+| 2024-25 | 10          | birth year | one | ✅ event 3865 | ✅ event 3975 — reconstructed from ECNL's recaps |
 | 2023-24 | 10          | birth year | one | —        | —      |
 | 2022-23 | 10          | birth year | one | —        | —      |
 | 2021-22 | 9 (no NorCal) | age (`GU13`) | one | —      | —      |
