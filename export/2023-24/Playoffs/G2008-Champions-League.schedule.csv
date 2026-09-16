@@ -1,0 +1,75 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2024-06-22,08:00 AM,Group Play,Penn Fusion SA ECNL G08,6,0,Internationals SC ECNL G08,60 Acres Park,Field #09,On Time,634549
+2024-06-22,08:00 AM,Group Play,Legends FC ECNL G08,1,1,Eclipse Select SC ECNL G08,60 Acres Park,Field #13,On Time,634550
+2024-06-22,08:00 AM,Group Play,Solar SC ECNL G08,4,1,Tampa Bay United ECNL G08,60 Acres Park,Field #15,On Time,634555
+2024-06-22,08:00 AM,Group Play,So Cal Blues ECNL G08,4,0,Fairfax BRAVE SC ECNL G08,60 Acres Park,Field #19,On Time,634556
+2024-06-22,08:00 AM,Group Play,FC Stars Blue ECNL G08,1,0,Washington Premier ECNL G08,60 Acres Park,Field #21,On Time,634561
+2024-06-22,08:00 AM,Group Play,Beach FC (CA) ECNL G08,4,1,Sting Austin ECNL G08,60 Acres Park,Field #24,On Time,634562
+2024-06-22,08:00 AM,Group Play,De Anza Force ECNL G08,2,0,Connecticut FC ECNL G08,60 Acres Park,Field #01,On Time,634573
+2024-06-22,08:00 AM,Group Play,Sting Dallas Black ECNL G08,0,0,FC DELCO ECNL G08,60 Acres Park,Field #05,On Time,634574
+2024-06-22,08:30 AM,Group Play,Michigan Hawks ECNL G08,7,0,Atlanta Fire United ECNL G08,60 Acres Park,Field #10,On Time,634603
+2024-06-22,08:30 AM,Group Play,MVLA ECNL G08,2,1,Wilmington Hammerheads ECNL G08,60 Acres Park,Field #14,On Time,634604
+2024-06-22,12:00 PM,Group Play,NC Courage ECNL G08,3,4,Eagles SC ECNL G08,60 Acres Park,Field #19,On Time,634591
+2024-06-22,12:00 PM,Group Play,Minnesota Thunder ECNL G08,1,2,Ohio Premier ECNL G08,60 Acres Park,Field #21,On Time,634592
+2024-06-22,12:30 PM,Group Play,XF Academy ECNL G08,2,0,VDA ECNL G08,60 Acres Park,Field #14,On Time,634543
+2024-06-22,12:30 PM,Group Play,World Class FC ECNL G08,3,3,DKSC ECNL G08,60 Acres Park,Field #10,On Time,634544
+2024-06-22,12:30 PM,Group Play,NVA ECNL G08,4,3,SLSG Navy ECNL G08,60 Acres Park,Field #18,On Time,634598
+2024-06-22,04:00 PM,Group Play,San Diego Surf ECNL G08,2,0,Concorde Fire Platinum ECNL G08,60 Acres Park,Field #01,On Time,634567
+2024-06-22,04:00 PM,Group Play,Ohio Elite Soccer Academy ECNL G08,2,1,FC Dallas ECNL G08,60 Acres Park,Field #05,On Time,634568
+2024-06-22,04:00 PM,Group Play,Alabama FC ECNL G08,1,3,FC Alliance ECNL G08,60 Acres Park,Field #09,On Time,634579
+2024-06-22,04:00 PM,Group Play,San Juan SC ECNL G08,0,1,Real Colorado National ECNL G08,60 Acres Park,Field #13,On Time,634580
+2024-06-22,04:00 PM,Group Play,Sporting Blue Valley ECNL G08,3,0,GSA ECNL G08,60 Acres Park,Field #15,On Time,634585
+2024-06-22,04:00 PM,Group Play,Slammers FC HB Koge ECNL G08,7,1,Eastside FC ECNL G08,60 Acres Park,Field #21,On Time,634586
+2024-06-22,04:00 PM,Group Play,Concorde Fire Premier ECNL G08,0,4,PDA Blue ECNL G08,60 Acres Park,Field #19,On Time,634597
+2024-06-24,08:00 AM,Group Play,Concorde Fire Platinum ECNL G08,1,0,Ohio Elite Soccer Academy ECNL G08,60 Acres Park,Field #19,On Time,634569
+2024-06-24,08:00 AM,Group Play,San Diego Surf ECNL G08,4,0,FC Dallas ECNL G08,60 Acres Park,Field #15,On Time,634570
+2024-06-24,08:00 AM,Group Play,Concorde Fire Premier ECNL G08,1,2,SLSG Navy ECNL G08,60 Acres Park,Field #21,On Time,634600
+2024-06-24,08:30 AM,Group Play,Internationals SC ECNL G08,0,4,Legends FC ECNL G08,60 Acres Park,Field #14,On Time,634551
+2024-06-24,08:30 AM,Group Play,Eclipse Select SC ECNL G08,3,5,Penn Fusion SA ECNL G08,60 Acres Park,Field #10,On Time,634552
+2024-06-24,08:30 AM,Group Play,PDA Blue ECNL G08,3,0,NVA ECNL G08,60 Acres Park,Field #04,On Time,634599
+2024-06-24,10:00 AM,Group Play,Tampa Bay United ECNL G08,0,4,So Cal Blues ECNL G08,60 Acres Park,Field #19,On Time,634557
+2024-06-24,10:00 AM,Group Play,Solar SC ECNL G08,5,0,Fairfax BRAVE SC ECNL G08,60 Acres Park,Field #15,On Time,634558
+2024-06-24,10:30 AM,Group Play,Atlanta Fire United ECNL G08,1,6,MVLA ECNL G08,60 Acres Park,Field #22,On Time,634605
+2024-06-24,10:30 AM,Group Play,Michigan Hawks ECNL G08,3,0,Wilmington Hammerheads ECNL G08,60 Acres Park,Field #20,On Time,634606
+2024-06-24,11:00 AM,Group Play,XF Academy ECNL G08,4,0,DKSC ECNL G08,60 Acres Park,Field #11,On Time,634546
+2024-06-24,12:00 PM,Group Play,Washington Premier ECNL G08,1,2,Beach FC (CA) ECNL G08,60 Acres Park,Field #15,On Time,634563
+2024-06-24,12:00 PM,Group Play,FC Stars Blue ECNL G08,2,0,Sting Austin ECNL G08,60 Acres Park,Field #13,On Time,634564
+2024-06-24,12:00 PM,Group Play,Alabama FC ECNL G08,3,6,San Juan SC ECNL G08,60 Acres Park,Field #21,On Time,634581
+2024-06-24,12:00 PM,Group Play,FC Alliance ECNL G08,0,3,Real Colorado National ECNL G08,60 Acres Park,Field #19,On Time,634582
+2024-06-24,01:00 PM,Group Play,VDA ECNL G08,1,0,World Class FC ECNL G08,60 Acres Park,Field #03,On Time,634545
+2024-06-24,01:00 PM,Group Play,Connecticut FC ECNL G08,0,5,Sting Dallas Black ECNL G08,60 Acres Park,Field #12,On Time,634575
+2024-06-24,01:00 PM,Group Play,De Anza Force ECNL G08,4,0,FC DELCO ECNL G08,60 Acres Park,Field #11,On Time,634576
+2024-06-24,02:00 PM,Group Play,GSA ECNL G08,1,3,Slammers FC HB Koge ECNL G08,60 Acres Park,Field #15,On Time,634587
+2024-06-24,02:00 PM,Group Play,Sporting Blue Valley ECNL G08,3,0,Eastside FC ECNL G08,60 Acres Park,Field #13,On Time,634588
+2024-06-24,02:30 PM,Group Play,Eagles SC ECNL G08,1,1,Minnesota Thunder ECNL G08,60 Acres Park,Field #04,On Time,634593
+2024-06-24,02:30 PM,Group Play,NC Courage ECNL G08,3,2,Ohio Premier ECNL G08,60 Acres Park,Field #10,On Time,634594
+2024-06-25,08:00 AM,Group Play,Eclipse Select SC ECNL G08,5,5,Internationals SC ECNL G08,60 Acres Park,Field #15,On Time,634553
+2024-06-25,08:00 AM,Group Play,Penn Fusion SA ECNL G08,2,1,Legends FC ECNL G08,60 Acres Park,Field #09,On Time,634554
+2024-06-25,08:00 AM,Group Play,Fairfax BRAVE SC ECNL G08,4,2,Tampa Bay United ECNL G08,60 Acres Park,Field #13,On Time,634559
+2024-06-25,08:00 AM,Group Play,Solar SC ECNL G08,2,2,So Cal Blues ECNL G08,60 Acres Park,Field #19,On Time,634560
+2024-06-25,08:00 AM,Group Play,FC Dallas ECNL G08,2,0,Concorde Fire Platinum ECNL G08,60 Acres Park,Field #05,On Time,634571
+2024-06-25,08:00 AM,Group Play,San Diego Surf ECNL G08,2,3,Ohio Elite Soccer Academy ECNL G08,60 Acres Park,Field #01,On Time,634572
+2024-06-25,08:00 AM,Group Play,Eastside FC ECNL G08,0,0,GSA ECNL G08,60 Acres Park,Field #21,On Time,634589
+2024-06-25,08:00 AM,Group Play,Sporting Blue Valley ECNL G08,1,2,Slammers FC HB Koge ECNL G08,60 Acres Park,Field #24,On Time,634590
+2024-06-25,08:30 AM,Group Play,DKSC ECNL G08,1,0,VDA ECNL G08,60 Acres Park,Field #04,On Time,634547
+2024-06-25,08:30 AM,Group Play,XF Academy ECNL G08,0,1,World Class FC ECNL G08,60 Acres Park,Field #14,On Time,634548
+2024-06-25,08:30 AM,Group Play,Sting Austin ECNL G08,2,0,Washington Premier ECNL G08,60 Acres Park,Field #22,On Time,634565
+2024-06-25,08:30 AM,Group Play,FC DELCO ECNL G08,0,1,Connecticut FC ECNL G08,60 Acres Park,Field #02,On Time,634577
+2024-06-25,08:30 AM,Group Play,De Anza Force ECNL G08,2,2,Sting Dallas Black ECNL G08,60 Acres Park,Field #10,On Time,634578
+2024-06-25,08:30 AM,Group Play,Real Colorado National ECNL G08,3,0,Alabama FC ECNL G08,60 Acres Park,Field #20,On Time,634583
+2024-06-25,08:30 AM,Group Play,FC Alliance ECNL G08,2,3,San Juan SC ECNL G08,60 Acres Park,Field #18,On Time,634584
+2024-06-25,09:00 AM,Group Play,FC Stars Blue ECNL G08,3,1,Beach FC (CA) ECNL G08,60 Acres Park,Field #03,On Time,634566
+2024-06-25,09:00 AM,Group Play,Ohio Premier ECNL G08,3,1,Eagles SC ECNL G08,60 Acres Park,Field #08,On Time,634595
+2024-06-25,09:00 AM,Group Play,NC Courage ECNL G08,1,0,Minnesota Thunder ECNL G08,60 Acres Park,Field #07,On Time,634596
+2024-06-25,09:00 AM,Group Play,SLSG Navy ECNL G08,2,1,PDA Blue ECNL G08,60 Acres Park,Field #12,On Time,634601
+2024-06-25,09:00 AM,Group Play,Concorde Fire Premier ECNL G08,1,5,NVA ECNL G08,60 Acres Park,Field #16,On Time,634602
+2024-06-25,09:00 AM,Group Play,Wilmington Hammerheads ECNL G08,2,0,Atlanta Fire United ECNL G08,60 Acres Park,Field #17,On Time,634607
+2024-06-25,09:00 AM,Group Play,Michigan Hawks ECNL G08,2,2,MVLA ECNL G08,60 Acres Park,Field #11,On Time,634608
+2024-06-27,08:00 AM,Bracket,XF Academy ECNL G08,1,0,San Juan SC ECNL G08,60 Acres Park,Field #12,On Time,634609
+2024-06-27,08:00 AM,Bracket,FC Stars Blue ECNL G08,2,2,MVLA ECNL G08,60 Acres Park,Field #17,On Time,634612
+2024-06-27,08:00 AM,Bracket,Real Colorado National ECNL G08,3,0,PDA Blue ECNL G08,60 Acres Park,Field #22,On Time,634614
+2024-06-27,10:00 AM,Bracket,San Diego Surf ECNL G08,0,2,So Cal Blues ECNL G08,60 Acres Park,Field #12,On Time,634610
+2024-06-27,10:00 AM,Bracket,Slammers FC HB Koge ECNL G08,1,1,Ohio Premier ECNL G08,60 Acres Park,Field #13,On Time,634611
+2024-06-27,10:00 AM,Bracket,De Anza Force ECNL G08,1,0,Michigan Hawks ECNL G08,60 Acres Park,Field #18,On Time,634615
+2024-06-27,10:00 AM,Bracket,Penn Fusion SA ECNL G08,5,2,Sporting Blue Valley ECNL G08,60 Acres Park,Field #17,On Time,634616
+2024-06-27,11:00 AM,Bracket,Solar SC ECNL G08,1,1,San Diego Surf ECNL G08,60 Acres Park,Field #21,On Time,634613

@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2024-06-22,10:00 AM,Bracket,Mustang SC ECNL G07,2,0,PDA South ECNL G07,60 Acres Park,Field #05,On Time,634001
+2024-06-22,11:00 AM,Bracket,Northwest Elite FC ECNL G07,4,3,Beach FC (VA) ECNL G2007,60 Acres Park,Field #17,On Time,633996
+2024-06-22,01:00 PM,Bracket,Rockford Raptors ECNL G07,0,3,Challenge SC ECNL G07,60 Acres Park,Field #17,On Time,634002
+2024-06-22,04:30 PM,Bracket,Utah Avalanche ECNL G07,1,1,Del Mar Sharks ECNL G07,60 Acres Park,Field #04,On Time,633995
+2024-06-22,04:30 PM,Bracket,Florida Krush ECNL G07,1,2,Eagles ECNL G07,60 Acres Park,Field #10,On Time,633997
+2024-06-22,04:30 PM,Bracket,CESA Liberty ECNL G07,1,2,Scorpions SC ECNL G07,60 Acres Park,Field #20,On Time,633999
+2024-06-22,04:30 PM,Bracket,Albion Hurricanes FC ECNL G07,0,4,Midwest United FC ECNL G07,60 Acres Park,Field #22,On Time,634000
+2024-06-22,05:00 PM,Bracket,Pittsburgh Riverhounds ECNL G07,2,0,Phoenix Rising ECNL G07,60 Acres Park,Field #12,On Time,633998
+2024-06-23,04:00 PM,Bracket,CESA Liberty ECNL G07,1,4,Albion Hurricanes FC ECNL G07,60 Acres Park,Field #24,On Time,634012
+2024-06-23,04:30 PM,Bracket,Scorpions SC ECNL G07,1,0,Midwest United FC ECNL G07,60 Acres Park,Field #10,On Time,634005
+2024-06-23,04:30 PM,Bracket,Mustang SC ECNL G07,3,2,Challenge SC ECNL G07,60 Acres Park,Field #14,On Time,634006
+2024-06-23,05:00 PM,Bracket,Utah Avalanche ECNL G07,5,1,Northwest Elite FC ECNL G07,60 Acres Park,Field #07,On Time,634003
+2024-06-23,05:00 PM,Bracket,Eagles ECNL G07,0,2,Pittsburgh Riverhounds ECNL G07,60 Acres Park,Field #08,On Time,634004
+2024-06-23,06:00 PM,Bracket,Del Mar Sharks ECNL G07,4,1,Beach FC (VA) ECNL G2007,60 Acres Park,Field #01,On Time,634010
+2024-06-23,06:00 PM,Bracket,Florida Krush ECNL G07,1,6,Phoenix Rising ECNL G07,60 Acres Park,Field #09,On Time,634011
+2024-06-23,06:00 PM,Bracket,PDA South ECNL G07,0,1,Rockford Raptors ECNL G07,60 Acres Park,Field #24,On Time,634013
+2024-06-25,10:30 AM,Bracket,Utah Avalanche ECNL G07,1,0,Pittsburgh Riverhounds ECNL G07,60 Acres Park,Field #02,On Time,634007
+2024-06-25,10:30 AM,Bracket,Scorpions SC ECNL G07,2,3,Mustang SC ECNL G07,60 Acres Park,Field #04,On Time,634008
+2024-06-25,02:00 PM,Bracket,Northwest Elite FC ECNL G07,3,1,Eagles ECNL G07,60 Acres Park,Field #09,On Time,634016
+2024-06-25,02:00 PM,Bracket,Midwest United FC ECNL G07,2,4,Challenge SC ECNL G07,60 Acres Park,Field #19,On Time,634017
+2024-06-25,04:00 PM,Bracket,Del Mar Sharks ECNL G07,3,1,Phoenix Rising ECNL G07,60 Acres Park,Field #09,On Time,634014
+2024-06-25,04:00 PM,Bracket,Albion Hurricanes FC ECNL G07,2,1,Rockford Raptors ECNL G07,60 Acres Park,Field #15,On Time,634015
+2024-06-25,04:00 PM,Bracket,Beach FC (VA) ECNL G2007,3,0,Florida Krush ECNL G07,60 Acres Park,Field #05,On Time,634018
+2024-06-25,04:00 PM,Bracket,CESA Liberty ECNL G07,1,1,PDA South ECNL G07,60 Acres Park,Field #13,On Time,634019
+2024-06-27,08:30 AM,Bracket,Utah Avalanche ECNL G07,2,2,Mustang SC ECNL G07,60 Acres Park,Field #10,On Time,634009

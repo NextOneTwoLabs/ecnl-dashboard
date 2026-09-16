@@ -1,0 +1,45 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
+1,San Diego Surf ECNL G10,San Diego Surf Soccer Club,62104,3,3,0,0,9,3.0,18,3,15
+2,Legends FC ECNL G10,Legends FC (CA),65115,3,3,0,0,9,3.0,11,3,8
+3,Solar SC ECNL G10,Solar SC,66050,3,2,0,1,7,2.33,8,1,7
+4,Slammers FC HB Koge ECNL G10,Slammers FC HB Koge,64905,3,2,0,1,7,2.33,8,2,6
+5,Indy Eleven Pro Academy ECNL G10,Indy Eleven Academy,46996,3,2,0,1,7,2.33,6,1,5
+6,Real Colorado National ECNL G10,Real Colorado,69251,3,2,0,1,7,2.33,6,1,5
+7,GSA ECNL G10,Gwinnett Soccer Academy,68924,3,2,0,1,7,2.33,6,3,3
+8,Dallas Texans ECNL G10,Dallas Texans,69269,3,2,0,1,7,2.33,5,2,3
+9,La Roca FC ECNL G10,La Roca FC,69014,3,2,0,1,7,2.33,5,2,3
+10,Michigan Hawks ECNL G10,Michigan Hawks,69108,3,2,0,1,7,2.33,4,2,2
+11,Bethesda SC ECNL G10,Bethesda SC,60101,3,2,1,0,6,2.0,10,1,9
+12,Eastside FC ECNL G10,Eastside FC (WA),69451,3,2,1,0,6,2.0,9,1,8
+13,MVLA ECNL G10,MVLA,33633,3,2,1,0,6,2.0,9,3,6
+14,SLAMMERS FC ECNL G10,Slammers FC,64956,3,2,1,0,6,2.0,6,2,4
+15,FL Premier FC ECNL G10,Florida Premier FC,69293,3,2,1,0,6,2.0,5,1,4
+16,Albion Hurricanes FC ECNL G10,Albion Hurricanes FC,40463,3,2,1,0,6,2.0,7,5,2
+17,Penn Fusion SA ECNL G10,Penn Fusion Soccer Academy,59666,3,2,1,0,6,2.0,4,2,2
+18,FC Pride Elite ECNL G10,FC Pride,45767,3,2,1,0,6,2.0,3,1,2
+19,Sting Dallas Royal ECNL G10,Sting Soccer Club,68974,3,2,1,0,6,2.0,5,4,1
+20,Kansas City Athletics ECNL G10,KC Athletics,46766,3,2,1,0,6,2.0,5,7,-2
+21,Mustang SC ECNL G10,Mustang Soccer,18712,3,1,0,2,5,1.67,7,4,3
+22,Charlotte SA ECNL G10,Charlotte Soccer Academy,63697,3,1,1,1,4,1.33,8,6,2
+23,So Cal Blues ECNL G10,So Cal Blues,69520,3,1,1,1,4,1.33,4,4,0
+24,Beach FC (CA) ECNL G10,Beach Futbol Club,18443,3,1,1,1,4,1.33,3,3,0
+25,PDA Blue ECNL G10,PDA Blue (North),56324,3,1,1,1,4,1.33,3,4,-1
+26,World Class FC ECNL G10,World Class FC,14328,3,1,1,1,4,1.33,3,5,-2
+27,Portland Thorns ECNL G10,Portland Thorns FC,69551,3,1,2,0,3,1.0,5,5,0
+28,VDA ECNL G10,Virginia Development Academy,19656,3,1,2,0,3,1.0,3,5,-2
+29,SUSA FC ECNL G10,SUSA FC,59680,3,1,2,0,3,1.0,3,5,-2
+30,Internationals SC ECNL G10,Internationals SC,47002,3,1,2,0,3,1.0,3,5,-2
+31,SLSG Navy ECNL G10,St. Louis Scott Gallagher,68758,3,1,2,0,3,1.0,2,4,-2
+32,FC Prime ECNL G10,Athletic Club Florida,46727,3,1,2,0,3,1.0,5,8,-3
+33,San Juan SC ECNL G10,San Juan Soccer Club,32669,3,1,2,0,3,1.0,3,6,-3
+34,SLSG Green MO ECNL G10,St. Louis Scott Gallagher,68780,3,1,2,0,3,1.0,3,8,-5
+35,VA Union ECNL G10,Fairfax Virginia Union,69871,3,1,2,0,3,1.0,3,15,-12
+36,NC Courage ECNL G10,NC Courage Academy,69433,3,0,2,1,1,0.33,4,6,-2
+37,WNY Flash ECNL G10,WNY Flash Academy,47037,3,0,2,1,1,0.33,6,9,-3
+38,Fairfax BRAVE SC ECNL G10,Fairfax Virginia Union,68366,3,0,2,1,1,0.33,5,9,-4
+39,Atlanta Fire United ECNL G10,Atlanta Fire United,67127,3,0,3,0,0,0.0,2,7,-5
+40,Concorde Fire Platinum ECNL G10,Concorde Fire ,68802,3,0,3,0,0,0.0,2,9,-7
+41,FC Dallas ECNL G10,FC Dallas Youth,46266,3,0,3,0,0,0.0,3,12,-9
+42,Connecticut FC ECNL G10,Connecticut FC,68939,3,0,3,0,0,0.0,1,12,-11
+43,Florida Elite ECNL G10,Sporting SA,65960,3,0,3,0,0,0.0,0,11,-11
+44,Liverpool FC IA Michigan ECNL G10,Liverpool FC-IA Michigan,69186,3,0,3,0,0,0.0,2,14,-12

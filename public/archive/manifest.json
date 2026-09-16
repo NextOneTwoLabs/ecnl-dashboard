@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-16T04:37:28Z",
+  "updated": "2026-09-16T14:05:05Z",
   "events": {
     "2025-26/Mid-Atlantic": {
       "season": "2025-26",
@@ -5240,6 +5240,326 @@
             "Champions League Cup",
             "CL Cup Consolations",
             "Champions League Consolations"
+          ]
+        }
+      ]
+    },
+    "2023-24/Playoffs": {
+      "season": "2023-24",
+      "kind": "national",
+      "name": "Playoffs",
+      "eventId": 3064,
+      "eventName": "ECNL Girls National Playoffs",
+      "fetchedAt": "2026-09-16T14:04:26Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/3064/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 14596,
+          "divisionName": "G2006/2005",
+          "flightID": 24866,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24866",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24866",
+          "teams": 0,
+          "games": 25,
+          "brackets": [
+            "Championship",
+            "Rd. 1 Losers",
+            "Rd. 2 Losers from Winners Bracket",
+            "Rd. 1 Losers from Losers Bracket"
+          ]
+        },
+        {
+          "divisionID": 14597,
+          "divisionName": "G2007",
+          "flightID": 24869,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24869",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24869",
+          "teams": 44,
+          "games": 74,
+          "brackets": [
+            "Bracket 1",
+            "Bracket 2",
+            "Bracket 3",
+            "Bracket 4",
+            "Bracket 5",
+            "Bracket 6",
+            "Bracket 7",
+            "Bracket 8"
+          ]
+        },
+        {
+          "divisionID": 14597,
+          "divisionName": "G2007",
+          "flightID": 24874,
+          "flightName": "North American Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24874",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24874",
+          "teams": 0,
+          "games": 25,
+          "brackets": [
+            "Championship",
+            "Rd. 1 Losers",
+            "Rd. 2 Losers from Winners Bracket",
+            "Rd. 1 Losers from Losers Bracket"
+          ]
+        },
+        {
+          "divisionID": 14597,
+          "divisionName": "G2007",
+          "flightID": 24875,
+          "flightName": "Showcase Cup A",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24875",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24875",
+          "teams": 0,
+          "games": 25,
+          "brackets": [
+            "Championship",
+            "Rd. 1 Losers",
+            "Rd. 2 Losers from Winners Bracket",
+            "Rd. 1 Losers from Losers Bracket"
+          ]
+        },
+        {
+          "divisionID": 14597,
+          "divisionName": "G2007",
+          "flightID": 24877,
+          "flightName": "Showcase Cup B",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24877",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24877",
+          "teams": 0,
+          "games": 25,
+          "brackets": [
+            "Championship",
+            "Rd. 1 Losers",
+            "Rd. 2 Losers from Winners Bracket",
+            "Rd. 1 Losers from Losers Bracket"
+          ]
+        },
+        {
+          "divisionID": 14598,
+          "divisionName": "G2008",
+          "flightID": 24870,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24870",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24870",
+          "teams": 44,
+          "games": 74,
+          "brackets": [
+            "Bracket 1",
+            "Bracket 2",
+            "Bracket 3",
+            "Bracket 4",
+            "Bracket 5",
+            "Bracket 6",
+            "Bracket 7",
+            "Bracket 8"
+          ]
+        },
+        {
+          "divisionID": 14598,
+          "divisionName": "G2008",
+          "flightID": 24873,
+          "flightName": "North American Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24873",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24873",
+          "teams": 0,
+          "games": 25,
+          "brackets": [
+            "Championship",
+            "Rd. 1 Losers",
+            "Rd. 2 Losers from Winners Bracket",
+            "Rd. 1 Losers from Losers Bracket"
+          ]
+        },
+        {
+          "divisionID": 14598,
+          "divisionName": "G2008",
+          "flightID": 24876,
+          "flightName": "Showcase Cup A",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24876",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24876",
+          "teams": 0,
+          "games": 25,
+          "brackets": [
+            "Championship",
+            "Rd. 1 Losers",
+            "Rd. 2 Losers from Winners Bracket",
+            "Rd. 1 Losers from Losers Bracket"
+          ]
+        },
+        {
+          "divisionID": 14598,
+          "divisionName": "G2008",
+          "flightID": 24878,
+          "flightName": "Showcase Cup B",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24878",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24878",
+          "teams": 0,
+          "games": 25,
+          "brackets": [
+            "Championship",
+            "Rd. 1 Losers",
+            "Rd. 2 Losers from Winners Bracket",
+            "Rd. 1 Losers from Losers Bracket"
+          ]
+        },
+        {
+          "divisionID": 14599,
+          "divisionName": "G2009",
+          "flightID": 24867,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24867",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24867",
+          "teams": 44,
+          "games": 74,
+          "brackets": [
+            "Bracket 1",
+            "Bracket 2",
+            "Bracket 3",
+            "Bracket 4",
+            "Bracket 5",
+            "Bracket 6",
+            "Bracket 7",
+            "Bracket 8"
+          ]
+        },
+        {
+          "divisionID": 14599,
+          "divisionName": "G2009",
+          "flightID": 24872,
+          "flightName": "North American Cup",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24872",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24872",
+          "teams": 0,
+          "games": 25,
+          "brackets": [
+            "Championship",
+            "Rd. 1 Losers",
+            "Rd. 2 Losers from Winners Bracket",
+            "Rd. 1 Losers from Losers Bracket"
+          ]
+        },
+        {
+          "divisionID": 14600,
+          "divisionName": "G2010",
+          "flightID": 24868,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24868",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24868",
+          "teams": 44,
+          "games": 74,
+          "brackets": [
+            "Bracket 1",
+            "Bracket 2",
+            "Bracket 3",
+            "Bracket 4",
+            "Bracket 5",
+            "Bracket 6",
+            "Bracket 7",
+            "Bracket 8"
+          ]
+        },
+        {
+          "divisionID": 14601,
+          "divisionName": "G2011",
+          "flightID": 24871,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3064/standings/24871",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3064/schedules/24871",
+          "teams": 44,
+          "games": 74,
+          "brackets": [
+            "Bracket 1",
+            "Bracket 2",
+            "Bracket 3",
+            "Bracket 4",
+            "Bracket 5",
+            "Bracket 6",
+            "Bracket 7",
+            "Bracket 8"
+          ]
+        }
+      ]
+    },
+    "2023-24/Finals": {
+      "season": "2023-24",
+      "kind": "national",
+      "name": "Finals",
+      "eventId": 3238,
+      "eventName": "ECNL Girls National Finals",
+      "fetchedAt": "2026-09-16T14:04:57Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/3238/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 14747,
+          "divisionName": "G2007",
+          "flightID": 25232,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3238/standings/25232",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3238/schedules/25232",
+          "teams": 0,
+          "games": 9,
+          "brackets": [
+            "Championship",
+            "Consolation"
+          ]
+        },
+        {
+          "divisionID": 14749,
+          "divisionName": "G2008",
+          "flightID": 25235,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3238/standings/25235",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3238/schedules/25235",
+          "teams": 0,
+          "games": 9,
+          "brackets": [
+            "Championship",
+            "Consolation"
+          ]
+        },
+        {
+          "divisionID": 14748,
+          "divisionName": "G2009",
+          "flightID": 25236,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3238/standings/25236",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3238/schedules/25236",
+          "teams": 0,
+          "games": 9,
+          "brackets": [
+            "Championship",
+            "Consolation"
+          ]
+        },
+        {
+          "divisionID": 14750,
+          "divisionName": "G2010",
+          "flightID": 25233,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3238/standings/25233",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3238/schedules/25233",
+          "teams": 0,
+          "games": 9,
+          "brackets": [
+            "Championship",
+            "Consolation"
+          ]
+        },
+        {
+          "divisionID": 14751,
+          "divisionName": "G2011",
+          "flightID": 25234,
+          "flightName": "Champions League",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/3238/standings/25234",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/3238/schedules/25234",
+          "teams": 0,
+          "games": 9,
+          "brackets": [
+            "Championship",
+            "Consolation"
           ]
         }
       ]
