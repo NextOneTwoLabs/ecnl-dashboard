@@ -396,7 +396,22 @@
           "eventName": "ECNL Girls Texas 2023-24"
         }
       },
-      "national": {},
+      "national": {
+        "Playoffs": {
+          "eventId": 3064,
+          "eventName": "ECNL Girls National Playoffs",
+          "location": "Redmond, WA",
+          "startDate": "2024-06-22",
+          "endDate": "2024-06-28"
+        },
+        "Finals": {
+          "eventId": 3238,
+          "eventName": "ECNL Girls National Finals",
+          "location": "Richmond, VA",
+          "startDate": "2024-07-10",
+          "endDate": "2024-07-13"
+        }
+      },
       "ageGroups": {
         "G2006/2005": {
           "u": 18,

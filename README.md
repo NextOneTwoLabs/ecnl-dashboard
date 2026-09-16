@@ -119,8 +119,8 @@ season).
 ## National playoffs
 
 A season's post-season events live under `national` in `data/sources.json`, keyed
-by the stage name shown in the sidebar. 2024-25 had separate `Playoffs` and
-`Finals` events; 2025-26 has one combined event, so its row reads
+by the stage name shown in the sidebar. 2023-24 and 2024-25 each had separate
+`Playoffs` and `Finals` events; 2025-26 has one combined event, so its row reads
 `"Playoffs & Finals"` and the stage selector is hidden.
 
 ```json
@@ -362,7 +362,7 @@ Endpoints used (all unauthenticated):
 | 2026-27 | 10          | age (`GU15`)         | two (`2011/2012`) | —   | —      |
 | 2025-26 | 10          | birth year (`G2011`) | one               | ✅ event 4251 (combined Playoffs & Finals, U13–U17) | ↑ same event |
 | 2024-25 | 10          | birth year | one | ✅ event 3865 | ✅ event 3975 — reconstructed from ECNL's recaps |
-| 2023-24 | 10          | birth year | one | —        | —      |
+| 2023-24 | 10          | birth year | one | ✅ event 3064 | ✅ event 3238 |
 | 2022-23 | 10          | birth year | one | —        | —      |
 | 2021-22 | 9 (no NorCal) | age (`GU13`) | one | —      | —      |
 

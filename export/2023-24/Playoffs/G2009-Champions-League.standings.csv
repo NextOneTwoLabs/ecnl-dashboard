@@ -1,0 +1,45 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
+1,PDA Blue ECNL G09,PDA Blue (North),13678,3,3,0,0,9,3.0,11,3,8
+2,San Diego Surf ECNL G09,San Diego Surf Soccer Club,61178,3,3,0,0,9,3.0,8,0,8
+3,Kansas City Athletics ECNL G09,KC Athletics,33175,3,3,0,0,9,3.0,11,4,7
+4,Slammers FC HB Koge ECNL G09,Slammers FC HB Koge,54921,3,3,0,0,9,3.0,8,2,6
+5,World Class FC  ECNL G09,World Class FC,46959,3,3,0,0,9,3.0,9,6,3
+6,Penn Fusion SA ECNL G09,Penn Fusion Soccer Academy,46945,3,3,0,0,9,3.0,7,4,3
+7,Real Colorado National ECNL G09,Real Colorado,58631,3,2,0,1,7,2.33,7,3,4
+8,VDA ECNL G09,Virginia Development Academy,59474,3,2,0,1,7,2.33,8,5,3
+9,FC Dallas ECNL G09,FC Dallas Youth,58541,3,2,0,1,7,2.33,4,1,3
+10,Tennessee Soccer Club ECNL G09,Tennessee SC,47036,3,2,0,1,7,2.33,5,3,2
+11,Solar SC ECNL G09,Solar SC,59562,3,2,1,0,6,2.0,8,3,5
+12,Legends FC ECNL G09,Legends FC (CA),10361,3,2,1,0,6,2.0,11,7,4
+13,SLSG Navy ECNL G09,St. Louis Scott Gallagher,54343,3,2,1,0,6,2.0,7,3,4
+14,San Juan SC ECNL G09,San Juan Soccer Club,31488,3,2,1,0,6,2.0,7,5,2
+15,Concorde Fire Platinum ECNL G09,Concorde Fire ,59255,3,2,1,0,6,2.0,6,4,2
+16,Eclipse Select SC ECNL G09,Eclipse Select Soccer Club,59906,3,2,1,0,6,2.0,7,6,1
+17,Utah Royals FC-AZ ECNL G09,Utah Royals FC - AZ,56530,3,2,1,0,6,2.0,3,4,-1
+18,SUSA FC ECNL G09,SUSA FC,46963,3,1,0,2,5,1.67,6,4,2
+19,Sting Dallas Royal ECNL G09,Sting Soccer Club,68973,3,1,1,1,4,1.33,6,3,3
+20,Michigan Hawks ECNL G09,Michigan Hawks,50646,3,1,1,1,4,1.33,3,2,1
+21,Arizona Arsenal ECNL G09,Arizona Arsenal Soccer Club,58586,3,1,1,1,4,1.33,5,6,-1
+22,Internationals SC ECNL G09,Internationals SC,47003,3,1,1,1,4,1.33,5,7,-2
+23,Beach FC (CA) ECNL G09,Beach Futbol Club,60046,3,1,2,0,3,1.0,10,8,2
+24,Match Fit Academy ECNL G09,Match Fit Surf,46947,3,1,2,0,3,1.0,8,6,2
+25,Richmond United ECNL G09,Richmond United,59426,3,1,2,0,3,1.0,5,4,1
+26,Albion Hurricanes FC ECNL G09,Albion Hurricanes FC,59340,3,1,2,0,3,1.0,6,6,0
+27,Seattle United ECNL G09,Seattle United,56728,3,1,2,0,3,1.0,5,6,-1
+28,FC Stars Blue ECNL G09,FC Stars,36636,3,1,2,0,3,1.0,5,6,-1
+29,Bay Area Surf ECNL G09,Bay Area Surf,69035,3,1,2,0,3,1.0,4,5,-1
+30,XF Academy ECNL G09,Crossfire Premier,60436,3,1,2,0,3,1.0,4,6,-2
+31,Sporting Blue Valley ECNL G09,Sporting Blue Valley,60884,3,1,2,0,3,1.0,3,5,-2
+32,Dallas Texans ECNL G09,Dallas Texans,59998,3,1,2,0,3,1.0,3,5,-2
+33,MVLA ECNL G09,MVLA,33438,3,1,2,0,3,1.0,5,8,-3
+34,FC Prime ECNL G09,Athletic Club Florida,46728,3,1,2,0,3,1.0,3,6,-3
+35,Alabama FC ECNL G09,Alabama FC,58734,3,1,2,0,3,1.0,4,8,-4
+36,Ohio Premier ECNL G09,Ohio Premier,60137,3,1,2,0,3,1.0,4,8,-4
+37,Ohio Elite Soccer Academy ECNL G09,Ohio Elite Soccer Academy,47010,3,0,2,1,1,0.33,2,4,-2
+38,La Roca FC ECNL G09,La Roca FC,45847,3,0,2,1,1,0.33,2,7,-5
+39,NVA ECNL G09,Northern Virginia Alliance,54842,3,0,2,1,1,0.33,1,7,-6
+40,Charlotte SA ECNL G09,Charlotte Soccer Academy,59885,3,0,2,1,1,0.33,1,7,-6
+41,NC Courage ECNL G09,NC Courage Academy,60108,3,0,3,0,0,0.0,5,9,-4
+42,Atlanta Fire United ECNL G09,Atlanta Fire United,60033,3,0,3,0,0,0.0,6,13,-7
+43,United Futbol Academy ECNL G09,United Futbol Academy,59536,3,0,3,0,0,0.0,3,11,-8
+44,CESA Liberty ECNL G09,Carolina Elite Soccer Academy,46817,3,0,3,0,0,0.0,3,14,-11

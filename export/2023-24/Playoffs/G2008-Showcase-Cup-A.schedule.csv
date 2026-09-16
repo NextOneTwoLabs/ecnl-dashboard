@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2024-06-22,09:00 AM,Bracket,Portland Thorns ECNL G08,0,1,LAFC So Cal ECNL G08,60 Acres Park,Field #08,On Time,634070
+2024-06-22,09:00 AM,Bracket,Racing Louisville Academy ECNL G08,1,2,Phoenix Rising ECNL G08,60 Acres Park,Field #16,On Time,634071
+2024-06-22,09:00 AM,Bracket,Jacksonville FC ECNL G08,0,3,Challenge SC ECNL G08,60 Acres Park,Field #17,On Time,634072
+2024-06-22,10:00 AM,Bracket,Pipeline SC ECNL G08,0,3,CESA Liberty ECNL G08,60 Acres Park,Field #21,On Time,634076
+2024-06-22,10:00 AM,Bracket,Boise Thorns FC ECNL G08,0,3,FC Wisconsin ECNL G08,60 Acres Park,Field #24,On Time,634077
+2024-06-22,12:30 PM,Bracket,Utah Royals FC-AZ ECNL G08,0,3,VA Union ECNL G08,60 Acres Park,Field #02,On Time,634073
+2024-06-22,12:30 PM,Bracket,Bay Area Surf ECNL G08,2,0,Utah Avalanche ECNL G08,60 Acres Park,Field #04,On Time,634074
+2024-06-22,01:00 PM,Bracket,Michigan Hawks Magic ECNL G08,0,1,Colorado Rapids ECNL G08,60 Acres Park,Field #11,On Time,634075
+2024-06-24,09:00 AM,Bracket,Jacksonville FC ECNL G08,0,2,Utah Royals FC-AZ ECNL G08,60 Acres Park,Field #08,On Time,634086
+2024-06-24,03:00 PM,Bracket,LAFC So Cal ECNL G08,2,2,Phoenix Rising ECNL G08,60 Acres Park,Field #08,On Time,634078
+2024-06-24,03:00 PM,Bracket,Challenge SC ECNL G08,3,0,VA Union ECNL G08,60 Acres Park,Field #11,On Time,634079
+2024-06-24,03:00 PM,Bracket,Bay Area Surf ECNL G08,1,2,Colorado Rapids ECNL G08,60 Acres Park,Field #16,On Time,634080
+2024-06-24,03:00 PM,Bracket,Utah Avalanche ECNL G08,1,1,Michigan Hawks Magic ECNL G08,60 Acres Park,Field #17,On Time,634087
+2024-06-24,04:00 PM,Bracket,CESA Liberty ECNL G08,1,0,FC Wisconsin ECNL G08,60 Acres Park,Field #19,On Time,634081
+2024-06-24,04:30 PM,Bracket,Pipeline SC ECNL G08,2,0,Boise Thorns FC ECNL G08,60 Acres Park,Field #14,On Time,634088
+2024-06-24,05:00 PM,Bracket,Portland Thorns ECNL G08,2,2,Racing Louisville Academy ECNL G08,60 Acres Park,Field #17,On Time,634085
+2024-06-25,01:00 PM,Bracket,LAFC So Cal ECNL G08,0,1,Challenge SC ECNL G08,60 Acres Park,Field #03,On Time,634082
+2024-06-25,01:00 PM,Bracket,Colorado Rapids ECNL G08,2,1,CESA Liberty ECNL G08,60 Acres Park,Field #07,On Time,634083
+2024-06-25,02:30 PM,Bracket,Portland Thorns ECNL G08,0,4,Utah Royals FC-AZ ECNL G08,60 Acres Park,Field #18,On Time,634089
+2024-06-25,02:30 PM,Bracket,Michigan Hawks Magic ECNL G08,0,2,Pipeline SC ECNL G08,60 Acres Park,Field #10,On Time,634090
+2024-06-25,02:30 PM,Bracket,Phoenix Rising ECNL G08,2,0,VA Union ECNL G08,60 Acres Park,Field #20,On Time,634091
+2024-06-25,02:30 PM,Bracket,Bay Area Surf ECNL G08,2,1,FC Wisconsin ECNL G08,60 Acres Park,Field #22,On Time,634092
+2024-06-25,02:30 PM,Bracket,Racing Louisville Academy ECNL G08,2,0,Jacksonville FC ECNL G08,60 Acres Park,Field #14,On Time,634093
+2024-06-25,04:00 PM,Bracket,Utah Avalanche ECNL G08,2,2,Boise Thorns FC ECNL G08,60 Acres Park,Field #24,On Time,634094
+2024-06-27,08:00 AM,Bracket,Challenge SC ECNL G08,2,0,Colorado Rapids ECNL G08,60 Acres Park,Field #08,On Time,634084
