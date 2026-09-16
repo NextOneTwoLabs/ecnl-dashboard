@@ -3421,7 +3421,11 @@
           getStandingsBlocks(division.divisionID, flight.flightID, evt.eventId).catch(() => []),
           getSchedule(evt.eventId, flight.flightID).catch(() => []),
         ]);
-        const bracketGames = games.filter(g => g.type === 'Bracket');
+        // A flight TGS publishes without standings has no group stage: every game is a
+        // knockout game whatever its type says (the 2022-23 cup flights type day one "Group Play").
+        // Keyed on the games: group games carry a flightgroupID, those cup games none.
+        const knockout = !blocks.length && games.some(g => g.type === 'Bracket');
+        const bracketGames = games.filter(g => g.type === 'Bracket' || (knockout && g.flightgroupID == null));
         const brackets = bracketGames.length ? buildBrackets(bracketGames, flight.flightName, tierName) : null;
 
         // Header
