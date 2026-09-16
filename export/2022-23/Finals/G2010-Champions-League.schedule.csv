@@ -1,0 +1,10 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2023-07-14,11:00 AM,Bracket,San Diego Surf ECNL G10,2,1,So Cal Blues ECNL G10,West Creek Complex,Field #05,On Time,463772
+2023-07-14,11:00 AM,Bracket,Real Colorado National ECNL G10,0,2,MVLA ECNL G10,West Creek Complex,Field #08,On Time,463773
+2023-07-14,11:00 AM,Bracket,Indiana Fire ECNL G10,1,2,Bethesda SC ECNL G10,West Creek Complex,Field #06,On Time,463774
+2023-07-14,11:00 AM,Bracket,Eclipse Select SC ECNL G10,0,1,Slammers FC HB Koge ECNL G10,West Creek Complex,Field #07,On Time,463775
+2023-07-15,11:00 AM,Bracket,San Diego Surf ECNL G10,1,3,MVLA ECNL G10,West Creek Complex,Field #07,On Time,463776
+2023-07-15,11:00 AM,Bracket,Bethesda SC ECNL G10,3,4,Slammers FC HB Koge ECNL G10,West Creek Complex,Field #08,On Time,463777
+2023-07-15,11:00 AM,Bracket,So Cal Blues ECNL G10,0,1,Real Colorado National ECNL G10,West Creek Complex,Field #05,On Time,463779
+2023-07-15,11:00 AM,Bracket,Indiana Fire ECNL G10,0,2,Eclipse Select SC ECNL G10,West Creek Complex,Field #06,On Time,463780
+2023-07-17,08:00 AM,Bracket,MVLA ECNL G10,3,3,Slammers FC HB Koge ECNL G10,West Creek Complex,Field #05,On Time,463778

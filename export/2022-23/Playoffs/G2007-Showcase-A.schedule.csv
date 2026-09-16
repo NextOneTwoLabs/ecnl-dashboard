@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2023-06-24,08:15 AM,Group Play,FC DELCO ECNL G07,2,1,Challenge SC ECNL G07,Surf Sports Park,Field #15,On Time,461212
+2023-06-24,08:15 AM,Group Play,Eagles SC ECNL G07,4,5,Cleveland Force SC ECNL G07,Surf Sports Park,Field #16,On Time,461213
+2023-06-24,08:15 AM,Group Play,VDA ECNL G07,2,1,Sporting Iowa ECNL G07,Surf Sports Park,Field A,On Time,461216
+2023-06-24,08:15 AM,Group Play,Midwest United FC ECNL G07,3,1,Colorado Rapids ECNL G07,Surf Sports Park,Field B,On Time,461217
+2023-06-24,08:15 AM,Group Play,South Carolina United ECNL G07,2,1,Dallas Texans ECNL G07,Surf Sports Park,Field D,On Time,461219
+2023-06-24,11:40 AM,Group Play,Scorpions Soccer ECNL G07,5,0,Boise Thorns FC ECNL G07,Surf Sports Park,Field #07,On Time,461218
+2023-06-24,01:30 PM,Group Play,Pateadores ECNL G07,0,1,CESA Liberty ECNL G07,Surf Sports Park,Field #03,On Time,461226
+2023-06-24,01:30 PM,Group Play,Mustang SC ECNL G07,3,1,WNY Flash ECNL G07,Surf Sports Park,Field #04,On Time,461227
+2023-06-26,08:30 AM,Bracket,Boise Thorns FC ECNL G07,0,4,Dallas Texans ECNL G07,Surf Sports Park,Field #13,On Time,460220
+2023-06-26,08:30 AM,Bracket,Challenge SC ECNL G07,1,0,Pateadores ECNL G07,Surf Sports Park,Field B,On Time,460221
+2023-06-26,09:50 AM,Bracket,Colorado Rapids ECNL G07,2,3,Sporting Iowa ECNL G07,Surf Sports Park,Field #03,On Time,460222
+2023-06-26,09:50 AM,Bracket,Eagles SC ECNL G07,3,2,WNY Flash ECNL G07,Surf Sports Park,Field #04,On Time,460223
+2023-06-26,11:40 AM,Bracket,Scorpions Soccer ECNL G07,1,0,South Carolina United ECNL G07,Surf Sports Park,Field #05,On Time,460213
+2023-06-26,11:40 AM,Bracket,FC DELCO ECNL G07,2,1,CESA Liberty ECNL G07,Surf Sports Park,Field #06,On Time,460214
+2023-06-26,12:10 PM,Bracket,Midwest United FC ECNL G07,1,0,VDA ECNL G07,Surf Sports Park,Field #11,On Time,460215
+2023-06-26,12:10 PM,Bracket,Cleveland Force SC ECNL G07,1,0,Mustang SC ECNL G07,Surf Sports Park,Field #12,On Time,460216
+2023-06-27,08:00 AM,Bracket,South Carolina United ECNL G07,0,0,CESA Liberty ECNL G07,Surf Sports Park,Field #05,On Time,460226
+2023-06-27,08:00 AM,Bracket,Colorado Rapids ECNL G07,0,5,WNY Flash ECNL G07,Surf Sports Park,Field #06,On Time,460229
+2023-06-27,08:30 AM,Bracket,Dallas Texans ECNL G07,2,2,Challenge SC ECNL G07,Surf Sports Park,Field D,On Time,460224
+2023-06-27,08:30 AM,Bracket,Sporting Iowa ECNL G07,0,1,Eagles SC ECNL G07,Surf Sports Park,Field B,On Time,460225
+2023-06-27,08:30 AM,Bracket,VDA ECNL G07,2,4,Mustang SC ECNL G07,Surf Sports Park,Field C,On Time,460227
+2023-06-27,08:30 AM,Bracket,Boise Thorns FC ECNL G07,0,2,Pateadores ECNL G07,Surf Sports Park,Field A,On Time,460228
+2023-06-27,11:40 AM,Bracket,Scorpions Soccer ECNL G07,5,0,FC DELCO ECNL G07,Surf Sports Park,Field #01,On Time,460217
+2023-06-27,11:40 AM,Bracket,Midwest United FC ECNL G07,0,1,Cleveland Force SC ECNL G07,Surf Sports Park,Field #02,On Time,460218
+2023-06-29,12:00 PM,Bracket,Scorpions Soccer ECNL G07,2,1,Cleveland Force SC ECNL G07,Surf Sports Park,Field #18,On Time,460219

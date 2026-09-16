@@ -1,0 +1,45 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
+1,Solar SC ECNL G07,Solar SC,20122,3,3,0,0,9,3.0,14,3,11
+2,San Diego Surf ECNL G07,San Diego Surf Soccer Club,45876,3,3,0,0,9,3.0,9,1,8
+3,World Class FC ECNL G07,World Class FC,35284,3,3,0,0,9,3.0,10,3,7
+4,Slammers FC HB Koge ECNL G07,Slammers FC HB Koge,8995,3,3,0,0,9,3.0,8,1,7
+5,DKSC ECNL G07,No Club Selection,35219,3,3,0,0,9,3.0,8,2,6
+6,SUSA FC ECNL G07,SUSA FC,33738,3,2,0,1,7,2.33,9,3,6
+7,Legends FC ECNL G07,Legends FC (CA),28540,3,2,0,1,7,2.33,7,1,6
+8,OK Energy FC ECNL G07,Oklahoma Energy FC,59504,3,2,0,1,7,2.33,9,5,4
+9,United Futbol Academy ECNL G07,United Futbol Academy,45835,3,2,0,1,7,2.33,7,3,4
+10,PDA Blue ECNL G07,PDA Blue (North),1967,3,2,1,0,6,2.0,11,3,8
+11,Internationals SC ECNL G07,Internationals SC,35240,3,2,1,0,6,2.0,12,7,5
+12,MVLA ECNL G07,MVLA,35169,3,2,1,0,6,2.0,9,4,5
+13,Crossfire Premier ECNL G07,No Club Selection,26840,3,2,1,0,6,2.0,8,6,2
+14,Bay Area Surf ECNL G07,Bay Area Surf,65152,3,2,1,0,6,2.0,5,4,1
+15,Phoenix Rising ECNL G07,Phoenix Rising FC,35183,3,2,1,0,6,2.0,5,4,1
+16,SLAMMERS FC ECNL G07,Slammers FC,18022,3,1,0,2,5,1.67,7,2,5
+17,Concorde Fire Platinum ECNL G07,Concorde Fire ,35256,3,1,0,2,5,1.67,4,3,1
+18,Penn Fusion SA ECNL G07,No Club Selection,44736,3,1,0,2,5,1.67,2,1,1
+19,Indiana Fire ECNL G07,Indy Eleven Academy,23407,3,1,1,1,4,1.33,7,3,4
+20,Michigan Hawks  ECNL G07,Michigan Hawks,35251,3,1,1,1,4,1.33,6,3,3
+21,Jacksonville FC ECNL G07,No Club Selection,35265,3,1,1,1,4,1.33,4,4,0
+22,Wilmington Hammerheads ECNL G07,No Club Selection,35272,3,1,1,1,4,1.33,4,5,-1
+23,Beach FC ECNL G07,Beach Futbol Club,46284,3,1,1,1,4,1.33,6,8,-2
+24,GSA ECNL G07,Gwinnett Soccer Academy,33371,3,1,1,1,4,1.33,3,5,-2
+25,Tennessee Soccer Club ECNL G07,Tennessee SC,35277,3,1,1,1,4,1.33,1,5,-4
+26,Loudoun Soccer ECNL G07,Northern Virginia Alliance,35287,3,1,2,0,3,1.0,5,5,0
+27,Ohio Premier ECNL G07,Ohio Premier,33377,3,1,2,0,3,1.0,4,4,0
+28,VA Union ECNL G07,Fairfax Virginia Union,25892,3,1,2,0,3,1.0,6,7,-1
+29,San Juan SC ECNL G07,San Juan Soccer Club,35173,3,1,2,0,3,1.0,3,6,-3
+30,Minnesota Thunder ECNL G07,No Club Selection,35253,3,1,2,0,3,1.0,3,6,-3
+31,Match Fit Academy ECNL G07,Match Fit Surf,34504,3,1,2,0,3,1.0,2,7,-5
+32,Atlanta Fire United ECNL G07,Atlanta Fire United,34662,3,1,2,0,3,1.0,3,9,-6
+33,Portland Thorns ECNL G07,Portland Thorns FC,45860,3,1,2,0,3,1.0,5,15,-10
+34,FC Dallas ECNL G07,FC Dallas Youth,46783,3,0,1,2,2,0.67,1,2,-1
+35,Sporting Blue Valley ECNL G07,Sporting Blue Valley,46618,3,0,2,1,1,0.33,6,8,-2
+36,Utah Avalanche ECNL G07,Utah Avalanche,35178,3,0,2,1,1,0.33,3,7,-4
+37,Seattle United ECNL G07,Seattle United,35177,3,0,2,1,1,0.33,3,7,-4
+38,FL Premier FC ECNL G07,Florida Premier FC,69290,3,0,2,1,1,0.33,2,6,-4
+39,SLSG Navy ECNL G07,St. Louis Scott Gallagher,34464,3,0,2,1,1,0.33,4,9,-5
+40,NC Courage ECNL G07,NC Courage Academy,44729,3,0,2,1,1,0.33,4,9,-5
+41,Kansas City Athletics ECNL G07,KC Athletics,19372,3,0,2,1,1,0.33,3,8,-5
+42,La Roca FC ECNL G07,La Roca FC,45849,3,0,3,0,0,0.0,2,10,-8
+43,Connecticut FC ECNL G07,Connecticut FC,24089,3,0,3,0,0,0.0,1,9,-8
+44,Charlotte SA ECNL G07,Charlotte Soccer Academy,44722,3,0,3,0,0,0.0,0,12,-12

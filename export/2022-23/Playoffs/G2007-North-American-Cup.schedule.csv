@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2023-06-24,08:15 AM,Group Play,Gretna Elite Academy ECNL G07,7,0,Tampa Bay United ECNL G07,Surf Sports Park,Field #11,On Time,461210
+2023-06-24,08:15 AM,Group Play,Maryland United FC ECNL G07,2,0,Eastside FC ECNL G07,Surf Sports Park,Field #12,On Time,461211
+2023-06-24,09:50 AM,Group Play,Eclipse Select SC ECNL G07,2,1,Sting Dallas Black ECNL G07,Surf Sports Park,Field #05,On Time,461220
+2023-06-24,11:40 AM,Group Play,Pittsburgh Riverhounds ECNL G07,5,2,NC Fusion ECNL G07,Surf Sports Park,Field #03,On Time,461225
+2023-06-24,03:20 PM,Group Play,Davis Legacy ECNL G07,0,4,Orlando City ECNL G07,Surf Sports Park,Field #01,On Time,461234
+2023-06-24,03:20 PM,Group Play,LAFC So Cal ECNL G07,2,0,Arlington Soccer ECNL G07,Surf Sports Park,Field #03,On Time,461236
+2023-06-24,04:05 PM,Group Play,Real Colorado National ECNL G07,4,2,Del Mar Sharks ECNL G07,Surf Sports Park,Field A,On Time,461246
+2023-06-24,04:05 PM,Group Play,Tulsa SC ECNL G07,1,3,FC Stars Blue ECNL G07,Surf Sports Park,Field D,On Time,461249
+2023-06-26,08:30 AM,Bracket,Davis Legacy ECNL G07,1,3,Tulsa SC ECNL G07,Surf Sports Park,Field #18,On Time,460195
+2023-06-26,08:30 AM,Bracket,Tampa Bay United ECNL G07,3,3,NC Fusion ECNL G07,Surf Sports Park,Field A,On Time,460196
+2023-06-26,12:10 PM,Bracket,Del Mar Sharks ECNL G07,3,0,Eastside FC ECNL G07,Surf Sports Park,Field #13,On Time,460197
+2023-06-26,12:10 PM,Bracket,Arlington Soccer ECNL G07,1,4,Sting Dallas Black ECNL G07,Surf Sports Park,Field #14,On Time,460198
+2023-06-26,02:00 PM,Bracket,Orlando City ECNL G07,2,1,FC Stars Blue ECNL G07,Surf Sports Park,Field #13,On Time,460188
+2023-06-26,02:00 PM,Bracket,Gretna Elite Academy ECNL G07,3,4,Pittsburgh Riverhounds ECNL G07,Surf Sports Park,Field #14,On Time,460189
+2023-06-26,03:20 PM,Bracket,Real Colorado National ECNL G07,2,1,Maryland United FC ECNL G07,Surf Sports Park,Field #05,On Time,460190
+2023-06-26,03:20 PM,Bracket,LAFC So Cal ECNL G07,3,2,Eclipse Select SC ECNL G07,Surf Sports Park,Field #06,On Time,460191
+2023-06-27,08:00 AM,Bracket,Tulsa SC ECNL G07,2,3,NC Fusion ECNL G07,Surf Sports Park,Field #03,On Time,460199
+2023-06-27,08:00 AM,Bracket,FC Stars Blue ECNL G07,2,0,Gretna Elite Academy ECNL G07,Surf Sports Park,Field #01,On Time,460201
+2023-06-27,08:00 AM,Bracket,Maryland United FC ECNL G07,2,4,Eclipse Select SC ECNL G07,Surf Sports Park,Field #02,On Time,460202
+2023-06-27,08:00 AM,Bracket,Davis Legacy ECNL G07,0,1,Tampa Bay United ECNL G07,Surf Sports Park,Field #04,On Time,460203
+2023-06-27,12:10 PM,Bracket,Orlando City ECNL G07,1,2,Pittsburgh Riverhounds ECNL G07,Surf Sports Park,Field #16,On Time,460192
+2023-06-27,12:10 PM,Bracket,Real Colorado National ECNL G07,1,0,LAFC So Cal ECNL G07,Surf Sports Park,Field #17,On Time,460193
+2023-06-27,02:00 PM,Bracket,Del Mar Sharks ECNL G07,2,2,Sting Dallas Black ECNL G07,Surf Sports Park,Field C,On Time,460200
+2023-06-27,02:00 PM,Bracket,Eastside FC ECNL G07,2,2,Arlington Soccer ECNL G07,Surf Sports Park,Field D,On Time,460204
+2023-06-29,08:00 AM,Bracket,Pittsburgh Riverhounds ECNL G07,0,3,Real Colorado National ECNL G07,Surf Sports Park,Field #16,On Time,460194

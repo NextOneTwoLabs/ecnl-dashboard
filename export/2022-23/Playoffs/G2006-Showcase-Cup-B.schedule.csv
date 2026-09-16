@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2023-06-24,12:25 AM,Group Play,PacNW SC ECNL G06,1,0,Fairfax BRAVE SC ECNL G06,Surf Sports Park,Field B,On Time,461327
+2023-06-24,09:50 AM,Group Play,FL Premier FC ECNL G06,0,4,Pateadores ECNL G06,Surf Sports Park,Field #02,On Time,461299
+2023-06-24,11:40 AM,Group Play,Tulsa SC ECNL G06,2,1,FC Wisconsin ECNL G06,Surf Sports Park,Field #05,On Time,461315
+2023-06-24,11:40 AM,Group Play,Placer United ECNL G06,1,1,Florida Krush ECNL G06,Surf Sports Park,Field #06,On Time,461316
+2023-06-24,11:40 AM,Group Play,Scorpions Soccer ECNL G06,0,2,Ohio Elite Soccer Academy ECNL G06,Surf Sports Park,Field #08,On Time,461317
+2023-06-24,12:25 PM,Group Play,Bay Area Surf ECNL G06,4,3,Liverpool FC IA Michigan ECNL G06,Surf Sports Park,Field A,On Time,461326
+2023-06-24,12:25 PM,Group Play,Racing Louisville Academy ECNL G06,5,2,Match Fit Academy ECNL G06,Surf Sports Park,Field C,On Time,461328
+2023-06-24,01:30 PM,Group Play,PDA South ECNL G06,4,2,Heat FC ECNL G06,Surf Sports Park,Field #08,On Time,461334
+2023-06-25,08:00 AM,Bracket,Scorpions Soccer ECNL G06,2,3,Fairfax BRAVE SC ECNL G06,Surf Sports Park,Field #05,On Time,460096
+2023-06-25,08:00 AM,Bracket,FL Premier FC ECNL G06,3,0,Match Fit Academy ECNL G06,Surf Sports Park,Field #06,On Time,460097
+2023-06-25,08:00 AM,Bracket,Liverpool FC IA Michigan ECNL G06,3,6,Heat FC ECNL G06,Surf Sports Park,Field #07,On Time,460098
+2023-06-25,01:30 PM,Bracket,Ohio Elite Soccer Academy ECNL G06,0,1,PacNW SC ECNL G06,Surf Sports Park,Field #06,On Time,460089
+2023-06-25,01:30 PM,Bracket,Pateadores ECNL G06,2,1,Racing Louisville Academy ECNL G06,Surf Sports Park,Field #07,On Time,460090
+2023-06-25,01:30 PM,Bracket,Bay Area Surf ECNL G06,2,2,PDA South ECNL G06,Surf Sports Park,Field #08,On Time,460091
+2023-06-25,01:30 PM,Bracket,FC Wisconsin ECNL G06,0,2,Placer United ECNL G06,Surf Sports Park,Field #05,On Time,460099
+2023-06-25,02:00 PM,Bracket,Tulsa SC ECNL G06,4,0,Florida Krush ECNL G06,Surf Sports Park,Field #13,On Time,460092
+2023-06-27,12:10 PM,Bracket,Fairfax BRAVE SC ECNL G06,1,2,FL Premier FC ECNL G06,Surf Sports Park,Field A,On Time,460100
+2023-06-27,12:10 PM,Bracket,PDA South ECNL G06,3,3,Florida Krush ECNL G06,Surf Sports Park,Field C,On Time,460103
+2023-06-27,12:10 PM,Bracket,Scorpions Soccer ECNL G06,3,2,Match Fit Academy ECNL G06,Surf Sports Park,Field B,On Time,460104
+2023-06-27,02:00 PM,Bracket,Heat FC ECNL G06,4,2,Placer United ECNL G06,Surf Sports Park,Field A,On Time,460101
+2023-06-27,02:00 PM,Bracket,Liverpool FC IA Michigan ECNL G06,4,0,FC Wisconsin ECNL G06,Surf Sports Park,Field B,On Time,460105
+2023-06-27,03:20 PM,Bracket,Ohio Elite Soccer Academy ECNL G06,2,0,Racing Louisville Academy ECNL G06,Surf Sports Park,Field #02,On Time,460102
+2023-06-27,03:50 PM,Bracket,PacNW SC ECNL G06,1,2,Pateadores ECNL G06,Surf Sports Park,Field #12,On Time,460093
+2023-06-27,03:50 PM,Bracket,Bay Area Surf ECNL G06,2,2,Tulsa SC ECNL G06,Surf Sports Park,Field #11,On Time,460094
+2023-06-29,12:00 PM,Bracket,Pateadores ECNL G06,0,2,Tulsa SC ECNL G06,Surf Sports Park,Field #12,On Time,460095
