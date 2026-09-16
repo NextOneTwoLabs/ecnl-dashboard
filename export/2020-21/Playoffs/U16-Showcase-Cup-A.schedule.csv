@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-07-01,11:30 AM,Bracket,Penn Fusion ECNL GU16,2,0,FC Portland ECNL GU16,Premier Sports Campus,Field #13,On Time,244799
+2021-07-01,11:30 AM,Bracket,Minnesota Thunder ECNL GU16,0,2,SUSA FC ECNL GU16,Premier Sports Campus,Field #15,On Time,244800
+2021-07-01,11:45 AM,Bracket,SLSG White ECNL GU16,1,1,Maryland United ECNL GU16,Premier Sports Campus,Field #02,On Time,244797
+2021-07-01,11:45 AM,Bracket,Tulsa SC ECNL GU16,2,0,FC Pride ECNL GU16,Premier Sports Campus,Field #04,On Time,244798
+2021-07-01,03:30 PM,Bracket,La Roca FC ECNL GU16,2,0,NCFC Youth ECNL GU16,Premier Sports Campus,Field #03,On Time,244793
+2021-07-01,03:30 PM,Bracket,Concorde Fire Platinum ECNL GU16,3,2,Internationals SC ECNL GU16,Premier Sports Campus,Field #07,On Time,244794
+2021-07-01,03:30 PM,Bracket,Strikers FC ECNL GU16,1,2,Wilmington Hammerheads ECNL GU16,Premier Sports Campus,Field #09,On Time,244795
+2021-07-01,03:30 PM,Bracket,Ohio Premier ECNL GU16,1,1,South Carolina United ECNL GU16,Premier Sports Campus,Field #11,On Time,244796
+2021-07-02,11:30 AM,Bracket,Maryland United ECNL GU16,1,1,Tulsa SC ECNL GU16,Premier Sports Campus,Field #11,On Time,244803
+2021-07-02,11:30 AM,Bracket,FC Portland ECNL GU16,2,4,Minnesota Thunder ECNL GU16,Premier Sports Campus,Field #13,On Time,244813
+2021-07-02,11:45 AM,Bracket,Penn Fusion ECNL GU16,1,4,SUSA FC ECNL GU16,Premier Sports Campus,Field #10,On Time,244804
+2021-07-02,11:45 AM,Bracket,SLSG White ECNL GU16,2,1,FC Pride ECNL GU16,Premier Sports Campus,Field #12,On Time,244812
+2021-07-02,07:30 PM,Bracket,La Roca FC ECNL GU16,0,1,Concorde Fire Platinum ECNL GU16,Premier Sports Campus,Field #07,On Time,244801
+2021-07-02,07:30 PM,Bracket,Wilmington Hammerheads ECNL GU16,1,2,Ohio Premier ECNL GU16,Premier Sports Campus,Field #11,On Time,244802
+2021-07-03,03:45 PM,Bracket,NCFC Youth ECNL GU16,1,1,Internationals SC ECNL GU16,Premier Sports Campus,Field #14,On Time,244810
+2021-07-03,03:45 PM,Bracket,Strikers FC ECNL GU16,2,4,South Carolina United ECNL GU16,Premier Sports Campus,Field #10,On Time,244811
+2021-07-04,07:30 AM,Bracket,Concorde Fire Platinum ECNL GU16,3,2,Ohio Premier ECNL GU16,Premier Sports Campus,Field #17,On Time,244805
+2021-07-04,07:30 AM,Bracket,La Roca FC ECNL GU16,4,1,Wilmington Hammerheads ECNL GU16,Premier Sports Campus,Field #19,On Time,244808
+2021-07-04,07:30 AM,Bracket,NCFC Youth ECNL GU16,1,2,South Carolina United ECNL GU16,Premier Sports Campus,Field #21,On Time,244814
+2021-07-04,07:45 AM,Bracket,Internationals SC ECNL GU16,2,1,Strikers FC ECNL GU16,Premier Sports Campus,Field #22,On Time,244816
+2021-07-04,11:45 AM,Bracket,Maryland United ECNL GU16,0,2,SUSA FC ECNL GU16,Premier Sports Campus,Field #12,On Time,244806
+2021-07-04,11:45 AM,Bracket,Tulsa SC ECNL GU16,0,1,Penn Fusion ECNL GU16,Premier Sports Campus,Field #14,On Time,244809
+2021-07-04,11:45 AM,Bracket,SLSG White ECNL GU16,2,3,Minnesota Thunder ECNL GU16,Premier Sports Campus,Field #16,On Time,244815
+2021-07-04,11:45 AM,Bracket,FC Pride ECNL GU16,1,0,FC Portland ECNL GU16,Premier Sports Campus,Field #18,On Time,244817
+2021-07-06,08:30 AM,Bracket,Concorde Fire Platinum ECNL GU16,0,4,SUSA FC ECNL GU16,Premier Sports Campus,Field #03,On Time,244807

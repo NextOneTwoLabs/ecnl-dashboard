@@ -1,0 +1,33 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
+1,Solar SC ECNL GU15,Solar SC,11423,3,3,0,0,9,3.0,16,0,16
+2,Kansas City Athletics ECNL GU15,KC Athletics,19672,3,2,0,1,7,2.33,13,3,10
+3,Colorado Rapids ECNL GU15,Colorado Storm,21349,3,2,0,1,7,2.33,8,1,7
+4,San Diego Surf ECNL GU15,San Diego Surf Soccer Club,45877,3,2,0,1,7,2.33,6,0,6
+5,Internationals SC ECNL GU15,Internationals SC,20363,3,2,0,1,7,2.33,8,3,5
+6,PDA Blue ECNL GU15,PDA Blue (North),1822,3,2,0,1,7,2.33,6,2,4
+7,Challenge SC ECNL GU15,Challenge SC,20382,3,2,0,1,7,2.33,3,0,3
+8,FC Dallas ECNL GU15,FC Dallas Youth,46784,3,2,0,1,7,2.33,3,1,2
+9,GSA ECNL GU15,Gwinnett Soccer Academy,20326,3,2,1,0,6,2.0,9,3,6
+10,Ohio Premier ECNL GU15,Ohio Premier,20367,3,2,1,0,6,2.0,4,5,-1
+11,SUSA FC ECNL GU15,SUSA FC,20356,3,1,0,2,5,1.67,3,1,2
+12,WNY Flash Academy ECNL GU15,WNY Flash Academy,20373,3,1,0,2,5,1.67,4,3,1
+13,World Class FC ECNL GU15,World Class FC,20357,3,1,0,2,5,1.67,3,2,1
+14,So Cal Blues ECNL GU15,So Cal Blues,13344,3,1,0,2,5,1.67,3,2,1
+15,LAFC Slammers ECNL GU15,Slammers FC HB Koge,17118,3,1,0,2,5,1.67,2,1,1
+16,Concorde Fire Platinum ECNL GU15,Concorde Fire ,19885,3,1,1,1,4,1.33,5,3,2
+17,Minnesota Thunder ECNL GU15,No Club Selection,20378,3,1,1,1,4,1.33,4,3,1
+18,Bethesda SC ECNL GU15,Bethesda SC,20341,3,1,1,1,4,1.33,4,5,-1
+19,Sunrise Prime FC ECNL GU15,Athletic Club Florida,20328,3,1,1,1,4,1.33,4,6,-2
+20,VDA ECNL GU15,Virginia Development Academy,19656,3,0,0,3,3,1.0,4,4,0
+21,SLSG Navy ECNL GU15,St. Louis Scott Gallagher,20075,3,1,2,0,3,1.0,1,2,-1
+22,Connecticut FC ECNL GU15,Connecticut FC,11478,3,1,2,0,3,1.0,3,6,-3
+23,Real Colorado National ECNL GU15,Real Colorado,45855,3,0,1,2,2,0.67,1,2,-1
+24,MVLA ECNL GU15,MVLA,20426,3,0,2,1,1,0.33,3,6,-3
+25,Charlotte SA ECNL GU15,Charlotte Soccer Academy,44723,3,0,2,1,1,0.33,0,4,-4
+26,SLSG WhiteECNL GU15,St. Louis Scott Gallagher,20379,3,0,2,1,1,0.33,0,5,-5
+27,Davis Legacy ECNL GU15,Davis Legacy Soccer Club,20425,3,0,2,1,1,0.33,1,8,-7
+28,Crossfire United ECNL GU15,Oregon Surf SC,18342,3,0,2,1,1,0.33,4,12,-8
+29,CESA ECNL GU15,Carolina Elite Soccer Academy,20311,3,0,2,1,1,0.33,1,9,-8
+30,Real So Cal ECNL GU15,LAFC So Cal,45889,3,0,3,0,0,0.0,2,8,-6
+31,Portland Thorns ECNL GU15,Portland Thorns FC,45861,3,0,3,0,0,0.0,0,8,-8
+32,Washington Premier ECNL GU15,Washington Premier FC,18776,3,0,3,0,0,0.0,1,11,-10

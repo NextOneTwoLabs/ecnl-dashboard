@@ -1,0 +1,5 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd,division,flight
+1,Colorado Rapids ECNL GU15,Colorado Storm,21349,1,1,0,0,3,3.0,5,2,3,GU15,Consolation
+2,WNY Flash Academy ECNL GU15,WNY Flash Academy,20373,1,1,0,0,3,3.0,2,1,1,GU15,Consolation
+3,Challenge SC ECNL GU15,Challenge SC,20382,1,0,1,0,0,0.0,1,2,-1,GU15,Consolation
+4,Internationals SC ECNL GU15,Internationals SC,20363,1,0,1,0,0,0.0,2,5,-3,GU15,Consolation

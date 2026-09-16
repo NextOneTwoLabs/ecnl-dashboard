@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-07-02,07:30 AM,Bracket,AHFC ECNL GU15,2,2,Mustang SC ECNL GU15,Premier Sports Campus,Field #13,On Time,244645
+2021-07-02,07:45 AM,Bracket,Heat FC ECNL GU15,0,3,Pacific Northwest SC ECNL GU15,Premier Sports Campus,Field #02,On Time,244646
+2021-07-02,07:45 AM,Bracket,SLAMMERS FC ECNL GU15,2,1,Richmond United ECNL GU15 ,Premier Sports Campus,Field #10,On Time,244649
+2021-07-02,07:45 AM,Bracket,South Carolina United ECNL GU15,1,1,Tennessee Soccer Club ECNL GU15,Premier Sports Campus,Field #14,On Time,244650
+2021-07-02,11:45 AM,Bracket,DKSC ECNL GU15,0,1,FC Stars White ECNL GU15,Premier Sports Campus,Field #04,On Time,244651
+2021-07-02,01:30 PM,Bracket,FC DELCO ECNL GU15,2,0,NC Fusion ECNL GU15,Premier Sports Campus,Field #15,On Time,244652
+2021-07-02,05:45 PM,Bracket,NC Courage ECNL GU15,3,1,Scorpions Soccer ECNL GU15,Premier Sports Campus,Field #18,On Time,244647
+2021-07-02,05:45 PM,Bracket,FC Bucks ECNL GU15,2,2,Real Colorado Athletico ECNL GU15,Premier Sports Campus,Field #20,On Time,244648
+2021-07-03,07:30 AM,Bracket,SLAMMERS FC ECNL GU15,3,4,South Carolina United ECNL GU15,Premier Sports Campus,Field #17,On Time,244655
+2021-07-03,07:45 AM,Bracket,Mustang SC ECNL GU15,3,2,Pacific Northwest SC ECNL GU15,Premier Sports Campus,Field #16,On Time,244653
+2021-07-03,07:45 AM,Bracket,AHFC ECNL GU15,3,1,Heat FC ECNL GU15,Premier Sports Campus,Field #18,On Time,244662
+2021-07-03,11:30 AM,Bracket,FC Stars White ECNL GU15,1,1,FC DELCO ECNL GU15,Premier Sports Campus,Field #11,On Time,244656
+2021-07-03,11:45 AM,Bracket,DKSC ECNL GU15,4,2,NC Fusion ECNL GU15,Premier Sports Campus,Field #18,On Time,244665
+2021-07-03,01:30 PM,Bracket,Richmond United ECNL GU15 ,4,0,Tennessee Soccer Club ECNL GU15,Premier Sports Campus,Stadium,On Time,244664
+2021-07-04,01:30 PM,Bracket,NC Courage ECNL GU15,0,0,FC Bucks ECNL GU15,Premier Sports Campus,Field #03,On Time,244654
+2021-07-04,01:30 PM,Bracket,Scorpions Soccer ECNL GU15,2,1,Real Colorado Athletico ECNL GU15,Premier Sports Campus,Stadium,On Time,244663
+2021-07-05,11:30 AM,Bracket,Mustang SC ECNL GU15,,,FC Bucks ECNL GU15,Premier Sports Campus,Field #11,On Time,244657
+2021-07-05,11:30 AM,Bracket,South Carolina United ECNL GU15,,,FC DELCO ECNL GU15,Premier Sports Campus,Field #09,On Time,244658
+2021-07-05,11:30 AM,Bracket,Pacific Northwest SC ECNL GU15,,,NC Courage ECNL GU15,Premier Sports Campus,Field #13,On Time,244660
+2021-07-05,11:30 AM,Bracket,SLAMMERS FC ECNL GU15,,,FC Stars White ECNL GU15,Premier Sports Campus,Field #15,On Time,244661
+2021-07-05,11:30 AM,Bracket,Richmond United ECNL GU15 ,,,DKSC ECNL GU15,Premier Sports Campus,Field #17,On Time,244667
+2021-07-05,11:45 AM,Bracket,AHFC ECNL GU15,,,Scorpions Soccer ECNL GU15,Premier Sports Campus,Field #16,On Time,244666
+2021-07-05,11:45 AM,Bracket,Heat FC ECNL GU15,,,Real Colorado Athletico ECNL GU15,Premier Sports Campus,Field #18,On Time,244668
+2021-07-05,11:45 AM,Bracket,Tennessee Soccer Club ECNL GU15,,,NC Fusion ECNL GU15,Premier Sports Campus,Field #14,On Time,244669
+2021-07-07,08:30 AM,Bracket,Winner Game 13,,,Winner Game 14,Premier Sports Campus,Field #06,On Time,244659

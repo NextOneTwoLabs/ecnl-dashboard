@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-06-30,07:30 AM,Bracket,PDA Blue ECNL GU18/U19,5,0,Crossfire United ECNL GU18/U19,Premier Sports Campus,Field #07,On Time,245070
+2021-06-30,07:30 AM,Bracket,Real Colorado National ECNL GU18/U19,0,0,LAFC Slammers ECNL GU18/U19,Premier Sports Campus,Field #09,On Time,245071
+2021-06-30,07:45 AM,Bracket,Eclipse Select SC ECNL GU18/U19,5,1,Crossfire Premier ECNL GU18/U19,Premier Sports Campus,Field #08,On Time,245072
+2021-06-30,07:45 AM,Bracket,Solar SC ECNL GU18/U19,5,2,Mustang SC ECNL GU18/U19,Premier Sports Campus,Field #10,On Time,245073
+2021-06-30,09:30 AM,Bracket,So Cal Blues ECNL GU18/U19,1,1,SLSG Navy ECNL GU18/U19,Premier Sports Campus,Field #07,On Time,245066
+2021-06-30,09:30 AM,Bracket,Charlotte SA ECNL GU18/U19,3,2,Concorde Fire Platinum ECNL GU18/U19,Premier Sports Campus,Field #05,On Time,245067
+2021-06-30,09:45 AM,Bracket,Internationals SC ECNL GU18/U19,5,2,McLean YSA ECNL GU18/U19,Premier Sports Campus,Field #14,On Time,245068
+2021-06-30,09:45 AM,Bracket,FC Stars Blue ECNL GU18/U19,2,2,DKSC ECNL GU18/U19,Premier Sports Campus,Field #10,On Time,245069
+2021-07-01,09:30 AM,Bracket,SLSG Navy ECNL GU18/U19,2,3,Charlotte SA ECNL GU18/U19,Premier Sports Campus,Stadium,On Time,245074
+2021-07-01,09:30 AM,Bracket,Internationals SC ECNL GU18/U19,3,0,DKSC ECNL GU18/U19,Premier Sports Campus,Field #09,On Time,245075
+2021-07-01,09:45 AM,Bracket,So Cal Blues ECNL GU18/U19,1,0,Concorde Fire Platinum ECNL GU18/U19,Premier Sports Campus,Field #22,On Time,245083
+2021-07-01,09:45 AM,Bracket,McLean YSA ECNL GU18/U19,2,3,FC Stars Blue ECNL GU18/U19,Premier Sports Campus,Field #08,On Time,245084
+2021-07-01,11:30 AM,Bracket,PDA Blue ECNL GU18/U19,3,1,LAFC Slammers ECNL GU18/U19,Premier Sports Campus,Field #09,On Time,245076
+2021-07-01,11:30 AM,Bracket,Eclipse Select SC ECNL GU18/U19,3,0,Solar SC ECNL GU18/U19,Premier Sports Campus,Stadium,On Time,245077
+2021-07-01,11:45 AM,Bracket,Crossfire United ECNL GU18/U19,1,4,Real Colorado National ECNL GU18/U19,Premier Sports Campus,Field #14,On Time,245085
+2021-07-01,11:45 AM,Bracket,Crossfire Premier ECNL GU18/U19,3,1,Mustang SC ECNL GU18/U19,Premier Sports Campus,Field #12,On Time,245086
+2021-07-03,07:30 AM,Bracket,PDA Blue ECNL GU18/U19,1,1,Eclipse Select SC ECNL GU18/U19,Premier Sports Campus,Stadium,On Time,245079
+2021-07-03,07:30 AM,Bracket,Real Colorado National ECNL GU18/U19,5,0,Crossfire Premier ECNL GU18/U19,Premier Sports Campus,Field #07,On Time,245088
+2021-07-03,07:30 AM,Bracket,Crossfire United ECNL GU18/U19,1,2,Mustang SC ECNL GU18/U19,Premier Sports Campus,Field #09,On Time,245090
+2021-07-03,07:45 AM,Bracket,LAFC Slammers ECNL GU18/U19,1,2,Solar SC ECNL GU18/U19,Premier Sports Campus,Field #06,On Time,245082
+2021-07-03,09:30 AM,Bracket,Charlotte SA ECNL GU18/U19,0,1,Internationals SC ECNL GU18/U19,Premier Sports Campus,Stadium,On Time,245078
+2021-07-03,09:30 AM,Bracket,So Cal Blues ECNL GU18/U19,4,2,FC Stars Blue ECNL GU18/U19,Premier Sports Campus,Field #07,On Time,245087
+2021-07-03,09:30 AM,Bracket,Concorde Fire Platinum ECNL GU18/U19,4,1,McLean YSA ECNL GU18/U19,Premier Sports Campus,Field #09,On Time,245089
+2021-07-03,09:45 AM,Bracket,SLSG Navy ECNL GU18/U19,1,2,DKSC ECNL GU18/U19,Premier Sports Campus,Field #06,On Time,245081
+2021-07-05,11:30 AM,Bracket,Internationals SC ECNL GU18/U19,2,3,Eclipse Select SC ECNL GU18/U19,Premier Sports Campus,Stadium,On Time,245080

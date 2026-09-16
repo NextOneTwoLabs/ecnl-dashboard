@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-06-30,07:30 AM,Bracket,FC Stars Blue ECNL GU17,3,1,Arsenal FC ECNL GU17,Premier Sports Campus,Field #17,On Time,245021
+2021-06-30,07:45 AM,Bracket,Phoenix Rising ECNL GU17,1,1,Pipeline SC ECNL GU17 ,Premier Sports Campus,Field #12,On Time,245020
+2021-06-30,07:45 AM,Bracket,PDA South ECNL GU17,1,1,Heat FC ECNL GU17,Premier Sports Campus,Field #16,On Time,245022
+2021-06-30,07:45 AM,Bracket,Portland Thorns ECNL GU17,0,4,Vardar ECNL GU17,Premier Sports Campus,Field #14,On Time,245023
+2021-06-30,11:30 AM,Bracket,Loudoun Soccer ECNL GU17,1,0,Marin FC ECNL GU17,Premier Sports Campus,Field #17,On Time,245018
+2021-06-30,11:30 AM,Bracket,Orlando City ECNL GU17,0,3,Eclipse Select SC ECNL GU17,Premier Sports Campus,Field #19,On Time,245019
+2021-06-30,11:45 AM,Bracket,Pittsburgh Riverhounds ECNL GU17,2,5,Mustang SC ECNL GU17,Premier Sports Campus,Field #02,On Time,245016
+2021-06-30,11:45 AM,Bracket,LA Breakers FC ECNL GU17,1,4,Davis Legacy ECNL GU17,Premier Sports Campus,Field #04,On Time,245017
+2021-07-01,07:30 AM,Bracket,Phoenix Rising ECNL GU17,4,3,FC Stars Blue ECNL GU17,Premier Sports Campus,Field #11,On Time,245026
+2021-07-01,07:30 AM,Bracket,Heat FC ECNL GU17,0,2,Vardar ECNL GU17,Premier Sports Campus,Field #09,On Time,245027
+2021-07-01,07:30 AM,Bracket,Pipeline SC ECNL GU17 ,5,0,Arsenal FC ECNL GU17,Premier Sports Campus,Field #21,On Time,245035
+2021-07-01,07:45 AM,Bracket,PDA South ECNL GU17,4,1,Portland Thorns ECNL GU17,Premier Sports Campus,Field #10,On Time,245036
+2021-07-01,09:30 AM,Bracket,Mustang SC ECNL GU17,5,1,Davis Legacy ECNL GU17,Premier Sports Campus,Field #17,On Time,245024
+2021-07-01,09:30 AM,Bracket,Pittsburgh Riverhounds ECNL GU17,2,2,LA Breakers FC ECNL GU17,Premier Sports Campus,Field #19,On Time,245033
+2021-07-01,09:45 AM,Bracket,Loudoun Soccer ECNL GU17,2,1,Eclipse Select SC ECNL GU17,Premier Sports Campus,Field #18,On Time,245025
+2021-07-01,09:45 AM,Bracket,Marin FC ECNL GU17,4,2,Orlando City ECNL GU17,Premier Sports Campus,Field #20,On Time,245034
+2021-07-03,05:30 PM,Bracket,Arsenal FC ECNL GU17,0,3,Portland Thorns ECNL GU17,Premier Sports Campus,Field #09,On Time,245040
+2021-07-03,05:45 PM,Bracket,Phoenix Rising ECNL GU17,1,3,Vardar ECNL GU17,Premier Sports Campus,Field #06,On Time,245029
+2021-07-03,05:45 PM,Bracket,FC Stars Blue ECNL GU17,3,0,Heat FC ECNL GU17,Premier Sports Campus,Field #08,On Time,245032
+2021-07-03,05:45 PM,Bracket,Pipeline SC ECNL GU17 ,0,1,PDA South ECNL GU17,Premier Sports Campus,Field #10,On Time,245038
+2021-07-03,07:30 PM,Bracket,Mustang SC ECNL GU17,1,2,Loudoun Soccer ECNL GU17,Premier Sports Campus,Field #11,On Time,245028
+2021-07-03,07:30 PM,Bracket,Davis Legacy ECNL GU17,2,3,Eclipse Select SC ECNL GU17,Premier Sports Campus,Field #03,On Time,245031
+2021-07-03,07:45 PM,Bracket,LA Breakers FC ECNL GU17,0,3,Marin FC ECNL GU17,Premier Sports Campus,Field #04,On Time,245037
+2021-07-03,07:45 PM,Bracket,Pittsburgh Riverhounds ECNL GU17,1,0,Orlando City ECNL GU17,Premier Sports Campus,Field #06,On Time,245039
+2021-07-05,07:45 AM,Bracket,Loudoun Soccer ECNL GU17,2,0,Vardar ECNL GU17,Premier Sports Campus,Field #04,On Time,245030

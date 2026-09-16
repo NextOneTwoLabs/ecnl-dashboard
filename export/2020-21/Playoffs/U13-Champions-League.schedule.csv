@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-07-02,07:30 AM,Bracket,So Cal Blues ECNL GU13,3,4,Solar SC ECNL GU13,Premier Sports Campus,Field #19,On Time,244501
+2021-07-02,07:30 AM,Bracket,Sting Dallas Black ECNL GU13,5,0,NC Courage ECNL GU13,Premier Sports Campus,Field #21,On Time,244502
+2021-07-02,09:30 AM,Bracket,Tennessee Soccer Club ECNL GU13,1,1,SLSG Navy ECNL GU13,Premier Sports Campus,Field #19,On Time,244505
+2021-07-02,09:30 AM,Bracket,SUSA FC ECNL GU13,0,1,LAFC Slammers ECNL U13,Premier Sports Campus,Field #21,On Time,244506
+2021-07-02,11:30 AM,Bracket,Crossfire Premier ECNL GU13,3,0,Alabama FC ECNL GU13,Premier Sports Campus,Field #19,On Time,244499
+2021-07-02,11:30 AM,Bracket,Eclipse Select SC ECNL GU13,1,1,FC Stars Blue ECNL GU13,Premier Sports Campus,Field #21,On Time,244500
+2021-07-02,05:30 PM,Bracket,PDA Blue ECNL GU13,1,2,San Juan SC ECNL GU13,Premier Sports Campus,Field #19,On Time,244503
+2021-07-02,05:30 PM,Bracket,Concorde Fire Platinum ECNL GU13,1,0,Real Colorado National ECNL GU13,Premier Sports Campus,Field #21,On Time,244504
+2021-07-03,07:45 AM,Bracket,Solar SC ECNL GU13,4,2,Sting Dallas Black ECNL GU13,Premier Sports Campus,Field #20,On Time,244508
+2021-07-03,07:45 AM,Bracket,So Cal Blues ECNL GU13,1,0,NC Courage ECNL GU13,Premier Sports Campus,Field #22,On Time,244517
+2021-07-03,11:45 AM,Bracket,Crossfire Premier ECNL GU13,1,2,Eclipse Select SC ECNL GU13,Premier Sports Campus,Field #02,On Time,244507
+2021-07-03,11:45 AM,Bracket,Alabama FC ECNL GU13,0,1,FC Stars Blue ECNL GU13,Premier Sports Campus,Field #20,On Time,244516
+2021-07-03,01:45 PM,Bracket,Tennessee Soccer Club ECNL GU13,0,0,LAFC Slammers ECNL U13,Premier Sports Campus,Field #16,On Time,244510
+2021-07-03,01:45 PM,Bracket,SLSG Navy ECNL GU13,2,3,SUSA FC ECNL GU13,Premier Sports Campus,Field #22,On Time,244519
+2021-07-04,09:30 AM,Bracket,San Juan SC ECNL GU13,5,3,Concorde Fire Platinum ECNL GU13,Premier Sports Campus,Stadium,On Time,244509
+2021-07-04,09:45 AM,Bracket,PDA Blue ECNL GU13,2,0,Real Colorado National ECNL GU13,Premier Sports Campus,Field #12,On Time,244518
+2021-07-05,01:30 PM,Bracket,Eclipse Select SC ECNL GU13,,,Solar SC ECNL GU13,Premier Sports Campus,Field #05,On Time,244511
+2021-07-05,01:30 PM,Bracket,San Juan SC ECNL GU13,,,LAFC Slammers ECNL U13,Premier Sports Campus,Field #07,On Time,244512
+2021-07-05,01:30 PM,Bracket,Crossfire Premier ECNL GU13,,,Sting Dallas Black ECNL GU13,Premier Sports Campus,Field #03,On Time,244514
+2021-07-05,01:30 PM,Bracket,Concorde Fire Platinum ECNL GU13,,,Tennessee Soccer Club ECNL GU13,Premier Sports Campus,Field #01,On Time,244515
+2021-07-05,01:45 PM,Bracket,FC Stars Blue ECNL GU13,,,So Cal Blues ECNL GU13,Premier Sports Campus,Field #02,On Time,244520
+2021-07-05,01:45 PM,Bracket,PDA Blue ECNL GU13,,,SUSA FC ECNL GU13,Premier Sports Campus,Field #04,On Time,244521
+2021-07-05,01:45 PM,Bracket,Alabama FC ECNL GU13,,,NC Courage ECNL GU13,Premier Sports Campus,Field #06,On Time,244522
+2021-07-05,01:45 PM,Bracket,Real Colorado National ECNL GU13,,,SLSG Navy ECNL GU13,Premier Sports Campus,Field #08,On Time,244523
+2021-07-07,10:30 AM,Bracket,Winner Game 13,,,Winner Game 14,Premier Sports Campus,Stadium,On Time,244513

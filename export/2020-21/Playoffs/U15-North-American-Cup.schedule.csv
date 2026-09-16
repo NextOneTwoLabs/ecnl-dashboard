@@ -1,0 +1,26 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2021-07-02,09:45 AM,Bracket,Strikers FC ECNL GU15,1,4,San Juan SC ECNL GU15,Premier Sports Campus,Field #02,On Time,244626
+2021-07-02,09:45 AM,Bracket,Crossfire Premier ECNL GU15,1,1,Alabama FC ECNL GU15,Premier Sports Campus,Field #12,On Time,244627
+2021-07-02,11:30 AM,Bracket,Tampa Bay United Rowdies ECNL GU15,2,1,Eastside FC ECNL GU15,Premier Sports Campus,Field #09,On Time,244620
+2021-07-02,11:30 AM,Bracket,McLean YSA ECNL GU15,2,2,Dallas Texans ECNL GU15,Premier Sports Campus,Field #05,On Time,244621
+2021-07-02,11:30 AM,Bracket,Eclipse Select SC North ECNL GU15,0,2,East Meadow SC ECNL GU15,Premier Sports Campus,Field #03,On Time,244622
+2021-07-02,11:30 AM,Bracket,Michigan Hawks ECNL GU15,2,0,FC Stars Blue ECNL GU15,Premier Sports Campus,Field #01,On Time,244623
+2021-07-02,05:30 PM,Bracket,Utah Avalanche ECNL 06,3,1,Eclipse Select SC ECNL GU15,Premier Sports Campus,Field #01,On Time,244624
+2021-07-02,05:30 PM,Bracket,Penn Fusion ECNL GU15,0,1,Pleasanton RAGE ECNL GU15,Premier Sports Campus,Field #11,On Time,244625
+2021-07-03,09:30 AM,Bracket,San Juan SC ECNL GU15,1,1,Alabama FC ECNL GU15,Premier Sports Campus,Field #11,On Time,244631
+2021-07-03,09:30 AM,Bracket,Strikers FC ECNL GU15,5,1,Crossfire Premier ECNL GU15,Premier Sports Campus,Field #17,On Time,244640
+2021-07-03,11:30 AM,Bracket,Tampa Bay United Rowdies ECNL GU15,1,2,McLean YSA ECNL GU15,Premier Sports Campus,Field #01,On Time,244628
+2021-07-03,11:30 AM,Bracket,East Meadow SC ECNL GU15,0,1,Michigan Hawks ECNL GU15,Premier Sports Campus,Field #07,On Time,244629
+2021-07-03,11:30 AM,Bracket,Eastside FC ECNL GU15,1,3,Dallas Texans ECNL GU15,Premier Sports Campus,Field #19,On Time,244637
+2021-07-03,11:30 AM,Bracket,Eclipse Select SC North ECNL GU15,0,2,FC Stars Blue ECNL GU15,Premier Sports Campus,Field #21,On Time,244638
+2021-07-04,11:30 AM,Bracket,Utah Avalanche ECNL 06,3,0,Pleasanton RAGE ECNL GU15,Premier Sports Campus,Stadium,On Time,244630
+2021-07-04,01:30 PM,Bracket,Eclipse Select SC ECNL GU15,,,Penn Fusion ECNL GU15,Premier Sports Campus,Field #05,On Time,244639
+2021-07-05,07:30 AM,Bracket,Utah Avalanche ECNL 06,,,San Juan SC ECNL GU15,Premier Sports Campus,Field #15,On Time,244633
+2021-07-05,07:30 AM,Bracket,Pleasanton RAGE ECNL GU15,,,Alabama FC ECNL GU15,Premier Sports Campus,Field #17,On Time,244636
+2021-07-05,07:45 AM,Bracket,Winner Game 20,,,Strikers FC ECNL GU15,Premier Sports Campus,Field #18,On Time,244642
+2021-07-05,07:45 AM,Bracket,Loser Game 20,,,Crossfire Premier ECNL GU15,Premier Sports Campus,Field #20,On Time,244644
+2021-07-05,11:30 AM,Bracket,Eastside FC ECNL GU15,,,Eclipse Select SC North ECNL GU15,Premier Sports Campus,Field #03,On Time,244643
+2021-07-05,11:45 AM,Bracket,McLean YSA ECNL GU15,,,Michigan Hawks ECNL GU15,Premier Sports Campus,Field #06,On Time,244632
+2021-07-05,11:45 AM,Bracket,Tampa Bay United Rowdies ECNL GU15,,,East Meadow SC ECNL GU15,Premier Sports Campus,Field #02,On Time,244635
+2021-07-05,11:45 AM,Bracket,Dallas Texans ECNL GU15,,,FC Stars Blue ECNL GU15,Premier Sports Campus,Field #12,On Time,244641
+2021-07-07,10:30 AM,Bracket,Winner Game 13,,,Winner Game 14,Premier Sports Campus,Field #04,On Time,244634
