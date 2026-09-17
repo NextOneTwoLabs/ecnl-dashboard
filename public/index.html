@@ -2464,7 +2464,25 @@
     // Third path segment is a club filter; 0 means "all clubs in this flight".
     async function getSchedule(eventId, flightId, opts) {
       const data = await fetchJSON(`Event/get-schedules-by-flight/${eventId}/${flightId}/0`, opts);
-      return data.data || [];
+      const games = data.data || [];
+      return (eventContext(eventId) || {}).kind === 'national' ? games : undateBorrowedDates(games);
+    }
+
+    // TGS's data can list both legs of a home-and-away pairing on one date, one leg
+    // with a time or venue and the other with no time, no venue and no score (NorCal
+    // 2026-27: Mustang SC v San Juan SC on 3 Oct, Pleasanton RAGE v Force (CA) on 8 May;
+    // #66). That leg is shown as Date TBD: a copy with gameDate null and dateUnconfirmed
+    // true. The other row must be the reversed pairing on the same date and have a
+    // score, a time or a venue. Rows with any of those are never changed; national
+    // events are not passed in (brackets order rounds by date); inputs are not mutated.
+    function undateBorrowedDates(games) {
+      const slotted = g => g.hometeamscore != null || g.awayteamscore != null ||
+        !/T00:00:00$/.test(g.gameDate || '') || !!(g.complex || g.venue);
+      const dated = g => g.hometeamID != null && g.awayteamID != null && !!g.gameDate;
+      const key = (homeID, awayID, g) => `${homeID}>${awayID}@${g.gameDate.slice(0, 10)}`;
+      const slots = new Set(games.filter(g => dated(g) && slotted(g)).map(g => key(g.hometeamID, g.awayteamID, g)));
+      return games.map(g => (dated(g) && !slotted(g) && slots.has(key(g.awayteamID, g.hometeamID, g)))
+        ? { ...g, gameDate: null, dateUnconfirmed: true } : g);
     }
 
     // ========== HELPERS ==========
@@ -3821,8 +3839,10 @@
     function gameDateKey(g) { return (g.gameDate || '').slice(0, 10); }
     function isPlayed(g) { return g.hometeamscore != null && g.awayteamscore != null; }
     function sortGames(games) {
+      // Sort key: the date string, except a leg undateBorrowedDates marked dateUnconfirmed sorts after every dated game.
+      const day = g => g.dateUnconfirmed ? '\uffff' : (g.gameDate || '');
       return [...games].sort((a, b) =>
-        (a.gameDate || '').localeCompare(b.gameDate || '') ||
+        day(a).localeCompare(day(b)) ||
         (a.gameTime || '').localeCompare(b.gameTime || ''));
     }
     // [{ key: 'YYYY-MM-DD', games: [...] }] in the order the games are given.
@@ -4292,9 +4312,7 @@
         return panel;
       }
 
-      const sorted = [...games].sort((a, b) =>
-        (a.gameDate || '').localeCompare(b.gameDate || '') ||
-        (a.gameTime || '').localeCompare(b.gameTime || ''));
+      const sorted = sortGames(games);
 
       let lastDate = null;
       let html = '';
@@ -4325,7 +4343,7 @@
         const status = (g.status && g.status !== 'On Time')
           ? `<span class="sched-status">${esc(g.status)}</span>` : '';
 
-        const venue = [g.complex, g.venue].filter(Boolean).join(' · ');
+        const venue = [g.complex, g.venue].filter(Boolean).join(' · ') || (g.dateUnconfirmed ? 'Date to be confirmed' : '');
         const tag = rowTag ? rowTag(g) : '';
 
         html += `
@@ -4607,7 +4625,7 @@
         ? `<span class="match-pk">(${g.hometeamPKscore}–${g.awayteamPKscore} PK)</span>` : '';
       const pending = !played && gameDateKey(g) && gameDateKey(g) < today ? '<span class="match-tag">Result pending</span>' : '';
       const status = g.status && g.status !== 'On Time' ? `<span class="sched-status">${esc(g.status)}</span>` : '';
-      const where = [g.complex, g.venue].filter(Boolean).join(' · ');
+      const where = [g.complex, g.venue].filter(Boolean).join(' · ') || (g.dateUnconfirmed ? 'Date to be confirmed' : '');
       const tag = rowTag ? rowTag(g) : '';
       const teams = played
         ? `${team(home, g.homeTeam, g.hometeamID, homeWin)}<span class="match-score">${g.hometeamscore}–${g.awayteamscore}</span>${team(away, g.awayTeam, g.awayteamID, awayWin)}${pk}`
@@ -4659,7 +4677,7 @@
       if (s.next) {
         const where = [s.next.complex, s.next.venue].filter(Boolean).join(' · ');
         nextHtml = `<div class="glance-next-opp">${esc(opponentText(s.next, team.teamID))}</div>` +
-          `<div class="glance-next-when">${esc(formatGameDate(s.next.gameDate))}${s.next.gameTimeText ? ` · ${esc(s.next.gameTimeText)}` : ''}</div>` +
+          `<div class="glance-next-when">${esc(formatGameDate(s.next.gameDate))}${s.next.gameTimeText && !s.next.dateUnconfirmed ? ` · ${esc(s.next.gameTimeText)}` : ''}</div>` +
           (where ? `<div class="glance-next-where">${esc(where)}</div>` : '');
       } else {
         nextHtml = `<div class="glance-next-opp muted">${s.mine.length ? 'Season complete' : 'No fixtures published yet'}</div>`;
