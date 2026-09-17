@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-16T21:13:34Z",
+  "updatedAt": "2026-09-17T00:11:05Z",
   "activeSeason": "2026-27",
-  "runDate": "2026-09-16",
+  "runDate": "2026-09-17",
   "sweep": false,
   "matchDay": false,
   "lastSweepDate": "2026-09-16",
@@ -10,7 +10,7 @@
   "standingsRefreshed": 0,
   "requests": 3,
   "failed": 0,
-  "durationSeconds": 1.7,
+  "durationSeconds": 1.4,
   "pendingResultFlights": 3,
   "pendingResultGames": 3
 }
