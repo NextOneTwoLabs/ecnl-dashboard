@@ -10,8 +10,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-20,10:30 AM,Group Play,Pittsburgh Riverhounds ECNL G2012/13,,,Ohio Elite SA ECNL G2012/13,Montour Junction Sports Complex,Field 1,On Time,1072804
 2026-09-20,10:45 AM,Group Play,Internationals SC ECNL G2012/2013,,,Tennessee SC ECNL G2012/13,Pinnacle Sports,OT 11v11,On Time,1072800
 2026-09-20,11:00 AM,Group Play,GTFC Impact ECNL G2012/13,,,FC Pride Elite ECNL G2012/13,Rossford Soccer Center Dome,Indoor 11v11,On Time,1072806
-2026-09-26,TBD,Group Play,Tennessee SC ECNL G2012/13,,,Indy Eleven ECNL G2012/13,,,On Time,1072818
 2026-09-26,09:00 AM,Group Play,Cleveland Force SC ECNL G2012/13,,,WNY Flash ECNL G2012/13,Victory Park,Field 4,On Time,1073034
+2026-09-26,10:45 AM,Group Play,Tennessee SC ECNL G2012/13,,,Indy Eleven ECNL G2012/13,Richard Siegel Soccer Complex,Field 2,On Time,1072818
 2026-09-26,10:45 AM,Group Play,Internationals SC ECNL G2012/2013,,,Pittsburgh Riverhounds ECNL G2012/13,Pinnacle Sports,OT 11v11,On Time,1073036
 2026-09-26,11:00 AM,Group Play,FC Alliance TN ECNL G2012/13,,,FC Pride Elite ECNL G2012/13,Hardin Valley Academy Stadium,Field 1,On Time,1072820
 2026-09-26,01:00 PM,Group Play,Racing Louisville Academy ECNL G2012/13,,,Ohio Premier ECNL G2012/13,Lynn Family Sports Vision & Training Facility,Field 3,On Time,1072816
@@ -22,10 +22,10 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-27,11:00 AM,Group Play,Racing Louisville Academy ECNL G2012/13,,,GTFC Impact ECNL G2012/13,Lynn Family Sports Vision & Training Facility,Field 3,On Time,1072828
 2026-09-27,11:00 AM,Group Play,FC Alliance TN ECNL G2012/13,,,Indy Eleven ECNL G2012/13,Hardin Valley Academy Stadium,Field 1,On Time,1072832
 2026-09-27,01:45 PM,Group Play,Ohio Elite SA ECNL G2012/13,,,Ohio Premier ECNL G2012/13,Ohio Elite Training Center,Field 9,On Time,1072826
-2026-10-03,TBD,Group Play,Ohio Premier ECNL G2012/13,,,GTFC Impact ECNL G2012/13,,,On Time,1072838
 2026-10-03,10:30 AM,Group Play,Pittsburgh Riverhounds ECNL G2012/13,,,WNY Flash ECNL G2012/13,Montour Junction Sports Complex,Field 1,On Time,1072836
 2026-10-03,10:45 AM,Group Play,FC Pride Elite ECNL G2012/13,,,Indy Eleven ECNL G2012/13,FC Pride Performance Center,Field 1,On Time,1072840
 2026-10-03,02:30 PM,Group Play,FC Alliance TN ECNL G2012/13,,,Tennessee SC ECNL G2012/13,Hardin Valley Academy Stadium,Field 1,On Time,1072842
+2026-10-03,04:00 PM,Group Play,Ohio Premier ECNL G2012/13,,,GTFC Impact ECNL G2012/13,OP Training Facility,Field 1,On Time,1072838
 2026-10-04,01:00 PM,Group Play,Racing Louisville Academy ECNL G2012/13,,,Ohio Elite SA ECNL G2012/13,Lynn Family Sports Vision & Training Facility,Field 3,On Time,1072844
 2026-10-04,04:45 PM,Group Play,Internationals SC ECNL G2012/2013,,,Cleveland Force SC ECNL G2012/13,Pinnacle Sports,OT 11v11,On Time,1072834
 2026-10-17,09:00 AM,Group Play,Cleveland Force SC ECNL G2012/13,,,Ohio Elite SA ECNL G2012/13,Victory Park,Field 4,On Time,1072846
@@ -57,7 +57,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-01,12:00 PM,Group Play,Indy Eleven ECNL G2012/13,,,Ohio Elite SA ECNL G2012/13,Grand Park ,Field 1,On Time,1072898
 2026-11-01,12:45 PM,Group Play,Ohio Premier ECNL G2012/13,,,Internationals SC ECNL G2012/2013,OP Training Facility,Field 1,On Time,1072896
 2026-11-01,01:00 PM,Group Play,GTFC Impact ECNL G2012/13,,,Cleveland Force SC ECNL G2012/13,Findlay High School ,Elmer Graham Stadium,On Time,1072894
-2026-11-07,TBD,Group Play,Cleveland Force SC ECNL G2012/13,,,Ohio Premier ECNL G2012/13,,,On Time,1072902
+2026-11-07,TBD,Group Play,Ohio Premier ECNL G2012/13,,,Cleveland Force SC ECNL G2012/13,,,On Time,1072902
 2026-11-07,11:00 AM,Group Play,Tennessee SC ECNL G2012/13,,,WNY Flash ECNL G2012/13,Bethesda Sports Park,Field 1,On Time,1072906
 2026-11-07,11:00 AM,Group Play,FC Alliance TN ECNL G2012/13,,,Pittsburgh Riverhounds ECNL G2012/13,Hardin Valley Academy Stadium,Field 1,On Time,1072908
 2026-11-07,12:30 PM,Group Play,Ohio Elite SA ECNL G2012/13,,,FC Pride Elite ECNL G2012/13,Seven Hills School,Lower Field,On Time,1072910
