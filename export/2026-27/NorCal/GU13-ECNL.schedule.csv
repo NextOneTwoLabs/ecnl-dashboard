@@ -29,8 +29,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-19,03:00 PM,Group Play,Force (CA) ECNL G2013/14,,,MVLA ECNL G2013/14,Gunderson High School,Stadium Field,On Time,1094522
 2026-09-19,05:55 PM,Group Play,Stanislaus Surf - ECNL G2013/14,,,Placer United ECNL G2013/14,Modesto Junior College,MJC West,On Time,1094546
 2026-09-20,TBD,Group Play,Bay Area Surf - ECNL G2013/14,,,Stanislaus Surf - ECNL G2013/14,,,On Time,1094552
-2026-09-20,TBD,Group Play,San Juan SC ECNL G2013/14,,,Force (CA) ECNL G2013/14,,,On Time,1094582
 2026-09-20,09:00 AM,Group Play,Pleasanton RAGE ECNL G2013/14,,,Marin FC ECNL G2013/14,Val Vista,Field 2,On Time,1094576
+2026-09-20,09:00 AM,Group Play,San Juan SC ECNL G2013/14,,,Force (CA) ECNL G2013/14,Tiemann Law Firm Fields at San Juan Soccer Complex,Black Field,On Time,1094582
 2026-09-20,10:00 AM,Group Play,COSC ECNL G2013/14,,,MVLA ECNL G2013/14,Clovis South High School,Field 2,On Time,1094558
 2026-09-20,10:00 AM,Group Play,Placer United ECNL G2013/14,,,Mustang SC ECNL G2013/14,Placer Valley Soccer Complex,Field 6,On Time,1094570
 2026-09-20,02:00 PM,Group Play,Davis Legacy ECNL G2013/14,,,Santa Rosa United ECNL G2013/14,Davis Legacy Soccer Complex,Field 11,On Time,1094564
@@ -40,7 +40,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-26,11:00 AM,Group Play,Mustang SC ECNL G2013/14,,,Stanislaus Surf - ECNL G2013/14,Provident Field @ MSC, Lower,On Time,1094606
 2026-09-26,12:00 PM,Group Play,Placer United ECNL G2013/14,,,Pleasanton RAGE ECNL G2013/14,Placer Valley Soccer Complex,Field 6,On Time,1094618
 2026-09-26,03:00 PM,Group Play,Marin FC ECNL G2013/14,,,Davis Legacy ECNL G2013/14,College of Marin,Stadium,On Time,1094600
-2026-09-27,TBD,Group Play,Bay Area Surf - ECNL G2013/14,,,Placer United ECNL G2013/14,,,On Time,1094624
+2026-09-27,10:55 AM,Group Play,Bay Area Surf - ECNL G2013/14,,,Placer United ECNL G2013/14,Ohlone College,Soccer Field,On Time,1094624
 2026-09-27,11:00 AM,Group Play,Santa Rosa United ECNL G2013/14,,,Mustang SC ECNL G2013/14,Trione Fields,Trione West,On Time,1094648
 2026-09-27,11:50 AM,Group Play,Stanislaus Surf - ECNL G2013/14,,,Marin FC ECNL G2013/14,Mary Grogan Community Park,field 4,On Time,1094654
 2026-09-27,12:00 PM,Group Play,Force (CA) ECNL G2013/14,,,Davis Legacy ECNL G2013/14,Kathleen MacDonald High School,Stadium,On Time,1094630
