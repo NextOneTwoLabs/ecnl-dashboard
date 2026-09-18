@@ -4,7 +4,7 @@
 # server serves, so the deployed site is byte-identical to a local run (minus
 # the feedback panel, which needs the Worker; use `npx wrangler dev` to run
 # the full thing). worker.js redirects the workers.dev address to the
-# canonical custom domain and handles POST /api/feedback; it runs ahead of the
+# canonical custom domain and handles /api/v1/* and POST /api/feedback; it runs ahead of the
 # assets for "/" and "/api/*" alone, so everything else is served as free
 # static assets without invoking the Worker.
 #

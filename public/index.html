@@ -2193,8 +2193,8 @@
     let NATIONAL_EVENTS = {};  // { season -> { "Playoffs"|"Finals" -> {eventId} } }
 
     async function loadSources() {
-      const resp = await fetch('data/sources.json', { cache: 'no-cache' });
-      if (!resp.ok) throw new Error(`Cannot load data/sources.json (HTTP ${resp.status})`);
+      const resp = await fetch('/api/v1/catalog', { cache: 'no-cache' });
+      if (!resp.ok) throw new Error(`Cannot load data catalog (HTTP ${resp.status})`);
       SOURCES = await resp.json();
 
       SEASONS = SOURCES.seasons;
@@ -2332,15 +2332,17 @@
     let playoffAgeGroupsCache = {};  // { "2024-25-Playoffs": [...], ... }
 
     // ========== DATA FETCH ==========
-    // The site is fully static: archive.py pre-fetches every response into
-    // archive/api/<path>.json and a scheduled job keeps it current. The API
-    // itself sends no CORS headers, so a browser could not call it directly
-    // anyway. This is also what makes the hosted and local versions identical —
-    // both read the same files, neither calls the API.
-    //
-    // ?live=1 routes through proxy_server.py instead, for local debugging only.
+    // The versioned API owns storage paths. Explicit ?live=1 uses the legacy
+    // local debugging proxy only; there is no archive fallback on API errors.
     const LIVE = new URLSearchParams(location.search).get('live') === '1';
-    const dataUrl = path => LIVE ? '/api/' + path : `archive/api/${path}.json`;
+    const dataUrl = path => {
+      if (!LIVE) return '/api/v1/' + path;
+      let match;
+      if ((match = /^events\/(\d+)\/hierarchy$/.exec(path))) return `/api/Event/get-event-schedule-or-standings/${match[1]}`;
+      if ((match = /^events\/(\d+)\/divisions\/(\d+)\/flights\/(\d+)\/standings$/.exec(path))) return `/api/Event/get-standings-by-div-and-flight/${match[2]}/${match[3]}/${match[1]}`;
+      if ((match = /^events\/(\d+)\/flights\/(\d+)\/schedule$/.exec(path))) return `/api/Event/get-schedules-by-flight/${match[1]}/${match[2]}/0`;
+      throw new Error('Unknown live-debug resource');
+    };
 
     const OLD_CACHE_PREFIX = 'ecnl-cache-';
 
@@ -2374,7 +2376,7 @@
     // How fresh the published data is. Written by `archive.py --refresh`.
     async function loadRefreshState() {
       try {
-        const resp = await fetch('archive/refresh-state.json', { cache: 'no-cache' });
+        const resp = await fetch('/api/v1/status', { cache: 'no-cache' });
         if (resp.ok) refreshState = await resp.json();
       } catch (e) { }
     }
@@ -2405,7 +2407,7 @@
 
     async function getEventHierarchy(eventId, opts) {
       if (eventHierarchy[eventId] && !(opts && opts.refresh)) return eventHierarchy[eventId];
-      const data = await fetchJSON(`Event/get-event-schedule-or-standings/${eventId}`, opts);
+      const data = await fetchJSON(`events/${eventId}/hierarchy`, opts);
       eventHierarchy[eventId] = data.data || data;
       return eventHierarchy[eventId];
     }
@@ -2420,7 +2422,7 @@
     // the next call retries. opts.refresh bypasses the memo.
     const standingsMemo = {};
     async function getStandings(divId, flightId, eventId, opts) {
-      const key = `Event/get-standings-by-div-and-flight/${divId}/${flightId}/${eventId}`;
+      const key = `events/${eventId}/divisions/${divId}/flights/${flightId}/standings`;
       if (standingsMemo[key] && !(opts && opts.refresh)) return standingsMemo[key];
       const p = fetchJSON(key, opts).then(data => {
         const blocks = Array.isArray(data.data) ? data.data : (data.data ? [data.data] : []);
@@ -2456,14 +2458,14 @@
     // Every standings block for a flight. Playoff flights with a group stage
     // return one block per group; knockout flights return none at all.
     async function getStandingsBlocks(divId, flightId, eventId, opts) {
-      const data = await fetchJSON(`Event/get-standings-by-div-and-flight/${divId}/${flightId}/${eventId}`, opts);
+      const data = await fetchJSON(`events/${eventId}/divisions/${divId}/flights/${flightId}/standings`, opts);
       const blocks = Array.isArray(data.data) ? data.data : (data.data ? [data.data] : []);
       return blocks.filter(b => b && (b.teamStandings || []).length);
     }
 
     // Third path segment is a club filter; 0 means "all clubs in this flight".
     async function getSchedule(eventId, flightId, opts) {
-      const data = await fetchJSON(`Event/get-schedules-by-flight/${eventId}/${flightId}/0`, opts);
+      const data = await fetchJSON(`events/${eventId}/flights/${flightId}/schedule`, opts);
       const games = data.data || [];
       return (eventContext(eventId) || {}).kind === 'national' ? games : undateBorrowedDates(games);
     }
@@ -4903,8 +4905,8 @@
         document.getElementById('standingsContainer').innerHTML = `<div class="error-message">
           <strong>Couldn't load the dashboard data.</strong><br>
           <small>Please try again shortly. If you opened this file directly from disk,
-          serve the folder over HTTP instead — for example
-          <code>cd public &amp;&amp; python -m http.server</code>.</small>
+          start the local API server from the repository root:
+          <code>python proxy_server.py --offline</code>.</small>
         </div>`;
         return;
       }
