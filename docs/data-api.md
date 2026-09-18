@@ -57,6 +57,11 @@ Compare cold/warm navigation and search with the previous release.
 Rollback restores the previous complete application deployment; there is no
 schema migration to reverse. Raw archive URLs remain public in this phase.
 
+Each v1 request now invokes the Worker, whereas direct static JSON reads did not.
+The unchanged cold-search fan-out can therefore make roughly 75 Worker requests
+per selected season; page-memory caches still eliminate repeated standings reads.
+Include this request volume in usage monitoring before increasing traffic.
+
 Later, replace the archive reader with private R2 and add validated publishing.
 That can remove data-only deployments without changing v1 clients. Server-side
 search and database-backed analytics are separate additions, not prerequisites.
