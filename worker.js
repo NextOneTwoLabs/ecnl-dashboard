@@ -1,7 +1,10 @@
+import { dataApi } from './api/data-api.mjs';
+
 // Entry point for the deployed Worker. The site itself is the static files in
-// public/ (see [assets] in wrangler.toml). This script does two things and runs
+// public/ (see [assets] in wrangler.toml). Versioned data routes stream one archived
+// JSON asset per request. This script also handles feedback and redirects, and runs
 // ahead of the static assets for "/" and "/api/*" only (run_worker_first in
-// wrangler.toml), so a page view costs one Worker request and every other file
+// wrangler.toml), so page and API requests invoke the Worker; every other file
 // is served as a free static asset:
 //
 //   1. Sends the workers.dev address to the canonical custom domain. Browsers
@@ -31,10 +34,12 @@ export default {
     const url = new URL(request.url);
     const isFeedback = url.pathname === '/api/feedback';
     try {
-      if (url.hostname.endsWith('.workers.dev')) {
+      // Version/branch preview hosts must remain on their own deployment.
+      if (url.hostname === 'ecnl-dashboard.nextonetwolabs.workers.dev') {
         url.hostname = CANONICAL_HOST;
         return Response.redirect(url.toString(), 301);
       }
+      if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) return await dataApi(request, env);
       if (isFeedback) return await feedback(request, env);
     } catch (err) {
       // A fault in the feedback handler must not take page serving down with it. The request

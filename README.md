@@ -11,7 +11,7 @@ upstream API or website ever goes away.
 - **Conference Standings** — All 10 ECNL conferences across 7 seasons (2020-21 through 2026-27), per-flight tables
 - **Matches** — Date-grouped match cards per conference: kickoff, both teams, score, venue. Opens on upcoming matches, with Results (newest first) and Full season (scrolled to the next match day) a click away
 - **Team at a glance** — Click any team in a standings table: position, points, recent form, next match, last result and more statistics in a side panel, with a Follow button and a link to the full team page
-- **Fully static** — no backend at runtime; deploys to any static host for free, and works offline once loaded
+- **Archived data API** — a thin Worker serves collected JSON through a stable `/api/v1` contract; the Python server supports offline local browsing
 - **Self-refreshing** — a scheduled job updates the data on match days and keeps the fixture calendar current
 - **CSV exports** — Human-readable standings and schedule tables under `export/`, openable in Excel
 - **Playoffs & Finals** — National post-season per age group and competition (Champions League, North American Cup, Showcase Cup, Showcase Games): knockout brackets drawn as trees, cup and consolation brackets, group tables where a group stage exists, round-tagged schedules, and a format note per competition
@@ -25,25 +25,42 @@ upstream API or website ever goes away.
 
 ## How it works
 
-The site is **fully static**. `archive.py` pre-fetches every API response into
-`public/archive/api/**.json`, and the page reads those files directly — it never
-calls the API from the browser (which it couldn't anyway: the API sends no CORS
-headers). A scheduled GitHub Action keeps the data current.
+`archive.py` pre-fetches upstream responses into `public/archive/api/**.json`.
+The browser requests `/api/v1` on the same hostname. The Worker maps each request
+to one archived asset and streams it without parsing or preloading the archive.
+A scheduled GitHub Action keeps those files current; normal page requests never
+contact the upstream API. The [v1 contract](docs/data-api.md) is the boundary
+between collection and presentation.
 
-`public/` is simultaneously the Cloudflare Pages output directory and the local
-server root, so **the hosted site and your local copy are the same files** with no
-build step between them.
+`public/` remains the frontend and bundled-data directory. There is no frontend
+build step. Worker, UI, and data still deploy together on every main commit,
+including data-only refresh commits. This change does not make the archive private.
 
 ## Run it locally
 
 ```bash
-cd public && python -m http.server 8000     # any static server works
+python proxy_server.py --offline    # archive-only API and frontend on port 5000
+npx wrangler dev                    # actual Worker, assets, and local feedback KV
 ```
 
-Then open [http://localhost:8000/](http://localhost:8000/). No backend needed.
+Open the address printed by the server. A plain static HTTP server or opening
+`public/index.html` directly cannot serve `/api/v1` and no longer supports the
+full default application.
 
-Or use `python proxy_server.py` (port 5000) if you also want `?live=1`, which
-routes data requests through a live API proxy for debugging.
+For explicit upstream debugging, run `python proxy_server.py` and open
+`http://localhost:5000/?live=1`. Only this mode uses the legacy live proxy;
+reconstructed schedules remain protected from upstream replacement. V1 routes
+always read the local archive, even when the server is not in offline mode.
+
+## Validate changes
+
+```bash
+node --test tests/data-api.test.mjs  # Node 22+; no npm dependencies required
+python -m unittest discover -s tests -p 'test_*.py'
+python reconstruct.py --check
+```
+
+The API contract workflow runs these checks on pull requests and main commits.
 
 ## Refresh the data
 
@@ -293,13 +310,13 @@ the one rule covers both sites.
 | `public/og.png` | The full badge centred on black at 1200×630 — link-preview card; copied from the entrance site, no build step |
 | `public/favicon-180.png` | The mark alone at 180×180, transparent — Safari ignores SVG favicons, so this is the PNG tab icon; rendered from `favicon.svg` at 720×720, downscaled and quantised to a 144-colour palette, no build step |
 | `public/data/sources.json` | Season → conference → event ID registry, refresh policy, birth-year anchor |
-| `public/archive/api/…` | Raw API responses keyed by endpoint path — what the site reads |
+| `public/archive/api/…` | Raw API responses keyed by endpoint path — read by the v1 storage adapter |
 | `public/archive/match-days.json` | Fixture calendar that drives the refresh schedule |
 | `public/archive/refresh-state.json` | When the data was last refreshed (powers "Updated 3h ago") |
 | `public/archive/manifest.json` | Index tying event IDs back to season/conference/flight |
 | `archive.py` | Crawler: match-day refresh, bulk backfill, CSV exports, `--verify` |
 | `ecnl_api.py` | Shared API/archive helpers |
-| `proxy_server.py` | Local static server, plus the `?live=1` API proxy |
+| `proxy_server.py` | Local static and archive-only v1 server, plus the `?live=1` API proxy |
 | `reconstruct.py` | Rebuilds schedules TGS removed from a hand-entered CSV; `--check` validates them (see "Reconstructed data") |
 | `reconstructed/` | The CSVs behind the reconstructed archive files — one line per game, with its source URL |
 | `export/<season>/<conf>/` | CSVs — not published; `*.standings.csv`, `*.schedule.csv` |
@@ -313,7 +330,7 @@ the one rule covers both sites.
 
 The site is a Cloudflare Worker serving static assets (`wrangler.toml` at the repo
 root: `[assets] directory = "./public"`, plus a small `worker.js` that redirects the
-`workers.dev` hostname and handles `POST /api/feedback`). It is built by Cloudflare's Git integration
+`workers.dev` hostname and handles `/api/v1/*` and `POST /api/feedback`). It is built by Cloudflare's Git integration
 on the **NextOneTwoLabs** Cloudflare account: repository `NextOneTwoLabs/ecnl-dashboard`,
 branch `main`, build command empty, deploy command `npx wrangler deploy`. Pushing to
 `main` — including the scheduled data commits — redeploys.
@@ -323,7 +340,7 @@ branch `main`, build command empty, deploy command `npx wrangler deploy`. Pushin
   the certificate are managed automatically).
 - `https://ecnl-dashboard.nextonetwolabs.workers.dev` permanently redirects there
   (`worker.js`, which runs ahead of the assets for `/` and `/api/*` only, so page views
-  cost one Worker request and every other file is a free static asset).
+  and API calls invoke the Worker; other assets are served directly).
 - `https://ecnl-dashboard.zhenyisx.workers.dev` — the original address — also
   redirects there, served by the tiny Worker in [`redirect/`](redirect/) from the
   original personal account.
@@ -344,8 +361,8 @@ in the Worker and the `--binding FEEDBACK` commands above are unaffected by the 
 
 To run the Worker and the panel locally, `npx wrangler dev` and open
 <http://localhost:8787>. KV is simulated on your machine, so test submissions stay there.
-A plain `python -m http.server` in `public/` serves the page fine, but `/api/feedback`
-404s there — expected.
+Use `python proxy_server.py --offline` for local data browsing without Wrangler.
+It does not implement feedback. A plain static server cannot serve the v1 API.
 
 ## Data Sources
 

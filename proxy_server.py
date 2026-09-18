@@ -10,7 +10,7 @@ Usage:
     python proxy_server.py --offline    serve only from archive/, never hit the network
     python proxy_server.py --port 8000
 
-    Then open http://localhost:5000/ecnl-dashboard.html
+    Then open http://localhost:5000/
 
 Responses carry X-ECNL-Source: live | archive | reconstructed so the dashboard
 can show where the data came from. Reconstructed schedules (ecnl_api.protected_paths)
@@ -26,6 +26,7 @@ import urllib.error
 from urllib.parse import urlparse, parse_qs
 
 import ecnl_api as api
+import data_api
 
 PORT = 5000
 # Serve public/ — the same directory Cloudflare Pages serves — so the local site
@@ -44,6 +45,9 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
 
+        if self._handle_v1():
+            return
+
         if parsed.path.startswith("/api/"):
             api_path = parsed.path[len("/api/"):]
             query = parse_qs(parsed.query)
@@ -52,6 +56,23 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         super().do_GET()
+
+    def _handle_v1(self):
+        path = urlparse(self.path).path
+        if path == "/api/v1" or path.startswith("/api/v1/"):
+            data_api.serve(self, path, SERVE_DIR)
+            return True
+        return False
+
+    def do_HEAD(self):
+        if not self._handle_v1():
+            super().do_HEAD()
+
+    def _unsupported(self):
+        if not self._handle_v1():
+            self.send_error(501, "Unsupported method")
+
+    do_POST = do_PUT = do_PATCH = do_DELETE = do_OPTIONS = do_TRACE = do_CONNECT = _unsupported
 
     # ---------- API ----------
 
@@ -161,7 +182,7 @@ def main():
     mode = "OFFLINE (archive only)" if OFFLINE else "live + write-through archive"
     print(f"\n  ECNL Dashboard — serving {os.path.relpath(SERVE_DIR, api.ROOT)}/  ({mode})")
     print(f"  http://localhost:{args.port}/")
-    print(f"  The page reads static archive JSON by default; add ?live=1 to use the proxy.")
+    print(f"  The page reads archive-only /api/v1 by default; add ?live=1 to use the proxy.")
     if not os.path.isdir(api.ARCHIVE_API_DIR):
         print(f"  note: no archive yet — run `python archive.py` to build one")
     print(f"  Press Ctrl+C to stop\n")
