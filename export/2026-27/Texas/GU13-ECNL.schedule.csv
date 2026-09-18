@@ -15,7 +15,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-19,11:00 AM,Group Play,OK Energy FC ECNL G2013/14,,,Lonestar ATX Red ECNL G2013/14,Edmond Soccer Club,ESC 4,On Time,1073474
 2026-09-19,01:00 PM,Group Play,FC Dallas Youth ECNL G2013/14,,,Colorado Storm ECNL G2013/14,Toyota Soccer Center,Field 11,On Time,1073618
 2026-09-19,01:00 PM,Group Play,Sting Royal ECNL G2013/14,,,Real Colorado National ECNL G2013/14,Sting National Training Center,Field 3,On Time,1073624
-2026-09-20,09:00 AM,Group Play,Real Colorado National ECNL G2013/14,,,Real Colorado Athletico ECNL G2013/14,Real Colorado Soccer Complex,RCSC 1,On Time,1073492
 2026-09-20,09:00 AM,Group Play,OK Energy FC ECNL G2013/14,,,FC Westlake ECNL G2013/14,Edmond Soccer Club,ESC 5,On Time,1073504
 2026-09-20,11:00 AM,Group Play,West Side Alliance ECNL G2013/14,,,Lonestar ATX Red ECNL G2013/14,RiverCity Parks,Field 9,On Time,1073498
 2026-09-20,01:00 PM,Group Play,Sting Royal ECNL G2013/14,,,Colorado Storm ECNL G2013/14,Sting National Training Center,Field 3,On Time,1073642
@@ -42,6 +41,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-04,11:00 AM,Group Play,FC Westlake ECNL G2013/14,,,Colorado Rush ECNL G2013/14,Westlake High School Stadium - Chaparral Stadium,Field 1,On Time,1073570
 2026-10-04,11:00 AM,Group Play,Lonestar ATX Red ECNL G2013/14,,,Real Colorado Athletico ECNL G2013/14,Burger Activity Center,Field 2,On Time,1073576
 2026-10-04,01:00 PM,Group Play,SOLAR SC ECNL G2013/14,,,Colorado Storm ECNL G2013/14,Carroll Senior High School,Field 1,On Time,1073606
+2026-10-07,07:30 PM,Group Play,Real Colorado National ECNL G2013/14,,,Real Colorado Athletico ECNL G2013/14,Highland Heritage Regional Park,HHRP West,On Time,1073492
 2026-10-11,03:00 PM,Group Play,SOLAR SC ECNL G2013/14,,,Dallas Texans ECNL G2013/14,OAK GROVE ,Field 2,On Time,1073666
 2026-10-17,09:00 AM,Group Play,Real Colorado National ECNL G2013/14,,,DKSC ECNL G2013/14,Real Colorado Soccer Complex,RCSC 1,On Time,1073678
 2026-10-17,09:00 AM,Group Play,Albion Hurricanes FC ECNL G2013/14,,,OK Energy FC ECNL G2013/14,Campbell Road Sports Park,Field 1,On Time,1073684
@@ -83,13 +83,13 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-22,09:00 AM,Group Play,Albion Hurricanes FC ECNL G2013/14,,,FC Dallas Youth ECNL G2013/14,Campbell Road Sports Park,Field 1,On Time,1073894
 2026-11-22,09:00 AM,Group Play,Challenge SC ECNL G2013/14,,,Sting Royal ECNL G2013/14,Burroughs Park,Field 2,On Time,1073900
 2026-11-22,11:00 AM,Group Play,SOLAR SC ECNL G2013/14,,,Sting Black ECNL G2013/14,Carroll Senior High School,Field 1,On Time,1073906
-2026-12-05,09:00 AM,Group Play,OK Energy FC ECNL G2013/14,,,SOLAR SC ECNL G2013/14,North Oklahoma City FC,NOKC Red 3,On Time,1073912
+2026-12-05,09:00 AM,Group Play,OK Energy FC ECNL G2013/14,,,SOLAR SC ECNL G2013/14,North Oklahoma City FC,NOKC Red 4,On Time,1073912
 2026-12-06,09:00 AM,Group Play,Dallas Texans ECNL G2013/14,,,West Side Alliance ECNL G2013/14,Heritage High School,Field 1,On Time,1073918
 2026-12-12,09:00 AM,Group Play,DKSC ECNL G2013/14,,,Colorado Rush ECNL G2013/14,Clark East Field,Field 2,On Time,1073924
 2026-12-12,09:00 AM,Group Play,Sting Black ECNL G2013/14,,,Real Colorado Athletico ECNL G2013/14,Sting National Training Center,Field A,On Time,1073930
-2026-12-13,TBD,Group Play,West Side Alliance ECNL G2013/14,,,SOLAR SC ECNL G2013/14,,,On Time,1073948
 2026-12-13,09:00 AM,Group Play,Sting Black ECNL G2013/14,,,Colorado Rush ECNL G2013/14,Sting National Training Center,Field A,On Time,1073936
 2026-12-13,09:00 AM,Group Play,DKSC ECNL G2013/14,,,Real Colorado Athletico ECNL G2013/14,Clark East Field,Field 2,On Time,1073942
+2026-12-13,09:00 AM,Group Play,West Side Alliance ECNL G2013/14,,,SOLAR SC ECNL G2013/14,RiverCity Parks,Field 9,On Time,1073948
 2027-01-30,09:00 AM,Group Play,West Side Alliance ECNL G2013/14,,,Colorado Storm ECNL G2013/14,RiverCity Parks,Field 9,On Time,1073954
 2027-01-30,09:00 AM,Group Play,OK Energy FC ECNL G2013/14,,,Real Colorado National ECNL G2013/14,North Oklahoma City FC,NOKC Red 3,On Time,1073960
 2027-01-31,09:00 AM,Group Play,OK Energy FC ECNL G2013/14,,,Colorado Storm ECNL G2013/14,North Oklahoma City FC,NOKC Red 4,On Time,1073966

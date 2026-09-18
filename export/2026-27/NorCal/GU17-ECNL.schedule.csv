@@ -29,9 +29,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-19,11:00 AM,Group Play,Santa Rosa United ECNL G2009/10,,,Pleasanton RAGE ECNL G2009/10,Trione Fields,Trione East,On Time,1094536
 2026-09-19,12:00 PM,Group Play,Force (CA) ECNL G2009/10,,,MVLA ECNL G2009/10,De Anza College,Soccer Field,On Time,1094518
 2026-09-20,TBD,Group Play,Bay Area Surf - ECNL G2009/10,,,Stanislaus Surf - ECNL G2009/10,,,On Time,1094548
-2026-09-20,TBD,Group Play,San Juan SC ECNL G2009/10,,,Force (CA) ECNL G2009/10,,,On Time,1094578
 2026-09-20,10:00 AM,Group Play,COSC ECNL G2009/10,,,MVLA ECNL G2009/10,Clovis South High School,Field 1,On Time,1094554
 2026-09-20,11:00 AM,Group Play,Pleasanton RAGE ECNL G2009/10,,,Marin FC ECNL G2009/10,Val Vista,Field 3,On Time,1094572
+2026-09-20,11:00 AM,Group Play,San Juan SC ECNL G2009/10,,,Force (CA) ECNL G2009/10,Tiemann Law Firm Fields at San Juan Soccer Complex,White Field,On Time,1094578
 2026-09-20,12:00 PM,Group Play,Davis Legacy ECNL G2009/10,,,Santa Rosa United ECNL G2009/10,Davis Legacy Soccer Complex,Field 12,On Time,1094560
 2026-09-20,12:00 PM,Group Play,Placer United ECNL G2009/10,,,Mustang SC ECNL G2009/10,Placer Valley Soccer Complex,Field 5,On Time,1094566
 2026-09-26,11:00 AM,Group Play,Marin FC ECNL G2009/10,,,Davis Legacy ECNL G2009/10,College of Marin,Stadium,On Time,1094596
@@ -40,7 +40,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-26,12:00 PM,Group Play,Force (CA) ECNL G2009/10,,,Bay Area Surf - ECNL G2009/10,Kathleen MacDonald High School,soccer field,On Time,1094590
 2026-09-26,12:00 PM,Group Play,Placer United ECNL G2009/10,,,Pleasanton RAGE ECNL G2009/10,Placer Valley Soccer Complex,Field 5,On Time,1094614
 2026-09-26,05:20 PM,Group Play,MVLA ECNL G2009/10,,,Santa Rosa United ECNL G2009/10,Foothill College,Top Hill Soccer Field,On Time,1094608
-2026-09-27,TBD,Group Play,Bay Area Surf - ECNL G2009/10,,,Placer United ECNL G2009/10,,,On Time,1094620
+2026-09-27,09:00 AM,Group Play,Bay Area Surf - ECNL G2009/10,,,Placer United ECNL G2009/10,Ohlone College,Soccer Field,On Time,1094620
 2026-09-27,11:00 AM,Group Play,San Juan SC ECNL G2009/10,,,MVLA ECNL G2009/10,Tiemann Law Firm Fields at San Juan Soccer Complex,White Field,On Time,1094638
 2026-09-27,11:00 AM,Group Play,Santa Rosa United ECNL G2009/10,,,Mustang SC ECNL G2009/10,Trione Fields,Trione East,On Time,1094644
 2026-09-27,12:00 PM,Group Play,Force (CA) ECNL G2009/10,,,Davis Legacy ECNL G2009/10,Kathleen MacDonald High School,soccer field,On Time,1094626
