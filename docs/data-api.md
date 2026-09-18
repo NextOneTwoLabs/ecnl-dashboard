@@ -65,3 +65,7 @@ The Python server offers the same archive-only v1 routes with stdlib only.
 Its explicit `?live=1` debug path still uses the legacy proxy and reconstructed
 schedule guards. Use Wrangler to test the actual Worker and feedback, which the
 Python server does not implement.
+
+The production `ecnl-dashboard.nextonetwolabs.workers.dev` hostname redirects to
+the canonical site. Cloudflare version and branch preview hosts intentionally
+serve their own deployment so preview checks cannot accidentally test production.

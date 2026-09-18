@@ -75,7 +75,8 @@ test('HTML fallback, upstream error and thrown storage fault stay JSON', async (
 
 test('Worker integration keeps redirects, feedback and static assets', async () => {
   assert.equal((await worker.fetch(request('/api/v1/unknown'), env)).status, 404);
-  assert.equal((await worker.fetch(new Request('https://example.workers.dev/?a=1'), env)).headers.get('location'), 'https://ecnl.nextonetwo.com/?a=1');
+  assert.equal((await worker.fetch(new Request('https://ecnl-dashboard.nextonetwolabs.workers.dev/?a=1'), env)).headers.get('location'), 'https://ecnl.nextonetwo.com/?a=1');
+  assert.equal((await worker.fetch(new Request('https://preview-ecnl-dashboard.nextonetwolabs.workers.dev/api/v1/catalog'), env)).status, 200);
   assert.equal((await worker.fetch(request('/api/feedback'), env)).status, 405);
   const calls = [];
   const feedbackEnv = { ...env, FEEDBACK: { put(...args) { calls.push(args); } } };

@@ -34,7 +34,8 @@ export default {
     const url = new URL(request.url);
     const isFeedback = url.pathname === '/api/feedback';
     try {
-      if (url.hostname.endsWith('.workers.dev')) {
+      // Version/branch preview hosts must remain on their own deployment.
+      if (url.hostname === 'ecnl-dashboard.nextonetwolabs.workers.dev') {
         url.hostname = CANONICAL_HOST;
         return Response.redirect(url.toString(), 301);
       }
