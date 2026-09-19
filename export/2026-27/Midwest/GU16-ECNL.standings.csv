@@ -1,13 +1,13 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,Michigan Hawks ECNL G2010/11,Michigan Hawks,134153,3,3,0,0,9,3.0,10,0,10
-2,Nationals SC ECNL G2010/11,Nationals,94348,2,2,0,0,6,3.0,7,0,7
+2,Nationals SC ECNL G2010/11,Nationals,94348,3,2,0,1,7,2.33,7,0,7
 3,Eclipse Select Soccer Club ECNL G2010/11,Eclipse Select Soccer Club,136038,3,2,0,1,7,2.33,9,4,5
-4,Gretna Elite Academy ECNL G2010/11,Gretna Elite Academy,131832,3,2,0,1,7,2.33,6,4,2
-5,Sporting Iowa ECNL G2010/11,Sporting Iowa Central,69510,3,2,1,0,6,2.0,10,5,5
+4,Sporting Iowa ECNL G2010/11,Sporting Iowa Central,69510,4,3,1,0,9,2.25,13,5,8
+5,Gretna Elite Academy ECNL G2010/11,Gretna Elite Academy,131832,4,2,0,2,8,2.0,6,4,2
 6,St. Louis Scott Gallagher Navy ECNL G2010/11,St. Louis Scott Gallagher,134854,5,3,2,0,9,1.8,9,5,4
 7,Sporting Blue Valley ECNL G2010/11,Sporting Blue Valley,131582,4,2,1,1,7,1.75,11,6,5
-8,Liverpool FC MI ECNL G2010/11,Liverpool FC-IA Michigan,69697,4,2,2,0,6,1.5,3,3,0
-9,Kansas City Athletics ECNL G2010/11,KC Athletics,79772,2,1,1,0,3,1.5,3,5,-2
+8,Kansas City Athletics ECNL G2010/11,KC Athletics,79772,2,1,1,0,3,1.5,3,5,-2
+9,Liverpool FC MI ECNL G2010/11,Liverpool FC-IA Michigan,69697,5,2,3,0,6,1.2,3,6,-3
 10,Missouri Rush ECNL G2010/11,Missouri Rush,114379,6,2,3,1,7,1.17,4,10,-6
 11,Chicago Inter ECNL G2010/11,Chicago Inter,127911,3,1,2,0,3,1.0,3,6,-3
 12,FC Wisconsin ECNL G2010/11,FC Wisconsin Girls,71855,3,0,1,2,2,0.67,2,6,-4

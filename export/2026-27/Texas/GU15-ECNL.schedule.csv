@@ -13,8 +13,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-19,09:00 AM,Group Play,FC Dallas Youth ECNL G2011/12,2,0,Colorado Storm ECNL G2011/12,Toyota Soccer Center,Field 17,On Time,1073616
 2026-09-19,11:00 AM,Group Play,West Side Alliance ECNL G2011/12,0,5,FC Westlake ECNL G2011/12,RiverCity Parks,Field 10,On Time,1073478
 2026-09-19,11:00 AM,Group Play,Sting Royal ECNL G2011/12,3,1,Real Colorado National ECNL G2011/12,Sting National Training Center,Championship Field,On Time,1073622
-2026-09-19,01:00 PM,Group Play,Dallas Texans ECNL G2011/12,,,DKSC ECNL G2011/12,Memorial High School,Field 1,On Time,1073466
-2026-09-19,01:00 PM,Group Play,OK Energy FC ECNL G2011/12,,,Lonestar ATX Red ECNL G2011/12,Edmond Soccer Club,ESC 5,On Time,1073472
+2026-09-19,01:00 PM,Group Play,Dallas Texans ECNL G2011/12,0,1,DKSC ECNL G2011/12,Memorial High School,Field 1,On Time,1073466
+2026-09-19,01:00 PM,Group Play,OK Energy FC ECNL G2011/12,1,2,Lonestar ATX Red ECNL G2011/12,Edmond Soccer Club,ESC 5,On Time,1073472
 2026-09-20,09:00 AM,Group Play,West Side Alliance ECNL G2011/12,,,Lonestar ATX Red ECNL G2011/12,RiverCity Parks,Field 9,On Time,1073496
 2026-09-20,09:00 AM,Group Play,FC Dallas Youth ECNL G2011/12,,,Real Colorado National ECNL G2011/12,Toyota Soccer Center,Field 16,On Time,1073646
 2026-09-20,11:00 AM,Group Play,OK Energy FC ECNL G2011/12,,,FC Westlake ECNL G2011/12,Edmond Soccer Club,ESC 5,On Time,1073502

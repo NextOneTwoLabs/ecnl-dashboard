@@ -23,10 +23,10 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-12,03:00 PM,Group Play,Pleasanton RAGE ECNL G2010/11,1,0,Stanislaus Surf - ECNL G2010/11,Val Vista,Field 2,On Time,1094501
 2026-09-12,05:00 PM,Group Play,Mustang SC ECNL G2010/11,1,0,Bay Area Surf - ECNL G2010/11,Provident Field @ MSC, Upper,On Time,1094489
 2026-09-19,09:00 AM,Group Play,Santa Rosa United ECNL G2010/11,1,3,Pleasanton RAGE ECNL G2010/11,Trione Fields,Trione West,On Time,1094537
-2026-09-19,10:00 AM,Group Play,Marin FC ECNL G2010/11,,,Mustang SC ECNL G2010/11,Terra Linda High School,Stadium,On Time,1094525
-2026-09-19,12:00 PM,Group Play,Davis Legacy ECNL G2010/11,,,COSC ECNL G2010/11,Davis Legacy Soccer Complex,Field 12,On Time,1094513
-2026-09-19,12:50 PM,Group Play,Stanislaus Surf - ECNL G2010/11,,,Placer United ECNL G2010/11,Modesto Junior College,MJC West,On Time,1094543
-2026-09-19,01:00 PM,Group Play,San Juan SC ECNL G2010/11,,,Bay Area Surf - ECNL G2010/11,Tiemann Law Firm Fields at San Juan Soccer Complex,White Field,On Time,1094531
+2026-09-19,10:00 AM,Group Play,Marin FC ECNL G2010/11,0,3,Mustang SC ECNL G2010/11,Terra Linda High School,Stadium,On Time,1094525
+2026-09-19,12:00 PM,Group Play,Davis Legacy ECNL G2010/11,7,0,COSC ECNL G2010/11,Davis Legacy Soccer Complex,Field 12,On Time,1094513
+2026-09-19,12:50 PM,Group Play,Stanislaus Surf - ECNL G2010/11,0,0,Placer United ECNL G2010/11,Modesto Junior College,MJC West,On Time,1094543
+2026-09-19,01:00 PM,Group Play,San Juan SC ECNL G2010/11,0,0,Bay Area Surf - ECNL G2010/11,Tiemann Law Firm Fields at San Juan Soccer Complex,White Field,On Time,1094531
 2026-09-19,04:00 PM,Group Play,Force (CA) ECNL G2010/11,,,MVLA ECNL G2010/11,De Anza College,Soccer Field,On Time,1094519
 2026-09-20,10:00 AM,Group Play,Davis Legacy ECNL G2010/11,,,Santa Rosa United ECNL G2010/11,Davis Legacy Soccer Complex,Field 11,On Time,1094561
 2026-09-20,12:00 PM,Group Play,Placer United ECNL G2010/11,,,Mustang SC ECNL G2010/11,Placer Valley Soccer Complex,Field 6,On Time,1094567

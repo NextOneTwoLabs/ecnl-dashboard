@@ -1,17 +1,17 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,St. Louis Scott Gallagher Navy ECNL G2009/10,St. Louis Scott Gallagher,134858,5,5,0,0,15,3.0,20,2,18
-2,Gretna Elite Academy ECNL G2009/10,Gretna Elite Academy,131833,3,3,0,0,9,3.0,10,1,9
-3,Chicago Inter ECNL G2009/10,Chicago Inter,127910,3,3,0,0,9,3.0,9,3,6
-4,Michigan Hawks ECNL G2009/10,Michigan Hawks,134136,2,2,0,0,6,3.0,7,3,4
-5,Michigan Hawks Magic ECNL G2009/10,Michigan Hawks,134142,3,2,1,0,6,2.0,12,8,4
-6,Kansas City Athletics ECNL G2009/10,KC Athletics,46766,2,1,1,0,3,1.5,3,3,0
-7,Nationals SC ECNL G2009/10,Nationals,94342,2,1,1,0,3,1.5,3,3,0
-8,St. Louis Scott Gallagher Green ECNL G2009/10,St. Louis Scott Gallagher,134861,4,2,2,0,6,1.5,5,6,-1
-9,Sporting Iowa ECNL G2009/10,Sporting Iowa Central,59750,3,1,1,1,4,1.33,2,5,-3
-10,Rockford Raptors FC ECNL G2009/10,Rockford Raptors FC,134305,4,1,2,1,4,1.0,9,8,1
-11,Eclipse Select Soccer Club ECNL G2009/10,Eclipse Select Soccer Club,136039,3,1,2,0,3,1.0,6,5,1
+2,Michigan Hawks ECNL G2009/10,Michigan Hawks,134136,3,3,0,0,9,3.0,14,3,11
+3,Gretna Elite Academy ECNL G2009/10,Gretna Elite Academy,131833,4,3,0,1,10,2.5,10,1,9
+4,Michigan Hawks Magic ECNL G2009/10,Michigan Hawks,134142,4,3,1,0,9,2.25,14,8,6
+5,Chicago Inter ECNL G2009/10,Chicago Inter,127910,4,3,1,0,9,2.25,9,10,-1
+6,St. Louis Scott Gallagher Green ECNL G2009/10,St. Louis Scott Gallagher,134861,5,3,2,0,9,1.8,7,7,0
+7,Nationals SC ECNL G2009/10,Nationals,94342,3,1,1,1,4,1.33,3,3,0
+8,Sporting Iowa ECNL G2009/10,Sporting Iowa Central,59750,3,1,1,1,4,1.33,2,5,-3
+9,Rockford Raptors FC ECNL G2009/10,Rockford Raptors FC,134305,4,1,2,1,4,1.0,9,8,1
+10,Eclipse Select Soccer Club ECNL G2009/10,Eclipse Select Soccer Club,136039,3,1,2,0,3,1.0,6,5,1
+11,Kansas City Athletics ECNL G2009/10,KC Athletics,46766,3,1,2,0,3,1.0,4,5,-1
 12,Missouri Rush ECNL G2009/10,Missouri Rush,114378,6,1,4,1,4,0.67,11,15,-4
 13,Sporting Blue Valley ECNL G2009/10,Sporting Blue Valley,131583,4,0,3,1,1,0.25,4,14,-10
 14,MN Thunder Academy ECNL G2009/10,Minnesota Thunder Academy,134414,0,0,0,0,0,0.0,0,0,0
-15,FC Wisconsin ECNL G2009/10,FC Wisconsin Girls,68013,2,0,2,0,0,0.0,0,3,-3
+15,FC Wisconsin ECNL G2009/10,FC Wisconsin Girls,68013,3,0,3,0,0,0.0,0,5,-5
 16,Liverpool FC MI ECNL G2009/10,Liverpool FC-IA Michigan,69186,4,0,4,0,0,0.0,2,24,-22
