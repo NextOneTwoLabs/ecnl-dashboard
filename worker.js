@@ -3,9 +3,9 @@ import { dataApi } from './api/data-api.mjs';
 // Entry point for the deployed Worker. The site itself is the static files in
 // public/ (see [assets] in wrangler.toml). Versioned data routes stream one archived
 // JSON asset per request. This script also handles feedback and redirects, and runs
-// ahead of the static assets for "/" and "/api/*" only (run_worker_first in
-// wrangler.toml), so page and API requests invoke the Worker; every other file
-// is served as a free static asset:
+// ahead of the static assets for "/", "/api/*", and blocked raw paths ("/archive*",
+// "/data*") (run_worker_first in wrangler.toml), so page and API requests invoke the
+// Worker, direct raw data fetches are rejected, and public assets are served directly:
 //
 //   1. Sends the workers.dev address to the canonical custom domain. Browsers
 //      carry the #fragment across a redirect, so deep links such as
@@ -41,6 +41,9 @@ export default {
       }
       if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) return await dataApi(request, env);
       if (isFeedback) return await feedback(request, env);
+      let pathname = url.pathname;
+      try { pathname = decodeURIComponent(pathname); } catch {}
+      if (/^\/(archive|data)($|\/)/i.test(pathname)) return notFound(request);
     } catch (err) {
       // A fault in the feedback handler must not take page serving down with it. The request
       // body may already be spent by now, so the feedback path answers for itself instead of
@@ -52,6 +55,12 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+const notFound = request =>
+  new Response(request.method === 'HEAD' ? null : JSON.stringify({ ok: false, error: 'Not found' }), {
+    status: 404,
+    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
+  });
 
 // Feedback answers JSON and only JSON: the dashboard renders nothing without JavaScript, so
 // there is no plain-form fallback to redirect. Nothing here is cacheable, and the only caller

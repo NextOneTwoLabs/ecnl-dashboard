@@ -34,7 +34,9 @@ between collection and presentation.
 
 `public/` remains the frontend and bundled-data directory. There is no frontend
 build step. Worker, UI, and data still deploy together on every main commit,
-including data-only refresh commits. This change does not make the archive private.
+including data-only refresh commits. Direct external visitor access to `/archive/` and
+`/data/` is blocked at the edge Worker and local server; the frontend reads
+exclusively through `/api/v1`.
 
 ## Run it locally
 
@@ -309,10 +311,10 @@ the one rule covers both sites.
 | `public/apple-touch-icon.png` | The full badge at 180×180 — iOS home-screen icon; copied from the entrance site, no build step |
 | `public/og.png` | The full badge centred on black at 1200×630 — link-preview card; copied from the entrance site, no build step |
 | `public/favicon-180.png` | The mark alone at 180×180, transparent — Safari ignores SVG favicons, so this is the PNG tab icon; rendered from `favicon.svg` at 720×720, downscaled and quantised to a 144-colour palette, no build step |
-| `public/data/sources.json` | Season → conference → event ID registry, refresh policy, birth-year anchor |
-| `public/archive/api/…` | Raw API responses keyed by endpoint path — read by the v1 storage adapter |
+| `public/data/sources.json` | Season → conference → event ID registry, refresh policy, birth-year anchor (read via `/api/v1/catalog`) |
+| `public/archive/api/…` | Raw API responses keyed by endpoint path — read internally by the v1 storage adapter; direct external access blocked |
 | `public/archive/match-days.json` | Fixture calendar that drives the refresh schedule |
-| `public/archive/refresh-state.json` | When the data was last refreshed (powers "Updated 3h ago") |
+| `public/archive/refresh-state.json` | When the data was last refreshed (powers "Updated 3h ago"; read via `/api/v1/status`) |
 | `public/archive/manifest.json` | Index tying event IDs back to season/conference/flight |
 | `archive.py` | Crawler: match-day refresh, bulk backfill, CSV exports, `--verify` |
 | `ecnl_api.py` | Shared API/archive helpers |
@@ -320,7 +322,7 @@ the one rule covers both sites.
 | `reconstruct.py` | Rebuilds schedules TGS removed from a hand-entered CSV; `--check` validates them (see "Reconstructed data") |
 | `reconstructed/` | The CSVs behind the reconstructed archive files — one line per game, with its source URL |
 | `export/<season>/<conf>/` | CSVs — not published; `*.standings.csv`, `*.schedule.csv` |
-| `worker.js` | Redirects the `workers.dev` hostname, and handles `POST /api/feedback` |
+| `worker.js` | Redirects the `workers.dev` hostname, blocks raw data paths, and handles `/api/v1/*` and `POST /api/feedback` |
 | `wrangler.toml` | Cloudflare Workers config: the `public/` assets and the `FEEDBACK` KV binding |
 | `.gitattributes` | Pins the image assets (`*.svg`, `*.png`) as binary, so the files copied from the entrance site stay byte-identical across checkouts instead of being line-ending converted |
 | `.github/workflows/refresh.yml` | The scheduled refresh — asks for every 2 h, measured at 3 to 5½ |
@@ -330,7 +332,7 @@ the one rule covers both sites.
 
 The site is a Cloudflare Worker serving static assets (`wrangler.toml` at the repo
 root: `[assets] directory = "./public"`, plus a small `worker.js` that redirects the
-`workers.dev` hostname and handles `/api/v1/*` and `POST /api/feedback`). It is built by Cloudflare's Git integration
+`workers.dev` hostname, blocks raw data paths, and handles `/api/v1/*` and `POST /api/feedback`). It is built by Cloudflare's Git integration
 on the **NextOneTwoLabs** Cloudflare account: repository `NextOneTwoLabs/ecnl-dashboard`,
 branch `main`, build command empty, deploy command `npx wrangler deploy`. Pushing to
 `main` — including the scheduled data commits — redeploys.
