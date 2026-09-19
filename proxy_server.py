@@ -21,8 +21,11 @@ import argparse
 import http.server
 import json
 import os
+import posixpath
+import re
 import sys
 import urllib.error
+import urllib.parse
 from urllib.parse import urlparse, parse_qs
 
 import ecnl_api as api
@@ -48,6 +51,9 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         if self._handle_v1():
             return
 
+        if self._handle_blocked():
+            return
+
         if parsed.path.startswith("/api/"):
             api_path = parsed.path[len("/api/"):]
             query = parse_qs(parsed.query)
@@ -64,12 +70,23 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             return True
         return False
 
+    def _handle_blocked(self):
+        raw_path = urlparse(self.path).path
+        norm_path = posixpath.normpath(urllib.parse.unquote(raw_path))
+        if re.match(r"^/(archive|data)($|/)", norm_path, re.IGNORECASE):
+            self._send_json(404, {"ok": False, "error": "Not found"})
+            return True
+        return False
+
     def do_HEAD(self):
-        if not self._handle_v1():
-            super().do_HEAD()
+        if self._handle_v1():
+            return
+        if self._handle_blocked():
+            return
+        super().do_HEAD()
 
     def _unsupported(self):
-        if not self._handle_v1():
+        if not self._handle_v1() and not self._handle_blocked():
             self.send_error(501, "Unsupported method")
 
     do_POST = do_PUT = do_PATCH = do_DELETE = do_OPTIONS = do_TRACE = do_CONNECT = _unsupported
@@ -152,9 +169,11 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(payload)))
+        self.send_header("Cache-Control", "no-store")
         self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
-        self.wfile.write(payload)
+        if self.command != "HEAD":
+            self.wfile.write(payload)
 
     # ---------- logging ----------
 

@@ -5,8 +5,8 @@
 # the feedback panel, which needs the Worker; use `npx wrangler dev` to run
 # the full thing). worker.js redirects the workers.dev address to the
 # canonical custom domain and handles /api/v1/* and POST /api/feedback; it runs ahead of the
-# assets for "/" and "/api/*" alone, so everything else is served as free
-# static assets without invoking the Worker.
+# assets for "/", "/api/*", and blocked raw paths ("/archive*", "/data*"), so other
+# page assets are served as free static assets without invoking the Worker.
 #
 # Canonical address: https://ecnl.nextonetwo.com  (custom domain, attached to
 # this Worker in the Cloudflare dashboard under Settings -> Domains & Routes).
@@ -18,7 +18,7 @@ compatibility_date = "2026-08-31"
 [assets]
 directory = "./public"
 binding = "ASSETS"
-run_worker_first = ["/", "/api/*"]
+run_worker_first = ["/", "/api/*", "/archive*", "/data*"]
 
 # Visitor feedback, one key per submission. The namespace already exists on the
 # NextOneTwoLabs account and its real id is in place, so there is nothing to

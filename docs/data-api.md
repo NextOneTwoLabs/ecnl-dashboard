@@ -55,7 +55,13 @@ playoffs, reconstructed finals, search, favorites, deep links, and feedback.
 Compare cold/warm navigation and search with the previous release.
 
 Rollback restores the previous complete application deployment; there is no
-schema migration to reverse. Raw archive URLs remain public in this phase.
+schema migration to reverse. Direct visitor access to raw archive and data
+assets (`/archive/*`, `/data/*`, and bare `/archive`, `/data`) is blocked with
+404 at the edge Worker and local server. This closes the unauthenticated side door
+to raw snapshot files, while `/api/v1/*` remains the unauthenticated public API contract.
+Blocking requests prevents future downloads; it does not claw back copies already
+cached in visitors' browsers from earlier releases (a cache purge of `/archive/*`
+and `/data/*` on deploy is recommended hygiene).
 
 Each v1 request now invokes the Worker, whereas direct static JSON reads did not.
 The unchanged cold-search fan-out can therefore make roughly 75 Worker requests
@@ -64,7 +70,7 @@ Include this request volume in usage monitoring before increasing traffic.
 
 Later, replace the archive reader with private R2 and add validated publishing.
 That can remove data-only deployments without changing v1 clients. Server-side
-search and database-backed analytics are separate additions, not prerequisites.
+search, database-backed analytics, and a keyed private API are separate future additions.
 
 The Python server offers the same archive-only v1 routes with stdlib only.
 Its explicit `?live=1` debug path still uses the legacy proxy and reconstructed

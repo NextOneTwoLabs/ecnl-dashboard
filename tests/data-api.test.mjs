@@ -87,3 +87,37 @@ test('Worker integration keeps redirects, feedback and static assets', async () 
   const home = await worker.fetch(request('/'), { ASSETS: { fetch: () => new Response('homepage') } });
   assert.equal(await home.text(), 'homepage');
 });
+
+test('direct visitor access to /archive and /data is blocked', async () => {
+  const blockedPaths = [
+    '/archive',
+    '/archive/',
+    '/archive/api/Event/get-event-schedule-or-standings/4263.json',
+    '/archive/refresh-state.json',
+    '/archive/match-days.json',
+    '/data',
+    '/data/',
+    '/data/sources.json',
+    '/%61rchive/refresh-state.json',
+    '/%64ata/sources.json',
+    '/Archive/refresh-state.json',
+    '/%41rchive/refresh-state.json',
+    '/./archive/refresh-state.json',
+    '/foo/../data/sources.json',
+  ];
+  for (const path of blockedPaths) {
+    for (const method of ['GET', 'HEAD', 'POST']) {
+      const response = await worker.fetch(request(path, { method }), env);
+      assert.equal(response.status, 404, `${method} ${path} should be 404`);
+      assert.match(response.headers.get('content-type'), /application\/json/);
+      assert.equal(response.headers.get('cache-control'), 'no-store');
+      if (method === 'HEAD') {
+        assert.equal(await response.text(), '');
+      } else {
+        const body = await response.json();
+        assert.equal(body.ok, false);
+        assert.equal(body.error, 'Not found');
+      }
+    }
+  }
+});

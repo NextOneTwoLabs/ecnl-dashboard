@@ -88,5 +88,35 @@ class ApiTests(unittest.TestCase):
             self.assertEqual(status, 200)
             self.assertEqual(headers['X-ECNL-Source'], 'reconstructed')
 
+    def test_direct_archive_and_data_blocked(self):
+        blocked_paths = [
+            "/archive",
+            "/archive/",
+            "/archive/refresh-state.json",
+            "/archive/api/Event/get-event-schedule-or-standings/4263.json",
+            "/data",
+            "/data/",
+            "/data/sources.json",
+            "/%61rchive/refresh-state.json",
+            "/%64ata/sources.json",
+            "/Archive/refresh-state.json",
+            "/%41rchive/refresh-state.json",
+            "/./archive/refresh-state.json",
+            "/foo/../data/sources.json",
+        ]
+        with patch.object(proxy_server.ProxyHandler, 'log_message'):
+            for path in blocked_paths:
+                for method in ("GET", "HEAD", "POST"):
+                    status, headers, body = self.request(path, method)
+                    self.assertEqual(status, 404, f"{method} {path} should return 404")
+                    self.assertIn("application/json", headers.get("Content-Type", ""))
+                    self.assertEqual(headers.get("Cache-Control"), "no-store")
+                    if method == "HEAD":
+                        self.assertEqual(body, b"")
+                    else:
+                        data = json.loads(body.decode())
+                        self.assertFalse(data.get("ok"))
+                        self.assertEqual(data.get("error"), "Not found")
+
 if __name__ == '__main__':
     unittest.main()
