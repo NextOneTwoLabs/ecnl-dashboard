@@ -17,10 +17,10 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-08-30,01:00 PM,Group Play,South Carolina United ECNL G2013/14,2,2,Team Boca ECNL G2013/14,Southeastern Freight Lines Complex,Field 3,On Time,1069719
 2026-09-12,01:00 PM,Group Play,Seminole United ECNL G2013/14,1,1,Sporting SA JAX ECNL G2013/14,Seminole,Field 6,On Time,1069725
 2026-09-13,01:00 PM,Group Play,Florida Kraze Krush ECNL G2013/14,4,0,Jacksonville FC ECNL G2013/14,Central Winds,Field C,On Time,1069727
-2026-09-19,09:00 AM,Group Play,Alabama FC ECNL G2013/14,,,Team Boca ECNL G2013/14,Dunnavant Valley Fields (DVF),Field # 2,On Time,1069729
-2026-09-19,09:00 AM,Group Play,Concorde Fire Premier ECNL G2013/14,,,Athletic Club Florida ECNL G2013/14,Georgia Sports Park ,field 5,On Time,1069731
-2026-09-19,09:00 AM,Group Play,Atlanta Fire United ECNL G2013/14,,,Florida Premier FC ECNL G2013/14,Scott Hudgens Park,Field 6,On Time,1069735
-2026-09-19,09:00 AM,Group Play,Concorde Fire Platinum ECNL G2013/14,,,Sporting SA JAX ECNL G2013/14,Georgia Sports Park ,field 3,On Time,1069741
+2026-09-19,09:00 AM,Group Play,Alabama FC ECNL G2013/14,6,0,Team Boca ECNL G2013/14,Dunnavant Valley Fields (DVF),Field # 2,On Time,1069729
+2026-09-19,09:00 AM,Group Play,Concorde Fire Premier ECNL G2013/14,1,1,Athletic Club Florida ECNL G2013/14,Georgia Sports Park ,field 5,On Time,1069731
+2026-09-19,09:00 AM,Group Play,Atlanta Fire United ECNL G2013/14,0,1,Florida Premier FC ECNL G2013/14,Scott Hudgens Park,Field 6,On Time,1069735
+2026-09-19,09:00 AM,Group Play,Concorde Fire Platinum ECNL G2013/14,2,0,Sporting SA JAX ECNL G2013/14,Georgia Sports Park ,field 3,On Time,1069741
 2026-09-19,11:00 AM,Group Play,United Futbol Academy ECNL G2013/14,,,Tampa Bay United ECNL G2013/14,Fowler Park,Field 5,On Time,1069733
 2026-09-19,11:00 AM,Group Play,GSA ECNL G2013/14,,,Jacksonville FC ECNL G2013/14,Rabbit Hill Park,Field 2,On Time,1069743
 2026-09-19,01:00 PM,Group Play,CESA Liberty ECNL G2013/14,,,Florida Kraze Krush ECNL G2013/14,Mesa Soccer Complex,Field 4,On Time,1069737
