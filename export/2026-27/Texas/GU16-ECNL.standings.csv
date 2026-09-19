@@ -1,16 +1,16 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,FC Westlake ECNL G2010/11,FC Westlake ,131274,2,1,0,1,4,2.0,3,1,2
-2,Real Colorado National ECNL G2010/11,Real Colorado,81431,3,2,1,0,6,2.0,4,3,1
-3,Colorado Storm ECNL G2010/11,Colorado Storm,72334,3,1,0,2,5,1.67,4,2,2
+1,FC Dallas Youth ECNL G2010/11,FC Dallas Youth,63889,1,1,0,0,3,3.0,6,0,6
+2,FC Westlake ECNL G2010/11,FC Westlake ,131274,2,1,0,1,4,2.0,3,1,2
+3,Real Colorado National ECNL G2010/11,Real Colorado,81431,4,2,1,1,7,1.75,4,3,1
 4,Real Colorado Athletico ECNL G2010/11,Real Colorado,81521,2,1,1,0,3,1.5,3,4,-1
-5,Sting Black ECNL G2010/11,Sting Soccer Club,80765,1,0,0,1,1,1.0,1,1,0
-6,Sting Royal ECNL G2010/11,Sting Soccer Club,80240,1,0,0,1,1,1.0,1,1,0
-7,Albion Hurricanes FC ECNL G2010/11,Albion Hurricanes FC,40463,1,0,0,1,1,1.0,0,0,0
-8,Colorado Rush ECNL G2010/11,Colorado Rush,95046,2,0,1,1,1,0.5,0,1,-1
-9,Lonestar ATX Red ECNL G2010/11,Lonestar ATX,132699,2,0,1,1,1,0.5,2,4,-2
-10,Dallas Texans ECNL G2010/11,Dallas Texans,134487,0,0,0,0,0,0.0,0,0,0
-11,DKSC ECNL G2010/11,DKSC,81104,0,0,0,0,0,0.0,0,0,0
-12,FC Dallas Youth ECNL G2010/11,FC Dallas Youth,63889,0,0,0,0,0,0.0,0,0,0
+5,Colorado Storm ECNL G2010/11,Colorado Storm,72334,4,1,1,2,5,1.25,4,8,-4
+6,Dallas Texans ECNL G2010/11,Dallas Texans,134487,1,0,0,1,1,1.0,2,2,0
+7,DKSC ECNL G2010/11,DKSC,81104,1,0,0,1,1,1.0,2,2,0
+8,Sting Royal ECNL G2010/11,Sting Soccer Club,80240,2,0,0,2,2,1.0,1,1,0
+9,Sting Black ECNL G2010/11,Sting Soccer Club,80765,1,0,0,1,1,1.0,1,1,0
+10,Albion Hurricanes FC ECNL G2010/11,Albion Hurricanes FC,40463,1,0,0,1,1,1.0,0,0,0
+11,Colorado Rush ECNL G2010/11,Colorado Rush,95046,2,0,1,1,1,0.5,0,1,-1
+12,Lonestar ATX Red ECNL G2010/11,Lonestar ATX,132699,2,0,1,1,1,0.5,2,4,-2
 13,OK Energy FC ECNL G2010/11,Oklahoma Energy FC,80774,0,0,0,0,0,0.0,0,0,0
 14,SOLAR SC ECNL G2010/11,Solar SC,81882,0,0,0,0,0,0.0,0,0,0
 15,West Side Alliance ECNL G2010/11,West Side Alliance SC,110468,0,0,0,0,0,0.0,0,0,0
