@@ -1,17 +1,17 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,Florida Premier FC ECNL G2012/13,Florida Premier FC,113726,4,4,0,0,12,3.0,18,3,15
-2,Concorde Fire Premier ECNL G2012/13,Concorde Fire ,112296,4,3,0,1,10,2.5,15,4,11
-3,Florida Kraze Krush ECNL G2012/13,Florida Kraze Krush,106035,4,3,0,1,10,2.5,13,4,9
-4,South Carolina United ECNL G2012/13,South Carolina United FC,98643,3,2,0,1,7,2.33,12,3,9
-5,Concorde Fire Platinum ECNL G2012/13,Concorde Fire ,112295,4,3,1,0,9,2.25,17,5,12
-6,CESA Liberty ECNL G2012/13,Carolina Elite Soccer Academy,87758,4,3,1,0,9,2.25,11,5,6
-7,GSA ECNL G2012/13,Gwinnett Soccer Academy,131500,4,3,1,0,9,2.25,7,6,1
-8,Sporting SA JAX ECNL G2012/13,Sporting SA,94389,5,3,2,0,9,1.8,12,10,2
+2,Florida Kraze Krush ECNL G2012/13,Florida Kraze Krush,106035,5,4,0,1,13,2.6,17,4,13
+3,Concorde Fire Premier ECNL G2012/13,Concorde Fire ,112296,4,3,0,1,10,2.5,15,4,11
+4,Concorde Fire Platinum ECNL G2012/13,Concorde Fire ,112295,4,3,1,0,9,2.25,17,5,12
+5,CESA Liberty ECNL G2012/13,Carolina Elite Soccer Academy,87758,4,3,1,0,9,2.25,11,5,6
+6,GSA ECNL G2012/13,Gwinnett Soccer Academy,131500,4,3,1,0,9,2.25,7,6,1
+7,Sporting SA JAX ECNL G2012/13,Sporting SA,94389,5,3,2,0,9,1.8,12,10,2
+8,South Carolina United ECNL G2012/13,South Carolina United FC,98643,4,2,1,1,7,1.75,12,7,5
 9,Alabama FC ECNL G2012/13,Alabama FC,98886,4,1,2,1,4,1.0,9,10,-1
 10,Athletic Club Florida ECNL G2012/13,Athletic Club Florida,105806,4,1,2,1,4,1.0,8,11,-3
 11,United Futbol Academy ECNL G2012/13,United Futbol Academy,105642,4,1,2,1,4,1.0,4,8,-4
-12,Atlanta Fire United ECNL G2012/13,Atlanta Fire United,79849,3,1,2,0,3,1.0,2,8,-6
-13,Tampa Bay United ECNL G2012/13,Tampa Bay United,112271,3,0,2,1,1,0.33,2,11,-9
+12,Atlanta Fire United ECNL G2012/13,Atlanta Fire United,79849,4,1,2,1,4,1.0,2,8,-6
+13,Tampa Bay United ECNL G2012/13,Tampa Bay United,112271,4,0,2,2,2,0.5,2,11,-9
 14,Team Boca ECNL G2012/13,Team Boca,131999,4,0,3,1,1,0.25,6,13,-7
 15,Jacksonville FC ECNL G2012/13,Jacksonville FC,111248,5,0,5,0,0,0.0,1,11,-10
 16,Seminole United ECNL G2012/13,Seminole United,105992,5,0,5,0,0,0.0,0,25,-25
