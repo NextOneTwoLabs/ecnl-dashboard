@@ -10,9 +10,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-19,09:00 AM,Group Play,Eagles SC ECNL G2011/12,0,1,Pateadores Soccer Club ECNL G2011/12,Pleasant Valley Fields,Field 19,On Time,1085382
 2026-09-19,11:00 AM,Group Play,LA Breakers FC ECNL G2011/12,0,4,Beach Futbol Club (CA) ECNL G2011/12,Bell Gardens Sports Complex,Field 3,On Time,1085388
 2026-09-19,12:00 PM,Group Play,Phoenix Rising FC ECNL G2011/12,0,0,LV Heat Surf ECNL G2011/12,PRFC Youth Soccer Facility,Field 1,On Time,1085412
-2026-09-19,01:45 PM,Group Play,Legends FC (CA) ECNL G2011/12,,,So Cal Blues ECNL G2011/12,Silverlakes Complex,Field 16,On Time,1085400
-2026-09-19,01:45 PM,Group Play,Sporting California USA ECNL G2011/12,,,Slammers FC HB Koge ECNL G2011/12,San Bernardino Soccer Complex,Field 1,On Time,1085418
-2026-09-19,05:00 PM,Group Play,Legends FC Del Mar ECNL G2011/12,,,SLAMMERS FC ECNL G2011/12,Canyon Crest Academy,Stadium,On Time,1085406
+2026-09-19,01:45 PM,Group Play,Legends FC (CA) ECNL G2011/12,0,4,So Cal Blues ECNL G2011/12,Silverlakes Complex,Field 16,On Time,1085400
+2026-09-19,01:45 PM,Group Play,Sporting California USA ECNL G2011/12,1,8,Slammers FC HB Koge ECNL G2011/12,San Bernardino Soccer Complex,Field 1,On Time,1085418
+2026-09-19,05:00 PM,Group Play,Legends FC Del Mar ECNL G2011/12,0,0,SLAMMERS FC ECNL G2011/12,Canyon Crest Academy,Stadium,On Time,1085406
 2026-09-20,01:00 PM,Group Play,Utah Royals FC-AZ ECNL G2011/12,,,LV Heat Surf ECNL G2011/12,Scottsdale Sports Complex,Field 4,On Time,1085424
 2026-09-26,08:30 AM,Group Play,SLAMMERS FC ECNL G2011/12,,,Arizona Arsenal ECNL G2011/12,Arroyo Park,Field 1,On Time,1085454
 2026-09-26,10:00 AM,Group Play,Phoenix Rising FC ECNL G2011/12,,,Utah Royals FC-AZ ECNL G2011/12,PRFC Youth Soccer Facility,Field 1,On Time,1085442

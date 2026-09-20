@@ -4,15 +4,15 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 3,San Diego Surf ECNL G2008/09,San Diego Surf Soccer Club,132458,1,1,0,0,3,3.0,5,3,2
 4,Slammers FC HB Koge ECNL G2008/09,Slammers FC,133600,2,2,0,0,6,3.0,4,2,2
 5,Eagles SC ECNL G2008/09,Eagles SC,6122,2,1,0,1,4,2.0,5,3,2
-6,Legends FC (CA) ECNL G2008/09,Legends FC (CA),133009,2,1,0,1,4,2.0,3,2,1
-7,Sporting California USA ECNL G2008/09,Sporting California USA,134098,2,1,1,0,3,1.5,2,2,0
-8,LV Heat Surf ECNL G2008/09,LV Heat Surf SC ,50614,1,0,0,1,1,1.0,4,4,0
+6,LV Heat Surf ECNL G2008/09,LV Heat Surf SC ,50614,2,1,0,1,4,2.0,5,4,1
+7,Legends FC (CA) ECNL G2008/09,Legends FC (CA),133009,2,1,0,1,4,2.0,3,2,1
+8,Sporting California USA ECNL G2008/09,Sporting California USA,134098,2,1,1,0,3,1.5,2,2,0
 9,Utah Royals FC AZ ECNL G2008/09,Utah Royals FC - AZ,56530,2,0,1,1,1,0.5,5,7,-2
 10,SLAMMERS FC ECNL G2008/09,Slammers FC,42498,2,0,1,1,1,0.5,2,4,-2
 11,LA Breakers FC ECNL G2008/09,LA Breakers FC,55512,2,0,1,1,1,0.5,4,7,-3
 12,Arizona Arsenal ECNL G2008/09,Arizona Arsenal Soccer Club,134275,0,0,0,0,0,0.0,0,0,0
-13,Phoenix Rising FC ECNL G2008/09,Phoenix Rising FC,59771,0,0,0,0,0,0.0,0,0,0
-14,LAFC So Cal ECNL G2008/09,LAFC So Cal,133707,1,0,1,0,0,0.0,1,2,-1
+13,LAFC So Cal ECNL G2008/09,LAFC So Cal,133707,1,0,1,0,0,0.0,1,2,-1
+14,Phoenix Rising FC ECNL G2008/09,Phoenix Rising FC,59771,1,0,1,0,0,0.0,0,1,-1
 15,So Cal Blues ECNL G2008/09,So Cal Blues,135784,2,0,2,0,0,0.0,0,2,-2
 16,Pateadores Soccer Club ECNL G2008/09,Pateadores Soccer Club,130900,2,0,2,0,0,0.0,2,5,-3
 17,Rebels SC ECNL G2008/09,Rebels Soccer Club,26385,1,0,1,0,0,0.0,1,4,-3

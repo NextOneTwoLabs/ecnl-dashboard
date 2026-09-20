@@ -1,18 +1,18 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,San Diego Surf ECNL G2013/14,San Diego Surf Soccer Club,132463,1,1,0,0,3,3.0,10,1,9
 2,LV Heat Surf ECNL G2013/14,LV Heat Surf SC ,126712,2,2,0,0,6,3.0,6,0,6
-3,Legends FC (CA) ECNL G2013/14,Legends FC (CA),133032,1,1,0,0,3,3.0,4,0,4
-4,SLAMMERS FC ECNL G2013/14,Slammers FC,107988,1,1,0,0,3,3.0,2,0,2
-5,So Cal Blues ECNL G2013/14,So Cal Blues,135883,1,1,0,0,3,3.0,2,0,2
+3,Legends FC (CA) ECNL G2013/14,Legends FC (CA),133032,2,2,0,0,6,3.0,5,0,5
+4,Slammers FC HB Koge ECNL G2013/14,Slammers FC,112900,2,2,0,0,6,3.0,5,1,4
+5,SLAMMERS FC ECNL G2013/14,Slammers FC,107988,2,2,0,0,6,3.0,4,0,4
 6,LAFC So Cal ECNL G2013/14,LAFC So Cal,133715,1,1,0,0,3,3.0,1,0,1
-7,Slammers FC HB Koge ECNL G2013/14,Slammers FC,112900,1,1,0,0,3,3.0,1,0,1
+7,So Cal Blues ECNL G2013/14,So Cal Blues,135883,2,1,1,0,3,1.5,2,1,1
 8,Eagles SC ECNL G2013/14,Eagles SC,63947,2,1,1,0,3,1.5,2,4,-2
-9,Legends FC Del Mar ECNL G2013/14,Legends FC - Del Mar,131706,1,0,0,1,1,1.0,0,0,0
-10,Rebels SC ECNL G2013/14,Rebels Soccer Club,90147,1,0,0,1,1,1.0,0,0,0
-11,Beach Futbol Club (CA) ECNL G2013/14,Beach Futbol Club,131925,2,0,1,1,1,0.5,1,2,-1
+9,Rebels SC ECNL G2013/14,Rebels Soccer Club,90147,1,0,0,1,1,1.0,0,0,0
+10,Beach Futbol Club (CA) ECNL G2013/14,Beach Futbol Club,131925,2,0,1,1,1,0.5,1,2,-1
+11,Legends FC Del Mar ECNL G2013/14,Legends FC - Del Mar,131706,2,0,1,1,1,0.5,0,2,-2
 12,LA Breakers FC ECNL G2013/14,LA Breakers FC,133854,2,0,1,1,1,0.5,1,4,-3
 13,Arizona Arsenal ECNL G2013/14,Arizona Arsenal Soccer Club,134387,0,0,0,0,0,0.0,0,0,0
-14,Sporting California USA ECNL G2013/14,Sporting California USA,134070,1,0,1,0,0,0.0,0,2,-2
-15,Pateadores Soccer Club ECNL G2013/14,Pateadores Soccer Club,126631,2,0,2,0,0,0.0,0,3,-3
-16,Phoenix Rising FC ECNL G2013/14,Phoenix Rising FC,121185,1,0,1,0,0,0.0,0,3,-3
+14,Pateadores Soccer Club ECNL G2013/14,Pateadores Soccer Club,126631,2,0,2,0,0,0.0,0,3,-3
+15,Phoenix Rising FC ECNL G2013/14,Phoenix Rising FC,121185,1,0,1,0,0,0.0,0,3,-3
+16,Sporting California USA ECNL G2013/14,Sporting California USA,134070,2,0,2,0,0,0.0,1,6,-5
 17,Utah Royals FC-AZ ECNL G2013/14,Utah Royals FC - AZ,90259,2,0,2,0,0,0.0,1,12,-11
