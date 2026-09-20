@@ -10,12 +10,12 @@
     "eventDetails": "Event/get-event-details-by-eventID/{eventId}"
   },
   "refresh": {
-    "_comment": "Drives `archive.py --refresh`. Only activeSeason is ever fetched; past seasons are final. everyHours documents intent - the cron in .github/workflows/refresh.yml is the real schedule, so keep them in sync.",
+    "_comment": "Drives `archive.py --refresh`. Only activeSeason is ever fetched; past seasons are final. everyHours documents intent (match-day refreshes every 30 minutes during game hours; min interval 20 minutes) - the cron in .github/workflows/refresh.yml is the real schedule, so keep them in sync.",
     "activeSeason": "2026-27",
-    "matchDay": { "everyHours": 2, "lookbackDays": 2, "timezonePaddingDays": 1 },
+    "matchDay": { "everyHours": 0.5, "lookbackDays": 2, "timezonePaddingDays": 1 },
     "sweep": { "daily": true, "atUtcHour": 6 },
     "pending": { "maxPendingAgeDays": 21 },
-    "minIntervalMinutes": 90
+    "minIntervalMinutes": 20
   },
 
   "publicUrlTemplates": {
@@ -420,14 +420,14 @@
       "national": {
         "Playoffs": {
           "eventId": 3064,
-          "eventName": "ECNL Girls National Playoffs",
+          "eventName": "ECNL National Playoffs",
           "location": "Redmond, WA",
           "startDate": "2024-06-22",
           "endDate": "2024-06-28"
         },
         "Finals": {
           "eventId": 3238,
-          "eventName": "ECNL Girls National Finals",
+          "eventName": "ECNL National Finals",
           "location": "Richmond, VA",
           "startDate": "2024-07-10",
           "endDate": "2024-07-13"
@@ -527,7 +527,7 @@
         "Playoffs": {
           "eventId": 2719,
           "eventName": "ECNL National Playoffs",
-          "location": "Del Mar, CA",
+          "location": "Redmond, WA",
           "startDate": "2023-06-24",
           "endDate": "2023-06-30"
         },
@@ -701,7 +701,6 @@
     },
     "2020-21": {
       "startYear": 2020,
-      "_note": "No NorCal conference this season. The first season Bay Area clubs competed in ECNL: they played in the Northwest conference, whose divisions were split into Bay Area, Mountain and Pacific flights. Six conferences also ran a GU18/U19 Composite division beside GU18/U19. COVID season: many conference games were never played.",
       "conferences": {
         "Mid-Atlantic": {
           "eventId": 2040,
@@ -775,7 +774,7 @@
         },
         "Finals": {
           "eventId": 2289,
-          "eventName": "ECNL Girls National Finals",
+          "eventName": "ECNL National Finals",
           "location": "Richmond, VA",
           "startDate": "2021-07-17",
           "endDate": "2021-07-19",
