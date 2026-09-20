@@ -30,10 +30,10 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-19,12:00 PM,Group Play,Nationals SC ECNL G2010/11,0,0,Gretna Elite Academy ECNL G2010/11,Hy-Vee Multiplex,Field 1,On Time,1067786
 2026-09-19,02:00 PM,Group Play,Sporting Iowa ECNL G2010/11,3,0,Liverpool FC MI ECNL G2010/11,Hy-Vee Multiplex,Green #1,On Time,1067790
 2026-09-20,08:00 AM,Group Play,Liverpool FC MI ECNL G2010/11,,,Gretna Elite Academy ECNL G2010/11,HyVee Multiplex,Field 1,On Time,1067818
-2026-09-20,09:00 AM,Group Play,Missouri Rush ECNL G2010/11,,,Kansas City Athletics ECNL G2010/11,Missouri Rush Sports Park,Field 1,On Time,1067810
-2026-09-20,10:00 AM,Group Play,Sporting Iowa ECNL G2010/11,,,Nationals SC ECNL G2010/11,Hy-Vee Multiplex,Green #1,On Time,1067814
+2026-09-20,09:00 AM,Group Play,Missouri Rush ECNL G2010/11,0,2,Kansas City Athletics ECNL G2010/11,Missouri Rush Sports Park,Field 1,On Time,1067810
+2026-09-20,10:00 AM,Group Play,Sporting Iowa ECNL G2010/11,0,5,Nationals SC ECNL G2010/11,Hy-Vee Multiplex,Green #1,On Time,1067814
 2026-09-20,10:45 AM,Group Play,Chicago Inter ECNL G2010/11,,,Michigan Hawks Magic ECNL G2010/11,Chicago Inter Complex,Field 2,On Time,1067802
-2026-09-20,10:45 AM,Group Play,FC Wisconsin ECNL G2010/11,,,Michigan Hawks ECNL G2010/11,University School Milwaukee,Stadium,On Time,1067806
+2026-09-20,10:45 AM,Group Play,FC Wisconsin ECNL G2010/11,0,3,Michigan Hawks ECNL G2010/11,University School Milwaukee,Stadium,On Time,1067806
 2026-09-20,11:30 AM,Group Play,St. Louis Scott Gallagher Navy ECNL G2010/11,,,Rockford Raptors FC ECNL G2010/11,WWT Soccer Park,Field 2,On Time,1067798
 2026-09-20,11:30 AM,Group Play,St. Louis Scott Gallagher Green ECNL G2010/11,,,Eclipse Select Soccer Club ECNL G2010/11,WWT Soccer Park,Field 3,On Time,1067822
 2026-09-26,09:00 AM,Group Play,Chicago Inter ECNL G2010/11,,,Eclipse Select Soccer Club ECNL G2010/11,Chicago Inter Complex,Field 2,On Time,1067826

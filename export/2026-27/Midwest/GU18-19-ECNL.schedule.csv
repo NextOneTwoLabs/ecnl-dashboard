@@ -29,12 +29,12 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-19,11:00 AM,Group Play,Missouri Rush ECNL G2008/09,2,4,Rockford Raptors FC ECNL G2008/09,Missouri Rush Sports Park,Field 3,On Time,1067784
 2026-09-19,02:00 PM,Group Play,Chicago Inter ECNL G2008/09,1,5,Michigan Hawks ECNL G2008/09,Chicago Inter Complex,Field 1,On Time,1067776
 2026-09-19,02:30 PM,Group Play,FC Wisconsin ECNL G2008/09,0,2,Michigan Hawks Magic ECNL G2008/09,FC Wisconsin Soccer Park,Field 1 - Val Olla Field,On Time,1067780
-2026-09-20,08:00 AM,Group Play,St. Louis Scott Gallagher Navy ECNL G2008/09,,,Rockford Raptors FC ECNL G2008/09,WWT Soccer Park,Field 2,On Time,1067800
-2026-09-20,08:00 AM,Group Play,St. Louis Scott Gallagher Green ECNL G2008/09,,,Eclipse Select Soccer Club ECNL G2008/09,WWT Soccer Park,Field 3,On Time,1067824
-2026-09-20,09:00 AM,Group Play,Chicago Inter ECNL G2008/09,,,Michigan Hawks Magic ECNL G2008/09,Chicago Inter Complex,Field 2,On Time,1067804
-2026-09-20,09:00 AM,Group Play,Missouri Rush ECNL G2008/09,,,Kansas City Athletics ECNL G2008/09,Missouri Rush Sports Park,Field 2,On Time,1067812
-2026-09-20,10:00 AM,Group Play,Sporting Iowa ECNL G2008/09,,,Nationals SC ECNL G2008/09,Hy-Vee Multiplex,Green #2,On Time,1067816
-2026-09-20,10:00 AM,Group Play,Liverpool FC MI ECNL G2008/09,,,Gretna Elite Academy ECNL G2008/09,HyVee Multiplex,Field 1,On Time,1067820
+2026-09-20,08:00 AM,Group Play,St. Louis Scott Gallagher Navy ECNL G2008/09,4,1,Rockford Raptors FC ECNL G2008/09,WWT Soccer Park,Field 2,On Time,1067800
+2026-09-20,08:00 AM,Group Play,St. Louis Scott Gallagher Green ECNL G2008/09,2,5,Eclipse Select Soccer Club ECNL G2008/09,WWT Soccer Park,Field 3,On Time,1067824
+2026-09-20,09:00 AM,Group Play,Chicago Inter ECNL G2008/09,2,2,Michigan Hawks Magic ECNL G2008/09,Chicago Inter Complex,Field 2,On Time,1067804
+2026-09-20,09:00 AM,Group Play,Missouri Rush ECNL G2008/09,0,3,Kansas City Athletics ECNL G2008/09,Missouri Rush Sports Park,Field 2,On Time,1067812
+2026-09-20,10:00 AM,Group Play,Sporting Iowa ECNL G2008/09,1,6,Nationals SC ECNL G2008/09,Hy-Vee Multiplex,Green #2,On Time,1067816
+2026-09-20,10:00 AM,Group Play,Liverpool FC MI ECNL G2008/09,0,9,Gretna Elite Academy ECNL G2008/09,HyVee Multiplex,Field 1,On Time,1067820
 2026-09-20,02:30 PM,Group Play,FC Wisconsin ECNL G2008/09,,,Michigan Hawks ECNL G2008/09,University School Milwaukee,Stadium,On Time,1067808
 2026-09-26,08:00 AM,Group Play,Michigan Hawks ECNL G2008/09,,,Kansas City Athletics ECNL G2008/09,St. Joe's Sports Dome,St. Joe's Dome,On Time,1067844
 2026-09-26,09:00 AM,Group Play,Rockford Raptors FC ECNL G2008/09,,,St. Louis Scott Gallagher Green ECNL G2008/09,Mercyhealth Sportscore Two,Field TBA (11v11),On Time,1067836
