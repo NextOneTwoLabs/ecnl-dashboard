@@ -420,14 +420,14 @@
       "national": {
         "Playoffs": {
           "eventId": 3064,
-          "eventName": "ECNL National Playoffs",
+          "eventName": "ECNL Girls National Playoffs",
           "location": "Redmond, WA",
           "startDate": "2024-06-22",
           "endDate": "2024-06-28"
         },
         "Finals": {
           "eventId": 3238,
-          "eventName": "ECNL National Finals",
+          "eventName": "ECNL Girls National Finals",
           "location": "Richmond, VA",
           "startDate": "2024-07-10",
           "endDate": "2024-07-13"
@@ -527,7 +527,7 @@
         "Playoffs": {
           "eventId": 2719,
           "eventName": "ECNL National Playoffs",
-          "location": "Redmond, WA",
+          "location": "Del Mar, CA",
           "startDate": "2023-06-24",
           "endDate": "2023-06-30"
         },
@@ -701,6 +701,7 @@
     },
     "2020-21": {
       "startYear": 2020,
+      "_note": "No NorCal conference this season. The first season Bay Area clubs competed in ECNL: they played in the Northwest conference, whose divisions were split into Bay Area, Mountain and Pacific flights. Six conferences also ran a GU18/U19 Composite division beside GU18/U19. COVID season: many conference games were never played.",
       "conferences": {
         "Mid-Atlantic": {
           "eventId": 2040,
@@ -774,7 +775,7 @@
         },
         "Finals": {
           "eventId": 2289,
-          "eventName": "ECNL National Finals",
+          "eventName": "ECNL Girls National Finals",
           "location": "Richmond, VA",
           "startDate": "2021-07-17",
           "endDate": "2021-07-19",
