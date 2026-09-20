@@ -10,12 +10,12 @@
     "eventDetails": "Event/get-event-details-by-eventID/{eventId}"
   },
   "refresh": {
-    "_comment": "Drives `archive.py --refresh`. Only activeSeason is ever fetched; past seasons are final. everyHours documents intent - the cron in .github/workflows/refresh.yml is the real schedule, so keep them in sync.",
+    "_comment": "Drives `archive.py --refresh`. Only activeSeason is ever fetched; past seasons are final. everyHours documents intent (match-day refreshes every 30 minutes during game hours; min interval 20 minutes) - the cron in .github/workflows/refresh.yml is the real schedule, so keep them in sync.",
     "activeSeason": "2026-27",
-    "matchDay": { "everyHours": 2, "lookbackDays": 2, "timezonePaddingDays": 1 },
+    "matchDay": { "everyHours": 0.5, "lookbackDays": 2, "timezonePaddingDays": 1 },
     "sweep": { "daily": true, "atUtcHour": 6 },
     "pending": { "maxPendingAgeDays": 21 },
-    "minIntervalMinutes": 90
+    "minIntervalMinutes": 20
   },
 
   "publicUrlTemplates": {

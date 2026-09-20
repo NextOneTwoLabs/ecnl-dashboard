@@ -1,6 +1,7 @@
 name: Refresh ECNL data
 
-# Runs every 2 hours, but archive.py decides what each run actually does:
+# Runs every 30 minutes during game hours (8am-8:30pm PT), plus a daily
+# sweep at 6am UTC — archive.py decides what each run actually does:
 #   - non-match day, not the sweep hour -> exits in seconds, zero API calls
 #   - sweep hour (see refresh.sweep.atUtcHour in public/data/sources.json)
 #     -> refreshes every flight's schedule, rebuilding the fixture calendar
@@ -11,9 +12,11 @@ name: Refresh ECNL data
 
 on:
   schedule:
-    # Keep in sync with refresh.matchDay.everyHours in public/data/sources.json.
-    # GitHub delays cron under load, so treat this as approximate.
-    - cron: "0 */2 * * *"
+    # Every 30 minutes during game hours (8am-8:30pm PT), plus a daily sweep at
+    # 6am UTC — archive.py decides whether to do the match-day refresh, the
+    # daily sweep, or exit early when nothing is due.
+    - cron: "*/30 15-23,0-3 * * *"
+    - cron: "0 6 * * *"
   workflow_dispatch:
     inputs:
       sweep:
