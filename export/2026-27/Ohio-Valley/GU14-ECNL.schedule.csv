@@ -1,7 +1,6 @@
 date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
-2026-09-19,TBD,Group Play,Ohio Premier ECNL G2012/13,,,FC Pride Elite ECNL G2012/13,,,On Time,1072796
 2026-09-19,09:00 AM,Group Play,Cleveland Force SC ECNL G2012/13,2,1,Tennessee SC ECNL G2012/13,Victory Park,Field 3,On Time,1072786
-2026-09-19,10:30 AM,Group Play,WNY Flash ECNL G2012/13,,,Ohio Elite SA ECNL G2012/13,Flash Fields,Field A,On Time,1072790
+2026-09-19,10:30 AM,Group Play,WNY Flash ECNL G2012/13,2,4,Ohio Elite SA ECNL G2012/13,Flash Fields,Field A,On Time,1072790
 2026-09-19,10:30 AM,Group Play,Pittsburgh Riverhounds ECNL G2012/13,4,2,Racing Louisville Academy ECNL G2012/13,Montour Junction Sports Complex,Field 1,On Time,1072792
 2026-09-19,10:45 AM,Group Play,Internationals SC ECNL G2012/2013,0,1,FC Alliance TN ECNL G2012/13,Pinnacle Sports,OT 11v11,On Time,1072788
 2026-09-19,01:00 PM,Group Play,GTFC Impact ECNL G2012/13,2,0,Indy Eleven ECNL G2012/13,Rossford Soccer Center Dome,Indoor 11v11,On Time,1072794
@@ -64,6 +63,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-07,03:00 PM,Group Play,Racing Louisville Academy ECNL G2012/13,,,Indy Eleven ECNL G2012/13,Lynn Family Sports Vision & Training Facility,Field 4,On Time,1072912
 2026-11-08,09:30 AM,Group Play,Tennessee SC ECNL G2012/13,,,Pittsburgh Riverhounds ECNL G2012/13,Bethesda Sports Park,Field 1,On Time,1072914
 2026-11-08,11:00 AM,Group Play,FC Alliance TN ECNL G2012/13,,,WNY Flash ECNL G2012/13,Hardin Valley Academy Stadium,Field 1,On Time,1072916
+2026-11-08,12:45 PM,Group Play,Ohio Premier ECNL G2012/13,,,FC Pride Elite ECNL G2012/13,OP Training Facility,Field 1,On Time,1072796
 2026-11-14,02:00 PM,Group Play,Ohio Premier ECNL G2012/13,,,Indy Eleven ECNL G2012/13,OP Training Facility,Field 1,On Time,1072808
 2027-03-06,TBD,Group Play,GTFC Impact ECNL G2012/13,,,Ohio Premier ECNL G2012/13,,,On Time,1072920
 2027-03-06,TBD,Group Play,Tennessee SC ECNL G2012/13,,,Ohio Elite SA ECNL G2012/13,,,On Time,1072926
