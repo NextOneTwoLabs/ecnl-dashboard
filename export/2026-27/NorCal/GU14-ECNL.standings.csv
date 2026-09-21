@@ -1,13 +1,13 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,San Juan SC ECNL G2012/13,San Juan Soccer Club,103791,5,5,0,0,15,3.0,23,3,20
-2,Mustang SC ECNL G2012/13,Mustang Soccer,104961,5,4,0,1,13,2.6,14,4,10
-3,MVLA ECNL G2012/13,MVLA,84876,5,4,1,0,12,2.4,19,4,15
-4,Bay Area Surf - ECNL G2012/13,Bay Area Surf,115151,4,2,1,1,7,1.75,10,12,-2
-5,Placer United ECNL G2012/13,Placer United Soccer Club,106265,5,2,1,2,8,1.6,10,5,5
+1,San Juan SC ECNL G2012/13,San Juan Soccer Club,103791,6,6,0,0,18,3.0,32,4,28
+2,Mustang SC ECNL G2012/13,Mustang Soccer,104961,6,5,0,1,16,2.67,17,6,11
+3,MVLA ECNL G2012/13,MVLA,84876,6,5,1,0,15,2.5,23,6,17
+4,Bay Area Surf - ECNL G2012/13,Bay Area Surf,115151,5,3,1,1,10,2.0,14,12,2
+5,Santa Rosa United ECNL G2012/13,Santa Rosa United Soccer,132202,6,3,2,1,10,1.67,9,9,0
 6,Marin FC ECNL G2012/13,Marin FC,82675,6,3,3,0,9,1.5,10,15,-5
-7,Santa Rosa United ECNL G2012/13,Santa Rosa United Soccer,132202,5,2,2,1,7,1.4,7,8,-1
-8,Davis Legacy ECNL G2012/13,Davis Legacy Soccer Club,110984,5,2,3,0,6,1.2,8,8,0
-9,Stanislaus Surf - ECNL G2012/13,Stanislaus Surf Soccer Club,82859,5,1,3,1,4,0.8,3,10,-7
-10,COSC ECNL G2012/13,California Odyssey Soccer Club,114556,5,1,4,0,3,0.6,5,8,-3
-11,Pleasanton RAGE ECNL G2012/13,Pleasanton Rage,44316,5,1,4,0,3,0.6,5,17,-12
-12,Force (CA) ECNL G2012/13,Force,94620,5,0,5,0,0,0.0,0,20,-20
+7,Placer United ECNL G2012/13,Placer United Soccer Club,106265,6,2,2,2,8,1.33,12,8,4
+8,Davis Legacy ECNL G2012/13,Davis Legacy Soccer Club,110984,6,2,4,0,6,1.0,9,10,-1
+9,Stanislaus Surf - ECNL G2012/13,Stanislaus Surf Soccer Club,82859,6,1,4,1,4,0.67,3,14,-11
+10,Pleasanton RAGE ECNL G2012/13,Pleasanton Rage,44316,5,1,4,0,3,0.6,5,17,-12
+11,COSC ECNL G2012/13,California Odyssey Soccer Club,114556,6,1,5,0,3,0.5,7,12,-5
+12,Force (CA) ECNL G2012/13,Force,94620,6,0,6,0,0,0.0,1,29,-28

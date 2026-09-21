@@ -1,13 +1,13 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,MVLA ECNL G2011/12,MVLA,55325,5,4,0,1,13,2.6,26,2,24
-2,Placer United ECNL G2011/12,Placer United Soccer Club,68030,5,4,0,1,13,2.6,11,4,7
-3,Bay Area Surf - ECNL G2011/12,Bay Area Surf,95449,4,3,0,1,10,2.5,14,5,9
-4,COSC ECNL G2011/12,California Odyssey Soccer Club,113580,5,4,1,0,12,2.4,17,5,12
+1,Bay Area Surf - ECNL G2011/12,Bay Area Surf,95449,4,3,0,1,10,2.5,14,5,9
+2,MVLA ECNL G2011/12,MVLA,55325,6,4,0,2,14,2.33,28,4,24
+3,COSC ECNL G2011/12,California Odyssey Soccer Club,113580,6,4,1,1,13,2.17,19,7,12
+4,Placer United ECNL G2011/12,Placer United Soccer Club,68030,6,4,1,1,13,2.17,11,12,-1
 5,San Juan SC ECNL G2011/12,San Juan Soccer Club,84677,6,4,2,0,12,2.0,23,7,16
-6,Mustang SC ECNL G2011/12,Mustang Soccer,29444,5,2,1,2,8,1.6,11,6,5
-7,Davis Legacy ECNL G2011/12,Davis Legacy Soccer Club,90732,5,2,2,1,7,1.4,13,11,2
+6,Mustang SC ECNL G2011/12,Mustang Soccer,29444,6,3,1,2,11,1.83,19,6,13
+7,Davis Legacy ECNL G2011/12,Davis Legacy Soccer Club,90732,6,2,3,1,7,1.17,13,14,-1
 8,Marin FC ECNL G2011/12,Marin FC,92794,6,2,3,1,7,1.17,6,14,-8
-9,Santa Rosa United ECNL G2011/12,Santa Rosa United Soccer,132203,5,1,4,0,3,0.6,4,20,-16
+9,Santa Rosa United ECNL G2011/12,Santa Rosa United Soccer,132203,6,2,4,0,6,1.0,7,20,-13
 10,Pleasanton RAGE ECNL G2011/12,Pleasanton Rage,63606,5,1,4,0,3,0.6,4,18,-14
 11,Force (CA) ECNL G2011/12,Force,69022,6,0,5,1,1,0.17,1,21,-20
 12,Stanislaus Surf - ECNL G2011/12,Stanislaus Surf Soccer Club,82858,5,0,5,0,0,0.0,3,20,-17
