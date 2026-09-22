@@ -1,6 +1,6 @@
 date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
 2026-10-31,TBD,Group Play,Portland Thorns ECNL G2013/14,,,PacNW SC ECNL G2013/14,,,On Time,1058618
-2026-10-31,11:00 AM,Group Play,Washington Premier ECNL G2013/14,,,Oregon Surf ECNL G2013/14,WPFC Field Complex,Field 2,On Time,1058619
+2026-10-31,01:00 PM,Group Play,Washington Premier ECNL G2013/14,,,Oregon Surf ECNL G2013/14,WPFC Field Complex,Field 4,On Time,1058619
 2026-11-21,TBD,Group Play,Avalanche ECNL G2013/14,,,La Roca FC ECNL G2013/14,,,On Time,1058623
 2026-12-12,TBD,Group Play,PacNW SC ECNL G2013/14,,,Eastside FC ECNL G2013/14,,,On Time,1058629
 2026-12-12,TBD,Group Play,Portland Thorns ECNL G2013/14,,,Oregon Surf ECNL G2013/14,,,On Time,1058630
@@ -90,8 +90,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-04-24,01:30 PM,Group Play,La Roca FC ECNL G2013/14,,,Washington Premier ECNL G2013/14,La Roca Park,Field 1,On Time,1059121
 2027-04-25,TBD,Group Play,Oregon Surf ECNL G2013/14,,,XF ECNL G2013/14,,,On Time,1059146
 2027-04-25,TBD,Group Play,Portland Thorns ECNL G2013/14,,,Seattle United ECNL G2013/14,,,On Time,1059147
-2027-04-25,TBD,Group Play,Avalanche ECNL G2013/14,,,Washington Premier ECNL G2013/14,,,On Time,1059148
 2027-04-25,09:00 AM,Group Play,La Roca FC ECNL G2013/14,,,PacNW SC ECNL G2013/14,La Roca Park,Field 2,On Time,1059145
+2027-04-25,01:30 PM,Group Play,Avalanche ECNL G2013/14,,,Washington Premier ECNL G2013/14,St. Joseph Catholic High School,Grass Field,On Time,1059148
 2027-05-01,TBD,Group Play,Boise Thorns ECNL G2013/14,,,La Roca FC ECNL G2013/14,,,On Time,1059169
 2027-05-01,TBD,Group Play,Boise Thorns ECNL G2013/14,,,Avalanche ECNL G2013/14,,,On Time,1059170
 2027-05-01,TBD,Group Play,Avalanche ECNL G2013/14,,,XF ECNL G2013/14,,,On Time,1059171
