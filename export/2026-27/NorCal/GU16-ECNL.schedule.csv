@@ -34,7 +34,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-20,01:00 PM,Group Play,San Juan SC ECNL G2010/11,1,3,Force (CA) ECNL G2010/11,Tiemann Law Firm Fields at San Juan Soccer Complex,White Field,On Time,1094579
 2026-09-20,02:00 PM,Group Play,COSC ECNL G2010/11,0,5,MVLA ECNL G2010/11,Clovis South High School,Field 1,On Time,1094555
 2026-09-20,04:10 PM,Group Play,Bay Area Surf - ECNL G2010/11,6,0,Stanislaus Surf - ECNL G2010/11,Ohlone College,Soccer Field,On Time,1094549
-2026-09-26,10:00 AM,Group Play,Force (CA) ECNL G2010/11,,,Bay Area Surf - ECNL G2010/11,Kathleen MacDonald High School,soccer field,On Time,1094591
 2026-09-26,10:00 AM,Group Play,Placer United ECNL G2010/11,,,Pleasanton RAGE ECNL G2010/11,Placer Valley Soccer Complex,Field 6,On Time,1094615
 2026-09-26,01:00 PM,Group Play,Marin FC ECNL G2010/11,,,Davis Legacy ECNL G2010/11,College of Marin,Stadium,On Time,1094597
 2026-09-26,01:00 PM,Group Play,Mustang SC ECNL G2010/11,,,Stanislaus Surf - ECNL G2010/11,Provident Field @ MSC, Upper,On Time,1094603
@@ -76,6 +75,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-31,10:00 AM,Group Play,Placer United ECNL G2010/11,,,Davis Legacy ECNL G2010/11,Whitney High School,Stadium,On Time,1094819
 2026-10-31,11:00 AM,Group Play,Marin FC ECNL G2010/11,,,MVLA ECNL G2010/11,Terra Linda High School,Stadium,On Time,1094813
 2026-10-31,12:50 PM,Group Play,Stanislaus Surf - ECNL G2010/11,,,Pleasanton RAGE ECNL G2010/11,Thomas Downey High School,Field 1,On Time,1094831
+2026-11-01,TBD,Group Play,Force (CA) ECNL G2010/11,,,Bay Area Surf - ECNL G2010/11,Kathleen MacDonald High School,soccer field,On Time,1094591
 2026-11-07,TBD,Group Play,Bay Area Surf - ECNL G2010/11,,,San Juan SC ECNL G2010/11,,,On Time,1094837
 2026-11-07,TBD,Group Play,Mustang SC ECNL G2010/11,,,Marin FC ECNL G2010/11,,,On Time,1094849
 2026-11-07,TBD,Group Play,MVLA ECNL G2010/11,,,Force (CA) ECNL G2010/11,,,On Time,1094855
