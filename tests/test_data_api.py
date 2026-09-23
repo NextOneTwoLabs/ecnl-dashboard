@@ -63,6 +63,12 @@ class ApiTests(unittest.TestCase):
                     self.assertEqual(body, file.read_bytes())
                     self.assertEqual(headers['Cache-Control'], 'no-cache')
                     count += 1
+            for file in (ROOT / 'archive/teams').glob('*.json'):
+                status, headers, body = self.request(f'/api/v1/seasons/{file.stem}/teams')
+                self.assertEqual(status, 200, file.name)
+                self.assertEqual(body, file.read_bytes())
+                self.assertEqual(headers['Cache-Control'], 'no-cache')
+                count += 1
         self.assertGreater(count, 1200)
         print(f'Python archive parity: {count} resources')
 
@@ -78,6 +84,19 @@ class ApiTests(unittest.TestCase):
                 self.assertEqual(conditional['ETag'], headers['ETag'])
         self.assertEqual(self.request(path, headers={'If-None-Match': '"different"', 'If-Modified-Since': headers['Last-Modified']})[0], 200)
         self.assertEqual(self.request('/api/v1/events/999999999/hierarchy')[0], 404)
+        for missing in ('/api/v1/seasons/2030-31/teams', '/api/v1/seasons/2099-00/teams'):
+            for method in ('GET', 'HEAD'):
+                status, headers, body = self.request(missing, method)
+                self.assertEqual(status, 404, missing)
+                self.assertIn('application/json', headers['Content-Type'])
+                self.assertEqual(headers['Cache-Control'], 'no-store')
+                self.assertEqual(body, b'' if method == 'HEAD' else b'{"ok":false,"error":"Not found"}')
+        teams = '/api/v1/seasons/2026-27/teams'
+        status, headers, _ = self.request(teams)
+        self.assertEqual((status, headers['Cache-Control']), (200, 'no-cache'))
+        for method in ('GET', 'HEAD'):
+            status, conditional, body = self.request(teams, method, {'If-None-Match': headers['ETag']})
+            self.assertEqual((status, body, conditional['ETag']), (304, b'', headers['ETag']))
         with patch.object(Path, 'open', side_effect=PermissionError('fixture fault')):
             self.assertEqual(self.request(path)[0], 503)
 
@@ -94,6 +113,8 @@ class ApiTests(unittest.TestCase):
             "/archive/",
             "/archive/refresh-state.json",
             "/archive/api/Event/get-event-schedule-or-standings/4263.json",
+            "/archive/teams/2026-27.json",
+            "/%61rchive/teams/2026-27.json",
             "/data",
             "/data/",
             "/data/sources.json",

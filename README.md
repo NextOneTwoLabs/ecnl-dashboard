@@ -108,7 +108,15 @@ python archive.py --refresh --sweep                    # force the all-flights s
 python archive.py --refresh --dry-run --date 2026-09-12  # test a given day
 python archive.py --season 2026-27                     # full crawl of one season
 python archive.py --all                                # every season (~1,200 requests)
+python archive.py --team-index --all                   # rebuild every season's team index (no API calls)
 ```
+
+Every crawl and every `--refresh` also rebuilds the affected season's team index
+(`public/archive/teams/<season>.json`, served at `/api/v1/seasons/{season}/teams`),
+which lets a shared team link, My Teams and a Teams search find a team with one
+request instead of reading every standings file. It is rewritten only when a row
+changes. If `tests/test_team_index.py` reports it stale, run
+`python archive.py --team-index --all` and commit the result.
 
 Commit `public/archive/` and `export/` — that is what makes the data durable, and
 pushing to `main` is what deploys.
@@ -227,8 +235,9 @@ Favorites are stored in the browser (`localStorage`) as records — the team nam
 the IDs that locate it (`eventID`, `divisionID`, `flightID`, `teamID`) — captured from
 the standings row when the ★ is clicked. A favorite therefore belongs to one team in
 one season; clicking it switches the season selector to that season. Favorites saved
-by the earlier version (name only) are located by scanning the archived standings the
-first time My Teams is opened, and upgraded in place.
+by the earlier version (name only) are located through each season's team index (or,
+without one, by scanning the archived standings) the first time My Teams is opened,
+and upgraded in place.
 
 `#tab=teams&season=2026-27&team=<teamID>` deep-links to a team's summary even in a
 browser where it isn't a favorite (it is shown, not added to the list).
@@ -316,6 +325,7 @@ the one rule covers both sites.
 | `public/archive/match-days.json` | Fixture calendar that drives the refresh schedule |
 | `public/archive/refresh-state.json` | When the data was last refreshed (powers "Updated 3h ago"; read via `/api/v1/status`) |
 | `public/archive/manifest.json` | Index tying event IDs back to season/conference/flight |
+| `public/archive/teams/<season>.json` | Per-season team index, derived from the archived hierarchies and standings by `archive.py` (read via `/api/v1/seasons/{season}/teams`; see `docs/data-api.md`) |
 | `archive.py` | Crawler: match-day refresh, bulk backfill, CSV exports, `--verify` |
 | `ecnl_api.py` | Shared API/archive helpers |
 | `proxy_server.py` | Local static and archive-only v1 server, plus the `?live=1` API proxy |

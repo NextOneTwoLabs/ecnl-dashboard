@@ -1,12 +1,13 @@
 // Storage layout stays behind this adapter; handlers never accept asset paths.
 export function assetPath(resource) {
-  const { kind, event, division, flight } = resource;
+  const { kind, event, division, flight, season } = resource;
   switch (kind) {
     case 'catalog': return '/data/sources.json';
     case 'status': return '/archive/refresh-state.json';
     case 'hierarchy': return `/archive/api/Event/get-event-schedule-or-standings/${event}.json`;
     case 'standings': return `/archive/api/Event/get-standings-by-div-and-flight/${division}/${flight}/${event}.json`;
     case 'schedule': return `/archive/api/Event/get-schedules-by-flight/${event}/${flight}/0.json`;
+    case 'teams': return `/archive/teams/${season}.json`;
     default: throw new Error('Unknown resource');
   }
 }
