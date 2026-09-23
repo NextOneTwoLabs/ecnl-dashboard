@@ -2368,7 +2368,7 @@
       if (!resp.ok) {
         let detail = '';
         try { detail = (await resp.json()).error || ''; } catch (e) { }
-        throw new Error(`API error ${resp.status}${detail ? ': ' + detail : ''}`);
+        throw Object.assign(new Error(`API error ${resp.status}${detail ? ': ' + detail : ''}`), { status: resp.status });
       }
       return resp.json();
     }
@@ -2461,6 +2461,29 @@
       const data = await fetchJSON(`events/${eventId}/divisions/${divId}/flights/${flightId}/standings`, opts);
       const blocks = Array.isArray(data.data) ? data.data : (data.data ? [data.data] : []);
       return blocks.filter(b => b && (b.teamStandings || []).length);
+    }
+
+    // Every team in a season's conference standings, one row per (team, flight), in the
+    // order the scans below visit them (conference, division, flight, table position).
+    // Rows carry the standings-row fields the search table, the star button and
+    // adoptStandingsRow read, plus conference, flightName and rank. One request replaces
+    // a scan of every hierarchy and standings file (#81). Resolves to the rows, or null
+    // when there is no usable index, and every caller then scans as before. A 404, an
+    // unknown schema or ?live=1 (no index route) is kept for the session; any other
+    // failure (a 503, a network error, bad JSON) is evicted so the next call retries.
+    const teamIndexMemo = {};
+    function getTeamIndex(season) {
+      if (LIVE) return Promise.resolve(null);
+      if (!(season in teamIndexMemo)) {
+        const entry = fetchJSON(`seasons/${encodeURIComponent(season)}/teams`)
+          .then(d => (d && d.schema === 1 && d.season === season && Array.isArray(d.teams)) ? d.teams : null)
+          .catch(e => {
+            if (!(e && e.status === 404) && teamIndexMemo[season] === entry) delete teamIndexMemo[season];
+            return null;
+          });
+        teamIndexMemo[season] = entry;
+      }
+      return teamIndexMemo[season];
     }
 
     // Third path segment is a club filter; 0 means "all clubs in this flight".
@@ -2789,8 +2812,31 @@
         group.insertBefore(row, next || null);
       };
 
-      // Fetch every division of every conference in parallel, append results as each arrives
-      const fetchPromises = conferences.map(async ([confName, conf]) => {
+      // The season's team index holds every row the scan below would read, in the same
+      // order and with the same stats; addRow sorts by conference either way (#81).
+      const index = await getTeamIndex(currentSeason);
+      if (!live()) return;
+      if (index) {
+        const firstDivision = new Map();   // the scan reads the first division of each name
+        for (const t of index) {
+          const key = `${t.conference}\n${t.division}`;
+          if (!firstDivision.has(key)) firstDivision.set(key, t.divisionID);
+          if (firstDivision.get(key) !== t.divisionID || !groups.includes(t.division)) continue;
+          if (!`${t.name || ''} ${t.clubName || ''}`.toLowerCase().includes(q)) continue;
+          totalMatches++;
+          matchedAges.add(t.division); matchedConfs.add(t.conference);
+          addRow(t.division, t.conference, { flightName: t.flightName }, t, t.rank);
+        }
+        done = total;
+        const pText = document.getElementById('searchProgressText');
+        const pFill  = document.getElementById('searchProgressFill');
+        if (pText) pText.textContent = `${done} / ${total}`;
+        if (pFill)  pFill.style.width = `${Math.round((done / total) * 100)}%`;
+      }
+
+      // Without an index: fetch every division of every conference in parallel,
+      // appending results as each arrives
+      const fetchPromises = index ? [] : conferences.map(async ([confName, conf]) => {
         try {
           const hierarchy = await getEventHierarchy(conf.eventId);
           const divList = hierarchy.girlsDivAndFlightList || [];
@@ -3893,7 +3939,8 @@
     }
 
     // Fill in the IDs for a favourite saved by name only (or a deep-linked
-    // teamID) by scanning archived standings, this season first.
+    // teamID) from each season's team index, this season first, or by scanning
+    // that season's archived standings when it has no index.
     async function resolveFavorite(rec) {
       if (favoriteResolved(rec)) return true;
       // Cheapest first: the team may be in a table already on screen.
@@ -3904,6 +3951,16 @@
       }
       const seasons = [currentSeason, ...Object.keys(SEASONS).filter(s => s !== currentSeason)];
       for (const season of seasons) {
+        // The index's first match is the scan's first match (same order, #81).
+        const index = await getTeamIndex(season);
+        if (index) {
+          const t = index.find(x => rec.teamID ? x.teamID === rec.teamID : x.name === rec.name);
+          if (!t) continue;
+          adoptStandingsRow(rec, t, {
+            eventID: t.eventID, divisionID: t.divisionID, divisionName: t.division, flightID: t.flightID,
+          });
+          return true;
+        }
         const confs = Object.entries(SEASONS[season].conferences || {});
         const hits = await Promise.all(confs.map(async ([confName, conf]) => {
           try {

@@ -43,6 +43,17 @@ test('each archived resource is returned byte-for-byte by one asset read', async
     assert.equal(response.headers.get('cache-control'), 'no-cache');
     count++;
   }
+  for (const file of await readdir(new URL('archive/teams/', root))) {
+    const match = /^(\d{4}-\d{2})\.json$/.exec(file);
+    if (!match) continue;
+    let reads = 0;
+    const response = await dataApi(request(`/api/v1/seasons/${match[1]}/teams`), { ASSETS: { fetch(req) { reads++; return env.ASSETS.fetch(req); } } });
+    assert.equal(response.status, 200, file);
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()), await readFile(new URL('archive/teams/' + file, root)));
+    assert.equal(reads, 1);
+    assert.equal(response.headers.get('cache-control'), 'no-cache');
+    count++;
+  }
   assert.ok(count > 1200, `only ${count} resources checked`);
   console.log(`Archive parity: ${count} resources`);
 });
@@ -63,6 +74,67 @@ test('conditional validators forwarded; 304 and HEAD have no body', async () => 
     assert.equal(response.headers.get('cache-control'), 'no-cache');
     assert.equal(await response.text(), '');
   }
+});
+
+test('team index: validators forwarded to its asset path; 304 and HEAD have no body', async () => {
+  for (const method of ['GET', 'HEAD']) {
+    const response = await dataApi(request('/api/v1/seasons/2026-27/teams', { method, headers: { 'if-none-match': '"fixture"' } }), { ASSETS: { fetch(req) {
+      assert.equal(req.method, method);
+      assert.equal(new URL(req.url).pathname, '/archive/teams/2026-27.json');
+      assert.equal(req.headers.get('if-none-match'), '"fixture"');
+      return new Response(null, { status: 304, headers: { etag: '"fixture"' } });
+    } } });
+    assert.equal(response.status, 304);
+    assert.equal(response.headers.get('cache-control'), 'no-cache');
+    assert.equal(await response.text(), '');
+  }
+});
+
+test('a season without an index is a JSON 404, never HTML', async () => {
+  for (const path of ['/api/v1/seasons/2030-31/teams', '/api/v1/seasons/2099-00/teams']) {
+    for (const method of ['GET', 'HEAD']) {
+      const response = await dataApi(request(path, { method }), env);
+      assert.equal(response.status, 404, path);
+      assert.match(response.headers.get('content-type'), /application\/json/);
+      assert.equal(response.headers.get('cache-control'), 'no-store');
+      if (method === 'GET') assert.deepEqual(await response.json(), { ok: false, error: 'Not found' });
+      else assert.equal(await response.text(), '');
+    }
+  }
+});
+
+// The page's own mergeStandingsBlocks (public/index.html) must rank every flight as
+// archive.py's merge_standings_blocks did when it built the team index (#81), so an
+// index lookup or search shows the rank the conference page shows.
+test('page JS merge matches the team index ranks', async () => {
+  const html = await readFile(new URL('index.html', root), 'utf8');
+  const start = html.indexOf('function mergeStandingsBlocks(');
+  const end = html.slice(start).search(/\r?\n {4}\}\r?\n/);
+  assert.ok(start >= 0 && end > 0, 'mergeStandingsBlocks not found in index.html');
+  const mergeStandingsBlocks = new Function(html.slice(start, start + end) + '\n}\nreturn mergeStandingsBlocks;')();
+  let rows = 0, multi = 0, flights = 0;
+  for (const file of await readdir(new URL('archive/teams/', root))) {
+    if (!/^\d{4}-\d{2}\.json$/.test(file)) continue;
+    const byFlight = new Map();
+    for (const t of JSON.parse(await readFile(new URL('archive/teams/' + file, root), 'utf8')).teams) {
+      const key = `${t.divisionID}/${t.flightID}/${t.eventID}`;
+      if (!byFlight.has(key)) byFlight.set(key, []);
+      byFlight.get(key).push(t);
+    }
+    for (const [key, teams] of byFlight) {
+      const data = JSON.parse(await readFile(new URL(`archive/api/Event/get-standings-by-div-and-flight/${key}.json`, root), 'utf8')).data;
+      const blocks = Array.isArray(data) ? data : (data ? [data] : []);
+      const merged = (mergeStandingsBlocks(blocks) || { teamStandings: [] }).teamStandings;
+      const fields = ['teamID', 'name', 'gp', 'wins', 'losses', 'draws', 'standingpoints', 'goaldifferential'];
+      assert.deepEqual(teams.map(t => [t.rank, ...fields.map(k => t[k])]), merged.map((t, i) => [i + 1, ...fields.map(k => t[k])]),
+        `${file} flight ${key}: page merge differs from the index (python archive.py --team-index --all, then commit)`);
+      if (blocks.filter(b => b && (b.teamStandings || []).length).length > 1) multi++;
+      rows += teams.length;
+      flights++;
+    }
+  }
+  assert.ok(multi >= 10, `only ${multi} multi-block flights checked`);
+  console.log(`JS merge vs team index: ${rows} rows in ${flights} flights (${multi} multi-block), 0 mismatches`);
 });
 
 test('HTML fallback, upstream error and thrown storage fault stay JSON', async () => {
@@ -95,6 +167,8 @@ test('direct visitor access to /archive and /data is blocked', async () => {
     '/archive/api/Event/get-event-schedule-or-standings/4263.json',
     '/archive/refresh-state.json',
     '/archive/match-days.json',
+    '/archive/teams/2026-27.json',
+    '/%61rchive/teams/2026-27.json',
     '/data',
     '/data/',
     '/data/sources.json',

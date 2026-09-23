@@ -5,6 +5,7 @@ Crawls the events listed in public/data/sources.json and writes:
   public/archive/api/<endpoint-path>.json   raw API mirror (what the site serves)
   public/archive/match-days.json            fixture calendar driving the refresh
   public/archive/refresh-state.json         when data was last refreshed
+  public/archive/teams/<season>.json        per-season team index (derived, #81)
   export/<season>/<conference>/*.csv        human-readable standings & schedules
   public/archive/manifest.json              index tying event IDs to season/conference
 
@@ -18,6 +19,8 @@ Manual/bulk use:
     python archive.py --season 2026-27        full crawl of one season
     python archive.py --all                   every season (~1200+ requests)
     python archive.py --all --force           ignore the freshness check
+    python archive.py --team-index --all      rebuild every season's team index
+                                              from the archive (no API calls)
 
 Schedules reconstructed by reconstruct.py (listed under `reconstructed` in
 sources.json) are never re-fetched or overwritten unless --force-reconstructed
@@ -596,6 +599,113 @@ def cmd_export(sources, season):
     return 0
 
 
+# ---------- per-season team index (#81) ----------
+#
+# One file per season listing every team row in the season's conference standings, so
+# the page can find a team (deep links, My Teams) or search a season with one request
+# instead of reading every hierarchy and standings file. Built only from the archive,
+# with no API calls. Rows are in the page's scan order (registry conference, hierarchy
+# division and flight, position in the merged table), so the page's "first match" in
+# the index is the scan's first match. Rows keep TGS's standings-row key names, so the
+# page renders them unchanged. A shape change bumps TEAM_INDEX_SCHEMA (the page then
+# ignores the file and scans). Served at /api/v1/seasons/{season}/teams.
+
+TEAM_INDEX_SCHEMA = 1
+TEAM_INDEX_KEYS = [
+    "teamID", "name", "clubID", "clubName", "clublogo",
+    "eventID", "divisionID", "division", "flightID",
+]
+TEAM_INDEX_STATS = ["gp", "wins", "losses", "draws", "standingpoints", "goaldifferential"]
+
+
+def build_team_index(sources, season):
+    """The season's index as a dict. A missing or unreadable hierarchy or standings
+    file is skipped, as the page's scan skips a failed request. Raises ValueError if
+    an event lists two divisions with the same name: the page's search reads only the
+    first, so the index could not mirror it."""
+    teams = []
+    for conf, ev in ((sources["seasons"].get(season) or {}).get("conferences") or {}).items():
+        eid = ev.get("eventId")
+        if not eid:
+            continue
+        raw, _ = api.read_archive(api.p_hierarchy(eid))
+        if not raw:
+            continue
+        try:
+            divs = json.loads(raw)["data"]["girlsDivAndFlightList"] or []
+        except (ValueError, KeyError, TypeError):
+            continue
+        names = [d.get("divisionName") for d in divs]
+        dupes = sorted({str(n) for n in names if names.count(n) > 1})
+        if dupes:
+            raise ValueError(f"{season}/{conf} (event {eid}) lists division "
+                             f"{', '.join(dupes)} more than once")
+        for d in divs:
+            for f in d.get("flightList") or []:
+                sraw, _ = api.read_archive(api.p_standings(d.get("divisionID"), f.get("flightID"), eid))
+                if not sraw:
+                    continue
+                try:
+                    merged = merge_standings_blocks(json.loads(sraw).get("data"))
+                except (ValueError, AttributeError, TypeError):
+                    continue
+                for rank, t in enumerate(merged, 1):
+                    row = {k: t.get(k) for k in TEAM_INDEX_KEYS}
+                    row.update(conference=conf, flightName=f.get("flightName"), rank=rank)
+                    row.update({k: t.get(k) for k in TEAM_INDEX_STATS})
+                    teams.append(row)
+    return {"schema": TEAM_INDEX_SCHEMA, "season": season, "teams": teams}
+
+
+def team_index_bytes(index):
+    """One team per line, so a refresh diff shows only the rows that moved."""
+    head = json.dumps({k: v for k, v in index.items() if k != "teams"},
+                      ensure_ascii=False, separators=(",", ":"))[:-1]
+    rows = ",\n".join(json.dumps(t, ensure_ascii=False, separators=(",", ":")) for t in index["teams"])
+    return (head + ',"teams":[\n' + rows + "\n]}\n").encode("utf-8")
+
+
+def write_team_index(sources, season):
+    """Rebuild one season's index and write it only when its parsed content changed
+    (so line endings in a checkout never cause a rewrite). Never creates an empty file
+    for a season with nothing archived. Returns (written, team_count)."""
+    index = build_team_index(sources, season)
+    path = api.team_index_path(season)
+    current = api.read_json_file(path)
+    if current == index or (not index["teams"] and current is None):
+        return False, len(index["teams"])
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp = path + ".tmp"
+    with open(tmp, "wb") as f:
+        f.write(team_index_bytes(index))
+    os.replace(tmp, path)
+    return True, len(index["teams"])
+
+
+def update_team_index(sources, season, stats):
+    """write_team_index for the crawl and refresh paths. Any failure is reported
+    through stats.fail and never raises, so it cannot stop refresh-state.json from
+    being written (a missing state write would repeat the day's full sweep)."""
+    try:
+        written, n = write_team_index(sources, season)
+    except Exception as e:  # noqa: BLE001 — must never escape into the refresh
+        stats.fail(f"{season}: team index: {e} "
+                   f"(fix, then run: python archive.py --team-index --season {season})")
+        print(f"Team index {season}: FAILED: {e}")
+        return None
+    print(f"Team index {season}: {n} teams, {'written' if written else 'unchanged'}.")
+    return written
+
+
+def cmd_team_index(sources, season):
+    stats = Stats()
+    for s in ([season] if season else list(sources["seasons"].keys())):
+        update_team_index(sources, s, stats)
+    for e in stats.errors:
+        print(f"  - {e}")
+    return 1 if stats.failed else 0
+
+
 def refresh_policy(sources):
     p = sources.get("refresh") or {}
     md = p.get("matchDay") or {}
@@ -674,7 +784,12 @@ def cmd_refresh(sources, args):
 
     if not candidates:
         print("Non-match day, no sweep due, no pending results. No network calls.")
-        return 0
+        if args.dry_run:
+            return 0
+        # Heal an index left stale by a hand edit; written only if a row changed.
+        stats = Stats()
+        update_team_index(sources, season, stats)
+        return 1 if stats.failed else 0
     if args.dry_run:
         for fl in sorted((f for f in flights if f["key"] in candidates),
                          key=lambda f: (f["conference"], f["divisionName"])):
@@ -753,6 +868,11 @@ def cmd_refresh(sources, args):
         "pendingResultGames": sum(still_pending.values()),
     })
 
+    # The team index follows the standings and hierarchies just written (#81). Local
+    # work only, after the state write and unable to raise, so it can never stop the
+    # state (and lastSweepDate) from being saved.
+    update_team_index(sources, season, stats)
+
     print(f"{stats.fetched} requests ({standings_refreshed} standings), "
           f"{stats.failed} failed, {elapsed:.0f}s. "
           f"Pending results: {sum(still_pending.values())} games "
@@ -809,6 +929,9 @@ def main():
                     help="With --refresh: pretend the current UTC hour is H (for testing).")
     ap.add_argument("--export", action="store_true",
                     help="Rebuild the CSVs under export/ from the archive (no API calls).")
+    ap.add_argument("--team-index", action="store_true",
+                    help="Rebuild public/archive/teams/<season>.json from the archive "
+                         "(no API calls). With --all, every season.")
     args = ap.parse_args()
     if args.national and args.conference:
         ap.error("--national cannot be combined with --conference (the conference filter drops national events)")
@@ -843,6 +966,9 @@ def main():
     if args.export:
         return cmd_export(sources, season)
 
+    if args.team_index:
+        return cmd_team_index(sources, season)
+
     stats = Stats()
     manifest = load_manifest()
     started = time.time()
@@ -860,6 +986,12 @@ def main():
                     sources, season_key, divisions, div_team_names)
             manifest["events"][f"{season_key}/{name}"] = entry
             save_manifest(manifest)  # checkpoint, so an interrupted crawl keeps progress
+
+    # Rebuild the team index of every season whose conferences were crawled (#81).
+    if not args.dry_run and not args.national:
+        for s in sorted({s for s, kind, _n, _e in api.iter_events(sources, season, args.conference)
+                         if kind == "conference"}):
+            update_team_index(sources, s, stats)
 
     if age_changes and not args.dry_run:
         save_sources(sources)

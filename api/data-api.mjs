@@ -6,13 +6,21 @@ const routes = [
   [/^\/api\/v1\/events\/([^/]+)\/hierarchy$/, 'hierarchy', ['event']],
   [/^\/api\/v1\/events\/([^/]+)\/divisions\/([^/]+)\/flights\/([^/]+)\/standings$/, 'standings', ['event', 'division', 'flight']],
   [/^\/api\/v1\/events\/([^/]+)\/flights\/([^/]+)\/schedule$/, 'schedule', ['event', 'flight']],
+  [/^\/api\/v1\/seasons\/([^/]+)\/teams$/, 'teams', ['season']],
 ];
+
+// IDs are canonical positive decimals; a season is "YYYY-YY" with consecutive years.
+const isId = value => /^[1-9][0-9]*$/.test(value);
+const isSeason = value => {
+  const match = /^(20[0-9]{2})-([0-9]{2})$/.exec(value);
+  return !!match && (Number(match[1]) + 1) % 100 === Number(match[2]);
+};
 
 export function resolveResource(path) {
   for (const [pattern, kind, fields] of routes) {
     const match = pattern.exec(path);
     if (!match) continue;
-    if (match.slice(1).some(id => !/^[1-9][0-9]*$/.test(id))) return { status: 400 };
+    if (fields.some((name, i) => !(name === 'season' ? isSeason : isId)(match[i + 1]))) return { status: 400 };
     return { kind, ...Object.fromEntries(fields.map((name, i) => [name, match[i + 1]])) };
   }
   return { status: 404 };

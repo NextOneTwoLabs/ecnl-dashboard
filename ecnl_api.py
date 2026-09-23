@@ -26,6 +26,14 @@ ARCHIVE_API_DIR = os.path.join(ARCHIVE_DIR, "api")
 MANIFEST_PATH = os.path.join(ARCHIVE_DIR, "manifest.json")
 MATCH_DAYS_PATH = os.path.join(ARCHIVE_DIR, "match-days.json")
 REFRESH_STATE_PATH = os.path.join(ARCHIVE_DIR, "refresh-state.json")
+# Derived per-season team index (archive.py builds it from the archived hierarchies
+# and standings; /api/v1/seasons/{season}/teams serves it). Outside archive/api/, so
+# it is never an upstream mirror path, never proxied, and never a protected path.
+TEAM_INDEX_DIR = os.path.join(ARCHIVE_DIR, "teams")
+
+
+def team_index_path(season):
+    return os.path.join(TEAM_INDEX_DIR, f"{season}.json")
 
 # Not served: CSV exports and the Python tooling stay outside public/.
 EXPORT_DIR = os.path.join(ROOT, "export")

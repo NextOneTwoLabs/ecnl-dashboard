@@ -54,5 +54,53 @@
   [
     "/api/v1/events/4263/hierarchy/",
     404
+  ],
+  [
+    "/api/v1/seasons/2026-27/teams",
+    200
+  ],
+  [
+    "/api/v1/seasons/2020-21/teams",
+    200
+  ],
+  [
+    "/api/v1/seasons/2026-28/teams",
+    400
+  ],
+  [
+    "/api/v1/seasons/2026/teams",
+    400
+  ],
+  [
+    "/api/v1/seasons/26-27/teams",
+    400
+  ],
+  [
+    "/api/v1/seasons/1999-00/teams",
+    400
+  ],
+  [
+    "/api/v1/seasons/2026-27x/teams",
+    400
+  ],
+  [
+    "/api/v1/seasons/2026%2D27/teams",
+    400
+  ],
+  [
+    "/api/v1/seasons/%2e%2e%2f/teams",
+    400
+  ],
+  [
+    "/api/v1/seasons/2026-27/teams/",
+    404
+  ],
+  [
+    "/api/v1/seasons/2026-27",
+    404
+  ],
+  [
+    "/api/v1/seasons",
+    404
   ]
 ]

@@ -11,14 +11,27 @@ ROUTES = [
     (re.compile(r"/api/v1/events/([^/]+)/hierarchy"), lambda e: f"archive/api/Event/get-event-schedule-or-standings/{e}.json"),
     (re.compile(r"/api/v1/events/([^/]+)/divisions/([^/]+)/flights/([^/]+)/standings"), lambda e, d, f: f"archive/api/Event/get-standings-by-div-and-flight/{d}/{f}/{e}.json"),
     (re.compile(r"/api/v1/events/([^/]+)/flights/([^/]+)/schedule"), lambda e, f: f"archive/api/Event/get-schedules-by-flight/{e}/{f}/0.json"),
+    (re.compile(r"/api/v1/seasons/(?P<season>[^/]+)/teams"), lambda s: f"archive/teams/{s}.json"),
 ]
+
+
+def valid_id(value):
+    return re.fullmatch(r"[1-9][0-9]*", value) is not None
+
+
+def valid_season(value):
+    """A season key such as 2026-27: YYYY-YY with consecutive years."""
+    match = re.fullmatch(r"(20[0-9]{2})-([0-9]{2})", value)
+    return match is not None and (int(match[1]) + 1) % 100 == int(match[2])
 
 
 def resolve_resource(path):
     for pattern, asset in ROUTES:
         match = pattern.fullmatch(path)
         if match:
-            if any(not re.fullmatch(r"[1-9][0-9]*", part) for part in match.groups()):
+            season = pattern.groupindex.get("season")
+            if any(not (valid_season if i == season else valid_id)(part)
+                   for i, part in enumerate(match.groups(), 1)):
                 return 400, None
             return 200, asset(*match.groups())
     return 404, None
