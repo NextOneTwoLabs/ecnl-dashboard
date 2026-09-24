@@ -227,12 +227,15 @@ class TeamIndexTests(unittest.TestCase):
                 patch.object(archive, "fetch_json", side_effect=api.ApiError("offline fixture")), \
                 patch.object(archive, "export_flight_csv", side_effect=AssertionError("nothing was fetched")), \
                 patch.object(archive, "build_team_index", side_effect=RuntimeError("index fixture fault")), \
+                patch.object(archive, "refresh_club_places") as clubs, \
+                patch.object(api, "fetch_api_raw", side_effect=AssertionError("network in a test")), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             code = archive.cmd_refresh(self.sources, self.refresh_args("2026-09-26", 7, sweep=True))
             with open(api.REFRESH_STATE_PATH, encoding="utf-8") as f:
                 state = json.load(f)
         self.assertEqual(code, 1)
         self.assertEqual(state["lastSweepDate"], "2026-09-26")
+        self.assertEqual(clubs.call_count, 1)   # the sweep's club step runs, mocked (#87)
         self.assertTrue(state["sweep"])
         self.assertIn("Team index", out.getvalue())
         self.assertIn("index fixture fault", out.getvalue())

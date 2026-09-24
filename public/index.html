@@ -2486,6 +2486,39 @@
       return teamIndexMemo[season];
     }
 
+    // clubID -> { city, state } as the club's TGS record lists it (#87): one request
+    // per session covers every season. null until loaded. A 404 or an unknown schema
+    // is kept for the session (no places); any other failure shows nothing and is
+    // retried at most once a minute. ?live=1 has no such route and shows no place.
+    let clubPlaces = null, clubPlacesPromise = null, clubPlacesRetryAt = 0;
+    function loadClubPlaces() {
+      if (LIVE || clubPlaces || Date.now() < clubPlacesRetryAt) return Promise.resolve(clubPlaces);
+      if (!clubPlacesPromise) {
+        clubPlacesPromise = fetchJSON('clubs')
+          .then(d => { clubPlaces = (d && d.schema === 1 && d.clubs) || {}; return clubPlaces; })
+          .catch(e => {
+            if (e && e.status === 404) clubPlaces = {};
+            else clubPlacesRetryAt = Date.now() + 60000;
+            clubPlacesPromise = null;
+            return clubPlaces;
+          });
+      }
+      return clubPlacesPromise;
+    }
+    function clubPlaceText(clubID) {
+      const p = clubPlaces && clubID != null ? clubPlaces[clubID] : null;
+      return p && p.city && p.state ? `${p.city}, ${p.state}` : '';
+    }
+    // Whether a followed team is recorded in this event's division, so a cold
+    // conference page loads the place alongside the tables only when it will show one.
+    function favoriteInDivision(eventId, divisionID) {
+      for (const name of favorites) {
+        const rec = favoriteMeta.get(name);
+        if (rec && String(rec.eventID) === String(eventId) && String(rec.divisionID) === String(divisionID)) return true;
+      }
+      return false;
+    }
+
     // Third path segment is a club filter; 0 means "all clubs in this flight".
     async function getSchedule(eventId, flightId, opts) {
       const data = await fetchJSON(`events/${eventId}/flights/${flightId}/schedule`, opts);
@@ -4040,6 +4073,7 @@
         const [standings, games] = await Promise.all([
           getStandings(rec.divisionID, rec.flightID, rec.eventID),
           getSchedule(rec.eventID, rec.flightID).catch(() => []),
+          loadClubPlaces(),
         ]);
         const teams = standings.teamStandings || [];
         teams.forEach((t, i) => { t._origRank = i + 1; });
@@ -4073,7 +4107,7 @@
         const aside = document.createElement('aside');
         aside.className = 'glance-panel';
         aside.setAttribute('aria-label', 'Team at a glance');
-        aside.innerHTML = glancePanelHtml(row || { name: rec.name, teamID, clubName: rec.clubName, clublogo: rec.logo }, summary,
+        aside.innerHTML = glancePanelHtml(row || { name: rec.name, teamID, clubID: rec.clubID, clubName: rec.clubName, clublogo: rec.logo }, summary,
           { confName: ctx.name, ageLabel, flightName: flightName && division && division.flightList && division.flightList.length > 1 ? flightName : '' });
         layout.append(stack, aside);
         container.appendChild(layout);
@@ -4497,6 +4531,9 @@
         }
 
         const flights = division.flightList || [];
+        // A card that will show a team at once (a &team= link, or a team followed in
+        // this division) loads its club place alongside the tables (#87).
+        if (selectedTeamID || favoriteInDivision(conf.eventId, division.divisionID)) loadClubPlaces();
         const results = await Promise.all(flights.map(async f => {
           const [standings, games] = await Promise.all([
             getStandings(division.divisionID, f.flightID, conf.eventId, opts).catch(() => ({ teamStandings: [] })),
@@ -4510,6 +4547,12 @@
         currentFlightData = results;
         currentConfMeta = { conf, division, flights, ageLabel };
         selectedTeamID = defaultSelection();
+        // Waits on the request started above; starts one only for a favourite saved
+        // by name alone, which the division check could not place.
+        if (selectedTeamID && !clubPlaces) {
+          await loadClubPlaces();
+          if (token !== loadToken) return;
+        }
         renderConferenceView();
       } catch (err) {
         console.error(err);
@@ -4708,6 +4751,7 @@
           <p>Select a team in the table to see its position, form and next match.</p></div>`;
         return;
       }
+      if (!clubPlaces) loadClubPlaces().then(p => { if (p && Object.keys(p).length) updateGlancePanel(); });
       const summary = computeTeamSummary(hit.team.teamID, hit.fd.standings.teamStandings || [], hit.fd.games);
       el.innerHTML = glancePanelHtml(hit.team, summary, {
         season: currentSeason, confName: currentConference, ageLabel: currentConfMeta.ageLabel,
@@ -4726,6 +4770,7 @@
       const short = displayName(team.name, team.clubName);
       const logo = team.clublogo ? `<img class="team-logo" src="${esc(team.clublogo)}" alt="" onerror="this.style.display='none'">` : '';
       const meta = [ctx.confName, ctx.ageLabel ? `Girls ${ctx.ageLabel}` : '', ctx.flightName ? `${ctx.flightName} flight` : ''].filter(Boolean).join(' · ');
+      const place = clubPlaceText(team.clubID);
       const row = s.row;
       const gd = row ? (row.goaldifferential || 0) : 0;
       const formHtml = s.form.length
@@ -4756,7 +4801,8 @@
         <div class="glance-head">
           <div class="glance-eyebrow">Team at a glance</div>
           <div class="glance-name">${logo}<span title="${esc(team.name)}">${esc(short)}</span></div>
-          ${meta ? `<div class="glance-meta">${esc(meta)}</div>` : ''}
+          ${meta ? `<div class="glance-meta">${esc(meta)}</div>` : ''}${place ? `
+          <div class="glance-meta glance-place" title="Club address listed on TGS">${esc(place)}</div>` : ''}
           <div class="glance-follow">${starButton(team, { label: true })}</div>
         </div>
         <div class="glance-stats">

@@ -8,6 +8,7 @@ export function assetPath(resource) {
     case 'standings': return `/archive/api/Event/get-standings-by-div-and-flight/${division}/${flight}/${event}.json`;
     case 'schedule': return `/archive/api/Event/get-schedules-by-flight/${event}/${flight}/0.json`;
     case 'teams': return `/archive/teams/${season}.json`;
+    case 'clubs': return '/archive/clubs.json';
     default: throw new Error('Unknown resource');
   }
 }

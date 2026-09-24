@@ -69,6 +69,10 @@ class ApiTests(unittest.TestCase):
                 self.assertEqual(body, file.read_bytes())
                 self.assertEqual(headers['Cache-Control'], 'no-cache')
                 count += 1
+            status, headers, body = self.request('/api/v1/clubs')
+            self.assertEqual((status, body), (200, (ROOT / 'archive/clubs.json').read_bytes()))
+            self.assertEqual(headers['Cache-Control'], 'no-cache')
+            count += 1
         self.assertGreater(count, 1200)
         print(f'Python archive parity: {count} resources')
 
@@ -97,6 +101,12 @@ class ApiTests(unittest.TestCase):
         for method in ('GET', 'HEAD'):
             status, conditional, body = self.request(teams, method, {'If-None-Match': headers['ETag']})
             self.assertEqual((status, body, conditional['ETag']), (304, b'', headers['ETag']))
+        clubs = '/api/v1/clubs'
+        status, headers, _ = self.request(clubs)
+        self.assertEqual((status, headers['Cache-Control']), (200, 'no-cache'))
+        for method in ('GET', 'HEAD'):
+            status, conditional, body = self.request(clubs, method, {'If-None-Match': headers['ETag']})
+            self.assertEqual((status, body, conditional['ETag']), (304, b'', headers['ETag']))
         with patch.object(Path, 'open', side_effect=PermissionError('fixture fault')):
             self.assertEqual(self.request(path)[0], 503)
 
@@ -115,6 +125,8 @@ class ApiTests(unittest.TestCase):
             "/archive/api/Event/get-event-schedule-or-standings/4263.json",
             "/archive/teams/2026-27.json",
             "/%61rchive/teams/2026-27.json",
+            "/archive/clubs.json",
+            "/%61rchive/clubs.json",
             "/data",
             "/data/",
             "/data/sources.json",

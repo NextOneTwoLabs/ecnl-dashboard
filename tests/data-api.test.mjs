@@ -54,6 +54,15 @@ test('each archived resource is returned byte-for-byte by one asset read', async
     assert.equal(response.headers.get('cache-control'), 'no-cache');
     count++;
   }
+  {
+    let reads = 0;
+    const response = await dataApi(request('/api/v1/clubs'), { ASSETS: { fetch(req) { reads++; return env.ASSETS.fetch(req); } } });
+    assert.equal(response.status, 200, '/api/v1/clubs');
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()), await readFile(new URL('archive/clubs.json', root)));
+    assert.equal(reads, 1);
+    assert.equal(response.headers.get('cache-control'), 'no-cache');
+    count++;
+  }
   assert.ok(count > 1200, `only ${count} resources checked`);
   console.log(`Archive parity: ${count} resources`);
 });
@@ -81,6 +90,20 @@ test('team index: validators forwarded to its asset path; 304 and HEAD have no b
     const response = await dataApi(request('/api/v1/seasons/2026-27/teams', { method, headers: { 'if-none-match': '"fixture"' } }), { ASSETS: { fetch(req) {
       assert.equal(req.method, method);
       assert.equal(new URL(req.url).pathname, '/archive/teams/2026-27.json');
+      assert.equal(req.headers.get('if-none-match'), '"fixture"');
+      return new Response(null, { status: 304, headers: { etag: '"fixture"' } });
+    } } });
+    assert.equal(response.status, 304);
+    assert.equal(response.headers.get('cache-control'), 'no-cache');
+    assert.equal(await response.text(), '');
+  }
+});
+
+test('club places: validators forwarded to its asset path; 304 and HEAD have no body', async () => {
+  for (const method of ['GET', 'HEAD']) {
+    const response = await dataApi(request('/api/v1/clubs', { method, headers: { 'if-none-match': '"fixture"' } }), { ASSETS: { fetch(req) {
+      assert.equal(req.method, method);
+      assert.equal(new URL(req.url).pathname, '/archive/clubs.json');
       assert.equal(req.headers.get('if-none-match'), '"fixture"');
       return new Response(null, { status: 304, headers: { etag: '"fixture"' } });
     } } });
@@ -169,6 +192,8 @@ test('direct visitor access to /archive and /data is blocked', async () => {
     '/archive/match-days.json',
     '/archive/teams/2026-27.json',
     '/%61rchive/teams/2026-27.json',
+    '/archive/clubs.json',
+    '/%61rchive/clubs.json',
     '/data',
     '/data/',
     '/data/sources.json',

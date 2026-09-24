@@ -102,5 +102,17 @@
   [
     "/api/v1/seasons",
     404
+  ],
+  [
+    "/api/v1/clubs",
+    200
+  ],
+  [
+    "/api/v1/clubs/",
+    404
+  ],
+  [
+    "/api/v1/clubs/1425",
+    404
   ]
 ]
