@@ -97,6 +97,10 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         if not api.is_safe_api_path(api_path):
             self._send_json(400, {"error": "Invalid API path"})
             return
+        # Only the endpoint families the archive mirrors; refused before any fetch (#87).
+        if not api.is_archivable_path(api_path):
+            self._send_json(404, {"error": f"Not an archived endpoint family: {api_path}"})
+            return
 
         # Reconstructed schedules (see ecnl_api.protected_paths): the live
         # endpoint returns an empty list, so the archived copy is the answer

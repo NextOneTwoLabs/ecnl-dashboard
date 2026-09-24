@@ -6,6 +6,7 @@ Crawls the events listed in public/data/sources.json and writes:
   public/archive/match-days.json            fixture calendar driving the refresh
   public/archive/refresh-state.json         when data was last refreshed
   public/archive/teams/<season>.json        per-season team index (derived, #81)
+  public/archive/clubs.json                 club city and state (derived, #87)
   export/<season>/<conference>/*.csv        human-readable standings & schedules
   public/archive/manifest.json              index tying event IDs to season/conference
 
@@ -21,6 +22,8 @@ Manual/bulk use:
     python archive.py --all --force           ignore the freshness check
     python archive.py --team-index --all      rebuild every season's team index
                                               from the archive (no API calls)
+    python archive.py --clubs --all           fetch the city and state of every club
+                                              with no entry yet (--force: re-check all)
 
 Schedules reconstructed by reconstruct.py (listed under `reconstructed` in
 sources.json) are never re-fetched or overwritten unless --force-reconstructed
@@ -32,8 +35,10 @@ import csv
 import datetime
 import json
 import os
+import re
 import sys
 import time
+import unicodedata
 
 import ecnl_api as api
 
@@ -706,6 +711,302 @@ def cmd_team_index(sources, season):
     return 1 if stats.failed else 0
 
 
+# ---------- club places (#87) ----------
+#
+# public/archive/clubs.json maps clubID -> {"city", "state"}, or null for a club whose
+# TGS record has no usable city and state. Derived from Event/get-club-info, which also
+# returns the street, zip, phone and the club president's contacts: none of that is kept,
+# and the raw response is never written anywhere (ecnl_api.ARCHIVE_FAMILIES excludes it).
+# The values are shown as TGS publishes them ("Bay Area, CA"), cleaned but never guessed.
+
+CLUB_DELAY = 1.2              # seconds between club requests
+CLUB_TIMEOUT = 10             # seconds per attempt
+CLUB_RETRIES = 2              # attempts per club: one retry
+CLUB_FAILURE_CAP = 10         # a sweep stops at this many failed clubs
+CLUB_BUDGET_SECONDS = 8 * 60  # and after this much wall-clock time
+CLUB_WIPE_LIMIT = 0.05        # abort, writing nothing, if more usable entries than this would go null
+CLUB_RETRY_DAYS = 7           # after a failed monthly re-check, retry at most once a week
+
+US_STATES = {
+    "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA",
+    "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "District of Columbia": "DC",
+    "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL",
+    "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA",
+    "Maine": "ME", "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN",
+    "Mississippi": "MS", "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV",
+    "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY",
+    "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK", "Oregon": "OR",
+    "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD",
+    "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA",
+    "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY",
+    "Puerto Rico": "PR", "Guam": "GU", "U.S. Virgin Islands": "VI", "Virgin Islands": "VI",
+    "American Samoa": "AS", "Northern Mariana Islands": "MP",
+}
+CA_PROVINCES = {
+    "Alberta": "AB", "British Columbia": "BC", "Manitoba": "MB", "New Brunswick": "NB",
+    "Newfoundland and Labrador": "NL", "Nova Scotia": "NS", "Ontario": "ON",
+    "Prince Edward Island": "PE", "Quebec": "QC", "Saskatchewan": "SK",
+    "Northwest Territories": "NT", "Nunavut": "NU", "Yukon": "YT",
+}
+CLUB_STATE_CODES = frozenset(US_STATES.values()) | frozenset(CA_PROVINCES.values())
+
+
+def _fold(s):
+    """Lower case without accents, for the name lookup ("Québec" -> "quebec")."""
+    return unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower()
+
+
+_STATE_BY_NAME = {_fold(k): v for k, v in {**US_STATES, **CA_PROVINCES}.items()}
+_MINOR_WORDS = {"by", "the", "of", "on", "de", "la", "del", "du"}
+_CITY_ST_ZIP = re.compile(r"^(.+?),\s*([A-Z]{2})(\s+\d{5}(-\d{4})?)?\s*$")
+
+
+def _clean(s):
+    return re.sub(r"\s+", " ", str(s or "")).strip().strip(",").strip()
+
+
+def club_state_code(c):
+    """A known USPS / Canada Post code from `statecode` or `statename`, whichever
+    holds one (a code or a full name in either field), else ""."""
+    for v in (c.get("statecode"), c.get("statename")):
+        v = _clean(v)
+        if len(v) == 2 and v.upper() in CLUB_STATE_CODES:
+            return v.upper()
+        if _fold(v) in _STATE_BY_NAME:
+            return _STATE_BY_NAME[_fold(v)]
+    return ""
+
+
+def _cap(part, first):
+    if part != part.lower() or (not first and part in _MINOR_WORDS):
+        return part                      # mixed or upper case is left exactly as typed
+    if re.match(r"^o'[a-z]", part):
+        return "O'" + part[2].upper() + part[3:]
+    if re.match(r"^mc[a-z]", part):
+        return "Mc" + part[2].upper() + part[3:]
+    return part[:1].upper() + part[1:]
+
+
+def club_city_case(city):
+    """Only words typed entirely in lower case change; minor words stay lower case
+    except first, including inside hyphenated names ("stratford-on-avon")."""
+    return " ".join("-".join(_cap(p, i == 0 and j == 0) for j, p in enumerate(w.split("-")))
+                    for i, w in enumerate(city.split(" ")))
+
+
+def club_place(c):
+    """{"city", "state"} from a TGS clubData record, or None when it has no usable
+    city and state. Street, zip, `location` and `country` are never read."""
+    if not isinstance(c, dict):
+        return None
+    state = club_state_code(c)
+    city = _clean(c.get("city"))
+    m = _CITY_ST_ZIP.match(city)           # "Denver, CO 80202": the club typed it all in
+    if m:
+        if m.group(2) != state:
+            return None
+        city = _clean(m.group(1))
+    if not city or not state or "," in city:
+        return None
+    if re.search(r"\d|@", city) or len(city) > 40 or re.search(r"\bP\.?\s*O\.?\s*Box\b", city, re.I):
+        return None
+    return {"city": club_city_case(city), "state": state}
+
+
+class ClubRecordMissing(Exception):
+    """200 'success' but no clubData, or a clubData for another id: a failed fetch."""
+
+
+def fetch_club_place(club_id):
+    """One club's place, or None for a real record with no usable place. Raises
+    ClubRecordMissing or api.ApiError. Only city and state leave this function."""
+    raw = api.fetch_api_raw(api.p_club_info(club_id), timeout=CLUB_TIMEOUT, retries=CLUB_RETRIES)
+    payload = json.loads(raw)
+    data = payload.get("data") if isinstance(payload, dict) else None
+    c = data.get("clubData") if isinstance(data, dict) else None
+    if not isinstance(payload, dict) or payload.get("result") != "success" or not isinstance(c, dict) \
+            or str(c.get("clubID")) != str(club_id):
+        raise ClubRecordMissing(f"club {club_id}: no clubData for this id")
+    return club_place(c)
+
+
+def club_ids(seasons):
+    """Distinct clubIDs of the seasons' team indexes, in first-seen order."""
+    seen = {}
+    for s in seasons:
+        for t in (api.read_json_file(api.team_index_path(s)) or {}).get("teams") or []:
+            if t.get("clubID"):
+                seen.setdefault(str(t["clubID"]), None)
+    return list(seen)
+
+
+def load_club_places():
+    return dict((api.read_json_file(api.CLUBS_PATH) or {}).get("clubs") or {})
+
+
+def club_places_bytes(clubs):
+    """One club per line, sorted by id, LF, so a diff shows only the clubs that moved."""
+    rows = ",\n".join(f"{json.dumps(k)}:{json.dumps(v, ensure_ascii=False, separators=(',', ':'))}"
+                      for k, v in sorted(clubs.items(), key=lambda kv: int(kv[0])))
+    return ('{"schema":1,"clubs":{\n' + rows + "\n}}\n").encode("utf-8")
+
+
+def write_club_places(clubs):
+    """Write only when the parsed content changed, and never an empty file where
+    there was none. Returns True if written."""
+    current = api.read_json_file(api.CLUBS_PATH)
+    if current == {"schema": 1, "clubs": clubs} or (not clubs and current is None):
+        return False
+    os.makedirs(os.path.dirname(api.CLUBS_PATH), exist_ok=True)
+    tmp = api.CLUBS_PATH + ".tmp"
+    with open(tmp, "wb") as f:
+        f.write(club_places_bytes(clubs))
+    os.replace(tmp, api.CLUBS_PATH)
+    return True
+
+
+def sweep_club_places(ids, current, fetch=None, sleep=None, clock=None):
+    """Fetch `ids` into a copy of `current`. Returns (places, report).
+    report["stopped"] names the cap that ended the sweep (it did not complete, even
+    when the cap was reached on the last club); report["aborted"] is set when the
+    result must not be written at all (the wipe guard)."""
+    fetch, sleep, clock = fetch or fetch_club_place, sleep or time.sleep, clock or time.monotonic
+    places, errors, requested, fetched, stopped = dict(current), [], 0, 0, None
+    start = clock()
+    for i, cid in enumerate(ids):
+        if i and clock() - start > CLUB_BUDGET_SECONDS:
+            stopped = f"the {CLUB_BUDGET_SECONDS // 60}-minute budget"
+            break
+        if i:
+            sleep(CLUB_DELAY)
+        requested += 1
+        try:
+            place = fetch(cid)
+        except ClubRecordMissing as e:
+            errors.append(str(e))
+            places.setdefault(cid, None)       # null only when there is no entry yet
+        except (api.ApiError, ValueError, AttributeError) as e:
+            errors.append(f"club {cid}: {e}")  # keep the previous entry; retried later
+        else:
+            fetched += 1
+            places[cid] = place
+            continue
+        if len(errors) >= CLUB_FAILURE_CAP:
+            stopped = f"{len(errors)} failures"
+            break
+    usable = [k for k in ids if current.get(k)]
+    lost = [k for k in usable if not places.get(k)]
+    aborted = bool(usable) and len(lost) > CLUB_WIPE_LIMIT * len(usable)
+    return places, {"requested": requested, "fetched": fetched, "errors": errors, "stopped": stopped,
+                    "aborted": f"{len(lost)} of {len(usable)} usable entries would become null" if aborted else None}
+
+
+def update_club_places(ids, stats, label):
+    """Sweep, guard and write. Never raises. Club requests count in stats.fetched.
+    Returns True when the sweep completed (not stopped by a cap, not aborted)."""
+    try:
+        places, rep = sweep_club_places(ids, load_club_places())
+        stats.fetched += rep["requested"]
+        for e in rep["errors"]:
+            stats.fail(f"club places: {e}")
+        if rep["aborted"]:
+            stats.fail(f"club places: {label} aborted, nothing written: {rep['aborted']}")
+            print(f"Club places {label}: ABORTED ({rep['aborted']}); nothing written.")
+            return False
+        written = write_club_places(places)
+        if rep["stopped"]:
+            stats.fail(f"club places: {label} stopped at {rep['stopped']}")
+        print(f"Club places {label}: {rep['fetched']} of {len(ids)} fetched, {len(rep['errors'])} failed"
+              f"{', stopped at ' + rep['stopped'] if rep['stopped'] else ''}, "
+              f"{'written' if written else 'unchanged'}.")
+        return not rep["stopped"]
+    except Exception as e:  # noqa: BLE001 - must never escape into the refresh
+        stats.fail(f"club places: {label}: {e}")
+        print(f"Club places {label}: FAILED: {e}")
+        return False
+
+
+def fetch_new_club_places(seasons, stats, label):
+    """Fetch only the seasons' clubs with no entry yet (a crawl, or a sweep between
+    monthly re-checks). Never raises. Returns (requested_any, completed)."""
+    try:
+        current = load_club_places()
+        todo = [c for c in club_ids(seasons) if c not in current]
+    except Exception as e:  # noqa: BLE001
+        stats.fail(f"club places: {label}: {e}")
+        return False, False
+    if not todo:
+        print(f"Club places {label}: no new clubs.")
+        return False, True
+    return True, update_club_places(todo, stats, f"{label}: {len(todo)} new")
+
+
+def _club_retry_wait(state, today):
+    """Days left before a failed monthly re-check may run again, else 0."""
+    ok, tried = state.get("lastClubSweepDate") or "", state.get("lastClubSweepAttempt") or ""
+    if not tried or tried <= ok:
+        return 0
+    try:
+        return max(0, CLUB_RETRY_DAYS - (today - datetime.date.fromisoformat(tried)).days)
+    except ValueError:
+        return 0
+
+
+def refresh_club_places(season, today, stats):
+    """The refresh's club step, on the day's sweep run after the state write and the
+    team index: new clubs on every sweep; every active-season club on the first
+    successful sweep of each UTC calendar month; after a failed re-check, at most one
+    retry a week. Re-reads refresh-state.json and changes only the club dates and the
+    request/failure counts. Never raises."""
+    try:
+        state = api.load_refresh_state()
+        monthly = (state.get("lastClubSweepDate") or "")[:7] != today.isoformat()[:7]
+        wait = _club_retry_wait(state, today) if monthly else 0
+        if wait:
+            print(f"Club places: monthly re-check failed on {state.get('lastClubSweepAttempt')}; "
+                  f"next retry in {wait} day(s).")
+            monthly = False
+        if monthly:
+            ids = club_ids([season])
+            requested = bool(ids)
+            completed = update_club_places(ids, stats, "monthly re-check") if ids else False
+        else:
+            requested, completed = fetch_new_club_places([season], stats, "sweep")
+        if not requested:
+            return
+        state = api.load_refresh_state()          # read-modify-write
+        if monthly:
+            state["lastClubSweepAttempt"] = today.isoformat()
+            if completed:
+                state["lastClubSweepDate"] = today.isoformat()
+        state["requests"] = stats.fetched
+        state["failed"] = stats.failed
+        api.write_json_file(api.REFRESH_STATE_PATH, state)
+    except Exception as e:  # noqa: BLE001 - must never escape into the refresh
+        stats.fail(f"club places: {e}")
+        print(f"Club places: FAILED: {e}")
+
+
+def cmd_clubs(sources, season, force=False, dry_run=False):
+    """`--clubs [--season S | --all] [--force]`: fetch the clubs with no entry yet
+    (every club with --force), under the refresh's caps. Never touches
+    refresh-state.json, so it does not stand in for the monthly re-check."""
+    seasons = [season] if season else list(sources["seasons"])
+    ids = club_ids(seasons)
+    current = load_club_places()
+    todo = ids if force else [c for c in ids if c not in current]
+    print(f"Club places: {len(ids)} clubs in {', '.join(seasons)}; "
+          f"{len(todo)} to fetch{' (--force)' if force else ''}"
+          f"{', dry run: nothing fetched' if dry_run else ''}.")
+    if dry_run or not todo:
+        return 0
+    stats = Stats()
+    update_club_places(todo, stats, "--clubs")
+    for e in stats.errors:
+        print(f"  - {e}")
+    return 1 if stats.failed else 0
+
+
 def refresh_policy(sources):
     p = sources.get("refresh") or {}
     md = p.get("matchDay") or {}
@@ -858,6 +1159,9 @@ def cmd_refresh(sources, args):
         "sweep": sweep,
         "matchDay": match_day,
         "lastSweepDate": today.isoformat() if sweep else swept_on,
+        # Club places (#87): set only by refresh_club_places, carried forward here.
+        "lastClubSweepDate": state.get("lastClubSweepDate"),
+        "lastClubSweepAttempt": state.get("lastClubSweepAttempt"),
         "flightsConsidered": len(flights),
         "flightsRefreshed": len(candidates),
         "standingsRefreshed": standings_refreshed,
@@ -872,6 +1176,11 @@ def cmd_refresh(sources, args):
     # work only, after the state write and unable to raise, so it can never stop the
     # state (and lastSweepDate) from being saved.
     update_team_index(sources, season, stats)
+
+    # Club places (#87): on the day's sweep, after the state write and the team index
+    # (so a club new in today's standings is fetched today). Bounded; never raises.
+    if sweep:
+        refresh_club_places(season, today, stats)
 
     print(f"{stats.fetched} requests ({standings_refreshed} standings), "
           f"{stats.failed} failed, {elapsed:.0f}s. "
@@ -932,6 +1241,10 @@ def main():
     ap.add_argument("--team-index", action="store_true",
                     help="Rebuild public/archive/teams/<season>.json from the archive "
                          "(no API calls). With --all, every season.")
+    ap.add_argument("--clubs", action="store_true",
+                    help="Fetch the city and state of the season's clubs (--all: every season) "
+                         "that have no entry in public/archive/clubs.json yet; with --force, "
+                         "re-check every one. --dry-run lists the count and fetches nothing.")
     args = ap.parse_args()
     if args.national and args.conference:
         ap.error("--national cannot be combined with --conference (the conference filter drops national events)")
@@ -969,6 +1282,9 @@ def main():
     if args.team_index:
         return cmd_team_index(sources, season)
 
+    if args.clubs:
+        return cmd_clubs(sources, season, force=args.force, dry_run=args.dry_run)
+
     stats = Stats()
     manifest = load_manifest()
     started = time.time()
@@ -992,6 +1308,8 @@ def main():
         for s in sorted({s for s, kind, _n, _e in api.iter_events(sources, season, args.conference)
                          if kind == "conference"}):
             update_team_index(sources, s, stats)
+            # Then the season's clubs with no place yet (#87); usually none.
+            fetch_new_club_places([s], stats, s)
 
     if age_changes and not args.dry_run:
         save_sources(sources)

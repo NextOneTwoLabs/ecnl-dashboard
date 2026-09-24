@@ -12,6 +12,7 @@ ROUTES = [
     (re.compile(r"/api/v1/events/([^/]+)/divisions/([^/]+)/flights/([^/]+)/standings"), lambda e, d, f: f"archive/api/Event/get-standings-by-div-and-flight/{d}/{f}/{e}.json"),
     (re.compile(r"/api/v1/events/([^/]+)/flights/([^/]+)/schedule"), lambda e, f: f"archive/api/Event/get-schedules-by-flight/{e}/{f}/0.json"),
     (re.compile(r"/api/v1/seasons/(?P<season>[^/]+)/teams"), lambda s: f"archive/teams/{s}.json"),
+    (re.compile(r"/api/v1/clubs"), lambda: "archive/clubs.json"),
 ]
 
 

@@ -58,11 +58,15 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 node --test tests/data-api.test.mjs  # Node 22+; no npm dependencies required
-python -m unittest discover -s tests -p 'test_*.py'
+PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
+  python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
 ```
 
 The API contract workflow runs these checks on pull requests and main commits.
+No test may reach the network: `tests/netguard/sitecustomize.py` refuses any
+non-loopback connection and fails the run at exit if anything tried, even when the
+code under test swallowed the error; the dead proxy is a second layer.
 
 ## Refresh the data
 
@@ -109,7 +113,18 @@ python archive.py --refresh --dry-run --date 2026-09-12  # test a given day
 python archive.py --season 2026-27                     # full crawl of one season
 python archive.py --all                                # every season (~1,200 requests)
 python archive.py --team-index --all                   # rebuild every season's team index (no API calls)
+python archive.py --clubs --all                        # fetch club city/state for clubs with no entry yet
+python archive.py --clubs --season 2026-27 --force     # re-check every club of one season
 ```
+
+The Team at a glance card shows the club's city and state from
+`public/archive/clubs.json` (served at `/api/v1/clubs`; see `docs/data-api.md`).
+The refresh's daily sweep fetches clubs new in the active season, and the first
+successful sweep of each calendar month re-checks all of them (121 requests);
+after a failed re-check it retries at most once a week. The 22 clubs seen only in
+past seasons were backfilled once with `--clubs --all` and are never re-checked.
+Only city and state are stored; the rest of TGS's club record (street, zip, phone,
+the club president's contacts) is never kept.
 
 Every crawl and every `--refresh` also rebuilds the affected season's team index
 (`public/archive/teams/<season>.json`, served at `/api/v1/seasons/{season}/teams`),
@@ -326,6 +341,7 @@ the one rule covers both sites.
 | `public/archive/refresh-state.json` | When the data was last refreshed (powers "Updated 3h ago"; read via `/api/v1/status`) |
 | `public/archive/manifest.json` | Index tying event IDs back to season/conference/flight |
 | `public/archive/teams/<season>.json` | Per-season team index, derived from the archived hierarchies and standings by `archive.py` (read via `/api/v1/seasons/{season}/teams`; see `docs/data-api.md`) |
+| `public/archive/clubs.json` | Club city and state for every season's clubs (`null` when TGS lists none), derived by `archive.py` from TGS's club records, keeping nothing else (read via `/api/v1/clubs`; see `docs/data-api.md`) |
 | `archive.py` | Crawler: match-day refresh, bulk backfill, CSV exports, `--verify` |
 | `ecnl_api.py` | Shared API/archive helpers |
 | `proxy_server.py` | Local static and archive-only v1 server, plus the `?live=1` API proxy |
@@ -390,8 +406,14 @@ Endpoints used (all unauthenticated):
 | Divisions & flights for an event | `Event/get-event-schedule-or-standings/{eventId}` |
 | Standings | `Event/get-standings-by-div-and-flight/{divisionId}/{flightId}/{eventId}` |
 | Schedule | `Event/get-schedules-by-flight/{eventId}/{flightId}/0` |
+| First bracket (archived, not rendered) | `Event/get-flight-brackets-by-flight/{eventId}/{flightId}` |
 | Bracket HTML (archived, not rendered) | `Event/get-brackets-design-by-eventID-and-flightID/{eventId}/{flightId}` |
 | Event name (for `--verify`) | `Event/get-event-details-by-eventID/{eventId}` |
+| Club city and state (city and state only; never archived raw) | `Event/get-club-info/{clubId}` |
+
+Only the first six families are mirrored under `public/archive/api/`; the archive
+writer and the local `?live=1` proxy refuse every other path, so a club profile, a
+roster or an endpoint TGS adds later can never be written into the public repo.
 
 ## Season Coverage
 

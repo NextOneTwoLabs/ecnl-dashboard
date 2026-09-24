@@ -35,6 +35,11 @@ TEAM_INDEX_DIR = os.path.join(ARCHIVE_DIR, "teams")
 def team_index_path(season):
     return os.path.join(TEAM_INDEX_DIR, f"{season}.json")
 
+# Derived club places (#87): clubID -> {city, state} or null, served at /api/v1/clubs.
+# Built from TGS's get-club-info, whose raw response (street, zip, phone and the club
+# president's contacts) is never archived; only city and state are kept.
+CLUBS_PATH = os.path.join(ARCHIVE_DIR, "clubs.json")
+
 # Not served: CSV exports and the Python tooling stay outside public/.
 EXPORT_DIR = os.path.join(ROOT, "export")
 
@@ -189,15 +194,44 @@ def protected_notice(api_path):
             f"pass --force-reconstructed")
 
 
+# The only upstream endpoint families ever mirrored under archive/api/ (#87), each
+# with its number of numeric id segments. Anything else (club profiles, rosters,
+# endpoints TGS adds later) may carry personal data, so write_archive refuses it and
+# the local proxy refuses it before fetching.
+ARCHIVE_FAMILIES = {
+    "get-event-schedule-or-standings": 1,               # {eventId}
+    "get-standings-by-div-and-flight": 3,               # {divisionId}/{flightId}/{eventId}
+    "get-schedules-by-flight": 3,                       # {eventId}/{flightId}/0
+    "get-flight-brackets-by-flight": 2,                 # {eventId}/{flightId}
+    "get-brackets-design-by-eventID-and-flightID": 2,   # {eventId}/{flightId}
+    "get-event-details-by-eventID": 1,                  # {eventId}
+}
+_ID_SEGMENT = re.compile(r"^[0-9]+$")
+
+
+def is_archivable_path(api_path):
+    """True only for `Event/<allowed family>/<ids>` with that family's id count."""
+    if not is_safe_api_path(api_path):
+        return False
+    parts = api_path.split("/")
+    if len(parts) < 3 or parts[0] != "Event" or parts[1] not in ARCHIVE_FAMILIES:
+        return False
+    ids = parts[2:]
+    return len(ids) == ARCHIVE_FAMILIES[parts[1]] and all(_ID_SEGMENT.match(p) for p in ids)
+
+
 def write_archive(api_path, raw_bytes, allow_protected=False):
     """Atomically write a raw JSON response into the archive. Returns the path
     written, or None if the path was rejected.
 
-    Reconstructed paths (see protected_paths) are refused unless
-    `allow_protected` is set — the last line of defence behind the callers'
-    own checks."""
+    Only the endpoint families in ARCHIVE_FAMILIES are written. Reconstructed
+    paths (see protected_paths) are refused unless `allow_protected` is set —
+    the last line of defence behind the callers' own checks."""
     dest = archive_path_for(api_path)
     if dest is None:
+        return None
+    if not is_archivable_path(api_path):
+        sys.stderr.write(f"not an archived endpoint family: {api_path} — not written\n")
         return None
     if not allow_protected and is_protected_path(api_path):
         sys.stderr.write(protected_notice(api_path) + "\n")
@@ -299,6 +333,11 @@ def p_brackets_design(event_id, flight_id):
 
 def p_event_details(event_id):
     return f"Event/get-event-details-by-eventID/{event_id}"
+
+
+def p_club_info(club_id):
+    """A club's TGS profile. Read for city and state only; never archived (#87)."""
+    return f"Event/get-club-info/{club_id}"
 
 
 # ---------- misc ----------

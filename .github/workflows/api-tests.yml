@@ -8,6 +8,7 @@ permissions:
 jobs:
   contract:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,5 +18,12 @@ jobs:
         with:
           python-version: '3.12'
       - run: node --test tests/data-api.test.mjs
+      # No test may reach the network (#87): tests/netguard refuses any non-loopback
+      # connection and fails the run at exit, and the dead proxy catches the rest.
       - run: python -m unittest discover -s tests -p 'test_*.py'
+        env:
+          PYTHONPATH: tests/netguard
+          HTTPS_PROXY: http://127.0.0.1:9
+          HTTP_PROXY: http://127.0.0.1:9
+          NETGUARD_REPORT: '1'
       - run: python reconstruct.py --check
