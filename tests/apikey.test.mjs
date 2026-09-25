@@ -5,7 +5,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { readFileSync, statSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { gate, mint, COOKIE } from '../api/session.mjs';
 import { checkKey, hashKey, sameDigest, looseDecode, keyInUrl, clearKeyCache, KEY, HELP_URL } from '../api/apikey.mjs';
 import worker from '../worker.js';
@@ -263,6 +265,8 @@ test('R-A / M1: a key anywhere in the URL, plain or encoded, in the query or the
     ['plain', '/api/v1/status?k=' + k], ['upper', '/api/v1/status?k=' + k.toUpperCase()],
     ['%5F', '/api/v1/status?k=' + k.replace(/_/g, '%5F')], ['%5f', '/api/v1/status?k=' + k.replace(/_/g, '%5f')],
     ['%65', '/api/v1/status?k=%65' + k.slice(1)], ['double-encoded', '/api/v1/status?k=' + k.replace(/_/g, '%255F')],
+    ['quadruple-encoded', '/api/v1/status?k=' + k.replace(/_/g, '%25252525' + '5F')],
+    ['8 times encoded', '/api/v1/status?k=' + k.replace(/_/g, '%' + '25'.repeat(7) + '5F')],
     ['path', '/api/v1/' + k], ['path %5F', '/api/v1/' + k.replace(/_/g, '%5F')],
     ['encodeURIComponent', '/api/v1/status?k=' + encodeURIComponent(k)], ['URLSearchParams', '/api/v1/status?' + new URLSearchParams({ k })],
     ['beside a stray %', '/api/v1/status?x=%&k=' + k.replace(/_/g, '%5F')], ['fake %5F key', '/api/v1/status?k=' + fakeKey().replace(/_/g, '%5F')],
@@ -288,6 +292,11 @@ test('R-G / M1: undecodable escapes (?x=%, ?x=%E0%A4%A) stay gated: 429 over the
     assert.ok(!e.API_EVENTS.points.some(p => p.blobs[0] === 'gate-error'), q);
   }
   assert.equal(looseDecode('a%5Fb%255F%'), 'a_b_%');
+  // Until nothing changes, at most 8 passes: 8 times encoded is decoded, 9 times is not.
+  assert.equal(looseDecode('%' + '25'.repeat(7) + '5F'), '_');
+  assert.equal(looseDecode('%' + '25'.repeat(8) + '5F'), '%5F');
+  const flood = '%25'.repeat(200_000);
+  assert.doesNotThrow(() => looseDecode(flood));
 });
 
 test('R-B / M3: key-in-url keeps the unverified id; key-error, unknown and IP-refused keys store "-"', async () => {
@@ -398,10 +407,45 @@ test('S9: wrangler.toml declares RL_KEY (9004, 120 per 60 s) and the API_KEYS na
   assert.equal(new Set(ids).size, ids.length, 'each limiter has its own namespace_id');
 });
 
+// The files to scan under `dir`, relative with `/`: git's tracked and untracked files, or, when
+// git can't list them (a `git archive` copy, no git), a walk that skips .git and node_modules.
+function treeFiles(dir, gitEnv = {}) {
+  let files;
+  try {
+    files = execFileSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard'],
+      { cwd: dir, env: { ...process.env, ...gitEnv }, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] }).split('\0');
+  } catch {
+    files = [];
+    const walk = rel => { for (const entry of readdirSync(join(dir, rel), { withFileTypes: true })) {
+      if (entry.name === '.git' || entry.name === 'node_modules') continue;
+      const p = rel ? rel + '/' + entry.name : entry.name;
+      if (entry.isDirectory()) walk(p); else if (entry.isFile()) files.push(p);
+    } };
+    walk('');
+  }
+  return files.filter(p => p && !/^(public\/archive|reconstructed|export)\//.test(p));
+}
+const keyShaped = (dir, files) => files.filter(p => {
+  try { const f = join(dir, p); return statSync(f).size < 2_000_000 && /ecnl_live_[0-9a-f]{12}_[0-9a-f]{64}/i.test(readFileSync(f, 'latin1')); } catch { return false; }
+});
+
 test('no key-shaped string anywhere in the tree (N3: if this ever fails, revoke that key first)', () => {
-  const files = execFileSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
-    .split('\0').filter(p => p && !/^(public\/archive|reconstructed|export)\//.test(p));
+  const files = treeFiles('.');
   assert.ok(files.includes('api/apikey.mjs'));
-  const hits = files.filter(p => { try { return statSync(p).size < 2_000_000 && /ecnl_live_[0-9a-f]{12}_[0-9a-f]{64}/i.test(readFileSync(p, 'latin1')); } catch { return false; } });
-  assert.deepEqual(hits, []);
+  assert.deepEqual(keyShaped('.', files), []);
+});
+
+test('the key scan walks the folder when git cannot list it, skipping .git and node_modules', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'ecnl-keyscan-test-'));
+  try {
+    const plant = (p, text) => { mkdirSync(join(dir, p, '..'), { recursive: true }); writeFileSync(join(dir, p), text); };
+    plant('api/apikey.mjs', '// clean');
+    plant('docs/leak.md', 'token: ' + fakeKey().toUpperCase());
+    plant('.git/objects/x', fakeKey());
+    plant('node_modules/pkg/y.js', fakeKey());
+    plant('public/archive/z.json', fakeKey());
+    const files = treeFiles(dir, { GIT_DIR: join(dir, 'no-such-git-dir') });
+    assert.deepEqual(files.sort(), ['api/apikey.mjs', 'docs/leak.md'], 'fell back to the walk');
+    assert.deepEqual(keyShaped(dir, files), ['docs/leak.md']);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });

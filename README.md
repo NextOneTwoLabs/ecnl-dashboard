@@ -452,10 +452,16 @@ SHA-256 hash of each key.
     node tools\apikey.mjs revoke <id> --label "acme-agent"
     node tools\apikey.mjs help                                # list, get, purge and every command
 
-Requests arrive through the **Send feedback** panel (with a reply address); the owner sends
-each key by private email. The team's test key is issued per verification round with
-`--ttl 604800` (7 days) and revoked after the production check. Details, including running
-the tool before the PR is merged: [Issuing and revoking keys](docs/data-api.md#issuing-and-revoking-keys-owner).
+After issuing a key and running the printed commands, close the PowerShell window: the key
+stays in its scrollback. Requests arrive through the **Send feedback** panel (with a reply
+address); the owner sends each key by private email. The team's test key is issued per
+verification round with `--ttl 604800` (7 days) and revoked after the production check.
+**Before #93 is merged**, `tools\apikey.mjs` isn't in the owner's checkout: copy it pinned to
+the reviewed commit (`git fetch origin claude/93-api-keys`, then `git show 5708d1d:tools/apikey.mjs |
+Set-Content -Encoding ascii "$env:TEMP\ecnl-apikey-tool.mjs"`), run that copy, and **keep it
+until the test key is revoked, then revoke with it** (`node "$env:TEMP\ecnl-apikey-tool.mjs"
+revoke <id> --label "auditor-93"`). After merge and `git pull`, `node tools\apikey.mjs …` works
+from the checkout. Details: [Issuing and revoking keys](docs/data-api.md#issuing-and-revoking-keys-owner).
 
 **Workers Free quota.** The account is on Workers Free: 100,000 Worker requests a day, reset at
 00:00 UTC, and every request to `/` or `/api/*` counts, including the Worker's own 429s. When

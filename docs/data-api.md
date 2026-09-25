@@ -414,8 +414,8 @@ in a GitHub issue, a pull request or a chat.
 **How to send it.** Only in the `Authorization` header, as `Bearer <key>` (`Bearer` in any
 case). Never in a URL: URLs end up in browser history, `Referer` headers, proxy and server
 logs, chat previews and shared links. A key-shaped string anywhere in the path or query
-string, encoded or not, is refused with 400, "Treat this key as exposed and ask for a new
-one", and the owner can see which key it was.
+string, plain or percent-encoded (up to 8 times over), is refused with 400, "Treat this key
+as exposed and ask for a new one", and the owner can see which key it was.
 
 ```sh
 curl -s -H "Authorization: Bearer $ECNL_API_KEY" https://ecnl.nextonetwo.com/api/v1/catalog
@@ -437,16 +437,17 @@ agents, not from another site's page.
 toward the per-IP ceiling (`RL_IP`, 3,000 per 60 s). That is 2 requests a second: a full
 copy of every resource takes about 11 minutes. Over a limit: 429 with `Retry-After: 60`.
 
-**Answers.** All JSON with `Cache-Control: no-store` and `X-ECNL-Session: key`; HEAD has no
-body.
+**Answers.** Every answer to a keyed request says `X-ECNL-Session: key`. Refusals (400, 401,
+429, 503) are JSON with `Cache-Control: no-store`. A served request is answered as any other:
+the data with `Cache-Control: no-cache`, or a 304 with no body. HEAD never has a body.
 
 | Case | Status | Body and headers |
 | --- | --- | --- |
 | Valid key | 200 (or 304, 400, 404, 405 as for any request) | the data; no cookie |
 | Invalid, unknown or revoked key, or not `Bearer <key>` | 401 | `{"ok":false,"error":"This API key is not valid or has been revoked.","help":"<this section's URL>"}`, the same for every reason; `WWW-Authenticate: Bearer realm="ecnl", error="invalid_token"` |
 | Over `RL_KEY` or `RL_IP` | 429 | `{"ok":false,"error":"Too many requests. Please wait a minute and try again."}`, `Retry-After: 60` |
-| Key in the URL | 400 | "Send API keys in the Authorization header, never in a URL. Treat this key as exposed and ask for a new one." |
-| Key store unavailable | 503 | "API keys cannot be checked right now. Please try again later.", `Retry-After: 60` |
+| Key in the URL | 400 | `{"ok":false,"error":"Send API keys in the Authorization header, never in a URL. Treat this key as exposed and ask for a new one.","help":"<this section's URL>"}` |
+| Key store unavailable | 503 | `{"ok":false,"error":"API keys cannot be checked right now. Please try again later."}`, `Retry-After: 60` |
 
 - An `Authorization` header is always judged as a key, even beside a valid session cookie:
   a bad key gets 401 and never falls back to the cookie.
@@ -511,27 +512,33 @@ node tools\apikey.mjs help                                         # all of the 
 again), the `npx.cmd wrangler kv key put "key:<id>" --path "<temp file>" --namespace-id
 0f7cd5892944474598857af3e82bdafb --remote` that stores the record, and the `Remove-Item` for
 the temp file (it holds only the hash). Use a project or agent name as the label, never a
-person's name. `--ttl` is in seconds, at least 60.
+person's name. `--ttl` is in seconds, at least 60. **Once you have sent the key and run the
+printed commands, close that PowerShell window:** the key stays in its scrollback until you
+do. (The tool itself doesn't say this.)
 
 **Revoking** keeps a record with the id, label and time, so the counts still show a revoked
 key that is being tried (`key-revoked`). **Purging** (`kv key delete`) removes it entirely;
 use it only to clean up.
 
-**Before this is merged** (the preview check), your checkout doesn't have the tool yet. The
-tool is one self-contained file, so copy it from the PR branch and run it from the temp
-folder:
+**Before #93 is merged** (the preview check), your checkout doesn't have the tool yet. The
+tool is one self-contained file, so copy it, pinned to the commit the Reviewer reviewed
+(5708d1d), and run it from the temp folder:
 
 ```powershell
 git fetch origin claude/93-api-keys
-git show origin/claude/93-api-keys:tools/apikey.mjs | Set-Content -Encoding ascii "$env:TEMP\ecnl-apikey-tool.mjs"
+git show 5708d1d:tools/apikey.mjs | Set-Content -Encoding ascii "$env:TEMP\ecnl-apikey-tool.mjs"
 node "$env:TEMP\ecnl-apikey-tool.mjs" new --label "auditor-93" --ttl 604800
 ```
 
-Delete the copy afterwards (`Remove-Item "$env:TEMP\ecnl-apikey-tool.mjs"`).
+**Keep that copy until the test key is revoked, and revoke with it:**
+`node "$env:TEMP\ecnl-apikey-tool.mjs" revoke <id> --label "auditor-93"`, with the key's id in
+place of `<id>`. Only then delete the copy (`Remove-Item "$env:TEMP\ecnl-apikey-tool.mjs"`).
+**After merge and a `git pull`,** `node tools\apikey.mjs …` works from your checkout, as above.
 
 **The team's test key.** One per verification round, issued by the owner:
 - `new --label "auditor-93" --ttl 604800`: KV deletes the record after 7 days, so a
-  forgotten key expires. **Revoke it after the production check.**
+  forgotten key expires. **Revoke it after the production check**, with the temp copy if
+  it was issued before merge (see above).
 - The owner gives it to the Auditor privately. The Auditor reads it from an environment
   variable (`ECNL_TEST_KEY`) or a file outside the repository, never uses `curl -v`, HAR or
   Playwright traces with it, and redacts it to `ecnl_live_<id>_…` in reports.

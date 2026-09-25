@@ -20,9 +20,10 @@ export const hashKey = async key => hex(await crypto.subtle.digest('SHA-256', en
 
 // Decodes %XX escapes and can never throw: a stray or partial `%` stays as it is. Never
 // decodeURIComponent here: its URIError would land in the session fault path, which serves
-// the request ungated (#93 review, R-G). Repeated so a double-encoded key is found too.
+// the request ungated (#93 review, R-G). Repeated until nothing changes, at most 8 passes, so
+// a key encoded several times over is found too.
 export function looseDecode(text) {
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 8; i++) {
     const next = text.replace(/%([0-9a-f]{2})/gi, (_, h) => String.fromCharCode(parseInt(h, 16)));
     if (next === text) break;
     text = next;
@@ -70,8 +71,9 @@ async function lookup(env, id, nowMs) {
 }
 
 // -> { state: 'ok' | 'invalid' | 'revoked' | 'error', id?, reason? }. `id` is set only when a
-// record exists for it, so an id a caller made up is never returned. Never throws: `error` (KV
-// missing or failing) fails closed, and the caller answers 503.
+// record exists for it, so an id a caller made up is never returned. KV missing or failing
+// gives `error`, which fails closed: the caller answers 503. It can still throw, e.g. Workers'
+// timingSafeEqual on a badly written record; gate() catches that and also answers 503.
 export async function checkKey(authorization, env, nowMs = Date.now()) {
   const m = /^Bearer +(\S+) *$/i.exec(authorization || '');
   if (!m) return { state: 'invalid', reason: 'scheme' };
