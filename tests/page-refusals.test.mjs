@@ -32,20 +32,29 @@ const HELP = 'https://github.com/NextOneTwoLabs/ecnl-dashboard/blob/main/docs/da
 
 // answer(url) -> { status, session, body } or an Error (a network failure). `head` answers the
 // renewal HEAD / (a status, or an Error), one event-loop turn later (see settle). `delay` holds
-// every answer back that many ms.
-function page(answer, { head = 200, delay = 0 } = {}) {
+// every answer back that many ms. `bodyDelay` sends each API body that many ms after its headers,
+// and `step` moves the clock that far when a renewal lands and when a slow body arrives.
+function page(answer, { head = 200, delay = 0, bodyDelay = 0, step = 0 } = {}) {
   const calls = [], clock = { t: 1e12 };
   const fetch = async (url, options = {}) => {
     calls.push(`${options.method || 'GET'} ${url}`);
     if (delay) await new Promise(r => setTimeout(r, delay));
     if (url === '/') {
       await new Promise(r => setImmediate(r));
+      clock.t += step;
       if (head instanceof Error) throw head;
       return new Response(null, { status: head });
     }
     const a = answer(url);
     if (a instanceof Error) throw a;
-    return new Response(a.raw ?? JSON.stringify(a.body ?? (a.status === 429 ? { ok: false, error: 'Too many requests. Please wait a minute and try again.', help: HELP } : {})),
+    const text = a.raw ?? JSON.stringify(a.body ?? (a.status === 429 ? { ok: false, error: 'Too many requests. Please wait a minute and try again.', help: HELP } : {}));
+    const body = !bodyDelay ? text : new ReadableStream({ async start(c) {
+      await new Promise(r => setTimeout(r, bodyDelay));
+      clock.t += step;
+      c.enqueue(new TextEncoder().encode(text));
+      c.close();
+    } });
+    return new Response(body,
       { status: a.status, headers: { 'content-type': 'application/json', 'x-ecnl-session': a.session || 'none' } });
   };
   const esc = s => String(s).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
@@ -183,6 +192,22 @@ test('index (S1): a "none" refusal is forgotten once the session is back; a sess
   r.clock.t += 1000;
   await assert.rejects(r.getTeamIndex(SEASON));
   assert.equal(r.apiCalls().length, 1);
+});
+
+test('index (S1): a refusal is dated by when its request was sent, so a renewal that lands while its body is read still clears it', async () => {
+  // Sent at t; its "none" headers start the renewal, which lands at t+10; the refused body is
+  // read at t+20. Dated by arrival (t+20), the refusal would look newer than the session's
+  // return and the next search would send nothing.
+  let refusing = true;
+  const p = page(url => INDEX.test(url) ? (refusing ? { status: 429, session: 'none' } : indexOk) : ok, { bodyDelay: 20, step: 10 });
+  const sent = p.clock.t;
+  await assert.rejects(p.getTeamIndex(SEASON));
+  assert.equal(p.heads(), 1);
+  assert.equal(p.clock.t, sent + 20, 'the renewal landed (t+10) before the refused body was read (t+20)');
+  refusing = false;
+  p.clock.t += 1000;
+  assert.deepEqual(await p.getTeamIndex(SEASON), [], 'the next search asks again');
+  assert.equal(p.apiCalls().length, 2);
 });
 
 test('team lookup: a refused index stops at once, with no scan and no other season', async () => {

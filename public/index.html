@@ -3738,7 +3738,8 @@
             if (standingsError) {
               container.appendChild(failedFlightPanel(tierName, 'this table'));
             } else if (empty && gamesError) {
-              // #92: the notice above says the matches couldn't load; this is not "nothing published"
+              // #92: a knockout flight's bracket comes from its schedule: couldn't load, not "nothing published"
+              container.appendChild(failedFlightPanel(tierName, 'the bracket'));
             } else if (empty && !games.length) {
               container.insertAdjacentHTML('beforeend', `<div class="no-national-events">
                 <div class="no-national-events-icon">📋</div>
