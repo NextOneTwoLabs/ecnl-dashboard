@@ -32,3 +32,46 @@ run_worker_first = ["/", "/api/*", "/archive*", "/data*"]
 [[kv_namespaces]]
 binding = "FEEDBACK"
 id = "caf080c2c3f94556ad15cbcedca25ccd"
+
+# Rate limits for /api/v1/* (#90; api/session.mjs, docs/data-api.md "Sessions and rate
+# limits"). Needs wrangler 4.36.0 or later. Counters are per Cloudflare location and
+# deliberately approximate. A namespace_id is shared by every Worker on the account that uses
+# it, so these ids must not be used by any other Worker (owner checked before merge). The
+# period can only be 10 or 60 seconds. The limits are in-Worker: a refused request is still a
+# Worker request and counts against the Workers Free daily quota.
+[[ratelimits]]
+name = "RL_SESSION"          # per session id, for requests with a valid session cookie
+namespace_id = "9001"
+simple = { limit = 300, period = 60 }
+
+# Per IP (or IPv6 /64), for requests without a valid session cookie. 120 at launch, so tabs
+# opened before the deploy (no renewal code, no cookie) have room on shared IPs; lowered to 60
+# in a follow-up PR 7 days after deploy.
+[[ratelimits]]
+name = "RL_ANON"
+namespace_id = "9002"
+simple = { limit = 120, period = 60 }
+
+# Per IP (or IPv6 /64), every /api/v1 request: a ceiling sized for a crowd on one venue Wi-Fi.
+# Not scraping protection, and it does not protect the daily quota (docs/data-api.md).
+[[ratelimits]]
+name = "RL_IP"
+namespace_id = "9003"
+simple = { limit = 3000, period = 60 }
+
+# Counts of anonymous, limited and failed requests: outcome, route kind, Sec-Fetch-Site class
+# and production or preview. No IP address, session id or user agent. The dataset must be
+# created once in the dashboard before the first build (Workers & Pages -> Analytics Engine ->
+# Create Dataset, name ecnl_api_events, binding API_EVENTS); the first build of #91 failed
+# without it.
+[[analytics_engine_datasets]]
+binding = "API_EVENTS"
+dataset = "ecnl_api_events"
+
+# SESSION_SECRET is a Worker secret, not a var. Before merge, or whenever an undeployed version
+# exists, add it with `npx wrangler versions secret put SESSION_SECRET --name ecnl-dashboard`
+# (no deploy), then Retry build; never with Deploy in the dashboard's Production settings or a
+# plain `wrangler secret put` while a PR preview is the latest version (that could deploy
+# unmerged code). Rotating it when the deployed version is the latest: `npx wrangler secret put
+# SESSION_SECRET --name ecnl-dashboard`. It is deliberately not listed under [secrets]: a required secret blocks every deploy, including the
+# data-refresh deploys, when it is missing. Without it the API fails open (X-ECNL-Session: off).

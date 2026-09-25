@@ -156,7 +156,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(payload)))
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Expose-Headers",
-                         "X-ECNL-Source, X-ECNL-Archived-At, X-ECNL-Note")
+                         "X-ECNL-Source, X-ECNL-Archived-At, X-ECNL-Note, X-ECNL-Session")
         self.send_header("X-ECNL-Source", source)
         if archived_at:
             self.send_header("X-ECNL-Archived-At", archived_at)
@@ -206,6 +206,7 @@ def main():
     print(f"\n  ECNL Dashboard — serving {os.path.relpath(SERVE_DIR, api.ROOT)}/  ({mode})")
     print(f"  http://localhost:{args.port}/")
     print(f"  The page reads archive-only /api/v1 by default; add ?live=1 to use the proxy.")
+    print(f"  Sessions are off locally: no cookie, no rate limits (X-ECNL-Session: off).")
     if not os.path.isdir(api.ARCHIVE_API_DIR):
         print(f"  note: no archive yet — run `python archive.py` to build one")
     print(f"  Press Ctrl+C to stop\n")

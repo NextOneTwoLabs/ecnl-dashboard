@@ -44,6 +44,23 @@ class ApiTests(unittest.TestCase):
                     if method == 'HEAD': self.assertEqual(body, b'')
                     if status == 405: self.assertEqual(headers['Allow'], 'GET, HEAD')
 
+    def test_contract_sessions_off(self):
+        # #90: the local server is the Worker without SESSION_SECRET. No cookie and a forged
+        # cookie change nothing, every v1 answer says "off", and none sets a cookie.
+        forged = '__Host-ecnl_s=v1.1790000000.1790086400.AAAAAAAAAAAAAAAAAAAAAA.' + 'A' * 43
+        with patch.object(proxy_server.api, 'fetch_api_raw', side_effect=AssertionError('v1 must not contact upstream')), patch.object(proxy_server.ProxyHandler, 'log_message'):
+            for path, expected in json.loads((Path(__file__).parent / 'routes.json').read_text()):
+                for cookie in (None, forged):
+                    for method in ('GET', 'HEAD', 'POST', 'OPTIONS'):
+                        status, headers, body = self.request(path, method, {'Cookie': cookie} if cookie else None)
+                        self.assertEqual(status, 405 if expected == 200 and method not in ('GET', 'HEAD') else expected, (path, method, cookie))
+                        self.assertIn('application/json', headers['Content-Type'])
+                        self.assertEqual(headers.get('X-ECNL-Session'), 'off', path)
+                        self.assertNotIn('Set-Cookie', headers)
+                        if method == 'HEAD': self.assertEqual(body, b'')
+            status, headers, _ = self.request('/api/v1/catalog', headers={'If-None-Match': '*'})
+            self.assertEqual((status, headers.get('X-ECNL-Session')), (304, 'off'))
+
     def test_all_archive_parity(self):
         count = 0
         import re

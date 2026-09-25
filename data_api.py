@@ -1,4 +1,9 @@
-"""Archive-only v1 contract for the zero-dependency local server."""
+"""Archive-only v1 contract for the zero-dependency local server.
+
+Sessions are off here (#90): every v1 response says X-ECNL-Session: off, no cookie is set
+and no rate limit applies, which is how the Worker behaves without SESSION_SECRET. Status
+codes match the Worker's, except that the Worker can also answer 429.
+"""
 import hashlib
 import json
 import re
@@ -43,7 +48,8 @@ def serve(handler, path, root):
     if status == 200 and handler.command not in ("GET", "HEAD"):
         status = 405
     raw = b""
-    headers = {"Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store"}
+    headers = {"Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store",
+               "X-ECNL-Session": "off"}
     if status == 200:
         try:
             with (Path(root) / asset).open("rb") as source:
