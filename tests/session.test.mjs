@@ -2,6 +2,7 @@
 // plan review, turned into assertions against the fixes adopted.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { mint, verify, readCookie, setCookie, ipKey, gate, decorate, COOKIE, TTL, RENEW_AFTER, COOKIE_MAX_AGE } from '../api/session.mjs';
 import worker from '../worker.js';
 
@@ -309,4 +310,31 @@ test('R1 R12 a throwing limiter or key import still serves JSON; a failed import
   assert.ok(cookieOf(home));
   const api = await worker.fetch(req('/api/v1/clubs', { cookie: `${COOKIE}=${cookieOf(home)}` }), { ...env, SESSION_SECRET: fresh, ...limiters() });
   assert.equal(api.headers.get('x-ecnl-session'), 'ok');
+});
+
+// The page's own noteSession (public/index.html), run with a stub fetch and clock.
+test('page: only X-ECNL-Session "none" sends a background HEAD /, at most once a minute', async () => {
+  const html = (await readFile(new URL('../public/index.html', import.meta.url), 'utf8')).replace(/\r\n/g, '\n');
+  const start = html.indexOf('    let sessionRenewAt = 0;');
+  const end = html.indexOf('\n    }\n', html.indexOf('function noteSession(', start)) + 6;
+  assert.ok(start >= 0 && end > start, 'noteSession not found in index.html');
+  const calls = [], clock = { t: 1e12 };
+  const load = live => new Function('LIVE', 'fetch', 'Date', html.slice(start, end) + '\nreturn noteSession;')(
+    live, (url, options) => { calls.push([url, options.method, options.cache]); return Promise.resolve(); }, { now: () => clock.t });
+  const answer = session => ({ headers: new Headers(session ? { 'x-ecnl-session': session } : {}) });
+  const noteSession = load(false);
+  // A session-tier 429 says "ok"; with sessions off or after a gate fault nothing can be renewed.
+  for (const session of ['ok', 'renewed', 'off', 'error', null]) noteSession(answer(session));
+  assert.equal(calls.length, 0);
+  noteSession(answer('none'));
+  noteSession(answer('none'));
+  assert.deepEqual(calls, [['/', 'HEAD', 'no-store']]);
+  clock.t += 59999;
+  noteSession(answer('none'));
+  assert.equal(calls.length, 1, 'at most once a minute');
+  clock.t += 1;
+  noteSession(answer('none'));
+  assert.equal(calls.length, 2);
+  load(true)(answer('none'));
+  assert.equal(calls.length, 2, '?live=1 never renews');
 });

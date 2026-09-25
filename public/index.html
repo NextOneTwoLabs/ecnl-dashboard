@@ -2194,6 +2194,7 @@
 
     async function loadSources() {
       const resp = await fetch('/api/v1/catalog', { cache: 'no-cache' });
+      noteSession(resp);
       if (!resp.ok) throw new Error(`Cannot load data catalog (HTTP ${resp.status})`);
       SOURCES = await resp.json();
 
@@ -2344,6 +2345,17 @@
       throw new Error('Unknown live-debug resource');
     };
 
+    // #90: an answer without a session (cookie lost, blocked, or over a day old) is still
+    // served under a lower anonymous limit, or refused with 429 when that is spent. Either way
+    // it says X-ECNL-Session: none. Re-request the page headers in the background, at most once
+    // a minute, so the browser gets a fresh session cookie for what follows.
+    let sessionRenewAt = 0;
+    function noteSession(resp) {
+      if (LIVE || resp.headers.get('x-ecnl-session') !== 'none' || Date.now() < sessionRenewAt) return;
+      sessionRenewAt = Date.now() + 60000;
+      fetch('/', { method: 'HEAD', cache: 'no-store' }).catch(() => { });
+    }
+
     const OLD_CACHE_PREFIX = 'ecnl-cache-';
 
     // One-time cleanup of the pre-archive localStorage cache, which was unbounded
@@ -2365,6 +2377,7 @@
     async function fetchJSON(path, { refresh = false } = {}) {
       const url = dataUrl(path) + (LIVE && refresh ? '?refresh=1' : '');
       const resp = await fetch(url, refresh ? { cache: 'reload' } : undefined);
+      noteSession(resp);
       if (!resp.ok) {
         let detail = '';
         try { detail = (await resp.json()).error || ''; } catch (e) { }
@@ -2377,6 +2390,7 @@
     async function loadRefreshState() {
       try {
         const resp = await fetch('/api/v1/status', { cache: 'no-cache' });
+        noteSession(resp);
         if (resp.ok) refreshState = await resp.json();
       } catch (e) { }
     }
