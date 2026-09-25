@@ -165,6 +165,7 @@ test('anonymous allowance: over it, 429 "none" with a bare help URL and a Link h
   assert.equal(r.headers.get('link'), `<${HELP_URL}>; rel="help"`);
   assert.deepEqual(await r.json(), { ok: false, error: TOO_MANY, help: HELP_URL }, 'the text the page shows is unchanged');
   assert.match(HELP_URL, /^https:\/\/github\.com\/NextOneTwoLabs\/ecnl-dashboard\/blob\/main\/docs\/data-api\.md#api-keys$/);
+  assert.match(readFileSync('docs/data-api.md', 'utf8'), /^## API keys\r?$/m, 'the anchor the help URL names exists');
   const { env: e2 } = await setup({ extra: { RL_SESSION: limiter(0) } });
   const s = (await gate(req('/api/v1/status', { cookie: `${COOKIE}=${await mint(SECRET, T0)}` }), e2, T0)).response;
   assert.equal(s.status, 429);

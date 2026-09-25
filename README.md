@@ -38,10 +38,15 @@ including data-only refresh commits. Direct external visitor access to `/archive
 `/data/` is blocked at the edge Worker and local server; the frontend reads
 exclusively through `/api/v1`.
 
-`/api/v1` is free and public but rate-limited (#90): the page gets a signed session
-cookie from `/`, sessions get 300 requests a minute, and requests without one get a
-lower per-IP limit instead of being refused. Scripts that keep cookies work the same
-way (`curl -c jar.txt https://ecnl.nextonetwo.com/`, then `-b jar.txt`). See
+`/api/v1` is free and rate-limited (#90). The page gets a signed session cookie from `/`,
+and sessions get 300 requests a minute. Direct use (scripts, agents, other servers) needs
+an API key that the owner issues (#93): `Authorization: Bearer <key>`, 120 requests a minute
+per key. Ask for one through the site's **Send feedback** panel with a reply address; see
+[API keys](docs/data-api.md#api-keys). A request with neither a key nor a cookie is not
+refused outright: it gets a small per-IP allowance (for browsers without cookies), then a
+429 that points to keys. **For scrapers, day 1 changes nothing:** keyless scripts still get
+120 a minute (60 after #92), and scripts that keep the cookie get 300. Keys are a sanctioned,
+visible and revocable path, not a lock. See
 [Sessions and rate limits](docs/data-api.md#sessions-and-rate-limits).
 
 ## Run it locally
@@ -52,7 +57,8 @@ npx wrangler dev                    # actual Worker, assets, and local feedback 
 ```
 
 The Python server runs with sessions off: no cookie, no rate limits, and every
-`/api/v1` answer says `X-ECNL-Session: off`, as the Worker does without its secret.
+`/api/v1` answer says `X-ECNL-Session: off`, as the Worker does without its secret. It
+checks no API keys: an `Authorization` header changes nothing locally.
 
 Open the address printed by the server. A plain static HTTP server or opening
 `public/index.html` directly cannot serve `/api/v1` and no longer supports the
@@ -66,7 +72,7 @@ always read the local archive, even when the server is not in offline mode.
 ## Validate changes
 
 ```bash
-node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/netguard.test.mjs  # Node 22+
+node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs  # Node 22+
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -363,7 +369,9 @@ cover the sibling site's `/api/*`, since the rule has no hostname field) or move
 | `export/<season>/<conf>/` | CSVs — not published; `*.standings.csv`, `*.schedule.csv` |
 | `worker.js` | Redirects the `workers.dev` hostname, blocks raw data paths, sets the session cookie on `/`, and handles `/api/v1/*` and `POST /api/feedback` |
 | `api/session.mjs` | Session cookie, rate limits and counts for `/api/v1/*` (see `docs/data-api.md`, "Sessions and rate limits") |
-| `wrangler.toml` | Cloudflare Workers config: the `public/` assets, the `FEEDBACK` KV binding, the three rate limiters and the `API_EVENTS` Analytics Engine dataset |
+| `api/apikey.mjs` | API keys for direct use of `/api/v1/*`: format, hash check, key-in-URL check, cached KV lookup (see `docs/data-api.md`, "API keys") |
+| `tools/apikey.mjs` | The owner's key tool: issues a key, prints the wrangler commands to store, list, show, revoke or purge its record (self-contained, no network) |
+| `wrangler.toml` | Cloudflare Workers config: the `public/` assets, the `FEEDBACK` and `API_KEYS` KV bindings, the four rate limiters and the `API_EVENTS` Analytics Engine dataset |
 | `.gitattributes` | Pins the image assets (`*.svg`, `*.png`) as binary, so the files copied from the entrance site stay byte-identical across checkouts instead of being line-ending converted |
 | `.github/workflows/refresh.yml` | The scheduled refresh — asks for every 2 h, measured at 3 to 5½ |
 | `ecnl-standings.html` | Deprecated first version, kept for reference |
@@ -432,6 +440,22 @@ It does not implement feedback. A plain static server cannot serve the v1 API.
 Never enable Pseudo IPv4 "Overwrite headers", leave Bot Fight Mode off, and don't list the
 secret under `[secrets] required` (a missing required secret blocks every deploy, including
 the data-refresh ones). Details: [docs/data-api.md](docs/data-api.md#owner-setup-the-team-changes-none-of-this).
+
+**API keys (#93).** The owner issues, lists and revokes keys with `tools/apikey.mjs`, in a
+standalone PowerShell window (not a terminal an assistant can read). It needs only Node,
+makes no network request and never runs wrangler: it prints the key once and the exact
+`npx.cmd wrangler kv key ... --namespace-id 0f7cd5892944474598857af3e82bdafb --remote` commands
+to run. The KV namespace `ECNL_API_KEYS` (binding `API_KEYS`) already exists and holds only a
+SHA-256 hash of each key.
+
+    node tools\apikey.mjs new --label "acme-agent"            # a project or agent name, never a person's
+    node tools\apikey.mjs revoke <id> --label "acme-agent"
+    node tools\apikey.mjs help                                # list, get, purge and every command
+
+Requests arrive through the **Send feedback** panel (with a reply address); the owner sends
+each key by private email. The team's test key is issued per verification round with
+`--ttl 604800` (7 days) and revoked after the production check. Details, including running
+the tool before the PR is merged: [Issuing and revoking keys](docs/data-api.md#issuing-and-revoking-keys-owner).
 
 **Workers Free quota.** The account is on Workers Free: 100,000 Worker requests a day, reset at
 00:00 UTC, and every request to `/` or `/api/*` counts, including the Worker's own 429s. When

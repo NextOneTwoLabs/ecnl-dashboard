@@ -6,6 +6,13 @@ The public dashboard reads collected data through a same-origin API. Collection,
 JSON archives, CSV exports, refresh scheduling, and frontend rendering are unchanged.
 The API has no database and does not crawl upstream or load the full archive.
 
+**Who can call it (#93).** The dashboard page calls it with its session cookie. Anyone
+else (scripts, agents, other servers) needs an API key that the owner issues; see
+[API keys](#api-keys). **For scrapers, day 1 changes nothing:** a script with neither a
+key nor a cookie still gets 120 requests a minute per IP (60 after #92), and a script that
+keeps the page's cookie gets 300. Keys are a sanctioned, visible and revocable path, not a
+lock.
+
 | GET / HEAD route | Archived response |
 | --- | --- |
 | `/api/v1/catalog` | `public/data/sources.json`: season/conference registry, national events and display metadata |
@@ -136,20 +143,25 @@ retried at most once a minute. `?live=1` never requests it.
   asset binding and retains its validators and 304 status. Python generates a
   content ETag and Last-Modified and implements conditional requests, with ETag
   taking precedence. Validators can differ between local Python and Cloudflare.
-- No extra server cache, account, API key or broad CORS policy is introduced.
-  Browser clients use the same origin. Server-to-server clients do not require
-  CORS; permitting sibling browser origins can be designed separately.
-- Requests are session-scoped and rate-limited, and every answer carries
+- No extra server cache, account or broad CORS policy is introduced. Browser
+  clients use the same origin. Direct use (scripts, agents, servers) needs an API
+  key (see "API keys" below) and no CORS. The API sends no `Access-Control-*`
+  header, so a key can't be used from another site's page; permitting sibling
+  browser origins can be designed separately.
+- Requests are session-scoped or keyed, and rate-limited, and every answer carries
   `X-ECNL-Session` (see "Sessions and rate limits" below). A limited request gets a
   JSON 429 with `Retry-After: 60`.
 
 ## Sessions and rate limits
 
-`/api/v1/*` is public: no account, no key, and no request is refused for lacking a
-cookie. It is session-scoped and rate-limited (#90), so a plain script can't pull the
-data at full speed, and scraping shows up in counts. This caps how *fast* data can be
-pulled, not how much: anyone determined can still copy everything in about a minute per
-IP address, and the repo holds the same data.
+`/api/v1/*` serves this site's page, on a session cookie (#90), and direct use with an
+owner-issued API key (#93; see [API keys](#api-keys)). A request with neither is not
+refused outright: it gets a small per-IP allowance, the small allowance for browsers
+without cookies, and beyond it a 429 that points to keys. Everything is rate-limited, so
+a plain script can't pull the data at full speed, and scraping shows up in counts. This
+caps how *fast* data can be pulled, not how much: anyone determined can still load `/`,
+keep the cookie and copy everything in a few minutes per IP address (keys don't close
+that route), and the repo holds the same data.
 
 ### The session cookie
 
@@ -187,23 +199,30 @@ rate-limiting binding (`wrangler.toml`, `[[ratelimits]]`, wrangler 4.36.0 or lat
 | Limiter | Key | Limit | Applies to |
 | --- | --- | --- | --- |
 | `RL_SESSION` | session id | 300 per 60 s | requests with a valid session cookie |
-| `RL_ANON` | IP address, or the IPv6 /64 | 120 per 60 s at launch; 60 from a follow-up PR 7 days after deploy | requests without a valid cookie |
-| `RL_IP` | IP address, or the IPv6 /64 | 3,000 per 60 s | every request (a per-IP ceiling sized for a crowd on one venue Wi-Fi; it does not protect the daily quota) |
+| `RL_KEY` | API key id (`key:<id>`) | 120 per 60 s | requests with a valid API key (#93) |
+| `RL_ANON` | IP address, or the IPv6 /64 | 120 per 60 s: the small allowance for browsers without cookies; #92 lowers it to 60 | requests with neither a key nor a valid cookie |
+| `RL_IP` | IP address, or the IPv6 /64 | 3,000 per 60 s | every request, keyed ones too (a per-IP ceiling sized for a crowd on one venue Wi-Fi; it does not protect the daily quota) |
 
-An IPv4-mapped address (`::ffff:a.b.c.d`) is keyed as its IPv4 address. The IP check and
-the tier check run in parallel, so a request refused by one still uses a count in the other.
-Counters are per Cloudflare location and deliberately approximate; errors favour visitors.
+An IPv4-mapped address (`::ffff:a.b.c.d`) is keyed as its IPv4 address. On the session and
+anonymous tiers the IP check and the tier check run in parallel, so a request refused by one
+still uses a count in the other. A keyed request is checked against `RL_IP` first (over it:
+429 with no key lookup), then its key, then `RL_KEY`, so an invalid key never uses a real
+key's allowance. Counters are per Cloudflare location and deliberately approximate; errors
+favour visitors.
 
 Over a limit: `429`, `{"ok":false,"error":"Too many requests. Please wait a minute and try
-again."}`, `Retry-After: 60`, `Cache-Control: no-store`, no body on HEAD. Every answer from
+again."}`, `Retry-After: 60`, `Cache-Control: no-store`, no body on HEAD. On the anonymous
+tier the body also has `"help"`, the bare URL of [API keys](#api-keys), and the same target
+is in a `Link: <…#api-keys>; rel="help"` header; the page shows only `error`. Every answer from
 `/api/v1` carries `X-ECNL-Session`:
 
 | Value | Meaning |
 | --- | --- |
 | `ok` / `renewed` | served on the session tier (`renewed` also sets a new cookie) |
-| `none` | no valid session: served on the anonymous tier, or refused there (429) |
+| `key` | the request carried an `Authorization` header or a key in its URL: served on its key, or refused (400, 401, 429 or 503; see "API keys") |
+| `none` | no key and no valid session: served on the anonymous tier, or refused there (429) |
 | `off` | sessions are off: the Worker has no usable `SESSION_SECRET`, or it is the local Python server |
-| `error` | a fault in the session code; the data is served without any limit |
+| `error` | a fault in the session code; the data is served without any limit (never on the key path) |
 
 Measured locally (Chrome against an offline stand-in for the Worker with fake limiters): every
 journey #81 and #87 measured, with cookies, gets zero 429s, and so does the busiest single tab
@@ -213,14 +232,29 @@ requests) gets 6.
 
 ### Using the API from a script
 
-A script that keeps cookies gets the session tier:
+Scripts and agents use an API key, sent in the `Authorization` header (see
+[API keys](#api-keys)):
+
+```sh
+curl -s -H "Authorization: Bearer $ECNL_API_KEY" https://ecnl.nextonetwo.com/api/v1/status
+```
+
+Without a key, `curl` still works within the small anonymous allowance, and beyond it gets
+a 429 whose `help` field points to keys.
+
+### How the web app's session works (team testing)
+
+This is how the page itself gets the session tier, and how the team tests it. It is not the
+way for other scripts to use the API, which is a key; it is written down because anyone can
+see it, and keys don't close it (see the scope note above).
 
 ```sh
 curl -s -o /dev/null -c jar.txt https://ecnl.nextonetwo.com/
 curl -s -b jar.txt -c jar.txt https://ecnl.nextonetwo.com/api/v1/status
 ```
 
-Without the jar, `curl` still works, on the anonymous tier (1–2 requests per second).
+The first request loads `/`, which sets the session cookie; the second sends it back and is
+answered `X-ECNL-Session: ok`. Delete `jar.txt` afterwards.
 
 ### The Workers Free quota
 
@@ -254,6 +288,24 @@ session id or user agent.** Outcomes:
 - `limited-session`, `limited-anon`, `limited-ip`: refused with 429 (replaces the `anon-*` point).
 - `minted`: `/` issued a new session. `disabled`: served with sessions off.
   `gate-error`: a fault in the session code.
+- API keys (#93):
+  - `key-ok`: served on a valid key. **Every keyed request is counted**, for per-key usage.
+  - `key-invalid`: 401, with the reason in `blob6`: `scheme` (not `Bearer <key>`),
+    `malformed` (not key-shaped), `unknown` (no record for that id), `record` (a record
+    this code doesn't understand) or `mismatch` (the id exists, the secret is wrong).
+  - `key-revoked`: 401 for a revoked key. `limited-key`: 429 over `RL_KEY`.
+  - `limited-ip` with `blob6` `key`: a keyed request refused by `RL_IP` before its key was
+    looked at.
+  - `key-error`: 503, the key store missing or failing.
+  - `key-in-url`: 400, a key-shaped string in the URL's path or query string.
+
+  Key points add `blob5`, the key id, and `blob6`, the reason (empty when there is none).
+  The id is recorded only once a record exists for it, and `-` otherwise, so an id a caller
+  made up in a header is never stored. **The exception is `key-in-url`,** which keeps the id
+  read from the URL, unverified, because it tells the owner which key to revoke. An id is
+  12 hex characters and never the secret; the key itself, its hash and the `Authorization`
+  header are never written anywhere. Points with a verified id use it as their index, so
+  per-key sums sample fairly.
 
 Routine session requests write nothing; totals come from the Worker's own metrics. A write
 that fails (quota, missing binding) never changes the response. Rate-limit keys (a session
@@ -272,6 +324,15 @@ curl -s "https://api.cloudflare.com/client/v4/accounts/<account-id>/analytics_en
           GROUP BY outcome, site ORDER BY requests DESC"
 ```
 
+Per key, the same way with this query:
+
+```sql
+SELECT blob5 AS key_id, blob1 AS outcome, SUM(_sample_interval) AS requests
+FROM ecnl_api_events
+WHERE timestamp > NOW() - INTERVAL '7' DAY AND (blob1 LIKE 'key-%' OR blob1 = 'limited-key')
+GROUP BY key_id, outcome ORDER BY requests DESC
+```
+
 The measure of success is the `limited-*` counts, not zero scraping.
 
 ### Failure modes
@@ -282,9 +343,16 @@ The measure of success is the `limited-*` counts, not zero scraping.
 - **A fault in the session code** (a limiter or crypto throw): the data is still served as
   JSON, never the assets' HTML, with `X-ECNL-Session: error`; it is counted as `gate-error`
   and logged with the tag `session`. A failed key import is retried on the next request.
+- **The API key store missing or failing** (the `API_KEYS` binding, or KV's daily read
+  quota): keyed requests **fail closed** with 503 and `Retry-After: 60`, counted as
+  `key-error` and logged with the tag `apikey` (never the key). Any other fault on the key
+  path answers the same way. It never takes the fail-open path above: otherwise any
+  key-shaped header would get ungated data while KV is down. Cookie and anonymous requests
+  never touch the key store and are unaffected.
 - **The local Python server** runs with sessions off (`X-ECNL-Session: off`, no cookie, no
-  limits), the same as the Worker without a secret. Its status codes match the Worker's,
-  except that the Worker can also answer 429.
+  limits), the same as the Worker without a secret, and checks no API keys: an
+  `Authorization` header or a key in the URL changes nothing. Its status codes match the
+  Worker's, except that the Worker can also answer 429, and 400, 401 or 503 for keys.
 
 ### Owner setup (the team changes none of this)
 
@@ -315,6 +383,10 @@ The measure of success is the `limited-*` counts, not zero scraping.
    9001–9003 (a namespace id is shared by every Worker on the account that uses it).
 4. **After merge:** add the WAF rate-limiting rule above (recommended on Free).
 5. **For reports:** an API token with *Account · Account Analytics · Read*.
+6. **API keys (#93):** the KV namespace `ECNL_API_KEYS` exists (created in the dashboard; its
+   id is in `wrangler.toml` as the `API_KEYS` binding), and rate-limit `namespace_id` 9004
+   (`RL_KEY`) is unused elsewhere on the account (checked in the sibling repo). Keys are
+   issued and revoked as in [Issuing and revoking keys](#issuing-and-revoking-keys-owner).
 
 Never:
 
@@ -324,6 +396,148 @@ Never:
   clients, including the team's `curl` checks.
 - List `SESSION_SECRET` under `[secrets] required` in `wrangler.toml`: a missing required
   secret blocks every deploy, including the data-refresh deploys.
+- Turn on Workers Logs (`[observability]`) or run `wrangler tail` without first checking
+  whether it records request headers: it may record `Authorization`, and so API keys
+  (unverified; see "API keys").
+
+## API keys
+
+Direct use of `/api/v1` (scripts, agents, other servers) needs an API key that the owner
+issues (#93). The dashboard page never uses one; it keeps its session cookie. There is no
+self-service signup and no billing.
+
+**How to ask for one.** Use **Send feedback** at the foot of the site's sidebar, and give a
+reply address. Say what the key is for (a project or agent name) and roughly how many
+requests a day. The owner replies from their own email with the key. Keys are never sent
+in a GitHub issue, a pull request or a chat.
+
+**How to send it.** Only in the `Authorization` header, as `Bearer <key>` (`Bearer` in any
+case). Never in a URL: URLs end up in browser history, `Referer` headers, proxy and server
+logs, chat previews and shared links. A key-shaped string anywhere in the path or query
+string, encoded or not, is refused with 400, "Treat this key as exposed and ask for a new
+one", and the owner can see which key it was.
+
+```sh
+curl -s -H "Authorization: Bearer $ECNL_API_KEY" https://ecnl.nextonetwo.com/api/v1/catalog
+```
+
+```python
+import os, urllib.request
+req = urllib.request.Request("https://ecnl.nextonetwo.com/api/v1/catalog",
+                             headers={"Authorization": "Bearer " + os.environ["ECNL_API_KEY"]})
+print(urllib.request.urlopen(req).read()[:200])
+```
+
+A key is `ecnl_live_<id>_<secret>`: `id` is 12 lowercase hex characters and not secret (it
+names the key in counts and in the owner's commands); `secret` is 64 lowercase hex
+characters. The API sends no CORS headers, so a key only works from servers, scripts and
+agents, not from another site's page.
+
+**Limits.** 120 requests per 60 s per key (`RL_KEY`), and every keyed request also counts
+toward the per-IP ceiling (`RL_IP`, 3,000 per 60 s). That is 2 requests a second: a full
+copy of every resource takes about 11 minutes. Over a limit: 429 with `Retry-After: 60`.
+
+**Answers.** All JSON with `Cache-Control: no-store` and `X-ECNL-Session: key`; HEAD has no
+body.
+
+| Case | Status | Body and headers |
+| --- | --- | --- |
+| Valid key | 200 (or 304, 400, 404, 405 as for any request) | the data; no cookie |
+| Invalid, unknown or revoked key, or not `Bearer <key>` | 401 | `{"ok":false,"error":"This API key is not valid or has been revoked.","help":"<this section's URL>"}`, the same for every reason; `WWW-Authenticate: Bearer realm="ecnl", error="invalid_token"` |
+| Over `RL_KEY` or `RL_IP` | 429 | `{"ok":false,"error":"Too many requests. Please wait a minute and try again."}`, `Retry-After: 60` |
+| Key in the URL | 400 | "Send API keys in the Authorization header, never in a URL. Treat this key as exposed and ask for a new one." |
+| Key store unavailable | 503 | "API keys cannot be checked right now. Please try again later.", `Retry-After: 60` |
+
+- An `Authorization` header is always judged as a key, even beside a valid session cookie:
+  a bad key gets 401 and never falls back to the cookie.
+- **Timing.** A new key works about 2 minutes after the owner stores it, and a revoked key
+  stops within about 2 minutes: up to 60 s in the Worker's own cache plus up to 60 s for KV
+  to reach every location. A key used before it is stored is remembered as unknown for as
+  long, so wait the 2 minutes.
+- **The Workers Free quota applies to keyed traffic too.** Every keyed request counts
+  against the 100,000 a day, including 401s and 429s (see "The Workers Free quota"). A key
+  at full pace would use the whole day's quota in about 14 hours; the per-key limit doesn't
+  protect the quota.
+
+**What the owner keeps about a key.** One KV record per key in the `ECNL_API_KEYS`
+namespace (binding `API_KEYS`), under `key:<id>`:
+
+| Field | Value |
+| --- | --- |
+| `v` | 1 |
+| `hash` | SHA-256 (hex) of the whole key. The key itself is never stored. |
+| `label` | a project or agent name the owner chooses, 1–40 letters, digits, spaces or `._-`; never a person's name or an email address |
+| `created` | ISO time |
+| `tier` | `standard` |
+| `status` | `active`, or `revoked` (a revoked record keeps `v`, `label`, `status` and `revoked`, the time, and drops the hash) |
+
+Counts record the key id, never the key (see "What is recorded").
+
+**Handling a key.** Treat it like a password.
+- Keep it in an environment variable or a file outside any repository; never commit it,
+  paste it in an issue or chat, or put it in a URL.
+- Never capture it in a debugging record: no `curl -v`, no browser HAR export and no
+  Playwright trace while a key is in use, because all of them record request headers.
+- In reports and messages, redact it to `ecnl_live_<id>_…`.
+- If it may have been exposed, ask for a new one; the owner revokes the old one.
+- `tests/apikey.test.mjs` fails CI if a key-shaped string is in the repository. **If it ever
+  finds one, revoke that key first**: the repository is public, so a pushed key is already
+  exposed. Then remove it from the tree.
+- Keys travel in a request header. Workers Logs and `wrangler tail` may record request
+  headers, including `Authorization` (not verified). This Worker has no `[observability]`
+  section; keep it that way, or check what they record first.
+
+### Issuing and revoking keys (owner)
+
+`tools/apikey.mjs` does it. It needs only Node, makes no network request and never runs
+wrangler: it prints the key once, writes only the hash record to the system temp folder, and
+prints the exact commands to run. **Run it in a standalone PowerShell window, not the
+desktop app's Terminal panel,** which assistants can read. Run the printed `npx.cmd wrangler`
+commands in the same window, in your ECNLDash folder, as for the #90 secret; they name the
+namespace by id, so they don't need this branch's `wrangler.toml`, and they always pass
+`--remote`, because wrangler v4 otherwise writes only to a local copy on your computer.
+
+```powershell
+node tools\apikey.mjs new --label "acme-agent"                     # prints the key once, then the commands
+node tools\apikey.mjs new --label "auditor-93" --ttl 604800        # a test key that KV deletes after 7 days
+node tools\apikey.mjs revoke <id> --label "acme-agent"             # keeps a revoked record; prints the commands
+node tools\apikey.mjs list                                         # prints the command that lists key ids
+node tools\apikey.mjs get <id>                                     # prints the command that shows one record
+node tools\apikey.mjs purge <id>                                   # prints the command that deletes a record
+node tools\apikey.mjs help                                         # all of the above, with every wrangler command
+```
+
+`new` prints, in order: the key (give it to its holder by private email; it is not shown
+again), the `npx.cmd wrangler kv key put "key:<id>" --path "<temp file>" --namespace-id
+0f7cd5892944474598857af3e82bdafb --remote` that stores the record, and the `Remove-Item` for
+the temp file (it holds only the hash). Use a project or agent name as the label, never a
+person's name. `--ttl` is in seconds, at least 60.
+
+**Revoking** keeps a record with the id, label and time, so the counts still show a revoked
+key that is being tried (`key-revoked`). **Purging** (`kv key delete`) removes it entirely;
+use it only to clean up.
+
+**Before this is merged** (the preview check), your checkout doesn't have the tool yet. The
+tool is one self-contained file, so copy it from the PR branch and run it from the temp
+folder:
+
+```powershell
+git fetch origin claude/93-api-keys
+git show origin/claude/93-api-keys:tools/apikey.mjs | Set-Content -Encoding ascii "$env:TEMP\ecnl-apikey-tool.mjs"
+node "$env:TEMP\ecnl-apikey-tool.mjs" new --label "auditor-93" --ttl 604800
+```
+
+Delete the copy afterwards (`Remove-Item "$env:TEMP\ecnl-apikey-tool.mjs"`).
+
+**The team's test key.** One per verification round, issued by the owner:
+- `new --label "auditor-93" --ttl 604800`: KV deletes the record after 7 days, so a
+  forgotten key expires. **Revoke it after the production check.**
+- The owner gives it to the Auditor privately. The Auditor reads it from an environment
+  variable (`ECNL_TEST_KEY`) or a file outside the repository, never uses `curl -v`, HAR or
+  Playwright traces with it, and redacts it to `ecnl_live_<id>_…` in reports.
+- **It works on production too:** version previews use production's bindings, so preview and
+  production read the same key store.
+- It sits in the Auditor's local transcript, which is why it expires.
 
 ## Deployment and evolution
 
@@ -338,8 +552,8 @@ Rollback restores the previous complete application deployment; there is no
 schema migration to reverse. Direct visitor access to raw archive and data
 assets (`/archive/*`, `/data/*`, and bare `/archive`, `/data`) is blocked with
 404 at the edge Worker and local server. This closes the unauthenticated side door
-to raw snapshot files, while `/api/v1/*` remains the public API contract: no account,
-session-scoped and rate-limited (see "Sessions and rate limits").
+to raw snapshot files, while `/api/v1/*` remains the API contract: the page's session or
+an API key, and rate-limited (see "Sessions and rate limits" and "API keys").
 Blocking requests prevents future downloads; it does not claw back copies already
 cached in visitors' browsers from earlier releases (a cache purge of `/archive/*`
 and `/data/*` on deploy is recommended hygiene).
@@ -357,10 +571,11 @@ Free quota").
 
 Later, replace the archive reader with private R2 and add validated publishing.
 That can remove data-only deployments without changing v1 clients. Server-side
-search, database-backed analytics, and a keyed private API are separate future additions.
+search and database-backed analytics are separate future additions, and so are per-key
+tiers or billing on top of the API keys (#93).
 
 The Python server offers the same archive-only v1 routes with stdlib only, with
-sessions off (`X-ECNL-Session: off`, no cookie, no rate limits).
+sessions off (`X-ECNL-Session: off`, no cookie, no rate limits) and no API key checks.
 Its explicit `?live=1` debug path still uses the legacy proxy and reconstructed
 schedule guards. Use Wrangler to test the actual Worker and feedback, which the
 Python server does not implement.
