@@ -17,7 +17,7 @@ function limiter(limit) {
   return { counts, async limit({ key }) { const n = (counts.get(key) || 0) + 1; counts.set(key, n); return { success: n <= limit }; } };
 }
 function sink() { const points = []; return { points, writeDataPoint(p) { points.push(p); } }; }
-const limiters = (anon = 120) => ({ RL_SESSION: limiter(300), RL_ANON: limiter(anon), RL_IP: limiter(3000) });
+const limiters = (anon = 60) => ({ RL_SESSION: limiter(300), RL_ANON: limiter(anon), RL_IP: limiter(3000) });
 const assets = { async fetch(r) {
   const p = new URL(r.url).pathname;
   if (p === '/') {
@@ -139,9 +139,9 @@ test('R6 cross-site with a cookie is anon-cross-site; R8 other Sec-Fetch-Site va
 });
 
 test('gate: 429 JSON with Retry-After and X-ECNL-Session per tier; HEAD has no body', async () => {
-  const env = { SESSION_SECRET: SECRET, ...limiters(120), API_EVENTS: sink() };
+  const env = { SESSION_SECRET: SECRET, ...limiters(60), API_EVENTS: sink() };
   const ip = { 'cf-connecting-ip': '198.51.100.8' };
-  for (let i = 0; i < 120; i++) assert.ok(!(await gate(req('/api/v1/catalog', ip), env, T0)).response, `anon ${i}`);
+  for (let i = 0; i < 60; i++) assert.ok(!(await gate(req('/api/v1/catalog', ip), env, T0)).response, `anon ${i}`);
   const r = (await gate(req('/api/v1/catalog', ip), env, T0)).response;
   assert.equal(r.status, 429);
   assert.equal(r.headers.get('retry-after'), '60');
@@ -174,7 +174,7 @@ test('R5 a cookieless flood writes exactly one data point per request, limited-*
 });
 
 test('R9 a request refused by RL_IP counts limited-ip; the parallel session check still used a count', async () => {
-  const env = { SESSION_SECRET: SECRET, RL_SESSION: limiter(300), RL_ANON: limiter(120), RL_IP: limiter(0), API_EVENTS: sink() };
+  const env = { SESSION_SECRET: SECRET, RL_SESSION: limiter(300), RL_ANON: limiter(60), RL_IP: limiter(0), API_EVENTS: sink() };
   const t = await mint(SECRET, T0);
   const g = await gate(req('/api/v1/clubs', { cookie: `${COOKIE}=${t}`, 'cf-connecting-ip': '203.0.113.1' }), env, T0);
   assert.equal(g.response.status, 429);
@@ -311,6 +311,20 @@ test('R1 R12 a throwing limiter or key import still serves JSON; a failed import
   assert.ok(cookieOf(home));
   const api = await worker.fetch(req('/api/v1/clubs', { cookie: `${COOKIE}=${cookieOf(home)}` }), { ...env, SESSION_SECRET: fresh, ...limiters() });
   assert.equal(api.headers.get('x-ecnl-session'), 'ok');
+});
+
+// #92: RL_ANON is the small allowance for browsers without cookies, 60 a minute. All four
+// limiters are checked, so a value changed by accident shows up here.
+test('wrangler.toml declares the four rate limiters: RL_SESSION 300, RL_ANON 60, RL_IP 3000, RL_KEY 120', async () => {
+  const toml = (await readFile(new URL('../wrangler.toml', import.meta.url), 'utf8')).replace(/\r\n/g, '\n');
+  const blocks = toml.split(/^(?=\[)/m).filter(b => b.startsWith('[[ratelimits]]'));
+  const want = { RL_SESSION: ['9001', 300], RL_ANON: ['9002', 60], RL_IP: ['9003', 3000], RL_KEY: ['9004', 120] };
+  assert.deepEqual(blocks.map(b => /^name = "(\w+)"/m.exec(b)?.[1]).sort(), Object.keys(want).sort());
+  for (const [name, [ns, limit]] of Object.entries(want)) {
+    const b = blocks.find(x => new RegExp(`^name = "${name}"`, 'm').test(x));
+    assert.match(b, new RegExp(`^namespace_id = "${ns}"$`, 'm'), name);
+    assert.match(b, new RegExp(`^simple = \\{ limit = ${limit}, period = 60 \\}$`, 'm'), name);
+  }
 });
 
 // The page's own noteSession (public/index.html), run with a stub fetch and clock.

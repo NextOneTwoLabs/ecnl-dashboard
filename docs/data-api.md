@@ -9,7 +9,7 @@ The API has no database and does not crawl upstream or load the full archive.
 **Who can call it (#93).** The dashboard page calls it with its session cookie. Anyone
 else (scripts, agents, other servers) needs an API key that the owner issues; see
 [API keys](#api-keys). **For scrapers, day 1 changes nothing:** a script with neither a
-key nor a cookie still gets 120 requests a minute per IP (60 after #92), and a script that
+key nor a cookie gets 60 requests a minute per IP (120 before #92), and a script that
 keeps the page's cookie gets 300. Keys are a sanctioned, visible and revocable path, not a
 lock.
 
@@ -213,7 +213,7 @@ rate-limiting binding (`wrangler.toml`, `[[ratelimits]]`, wrangler 4.36.0 or lat
 | --- | --- | --- | --- |
 | `RL_SESSION` | session id | 300 per 60 s | requests with a valid session cookie |
 | `RL_KEY` | API key id (`key:<id>`) | 120 per 60 s | requests with a valid API key (#93) |
-| `RL_ANON` | IP address, or the IPv6 /64 | 120 per 60 s: the small allowance for browsers without cookies; #92 lowers it to 60 | requests with neither a key nor a valid cookie |
+| `RL_ANON` | IP address, or the IPv6 /64 | 60 per 60 s: the small allowance for browsers without cookies | requests with neither a key nor a valid cookie |
 | `RL_IP` | IP address, or the IPv6 /64 | 3,000 per 60 s | every request, keyed ones too (a per-IP ceiling sized for a crowd on one venue Wi-Fi; it does not protect the daily quota) |
 
 An IPv4-mapped address (`::ffff:a.b.c.d`) is keyed as its IPv4 address. On the session and
@@ -241,11 +241,16 @@ answer from `/api/v1` carries `X-ECNL-Session`:
 | `off` | sessions are off: the Worker has no usable `SESSION_SECRET`, or it is the local Python server |
 | `error` | a fault in the session code; the data is served without any limit (never on the key path) |
 
-Measured locally (Chrome against an offline stand-in for the Worker with fake limiters): every
-journey #81 and #87 measured, with cookies, gets zero 429s, and so does the busiest single tab
-(149 requests in 11 s). Without cookies at 120 per minute, only that stress case is refused (14 of
-134). At 60, the fastest real journey (every age group of the largest conference, twice, 66
-requests) gets 6.
+Measured locally at 60 per minute (#92; Chrome against an offline stand-in for the Worker with
+fake limiters, a sliding window stricter than Cloudflare's): every journey #81 and #87 measured,
+with cookies, gets zero 429s, and so does the busiest single tab (149 requests in 11 s). Without
+cookies, every ordinary journey gets zero 429s too (cold load 5 requests, a shared team link 7, My
+Teams with three favourites 11, search then five team pages 21). The fastest real journey (every
+age group of the largest conference, twice, 66 requests) gets 6, shown as "Some tables couldn't
+load" with **Try again**. The busiest single tab without cookies sends 109 requests, 49 refused,
+each shown as "try again" (before #92 the page turned the same clicks into 1,397 requests, 1,337
+refused). With the allowance already spent, a search typed key by key sends 1 request, a team
+lookup 1, and the next age group 2.
 
 ### Using the API from a script
 
