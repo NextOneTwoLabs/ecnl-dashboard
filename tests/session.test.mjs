@@ -147,7 +147,8 @@ test('gate: 429 JSON with Retry-After and X-ECNL-Session per tier; HEAD has no b
   assert.equal(r.headers.get('retry-after'), '60');
   assert.equal(r.headers.get('cache-control'), 'no-store');
   assert.equal(r.headers.get('x-ecnl-session'), 'none');
-  assert.deepEqual(await r.json(), { ok: false, error: 'Too many requests. Please wait a minute and try again.' });
+  // #93: an anonymous-tier 429 also points to API keys; `error`, which the page shows, is unchanged.
+  assert.deepEqual(await r.json(), { ok: false, error: 'Too many requests. Please wait a minute and try again.', help: 'https://github.com/NextOneTwoLabs/ecnl-dashboard/blob/main/docs/data-api.md#api-keys' });
   assert.equal(await (await gate(req('/api/v1/catalog', ip, 'HEAD'), env, T0)).response.text(), '');
   // A session on the same IP is not affected by the anonymous tier.
   const t = await mint(SECRET, T0);

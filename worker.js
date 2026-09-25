@@ -17,7 +17,8 @@ import { gate, pageCookie, decorate, sessionFault } from './api/session.mjs';
 //      the visitor was on, so "the standings look wrong" says which standings.
 //      No IP address, no user agent, nothing else about the visitor.
 //   3. Sets a signed session cookie on "/" and rate-limits /api/v1/* per session and per IP
-//      (api/session.mjs, #90). A fault there serves the data ungated, never HTML.
+//      (api/session.mjs, #90), or per API key for direct use (api/apikey.mjs, #93). A session
+//      fault serves the data ungated, never HTML; a key fault answers 503 (fails closed).
 const CANONICAL_HOST = 'ecnl.nextonetwo.com';
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Matches the textarea's maxlength in public/index.html; both count UTF-16 code units.
