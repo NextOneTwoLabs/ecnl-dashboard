@@ -52,8 +52,8 @@ name = "RL_ANON"
 namespace_id = "9002"
 simple = { limit = 120, period = 60 }
 
-# Per IP (or IPv6 /64), every /api/v1 request: a flood brake sized for a crowd on one venue
-# Wi-Fi, not scraping protection.
+# Per IP (or IPv6 /64), every /api/v1 request: a ceiling sized for a crowd on one venue Wi-Fi.
+# Not scraping protection, and it does not protect the daily quota (docs/data-api.md).
 [[ratelimits]]
 name = "RL_IP"
 namespace_id = "9003"

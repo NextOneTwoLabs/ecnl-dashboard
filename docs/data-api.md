@@ -136,9 +136,180 @@ retried at most once a minute. `?live=1` never requests it.
   asset binding and retains its validators and 304 status. Python generates a
   content ETag and Last-Modified and implements conditional requests, with ETag
   taking precedence. Validators can differ between local Python and Cloudflare.
-- No extra server cache, authentication, or broad CORS policy is introduced.
+- No extra server cache, account, API key or broad CORS policy is introduced.
   Browser clients use the same origin. Server-to-server clients do not require
   CORS; permitting sibling browser origins can be designed separately.
+- Requests are session-scoped and rate-limited, and every answer carries
+  `X-ECNL-Session` (see "Sessions and rate limits" below). A limited request gets a
+  JSON 429 with `Retry-After: 60`.
+
+## Sessions and rate limits
+
+`/api/v1/*` is public: no account, no key, and no request is refused for lacking a
+cookie. It is session-scoped and rate-limited (#90), so a plain script can't pull the
+data at full speed, and scraping shows up in counts. This caps how *fast* data can be
+pulled, not how much: anyone determined can still copy everything in about a minute per
+IP address, and the repo holds the same data.
+
+### The session cookie
+
+When the Worker serves the page (`GET` or `HEAD /`, including a 304), it sets:
+
+    __Host-ecnl_s=v1.<iat>.<exp>.<id>.<signature>; Max-Age=604800; Path=/; Secure; HttpOnly; SameSite=Lax
+
+- **What it holds:** a random 16-byte id and two times (issued, expires), signed with
+  HMAC-SHA-256 under the `SESSION_SECRET` Worker secret. Nothing personal: no IP address,
+  no user agent, nothing about the visitor. It is not a secret; it says "this client
+  loaded the page", and its id keys the per-session limit.
+- **Lifetimes:** the token is valid for 24 hours; the cookie is kept for 7 days, so a
+  token that lapsed is counted as `anon-expired` rather than looking like a cookieless
+  script. Once a token is an hour old, the next API answer re-issues it with a **fresh id**
+  (`X-ECNL-Session: renewed`), so no browser carries one id for long. Requests already in
+  flight at that moment may each get a new cookie; the browser keeps the last. Changing the
+  lifetime in `api/session.mjs` invalidates every token at once: one spike of `anon-invalid`
+  and one background `HEAD /` per open tab.
+- **Renewal in the page:** any API answer with `X-ECNL-Session: none` (cookie lost,
+  blocked, expired, or an anonymous-tier 429) makes the page send one background `HEAD /`,
+  at most once a minute, which sets a fresh cookie. A session-tier 429 says `ok` and never
+  triggers it. `?live=1` never does.
+- A response that sets the cookie is marked `Cache-Control: private, no-cache` (an API
+  error keeps `no-store`). The archive read never sees the cookie.
+- `Sec-Fetch-Site: cross-site` with a cookie (someone following a link to an API URL;
+  `SameSite=Lax` withholds it from cross-site fetches) is served on the anonymous tier and
+  counted as `anon-cross-site`.
+
+### Limits
+
+Every `/api/v1*` request, including 400/404/405 probes, is checked by Cloudflare's Workers
+rate-limiting binding (`wrangler.toml`, `[[ratelimits]]`, wrangler 4.36.0 or later):
+
+| Limiter | Key | Limit | Applies to |
+| --- | --- | --- | --- |
+| `RL_SESSION` | session id | 300 per 60 s | requests with a valid session cookie |
+| `RL_ANON` | IP address, or the IPv6 /64 | 120 per 60 s at launch; 60 from a follow-up PR 7 days after deploy | requests without a valid cookie |
+| `RL_IP` | IP address, or the IPv6 /64 | 3,000 per 60 s | every request (a per-IP ceiling sized for a crowd on one venue Wi-Fi; it does not protect the daily quota) |
+
+An IPv4-mapped address (`::ffff:a.b.c.d`) is keyed as its IPv4 address. The IP check and
+the tier check run in parallel, so a request refused by one still uses a count in the other.
+Counters are per Cloudflare location and deliberately approximate; errors favour visitors.
+
+Over a limit: `429`, `{"ok":false,"error":"Too many requests. Please wait a minute and try
+again."}`, `Retry-After: 60`, `Cache-Control: no-store`, no body on HEAD. Every answer from
+`/api/v1` carries `X-ECNL-Session`:
+
+| Value | Meaning |
+| --- | --- |
+| `ok` / `renewed` | served on the session tier (`renewed` also sets a new cookie) |
+| `none` | no valid session: served on the anonymous tier, or refused there (429) |
+| `off` | sessions are off: the Worker has no usable `SESSION_SECRET`, or it is the local Python server |
+| `error` | a fault in the session code; the data is served without any limit |
+
+Measured locally (Chrome against an offline stand-in for the Worker with fake limiters): every
+journey #81 and #87 measured, with cookies, gets zero 429s, and so does the busiest single tab
+(149 requests in 11 s). Without cookies at 120 per minute, only that stress case is refused (14 of
+134). At 60, the fastest real journey (every age group of the largest conference, twice, 66
+requests) gets 6.
+
+### Using the API from a script
+
+A script that keeps cookies gets the session tier:
+
+```sh
+curl -s -o /dev/null -c jar.txt https://ecnl.nextonetwo.com/
+curl -s -b jar.txt -c jar.txt https://ecnl.nextonetwo.com/api/v1/status
+```
+
+Without the jar, `curl` still works, on the anonymous tier (1–2 requests per second).
+
+### The Workers Free quota
+
+The account is on **Workers Free: 100,000 Worker requests a day, reset at 00:00 UTC.** After
+that, the Worker answers errors, and `/` and `/api/*` do not fall back to the static assets
+(they run the Worker first), so **the whole site is down for every visitor until 00:00 UTC.**
+Every request that reaches the Worker counts, **including the Worker's own 429s.** The limits
+above make an unwanted request cheap to answer; they do not stop it from being counted. One
+client at `RL_IP`'s pace (3,000 a minute) uses the day's quota in about 33 minutes, so **a
+flood can take `/` and `/api/*` down for the rest of the UTC day.** This risk predates #90;
+#90 does not create it.
+
+- **Workers Paid is the only full remedy.** It is a hosting decision for the owner, not a
+  charge to visitors.
+- **On Free, the one free WAF rate-limiting rule is recommended** (owner, after merge): path
+  starts with `/api/v1/`, counted per IP, 1,000 requests per 10 s, block for 10 s. It is
+  partial: it still lets a determined client through at roughly the same pace, and whether
+  it runs before the Worker (so that blocked requests are not Worker requests) is to be
+  confirmed in Security Events.
+
+### What is recorded
+
+Each non-routine request writes **one** Workers Analytics Engine data point (dataset
+`ecnl_api_events`, binding `API_EVENTS`): `blob1` the outcome, `blob2` the route kind
+(`catalog`, `standings`, …, `invalid` or `unknown` for probes, `page` for `/`), `blob3` the
+`Sec-Fetch-Site` class, `blob4` `production` or `preview` (from the request host, because
+preview versions run with production's bindings and vars), `double1` 1. **No IP address,
+session id or user agent.** Outcomes:
+
+- `anon-missing`, `anon-invalid`, `anon-expired`, `anon-cross-site`: served on the anonymous tier.
+- `limited-session`, `limited-anon`, `limited-ip`: refused with 429 (replaces the `anon-*` point).
+- `minted`: `/` issued a new session. `disabled`: served with sessions off.
+  `gate-error`: a fault in the session code.
+
+Routine session requests write nothing; totals come from the Worker's own metrics. A write
+that fails (quota, missing binding) never changes the response. Rate-limit keys (a session
+id, an IP address or a /64) are held briefly by Cloudflare's per-location limiter to count;
+we never write them anywhere. On Free, Analytics Engine allows 100,000 points a day, as many
+as the Worker has requests, and keeps them 3 months.
+
+To report (a token with *Account · Account Analytics · Read*), always weighting by
+`_sample_interval`, never `SUM(double1)`:
+
+```sh
+curl -s "https://api.cloudflare.com/client/v4/accounts/<account-id>/analytics_engine/sql" \
+  -H "Authorization: Bearer <token>" \
+  --data "SELECT blob1 AS outcome, blob4 AS site, SUM(_sample_interval) AS requests
+          FROM ecnl_api_events WHERE timestamp > NOW() - INTERVAL '1' DAY
+          GROUP BY outcome, site ORDER BY requests DESC"
+```
+
+The measure of success is the `limited-*` counts, not zero scraping.
+
+### Failure modes
+
+- **No secret** (or one under 32 characters): sessions are off. No cookie is set, only
+  `RL_IP` applies, answers say `X-ECNL-Session: off`, and each request counts `disabled`.
+  Production must never answer `off`.
+- **A fault in the session code** (a limiter or crypto throw): the data is still served as
+  JSON, never the assets' HTML, with `X-ECNL-Session: error`; it is counted as `gate-error`
+  and logged with the tag `session`. A failed key import is retried on the next request.
+- **The local Python server** runs with sessions off (`X-ECNL-Session: off`, no cookie, no
+  limits), the same as the Worker without a secret. Its status codes match the Worker's,
+  except that the Worker can also answer 429.
+
+### Owner setup (the team changes none of this)
+
+1. **Before the PR's Cloudflare preview check:** create the secret with a generated value,
+   not a passphrase:
+
+   ```sh
+   node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+   npx wrangler secret put SESSION_SECRET
+   ```
+
+   `secret put` deploys a new version of the current code at once, which is harmless.
+   Rotating the secret later just re-issues every session.
+2. **Before merge:** confirm no other Worker on the account uses rate-limit `namespace_id`s
+   9001–9003 (a namespace id is shared by every Worker on the account that uses it).
+3. **After merge:** add the WAF rate-limiting rule above (recommended on Free).
+4. **For reports:** an API token with *Account · Account Analytics · Read*.
+
+Never:
+
+- Enable Pseudo IPv4 "Overwrite headers": it would give each IPv6 address its own IPv4 and
+  defeat the /64 key.
+- Turn on Bot Fight Mode: it is zone-wide, can't be exempted per path, and challenges API
+  clients, including the team's `curl` checks.
+- List `SESSION_SECRET` under `[secrets] required` in `wrangler.toml`: a missing required
+  secret blocks every deploy, including the data-refresh deploys.
 
 ## Deployment and evolution
 
@@ -153,7 +324,8 @@ Rollback restores the previous complete application deployment; there is no
 schema migration to reverse. Direct visitor access to raw archive and data
 assets (`/archive/*`, `/data/*`, and bare `/archive`, `/data`) is blocked with
 404 at the edge Worker and local server. This closes the unauthenticated side door
-to raw snapshot files, while `/api/v1/*` remains the unauthenticated public API contract.
+to raw snapshot files, while `/api/v1/*` remains the public API contract: no account,
+session-scoped and rate-limited (see "Sessions and rate limits").
 Blocking requests prevents future downloads; it does not claw back copies already
 cached in visitors' browsers from earlier releases (a cache purge of `/archive/*`
 and `/data/*` on deploy is recommended hygiene).
@@ -165,13 +337,16 @@ of 78, a Teams search 1 instead of 73, and opening My Teams with three favourite
 9 instead of 226. Without the index
 (the fallback) a cold search makes roughly 75 Worker requests per selected
 season; page-memory caches still eliminate repeated standings reads. Include
-this request volume in usage monitoring before increasing traffic.
+this request volume in usage monitoring before increasing traffic: on Workers Free
+every one of these requests counts against the 100,000-a-day quota (see "The Workers
+Free quota").
 
 Later, replace the archive reader with private R2 and add validated publishing.
 That can remove data-only deployments without changing v1 clients. Server-side
 search, database-backed analytics, and a keyed private API are separate future additions.
 
-The Python server offers the same archive-only v1 routes with stdlib only.
+The Python server offers the same archive-only v1 routes with stdlib only, with
+sessions off (`X-ECNL-Session: off`, no cookie, no rate limits).
 Its explicit `?live=1` debug path still uses the legacy proxy and reconstructed
 schedule guards. Use Wrangler to test the actual Worker and feedback, which the
 Python server does not implement.

@@ -38,12 +38,21 @@ including data-only refresh commits. Direct external visitor access to `/archive
 `/data/` is blocked at the edge Worker and local server; the frontend reads
 exclusively through `/api/v1`.
 
+`/api/v1` is free and public but rate-limited (#90): the page gets a signed session
+cookie from `/`, sessions get 300 requests a minute, and requests without one get a
+lower per-IP limit instead of being refused. Scripts that keep cookies work the same
+way (`curl -c jar.txt https://ecnl.nextonetwo.com/`, then `-b jar.txt`). See
+[Sessions and rate limits](docs/data-api.md#sessions-and-rate-limits).
+
 ## Run it locally
 
 ```bash
 python proxy_server.py --offline    # archive-only API and frontend on port 5000
 npx wrangler dev                    # actual Worker, assets, and local feedback KV
 ```
+
+The Python server runs with sessions off: no cookie, no rate limits, and every
+`/api/v1` answer says `X-ECNL-Session: off`, as the Worker does without its secret.
 
 Open the address printed by the server. A plain static HTTP server or opening
 `public/index.html` directly cannot serve `/api/v1` and no longer supports the
@@ -57,16 +66,17 @@ always read the local archive, even when the server is not in offline mode.
 ## Validate changes
 
 ```bash
-node --test tests/data-api.test.mjs  # Node 22+; no npm dependencies required
+node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs  # Node 22+
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
 ```
 
 The API contract workflow runs these checks on pull requests and main commits.
-No test may reach the network: `tests/netguard/sitecustomize.py` refuses any
-non-loopback connection and fails the run at exit if anything tried, even when the
-code under test swallowed the error; the dead proxy is a second layer.
+No test may reach the network: `tests/netguard/sitecustomize.py` (Python) and
+`tests/netguard/netguard.mjs` (Node, preloaded with `--import`) refuse any non-loopback
+connection and fail the run at exit if anything tried, even when the code under test
+swallowed the error; the dead proxy is a second layer. No npm dependencies are required.
 
 ## Refresh the data
 
@@ -321,8 +331,10 @@ visitor's message) drops the crudest bots, the message is capped at 2,000 charac
 request body at 8 KB. Those bound each write, not how many arrive. **KV writes on the free plan are
 capped at 1,000 a day for the whole Cloudflare account**, and that budget is shared with the
 sibling site's waiting list — a flood of feedback here would break signups on `nextonetwo.com` too.
-If junk appears, the free plan includes one WAF rate-limiting rule per account; match `/api/*` so
-the one rule covers both sites.
+The free plan includes one WAF rate-limiting rule per account, and it is now recommended for the
+data API (path starts with `/api/v1/`; see [The Workers Free quota](docs/data-api.md#the-workers-free-quota)).
+If feedback junk appears too, the owner chooses: widen that rule to `/api/` (it would then also
+cover the sibling site's `/api/*`, since the rule has no hostname field) or move to a paid plan.
 
 ## Layout
 
@@ -348,8 +360,9 @@ the one rule covers both sites.
 | `reconstruct.py` | Rebuilds schedules TGS removed from a hand-entered CSV; `--check` validates them (see "Reconstructed data") |
 | `reconstructed/` | The CSVs behind the reconstructed archive files — one line per game, with its source URL |
 | `export/<season>/<conf>/` | CSVs — not published; `*.standings.csv`, `*.schedule.csv` |
-| `worker.js` | Redirects the `workers.dev` hostname, blocks raw data paths, and handles `/api/v1/*` and `POST /api/feedback` |
-| `wrangler.toml` | Cloudflare Workers config: the `public/` assets and the `FEEDBACK` KV binding |
+| `worker.js` | Redirects the `workers.dev` hostname, blocks raw data paths, sets the session cookie on `/`, and handles `/api/v1/*` and `POST /api/feedback` |
+| `api/session.mjs` | Session cookie, rate limits and counts for `/api/v1/*` (see `docs/data-api.md`, "Sessions and rate limits") |
+| `wrangler.toml` | Cloudflare Workers config: the `public/` assets, the `FEEDBACK` KV binding, the three rate limiters and the `API_EVENTS` Analytics Engine dataset |
 | `.gitattributes` | Pins the image assets (`*.svg`, `*.png`) as binary, so the files copied from the entrance site stay byte-identical across checkouts instead of being line-ending converted |
 | `.github/workflows/refresh.yml` | The scheduled refresh — asks for every 2 h, measured at 3 to 5½ |
 | `ecnl-standings.html` | Deprecated first version, kept for reference |
@@ -391,6 +404,26 @@ To run the Worker and the panel locally, `npx wrangler dev` and open
 <http://localhost:8787>. KV is simulated on your machine, so test submissions stay there.
 Use `python proxy_server.py --offline` for local data browsing without Wrangler.
 It does not implement feedback. A plain static server cannot serve the v1 API.
+
+**Session secret and rate limits (#90).** The owner, not the team, sets these up:
+
+1. Before a preview check of the rate limits: `npx wrangler secret put SESSION_SECRET`, with a
+   value from `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`
+   (a generated value, never a passphrase). Without it the API still works with only the per-IP
+   limit, answering `X-ECNL-Session: off`; production must never say `off`.
+2. Before merge: confirm no other Worker on the account uses rate-limit `namespace_id`s 9001–9003.
+3. After merge: the WAF rate-limiting rule (recommended on Workers Free).
+4. For reports: an API token with *Account · Account Analytics · Read*.
+
+Never enable Pseudo IPv4 "Overwrite headers", leave Bot Fight Mode off, and don't list the
+secret under `[secrets] required` (a missing required secret blocks every deploy, including
+the data-refresh ones). Details: [docs/data-api.md](docs/data-api.md#owner-setup-the-team-changes-none-of-this).
+
+**Workers Free quota.** The account is on Workers Free: 100,000 Worker requests a day, reset at
+00:00 UTC, and every request to `/` or `/api/*` counts, including the Worker's own 429s. When
+it runs out, `/` and `/api/*` fail for every visitor until 00:00 UTC, so a flood can take the
+site down for the rest of the UTC day. The rate limits don't prevent that; the WAF rule
+reduces it; Workers Paid is the only full remedy.
 
 ## Data Sources
 
