@@ -60,8 +60,10 @@ namespace_id = "9003"
 simple = { limit = 3000, period = 60 }
 
 # Counts of anonymous, limited and failed requests: outcome, route kind, Sec-Fetch-Site class
-# and production or preview. No IP address, session id or user agent. The dataset is created
-# on the first write.
+# and production or preview. No IP address, session id or user agent. The dataset must be
+# created once in the dashboard before the first build (Workers & Pages -> Analytics Engine ->
+# Create Dataset, name ecnl_api_events, binding API_EVENTS); the first build of #91 failed
+# without it.
 [[analytics_engine_datasets]]
 binding = "API_EVENTS"
 dataset = "ecnl_api_events"
