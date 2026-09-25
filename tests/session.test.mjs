@@ -316,7 +316,7 @@ test('R1 R12 a throwing limiter or key import still serves JSON; a failed import
 // The page's own noteSession (public/index.html), run with a stub fetch and clock.
 test('page: only X-ECNL-Session "none" sends a background HEAD /, at most once a minute', async () => {
   const html = (await readFile(new URL('../public/index.html', import.meta.url), 'utf8')).replace(/\r\n/g, '\n');
-  const start = html.indexOf('    let sessionRenewAt = 0;');
+  const start = html.indexOf('    let sessionRenewAt = 0');
   const end = html.indexOf('\n    }\n', html.indexOf('function noteSession(', start)) + 6;
   assert.ok(start >= 0 && end > start, 'noteSession not found in index.html');
   const calls = [], clock = { t: 1e12 };

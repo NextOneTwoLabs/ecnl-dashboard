@@ -70,9 +70,19 @@ bytes unchanged. It is rebuilt at the end of a crawl, by every `--refresh`
 
 The page uses the index to find a deep-linked team or a saved favourite and to
 run a Teams search: one request per season instead of every hierarchy and
-standings file. If the index is missing (404), has an unknown schema, or fails
-(then retried on the next lookup), the page falls back to the full scan, which
-reuses page-memory standings caches. `?live=1` never uses the index.
+standings file. What the page does with the index answer (#92):
+
+| Index answer | The page | Remembered |
+| --- | --- | --- |
+| 200 with a known schema | uses the rows | for the session |
+| 404, or an unknown schema | falls back to the full scan, which reuses page-memory standings caches | for the session |
+| any other 4xx (429, 400, 401, 403, …) | no scan: "Couldn't search right now" or "Couldn't load this team", with "try again" | for a minute (a `none` 429 until the session is back, if sooner) |
+| a 5xx, a network error or bad JSON | no scan: the same "try again" message | no: the next search or lookup asks once more |
+
+A refused index therefore never starts the scan, and a team lookup stops there
+instead of going on through the other seasons. A lookup that does scan (no
+index) stops at a failure other than a 404 in the same way once that season's scan
+is done, rather than answering "Couldn't find …". `?live=1` never uses the index.
 
 ### Club places (`/api/v1/clubs`)
 
@@ -184,7 +194,10 @@ valid session or it is over an hour old:
 - **Renewal in the page:** any API answer with `X-ECNL-Session: none` (cookie lost,
   blocked, expired, or an anonymous-tier 429) makes the page send one background `HEAD /`,
   at most once a minute, which sets a fresh cookie. A session-tier 429 says `ok` and never
-  triggers it. `?live=1` never does.
+  triggers it. `?live=1` never does. If a request sent after a renewal landed (the `HEAD /`
+  answered 2xx) still says `none`, the browser is not keeping cookies, and the page stops
+  renewing until an answer says `ok` or `renewed` (#92). A renewal that fails (5xx or
+  network) does not count, so renewal goes on.
 - A response that sets the cookie is marked `Cache-Control: private, no-cache` (an API
   error keeps `no-store`). The archive read never sees the cookie.
 - `Sec-Fetch-Site: cross-site` with a cookie (someone following a link to an API URL;
@@ -213,8 +226,12 @@ favour visitors.
 Over a limit: `429`, `{"ok":false,"error":"Too many requests. Please wait a minute and try
 again."}`, `Retry-After: 60`, `Cache-Control: no-store`, no body on HEAD. On the anonymous
 tier the body also has `"help"`, the bare URL of [API keys](#api-keys), and the same target
-is in a `Link: <…#api-keys>; rel="help"` header; the page shows only `error`. Every answer from
-`/api/v1` carries `X-ECNL-Session`:
+is in a `Link: <…#api-keys>; rel="help"` header. The page shows neither `error` nor `help`: it
+says "Too many requests. Try again in a minute.", or on a 429 that says `none`, "Too many
+requests. Try again in a minute, or allow cookies for this site and reload the page." (#92).
+A table refused (or failing with anything but a 404) shows "Some tables couldn't load." with
+a **Try again** button, never an empty "0 teams" table; nothing retries on its own. Every
+answer from `/api/v1` carries `X-ECNL-Session`:
 
 | Value | Meaning |
 | --- | --- |
@@ -570,8 +587,9 @@ With the team index (#81) and the club places (#87, one request per session),
 measured locally: a cold shared team link for 2026-27 makes 7 v1 requests instead
 of 78, a Teams search 1 instead of 73, and opening My Teams with three favourites
 9 instead of 226. Without the index
-(the fallback) a cold search makes roughly 75 Worker requests per selected
-season; page-memory caches still eliminate repeated standings reads. Include
+(the fallback, after a 404; never after a refused or failed index, #92) a cold search
+makes roughly 75 Worker requests per selected season; page-memory caches still
+eliminate repeated standings reads. Include
 this request volume in usage monitoring before increasing traffic: on Workers Free
 every one of these requests counts against the 100,000-a-day quota (see "The Workers
 Free quota").
