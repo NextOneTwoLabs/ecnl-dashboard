@@ -153,7 +153,8 @@ IP address, and the repo holds the same data.
 
 ### The session cookie
 
-When the Worker serves the page (`GET` or `HEAD /`, including a 304), it sets:
+When the Worker serves the page (`GET` or `HEAD /`, including a 304), it sets, when there is no
+valid session or it is over an hour old:
 
     __Host-ecnl_s=v1.<iat>.<exp>.<id>.<signature>; Max-Age=604800; Path=/; Secure; HttpOnly; SameSite=Lax
 
@@ -246,7 +247,7 @@ Each non-routine request writes **one** Workers Analytics Engine data point (dat
 `ecnl_api_events`, binding `API_EVENTS`): `blob1` the outcome, `blob2` the route kind
 (`catalog`, `standings`, …, `invalid` or `unknown` for probes, `page` for `/`), `blob3` the
 `Sec-Fetch-Site` class, `blob4` `production` or `preview` (from the request host, because
-preview versions run with production's bindings and vars), `double1` 1. **No IP address,
+this Worker's version previews run with production's bindings and vars), `double1` 1. **No IP address,
 session id or user agent.** Outcomes:
 
 - `anon-missing`, `anon-invalid`, `anon-expired`, `anon-cross-site`: served on the anonymous tier.
@@ -287,7 +288,10 @@ The measure of success is the `limited-*` counts, not zero scraping.
 
 ### Owner setup (the team changes none of this)
 
-1. **Before the PR's Cloudflare preview check:** create the secret with a generated value,
+1. **Once, before the first build with these bindings:** create the Analytics Engine dataset
+   `ecnl_api_events` with the binding `API_EVENTS` in the Cloudflare dashboard. The first
+   build of #90 failed without it (done for #90).
+2. **Before the PR's Cloudflare preview check:** create the secret with a generated value,
    not a passphrase:
 
    ```sh
@@ -296,11 +300,15 @@ The measure of success is the `limited-*` counts, not zero scraping.
    ```
 
    `secret put` deploys a new version of the current code at once, which is harmless.
-   Rotating the secret later just re-issues every session.
-2. **Before merge:** confirm no other Worker on the account uses rate-limit `namespace_id`s
+   Rotating the secret later just re-issues every session. This Worker's builds run
+   `wrangler versions upload` (version preview URLs, not the newer Worker Previews), so a
+   preview uses production's bindings and secrets; a version uploaded before `SESSION_SECRET`
+   exists runs with sessions off (`X-ECNL-Session: off`) until it is uploaded again (**Retry
+   build** in the dashboard).
+3. **Before merge:** confirm no other Worker on the account uses rate-limit `namespace_id`s
    9001–9003 (a namespace id is shared by every Worker on the account that uses it).
-3. **After merge:** add the WAF rate-limiting rule above (recommended on Free).
-4. **For reports:** an API token with *Account · Account Analytics · Read*.
+4. **After merge:** add the WAF rate-limiting rule above (recommended on Free).
+5. **For reports:** an API token with *Account · Account Analytics · Read*.
 
 Never:
 

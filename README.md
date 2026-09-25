@@ -66,7 +66,7 @@ always read the local archive, even when the server is not in offline mode.
 ## Validate changes
 
 ```bash
-node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs  # Node 22+
+node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/netguard.test.mjs  # Node 22+
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -331,7 +331,8 @@ visitor's message) drops the crudest bots, the message is capped at 2,000 charac
 request body at 8 KB. Those bound each write, not how many arrive. **KV writes on the free plan are
 capped at 1,000 a day for the whole Cloudflare account**, and that budget is shared with the
 sibling site's waiting list — a flood of feedback here would break signups on `nextonetwo.com` too.
-The free plan includes one WAF rate-limiting rule per account, and it is now recommended for the
+The free plan includes one WAF rate-limiting rule per zone (both sites share the `nextonetwo.com`
+zone), and it is now recommended for the
 data API (path starts with `/api/v1/`; see [The Workers Free quota](docs/data-api.md#the-workers-free-quota)).
 If feedback junk appears too, the owner chooses: widen that rule to `/api/` (it would then also
 cover the sibling site's `/api/*`, since the rule has no hostname field) or move to a paid plan.
@@ -407,13 +408,19 @@ It does not implement feedback. A plain static server cannot serve the v1 API.
 
 **Session secret and rate limits (#90).** The owner, not the team, sets these up:
 
-1. Before a preview check of the rate limits: `npx wrangler secret put SESSION_SECRET`, with a
+1. Once, before the first build with these bindings: create the Analytics Engine dataset
+   `ecnl_api_events` with the binding `API_EVENTS` in the Cloudflare dashboard. The first build
+   of #90 failed without it (done for #90).
+2. Before a preview check of the rate limits: `npx wrangler secret put SESSION_SECRET`, with a
    value from `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`
    (a generated value, never a passphrase). Without it the API still works with only the per-IP
-   limit, answering `X-ECNL-Session: off`; production must never say `off`.
-2. Before merge: confirm no other Worker on the account uses rate-limit `namespace_id`s 9001–9003.
-3. After merge: the WAF rate-limiting rule (recommended on Workers Free).
-4. For reports: an API token with *Account · Account Analytics · Read*.
+   limit, answering `X-ECNL-Session: off`; production must never say `off`. This Worker's builds
+   run `wrangler versions upload` (version preview URLs), so a preview uses production's bindings
+   and secrets; a version uploaded before `SESSION_SECRET` exists runs with sessions off until it
+   is uploaded again (**Retry build**).
+3. Before merge: confirm no other Worker on the account uses rate-limit `namespace_id`s 9001–9003.
+4. After merge: the WAF rate-limiting rule (recommended on Workers Free).
+5. For reports: an API token with *Account · Account Analytics · Read*.
 
 Never enable Pseudo IPv4 "Overwrite headers", leave Bot Fight Mode off, and don't list the
 secret under `[secrets] required` (a missing required secret blocks every deploy, including

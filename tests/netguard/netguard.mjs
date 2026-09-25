@@ -14,7 +14,8 @@ import dns from 'node:dns';
 import dnsPromises from 'node:dns/promises';
 
 const attempts = [];
-const loopback = host => !host || host === 'localhost' || /^127\./.test(host) || host === '::1' || host === '[::1]';
+// An IPv4 loopback literal only: a name such as 127.0.0.1.example.com is not loopback.
+const loopback = host => !host || host === 'localhost' || /^127(\.\d{1,3}){3}$/.test(host) || host === '::1' || host === '[::1]';
 const deny = what => { attempts.push(what); console.error('netguard: blocked ' + what); throw new Error('netguard: blocked ' + what); };
 
 const connect = net.Socket.prototype.connect;
