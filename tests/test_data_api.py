@@ -61,6 +61,23 @@ class ApiTests(unittest.TestCase):
             status, headers, _ = self.request('/api/v1/catalog', headers={'If-None-Match': '*'})
             self.assertEqual((status, headers.get('X-ECNL-Session')), (304, 'off'))
 
+    def test_keys_ignored_locally(self):
+        # #93: the local server checks no keys: an Authorization header, valid-looking or not,
+        # changes nothing, every answer still says "off", and nothing asks for credentials.
+        # The key-shaped value is built here, so no key-shaped literal is in the tree.
+        fake = 'ecnl_live_' + '0' * 12 + '_' + '0' * 64
+        with patch.object(proxy_server.api, 'fetch_api_raw', side_effect=AssertionError('v1 must not contact upstream')), patch.object(proxy_server.ProxyHandler, 'log_message'):
+            for auth in ('Bearer ' + fake, 'Bearer junk', 'Basic abc', ''):
+                for method in ('GET', 'HEAD'):
+                    status, headers, body = self.request('/api/v1/catalog', method, {'Authorization': auth})
+                    self.assertEqual((status, headers.get('X-ECNL-Session')), (200, 'off'), (auth, method))
+                    self.assertNotIn('WWW-Authenticate', headers)
+                    self.assertNotIn('Set-Cookie', headers)
+                    if method == 'GET': self.assertIn(b'"seasons"', body)
+            # The Worker refuses a key in a URL with 400; locally it is only a query string.
+            status, headers, _ = self.request('/api/v1/catalog?k=' + fake)
+            self.assertEqual((status, headers.get('X-ECNL-Session')), (200, 'off'))
+
     def test_all_archive_parity(self):
         count = 0
         import re
