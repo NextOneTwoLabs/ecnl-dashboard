@@ -19,7 +19,7 @@ jobs:
           python-version: '3.12'
       # The Node twin of the guard below (#90): tests/netguard/netguard.mjs refuses any
       # non-loopback connection, DNS lookup or fetch, and fails the run at exit.
-      - run: node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/netguard.test.mjs
+      - run: node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs
         env:
           HTTPS_PROXY: http://127.0.0.1:9
           HTTP_PROXY: http://127.0.0.1:9
