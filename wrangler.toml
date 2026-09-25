@@ -68,6 +68,10 @@ simple = { limit = 3000, period = 60 }
 binding = "API_EVENTS"
 dataset = "ecnl_api_events"
 
-# SESSION_SECRET is a Worker secret (npx wrangler secret put SESSION_SECRET), not a var, and is
-# deliberately not listed under [secrets]: a required secret blocks every deploy, including the
+# SESSION_SECRET is a Worker secret, not a var. Before merge, or whenever an undeployed version
+# exists, add it with `npx wrangler versions secret put SESSION_SECRET --name ecnl-dashboard`
+# (no deploy), then Retry build; never with Deploy in the dashboard's Production settings or a
+# plain `wrangler secret put` while a PR preview is the latest version (that could deploy
+# unmerged code). Rotating it when the deployed version is the latest: `npx wrangler secret put
+# SESSION_SECRET --name ecnl-dashboard`. It is deliberately not listed under [secrets]: a required secret blocks every deploy, including the
 # data-refresh deploys, when it is missing. Without it the API fails open (X-ECNL-Session: off).

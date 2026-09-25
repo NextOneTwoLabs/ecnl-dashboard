@@ -411,9 +411,16 @@ It does not implement feedback. A plain static server cannot serve the v1 API.
 1. Once, before the first build with these bindings: create the Analytics Engine dataset
    `ecnl_api_events` with the binding `API_EVENTS` in the Cloudflare dashboard. The first build
    of #90 failed without it (done for #90).
-2. Before a preview check of the rate limits: `npx wrangler secret put SESSION_SECRET`, with a
-   value from `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`
-   (a generated value, never a passphrase). Without it the API still works with only the per-IP
+2. Before a preview check of the rate limits, create the secret with a value from
+   `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"` (a generated
+   value, never a passphrase). **Before merge, or whenever an undeployed version exists:**
+   `npx wrangler versions secret put SESSION_SECRET --name ecnl-dashboard` (adds it to a new
+   version without deploying; later uploads keep it), then **Retry build** on the PR's latest
+   build. **Don't** add it in the dashboard's Production settings with **Deploy**, or with a plain
+   `wrangler secret put`, while a PR preview is the latest version: that could deploy unmerged PR
+   code. **Rotating it later, when the deployed version is the latest:**
+   `npx wrangler secret put SESSION_SECRET --name ecnl-dashboard` is fine.
+   Without the secret the API still works with only the per-IP
    limit, answering `X-ECNL-Session: off`; production must never say `off`. This Worker's builds
    run `wrangler versions upload` (version preview URLs), so a preview uses production's bindings
    and secrets; a version uploaded before `SESSION_SECRET` exists runs with sessions off until it

@@ -292,15 +292,21 @@ The measure of success is the `limited-*` counts, not zero scraping.
    `ecnl_api_events` with the binding `API_EVENTS` in the Cloudflare dashboard. The first
    build of #90 failed without it (done for #90).
 2. **Before the PR's Cloudflare preview check:** create the secret with a generated value,
-   not a passphrase:
+   not a passphrase. **Before merge, or whenever an undeployed version exists** (a PR preview
+   is the latest uploaded version), add it to a new version **without deploying**, then use
+   **Retry build** on the PR's latest build:
 
    ```sh
    node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
-   npx wrangler secret put SESSION_SECRET
+   npx wrangler versions secret put SESSION_SECRET --name ecnl-dashboard
    ```
 
-   `secret put` deploys a new version of the current code at once, which is harmless.
-   Rotating the secret later just re-issues every session. This Worker's builds run
+   Later uploads keep existing secrets. **Don't** add the secret in the dashboard's
+   Production settings with **Deploy**, and don't use a plain `wrangler secret put`, while a
+   PR preview is the latest version: both build the new version from that latest version, so
+   they could put unmerged PR code into production (or be refused). **Rotating the secret
+   later, when the deployed version is the latest:** `npx wrangler secret put SESSION_SECRET
+   --name ecnl-dashboard` is fine; it re-issues every session. This Worker's builds run
    `wrangler versions upload` (version preview URLs, not the newer Worker Previews), so a
    preview uses production's bindings and secrets; a version uploaded before `SESSION_SECRET`
    exists runs with sessions off (`X-ECNL-Session: off`) until it is uploaded again (**Retry
