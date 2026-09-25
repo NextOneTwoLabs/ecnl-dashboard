@@ -207,6 +207,7 @@ def main():
     print(f"  http://localhost:{args.port}/")
     print(f"  The page reads archive-only /api/v1 by default; add ?live=1 to use the proxy.")
     print(f"  Sessions are off locally: no cookie, no rate limits (X-ECNL-Session: off).")
+    print(f"  API keys are not checked locally: an Authorization header changes nothing.")
     if not os.path.isdir(api.ARCHIVE_API_DIR):
         print(f"  note: no archive yet — run `python archive.py` to build one")
     print(f"  Press Ctrl+C to stop\n")

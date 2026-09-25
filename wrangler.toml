@@ -33,6 +33,15 @@ run_worker_first = ["/", "/api/*", "/archive*", "/data*"]
 binding = "FEEDBACK"
 id = "caf080c2c3f94556ad15cbcedca25ccd"
 
+# API keys for direct use of /api/v1 (#93; api/apikey.mjs, docs/data-api.md "API keys"). It
+# holds `key:<id>` -> {v, hash, label, created, tier, status}, where hash is the SHA-256 of the
+# key: never a key. Its own namespace, not FEEDBACK, so the feedback listing never shows key
+# records and a feedback purge can't delete them. The owner created it in the dashboard (title
+# ECNL_API_KEYS) and manages it with tools/apikey.mjs; the id is not secret.
+[[kv_namespaces]]
+binding = "API_KEYS"
+id = "0f7cd5892944474598857af3e82bdafb"
+
 # Rate limits for /api/v1/* (#90; api/session.mjs, docs/data-api.md "Sessions and rate
 # limits"). Needs wrangler 4.36.0 or later. Counters are per Cloudflare location and
 # deliberately approximate. A namespace_id is shared by every Worker on the account that uses
@@ -44,9 +53,8 @@ name = "RL_SESSION"          # per session id, for requests with a valid session
 namespace_id = "9001"
 simple = { limit = 300, period = 60 }
 
-# Per IP (or IPv6 /64), for requests without a valid session cookie. 120 at launch, so tabs
-# opened before the deploy (no renewal code, no cookie) have room on shared IPs; lowered to 60
-# in a follow-up PR 7 days after deploy.
+# Per IP (or IPv6 /64), for requests with neither an API key nor a valid session cookie: the
+# small allowance for browsers without cookies; #92 lowers it to 60.
 [[ratelimits]]
 name = "RL_ANON"
 namespace_id = "9002"
@@ -58,6 +66,15 @@ simple = { limit = 120, period = 60 }
 name = "RL_IP"
 namespace_id = "9003"
 simple = { limit = 3000, period = 60 }
+
+# Per API key id (`key:<id>`), for requests with a valid key (#93), tier "standard". Keyed
+# requests also count toward RL_IP. Without this binding a key would have no per-key limit
+# (tests/apikey.test.mjs checks it is declared). Another tier would need its own binding and
+# namespace_id.
+[[ratelimits]]
+name = "RL_KEY"
+namespace_id = "9004"
+simple = { limit = 120, period = 60 }
 
 # Counts of anonymous, limited and failed requests: outcome, route kind, Sec-Fetch-Site class
 # and production or preview. No IP address, session id or user agent. The dataset must be

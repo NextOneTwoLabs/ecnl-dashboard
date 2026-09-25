@@ -1,8 +1,9 @@
 """Archive-only v1 contract for the zero-dependency local server.
 
 Sessions are off here (#90): every v1 response says X-ECNL-Session: off, no cookie is set
-and no rate limit applies, which is how the Worker behaves without SESSION_SECRET. Status
-codes match the Worker's, except that the Worker can also answer 429.
+and no rate limit applies, which is how the Worker behaves without SESSION_SECRET. No API key
+is checked (#93): an Authorization header, or a key in the URL, changes nothing here. Status
+codes match the Worker's, except that the Worker can also answer 429, and 400, 401 or 503 for keys.
 """
 import hashlib
 import json

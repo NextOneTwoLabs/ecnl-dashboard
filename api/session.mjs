@@ -5,7 +5,11 @@
 // ticket saying "this client loaded the page". It holds a random id and two times, nothing
 // personal, and the id keys the per-session rate limit. The API never refuses a request for
 // lacking one: it is served under a lower per-IP limit instead (the anonymous tier).
+//
+// Direct use (scripts, agents) sends an owner-issued API key instead (#93, api/apikey.mjs):
+// `Authorization: Bearer <key>`, judged before the cookie and never falling back to it.
 import { resolveResource } from './data-api.mjs';
+import { checkKey, keyInUrl, HELP_URL } from './apikey.mjs';
 
 export const COOKIE = '__Host-ecnl_s';
 // Token lifetime, seconds. `exp - iat` must equal it, so changing TTL invalidates every
@@ -92,10 +96,43 @@ export function ipKey(ip) {
   return 'ip6:' + groups.slice(0, 4).map(g => g.toString(16)).join(':') + '::/64';
 }
 
-const tooMany = (request, session) => new Response(request.method === 'HEAD' ? null : JSON.stringify({ ok: false, error: 'Too many requests. Please wait a minute and try again.' }), {
-  status: 429,
-  headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'retry-after': String(RETRY_AFTER), 'x-ecnl-session': session },
+const refuse = (request, status, session, body, extra = {}) => new Response(request.method === 'HEAD' ? null : JSON.stringify({ ok: false, ...body }), {
+  status,
+  headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-ecnl-session': session, ...extra },
 });
+const TOO_MANY = 'Too many requests. Please wait a minute and try again.';
+// #93: an anonymous-tier 429 also points to API keys, as a bare `help` URL (the page shows only
+// `error`) and a Link header with the same target. Session-tier and key 429s carry neither.
+const tooMany = (request, session, help = false) => refuse(request, 429, session,
+  help ? { error: TOO_MANY, help: HELP_URL } : { error: TOO_MANY },
+  help ? { 'retry-after': String(RETRY_AFTER), link: `<${HELP_URL}>; rel="help"` } : { 'retry-after': String(RETRY_AFTER) });
+// One body for every invalid, unknown or revoked key, so the answer says nothing about which.
+const badKey = request => refuse(request, 401, 'key', { error: 'This API key is not valid or has been revoked.', help: HELP_URL },
+  { 'www-authenticate': 'Bearer realm="ecnl", error="invalid_token"' });
+const keyInUrlRefusal = request => refuse(request, 400, 'key',
+  { error: 'Send API keys in the Authorization header, never in a URL. Treat this key as exposed and ask for a new one.', help: HELP_URL });
+const keyDown = request => refuse(request, 503, 'key', { error: 'API keys cannot be checked right now. Please try again later.' },
+  { 'retry-after': String(RETRY_AFTER) });
+
+// A limiter fault on the key path does not refuse: RL_IP is checked before the key is judged,
+// and RL_KEY only after the key is proven, as on the session path.
+const allowedOpen = async (binding, key) => { try { return await allowed(binding, key); } catch { return true; } };
+
+// Keyed requests (#93). The per-IP ceiling comes first, so an IP over it costs no KV read (#93
+// review, R-C); then the key; then the per-key limit, so an invalid key never spends a real
+// key's allowance. Counts carry the key id only once a record exists for it, `-` otherwise.
+async function keyGate(request, env, about, ip, nowMs) {
+  if (!(await allowedOpen(env.RL_IP, ip))) {
+    count(env, 'limited-ip', about, { id: '-', reason: 'key' });
+    return { response: tooMany(request, 'key') };
+  }
+  const v = await checkKey(request.headers.get('authorization'), env, nowMs);
+  if (v.state === 'error') { count(env, 'key-error', about, { id: '-' }); return { response: keyDown(request) }; }
+  if (v.state !== 'ok') { count(env, v.state === 'revoked' ? 'key-revoked' : 'key-invalid', about, v); return { response: badKey(request) }; }
+  if (!(await allowedOpen(env.RL_KEY, 'key:' + v.id))) { count(env, 'limited-key', about, v); return { response: tooMany(request, 'key') }; }
+  count(env, 'key-ok', about, v);
+  return { session: 'key', cookie: null };
+}
 
 // What is recorded about a request, and only for non-routine ones: the outcome, the route
 // kind, the Sec-Fetch-Site class and production or preview. No IP address, session id or user
@@ -113,17 +150,41 @@ function describe(request) {
   };
 }
 
-function count(env, outcome, { kind, sfs, site }) {
-  try { env.API_EVENTS?.writeDataPoint({ indexes: [outcome], blobs: [outcome, kind, sfs, site], doubles: [1] }); } catch {}
+// #93: key outcomes add blob5, the key id (never the key) or `-`, and blob6, the reason. The id
+// is one a record exists for, except for `key-in-url`, which keeps the unverified id from the
+// URL because it tells the owner which key to revoke. Points with a verified id are indexed by
+// it, so per-key sums sample fairly.
+function count(env, outcome, { kind, sfs, site }, key) {
+  const blobs = [outcome, kind, sfs, site];
+  if (key) blobs.push(key.id || '-', key.reason || '');
+  const index = key?.id && key.id !== '-' && outcome !== 'key-in-url' ? key.id : outcome;
+  try { env.API_EVENTS?.writeDataPoint({ indexes: [index], blobs, doubles: [1] }); } catch {}
 }
 
 const allowed = async (binding, key) => !binding || (await binding.limit({ key })).success;
 
 // Called by the Worker for every /api/v1* request before the data handler.
-// -> { response } to answer now (429), or { session, cookie } to serve and decorate.
+// -> { response } to answer now (429; for keys also 400, 401 or 503), or { session, cookie } to
+// serve and decorate.
 export async function gate(request, env, nowMs = Date.now()) {
   const about = describe(request);
   const ip = ipKey(request.headers.get('cf-connecting-ip'));
+
+  // #93, first and without SESSION_SECRET: a key-shaped string anywhere in the URL is refused;
+  // an Authorization header goes to the key path, which answers for its own faults (503) so a
+  // key fault never reaches the fail-open sessionFault; only then the cookie, then the allowance.
+  const inUrl = keyInUrl(request.url);
+  if (inUrl) {
+    count(env, 'key-in-url', about, { id: inUrl[1] ? inUrl[1].toLowerCase() : '-' });
+    return { response: keyInUrlRefusal(request) };
+  }
+  if (request.headers.has('authorization')) {
+    try { return await keyGate(request, env, about, ip, nowMs); } catch (err) {
+      console.error('apikey', err && err.message);
+      count(env, 'key-error', about, { id: '-' });
+      return { response: keyDown(request) };
+    }
+  }
 
   if (!usableSecret(env.SESSION_SECRET)) {
     // Fail open: without a secret no session can be issued, so treating everyone as
@@ -146,7 +207,7 @@ export async function gate(request, env, nowMs = Date.now()) {
   if (!ipOk || !tierOk) {
     count(env, !ipOk ? 'limited-ip' : hasSession ? 'limited-session' : 'limited-anon', about);
     // "none" on an anonymous 429 is what makes the page fetch a new cookie (#90 review).
-    return { response: tooMany(request, hasSession ? 'ok' : 'none') };
+    return { response: tooMany(request, hasSession ? 'ok' : 'none', !hasSession) };
   }
   if (!hasSession) count(env, 'anon-' + v.state, about);
   return {
