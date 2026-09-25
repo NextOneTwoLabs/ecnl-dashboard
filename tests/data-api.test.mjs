@@ -160,12 +160,53 @@ test('page JS merge matches the team index ranks', async () => {
   console.log(`JS merge vs team index: ${rows} rows in ${flights} flights (${multi} multi-block), 0 mismatches`);
 });
 
-test('HTML fallback, upstream error and thrown storage fault stay JSON', async () => {
+// #90: every route case answers the same through the Worker with sessions on, whether the
+// request has no cookie or a forged one; only X-ECNL-Session says which tier served it.
+const limiter = () => ({ async limit() { return { success: true }; } });
+const sessionEnv = { ...env, SESSION_SECRET: 'r'.repeat(40), RL_SESSION: limiter(), RL_ANON: limiter(), RL_IP: limiter(), API_EVENTS: { writeDataPoint() {} } };
+const forged = '__Host-ecnl_s=v1.1790000000.1790086400.AAAAAAAAAAAAAAAAAAAAAA.' + 'A'.repeat(43);
+
+test('shared route cases through the Worker: no cookie and a forged cookie change nothing', async () => {
+  for (const [path, status] of cases) {
+    for (const cookie of [null, forged]) {
+      for (const method of ['GET', 'HEAD', 'POST', 'OPTIONS']) {
+        const response = await worker.fetch(request(path, { method, headers: cookie ? { cookie } : {} }), sessionEnv);
+        assert.equal(response.status, status === 200 && !['GET', 'HEAD'].includes(method) ? 405 : status, `${method} ${path} ${cookie ? 'forged' : 'no'} cookie`);
+        assert.match(response.headers.get('content-type'), /application\/json/);
+        assert.equal(response.headers.get('x-ecnl-session'), 'none');
+        assert.equal(response.headers.get('set-cookie'), null);
+        if (method === 'HEAD') assert.equal(await response.text(), '');
+      }
+    }
+  }
+});
+
+test('HTML fallback, upstream error, thrown storage fault, throwing limiter and key import stay JSON', async () => {
   for (const [stored, expected] of [[() => new Response('<html>fallback</html>', { headers: { 'content-type': 'text/html' } }), 404], [() => new Response('broken', { status: 500 }), 503], [() => { throw new Error('fixture fault'); }, 503]]) {
     const response = await dataApi(request('/api/v1/catalog'), { ASSETS: { fetch: stored } });
     assert.equal(response.status, expected);
     assert.equal((await response.json()).ok, false);
   }
+  // A fault in the session gate serves the data ungated (#90), never the assets' HTML.
+  const logged = [], original = console.error, importKey = crypto.subtle.importKey;
+  console.error = (...args) => logged.push(args[0]);
+  const boom = { async limit() { throw new Error('limiter fault'); } };
+  try {
+    for (const faultEnv of [{ ...sessionEnv, RL_SESSION: boom, RL_ANON: boom, RL_IP: boom }, { ...sessionEnv, SESSION_SECRET: 'k'.repeat(40) }]) {
+      if (faultEnv.RL_IP !== boom) crypto.subtle.importKey = async () => { throw new Error('import fault'); };
+      for (const [path, status] of [['/api/v1/catalog', 200], ['/api/v1/unknown', 404]]) {
+        // With a cookie, so the key import is reached (a request without one never verifies).
+        const response = await worker.fetch(request(path, { headers: { cookie: forged } }), faultEnv);
+        assert.equal(response.status, status, path);
+        assert.match(response.headers.get('content-type'), /application\/json/);
+        assert.equal(response.headers.get('x-ecnl-session'), 'error');
+      }
+    }
+  } finally {
+    console.error = original;
+    crypto.subtle.importKey = importKey;
+  }
+  assert.deepEqual(logged, ['session', 'session', 'session', 'session']);
 });
 
 test('Worker integration keeps redirects, feedback and static assets', async () => {

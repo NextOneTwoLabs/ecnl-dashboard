@@ -1,4 +1,5 @@
 import { dataApi } from './api/data-api.mjs';
+import { gate, pageCookie, decorate, sessionFault } from './api/session.mjs';
 
 // Entry point for the deployed Worker. The site itself is the static files in
 // public/ (see [assets] in wrangler.toml). Versioned data routes stream one archived
@@ -15,6 +16,8 @@ import { dataApi } from './api/data-api.mjs';
 //      the message, the reply email if the visitor gave one, and the URL hash
 //      the visitor was on, so "the standings look wrong" says which standings.
 //      No IP address, no user agent, nothing else about the visitor.
+//   3. Sets a signed session cookie on "/" and rate-limits /api/v1/* per session and per IP
+//      (api/session.mjs, #90). A fault there serves the data ungated, never HTML.
 const CANONICAL_HOST = 'ecnl.nextonetwo.com';
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Matches the textarea's maxlength in public/index.html; both count UTF-16 code units.
@@ -39,7 +42,27 @@ export default {
         url.hostname = CANONICAL_HOST;
         return Response.redirect(url.toString(), 301);
       }
-      if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) return await dataApi(request, env);
+      if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) {
+        // The session code has its own catches: a throw there must not reach the feedback
+        // catch below, which would hand an API request to the assets (HTML).
+        let verdict;
+        try { verdict = await gate(request, env); } catch (err) { verdict = sessionFault(request, env, err); }
+        if (verdict.response) return verdict.response;
+        const response = await dataApi(request, env);
+        try { return decorate(response, verdict); } catch (err) {
+          sessionFault(request, env, err);
+          try { response.headers.set('x-ecnl-session', 'error'); } catch {}
+          return response;
+        }
+      }
+      if (url.pathname === '/' && (request.method === 'GET' || request.method === 'HEAD')) {
+        const page = await env.ASSETS.fetch(request);
+        try {
+          const cookie = page.status < 400 ? await pageCookie(request, env) : null;
+          if (cookie) return decorate(page, { cookie });
+        } catch (err) { sessionFault(request, env, err); }
+        return page;
+      }
       if (isFeedback) return await feedback(request, env);
       let pathname = url.pathname;
       try { pathname = decodeURIComponent(pathname); } catch {}

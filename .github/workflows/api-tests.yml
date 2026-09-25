@@ -17,7 +17,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: node --test tests/data-api.test.mjs
+      # The Node twin of the guard below (#90): tests/netguard/netguard.mjs refuses any
+      # non-loopback connection, DNS lookup or fetch, and fails the run at exit.
+      - run: node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs
+        env:
+          HTTPS_PROXY: http://127.0.0.1:9
+          HTTP_PROXY: http://127.0.0.1:9
+          NETGUARD_REPORT: '1'
       # No test may reach the network (#87): tests/netguard refuses any non-loopback
       # connection and fails the run at exit, and the dead proxy catches the rest.
       - run: python -m unittest discover -s tests -p 'test_*.py'

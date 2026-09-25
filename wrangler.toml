@@ -32,3 +32,40 @@ run_worker_first = ["/", "/api/*", "/archive*", "/data*"]
 [[kv_namespaces]]
 binding = "FEEDBACK"
 id = "caf080c2c3f94556ad15cbcedca25ccd"
+
+# Rate limits for /api/v1/* (#90; api/session.mjs, docs/data-api.md "Sessions and rate
+# limits"). Needs wrangler 4.36.0 or later. Counters are per Cloudflare location and
+# deliberately approximate. A namespace_id is shared by every Worker on the account that uses
+# it, so these ids must not be used by any other Worker (owner checked before merge). The
+# period can only be 10 or 60 seconds. The limits are in-Worker: a refused request is still a
+# Worker request and counts against the Workers Free daily quota.
+[[ratelimits]]
+name = "RL_SESSION"          # per session id, for requests with a valid session cookie
+namespace_id = "9001"
+simple = { limit = 300, period = 60 }
+
+# Per IP (or IPv6 /64), for requests without a valid session cookie. 120 at launch, so tabs
+# opened before the deploy (no renewal code, no cookie) have room on shared IPs; lowered to 60
+# in a follow-up PR 7 days after deploy.
+[[ratelimits]]
+name = "RL_ANON"
+namespace_id = "9002"
+simple = { limit = 120, period = 60 }
+
+# Per IP (or IPv6 /64), every /api/v1 request: a flood brake sized for a crowd on one venue
+# Wi-Fi, not scraping protection.
+[[ratelimits]]
+name = "RL_IP"
+namespace_id = "9003"
+simple = { limit = 3000, period = 60 }
+
+# Counts of anonymous, limited and failed requests: outcome, route kind, Sec-Fetch-Site class
+# and production or preview. No IP address, session id or user agent. The dataset is created
+# on the first write.
+[[analytics_engine_datasets]]
+binding = "API_EVENTS"
+dataset = "ecnl_api_events"
+
+# SESSION_SECRET is a Worker secret (npx wrangler secret put SESSION_SECRET), not a var, and is
+# deliberately not listed under [secrets]: a required secret blocks every deploy, including the
+# data-refresh deploys, when it is missing. Without it the API fails open (X-ECNL-Session: off).
