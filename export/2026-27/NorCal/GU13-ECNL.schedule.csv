@@ -58,6 +58,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-17,12:00 PM,Group Play,Placer United ECNL G2013/14,,,MVLA ECNL G2013/14,Placer Valley Soccer Complex,Field 6,On Time,1094708
 2026-10-17,01:00 PM,Group Play,Pleasanton RAGE ECNL G2013/14,,,Mustang SC ECNL G2013/14,Val Vista,Field 2,On Time,1094714
 2026-10-17,02:00 PM,Group Play,Davis Legacy ECNL G2013/14,,,Stanislaus Surf - ECNL G2013/14,Davis Legacy Soccer Complex,Field 9,On Time,1094702
+2026-10-24,11:00 AM,Group Play,Pleasanton RAGE ECNL G2013/14,,,Force (CA) ECNL G2013/14,Val Vista,Field 2,On Time,1095152
 2026-10-24,12:00 PM,Group Play,Mustang SC ECNL G2013/14,,,COSC ECNL G2013/14,Provident Field @ MSC, Lower,On Time,1094756
 2026-10-24,01:00 PM,Group Play,Marin FC ECNL G2013/14,,,Placer United ECNL G2013/14,College of Marin,Stadium,On Time,1094750
 2026-10-24,02:00 PM,Group Play,Davis Legacy ECNL G2013/14,,,San Juan SC ECNL G2013/14,Davis Legacy Soccer Complex,Field 9,On Time,1094738
@@ -126,7 +127,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-05-01,06:00 PM,Group Play,Stanislaus Surf - ECNL G2013/14,,,Davis Legacy ECNL G2013/14,Thomas Downey High School,Field 1,On Time,1095128
 2027-05-08,TBD,Group Play,MVLA ECNL G2013/14,,,Bay Area Surf - ECNL G2013/14,,,On Time,1095140
 2027-05-08,TBD,Group Play,Placer United ECNL G2013/14,,,Marin FC ECNL G2013/14,,,On Time,1095146
-2027-05-08,TBD,Group Play,Pleasanton RAGE ECNL G2013/14,,,Force (CA) ECNL G2013/14,,,On Time,1095152
 2027-05-08,TBD,Group Play,San Juan SC ECNL G2013/14,,,Davis Legacy ECNL G2013/14,,,On Time,1095158
 2027-05-08,06:00 AM,Group Play,Force (CA) ECNL G2013/14,,,Pleasanton RAGE ECNL G2013/14,De Anza College,Stadium Field,On Time,1094744
 2027-05-08,10:00 AM,Group Play,COSC ECNL G2013/14,,,Mustang SC ECNL G2013/14,Edison High School Fields,field 2,On Time,1095134

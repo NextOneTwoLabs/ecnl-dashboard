@@ -9,9 +9,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-26,09:45 AM,Group Play,FC Stars White ECNL G2012/13,,,FC Stars Blue ECNL G2012/13,FC Stars Soccer Complex,Field 1 ,On Time,1068172
 2026-09-26,10:00 AM,Group Play,Scorpions SC ECNL G2012/13,,,Connecticut FC United ECNL G2012/13,Taunton Forekicks,Field 12,On Time,1068174
 2026-09-26,10:30 AM,Group Play,FSA FC ECNL G2012/13,,,East Meadow Soccer Club ECNL G2012/13,FSA-Farmington Sports Arena,Field 8,On Time,1068178
-2026-09-26,01:15 PM,Group Play,Select ECNL G2012/13,,,World Class FC ECNL G2012/13,Union Point Sports Complex,Field 1,On Time,1068176
-2026-09-27,TBD,Group Play,Select ECNL G2012/13,,,Connecticut FC United ECNL G2012/13,,,On Time,1068182
-2026-09-27,10:30 AM,Group Play,FSA FC ECNL G2012/13,,,SUSA FC ECNL G2012/13,FSA-Farmington Sports Arena,Field 8,On Time,1068184
+2026-09-27,10:15 AM,Group Play,FSA FC ECNL G2012/13,,,SUSA FC ECNL G2012/13,FSA-Farmington Sports Arena,Field 8,On Time,1068184
 2026-09-27,11:30 AM,Group Play,Scorpions SC ECNL G2012/13,,,World Class FC ECNL G2012/13,Taunton Forekicks,Field 12,On Time,1068180
 2026-10-03,TBD,Group Play,Connecticut FC United ECNL G2012/13,,,World Class FC ECNL G2012/13,,,On Time,1068190
 2026-10-03,08:00 AM,Group Play,East Meadow Soccer Club ECNL G2012/13,,,FC Stars White ECNL G2012/13,East Meadow Field of Dreams,South Turf,On Time,1068188
@@ -19,8 +17,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-04,08:00 AM,Group Play,East Meadow Soccer Club ECNL G2012/13,,,FC Stars Blue ECNL G2012/13,East Meadow Field of Dreams,South Turf,On Time,1068192
 2026-10-04,10:40 AM,Group Play,SUSA FC ECNL G2012/13,,,FC Stars White ECNL G2012/13,The SUSA Orlin & Cohen Sports Complex,field 2,On Time,1068194
 2026-10-07,07:30 PM,Group Play,Select ECNL G2012/13,,,Scorpions SC ECNL G2012/13,Union Point Sports Complex,Field 1,On Time,1068196
-2026-10-17,TBD,Group Play,Select ECNL G2012/13,,,SUSA FC ECNL G2012/13,,,On Time,1068202
 2026-10-17,11:30 AM,Group Play,Scorpions SC ECNL G2012/13,,,East Meadow Soccer Club ECNL G2012/13,Wheeler School,field 1,On Time,1068198
+2026-10-17,01:15 PM,Group Play,Select ECNL G2012/13,,,SUSA FC ECNL G2012/13,Union Point Sports Complex,Field 1,On Time,1068202
 2026-10-17,02:00 PM,Group Play,World Class FC ECNL G2012/13,,,FSA FC ECNL G2012/13,Orangetown Soccer Complex,Field 5,On Time,1068200
 2026-10-18,09:00 AM,Group Play,Select ECNL G2012/13,,,East Meadow Soccer Club ECNL G2012/13,Notre Dame Academy,Turf,On Time,1068206
 2026-10-18,11:30 AM,Group Play,Scorpions SC ECNL G2012/13,,,SUSA FC ECNL G2012/13,Taunton Forekicks,Field 12,On Time,1068204
@@ -36,6 +34,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-07,TBD,Group Play,Connecticut FC United ECNL G2012/13,,,FC Stars White ECNL G2012/13,,,On Time,1068226
 2026-11-08,TBD,Group Play,World Class FC ECNL G2012/13,,,FC Stars White ECNL G2012/13,,,On Time,1068228
 2026-11-08,TBD,Group Play,Connecticut FC United ECNL G2012/13,,,FC Stars Blue ECNL G2012/13,,,On Time,1068230
+2026-11-14,07:00 AM,Group Play,Select ECNL G2012/13,,,World Class FC ECNL G2012/13,Union Point Sports Complex,Field 1,On Time,1068176
+2026-11-15,07:00 AM,Group Play,Select ECNL G2012/13,,,Connecticut FC United ECNL G2012/13,Union Point Sports Complex,Field 1,On Time,1068182
 2027-02-27,TBD,Group Play,FC Stars Blue ECNL G2012/13,,,FC Stars White ECNL G2012/13,,,On Time,1068294
 2027-03-06,TBD,Group Play,Scorpions SC ECNL G2012/13,,,FC Stars Blue ECNL G2012/13,,,On Time,1068232
 2027-03-06,TBD,Group Play,Select ECNL G2012/13,,,FC Stars White ECNL G2012/13,,,On Time,1068234
