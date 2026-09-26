@@ -1,5 +1,4 @@
 date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
-2026-11-21,TBD,Group Play,Avalanche ECNL G2008/09,,,La Roca FC ECNL G2008/09,,,On Time,1058628
 2026-12-12,TBD,Group Play,PacNW SC ECNL G2008/09,,,Eastside FC ECNL G2008/09,,,On Time,1058654
 2026-12-12,TBD,Group Play,Portland Thorns ECNL G2008/09,,,Oregon Surf ECNL G2008/09,,,On Time,1058655
 2026-12-12,TBD,Group Play,XF ECNL G2008/09,,,Boise Thorns ECNL G2008/09,,,On Time,1058658
@@ -38,6 +37,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-02-28,TBD,Group Play,Boise Thorns ECNL G2008/09,,,Portland Thorns ECNL G2008/09,,,On Time,1058854
 2027-02-28,11:00 AM,Group Play,Washington Premier ECNL G2008/09,,,XF ECNL G2008/09,WPFC Field Complex,Field 3,On Time,1058856
 2027-02-28,03:00 PM,Group Play,Eastside FC ECNL G2008/09,,,Oregon Surf ECNL G2008/09,PRESTON PARK ATHLETIC FIELDS,Field 1,On Time,1058855
+2027-02-28,04:15 PM,Group Play,Avalanche ECNL G2008/09,,,La Roca FC ECNL G2008/09,Real Salt Lake Academy,Stadium,On Time,1058628
 2027-03-06,TBD,Group Play,Boise Thorns ECNL G2008/09,,,Washington Premier ECNL G2008/09,,,On Time,1058882
 2027-03-06,TBD,Group Play,Oregon Surf ECNL G2008/09,,,La Roca FC ECNL G2008/09,,,On Time,1058883
 2027-03-06,TBD,Group Play,Oregon Surf ECNL G2008/09,,,Avalanche ECNL G2008/09,,,On Time,1058884
@@ -74,7 +74,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-04-17,TBD,Group Play,Boise Thorns ECNL G2008/09,,,PacNW SC ECNL G2008/09,,,On Time,1059085
 2027-04-17,TBD,Group Play,La Roca FC ECNL G2008/09,,,Oregon Surf ECNL G2008/09,,,On Time,1059086
 2027-04-17,TBD,Group Play,Avalanche ECNL G2008/09,,,Oregon Surf ECNL G2008/09,,,On Time,1059088
-2027-04-17,TBD,Group Play,Avalanche ECNL G2008/09,,,Portland Thorns ECNL G2008/09,,,On Time,1059089
+2027-04-17,09:00 AM,Group Play,Avalanche ECNL G2008/09,,,Portland Thorns ECNL G2008/09,St. Joseph Catholic High School,Turf Field,On Time,1059089
 2027-04-17,11:15 AM,Group Play,La Roca FC ECNL G2008/09,,,Portland Thorns ECNL G2008/09,La Roca Park,Field 1,On Time,1059087
 2027-04-17,12:00 PM,Group Play,Washington Premier ECNL G2008/09,,,Eastside FC ECNL G2008/09,WPFC Field Complex,Field 4,On Time,1059090
 2027-04-18,TBD,Group Play,Boise Thorns ECNL G2008/09,,,Seattle United ECNL G2008/09,,,On Time,1059116
