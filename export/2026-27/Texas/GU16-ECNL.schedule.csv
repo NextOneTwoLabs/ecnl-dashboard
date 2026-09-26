@@ -17,9 +17,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-20,11:00 AM,Group Play,Sting Royal ECNL G2010/11,1,0,Colorado Storm ECNL G2010/11,Sting National Training Center,Field 3,On Time,1073639
 2026-09-20,11:00 AM,Group Play,FC Dallas Youth ECNL G2010/11,5,1,Real Colorado National ECNL G2010/11,Toyota Soccer Center,Field 16,On Time,1073645
 2026-09-20,01:00 PM,Group Play,OK Energy FC ECNL G2010/11,0,3,FC Westlake ECNL G2010/11,Edmond Soccer Club,ESC 5,On Time,1073501
-2026-09-26,09:00 AM,Group Play,Dallas Texans ECNL G2010/11,,,Sting Black ECNL G2010/11,Liberty HS,Field 1,On Time,1073531
-2026-09-26,11:00 AM,Group Play,SOLAR SC ECNL G2010/11,,,DKSC ECNL G2010/11,OAK GROVE ,Field 2,On Time,1073537
-2026-09-26,11:00 AM,Group Play,Sting Royal ECNL G2010/11,,,West Side Alliance ECNL G2010/11,Sting National Training Center,Championship Field,On Time,1073549
+2026-09-26,09:00 AM,Group Play,Dallas Texans ECNL G2010/11,1,1,Sting Black ECNL G2010/11,Liberty HS,Field 1,On Time,1073531
+2026-09-26,11:00 AM,Group Play,SOLAR SC ECNL G2010/11,2,1,DKSC ECNL G2010/11,OAK GROVE ,Field 2,On Time,1073537
+2026-09-26,11:00 AM,Group Play,Sting Royal ECNL G2010/11,3,2,West Side Alliance ECNL G2010/11,Sting National Training Center,Championship Field,On Time,1073549
 2026-09-26,12:15 PM,Group Play,Colorado Storm ECNL G2010/11,,,Albion Hurricanes FC ECNL G2010/11,Regis University,Middle Turf,On Time,1073507
 2026-09-26,01:00 PM,Group Play,Real Colorado National ECNL G2010/11,,,Challenge SC ECNL G2010/11,Real Colorado Soccer Complex,RCSC 1,On Time,1073513
 2026-09-26,01:00 PM,Group Play,FC Dallas Youth ECNL G2010/11,,,OK Energy FC ECNL G2010/11,Toyota Soccer Center,Field 11,On Time,1073543
