@@ -9,7 +9,7 @@ The API has no database and does not crawl upstream or load the full archive.
 **Who can call it (#93).** The dashboard page calls it with its session cookie. Anyone
 else (scripts, agents, other servers) needs an API key that the owner issues; see
 [API keys](#api-keys). **For scrapers, day 1 changes nothing:** a script with neither a
-key nor a cookie still gets 120 requests a minute per IP (60 after #92), and a script that
+key nor a cookie gets 60 requests a minute per IP (120 before #92), and a script that
 keeps the page's cookie gets 300. Keys are a sanctioned, visible and revocable path, not a
 lock.
 
@@ -70,9 +70,19 @@ bytes unchanged. It is rebuilt at the end of a crawl, by every `--refresh`
 
 The page uses the index to find a deep-linked team or a saved favourite and to
 run a Teams search: one request per season instead of every hierarchy and
-standings file. If the index is missing (404), has an unknown schema, or fails
-(then retried on the next lookup), the page falls back to the full scan, which
-reuses page-memory standings caches. `?live=1` never uses the index.
+standings file. What the page does with the index answer (#92):
+
+| Index answer | The page | Remembered |
+| --- | --- | --- |
+| 200 with a known schema | uses the rows | for the session |
+| 404, or an unknown schema | falls back to the full scan, which reuses page-memory standings caches | for the session |
+| any other 4xx (429, 400, 401, 403, …) | no scan: "Couldn't search right now" or "Couldn't load this team", with "try again" | for a minute (a `none` 429 until the session is back, if sooner) |
+| a 5xx, a network error or bad JSON | no scan: the same "try again" message | no: the next search or lookup asks once more |
+
+A refused index therefore never starts the scan, and a team lookup stops there
+instead of going on through the other seasons. A lookup that does scan (no
+index) stops at a failure other than a 404 in the same way once that season's scan
+is done, rather than answering "Couldn't find …". `?live=1` never uses the index.
 
 ### Club places (`/api/v1/clubs`)
 
@@ -184,7 +194,10 @@ valid session or it is over an hour old:
 - **Renewal in the page:** any API answer with `X-ECNL-Session: none` (cookie lost,
   blocked, expired, or an anonymous-tier 429) makes the page send one background `HEAD /`,
   at most once a minute, which sets a fresh cookie. A session-tier 429 says `ok` and never
-  triggers it. `?live=1` never does.
+  triggers it. `?live=1` never does. If a request sent after a renewal landed (the `HEAD /`
+  answered 2xx) still says `none`, the browser is not keeping cookies, and the page stops
+  renewing until an answer says `ok` or `renewed` (#92). A renewal that fails (5xx or
+  network) does not count, so renewal goes on.
 - A response that sets the cookie is marked `Cache-Control: private, no-cache` (an API
   error keeps `no-store`). The archive read never sees the cookie.
 - `Sec-Fetch-Site: cross-site` with a cookie (someone following a link to an API URL;
@@ -200,7 +213,7 @@ rate-limiting binding (`wrangler.toml`, `[[ratelimits]]`, wrangler 4.36.0 or lat
 | --- | --- | --- | --- |
 | `RL_SESSION` | session id | 300 per 60 s | requests with a valid session cookie |
 | `RL_KEY` | API key id (`key:<id>`) | 120 per 60 s | requests with a valid API key (#93) |
-| `RL_ANON` | IP address, or the IPv6 /64 | 120 per 60 s: the small allowance for browsers without cookies; #92 lowers it to 60 | requests with neither a key nor a valid cookie |
+| `RL_ANON` | IP address, or the IPv6 /64 | 60 per 60 s: the small allowance for browsers without cookies | requests with neither a key nor a valid cookie |
 | `RL_IP` | IP address, or the IPv6 /64 | 3,000 per 60 s | every request, keyed ones too (a per-IP ceiling sized for a crowd on one venue Wi-Fi; it does not protect the daily quota) |
 
 An IPv4-mapped address (`::ffff:a.b.c.d`) is keyed as its IPv4 address. On the session and
@@ -213,8 +226,12 @@ favour visitors.
 Over a limit: `429`, `{"ok":false,"error":"Too many requests. Please wait a minute and try
 again."}`, `Retry-After: 60`, `Cache-Control: no-store`, no body on HEAD. On the anonymous
 tier the body also has `"help"`, the bare URL of [API keys](#api-keys), and the same target
-is in a `Link: <…#api-keys>; rel="help"` header; the page shows only `error`. Every answer from
-`/api/v1` carries `X-ECNL-Session`:
+is in a `Link: <…#api-keys>; rel="help"` header. The page shows neither `error` nor `help`: it
+says "Too many requests. Try again in a minute.", or on a 429 that says `none`, "Too many
+requests. Try again in a minute, or allow cookies for this site and reload the page." (#92).
+A table refused (or failing with anything but a 404) shows "Some tables couldn't load." with
+a **Try again** button, never an empty "0 teams" table; nothing retries on its own. Every
+answer from `/api/v1` carries `X-ECNL-Session`:
 
 | Value | Meaning |
 | --- | --- |
@@ -224,11 +241,16 @@ is in a `Link: <…#api-keys>; rel="help"` header; the page shows only `error`. 
 | `off` | sessions are off: the Worker has no usable `SESSION_SECRET`, or it is the local Python server |
 | `error` | a fault in the session code; the data is served without any limit (never on the key path) |
 
-Measured locally (Chrome against an offline stand-in for the Worker with fake limiters): every
-journey #81 and #87 measured, with cookies, gets zero 429s, and so does the busiest single tab
-(149 requests in 11 s). Without cookies at 120 per minute, only that stress case is refused (14 of
-134). At 60, the fastest real journey (every age group of the largest conference, twice, 66
-requests) gets 6.
+Measured locally at 60 per minute (#92; Chrome against an offline stand-in for the Worker with
+fake limiters, a sliding window stricter than Cloudflare's): every journey #81 and #87 measured,
+with cookies, gets zero 429s, and so does the busiest single tab (149 requests in 11 s). Without
+cookies, every ordinary journey gets zero 429s too (cold load 5 requests, a shared team link 7, My
+Teams with three favourites 11, search then five team pages 21). The fastest real journey (every
+age group of the largest conference, twice, 66 requests) gets 6, shown as "Some tables couldn't
+load" with **Try again**. The busiest single tab without cookies sends 109 requests, 49 refused,
+each shown as "try again" (before #92 the page turned the same clicks into 1,397 requests, 1,337
+refused). With the allowance already spent, a search typed key by key sends 1 request, a team
+lookup 1, and the next age group 2.
 
 ### Using the API from a script
 
@@ -570,8 +592,9 @@ With the team index (#81) and the club places (#87, one request per session),
 measured locally: a cold shared team link for 2026-27 makes 7 v1 requests instead
 of 78, a Teams search 1 instead of 73, and opening My Teams with three favourites
 9 instead of 226. Without the index
-(the fallback) a cold search makes roughly 75 Worker requests per selected
-season; page-memory caches still eliminate repeated standings reads. Include
+(the fallback, after a 404; never after a refused or failed index, #92) a cold search
+makes roughly 75 Worker requests per selected season; page-memory caches still
+eliminate repeated standings reads. Include
 this request volume in usage monitoring before increasing traffic: on Workers Free
 every one of these requests counts against the 100,000-a-day quota (see "The Workers
 Free quota").

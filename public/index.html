@@ -1182,6 +1182,11 @@
       border-color: #5c2020;
       color: #fca5a5;
     }
+    /* #92: tables that failed with anything but a 404 */
+    .error-message.load-warning { margin: 0 0 12px; padding: 12px 16px; }
+    .load-warning .load-retry { margin: 0 0 0 8px; padding: 4px 12px; }
+    .load-warning .load-retry:disabled { opacity: 0.6; cursor: default; }
+    .flight-failed { padding: 16px 20px; color: var(--text-secondary); font-size: 13px; }
 
     /* Favorites panel */
     .favorites-empty {
@@ -2193,9 +2198,10 @@
     let NATIONAL_EVENTS = {};  // { season -> { "Playoffs"|"Finals" -> {eventId} } }
 
     async function loadSources() {
+      const sentAt = Date.now();
       const resp = await fetch('/api/v1/catalog', { cache: 'no-cache' });
-      noteSession(resp);
-      if (!resp.ok) throw new Error(`Cannot load data catalog (HTTP ${resp.status})`);
+      noteSession(resp, sentAt);
+      if (!resp.ok) throw Object.assign(new Error(`Cannot load data catalog (HTTP ${resp.status})`), { status: resp.status, session: resp.headers.get('x-ecnl-session') });
       SOURCES = await resp.json();
 
       SEASONS = SOURCES.seasons;
@@ -2349,11 +2355,25 @@
     // served under a lower anonymous limit, or refused with 429 when that is spent. Either way
     // it says X-ECNL-Session: none. Re-request the page headers in the background, at most once
     // a minute, so the browser gets a fresh session cookie for what follows.
-    let sessionRenewAt = 0;
-    function noteSession(resp) {
-      if (LIVE || resp.headers.get('x-ecnl-session') !== 'none' || Date.now() < sessionRenewAt) return;
+    // A browser that blocks cookies never keeps the renewed cookie: once a request sent after a
+    // renewal landed (a 2xx answer to the HEAD /) still says "none", stop renewing until an answer
+    // says "ok" or "renewed" again (#92). sessionBackAt is when the session last came back (such an
+    // answer, or a renewal that landed); getTeamIndex forgets a "none" refusal sent before then.
+    let sessionRenewAt = 0, renewedAt = 0, cookiesKept = true, sessionBackAt = 0;
+    function noteSession(resp, sentAt = Date.now()) {
+      if (LIVE) return;
+      const session = resp.headers.get('x-ecnl-session');
+      if (session === 'ok' || session === 'renewed') {
+        cookiesKept = true; renewedAt = 0; sessionBackAt = Date.now();
+        return;
+      }
+      if (session !== 'none' || !cookiesKept) return;
+      if (renewedAt && sentAt >= renewedAt) { cookiesKept = false; return; }
+      if (Date.now() < sessionRenewAt) return;
       sessionRenewAt = Date.now() + 60000;
-      fetch('/', { method: 'HEAD', cache: 'no-store' }).catch(() => { });
+      fetch('/', { method: 'HEAD', cache: 'no-store' })
+        .then(r => { if (r.ok) renewedAt = sessionBackAt = Date.now(); })
+        .catch(() => { });
     }
 
     const OLD_CACHE_PREFIX = 'ecnl-cache-';
@@ -2376,21 +2396,66 @@
 
     async function fetchJSON(path, { refresh = false } = {}) {
       const url = dataUrl(path) + (LIVE && refresh ? '?refresh=1' : '');
+      const sentAt = Date.now();
       const resp = await fetch(url, refresh ? { cache: 'reload' } : undefined);
-      noteSession(resp);
+      noteSession(resp, sentAt);
       if (!resp.ok) {
         let detail = '';
         try { detail = (await resp.json()).error || ''; } catch (e) { }
-        throw Object.assign(new Error(`API error ${resp.status}${detail ? ': ' + detail : ''}`), { status: resp.status });
+        // The status and the session header let callers tell "not published" (404) from
+        // "try again" (#92); see isRefusal and retryText.
+        throw Object.assign(new Error(`API error ${resp.status}${detail ? ': ' + detail : ''}`),
+          { status: resp.status, session: resp.headers.get('x-ecnl-session'), sentAt });
       }
       return resp.json();
+    }
+
+    // #92: a refused request (429, or any other 4xx but 404) means "try again shortly", never
+    // "nothing published": no fallback scan and no empty table. The page shows its own words,
+    // never the answer's text or its `help` link.
+    const isRefusal = e => !!e && e.status >= 400 && e.status < 500 && e.status !== 404;
+    const isMissing = e => !!e && e.status === 404;
+    function retryText(e) {
+      if (e && e.status === 429) return `Too many requests. Try again in a minute${e.session === 'none' ? ', or allow cookies for this site and reload the page' : ''}.`;
+      return 'Please try again shortly.';
+    }
+    // The inline notice for tables that failed with anything but a 404, with a retry button.
+    // `announce` is false when the same load is only re-rendered (a tab, filter or team change),
+    // so a screen reader reads the alert once per load.
+    function loadWarning(err, retry, announce = true) {
+      const box = document.createElement('div');
+      box.className = 'error-message load-warning';
+      if (announce) box.setAttribute('role', 'alert');
+      box.innerHTML = `<strong>Some tables couldn't load.</strong> <span>${esc(retryText(err))}</span>`;
+      if (retry) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn-primary load-retry';
+        b.textContent = 'Try again';
+        b.addEventListener('click', async () => {
+          if (b.disabled) return;
+          b.disabled = true;   // one retry at a time: a double-click sends one set of requests
+          try { await retry(); } finally { b.disabled = false; }
+        });
+        box.append(' ', b);
+      }
+      return box;
+    }
+    // Stands in for a flight's table that failed to load, so it never reads "0 teams" (#92).
+    function failedFlightPanel(title, what) {
+      const panel = document.createElement('div');
+      panel.className = 'flight-panel standings-panel';
+      panel.innerHTML = `<div class="flight-header"><div class="flight-title">${esc(title)}</div></div>` +
+        `<div class="flight-failed">Couldn't load ${esc(what)}.</div>`;
+      return panel;
     }
 
     // How fresh the published data is. Written by `archive.py --refresh`.
     async function loadRefreshState() {
       try {
+        const sentAt = Date.now();
         const resp = await fetch('/api/v1/status', { cache: 'no-cache' });
-        noteSession(resp);
+        noteSession(resp, sentAt);
         if (resp.ok) refreshState = await resp.json();
       } catch (e) { }
     }
@@ -2481,23 +2546,32 @@
     // order the scans below visit them (conference, division, flight, table position).
     // Rows carry the standings-row fields the search table, the star button and
     // adoptStandingsRow read, plus conference, flightName and rank. One request replaces
-    // a scan of every hierarchy and standings file (#81). Resolves to the rows, or null
-    // when there is no usable index, and every caller then scans as before. A 404, an
-    // unknown schema or ?live=1 (no index route) is kept for the session; any other
-    // failure (a 503, a network error, bad JSON) is evicted so the next call retries.
+    // a scan of every hierarchy and standings file (#81). Resolves to the rows, or to null
+    // when there is no index (a 404, an unknown schema, ?live=1), and the caller then scans;
+    // both are kept for the session. Any other failure rejects, and the caller shows "try
+    // again" instead of scanning (#92): a refusal (429 or another 4xx) is remembered for a
+    // minute so keystrokes don't re-ask, or, if it said "none", until the session comes back
+    // (noteSession's sessionBackAt); a 503, a network error or bad JSON is forgotten at once,
+    // so the next search or lookup asks again (one request, never a scan).
     const teamIndexMemo = {};
     function getTeamIndex(season) {
       if (LIVE) return Promise.resolve(null);
-      if (!(season in teamIndexMemo)) {
-        const entry = fetchJSON(`seasons/${encodeURIComponent(season)}/teams`)
-          .then(d => (d && d.schema === 1 && d.season === season && Array.isArray(d.teams)) ? d.teams : null)
-          .catch(e => {
-            if (!(e && e.status === 404) && teamIndexMemo[season] === entry) delete teamIndexMemo[season];
-            return null;
-          });
-        teamIndexMemo[season] = entry;
-      }
-      return teamIndexMemo[season];
+      const memo = teamIndexMemo[season];
+      const stale = memo && memo.until && (Date.now() >= memo.until || (memo.none && sessionBackAt > memo.at));
+      if (memo && !stale) return memo.p;
+      const entry = { until: 0 };
+      entry.p = fetchJSON(`seasons/${encodeURIComponent(season)}/teams`)
+        .then(d => (d && d.schema === 1 && d.season === season && Array.isArray(d.teams)) ? d.teams : null)
+        .catch(e => {
+          if (isMissing(e)) return null;
+          if (teamIndexMemo[season] === entry) {
+            if (isRefusal(e)) Object.assign(entry, { at: e.sentAt, until: Date.now() + 60000, none: e.session === 'none' });
+            else delete teamIndexMemo[season];
+          }
+          throw e;
+        });
+      teamIndexMemo[season] = entry;
+      return entry.p;
     }
 
     // clubID -> { city, state } as the club's TGS record lists it (#87): one request
@@ -2858,10 +2932,28 @@
         const next = [...group.querySelectorAll('tr[data-conf]')].find(r => r.dataset.conf.localeCompare(confName) > 0);
         group.insertBefore(row, next || null);
       };
+      // A message in place of results goes below the table, not in a row of it, so a phone's
+      // narrow screen doesn't clip it inside the scrolling table (#92).
+      const showMessage = text => {
+        const scroll = container.querySelector('.search-results-scroll');
+        if (scroll) scroll.insertAdjacentHTML('afterend', `<div class="search-no-results-msg">${esc(text)}</div>`);
+      };
 
       // The season's team index holds every row the scan below would read, in the same
       // order and with the same stats; addRow sorts by conference either way (#81).
-      const index = await getTeamIndex(currentSeason);
+      let index;
+      try { index = await getTeamIndex(currentSeason); } catch (e) {
+        // #92: refused, or the server is having trouble: say so, and don't scan.
+        if (!live()) return;
+        const prog = document.getElementById('searchProgress');
+        if (prog) prog.style.display = 'none';
+        const msg = `Couldn't search right now. ${retryText(e)}`;
+        const countEl = document.getElementById('searchResultsCount');
+        if (countEl) countEl.textContent = "Couldn't search right now";
+        showMessage(msg);
+        document.getElementById('globalSearchStatus').textContent = msg;
+        return;
+      }
       if (!live()) return;
       if (index) {
         const firstDivision = new Map();   // the scan reads the first division of each name
@@ -2883,18 +2975,23 @@
 
       // Without an index: fetch every division of every conference in parallel,
       // appending results as each arrives
+      // #92: the first failure other than a 404. After a refusal no new request starts (best
+      // effort: requests already sent still finish).
+      let failed = null;
+      const note = e => { if (!isMissing(e)) failed = failed || e; };
       const fetchPromises = index ? [] : conferences.map(async ([confName, conf]) => {
         try {
+          if (isRefusal(failed)) throw failed;
           const hierarchy = await getEventHierarchy(conf.eventId);
           const divList = hierarchy.girlsDivAndFlightList || [];
           await Promise.all(groups.map(async ag => {
             const division = divList.find(d => d.divisionName === ag);
-            if (!division) return;
+            if (!division || isRefusal(failed)) return;
             const standingsResults = await Promise.all(
               (division.flightList || []).map(f =>
                 getStandings(division.divisionID, f.flightID, conf.eventId)
                   .then(data => ({ flight: f, data }))
-                  .catch(() => null)
+                  .catch(e => { note(e); return null; })
               )
             );
             if (!live()) return;
@@ -2908,7 +3005,7 @@
               });
             });
           }));
-        } catch (e) { /* skip failed conference */ }
+        } catch (e) { note(e); /* skip failed conference */ }
 
         done++;
         if (!live()) return;
@@ -2927,16 +3024,16 @@
 
       // Counts the age groups and conferences that have a hit, not the ones searched
       const n = (count, one, many) => `${count} ${count === 1 ? one : many}`;
-      const summary = totalMatches === 0
+      const summary = (totalMatches === 0
         ? `0 matches (${groups.length} age groups · ${total} conferences searched)`
-        : `${n(totalMatches, 'match', 'matches')} in ${n(matchedAges.size, 'age group', 'age groups')} · ${n(matchedConfs.size, 'conference', 'conferences')}`;
+        : `${n(totalMatches, 'match', 'matches')} in ${n(matchedAges.size, 'age group', 'age groups')} · ${n(matchedConfs.size, 'conference', 'conferences')}`)
+        + (failed ? `. Some results couldn't load. ${retryText(failed)}` : '');
       const countEl = document.getElementById('searchResultsCount');
       if (countEl) countEl.textContent = summary;
 
       if (totalMatches === 0) {
-        const table = document.getElementById('searchResultsTable');
-        if (table) table.insertAdjacentHTML('beforeend', `<tbody><tr><td colspan="${SEARCH_COLS.length}"><div class="search-no-results-msg">` +
-          `No teams found matching "${esc(query)}" in any age group or conference (${esc(currentSeason)})</div></td></tr></tbody>`);
+        showMessage(failed ? `Some results couldn't load. ${retryText(failed)}`
+          : `No teams found matching "${query}" in any age group or conference (${currentSeason})`);
       }
 
       document.getElementById('globalSearchStatus').textContent = summary;
@@ -3562,10 +3659,15 @@
         // link when there is no schedule page to open.
         const gap = (evt.dataGaps || {})[flight.flightID] || null;
 
+        // #92: anything but a 404 is "couldn't load", not "nothing published"
+        let standingsError = null, gamesError = null;
         const [rawBlocks, games] = await Promise.all([
-          getStandingsBlocks(division.divisionID, flight.flightID, evt.eventId).catch(() => []),
-          getSchedule(evt.eventId, flight.flightID).catch(() => []),
+          getStandingsBlocks(division.divisionID, flight.flightID, evt.eventId)
+            .catch(e => { if (!isMissing(e)) standingsError = e; return []; }),
+          getSchedule(evt.eventId, flight.flightID)
+            .catch(e => { if (!isMissing(e)) gamesError = e; return []; }),
         ]);
+        const loadError = standingsError || gamesError;
         // TGS's unnamed remainder block (id 0) beside "Group A" is not a group: one table.
         const blocks = rawBlocks.every(b => b.flightGroupID) ? rawBlocks : [mergeStandingsBlocks(rawBlocks)];
         const bracketGames = knockoutGames(games, blocks, (gap && gap.omitFromBracket) || []);
@@ -3601,6 +3703,7 @@
 
         // Body
         container.innerHTML = '';
+        if (loadError) container.appendChild(loadWarning(loadError, () => loadPlayoffFlight()));
         if (recon && recon.note) {
           const note = document.createElement('div');
           note.className = 'reconstructed-note';
@@ -3622,7 +3725,8 @@
         }
         if (currentView === 'schedule') {
           const tagFor = brackets ? (g => brackets.tagByMatch.get(g.matchID) || '') : null;
-          container.appendChild(renderScheduleTable(games, tierName, flight.flightID, evt.eventId, tagFor,
+          if (gamesError) container.appendChild(failedFlightPanel(tierName, 'these matches'));
+          else container.appendChild(renderScheduleTable(games, tierName, flight.flightID, evt.eventId, tagFor,
             undefined, gap ? 'No game-by-game schedule was published for this flight.' : undefined));
         } else {
           if (blocks.length > 1) container.appendChild(renderGroupCards(blocks));
@@ -3630,7 +3734,13 @@
           if (blocks.length <= 1 && !brackets) {
             const data = blocks[0] || { teamStandings: [] };
             (data.teamStandings || []).forEach((t, i) => { t._origRank = i + 1; });
-            if (!(data.teamStandings || []).length && !games.length) {
+            const empty = !(data.teamStandings || []).length;
+            if (standingsError) {
+              container.appendChild(failedFlightPanel(tierName, 'this table'));
+            } else if (empty && gamesError) {
+              // #92: a knockout flight's bracket comes from its schedule: couldn't load, not "nothing published"
+              container.appendChild(failedFlightPanel(tierName, 'the bracket'));
+            } else if (empty && !games.length) {
               container.insertAdjacentHTML('beforeend', `<div class="no-national-events">
                 <div class="no-national-events-icon">📋</div>
                 <div class="no-national-events-text">No results yet</div>
@@ -3645,7 +3755,7 @@
         console.error(err);
         container.innerHTML = `<div class="error-message">
           <strong>Couldn't load ${esc(currentPlayoffStage)}.</strong><br>
-          <small>Please try again shortly.</small>
+          <small>${esc(retryText(err))}</small>
         </div>`;
       }
 
@@ -3907,7 +4017,9 @@
       try {
         for (const rec of sortedFavorites()) {
           if (favoriteResolved(rec) || !favorites.has(rec.name)) continue;
-          if (await resolveFavorite(rec) && currentTab === 'favorites') buildFavoritesList();
+          let found;
+          try { found = await resolveFavorite(rec); } catch (e) { break; }   // refused: try on the next visit (#92)
+          if (found && currentTab === 'favorites') buildFavoritesList();
         }
       } finally { resolvingAll = false; }
     }
@@ -3987,7 +4099,11 @@
 
     // Fill in the IDs for a favourite saved by name only (or a deep-linked
     // teamID) from each season's team index, this season first, or by scanning
-    // that season's archived standings when it has no index.
+    // that season's archived standings when it has no index. Rejects on a failure other than
+    // a 404 (the index, or a request during a scan) instead of going on to the next season or
+    // answering "not found" (#92). A refused index stops at once; during a scan, a refusal
+    // stops new requests from starting (best effort: those already sent finish), and the
+    // lookup rejects once that season's scan is done.
     async function resolveFavorite(rec) {
       if (favoriteResolved(rec)) return true;
       // Cheapest first: the team may be in a table already on screen.
@@ -4009,19 +4125,23 @@
           return true;
         }
         const confs = Object.entries(SEASONS[season].conferences || {});
+        let failed = null;   // the first failure other than a 404
+        const note = e => { if (!isMissing(e)) failed = failed || e; return null; };
         const hits = await Promise.all(confs.map(async ([confName, conf]) => {
           try {
+            if (isRefusal(failed)) return null;
             const h = await getEventHierarchy(conf.eventId);
             const pairs = [];
             for (const d of (h.girlsDivAndFlightList || [])) for (const f of (d.flightList || [])) pairs.push({ d, f });
             const found = await Promise.all(pairs.map(async ({ d, f }) => {
-              const data = await getStandings(d.divisionID, f.flightID, conf.eventId).catch(() => null);
+              if (isRefusal(failed)) return null;
+              const data = await getStandings(d.divisionID, f.flightID, conf.eventId).catch(note);
               const teams = (data && data.teamStandings) || [];
               const t = teams.find(x => rec.teamID ? x.teamID === rec.teamID : x.name === rec.name);
               return t ? { t, d, f, conf } : null;
             }));
             return found.find(Boolean) || null;
-          } catch (e) { }
+          } catch (e) { note(e); }
           return null;
         }));
         const hit = hits.find(Boolean);
@@ -4032,6 +4152,7 @@
           });
           return true;
         }
+        if (failed) throw failed;   // "try again", not "not found": don't go on to the next season
       }
       return false;
     }
@@ -4084,9 +4205,10 @@
         const flightName = (flight && flight.flightName) || '';
         const ageLabel = divisionName ? getAgeLabel(divisionName, ctx.season) : '';
 
+        let gamesError = null;
         const [standings, games] = await Promise.all([
           getStandings(rec.divisionID, rec.flightID, rec.eventID),
-          getSchedule(rec.eventID, rec.flightID).catch(() => []),
+          getSchedule(rec.eventID, rec.flightID).catch(e => { if (!isMissing(e)) gamesError = e; return []; }),
           loadClubPlaces(),
         ]);
         const teams = standings.teamStandings || [];
@@ -4122,9 +4244,10 @@
         aside.className = 'glance-panel';
         aside.setAttribute('aria-label', 'Team at a glance');
         aside.innerHTML = glancePanelHtml(row || { name: rec.name, teamID, clubID: rec.clubID, clubName: rec.clubName, clublogo: rec.logo }, summary,
-          { confName: ctx.name, ageLabel, flightName: flightName && division && division.flightList && division.flightList.length > 1 ? flightName : '' });
+          { confName: ctx.name, ageLabel, flightName: flightName && division && division.flightList && division.flightList.length > 1 ? flightName : '', gamesFailed: !!gamesError });
         layout.append(stack, aside);
         container.appendChild(layout);
+        if (gamesError) stack.appendChild(loadWarning(gamesError, () => loadTeamSummary(rec)));
 
         // Standings with the team's row highlighted
         if (teams.length) {
@@ -4133,7 +4256,8 @@
 
         // The team's own games
         const short = shortTeamName(rec.name);
-        stack.appendChild(renderScheduleTable(mine, flightName, rec.flightID, rec.eventID, null, `${short} · all games`));
+        if (gamesError) stack.appendChild(failedFlightPanel(`${short} · all games`, 'these matches'));
+        else stack.appendChild(renderScheduleTable(mine, flightName, rec.flightID, rec.eventID, null, `${short} · all games`));
 
         // Post-season, if the team appears in a national event of this season
         for (const [stage, evt] of Object.entries(NATIONAL_EVENTS[ctx.season] || {})) {
@@ -4178,7 +4302,8 @@
         }
       } catch (err) {
         console.error(err);
-        container.innerHTML = `<div class="error-message"><strong>Couldn't load this team.</strong><br><small>Please try again shortly.</small></div>`;
+        document.getElementById('contentSubtitle').textContent = '';
+        container.innerHTML = `<div class="error-message"><strong>Couldn't load this team.</strong><br><small>${esc(retryText(err))}</small></div>`;
       }
 
       saveState();
@@ -4513,6 +4638,7 @@
     // glance panel are pure re-renders); renderConferenceView paints it.
     let currentConfMeta = null;   // { conf, division, flights, ageLabel }
     let loadToken = 0;            // drops responses from a navigation that was superseded
+    let warnedFlightData = null;  // the load whose "couldn't load" notice was last announced (#92)
 
     async function loadCurrentView(opts = {}) {
       const conf = getSeasonData().conferences[currentConference];
@@ -4548,13 +4674,18 @@
         // A card that will show a team at once (a &team= link, or a team followed in
         // this division) loads its club place alongside the tables (#87).
         if (selectedTeamID || favoriteInDivision(conf.eventId, division.divisionID)) loadClubPlaces();
+        // A 404 is "not published" and shows an empty table; any other failure is kept as
+        // standingsError / gamesError and shown as "couldn't load" with a retry (#92).
         const results = await Promise.all(flights.map(async f => {
+          let standingsError = null, gamesError = null;
           const [standings, games] = await Promise.all([
-            getStandings(division.divisionID, f.flightID, conf.eventId, opts).catch(() => ({ teamStandings: [] })),
-            getSchedule(conf.eventId, f.flightID, opts).catch(() => []),
+            getStandings(division.divisionID, f.flightID, conf.eventId, opts)
+              .catch(e => { if (!isMissing(e)) standingsError = e; return { teamStandings: [] }; }),
+            getSchedule(conf.eventId, f.flightID, opts)
+              .catch(e => { if (!isMissing(e)) gamesError = e; return []; }),
           ]);
           (standings.teamStandings || []).forEach((t, i) => { t._origRank = i + 1; });
-          return { flight: f, division, standings, games: games || [] };
+          return { flight: f, division, standings, games: games || [], standingsError, gamesError };
         }));
         if (token !== loadToken) return;
 
@@ -4573,7 +4704,7 @@
         if (token !== loadToken) return;
         container.innerHTML = `<div class="error-message">
       <strong>Couldn't load ${currentConference}.</strong><br>
-      <small>Please try again shortly.</small>
+      <small>${esc(retryText(err))}</small>
     </div>`;
       }
 
@@ -4610,8 +4741,10 @@
       const multi = flights.length > 1;
 
       const teamCount = currentFlightData.reduce((n, fd) => n + (fd.standings.teamStandings || []).length, 0);
+      const failed = currentFlightData.find(fd => fd.standingsError || fd.gamesError);
+      const countKnown = !currentFlightData.some(fd => fd.standingsError);
       document.getElementById('contentSubtitle').textContent =
-        ['Girls', `${teamCount} teams`, seasonLabel(currentSeason)].join(' · ') +
+        ['Girls', countKnown ? `${teamCount} teams` : '', seasonLabel(currentSeason)].filter(Boolean).join(' · ') +
         (multi ? ` · ${flights.length} flights` : '');
 
       // The original public pages remain the canonical source for what is shown.
@@ -4632,10 +4765,16 @@
       aside.setAttribute('aria-label', 'Team at a glance');
       layout.append(main, aside);
       container.appendChild(layout);
+      // Announced once per load (loadCurrentView sets a new currentFlightData), not on re-renders.
+      const announce = warnedFlightData !== currentFlightData;
+      warnedFlightData = currentFlightData;
+      if (failed) main.appendChild(loadWarning(failed.standingsError || failed.gamesError, () => loadCurrentView(), announce));
 
-      currentFlightData.forEach(({ flight, standings, games }) => {
+      currentFlightData.forEach(({ flight, standings, games, standingsError, gamesError }) => {
         const title = multi ? `${flight.flightName} flight` : (isSchedule ? 'Matches' : 'Conference standings');
-        if (isSchedule) {
+        if (isSchedule ? gamesError : standingsError) {
+          main.appendChild(failedFlightPanel(title, isSchedule ? 'these matches' : 'this table'));
+        } else if (isSchedule) {
           main.appendChild(renderMatchCards(games, { title, filter: scheduleFilter }));
         } else {
           main.appendChild(renderStandingsTable(standings, flight.flightName, flight.flightID, conf.eventId,
@@ -4770,7 +4909,7 @@
       el.innerHTML = glancePanelHtml(hit.team, summary, {
         season: currentSeason, confName: currentConference, ageLabel: currentConfMeta.ageLabel,
         flightName: currentConfMeta.flights.length > 1 ? hit.fd.flight.flightName : '',
-        link: true,
+        link: true, gamesFailed: !!hit.fd.gamesError,
       });
     }
 
@@ -4789,7 +4928,7 @@
       const gd = row ? (row.goaldifferential || 0) : 0;
       const formHtml = s.form.length
         ? `<div class="form-chips">${s.form.map(r => `<span class="form-chip ${r.toLowerCase()}" title="${r === 'W' ? 'Win' : r === 'L' ? 'Loss' : 'Draw'}">${r}</span>`).join('')}</div>`
-        : `<div class="stat-sub">No games played yet</div>`;
+        : `<div class="stat-sub">${ctx.gamesFailed ? "Couldn't load the games" : 'No games played yet'}</div>`;
 
       let nextHtml;
       if (s.next) {
@@ -4798,7 +4937,7 @@
           `<div class="glance-next-when">${esc(formatGameDate(s.next.gameDate))}${s.next.gameTimeText && !s.next.dateUnconfirmed ? ` · ${esc(s.next.gameTimeText)}` : ''}</div>` +
           (where ? `<div class="glance-next-where">${esc(where)}</div>` : '');
       } else {
-        nextHtml = `<div class="glance-next-opp muted">${s.mine.length ? 'Season complete' : 'No fixtures published yet'}</div>`;
+        nextHtml = `<div class="glance-next-opp muted">${ctx.gamesFailed ? "Couldn't load the fixtures" : s.mine.length ? 'Season complete' : 'No fixtures published yet'}</div>`;
       }
       let lastHtml = '';
       if (s.last) {
@@ -5021,9 +5160,9 @@
       } catch (err) {
         document.getElementById('standingsContainer').innerHTML = `<div class="error-message">
           <strong>Couldn't load the dashboard data.</strong><br>
-          <small>Please try again shortly. If you opened this file directly from disk,
+          <small>${esc(retryText(err))}${err && err.status ? '' : ` If you opened this file directly from disk,
           start the local API server from the repository root:
-          <code>python proxy_server.py --offline</code>.</small>
+          <code>python proxy_server.py --offline</code>.`}</small>
         </div>`;
         return;
       }

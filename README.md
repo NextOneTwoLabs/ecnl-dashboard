@@ -44,8 +44,8 @@ an API key that the owner issues (#93): `Authorization: Bearer <key>`, 120 reque
 per key. Ask for one through the site's **Send feedback** panel with a reply address; see
 [API keys](docs/data-api.md#api-keys). A request with neither a key nor a cookie is not
 refused outright: it gets a small per-IP allowance (for browsers without cookies), then a
-429 that points to keys. **For scrapers, day 1 changes nothing:** keyless scripts still get
-120 a minute (60 after #92), and scripts that keep the cookie get 300. Keys are a sanctioned,
+429 that points to keys. **For scrapers, day 1 changes nothing:** keyless scripts get 60 a
+minute (120 before #92), and scripts that keep the cookie get 300. Keys are a sanctioned,
 visible and revocable path, not a lock. See
 [Sessions and rate limits](docs/data-api.md#sessions-and-rate-limits).
 
