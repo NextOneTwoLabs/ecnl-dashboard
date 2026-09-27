@@ -7,8 +7,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-26,09:00 AM,Group Play,Arlington Soccer Association ECNL G2008/09,2,0,South Carolina Surf ECNL G2008/09,Long Bridge Park,Boeing #4,On Time,1121239
 2026-09-26,01:00 PM,Group Play,VDA ECNL G2008/09,6,0,NC Fusion ECNL G2008/09,Howison Park,Field 3,On Time,1121243
 2026-09-26,02:00 PM,Group Play,Richmond United ECNL G2008/09,1,0,NCFC Youth ECNL G2008/09,Striker Park,Field 3,On Time,1121247
-2026-09-27,12:00 PM,Group Play,Fairfax Virginia Union ECNL G2008/09,,,NCFC Youth ECNL G2008/09,WT Woodson High School,Stadium Field,On Time,1121251
-2026-09-27,01:00 PM,Group Play,Richmond United ECNL G2008/09,,,NC Fusion ECNL G2008/09,Striker Park,Field 3,On Time,1121255
+2026-09-27,12:00 PM,Group Play,Fairfax Virginia Union ECNL G2008/09,0,2,NCFC Youth ECNL G2008/09,WT Woodson High School,Stadium Field,On Time,1121251
+2026-09-27,01:00 PM,Group Play,Richmond United ECNL G2008/09,9,0,NC Fusion ECNL G2008/09,Striker Park,Field 3,On Time,1121255
 2026-09-27,01:00 PM,Group Play,VDA ECNL G2008/09,,,South Carolina Surf ECNL G2008/09,Ali Krieger Sports Complex (AKSC),Field 7,On Time,1121259
 2026-10-03,12:00 PM,Group Play,Beach FC (VA) ECNL G2008/09,,,Richmond United ECNL G2008/09,Hampton Roads Soccer Complex,Field 15,On Time,1121267
 2026-10-03,01:00 PM,Group Play,Arlington Soccer Association ECNL G2008/09,,,Wilmington Hammerheads ECNL G2008/09,Long Bridge Park,Boeing #4,On Time,1121263

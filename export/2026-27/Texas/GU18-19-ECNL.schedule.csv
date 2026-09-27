@@ -28,7 +28,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-26,01:00 PM,Group Play,FC Dallas Youth ECNL G2008/09,3,1,OK Energy FC ECNL G2008/09,Toyota Soccer Center,Field 13,On Time,1073541
 2026-09-26,02:30 PM,Group Play,Colorado Storm ECNL G2008/09,2,1,Albion Hurricanes FC ECNL G2008/09,Regis University,West Turf,On Time,1073505
 2026-09-26,03:00 PM,Group Play,Sting Royal ECNL G2008/09,2,0,West Side Alliance ECNL G2008/09,Sting National Training Center,Championship Field,On Time,1073547
-2026-09-27,11:00 AM,Group Play,Colorado Storm ECNL G2008/09,,,Challenge SC ECNL G2008/09,Dick's Sporting Goods Park,DSGP - 10,On Time,1073553
+2026-09-27,11:00 AM,Group Play,Colorado Storm ECNL G2008/09,1,3,Challenge SC ECNL G2008/09,Dick's Sporting Goods Park,DSGP - 10,On Time,1073553
 2026-09-27,01:00 PM,Group Play,Real Colorado National ECNL G2008/09,,,Albion Hurricanes FC ECNL G2008/09,Real Colorado Soccer Complex,RCSC Grass,On Time,1073559
 2026-09-27,01:00 PM,Group Play,FC Dallas Youth ECNL G2008/09,,,West Side Alliance ECNL G2008/09,Toyota Soccer Center,Field 9,On Time,1073577
 2026-09-27,03:00 PM,Group Play,Sting Royal ECNL G2008/09,,,OK Energy FC ECNL G2008/09,Sting National Training Center,Field 1,On Time,1073583
@@ -64,7 +64,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-24,01:00 PM,Group Play,Lonestar ATX Red ECNL G2008/09,,,FC Westlake ECNL G2008/09,St. Andrew's Episcopal School,Field 2,On Time,1073763
 2026-10-24,01:00 PM,Group Play,OK Energy FC ECNL G2008/09,,,Sting Black ECNL G2008/09,Edmond Soccer Club,ESC 4,On Time,1073769
 2026-10-24,01:00 PM,Group Play,West Side Alliance ECNL G2008/09,,,DKSC ECNL G2008/09,RiverCity Parks,Field 9,On Time,1073775
-2026-10-24,01:00 PM,Group Play,Lonestar ATX Red ECNL G2008/09,,,Albion Hurricanes FC ECNL G2008/09,Burger Activity Center,Stadium Field 1,On Time,1074015
 2026-10-24,01:00 PM,Group Play,FC Westlake ECNL G2008/09,,,Challenge SC ECNL G2008/09,Onion Creek Soccer Complex,Field 9,On Time,1074021
 2026-10-24,01:30 PM,Group Play,Real Colorado Athletico ECNL G2008/09,,,FC Dallas Youth ECNL G2008/09,Real Colorado Soccer Complex,RCSC Grass,On Time,1073757
 2026-10-25,TBD,Group Play,Colorado Rush ECNL G2008/09,,,FC Dallas Youth ECNL G2008/09,,,On Time,1073781
@@ -113,6 +112,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-02-07,01:30 PM,Group Play,Real Colorado Athletico ECNL G2008/09,,,OK Energy FC ECNL G2008/09,Real Colorado Soccer Complex,RCSC 1,On Time,1073991
 2027-02-20,01:30 PM,Group Play,Colorado Storm ECNL G2008/09,,,Colorado Rush ECNL G2008/09,Regis University,West Turf,On Time,1073997
 2027-04-17,TBD,Group Play,Sting Black ECNL G2008/09,,,FC Dallas Youth ECNL G2008/09,,,On Time,1074003
+2027-04-18,TBD,Group Play,Lonestar ATX Red ECNL G2008/09,,,Albion Hurricanes FC ECNL G2008/09,Burger Activity Center,Stadium Field 1,On Time,1074015
 2027-04-18,TBD,Group Play,DKSC ECNL G2008/09,,,FC Dallas Youth ECNL G2008/09,,,On Time,1074027
 2027-04-24,TBD,Group Play,Sting Royal ECNL G2008/09,,,SOLAR SC ECNL G2008/09,,,On Time,1074039
 2027-04-24,09:00 AM,Group Play,FC Dallas Youth ECNL G2008/09,,,Dallas Texans ECNL G2008/09,Toyota Soccer Center,Field 11,On Time,1074033

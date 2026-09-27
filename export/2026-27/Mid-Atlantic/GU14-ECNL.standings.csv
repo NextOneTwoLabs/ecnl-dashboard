@@ -1,12 +1,12 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,Richmond United ECNL G2012/13,Richmond United,133823,1,1,0,0,3,3.0,7,0,7
+1,Richmond United ECNL G2012/13,Richmond United,133823,2,2,0,0,6,3.0,15,1,14
 2,NCFC Youth NC Courage ECNL G2012/13,NCFC Youth,130288,1,1,0,0,3,3.0,3,0,3
 3,Charlotte SA ECNL G2012/13,Charlotte Soccer Academy,131431,1,1,0,0,3,3.0,3,1,2
-4,Arlington Soccer Association ECNL G2012/13,Arlington Soccer Association,134239,3,2,0,1,7,2.33,4,0,4
-5,VDA ECNL G2012/13,Virginia Development Academy,113303,2,1,0,1,4,2.0,7,0,7
-6,NCFC Youth ECNL G2012/13,NCFC Youth,98907,4,1,1,2,5,1.25,4,9,-5
-7,Wilmington Hammerheads ECNL G2012/13,Wilmington Hammerheads,134658,2,0,1,1,1,0.5,2,4,-2
-8,Beach FC (VA) ECNL G2012/13,Beach FC,135517,3,0,2,1,1,0.33,0,5,-5
-9,Fairfax Virginia Union ECNL G2012/13,Fairfax Virginia Union,135363,0,0,0,0,0,0.0,0,0,0
-10,South Carolina Surf ECNL G2012/13,South Carolina Surf SC,129049,1,0,1,0,0,0.0,0,2,-2
-11,NC Fusion ECNL G2012/13,NC Fusion,95059,2,0,2,0,0,0.0,1,10,-9
+4,Fairfax Virginia Union ECNL G2012/13,Fairfax Virginia Union,135363,1,1,0,0,3,3.0,2,0,2
+5,VDA ECNL G2012/13,Virginia Development Academy,113303,3,2,0,1,7,2.33,14,0,14
+6,Arlington Soccer Association ECNL G2012/13,Arlington Soccer Association,134239,3,2,0,1,7,2.33,4,0,4
+7,NCFC Youth ECNL G2012/13,NCFC Youth,98907,5,1,2,2,5,1.0,4,11,-7
+8,Wilmington Hammerheads ECNL G2012/13,Wilmington Hammerheads,134658,2,0,1,1,1,0.5,2,4,-2
+9,Beach FC (VA) ECNL G2012/13,Beach FC,135517,3,0,2,1,1,0.33,0,5,-5
+10,South Carolina Surf ECNL G2012/13,South Carolina Surf SC,129049,2,0,2,0,0,0.0,0,9,-9
+11,NC Fusion ECNL G2012/13,NC Fusion,95059,3,0,3,0,0,0.0,2,18,-16
