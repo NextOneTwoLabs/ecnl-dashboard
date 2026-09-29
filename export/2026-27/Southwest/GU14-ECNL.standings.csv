@@ -3,8 +3,8 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 2,Beach Futbol Club (CA) ECNL G2012/13,Beach Futbol Club,131924,3,3,0,0,9,3.0,11,2,9
 3,So Cal Blues ECNL G2012/13,So Cal Blues,135886,2,2,0,0,6,3.0,4,0,4
 4,Phoenix Rising FC ECNL G2012/13,Phoenix Rising FC,99201,1,1,0,0,3,3.0,3,0,3
-5,Legends FC (CA) ECNL G2012/13,Legends FC (CA),133029,3,2,1,0,6,2.0,8,2,6
-6,SLAMMERS FC ECNL G2012/13,Slammers FC,100497,2,1,0,1,4,2.0,5,2,3
+5,SLAMMERS FC ECNL G2012/13,Slammers FC,100497,3,2,0,1,7,2.33,7,2,5
+6,Legends FC (CA) ECNL G2012/13,Legends FC (CA),133029,3,2,1,0,6,2.0,8,2,6
 7,San Diego Surf ECNL G2012/13,San Diego Surf Soccer Club,132462,2,1,0,1,4,2.0,3,2,1
 8,Rebels SC ECNL G2012/13,Rebels Soccer Club,90410,2,1,1,0,3,1.5,2,6,-4
 9,LA Breakers FC ECNL G2012/13,LA Breakers FC,79075,3,1,2,0,3,1.0,4,5,-1
@@ -14,5 +14,5 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 13,Legends FC Del Mar ECNL G2012/13,Legends FC - Del Mar,131709,2,0,1,1,1,0.5,2,4,-2
 14,Utah Royals FC-AZ ECNL G2012/13,Utah Royals FC - AZ,90258,3,0,2,1,1,0.33,3,7,-4
 15,Sporting California USA ECNL G2012/13,Sporting California USA,134082,3,0,2,1,1,0.33,1,10,-9
-16,Arizona Arsenal ECNL G2012/13,Arizona Arsenal Soccer Club,134386,1,0,1,0,0,0.0,0,3,-3
+16,Arizona Arsenal ECNL G2012/13,Arizona Arsenal Soccer Club,134386,2,0,2,0,0,0.0,0,5,-5
 17,LAFC So Cal ECNL G2012/13,LAFC So Cal,133714,2,0,2,0,0,0.0,2,8,-6
