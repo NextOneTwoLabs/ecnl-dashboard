@@ -101,8 +101,9 @@ const refuse = (request, status, session, body, extra = {}) => new Response(requ
   headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-ecnl-session': session, ...extra },
 });
 const TOO_MANY = 'Too many requests. Please wait a minute and try again.';
-// #93: an anonymous-tier 429 also points to API keys, as a bare `help` URL (the page shows only
-// `error`) and a Link header with the same target. Session-tier and key 429s carry neither.
+// #93: an anonymous-tier 429 also points to API keys, as a bare `help` URL (the page shows its
+// own words, never `error` or `help`; #92) and a Link header with the same target. Session-tier
+// and key 429s carry neither.
 const tooMany = (request, session, help = false) => refuse(request, 429, session,
   help ? { error: TOO_MANY, help: HELP_URL } : { error: TOO_MANY },
   help ? { 'retry-after': String(RETRY_AFTER), link: `<${HELP_URL}>; rel="help"` } : { 'retry-after': String(RETRY_AFTER) });
