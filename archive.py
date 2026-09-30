@@ -24,6 +24,15 @@ Manual/bulk use:
     python archive.py --season 2025-26 --showcases --max-requests 20
                                               only the season's showcases, at most
                                               20 HTTP requests, retries included
+    python archive.py --season 2025-26 --showcases --event 4133 --verify --max-requests 2
+    python archive.py --season 2025-26 --showcases --event 4133 --dry-run
+    python archive.py --season 2025-26 --showcases --event 4133 --max-requests 16
+                                              one showcase only (#103): --event <id>
+                                              needs --season and --showcases; without
+                                              --event, verify and the crawl act on every
+                                              showcase of the season. The team index is
+                                              still rebuilt for the whole season; only
+                                              this showcase's manifest entry is written
     python archive.py --team-index --all      rebuild every season's team index
                                               from the archive (no API calls)
     python archive.py --clubs --all           fetch the city and state of every club
@@ -197,13 +206,44 @@ def write_csv(path, columns, rows):
 
 # ---------- verification ----------
 
-def verify(sources, season, conference, kind=None):
+class EventFilterError(Exception):
+    """--event names no showcase of the season; the message says what the id is."""
+
+
+def select_events(sources, season, conference=None, kind=None, event_id=None):
+    """The (season, kind, name, event) rows that verify() and the crawl act on, as a list
+    built before any request. `kind` ("national" or "showcase") keeps only that kind.
+
+    With `event_id` (--event, #103), exactly one row: the showcase of `season` with that
+    eventId. An unknown id, another kind's id or another season's showcase raises
+    EventFilterError naming what the id is, so nothing is ever requested for it."""
+    if event_id is None:
+        return [row for row in api.iter_events(sources, season, conference)
+                if not kind or row[1] == kind]
+    if not season:
+        raise EventFilterError(f"--event {event_id} needs an explicit --season")
+    found = [row for row in api.iter_events(sources)
+             if str(row[3].get("eventId")) == str(event_id)]
+    chosen = [row for row in found if row[0] == season and row[1] == "showcase"]
+    if len(chosen) == 1:
+        return chosen
+    if len(chosen) > 1:
+        names = ", ".join(repr(n) for _s, _k, n, _e in chosen)
+        raise EventFilterError(f"--event {event_id} is registered {len(chosen)} times in {season}: "
+                               f"showcases {names}; an eventId must be unique in sources.json")
+    if not found:
+        raise EventFilterError(f"--event {event_id}: no event in the registry "
+                               f"(public/data/sources.json) has this id")
+    what = " and ".join(f"the {s} {k} {n!r}" for s, k, n, _e in found)
+    raise EventFilterError(f"--event {event_id} is not a {season} showcase: it is {what}")
+
+
+def verify(sources, season, conference, kind=None, event_id=None):
     """Confirm each configured event ID resolves to the expected event name.
-    `kind` ("national" or "showcase") checks only that kind of event."""
+    `kind` ("national" or "showcase") checks only that kind of event; `event_id`
+    (--event) only that one showcase of `season` (see select_events)."""
     ok = bad = 0
-    for season_key, ev_kind, name, event in api.iter_events(sources, season, conference):
-        if kind and ev_kind != kind:
-            continue
+    for season_key, ev_kind, name, event in select_events(sources, season, conference, kind, event_id):
         eid = event.get("eventId")
         if not eid:
             print(f"  SKIP  {season_key} {name}: no eventId set")
@@ -1310,6 +1350,17 @@ def save_manifest(manifest):
         f.write("\n")
 
 
+class _OnceAction(argparse.Action):
+    """Store an option that may be given only once: argparse would silently keep the
+    last of two `--event` values, and act on a showcase the caller did not mean."""
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        if getattr(namespace, self.dest, None) is not None:
+            parser.error(f"{option_string} given more than once "
+                         f"({getattr(namespace, self.dest)}, then {values}); name one showcase")
+        setattr(namespace, self.dest, values)
+
+
 def main():
     ap = argparse.ArgumentParser(description="Archive ECNL standings and schedules locally.")
     ap.add_argument("--season", help="Season key, e.g. 2024-25. Defaults to the newest season.")
@@ -1319,6 +1370,15 @@ def main():
     ap.add_argument("--showcases", action="store_true",
                     help="Only the season's showcases (#97); skips conferences and national events. "
                          "With --verify, verifies only them.")
+    ap.add_argument("--event", type=int, metavar="ID", action=_OnceAction,
+                    help="Only with an explicit --season S and --showcases: act on the one "
+                         "showcase of S with this TGS event id (#103), for --verify (one "
+                         "request), --dry-run and the crawl (--force re-fetches only it). "
+                         "Without --event, verify and the crawl act on every showcase of the "
+                         "season. The team index is still rebuilt for the whole season; only "
+                         "this showcase's manifest entry is written. Not with --all, --national, "
+                         "--conference, --refresh, --export, --team-index or --clubs, and "
+                         "given only once.")
     ap.add_argument("--max-requests", type=int, metavar="N",
                     help="Stop asking upstream after N HTTP requests, retries included "
                          "(a request budget for a crawl or --verify).")
@@ -1352,6 +1412,16 @@ def main():
                          "that have no entry in public/archive/clubs.json yet; with --force, "
                          "re-check every one. --dry-run lists the count and fetches nothing.")
     args = ap.parse_args()
+    if args.event is not None:
+        # #103: --event acts on one showcase of one named season, and on nothing else.
+        clash = [flag for flag, on in (
+            ("--all", args.all), ("--national", args.national), ("--conference", args.conference),
+            ("--refresh", args.refresh), ("--export", args.export),
+            ("--team-index", args.team_index), ("--clubs", args.clubs)) if on]
+        if clash:
+            ap.error(f"--event cannot be combined with {', '.join(clash)}")
+        if not args.season or not args.showcases:
+            ap.error("--event needs an explicit --season S and --showcases")
     if args.national and args.conference:
         ap.error("--national cannot be combined with --conference (the conference filter drops national events)")
     if args.showcases and (args.conference or args.national):
@@ -1385,9 +1455,12 @@ def main():
         season = season_keys[0]
         print(f"No --season/--all given; defaulting to {season}.\n")
 
+    only_kind = "showcase" if args.showcases else "national" if args.national else None
     if args.verify:
-        code = verify(sources, season, args.conference,
-                      "showcase" if args.showcases else "national" if args.national else None)
+        try:
+            code = verify(sources, season, args.conference, only_kind, args.event)
+        except EventFilterError as e:
+            ap.error(str(e))
         print(f"HTTP requests: {api.HTTP_ATTEMPTS} (retries included).")
         return code
 
@@ -1400,16 +1473,19 @@ def main():
     if args.clubs:
         return cmd_clubs(sources, season, force=args.force, dry_run=args.dry_run)
 
+    try:
+        events = select_events(sources, season, args.conference, only_kind, args.event)
+    except EventFilterError as e:
+        ap.error(str(e))
+
     stats = Stats()
     manifest = load_manifest()
     started = time.time()
 
     age_changes = []
-    for season_key, kind, name, event in api.iter_events(sources, season, args.conference):
-        if args.national and kind != "national":
-            continue
-        if args.showcases and kind != "showcase":
-            continue
+    # Only the crawled events' manifest entries are replaced (with --event, that one);
+    # every other entry is carried over as loaded.
+    for season_key, kind, name, event in events:
         entry = archive_event(sources, season_key, kind, name, event, stats, args.force, args.dry_run)
         if entry:
             div_team_names = entry.pop("_divTeamNames", {})

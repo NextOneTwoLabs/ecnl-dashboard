@@ -169,7 +169,8 @@ hardcoded in the HTML.
    ```
 
    `--verify` checks every event of the season; add `--national` or `--showcases` to
-   verify only the national events or only the showcases (since #97).
+   verify only the national events or only the showcases (since #97), and
+   `--showcases --event <id>` to verify one showcase (#103).
 
 3. Archive it: `python archive.py --season 2026-27`
 
@@ -300,6 +301,14 @@ display name shown on the Showcases tab (#97):
   team played in, and never fetches clubs. CSVs go to `export/<season>/showcases/<name>/`;
   their `rank` column is TGS's own `rank` as published, not a position, and `--export`
   rebuilds them with the conferences'.
+- **One showcase:** `--event <id>` (#103), only with an explicit `--season` and `--showcases`,
+  limits `--verify` (one request), `--dry-run` (one "would archive" line) and the crawl
+  (`--force` included) to that showcase; without `--event`, verify and the crawl act on every
+  showcase of the season. The team index is still rebuilt for the whole season, and only that
+  showcase's manifest entry is written. An id that is not a showcase of that season, a
+  repeated `--event`, or `--event` with `--all`, `--national`, `--conference`, `--refresh`,
+  `--export`, `--team-index` or `--clubs`, exits 2 before any request. Every `eventId` is
+  unique in `sources.json` (a test checks this).
 - **Request budgets count retries.** A 5xx is retried up to 3 times, so `--max-requests N`
   counts every HTTP request, retries included, and stops before request N + 1. With a budget
   set, the crawler prints one line per attempt (UTC time, path, status, bytes); that printed
@@ -310,8 +319,8 @@ display name shown on the Showcases tab (#97):
 
 To add a showcase, follow the checklist in
 [docs/showcases.md, "Onboarding a showcase"](docs/showcases.md#onboarding-a-showcase):
-identify it (2 requests), write the registry hunk by hand, `--verify` (1), crawl
-(1 + 2 × flights, with `--max-requests`), audit the data offline including the **name check**
+identify it (2 requests), write the registry hunk by hand, `--verify --event <id>` (1), crawl
+with `--event <id>` (1 + 2 × flights, with `--max-requests`), audit the data offline including the **name check**
 (the display name is unique in its season) and the **alias review**, check the pages offline,
 then a PR the owner approves. Discovery of other showcases is deferred.
 

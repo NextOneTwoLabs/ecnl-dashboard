@@ -49,8 +49,11 @@ event. `tests/test_showcases.py` re-checks every declared alias against the arch
 
 ## Request cost
 
-- **Onboarding** one showcase: 1 (`--verify`) + 1 + 2 × flights (the crawl). Phoenix Spring
-  has 6 flights: 14 requests. A 5xx is retried up to 3 times, so every budget counts HTTP
+- **Onboarding** one showcase: 1 (`--verify --event <id>`) + 1 + 2 × flights (the crawl with
+  `--event <id>`). Phoenix Spring has 6 flights: 14 requests. `--event <id>` (#103) needs an
+  explicit `--season` and `--showcases`, and exits 2 before any request with `--all`,
+  `--national`, `--conference`, `--refresh`, `--export`, `--team-index` or `--clubs`, when
+  given twice, or when the id is not a showcase of that season. A 5xx is retried up to 3 times, so every budget counts HTTP
   requests, retries included: `--max-requests N` stops the run before request N + 1, and the
   crawl's summary prints the count.
 - **The standard for a budgeted run is the crawler's own pace under `--max-requests`**
@@ -73,8 +76,8 @@ event. `tests/test_showcases.py` re-checks every declared alias against the arch
 | 0 | TPM (from an owner-approved list, or the owner names one) | File one issue per event, or one per season batch: "Onboard showcase <name> (TGS <id>)" | 0 |
 | 1 | SWE | **Identify:** event details and hierarchy give the TGS name, dates, place, divisions, flights, team counts and girls-only status. The season is the one whose August-to-July span holds the dates, cross-checked against the division naming | 2 |
 | 2 | SWE | **Registry edit:** one hand-written hunk under `seasons.<S>.showcases` (display name, `eventId`, exact `eventName`, `location` "City, ST", ISO `startDate`/`endDate`, optional `tierNotes`/`dataGaps`). Never re-serialize `sources.json` | 0 |
-| 3 | SWE | `python archive.py --verify --season <S> --showcases --max-requests 2` → OK; save its printed request line to the issue | 1 |
-| 4 | SWE | `python archive.py --season <S> --showcases --dry-run`, then the crawl: `python archive.py --season <S> --showcases --no-update-sources --max-requests <1 + 2 × flights + a small margin>`, at the crawler's own pace. Save its printed request log (one line per attempt) to the issue | 1 + 2 × flights |
+| 3 | SWE | `python archive.py --verify --season <S> --showcases --event <id> --max-requests 2` → one OK line, for this showcase only; save its printed request line to the issue. Without `--event`, verify and the crawl act on every showcase of the season | 1 |
+| 4 | SWE | `python archive.py --season <S> --showcases --event <id> --dry-run` → one "would archive" line, then the crawl: `python archive.py --season <S> --showcases --event <id> --no-update-sources --max-requests <1 + 2 × flights + a small margin>`, at the crawler's own pace. Only this showcase's paths are fetched and only its manifest entry is written (plus `updated`); the team index is still rebuilt for the whole season. Save its printed request log (one line per attempt) to the issue | 1 + 2 × flights |
 | 5 | SWE, offline under the netguard | The team index's `teams` rows unchanged and its `showcases` rows added; manifest +1 entry (and its `updated` stamp); blast radius = the event's archive paths, its export folder, `teams/<S>.json` and the manifest; `reconstruct.py --check`; the Python and Node suites; `--refresh --dry-run --date <a day inside and outside the event>` | 0 |
 | 6 | SWE, offline | **Data audit:** placeholder dates, null sides, unscored past games, `gamenumber`, TGS `rank`, standings block count, teams with no conference row. **Name check:** the display name is unique among the season's conferences, national events and showcases (`tests/test_showcases.py`). **Alias review:** list showcase teams whose exact name matches a conference team with another id in the same age group; declare each confirmed one in `teamAliases` with a `teamAliasesNote` naming the evidence. Anything odd goes into `tierNotes` or `dataGaps`, with a source | 0 |
 | 7 | SWE, offline browser | Every age group (Results and Games), "no team page" only on rows with none, one attendee team page, 390 px, dark mode; no console errors | 0 |
