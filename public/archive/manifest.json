@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-30T03:33:33Z",
+  "updated": "2026-09-30T18:08:40Z",
   "events": {
     "2025-26/Mid-Atlantic": {
       "season": "2025-26",
@@ -7414,6 +7414,57 @@
           "schedulesUrl": "https://public.totalglobalsports.com/public/event/4133/schedules/36391",
           "teams": 24,
           "games": 36
+        }
+      ]
+    },
+    "2025-26/San Diego Fall": {
+      "season": "2025-26",
+      "kind": "showcase",
+      "name": "San Diego Fall",
+      "eventId": 4041,
+      "eventName": "ECNL Girls San Diego",
+      "fetchedAt": "2026-09-30T18:08:35Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/4041/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 19568,
+          "divisionName": "G2011",
+          "flightID": 34643,
+          "flightName": "San Diego",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/4041/standings/34643",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/4041/schedules/34643",
+          "teams": 30,
+          "games": 45
+        },
+        {
+          "divisionID": 19567,
+          "divisionName": "G2012",
+          "flightID": 34645,
+          "flightName": "San Diego",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/4041/standings/34645",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/4041/schedules/34645",
+          "teams": 28,
+          "games": 42
+        },
+        {
+          "divisionID": 19566,
+          "divisionName": "G2013",
+          "flightID": 34646,
+          "flightName": "San Diego",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/4041/standings/34646",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/4041/schedules/34646",
+          "teams": 30,
+          "games": 45
+        },
+        {
+          "divisionID": 19565,
+          "divisionName": "G2014",
+          "flightID": 34644,
+          "flightName": "San Diego",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/4041/standings/34644",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/4041/schedules/34644",
+          "teams": 22,
+          "games": 33
         }
       ]
     }

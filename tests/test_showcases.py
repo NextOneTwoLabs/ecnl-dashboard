@@ -599,6 +599,22 @@ class RegistryTests(unittest.TestCase):
         # 2025-26 is not the active season, so 4133 is never refreshed.
         self.assertNotEqual(archive.refresh_policy(self.sources)["activeSeason"], "2025-26")
 
+    def test_san_diego_fall(self):
+        # #101: TGS 4041, checked by --verify (name) and the event details (dates, Del Mar).
+        ev = self.sources["seasons"]["2025-26"]["showcases"]["San Diego Fall"]
+        self.assertEqual((ev["eventId"], ev["eventName"], ev["location"], ev["startDate"], ev["endDate"]),
+                         (4041, "ECNL Girls San Diego", "Del Mar, CA", "2025-10-11", "2025-10-13"))
+        self.assertEqual(list(ev["tierNotes"]), ["San Diego"], "keyed by the TGS flight name")
+        self.assertNotIn("teamAliases", ev, "the #101 alias review found no candidate")
+        self.assertNotIn("dataGaps", ev)
+
+    def test_showcases_are_in_calendar_order(self):
+        # #101 S4: a season's showcases are listed by startDate (the Showcases tab opens on
+        # the first one, and the list reads in calendar order).
+        for season, data in self.sources["seasons"].items():
+            starts = [ev["startDate"] for ev in (data.get("showcases") or {}).values()]
+            self.assertEqual(starts, sorted(starts), f"{season}: showcases not in startDate order")
+
 
 def _archived(path):
     raw, _ = api.read_archive(path)
@@ -664,6 +680,30 @@ class ArchivedShowcaseTests(unittest.TestCase):
         for d, f, standings, games in self.showcase_rows(4133):
             self.assertEqual(len(games) and all(g.get("type") == "Group Play" for g in games), True)
         self.assertEqual(sum(len(g) for *_x, g in self.showcase_rows(4133)), 453)
+
+    def test_san_diego_fall_index_rows(self):
+        # #101 S1: TGS 4041, one flight per age group, in hierarchy order.
+        if not any(e["eventId"] == 4041 for _s, _n, e in self.events):
+            self.skipTest("4041 not archived yet")
+        idx = api.read_json_file(api.team_index_path("2025-26"))
+        rows = [r for r in idx.get("showcases") or [] if r["eventID"] == 4041]
+        self.assertEqual([r["flightID"] for r in rows], [34643, 34645, 34646, 34644])
+        self.assertEqual([len(r["teamIDs"]) for r in rows], [30, 28, 30, 22])
+        self.assertEqual([r.get("aliases") for r in rows], [None] * 4)
+        flights = self.showcase_rows(4041)
+        self.assertEqual([len(standings) for _d, _f, standings, _g in flights], [30, 28, 30, 22])
+        self.assertEqual(sum(len(g) for *_x, g in flights), 165)
+
+    def test_every_showcase_game_is_group_play(self):
+        # #101 S1: a showcase has no knockout, so no title is at stake (the Format note says
+        # so); a bracket game would need a new design, not a note.
+        if not self.events:
+            self.skipTest("no showcase archived yet")
+        for season, name, ev in self.events:
+            for d, f, _standings, games in self.showcase_rows(ev["eventId"]):
+                with self.subTest(showcase=f"{season}/{name}", flight=f["flightID"]):
+                    self.assertTrue(games)
+                    self.assertEqual({g.get("type") for g in games}, {"Group Play"})
 
     def test_only_mirrored_families(self):
         if not self.events:

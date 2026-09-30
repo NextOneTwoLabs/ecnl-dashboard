@@ -4,7 +4,10 @@ A showcase is an ECNL weekend event outside the conference season: teams from di
 conferences (and some ECNL RL, Pre-ECNL and guest teams) play a few games each, and no title
 is at stake. The site shows each archived showcase on the **Showcases** tab (a Results table
 and a Games list per age group) and on the team page of every conference team that played in
-it. Showcases were added in #97; the first is **Phoenix Spring** (TGS event 4133, 2025-26).
+it. Showcases were added in #97; the first is **Phoenix Spring** (TGS event 4133, 2025-26),
+and the second **San Diego Fall** (TGS event 4041, 2025-26, #101). A season's showcases are
+listed in `startDate` order (a registry test checks this), and its Showcases tab opens on the
+first.
 
 ## How a showcase is stored
 

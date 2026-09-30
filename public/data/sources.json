@@ -185,6 +185,16 @@
         }
       },
       "showcases": {
+        "San Diego Fall": {
+          "eventId": 4041,
+          "eventName": "ECNL Girls San Diego",
+          "location": "Del Mar, CA",
+          "startDate": "2025-10-11",
+          "endDate": "2025-10-13",
+          "tierNotes": {
+            "San Diego": "A showcase, not a competition: no title was at stake. Showcase games don't count toward conference standings. The results are listed in the order TGS publishes them, which is not a ranking."
+          }
+        },
         "Phoenix Spring": {
           "eventId": 4133,
           "eventName": "ECNL Phoenix - Spring",

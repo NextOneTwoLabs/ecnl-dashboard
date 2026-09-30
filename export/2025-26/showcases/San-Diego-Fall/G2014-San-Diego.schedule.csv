@@ -1,0 +1,34 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2025-10-11,08:00 AM,Group Play,San Diego Surf Pre-ECNL G14,13,1,Sporting CA USA Pre-ECNL G14,Surf Cup Sports Park,Field #21,On Time,960316
+2025-10-11,08:00 AM,Group Play,Legends FC San Diego Pre-ECNL G14,2,1,Portland Thorns Academy Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960317
+2025-10-11,08:00 AM,Group Play,Rebels SC Pre-ECNL G14,3,1,Seattle United Pre ECNL G14,Surf Cup Sports Park,Field #23,On Time,960318
+2025-10-11,08:00 AM,Group Play,Phoenix Rising FC Pre-ECNL G14,0,2,Santa Rosa United Pre-ECNL G14,Surf Cup Sports Park,Field #24,On Time,960319
+2025-10-11,09:30 AM,Group Play,Bay Area Surf Pre-ECNL G14,5,2,Arizona Arsenal Pre-ECNL G14,Surf Cup Sports Park,Field #21,On Time,960324
+2025-10-11,09:30 AM,Group Play,Colorado Rush Academy Pre-ECNL G14,0,4,Legends FC Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960325
+2025-10-11,09:30 AM,Group Play,LAFC SO CAL Pre-ECNL G14,7,1,New England Surf Pre-ECNL G14,Surf Cup Sports Park,Field #23,On Time,960326
+2025-10-11,09:30 AM,Group Play,MVLA Pre-ECNL G14,4,0,Utah Royals FC-AZ Pre-ECNL G14,Surf Cup Sports Park,Field #24,On Time,960327
+2025-10-11,11:00 AM,Group Play,Eagles Soccer Club Pre-ECNL G14,3,0,Marin FC Pre-ECNL G14,Surf Cup Sports Park,Field #21,On Time,960337
+2025-10-11,11:00 AM,Group Play,Legends FC San Diego Pre-ECNL G14,1,3,Sporting CA USA Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960338
+2025-10-11,11:00 AM,Group Play,Beach FC (CA) Pre-ECNL G14,6,1,COSC Pre-ECNL G14,Surf Cup Sports Park,Field #23,On Time,960339
+2025-10-11,01:00 PM,Group Play,Seattle United Pre ECNL G14,0,6,LAFC SO CAL Pre-ECNL G14,Surf Cup Sports Park,Field #21,On Time,960349
+2025-10-11,01:00 PM,Group Play,Eastside FC Pre-ECNL G14 Red,4,2,LA Breakers FC Pre-ECNL G14 Blue,Surf Cup Sports Park,Field #22,On Time,960350
+2025-10-11,01:00 PM,Group Play,New England Surf Pre-ECNL G14,1,2,Phoenix Rising FC Pre-ECNL G14,Surf Cup Sports Park,Field #23,On Time,960351
+2025-10-11,01:00 PM,Group Play,San Diego Surf Pre-ECNL G14,2,2,Santa Rosa United Pre-ECNL G14,Surf Cup Sports Park,Field #24,On Time,960352
+2025-10-11,02:30 PM,Group Play,Beach FC (CA) Pre-ECNL G14,3,0,Marin FC Pre-ECNL G14,Surf Cup Sports Park,Field #21,On Time,960362
+2025-10-11,02:30 PM,Group Play,Portland Thorns Academy Pre-ECNL G14,1,6,Rebels SC Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960363
+2025-10-11,02:30 PM,Group Play,Utah Royals FC-AZ Pre-ECNL G14,0,2,COSC Pre-ECNL G14,Surf Cup Sports Park,Field #23,On Time,960364
+2025-10-11,02:30 PM,Group Play,MVLA Pre-ECNL G14,1,1,Eagles Soccer Club Pre-ECNL G14,Surf Cup Sports Park,Field #24,On Time,960365
+2025-10-11,04:00 PM,Group Play,Legends FC Pre-ECNL G14,5,0,Eastside FC Pre-ECNL G14 Red,Surf Cup Sports Park,Field #21,On Time,960375
+2025-10-11,04:00 PM,Group Play,LA Breakers FC Pre-ECNL G14 Blue,3,1,Bay Area Surf Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960376
+2025-10-11,04:00 PM,Group Play,Colorado Rush Academy Pre-ECNL G14,1,3,Arizona Arsenal Pre-ECNL G14,Surf Cup Sports Park,Field #23,On Time,960377
+2025-10-12,08:00 AM,Group Play,Bay Area Surf Pre-ECNL G14,0,10,Legends FC Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960384
+2025-10-12,08:00 AM,Group Play,Legends FC San Diego Pre-ECNL G14,2,3,New England Surf Pre-ECNL G14,Surf Cup Sports Park,Field #23,On Time,960385
+2025-10-12,09:30 AM,Group Play,MVLA Pre-ECNL G14,1,1,Beach FC (CA) Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960389
+2025-10-12,09:30 AM,Group Play,Portland Thorns Academy Pre-ECNL G14,8,2,Phoenix Rising FC Pre-ECNL G14,Surf Cup Sports Park,Field #23,On Time,960390
+2025-10-12,11:00 AM,Group Play,COSC Pre-ECNL G14,1,6,Eagles Soccer Club Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960400
+2025-10-12,11:00 AM,Group Play,Eastside FC Pre-ECNL G14 Red,2,2,Arizona Arsenal Pre-ECNL G14,Surf Cup Sports Park,Field #23,On Time,960401
+2025-10-12,12:30 PM,Group Play,LA Breakers FC Pre-ECNL G14 Blue,1,2,Colorado Rush Academy Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960411
+2025-10-12,12:30 PM,Group Play,Marin FC Pre-ECNL G14,0,3,Utah Royals FC-AZ Pre-ECNL G14,Surf Cup Sports Park,Field #23,On Time,960412
+2025-10-12,02:00 PM,Group Play,Seattle United Pre ECNL G14,0,7,San Diego Surf Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960422
+2025-10-12,02:00 PM,Group Play,Santa Rosa United Pre-ECNL G14,0,2,Rebels SC Pre-ECNL G14,Surf Cup Sports Park,Field #23,On Time,960423
+2025-10-12,03:30 PM,Group Play,Sporting CA USA Pre-ECNL G14,0,4,LAFC SO CAL Pre-ECNL G14,Surf Cup Sports Park,Field #22,On Time,960430
