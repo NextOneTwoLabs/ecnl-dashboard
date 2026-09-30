@@ -184,6 +184,22 @@
           }
         }
       },
+      "showcases": {
+        "Phoenix Spring": {
+          "eventId": 4133,
+          "eventName": "ECNL Phoenix - Spring",
+          "location": "Phoenix, AZ",
+          "startDate": "2026-03-27",
+          "endDate": "2026-03-29",
+          "tierNotes": {
+            "Phoenix - Spring": "A showcase, not a competition: every team played three games, and no title was at stake. Showcase games don't count toward conference standings. The results are listed in the order TGS publishes them, which is not a ranking."
+          },
+          "teamAliases": {
+            "112470": 69910
+          },
+          "teamAliasesNote": "Utah Avalanche ECNL G11 is team 112470 in this showcase's G2011 table (club 'No Club Selection') and team 69910 in the 2025-26 Northwest conference: the same name in the same age group, and the only showcase team whose exact name matches a conference team with another id. Reviewed by hand (#97)."
+        }
+      },
       "ageGroups": {
         "G2008/2007": {
           "u": 18,

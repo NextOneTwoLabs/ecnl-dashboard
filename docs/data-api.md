@@ -15,7 +15,7 @@ lock.
 
 | GET / HEAD route | Archived response |
 | --- | --- |
-| `/api/v1/catalog` | `public/data/sources.json`: season/conference registry, national events and display metadata |
+| `/api/v1/catalog` | `public/data/sources.json`: season/conference registry, national events, showcases and display metadata |
 | `/api/v1/status` | `public/archive/refresh-state.json`: refresh timestamps and per-flight status |
 | `/api/v1/events/{eventId}/hierarchy` | Event hierarchy envelope: divisions and their flights |
 | `/api/v1/events/{eventId}/divisions/{divisionId}/flights/{flightId}/standings` | Standings envelope with every group block |
@@ -38,6 +38,23 @@ the selected archived object.
 The catalog resolves season/conference to eventId. Its hierarchy resolves the
 selected age to divisionId and flightIds. Multiple flights require one request
 each.
+
+### Event kinds in the catalog
+
+Each season in the catalog (`seasons.<season>`) lists its events in three maps, keyed by
+display name, and the map is the event's kind:
+
+| Map | Kind | Entry fields |
+| --- | --- | --- |
+| `conferences` | a conference season | `eventId`, `eventName` |
+| `national` | a national (Playoffs/Finals) event | `eventId`, `eventName`, `location`, `startDate`, `endDate`; optional `tierLabels`, `tierNotes`, `defaultTier`, `dataGaps`, `reconstructed` |
+| `showcases` (#97, optional) | a showcase weekend | `eventId`, `eventName`, `location` (`"City, ST"`), `startDate`, `endDate` (ISO); optional `tierLabels`, `tierNotes`, `dataGaps`, `teamAliases` (`{"<showcase teamID>": <conference teamID>}`, declared by hand after review) and `teamAliasesNote` |
+
+A showcase's data is read through the same event routes as any other event
+(`/api/v1/events/{eventId}/hierarchy`, `…/standings`, `…/schedule`); there is no new route.
+Its standings rows are a results list: TGS gives most rows `rank` 1 and some 2, so the
+page shows no position and keeps TGS's order. A reader that does not know `showcases`
+ignores it. Display names are unique within a season across the three maps.
 
 ### Team index (`/api/v1/seasons/{season}/teams`)
 
@@ -65,8 +82,33 @@ bytes unchanged. It is rebuilt at the end of a crawl, by every `--refresh`
   and values. `conference` is the catalog conference name, `flightName` the
   hierarchy flight name, and `rank` the 1-based position in the flight's table
   after merging group blocks as the page does.
-- Teams that played only a national event are not listed (the scan never found
-  them either). A season with nothing archived has no file (404).
+- Teams that played only a national event or a showcase are not listed in `teams`
+  (the scan never found them either). A season with nothing archived has no file (404).
+- **`showcases` (optional, #97):** present only when the season has an archived
+  showcase. One row per showcase flight, in catalog, then hierarchy order:
+
+  ```json
+  ],"showcases":[
+  {"eventID":4133,"divisionID":20345,"flightID":36390,"teamIDs":[77797,81526,…],"aliases":{"112470":69910}},
+  …]}
+  ```
+
+  `teamIDs` are the ids in the flight's schedule, in first-appearance order, as the
+  games carry them (a flight with games but no table still has a row). `aliases`, when
+  present, is the catalog's `teamAliases` for the ids in this flight: showcase id to the
+  same team's conference id. The `teams` rows do not change and the schema stays 1: a
+  reader that knows only `teams` is unaffected. A team page uses these rows to fetch only
+  the showcase schedules its team played in (its own id or an alias); without an index
+  (404, unknown schema, `?live=1`) it reads each showcase's hierarchy instead, and a
+  refused index (below) shows "try again" and reads nothing else.
+
+**Request cost of the showcase rows (#97).** In a season with a showcase, a team page reads
+that season's index once per session to learn whether the team played in one. A deep link
+or search already reads it; a page opened from My Teams did not, so it costs **one request
+more per session** there (the owner accepted this), plus **one schedule request per showcase
+flight the team played in**. A season without showcases costs nothing extra. On the
+Showcases tab, the index tells which rows have a team page: if it is refused, every row is
+shown by its plain name with "try again", never as "no team page".
 
 The page uses the index to find a deep-linked team or a saved favourite and to
 run a Teams search: one request per season instead of every hierarchy and

@@ -4,6 +4,11 @@
     event's own dates only, with --date passed through), the team index's showcase
     rows, the export folder, no brackets, the CLI guards, and the request budget that
     counts retries.
+(b) The registry: every showcase has what the refresh and the page need, names are unique
+    across a season's conferences, national events and showcases (they are manifest keys
+    and export folders), and every teamAliases entry is well formed and documented.
+(c) The archived showcases: a hand-declared alias really is the same team (onboarding
+    checklist, alias review), the index rows, and only the mirrored families.
 No test reaches the network (tests/netguard).
 """
 import argparse
@@ -199,6 +204,130 @@ class ShowcaseKindTests(unittest.TestCase):
             self.assertEqual(archive.verify(self.src, self.active, None, "showcase"), 0)
         self.assertEqual(asked, [api.p_event_details(FAKE_ID)])
         self.assertIn("1 verified, 0 problem(s)", out.getvalue())
+
+
+class RegistryTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.sources = api.load_sources()
+
+    def test_names_are_unique_within_a_season(self):
+        # S5: `<season>/<name>` is the manifest key and slug(name) the export folder, for
+        # every kind; "showcases" is the showcase export folder itself.
+        for season, data in self.sources["seasons"].items():
+            names = [n for kind in ("conferences", "national", "showcases") for n in (data.get(kind) or {})]
+            self.assertEqual(len(names), len(set(names)), f"{season}: a name is used twice: {names}")
+            slugs = [api.slug(n).lower() for n in names]
+            self.assertEqual(len(slugs), len(set(slugs)), f"{season}: two names share an export folder: {names}")
+            self.assertNotIn("showcases", slugs[:len(names) - len(data.get("showcases") or {})], season)
+
+    def test_showcase_entries(self):
+        ids = {e["eventId"] for _s, k, _n, e in api.iter_events(self.sources) if k != "showcase"}
+        seen = 0
+        for season, kind, name, ev in api.iter_events(self.sources):
+            if kind != "showcase":
+                continue
+            seen += 1
+            label = f"{season}/{name}"
+            self.assertIsInstance(ev.get("eventId"), int, label)
+            self.assertNotIn(ev["eventId"], ids, f"{label}: event id also registered as another event")
+            self.assertTrue(ev.get("eventName"), f"{label}: eventName (TGS's exact name) is required")
+            self.assertRegex(ev.get("location") or "", r"^[^,]+, [A-Z]{2}$", f"{label}: location is 'City, ST'")
+            start = datetime.date.fromisoformat(ev["startDate"])
+            end = datetime.date.fromisoformat(ev["endDate"])
+            first = self.sources["seasons"][season].get("startYear") or int(season[:4])
+            self.assertTrue(datetime.date(first, 8, 1) <= start <= end <= datetime.date(first + 1, 7, 31),
+                            f"{label}: dates must be ISO, in order, and inside the season")
+            for bad in ("reconstructed", "defaultTier"):
+                self.assertNotIn(bad, ev, f"{label}: showcases have no brackets or tiers to default")
+            aliases = ev.get("teamAliases") or {}
+            for k, v in aliases.items():
+                self.assertRegex(k, r"^[1-9][0-9]*$", label)
+                self.assertIsInstance(v, int, label)
+                self.assertNotEqual(int(k), v, label)
+            if aliases:
+                self.assertTrue(ev.get("teamAliasesNote"), f"{label}: every alias needs its source note")
+        self.assertGreaterEqual(seen, 1)
+
+    def test_phoenix_spring(self):
+        ev = self.sources["seasons"]["2025-26"]["showcases"]["Phoenix Spring"]
+        self.assertEqual((ev["eventId"], ev["eventName"], ev["location"], ev["startDate"], ev["endDate"]),
+                         (4133, "ECNL Phoenix - Spring", "Phoenix, AZ", "2026-03-27", "2026-03-29"))
+        self.assertEqual(ev["teamAliases"], {"112470": 69910})
+        # 2025-26 is not the active season, so 4133 is never refreshed.
+        self.assertNotEqual(archive.refresh_policy(self.sources)["activeSeason"], "2025-26")
+
+
+def _archived(path):
+    raw, _ = api.read_archive(path)
+    return json.loads(raw) if raw else None
+
+
+class ArchivedShowcaseTests(unittest.TestCase):
+    """Checks on the committed showcase data; each archived showcase is checked (the registry
+    test above requires every showcase's fields, so a registered one is never skipped silently
+    once crawled)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.sources = api.load_sources()
+        cls.events = [(s, n, e) for s, k, n, e in api.iter_events(cls.sources)
+                      if k == "showcase" and _archived(api.p_hierarchy(e["eventId"]))]
+
+    def showcase_rows(self, eid):
+        """(flightID, standings rows, games) for each flight of an archived showcase."""
+        h = _archived(api.p_hierarchy(eid))["data"]
+        out = []
+        for d in h["girlsDivAndFlightList"] or []:
+            for f in d.get("flightList") or []:
+                st = _archived(api.p_standings(d["divisionID"], f["flightID"], eid))
+                rows = archive.merge_standings_blocks(st["data"]) if st else []
+                games = (_archived(api.p_schedule(eid, f["flightID"])) or {}).get("data") or []
+                out.append((d, f, rows, games))
+        return out
+
+    def test_aliases_are_the_same_team(self):
+        # Onboarding checklist, alias review (M3): the showcase id plays at the event under
+        # exactly the conference team's name, in the same age group; the conference id is in
+        # the season's index and does not itself play at the event.
+        for season, name, ev in self.events:
+            index = api.read_json_file(api.team_index_path(season))["teams"]
+            by_id = {t["teamID"]: t for t in index}
+            flights = self.showcase_rows(ev["eventId"])
+            played = {t for _d, _f, _r, games in flights for g in games for t in (g["hometeamID"], g["awayteamID"])}
+            for k, v in (ev.get("teamAliases") or {}).items():
+                with self.subTest(showcase=f"{season}/{name}", alias=k):
+                    self.assertIn(int(k), played)
+                    self.assertNotIn(v, played)
+                    self.assertIn(v, by_id)
+                    row = next(r for d, _f, rows, _g in flights for r in rows if r["teamID"] == int(k))
+                    div = next(d for d, _f, rows, _g in flights if any(r["teamID"] == int(k) for r in rows))
+                    self.assertEqual(row["name"], by_id[v]["name"])
+                    self.assertEqual(div["divisionName"], by_id[v]["division"])
+
+    def test_phoenix_spring_index_rows(self):
+        idx = api.read_json_file(api.team_index_path("2025-26"))
+        rows = [r for r in idx.get("showcases") or [] if r["eventID"] == 4133]
+        if not any(e["eventId"] == 4133 for _s, _n, e in self.events):
+            self.skipTest("4133 not archived yet")
+        self.assertEqual([r["flightID"] for r in rows], [36386, 36388, 36390, 36387, 36389, 36391])
+        self.assertEqual([len(r["teamIDs"]) for r in rows], [54, 54, 54, 58, 58, 24])
+        self.assertEqual([r.get("aliases") for r in rows], [None, None, {"112470": 69910}, None, None, None])
+        bare = copy.deepcopy(self.sources)
+        bare["seasons"]["2025-26"].pop("showcases")
+        self.assertEqual(archive.build_team_index(bare, "2025-26")["teams"], idx["teams"],
+                         "the conference rows are what they were without showcases")
+        for d, f, standings, games in self.showcase_rows(4133):
+            self.assertEqual(len(games) and all(g.get("type") == "Group Play" for g in games), True)
+        self.assertEqual(sum(len(g) for *_x, g in self.showcase_rows(4133)), 453)
+
+    def test_only_mirrored_families(self):
+        for _s, _n, ev in self.events:
+            eid = ev["eventId"]
+            self.assertIsNone(api.read_archive(api.p_event_details(eid))[0], "event details are never archived")
+            for d, f, _r, _g in self.showcase_rows(eid):
+                self.assertIsNone(api.read_archive(api.p_brackets_design(eid, f["flightID"]))[0])
+                self.assertIsNone(api.read_archive(api.p_brackets(eid, f["flightID"]))[0])
 
 
 class RequestBudgetTests(unittest.TestCase):
