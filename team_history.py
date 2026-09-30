@@ -473,7 +473,10 @@ def link_seasons(rows, manual):
         # Name, then club: every candidate list is computed before anything is linked, and a
         # candidate listed by two predecessors is linked to neither (M5).
         by_name = {(a, r["teamID"]): cands(r, lambda n, r=r: stem(n["name"]) == stem(r["name"])) for r in pend}
-        named = {c for cs in by_name.values() for c in cs}
+        # A team another predecessor lists by name is not a club candidate: the name is the
+        # stronger claim. At the regroup nothing is linked anyway, so every club team that
+        # ages correctly is offered (De Anza Force G12, #107 review).
+        named = set() if regroup else {c for cs in by_name.values() for c in cs}
         by_club = {(a, r["teamID"]): cands(r, lambda n, r=r: n["clubID"] == r["clubID"] and (b, n["teamID"]) not in named)
                    for r in pend if not by_name[(a, r["teamID"])] and r["clubID"] != NO_CLUB}
         for how, table in (("name", by_name), ("club", by_club)):
@@ -613,9 +616,14 @@ def depth(e):
 
 def best_and_titles(posts):
     """M3: the best Champions League finish (tier label, then depth, Finals above Playoffs, the
-    latest season), and every title, ranked by tier and stage. Indices into `posts`."""
+    better group place, the latest season), and every title, ranked by tier and stage. Indices
+    into `posts`."""
     cl = [i for i, e in enumerate(posts) if tier_rank(e["tier"]) == 4]
-    best = max(cl, key=lambda i: (depth(posts[i]), stage_rank(posts[i]["stage"]), posts[i]["season"]), default=None)
+
+    def place(e):   # a better group place ranks higher; no group counts as first
+        return -(e["group"]["pos"]) if e.get("group") else -1
+    best = max(cl, key=lambda i: (depth(posts[i]), stage_rank(posts[i]["stage"]), place(posts[i]), posts[i]["season"]),
+               default=None)
     titles = sorted((i for i, e in enumerate(posts) if e.get("champion")),
                     key=lambda i: (-tier_rank(posts[i]["tier"]), -stage_rank(posts[i]["stage"]), posts[i]["season"]))
     return best, titles
@@ -672,9 +680,16 @@ def build(sources=None, links_path=None):
         sq["seasons"] = chain
         sq["postseason"] = posts
         sq["showcases"] = [e for r in chain for e in shows.get((r["season"], r["teamID"]), [])]
-        m = maybe.get((last["season"], last["teamID"]))
+        lk = (last["season"], last["teamID"])
+        m = maybe.get(lk)
         if m:
             sq["maybe"] = [ref(c) for c in m]
+            # Outside the regroup a candidate is offered, not linked, because another
+            # predecessor could claim it too (M5): name those (#107 review).
+            for c, out in zip(m, sq["maybe"]):
+                rivals = [p for p in maybe_prev.get(c, []) if p != lk]
+                if c[0] != REGROUP and rivals:
+                    out["alsoClaimedBy"] = [{k: ref(p)[k] for k in ("season", "teamID", "name")} for p in rivals]
         mp = maybe_prev.get((first["season"], first["teamID"]))
         if mp:
             sq["maybePrev"] = [ref(c) for c in mp]

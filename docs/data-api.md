@@ -204,7 +204,8 @@ the first rule that applies:
    under the same conditions, when rule 3 found no candidate at all.
 
 Nothing is linked across the 2026-27 school-year regroup except an id TGS moved **up** an age
-group; a new id, or an id TGS kept in the **same** age group (a club keeping its ids in their
+group (and there, since nothing is linked by name or club, a club team is offered even when
+another predecessor lists it by name); a new id, or an id TGS kept in the **same** age group (a club keeping its ids in their
 age slots), is offered as a possible continuation (`maybe` / `maybePrev`) and never merged.
 Every candidate list is computed before anything is linked, so the links never depend on the
 order of the input rows. Normally a file holds one squad; an id TGS reused for an age slot
@@ -233,7 +234,11 @@ one that played in the link's season.
   group), `seasons`, `postseason`, `showcases`; optional `best` (index into `postseason` of
   the best Champions League finish: depth, then Finals above Playoffs, then the latest),
   `titles` (indexes of every title, by tier then stage), `maybe` and `maybePrev` (possible
-  continuations and predecessors: `season`, `teamID`, `name`, `division`, `conference`).
+  continuations and predecessors: `season`, `teamID`, `name`, `division`, `conference`). A
+  `maybe` entry outside the 2026-27 regroup that another predecessor could also claim (the
+  2024-25 Fairfax merger) carries `alsoClaimedBy` (`season`, `teamID`, `name` of each), and
+  the page names them: "… could also continue Fairfax BRAVE SC ECNL G10". Ties for the best
+  finish go to the better stage, then the better group place, then the latest season.
 - Season rows: the team index's identity fields plus `u`, `birthYears`, `rank` (position in
   the table after merging blocks, as the page does), `of` (table size), TGS's own `gp`, `w`,
   `d`, `l`, `pts`, `gf`, `ga`, `gd`, `ppg`, our `form` (last five, oldest first), `games` and

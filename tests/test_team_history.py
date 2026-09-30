@@ -53,13 +53,19 @@ def built():
     return th.build()
 
 
+_SEED = []
+
+
 def seed_history(out):
-    """A private copy of the history files: the committed ones, or (in a checkout without the
-    data commit) a fresh build. Tests never write into the checkout's own directory."""
-    if os.path.isdir(th.history_dir()):
-        shutil.copytree(th.history_dir(), out)
-    else:
-        th.write_history(out_dir=out)
+    """A private copy of a fresh build of the history files (built once per run), so these
+    tests depend neither on the committed data being present nor on it being current (that is
+    the drift test's job), and never write into the checkout's own directory."""
+    if not _SEED:
+        tmp = tempfile.mkdtemp()
+        unittest.addModuleCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        th.write_history(out_dir=os.path.join(tmp, "history"))
+        _SEED.append(os.path.join(tmp, "history"))
+    shutil.copytree(_SEED[0], out)
 
 
 def links_of(rows, manual=None):
@@ -145,6 +151,37 @@ class Built(unittest.TestCase):
             self.assertNotIn(pred, nxt)
             self.assertEqual(maybe[pred], [("2024-25", 96996)])
         self.assertEqual([p["teamID"] for p in self.squad_of("2024-25", 96996)["maybePrev"]], [68366, 69871])
+
+    def test_a_contested_continuation_names_the_other_claimant(self):
+        # Review Must-fix 1: the 10 Fairfax / VA Union predecessors (2023-24, club 4603). Each is
+        # offered its 2024-25 successor, and the page must be able to say who else could claim it.
+        contested = [(sq, m) for sq in self.squads for m in sq.get("maybe", []) if m.get("alsoClaimedBy")]
+        self.assertEqual(len(contested), 10)
+        for sq, m in contested:
+            last = sq["seasons"][-1]
+            self.assertEqual((last["season"], last["clubID"], m["season"]), ("2023-24", 4603, "2024-25"))
+            rivals = [(x["season"], x["teamID"]) for x in m["alsoClaimedBy"]]
+            self.assertNotIn((last["season"], last["teamID"]), rivals)
+            for x in m["alsoClaimedBy"]:
+                self.assertIn(m["teamID"], [c["teamID"] for c in self.squad_of(x["season"], x["teamID"])["maybe"]])
+        va = self.squad_of("2023-24", 69871)["maybe"]
+        self.assertEqual([(m["name"], [x["name"] for x in m["alsoClaimedBy"]]) for m in va],
+                         [("Fairfax VA Union ECNL G10", ["Fairfax BRAVE SC ECNL G10"])])
+        # At the regroup the reason is the regroup, not a rival: never named there.
+        self.assertFalse(any(m.get("alsoClaimedBy") for sq in self.squads for m in sq.get("maybe", []) if m["season"] == th.REGROUP))
+
+    def test_the_regroup_offers_club_teams_another_side_lists_by_name(self):
+        # Review: De Anza Force G12 (94620) kept its id in the same age group; the club's team one
+        # age group up is another predecessor's name candidate, and is offered here too.
+        sq = self.squad_of("2025-26", 94620)
+        self.assertEqual([(m["teamID"], m["division"]) for m in sq["maybe"]], [(69022, "GU15"), (94620, "GU14")])
+
+    def test_best_finish_ties_go_to_the_better_group_place(self):
+        # Review nit: equal depth and stage: the better group place, then the latest season.
+        for season, tid, want in (("2021-22", 46817, ("2022-23", 3)), ("2025-26", 82416, ("2023-24", 2))):
+            sq = self.squad_of(season, tid)
+            best = sq["postseason"][sq["best"]]
+            self.assertEqual((best["season"], best["group"]["pos"]), want, tid)
 
     def test_adding_a_season_never_changes_an_older_link(self):
         nxt, maybe, _ = links_of(self.rows)
@@ -273,7 +310,10 @@ class Built(unittest.TestCase):
                 self.assertLessEqual(set(e), EVENT_KEYS)
                 self.assertLessEqual(set(e.get("group") or {}), {"name", "pos", "of"})
             for m in sq.get("maybe", []) + sq.get("maybePrev", []):
-                self.assertEqual(set(m), REF_KEYS)
+                self.assertLessEqual(REF_KEYS, set(m))
+                self.assertLessEqual(set(m), REF_KEYS | {"alsoClaimedBy"})
+                for x in m.get("alsoClaimedBy", []):
+                    self.assertEqual(set(x), {"season", "teamID", "name"})
 
 
 class Overrides(unittest.TestCase):
