@@ -8,7 +8,8 @@ permissions:
 jobs:
   contract:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # 10 since #107: the team-history tests rebuild the histories a few times (about a minute).
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -19,7 +20,9 @@ jobs:
           python-version: '3.12'
       # The Node twin of the guard below (#90): tests/netguard/netguard.mjs refuses any
       # non-loopback connection, DNS lookup or fetch, and fails the run at exit.
-      - run: node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs
+      # tests/team-history.test.mjs runs team_history.py --parity itself (Python is set up above),
+      # under the Python guard, into a temporary directory in the checkout that it removes (#107).
+      - run: node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs
         env:
           HTTPS_PROXY: http://127.0.0.1:9
           HTTP_PROXY: http://127.0.0.1:9
@@ -33,3 +36,13 @@ jobs:
           HTTP_PROXY: http://127.0.0.1:9
           NETGUARD_REPORT: '1'
       - run: python reconstruct.py --check
+      # The team histories (#107) must equal a fresh build of the committed archive: a data
+      # change without its history rebuild, a builder change without regenerated files, or a
+      # team-links.json entry that no longer fits fails here. Writes nothing.
+      - run: python archive.py --team-history --check
+        env:
+          PYTHONPATH: tests/netguard
+          HTTPS_PROXY: http://127.0.0.1:9
+          HTTP_PROXY: http://127.0.0.1:9
+          ECNL_API_BASE: https://127.0.0.1:9
+          NETGUARD_REPORT: '1'

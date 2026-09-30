@@ -2074,6 +2074,94 @@
       border-radius: 2px;
       transition: width 0.2s ease;
     }
+
+    /* ===== #107: team history (the team page's History tab) ===== */
+    .hist-stack { container-type: inline-size; }
+    .hist-tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .hist-tile { padding: 14px 16px; border-right: 1px solid var(--border-light); min-width: 0; }
+    .hist-tile:last-child { border-right: 0; }
+    .hist-tile .stat-value { font-size: 19px; white-space: normal; overflow-wrap: anywhere; }
+    .hist-tile .stat-sub { white-space: normal; }
+    .hist-titles { padding: 10px 16px; border-top: 1px solid var(--border-light); font-size: 13px; line-height: 1.5; }
+    .hist-titles b { color: var(--gold); }
+    .hist-caption { padding: 8px 16px; border-top: 1px solid var(--border-light); font-size: 11.5px; color: var(--text-secondary); }
+    .hist-table-wrap { overflow-x: auto; }
+    .hist-table { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+    .hist-table th { padding: 8px 8px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;
+      color: var(--text-secondary); border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+    .hist-table th:first-child, .hist-table td:first-child { padding-left: 16px; }
+    .hist-table th:last-child, .hist-table td:last-child { padding-right: 16px; }
+    .hist-table td { padding: 10px 8px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+    .hist-table tr:last-child td { border-bottom: 0; }
+    .hist-table .num { text-align: right; white-space: nowrap; }
+    .hist-table tr.hist-live td, .hist-card.hist-live { background: var(--accent-surface); }
+    .hist-season { font-weight: 700; white-space: nowrap; }
+    .hist-name { font-size: 12px; color: var(--text-secondary); overflow-wrap: anywhere; }
+    .hist-pos { font-weight: 800; font-size: 15px; white-space: nowrap; }
+    .hist-pos.first { color: var(--gold); }
+    .hist-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .hist-badge { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.2px; white-space: nowrap; line-height: 1.5; }
+    .hist-badge.live { background: var(--accent-text); color: var(--accent-contrast); }
+    .hist-badge.soft { border: 1px dashed var(--text-secondary); color: var(--text-secondary); }
+    .hist-badge.plain { border: 1px solid var(--border); color: var(--text-secondary); }
+    .hist-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+    .hist-links a { font-size: 12px; font-weight: 600; color: var(--accent-text); text-decoration: none; white-space: nowrap; }
+    .hist-links a:hover { text-decoration: underline; }
+    .hist-form { display: flex; gap: 3px; }
+    .hist-cards { display: none; }
+    .hist-card { padding: 12px 16px; border-bottom: 1px solid var(--border-light); }
+    .hist-card:last-child { border-bottom: 0; }
+    .hist-card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .hist-card-line { margin-top: 3px; font-size: 12.5px; color: var(--text-secondary); overflow-wrap: anywhere; }
+    .hist-card-stats { margin-top: 6px; display: flex; gap: 6px 12px; flex-wrap: wrap; align-items: center; font-size: 13px; font-variant-numeric: tabular-nums; }
+    .hist-event { display: grid; grid-template-columns: 70px minmax(0, 1fr) auto; gap: 4px 14px; align-items: start;
+      padding: 12px 16px; border-bottom: 1px solid var(--border-light); }
+    .hist-event:last-child { border-bottom: 0; }
+    .hist-event-when { font-weight: 700; font-size: 13px; }
+    .hist-event-what { font-size: 13.5px; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+    .hist-event-sub { font-size: 12px; color: var(--text-secondary); font-weight: 400; margin-top: 2px; }
+    .hist-event-rec { text-align: right; font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .hist-event .hist-links { grid-column: 2 / 4; }
+    .hist-outcome { font-weight: 700; color: var(--text-primary); }
+    .hist-outcome.gold { color: var(--gold); }
+    .hist-note { padding: 12px 16px; font-size: 12px; line-height: 1.55; color: var(--text-secondary); border-top: 1px solid var(--border-light); }
+    .hist-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 10px 16px; border-top: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary); }
+    .hist-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .hist-maybe { padding: 14px 16px; border: 1px dashed var(--text-secondary); border-radius: var(--radius-md); background: var(--bg-surface); font-size: 13px; line-height: 1.55; overflow-wrap: anywhere; }
+    .hist-maybe strong { display: block; margin-bottom: 4px; }
+    .hist-maybe a { font-weight: 600; color: var(--accent-text); }
+    .hist-stale { padding: 10px 16px; border-radius: var(--radius-md); background: var(--gold-glow); border: 1px solid var(--gold); font-size: 13px; }
+    .hist-chart { padding: 12px 18px; border-bottom: 1px solid var(--border-light); }
+    .hist-chart svg { display: block; width: 100%; height: auto; margin-top: 6px; }
+    .hist-chart .ax { fill: var(--text-secondary); font-size: 10px; }
+    .hist-chart .ln { stroke: var(--accent-text); stroke-width: 2; fill: none; }
+    .hist-chart .dt { fill: var(--accent-text); stroke: var(--accent-text); stroke-width: 1.5; }
+    .hist-chart .dt.first { fill: var(--gold); stroke: var(--gold); }
+    .hist-chart .dt.live { fill: var(--bg-surface); }
+    .hist-chart .lbl { fill: var(--text-primary); font-size: 11px; font-weight: 700; }
+    .hist-chart .grid { stroke: var(--border-light); }
+    .hist-chart-key { margin-top: 4px; font-size: 11px; color: var(--text-secondary); }
+    .glance-panel .glance-actions + .glance-actions { border-top: 0; padding-top: 0; }
+    /* The season table needs about 700px; a narrower panel (the side card beside it at
+       1280px, 1100px, a phone) gets one card per season, and the tiles wrap (#107 M7). */
+    @container (max-width: 699px) {
+      .hist-table-wrap { display: none; }
+      .hist-cards { display: block; }
+      .hist-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .hist-tile:nth-child(3) { border-right: 0; }
+      .hist-tile:nth-child(n+4) { border-top: 1px solid var(--border-light); }
+    }
+    @container (max-width: 520px) {
+      .hist-tiles { grid-template-columns: 1fr 1fr; }
+      .hist-tile { border-right: 0; border-top: 1px solid var(--border-light); padding: 12px 14px; }
+      .hist-tile:nth-child(-n+2) { border-top: 0; }
+      .hist-tile:nth-child(odd) { border-right: 1px solid var(--border-light); }
+      .hist-tile:last-child:nth-child(odd) { grid-column: span 2; border-right: 0; }
+      .hist-event { grid-template-columns: 58px minmax(0, 1fr); }
+      .hist-event-rec { grid-column: 2; text-align: left; }
+      .hist-event .hist-links { grid-column: 2; }
+    }
   </style>
 </head>
 
@@ -2395,6 +2483,9 @@
     let showMoreStats = false;
     let currentFlightData = [];       // [{ flight, standings, games }] for the loaded conference + age group
     let previewTeam = null;           // a #tab=teams deep link to a team that isn't a favourite
+    let teamView = 'season';          // #107: a team page shows 'season' (as before) or 'history'
+    let teamViewFor = null;           // the team teamView belongs to: another team starts on 'season' (S11)
+    let teamToken = 0;                // drops a team page load that was superseded
     // Playoffs state
     let currentPlayoffStage = null;      // a key of the season's `national` map, e.g. "Playoffs & Finals"
     let currentPlayoffAgeGroup = null;
@@ -2802,7 +2893,8 @@
           (currentPlayoffTier ? `&tier=${e(currentPlayoffTier)}` : '') + view
         : currentTab === 'favorites'
         ? `#tab=teams&season=${e(currentSeason)}` +
-          (fav && fav.teamID ? `&team=${e(fav.teamID)}` : '') + (fav ? `&name=${e(fav.name)}` : '')
+          (fav && fav.teamID ? `&team=${e(fav.teamID)}` : '') + (fav ? `&name=${e(fav.name)}` : '') +
+          (teamView === 'history' ? '&view=history' : '')
         : `#season=${e(currentSeason)}&age=${e(currentAgeGroup)}&conf=${e(currentConference)}${view}` +
           (selectedTeamID ? `&team=${e(selectedTeamID)}` : '') +
           (scheduleFilter !== 'upcoming' ? `&sched=${e(scheduleFilter)}` : '');
@@ -2822,6 +2914,9 @@
         const name = p.get('name') || null;
         let rec = [...favoriteMeta.values()].find(r => (teamID && r.teamID === teamID) || (name && r.name === name));
         previewTeam = null;
+        // #107: History only for the team this link names (S11).
+        teamView = p.get('view') === 'history' ? 'history' : 'season';
+        teamViewFor = { id: teamID, name };
         if (!rec && (teamID || name)) {
           // Not one of this browser's favourites: show it anyway, resolved from
           // the archive, without adding it to the list.
@@ -4584,7 +4679,10 @@
     // the team's own games, and its post-season games when it played any.
     async function loadTeamSummary(rec) {
       const container = document.getElementById('standingsContainer');
-      document.getElementById('viewTabs').style.display = 'none';
+      if (!sameTeam(teamViewFor, rec)) teamView = 'season';   // #107 S11
+      teamViewFor = { id: rec.teamID, name: rec.name };
+      const token = ++teamToken;
+      showTeamViewTabs();
       document.getElementById('formatNote').style.display = 'none';
       document.getElementById('extLinks').innerHTML = '';
       document.getElementById('breadcrumb').innerHTML =
@@ -4596,7 +4694,8 @@
       container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading ${esc(rec.name || 'team')}…</div></div>`;
 
       try {
-        const found = await resolveFavorite(rec);
+        const found = (teamView === 'history' && rec.teamID) || await resolveFavorite(rec);
+        if (token !== teamToken) return;
         if (!found) {
           document.getElementById('contentSubtitle').textContent = 'Not found in the archived seasons';
           container.innerHTML = `<div class="error-message">
@@ -4612,6 +4711,7 @@
           currentSeason = ctx.season;
           syncSeasonUI();
         }
+        if (teamView === 'history') { await loadTeamHistory(rec, ctx.season, token); return; }   // #107
 
         const hierarchy = await getEventHierarchy(rec.eventID);
         const division = (hierarchy.girlsDivAndFlightList || []).find(d => d.divisionID === rec.divisionID);
@@ -4626,6 +4726,7 @@
           getSchedule(rec.eventID, rec.flightID).catch(e => { if (!isMissing(e)) gamesError = e; return []; }),
           loadClubPlaces(),
         ]);
+        if (token !== teamToken) return;
         const teams = standings.teamStandings || [];
         teams.forEach((t, i) => { t._origRank = i + 1; });
         const idx = teams.findIndex(t => rec.teamID ? t.teamID === rec.teamID : t.name === rec.name);
@@ -4750,6 +4851,328 @@
       saveState();
       pushHash();
     }
+
+
+    // ========== TEAM HISTORY (#107) ==========
+    // One squad across seasons and events, from /api/v1/teams/{teamID}/history: one request,
+    // kept for the session. Built by team_history.py from the archive (docs/data-api.md, "Team
+    // history"). As getTeamIndex (#92): a 404 or an unknown schema means "no history" and is
+    // kept for the session; a refusal (429 or another 4xx) rejects with "try again" and is
+    // remembered for a minute, or, if it said "none", until the session comes back; a 503, a
+    // network error or bad JSON rejects and is forgotten at once. Never a fallback request.
+    const teamHistoryMemo = {};
+    const teamHistoryMissing = new Set();   // ids the route answered 404 (or an unknown schema) for
+    function getTeamHistory(teamID) {
+      if (LIVE) return Promise.resolve(null);
+      const memo = teamHistoryMemo[teamID];
+      const stale = memo && memo.until && (Date.now() >= memo.until || (memo.none && sessionBackAt > memo.at));
+      if (memo && !stale) return memo.p;
+      const entry = { until: 0 };
+      entry.p = fetchJSON(`teams/${encodeURIComponent(teamID)}/history`)
+        .then(d => {
+          const ok = d && d.schema === 1 && String(d.teamID) === String(teamID) && Array.isArray(d.squads);
+          if (!ok) teamHistoryMissing.add(String(teamID));
+          return ok ? d : null;
+        })
+        .catch(e => {
+          if (isMissing(e)) { teamHistoryMissing.add(String(teamID)); return null; }
+          if (teamHistoryMemo[teamID] === entry) {
+            if (isRefusal(e)) Object.assign(entry, { at: e.sentAt, until: Date.now() + 60000, none: e.session === 'none' });
+            else delete teamHistoryMemo[teamID];
+          }
+          throw e;
+        });
+      teamHistoryMemo[teamID] = entry;
+      return entry.p;
+    }
+    function historyAvailable(teamID) {
+      return !LIVE && teamID != null && !teamHistoryMissing.has(String(teamID));
+    }
+
+    function sameTeam(a, rec) {
+      return !!(a && rec && ((a.id && rec.teamID && String(a.id) === String(rec.teamID)) || (a.name && a.name === rec.name)));
+    }
+
+    // The team page's view tabs: This season | History.
+    function showTeamViewTabs() {
+      document.getElementById('viewTabs').style.display = '';
+      const s = document.getElementById('viewTabStandings'), c = document.getElementById('viewTabSchedule');
+      s.textContent = 'This season'; c.textContent = 'History';
+      s.classList.toggle('active', teamView !== 'history'); s.setAttribute('aria-selected', String(teamView !== 'history'));
+      c.classList.toggle('active', teamView === 'history'); c.setAttribute('aria-selected', String(teamView === 'history'));
+    }
+
+    function selectTeamView(v) {
+      const leavingSearch = globalSearchActive;
+      if (leavingSearch) clearGlobalSearch({ reload: false });
+      else if (v === teamView) return;
+      teamView = v;
+      const rec = currentFavorite ? (favoriteMeta.get(currentFavorite) || { name: currentFavorite }) : previewTeam;
+      if (!rec) return;
+      teamViewFor = { id: rec.teamID, name: rec.name };
+      loadTeamSummary(rec);
+    }
+
+    // "born 2011", or "born 2010/11" for a squad seen only in a two-year age group (S2).
+    function historyYears(years) {
+      if (!years || !years.length) return '';
+      return years.length === 1 ? String(years[0]) : `${years[0]}/${String(years[years.length - 1]).slice(-2)}`;
+    }
+
+    function ordinal(n) {
+      const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+
+    // What a post-season entry says: M4 (a "Runner-up" only against a decided champion) and the
+    // builder's round names. `short` is the tile's value.
+    function historyOutcome(e) {
+      if (e.champion) return { text: '🏆 Champion', short: 'Champion', gold: true };
+      if (e.final === 'lost') return { text: 'Runner-up', short: 'Runner-up', gold: true };
+      if (e.final === 'undecided') {
+        return { text: `Reached the Final (${e.inProgress ? 'to play' : 'no result published'})`, short: 'Final' };
+      }
+      if (/showcase games/i.test(e.tier || '')) return { text: 'No title at stake', short: 'Showcase games' };
+      const grp = e.group ? `${ordinal(e.group.pos)} of ${e.group.of}${e.group.name ? ` in ${e.group.name}` : ''}` : '';
+      if (e.reached) {
+        const round = e.reached === 'First round' ? 'first round' : e.reached;
+        return { text: grp ? `${grp}, then the ${round}` : `Reached the ${round}`, short: e.reached };
+      }
+      if (grp) return { text: `Group stage · ${grp}`, short: 'Group stage' };
+      return { text: 'Played', short: 'Played' };
+    }
+
+    function historyChartSvg(rows) {
+      const W = 264, H = 122, L = 26, R = 16, T = 18, B = 26;
+      const n = rows.length, maxOf = Math.max(...rows.map(r => r.of || 1), 2);
+      const x = i => n === 1 ? (L + W - R) / 2 : L + i * (W - L - R) / (n - 1);
+      const y = p => T + (p - 1) * (H - T - B) / (maxOf - 1);
+      const pts = rows.map((r, i) => [x(i), y(r.rank)]);
+      const label = 'Conference finishing position by season: ' + rows.map(r =>
+        `${seasonLabel(r.season)} ${ordinal(r.rank)} of ${r.of}${r.inProgress ? ' so far' : ''}`).join('; ');
+      return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">
+        <line class="grid" x1="${L}" x2="${W - R}" y1="${y(1)}" y2="${y(1)}"/><text class="ax" x="0" y="${y(1) + 3}">1st</text>
+        <line class="grid" x1="${L}" x2="${W - R}" y1="${y(maxOf)}" y2="${y(maxOf)}"/><text class="ax" x="0" y="${y(maxOf) + 3}">${ordinal(maxOf)}</text>
+        ${n > 1 ? `<polyline class="ln" points="${pts.map(p => p.join(',')).join(' ')}"/>` : ''}
+        ${rows.map((r, i) => `<circle class="dt${r.rank === 1 && !r.inProgress ? ' first' : ''}${r.inProgress ? ' live' : ''}" cx="${pts[i][0]}" cy="${pts[i][1]}" r="4.5"/>
+          <text class="lbl" x="${pts[i][0]}" y="${pts[i][1] - 8}" text-anchor="middle">${r.rank}</text>
+          <text class="ax" x="${pts[i][0]}" y="${H - 8}" text-anchor="middle">${esc(r.season.slice(2))}</text>`).join('')}
+      </svg>`;
+    }
+
+    async function loadTeamHistory(rec, season, token) {
+      const container = document.getElementById('standingsContainer');
+      document.getElementById('contentSubtitle').textContent = 'Loading its history…';
+      container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading the history…</div></div>`;
+      let data;
+      try { [data] = await Promise.all([getTeamHistory(rec.teamID), loadClubPlaces()]); }
+      catch (e) {
+        if (token !== teamToken) return;
+        document.getElementById('contentSubtitle').textContent = '';
+        const box = loadWarning(e, () => loadTeamSummary(rec));
+        box.querySelector('strong').textContent = "The history couldn't load.";   // S5
+        container.innerHTML = '';
+        container.appendChild(box);
+        saveState(); pushHash();
+        return;
+      }
+      if (token !== teamToken) return;
+      if (!data || !data.squads.length) {
+        document.getElementById('contentSubtitle').textContent = '';
+        container.innerHTML = `<div class="error-message"><strong>No season-by-season history for this team.</strong><br><small>Only teams in an ECNL conference table have one.</small></div>`;
+        saveState(); pushHash();
+        return;
+      }
+      renderTeamHistory(rec, season, data);
+      saveState(); pushHash();
+    }
+
+    function renderTeamHistory(rec, season, data) {
+      const container = document.getElementById('standingsContainer');
+      const id = String(rec.teamID);
+      const mineIn = q => q.seasons.filter(r => String(r.teamID) === id);
+      // The squad that played this season under this id; else the one it played for last.
+      const latest = q => (mineIn(q).slice(-1)[0] || { season: '' }).season;
+      const sq = data.squads.find(q => mineIn(q).some(r => r.season === season))
+        || data.squads.slice().sort((a, b) => latest(b).localeCompare(latest(a)))[0];
+      const rows = sq.seasons, last = rows[rows.length - 1];
+      const here = mineIn(sq).find(r => r.season === season) || mineIn(sq).slice(-1)[0] || last;
+      if (previewTeam === rec && /^Team \d+$/.test(rec.name || '')) rec.name = here.name;   // a link without &name=
+      const followed = !!currentFavorite;
+      const open = (SOURCES && SOURCES.refresh && SOURCES.refresh.activeSeason) || Object.keys(SEASONS)[0];
+      const ended = last.season !== open;
+      const short = shortTeamName(last.name) || last.clubName;
+      const place = sq.clubID !== 7 ? clubPlaceText(sq.clubID) : '';
+      const years = historyYears(sq.birthYears);
+      const logo = last.logo ? `<img class="team-title-logo" src="${esc(last.logo)}" alt="" onerror="this.style.display='none'">` : '';
+      const span = rows.length === 1 ? seasonLabel(last.season) : `${seasonLabel(rows[0].season)} to ${seasonLabel(last.season)}`;
+
+      document.getElementById('breadcrumb').innerHTML =
+        `<span>${esc(season)}</span><span class="breadcrumb-sep">›</span>` + (followed ? `<span>My Teams</span><span class="breadcrumb-sep">›</span>` : '') +
+        `<span>${esc(here.name)}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">History</span>`;
+      document.getElementById('contentTitle').innerHTML = logo + esc(`${short} · born ${years}`);
+      document.getElementById('contentSubtitle').textContent = [place,
+        `${rows.length} season${rows.length === 1 ? '' : 's'} in ECNL (${span})`,
+        ended ? `Last seen ${seasonLabel(last.season)}` : `now ${last.name}`].filter(Boolean).join(' · ');
+      document.getElementById('extLinks').innerHTML =
+        `<a class="open-external" href="${getStandingsUrl(last.eventID, last.flightID)}" target="_blank" rel="noopener">${EXTERNAL_ICON} ${ended ? 'Last' : 'Latest'} table on TGS</a>`;
+
+      const layout = document.createElement('div');
+      layout.className = 'conf-layout';
+      const stack = document.createElement('div');
+      stack.className = 'conf-main summary-stack hist-stack';
+      const aside = document.createElement('aside');
+      aside.className = 'glance-panel';
+      aside.setAttribute('aria-label', 'Squad at a glance');
+      layout.append(stack, aside);
+      container.innerHTML = '';
+      container.appendChild(layout);
+      const add = (cls, html) => { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; stack.appendChild(d); return d; };
+
+      // Built from older data than the page shows (a failed rebuild; docs/data-api.md).
+      const st = refreshState || {};
+      if (st.historyAsOf && st.updatedAt && st.historyAsOf !== st.updatedAt) {
+        add('hist-stale', `History as of ${esc(formatObservedDate(st.historyAsOf))}: results since then aren't in it yet.`);
+      }
+
+      // Totals: ours, summed from TGS's standings rows; first places count finished seasons (M2).
+      const live = rows.some(r => r.inProgress);
+      const sum = k => rows.reduce((a, r) => a + (r[k] || 0), 0);
+      const firsts = rows.filter(r => r.rank === 1 && !r.inProgress);
+      const posts = sq.postseason || [];
+      const best = sq.best != null ? posts[sq.best] : null;
+      const bestOut = best ? historyOutcome(best) : null;
+      const gd = sum('gf') - sum('ga');
+      const titles = (sq.titles || []).map(i => posts[i]).filter(Boolean);
+      add('flight-panel', `<div class="hist-tiles">
+        <div class="hist-tile"><div class="stat-label">Seasons</div><div class="stat-value">${rows.length}</div>
+          <div class="stat-sub">${esc(span)}</div></div>
+        <div class="hist-tile"><div class="stat-label">First-place finishes</div><div class="stat-value">${firsts.length}</div>
+          <div class="stat-sub">${firsts.length ? esc(firsts.map(r => seasonLabel(r.season)).join(', ')) : 'Finished seasons only'}</div></div>
+        <div class="hist-tile"><div class="stat-label">Conference record</div><div class="stat-value">${sum('w')}-${sum('d')}-${sum('l')}</div>
+          <div class="stat-sub">W-D-L · ${sum('gp')} games${live ? ' · incl. this season' : ''}</div></div>
+        <div class="hist-tile"><div class="stat-label">Conference goals</div><div class="stat-value">${sum('gf')}–${sum('ga')}</div>
+          <div class="stat-sub">${gd >= 0 ? '+' : ''}${gd} difference</div></div>
+        <div class="hist-tile"><div class="stat-label">Best Champions League finish</div><div class="stat-value">${bestOut ? esc(bestOut.short) : '—'}</div>
+          <div class="stat-sub">${best ? esc(`${seasonLabel(best.season)} · ${best.stage}`) : 'No Champions League games'}</div></div>
+      </div>` + (titles.length ? `<div class="hist-titles"><b>🏆 ${titles.length === 1 ? 'Title' : `${titles.length} titles`}:</b> ${titles.map(e =>
+        esc(`${e.tier}${/finals/i.test(e.tier) ? '' : `, ${e.stage}`} ${seasonLabel(e.season)}`)).join(' · ')}</div>` : '') +
+        `<div class="hist-caption">Totals are ours, added up from TGS's conference standings.</div>`);
+
+      const refLink = p => `<a href="${pageHref(p, true)}">${esc(p.name)}</a> (${esc(seasonLabel(p.season))}, ${esc(p.conference)}, ${esc(getAgeLabel(p.division, p.season))})`;
+      if (data.squads.length > 1) {
+        const others = data.squads.filter(q => q !== sq);
+        add('hist-maybe', `<strong>One TGS id, ${data.squads.length} squads</strong>TGS used team id ${esc(id)} for an age slot rather than for one group of players, so it belongs to more than one squad. This page follows the squad born ${esc(years)} that played in ${esc(seasonLabel(here.season))}. Also: ` +
+          others.map(q => { const r0 = mineIn(q)[0] || q.seasons[0]; return `<a href="${pageHref(r0, true)}">born ${esc(historyYears(q.birthYears))} (${esc(seasonLabel(r0.season))})</a>`; }).join(', ') + '.');
+      }
+      if (sq.maybePrev && sq.maybePrev.length) {
+        const rg = rows[0].regroup;
+        add('hist-maybe', `<strong>Earlier seasons not confirmed</strong>${rg
+          ? `In ${esc(seasonLabel(rows[0].season))} ECNL regrouped ages by school year, and TGS gave this team a new id or kept the id in its age group, so we can't tell which earlier team it continues.`
+          : `TGS gave this team a new id, and more than one earlier team could be its predecessor.`} Possibly: ` +
+          sq.maybePrev.map(refLink).join(' or ') + '.');
+      }
+
+      // Season by season: a table on a wide panel, one card per season on a narrow one.
+      const posHtml = r => `<span class="hist-pos${r.rank === 1 && !r.inProgress ? ' first' : ''}">${r.rank}${r.merged ? '†' : ''}<span class="stat-of"> / ${r.of}</span></span>`;
+      const formHtml = r => r.form ? `<span class="hist-form" aria-label="Last ${r.form.length} results, oldest first: ${esc([...r.form].join(' '))}">${[...r.form].map(x => `<span class="form-chip inline ${x.toLowerCase()}" aria-hidden="true">${x}</span>`).join('')}</span>` : '';
+      // S7: each label is explained in a visible legend under the table, not only in a tooltip.
+      const BADGES = {
+        live: ['live', 'In progress', r => `${r.played} of ${r.games} games played`, 'the season is still being played'],
+        regroup: ['plain', 'school-year regroup', () => 'From 2026–27 ECNL groups ages by school year', 'from 2026–27 an age group spans two birth years'],
+        name: ['soft', 'linked by name', () => 'TGS gave this team a new id; linked by its name and birth year', 'a new TGS id, linked by name and birth year'],
+        club: ['soft', 'linked by club', () => "TGS gave this team a new id and name; linked as the club's only team of this birth year", "a new id and name, linked as the club's only team of that birth year"],
+        manual: ['soft', 'linked by review', () => 'Linked by hand after review', 'linked by hand after review'],
+        moved: ['plain', 'moved from …', () => 'Changed conference from the season before', 'changed conference'],
+      };
+      const used = new Set();
+      const badge = (k, r, text) => { used.add(k); const [cls, label, tip] = BADGES[k]; return `<span class="hist-badge ${cls}" title="${esc(tip(r))}">${esc(text || label)}</span>`; };
+      const badges = (r, i) => [r.inProgress ? badge('live', r) : '', r.regroup ? badge('regroup', r) : '',
+        ['name', 'club', 'manual'].includes(r.link) ? badge(r.link, r) : '',
+        i > 0 && rows[i - 1].conference !== r.conference ? badge('moved', r, `moved from ${rows[i - 1].conference}`) : ''].filter(Boolean).join('');
+      const links = r => `<span class="hist-links"><a href="${confHref(r)}">Table</a><a href="${pageHref(r)}" title="That season's team page">Team page</a>` +
+        `<a href="${getStandingsUrl(r.eventID, r.flightID)}" target="_blank" rel="noopener">TGS</a></span>`;
+      const age = r => getAgeLabel(r.division, r.season);
+      const conf = r => esc(r.conference) + (r.flightName && !/^(ECNL|Flight 1)$/i.test(r.flightName) ? ` <span class="hist-name">· ${esc(r.flightName)}</span>` : '');
+      const signed = v => v == null ? '—' : `${v > 0 ? '+' : ''}${v}`;
+      const tableRows = rows.map((r, i) => { const b = badges(r, i); return `<tr class="${r.inProgress ? 'hist-live' : ''}">
+          <td><div class="hist-season">${esc(seasonLabel(r.season))}</div><div class="hist-name">${esc(r.name)} · ${esc(age(r))}</div>${b ? `<div class="hist-badges">${b}</div>` : ''}${links(r)}</td>
+          <td>${conf(r)}</td><td class="num">${posHtml(r)}</td><td class="num">${r.gp ?? '—'}</td><td class="num">${r.w}-${r.d}-${r.l}</td>
+          <td class="num">${r.gf ?? '—'}–${r.ga ?? '—'}</td><td class="num">${signed(r.gd)}</td><td class="num"><b>${r.pts ?? '—'}</b></td><td>${formHtml(r)}</td></tr>`; }).join('');
+      const cards = rows.map((r, i) => { const b = badges(r, i); return `<div class="hist-card${r.inProgress ? ' hist-live' : ''}">
+          <div class="hist-card-top"><span class="hist-season">${esc(seasonLabel(r.season))}</span>${posHtml(r)}</div>
+          <div class="hist-card-line">${conf(r)} · ${esc(age(r))} · ${esc(r.name)}</div>${b ? `<div class="hist-badges">${b}</div>` : ''}
+          <div class="hist-card-stats"><span><b>${r.pts ?? '—'}</b> pts</span><span>${r.gp ?? '—'} GP</span><span>${r.w}-${r.d}-${r.l}</span><span>${r.gf ?? '—'}–${r.ga ?? '—'} (${signed(r.gd)})</span>${formHtml(r)}</div>
+          ${links(r)}</div>`; }).join('');
+      const legend = [...used].map(k => { const [cls, label, , meaning] = BADGES[k]; return `<span><span class="hist-badge ${cls}">${esc(label)}</span>${esc(meaning)}</span>`; }).join('');
+      add('flight-panel', `<div class="flight-header"><div class="flight-title">Season by season</div><span class="flight-team-count">Conference tables</span></div>
+        <div class="hist-table-wrap"><table class="hist-table"><caption class="sr-only">Season by season, conference tables</caption>
+          <thead><tr><th scope="col">Season</th><th scope="col">Conference</th><th scope="col" class="num" title="Position in the conference table">Pos</th><th scope="col" class="num" title="Games played">GP</th>
+            <th scope="col" class="num">W-D-L</th><th scope="col" class="num">Goals</th><th scope="col" class="num" title="Goal difference">GD</th><th scope="col" class="num">Pts</th><th scope="col">Form</th></tr></thead>
+          <tbody>${tableRows}</tbody></table></div>
+        <div class="hist-cards">${cards}</div>
+        ${legend ? `<div class="hist-legend" aria-label="What the labels mean">${legend}</div>` : ''}
+        <div class="hist-note">Pos is the team's place in its conference table in TGS's published order${rows.some(r => r.merged) ? `, except where marked †: one of the 11 tables (2020-21 to 2022-23) TGS published in two blocks, which we merge by points per game` : ''}.
+          GP, W-D-L, goals and points are TGS's standings; form is ours, from TGS's scores (oldest first).${live ? ` "In progress" is as of ${esc(st.updatedAt ? formatObservedDate(st.updatedAt) : 'the last refresh')}.` : ''}</div>`);
+
+      if (sq.maybe && sq.maybe.length) {
+        const rg = sq.maybe.some(p => p.season === '2026-27') && last.season !== '2026-27';
+        add('hist-maybe', `<strong>What happened next is not confirmed</strong>${rg
+          ? `From ${esc(seasonLabel(sq.maybe[0].season))} ECNL groups ages by school year. TGS gave this club's teams new ids, or kept each id in its age group, so we can't tell which team continues this one.`
+          : `TGS gave the next season's teams new ids, and more than one could continue this one.`} Possibly: ` +
+          sq.maybe.map(refLink).join(' or ') + '.');
+      }
+
+      const eventPanel = (title, count, items, note) => add('flight-panel',
+        `<div class="flight-header"><div class="flight-title">${esc(title)}</div><span class="flight-team-count">${esc(count)}</span></div>${items}` +
+        (note ? `<div class="hist-note">${note}</div>` : ''));
+      const natStage = e => Object.keys(NATIONAL_EVENTS[e.season] || {}).find(k => NATIONAL_EVENTS[e.season][k].eventId === e.eventID) || e.stage;
+      eventPanel('Playoffs and Finals', posts.length ? `${posts.length} appearance${posts.length === 1 ? '' : 's'}` : 'None yet', posts.length
+        ? posts.map(e => {
+          const o = historyOutcome(e);
+          const href = `#tab=playoffs&season=${encodeURIComponent(e.season)}&stage=${encodeURIComponent(natStage(e))}&age=${encodeURIComponent(e.division)}&tier=${encodeURIComponent(e.flightID)}`;
+          const notes = [e.cup, e.reconstructed ? 'reconstructed from ECNL recaps' : '',
+            e.fromTable ? "TGS didn't publish the group games: the record uses its group table" : e.dataGap ? "TGS's data for this flight is incomplete" : '',
+            e.inProgress ? 'in progress' : ''].filter(Boolean);
+          return `<div class="hist-event"><div class="hist-event-when">${esc(seasonLabel(e.season))}</div>
+            <div class="hist-event-what">${esc(e.stage)} · ${esc(e.tier)}<div class="hist-event-sub"><span class="hist-outcome${o.gold ? ' gold' : ''}">${esc(o.text)}</span>${notes.length ? ` · ${esc(notes.join(' · '))}` : ''}</div></div>
+            <div class="hist-event-rec">${e.w}-${e.d}-${e.l} · ${e.gf}–${e.ga}</div>
+            <span class="hist-links"><a href="${href}">${/showcase games/i.test(e.tier) ? 'Results' : 'Bracket'}</a><a href="${getStandingsUrl(e.eventID, e.flightID)}" target="_blank" rel="noopener">TGS</a></span></div>`;
+        }).join('')
+        : `<div class="hist-note">No Playoffs or Finals games in the archive for this squad.</div>`,
+        posts.length ? "W-D-L and goals are ours, from TGS's scores; a shoot-out win counts as a win (W) and a shoot-out loss as a loss (L). Rounds and titles are worked out from the bracket, as on the Playoffs page." : '');
+
+      const shows = sq.showcases || [];
+      if (shows.length) eventPanel('Showcases', `${shows.length} attended`, shows.map(e => {
+        const href = `#tab=showcases&season=${encodeURIComponent(e.season)}&event=${encodeURIComponent(e.eventID)}&age=${encodeURIComponent(e.division)}&flight=${encodeURIComponent(e.flightID)}`;
+        return `<div class="hist-event"><div class="hist-event-when">${esc(seasonLabel(e.season))}</div>
+          <div class="hist-event-what">${esc(e.stage)}<div class="hist-event-sub">${esc([formatDateRange(e.startDate, e.endDate), e.location].filter(Boolean).join(' · '))}</div></div>
+          <div class="hist-event-rec">${e.w}-${e.d}-${e.l} · ${e.gf}–${e.ga}</div>
+          <span class="hist-links"><a href="${href}">Results</a><a href="${getSchedulesUrl(e.eventID, e.flightID)}" target="_blank" rel="noopener">TGS</a></span></div>`;
+      }).join(''), "Showcase games don't count toward any table. W-D-L is ours, from TGS's scores.");
+
+      const how = [...new Set(rows.slice(1).map(r => r.link))];
+      const linkedBy = !how.length ? '—' : how.every(h => h === 'id') ? 'TGS team id' : how.map(h => ({ id: 'id', name: 'name', club: 'club', manual: 'review' })[h]).join(', ');
+      aside.innerHTML = `
+        <div class="glance-head">
+          <div class="glance-eyebrow">Squad at a glance</div>
+          <div class="glance-name">${last.logo ? `<img class="team-logo" src="${esc(last.logo)}" alt="" onerror="this.style.display='none'">` : ''}<span title="${esc(last.name)}">${esc(short)}</span></div>
+          <div class="glance-meta">Girls born ${esc(years)}${place ? ` · ${esc(place)}` : ''}</div>
+          <div class="glance-meta">${ended ? `Last seen ${esc(seasonLabel(last.season))}` : 'Now'}: ${esc(last.conference)} · ${esc(getAgeLabel(last.division, last.season))}</div>
+          <div class="glance-follow">${starButton({ name: last.name, teamID: last.teamID, clubID: last.clubID, clubName: last.clubName, eventID: last.eventID, divisionID: last.divisionID, division: last.division, flightID: last.flightID, clublogo: last.logo }, { label: true })}</div>
+        </div>
+        <div class="hist-chart"><div class="stat-label">Conference finishing position</div>${historyChartSvg(rows)}
+          <div class="hist-chart-key">1st at the top.${live ? ' A hollow dot: season in progress.' : ''}</div></div>
+        <dl class="glance-dl" style="padding-top:12px">
+          <dt>Linked by</dt><dd>${esc(linkedBy)}</dd>
+          <dt>Names used</dt><dd>${new Set(rows.map(r => r.name)).size}</dd>
+          <dt>Conferences</dt><dd>${esc([...new Set(rows.map(r => r.conference))].join(', '))}</dd>
+          <dt>Showcases</dt><dd>${shows.length}</dd>
+        </dl>
+        <div class="glance-actions"><a class="glance-link" href="${pageHref(last)}">${esc(seasonLabel(last.season))} team page →</a></div>`;
+    }
+    const confHref = r => `#season=${encodeURIComponent(r.season)}&age=${encodeURIComponent(r.division)}&conf=${encodeURIComponent(r.conference)}&team=${encodeURIComponent(r.teamID)}`;
+    const pageHref = (r, history) => `#tab=teams&season=${encodeURIComponent(r.season)}&team=${encodeURIComponent(r.teamID)}&name=${encodeURIComponent(r.name)}${history ? '&view=history' : ''}`;
 
     // ========== STANDINGS RENDERING ==========
     // One column config drives every standings table: the conference tables,
@@ -5069,6 +5492,7 @@
     }
 
     function selectView(view) {
+      if (currentTab === 'favorites') { selectTeamView(view === 'schedule' ? 'history' : 'season'); return; }   // #107
       // Leaving search mode: the results panel owns the breadcrumb, title and
       // container, so rebuild the view with one loadCurrentView (fetches are
       // memoised) instead of clearGlobalSearch's own reload plus a render here.
@@ -5403,6 +5827,12 @@
       const link = ctx.link && ctx.season
         ? `<div class="glance-actions"><a class="glance-link" href="#tab=teams&season=${encodeURIComponent(ctx.season)}&team=${encodeURIComponent(team.teamID)}&name=${encodeURIComponent(team.name)}">Full team page →</a></div>`
         : '';
+      // #107: every conference team has a history file (tests/test_team_history.py); the link
+      // is left out where there is none: ?live=1 (no route), or an id the route answered 404 for.
+      const histSeason = ctx.season || currentSeason;
+      const histLink = historyAvailable(team.teamID)
+        ? `<div class="glance-actions"><a class="glance-link" href="#tab=teams&season=${encodeURIComponent(histSeason)}&team=${encodeURIComponent(team.teamID)}&name=${encodeURIComponent(team.name)}&view=history">Season-by-season history →</a></div>`
+        : '';
 
       return `
         <div class="glance-head">
@@ -5436,7 +5866,7 @@
             <dt>Points per game</dt><dd>${row ? (row.ppg || 0).toFixed(2) : '—'}</dd>
           </dl>
         </details>
-        ${link}`;
+        ${link}${histLink}`;
     }
 
     // From a search result: land on the team's conference page with it selected.

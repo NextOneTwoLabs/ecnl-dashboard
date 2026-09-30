@@ -22,8 +22,9 @@ lock.
 | `/api/v1/events/{eventId}/flights/{flightId}/schedule` | Schedule envelope, all clubs in that flight |
 | `/api/v1/seasons/{season}/teams` | Team index for one season (derived; see below): `public/archive/teams/{season}.json` |
 | `/api/v1/clubs` | Club places, every season (derived; see below): `public/archive/clubs.json` |
+| `/api/v1/teams/{teamId}/history` | One team's squad history across every season and event (derived; see below): `public/archive/history/{teamId}.json` |
 
-Apart from the team index and the club places, success bodies are the original JSON bytes. Existing
+Apart from the team index, the club places and the team histories, success bodies are the original JSON bytes. Existing
 envelopes (`data` where present), field names/casing, array order, null values,
 IDs, empty groups, and reconstructed match metadata (`source`, `reconstructed`,
 negative match IDs) are preserved. No wrapping, merging, sorting, or date
@@ -180,6 +181,151 @@ a team, and only alongside the tables when the card will show one at once (a
 opened). No place (null, a club not in the file, or the file not loaded yet) shows
 nothing. A 404 is kept for the session; any other failure shows nothing and is
 retried at most once a minute. `?live=1` never requests it.
+
+### Team history (`/api/v1/teams/{teamId}/history`)
+
+Also **derived** (#107): `team_history.py` builds one file per TGS team id that appears in
+any conference table, from the archive alone (team indexes, conference standings and
+schedules, national schedules and standings, showcase schedules; no upstream requests).
+The team page's **History** tab reads it with one request. `teamId` is validated like every
+id (`01`, `0`, `-1`, `abc` get 400); an id with no file (a team seen only at a national event
+or a showcase, such as an RL team) gets a JSON 404.
+
+**Squads.** A file lists every *squad* its id belongs to. A squad is one group of players
+followed season to season: a chain of conference team-seasons, each linked to the next by
+the first rule that applies:
+
+1. `manual`: an entry in `public/data/team-links.json` (below).
+2. `id`: the same TGS team id, and the age group moves up by one (from 2026-27, when ECNL
+   grouped ages by school year, the old birth year must also be in the new two-year band).
+3. `name`: a new id with the same name once the age token and "ECNL" are removed, the only
+   such candidate, and claimed by no other predecessor.
+4. `club`: a new id in the same club (never TGS's placeholder club 7, "No Club Selection"),
+   under the same conditions, when rule 3 found no candidate at all.
+
+Nothing is linked across the 2026-27 school-year regroup except an id TGS moved **up** an age
+group; a new id, or an id TGS kept in the **same** age group (a club keeping its ids in their
+age slots), is offered as a possible continuation (`maybe` / `maybePrev`) and never merged.
+Every candidate list is computed before anything is linked, so the links never depend on the
+order of the input rows. Normally a file holds one squad; an id TGS reused for an age slot
+(2020-22, and the same-age carries of 2026-27) holds two or three, and the page follows the
+one that played in the link's season.
+
+```json
+{"schema":1,"teamID":55477,"squads":[
+{"clubID":294,"clubName":"MVLA","birthYears":[2011],"best":2,"seasons":[
+{"season":"2023-24","teamID":55477,"name":"MVLA ECNL G11",…,"rank":1,"of":10,"gp":18,"w":15,"d":2,"l":1,"pts":47,"gf":47,"ga":5,"gd":42,"ppg":2.61,"form":"WWWDL","games":18,"played":18,"link":"start"},
+…
+{"season":"2026-27","teamID":55477,"name":"MVLA ECNL G2010/11",…,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,…,"tier":"Champions League","teamID":55477,"games":3,"played":3,"w":1,"d":1,"l":1,"gf":6,"ga":7,"group":null,"reached":"Round of 16","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,…,"w":2,"d":1,"l":0,"gf":9,"ga":4}
+]}
+]}
+```
+
+- `schema` is `1`, with the same bump rule as the team index; the page shows "No
+  season-by-season history" for a schema it does not know. **One season or event per
+  line**, so a refresh diff shows only the rows that changed.
+- Squad fields: `clubID`, `clubName` (its latest), `birthYears` (the years every season of
+  the chain agrees on: `[2011]`, or `[2010, 2011]` for a squad seen only in a two-year
+  group), `seasons`, `postseason`, `showcases`; optional `best` (index into `postseason` of
+  the best Champions League finish: depth, then Finals above Playoffs, then the latest),
+  `titles` (indexes of every title, by tier then stage), `maybe` and `maybePrev` (possible
+  continuations and predecessors: `season`, `teamID`, `name`, `division`, `conference`).
+- Season rows: the team index's identity fields plus `u`, `birthYears`, `rank` (position in
+  the table after merging blocks, as the page does), `of` (table size), TGS's own `gp`, `w`,
+  `d`, `l`, `pts`, `gf`, `ga`, `gd`, `ppg`, our `form` (last five, oldest first), `games` and
+  `played`, and `link` (`start`, `id`, `name`, `club` or `manual`). Optional flags:
+  `merged` (TGS published the table in two blocks; 11 tables, 2020-21 to 2022-23),
+  `inProgress` (only in the open season, `refresh.activeSeason`, while a game is unplayed; a
+  cancelled game never reopens a past season) and `regroup` (every 2026-27 row).
+- Event rows: `season`, `stage`, `eventID`, `eventName`, `divisionID`, `division`,
+  `flightID`, `flightName`, `tier` (the catalog's tier label), `teamID` (the id at the event;
+  a showcase alias keeps the showcase id), `games`, `played`, and our `w`, `d`, `l`, `gf`, `ga`
+  from TGS's scores (a shoot-out win counts as a win). Post-season rows add `group`
+  (`{name, pos, of}` in TGS's group table order), `reached` (the last main-bracket round, as
+  the page's bracket names it; a round of an odd size is "First round"), `champion`,
+  `final` (`"lost"` only when a champion was decided and it is the other team;
+  `"undecided"` when the final has no result), `cup`, `reconstructed`, `dataGap`, and
+  `fromTable` (only in a flight the catalog lists under `dataGaps`: TGS published the group
+  table but not its games, so the record is the table's plus the published knockout games).
+  Showcase rows add `location`, `startDate`, `endDate`.
+- **Privacy.** Team-level public data only: team and club names, TGS ids, logos (already on
+  every table), tables, scores and results. No player, roster, staff or contact field; the
+  tests hold an allow-list of every key written. Club 7's place is never shown.
+
+**`public/data/team-links.json`** holds hand-reviewed overrides, like the showcase
+`teamAliases`: `link` entries (`{"from":"2025-26/54493","to":"2026-27/134153","note":"the
+evidence"}`) and `unlink` entries that forbid a link the rules would make. The SWE declares
+them with evidence; the Reviewer and the owner approve them in a PR. The builder validates
+every entry on every build: both team-seasons must be in a conference table, `to` must be in
+the season after `from`, a link must age correctly and carry a `note`, neither end may be
+claimed by two entries, and the target may not already continue another team by its id (unlink
+that first). An entry that fails is reported, has no effect, and fails the run (`--refresh`,
+`--team-history` and the CI check exit 1). The file is not served (`/data*` is blocked).
+
+What the page does with the history answer (#92), as with the team index:
+
+| History answer | The page | Remembered |
+| --- | --- | --- |
+| 200 with a known schema | the History tab | for the session |
+| 404, or an unknown schema | "No season-by-season history for this team"; the glance-card link is hidden for that id | for the session |
+| any other 4xx (429, 400, 401, 403, …) | "The history couldn't load." with "Try again" | for a minute (a `none` 429 until the session is back, if sooner) |
+| a 5xx, a network error or bad JSON | the same | no: "Try again" asks once more |
+
+There is never a fallback request. **Request cost:** a cold shared History link costs 4
+`/api/v1` requests (catalog, status, history, clubs); History from a team page already open,
+or from a glance card, costs 1. The "Season-by-season history" link on every Team at a glance
+card sends nothing until it is opened; every conference team has a file (a test checks it),
+and the link is hidden under `?live=1` and for an id the route answered 404 for. On Workers
+Free that is one Worker request per History opened; a script walking all 1,906 files would
+use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a minute.
+
+#### When the data changes
+
+- **The refresh.** `archive.py --refresh` rebuilds every history file right after the team
+  index, in the same run (`update_team_history` in `cmd_refresh`, both on a run that fetched
+  and on a run with nothing due), and `.github/workflows/refresh.yml`'s "Commit changed data"
+  step commits the history files together with the season data they come from (`git add
+  -A`). Any crawl (`archive.py --season …`, `--national`, `--showcases`) rebuilds them too.
+  A history can therefore never lag its season data by a commit. The whole set is rebuilt
+  (a squad spans every season) but only changed files are written: a result changes the
+  files of the two teams' squads and nothing else (a test runs a refresh that changes one
+  flight and checks exactly those files change). **Cost:** about 2 seconds of local work per
+  run (1.8 s measured on a laptop, reading and comparing all 1,906 files), no upstream request; measured on two real refresh pairs, 6 files (2026-09-30) and
+  317 files (Saturday 2026-09-26, 318 changed lines, 177 KB of added lines against 590 KB of
+  whole files).
+- **If the build fails** during a refresh, nothing of it is written: the whole set is built
+  in memory first, changed files are written as `.tmp` files beside their targets and only
+  then moved into place, and a failure before that removes the `.tmp` files. The season data
+  is still committed (it matters most), the log says `Team history: FAILED: …` and the run
+  exits 1 (the workflow's last step fails). `refresh-state.json` keeps `historyAsOf`, the
+  `updatedAt` of the data the history files were last built from; while it differs from
+  `updatedAt`, the History tab says "History as of <date>". A build that would delete more
+  than 5 % of the files (or 20) refuses, as a missing season index would look like that.
+  The next refresh tries again.
+- **Drift check.** CI's `contract` job runs `python archive.py --team-history --check`,
+  which writes nothing and fails when any committed history file differs from a fresh build
+  of the committed archive (and `tests/test_team_history.py` asserts the same). A data
+  change committed without its rebuild, a builder change without regenerated files, or an
+  override that no longer fits fails there.
+- **Past seasons** are frozen: the refresh fetches only `refresh.activeSeason`. A TGS
+  correction to a past season appears only if it is deliberately re-crawled
+  (`archive.py --season 2024-25 --force`); the crawl then rebuilds the histories itself.
+  After `reconstruct.py` rebuilds a reconstructed flight, run `archive.py --team-history`
+  (the drift check catches a forgotten run).
+- **Links that change.** A new season, new ids or a renamed team are linked again from
+  scratch on every build, deterministically: a link between two seasons depends only on
+  those two seasons' rows (and the overrides), so adding a season never changes an older
+  link (tested by building with and without the newest season). A `team-links.json` entry
+  that no longer fits fails loudly, as above.
+- **Caching.** Like every route, history answers are `no-cache` with a validator; the ETag
+  changes whenever a file's bytes change. Most files hold no open season and change only
+  when the builder, `reconstruct.py` or an override does, but they *can* change, so any
+  future longer caching (#82) must be versioned (for example a build id in the URL or a
+  `closed` list published with the data), never a bare long `max-age`.
 
 ## HTTP behavior
 

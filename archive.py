@@ -7,6 +7,7 @@ Crawls the events listed in public/data/sources.json and writes:
   public/archive/refresh-state.json         when data was last refreshed
   public/archive/teams/<season>.json        per-season team index (derived, #81)
   public/archive/clubs.json                 club city and state (derived, #87)
+  public/archive/history/<teamID>.json      one squad across seasons and events (derived, #107)
   export/<season>/<conference>/*.csv        human-readable standings & schedules
   export/<season>/showcases/<showcase>/*.csv  the same for a showcase (#97)
   public/archive/manifest.json              index tying event IDs to season/conference
@@ -35,6 +36,9 @@ Manual/bulk use:
                                               this showcase's manifest entry is written
     python archive.py --team-index --all      rebuild every season's team index
                                               from the archive (no API calls)
+    python archive.py --team-history          rebuild every team's history file (#107)
+                                              from the archive (no API calls); with
+                                              --check, write nothing and fail on drift
     python archive.py --clubs --all           fetch the city and state of every club
                                               with no entry yet (--force: re-check all)
 
@@ -51,6 +55,7 @@ import os
 import re
 import sys
 import time
+import traceback
 import unicodedata
 
 import ecnl_api as api
@@ -842,6 +847,75 @@ def cmd_team_index(sources, season):
     return 1 if stats.failed else 0
 
 
+# ---------- team histories (#107) ----------
+#
+# public/archive/history/<teamID>.json: one squad across every season and event, built by
+# team_history.py from the archive alone (no API calls) and served at
+# /api/v1/teams/{teamID}/history. Every crawl and every --refresh rebuilds the whole set right
+# after the team index, so the history files change in the same commit as the season data they
+# come from. The build is all in memory first; only then are the changed files written, and a
+# failure leaves every file as it was (docs/data-api.md, "When the data changes").
+
+def update_team_history(sources, stats, dry_run=False):
+    """team_history.write_history for the crawl and refresh paths. Never raises, so it cannot
+    stop refresh-state.json from being written or the data from being committed. On success,
+    refresh-state.json's historyAsOf becomes its updatedAt (the data the files were built from);
+    on failure historyAsOf keeps its old value, the page says "history as of <date>", and the
+    failure goes to stats.fail, so the run exits non-zero. A team-links.json entry that no
+    longer fits is reported the same way, and only that entry is left out (#107 S1)."""
+    import team_history
+    try:
+        written, removed, total, errors = team_history.write_history(sources, dry_run=dry_run)
+    except Exception as e:  # noqa: BLE001 — must never escape into the refresh
+        state = api.load_refresh_state()
+        here = os.path.dirname(os.path.abspath(__file__))
+        tb = [f for f in traceback.extract_tb(e.__traceback__) if os.path.dirname(os.path.abspath(f.filename)) == here]
+        where = f" [{type(e).__name__} at {os.path.basename(tb[-1].filename)}:{tb[-1].lineno}]" if tb else f" [{type(e).__name__}]"
+        stats.fail(f"team history: {e}{where} (fix, then run: python archive.py --team-history)")
+        print(f"Team history: FAILED: {e}{where}. The history files were left as they were "
+              f"(built from the data of {state.get('historyAsOf') or 'an earlier run'}).")
+        return None
+    for err in errors:
+        stats.fail(f"team history: {err}")
+    verb = "would write" if dry_run else "written"
+    print(f"Team history: {total} teams, {written} {verb}, {removed} {'would be ' if dry_run else ''}removed"
+          f"{f', {len(errors)} team-links.json problem(s)' if errors else ''}.")
+    # Only when the state file belongs to this archive (a test that moves the archive elsewhere
+    # must not touch the checkout's refresh-state.json).
+    if not dry_run and os.path.dirname(os.path.abspath(api.REFRESH_STATE_PATH)) == os.path.abspath(api.ARCHIVE_DIR):
+        state = api.load_refresh_state()
+        if state.get("updatedAt") and state.get("historyAsOf") != state["updatedAt"]:
+            state["historyAsOf"] = state["updatedAt"]
+            api.write_json_file(api.REFRESH_STATE_PATH, state)
+    return written + removed
+
+
+def cmd_team_history(sources, dry_run=False, check=False):
+    """--team-history: rebuild every history file (all seasons: a squad spans them). --check
+    writes nothing and fails when a committed file differs from a fresh build (CI's drift
+    check); --dry-run counts what would change."""
+    import team_history
+    if check:
+        try:
+            diff, errors = team_history.check_history(sources)
+        except Exception as e:  # noqa: BLE001
+            print(f"Team history check: FAILED: {e}")
+            return 1
+        for err in errors:
+            print(f"  - team-links.json: {err}")
+        if diff:
+            print(f"Team history check: {len(diff)} file(s) differ from a fresh build of the archive, e.g. "
+                  f"{', '.join(diff[:8])}. Run: python archive.py --team-history, then commit public/archive/history/")
+        else:
+            print("Team history check: every file equals a fresh build of the archive.")
+        return 1 if diff or errors else 0
+    stats = Stats()
+    update_team_history(sources, stats, dry_run=dry_run)
+    for e in stats.errors:
+        print(f"  - {e}")
+    return 1 if stats.failed else 0
+
+
 # ---------- club places (#87) ----------
 #
 # public/archive/clubs.json maps clubID -> {"city", "state"}, or null for a club whose
@@ -1218,9 +1292,11 @@ def cmd_refresh(sources, args):
         print("Non-match day, no sweep due, no pending results. No network calls.")
         if args.dry_run:
             return 0
-        # Heal an index left stale by a hand edit; written only if a row changed.
+        # Heal an index left stale by a hand edit; written only if a row changed. The team
+        # histories follow it the same way (#107).
         stats = Stats()
         update_team_index(sources, season, stats)
+        update_team_history(sources, stats)
         return 1 if stats.failed else 0
     if args.dry_run:
         for fl in sorted((f for f in flights if f["key"] in candidates),
@@ -1302,6 +1378,9 @@ def cmd_refresh(sources, args):
         # Club places (#87): set only by refresh_club_places, carried forward here.
         "lastClubSweepDate": state.get("lastClubSweepDate"),
         "lastClubSweepAttempt": state.get("lastClubSweepAttempt"),
+        # Team histories (#107): set by update_team_history once they are rebuilt from this
+        # run's data, carried forward here so a failed build keeps saying how old they are.
+        "historyAsOf": state.get("historyAsOf"),
         "flightsConsidered": len(flights),
         "flightsRefreshed": len(candidates),
         "standingsRefreshed": standings_refreshed,
@@ -1316,6 +1395,12 @@ def cmd_refresh(sources, args):
     # work only, after the state write and unable to raise, so it can never stop the
     # state (and lastSweepDate) from being saved.
     update_team_index(sources, season, stats)
+
+    # Team histories (#107) follow the index: every history file whose seasons, results or
+    # events changed is rewritten in this run, so the workflow commits it with the data. All
+    # seasons are rebuilt (a squad spans them); unchanged files are not rewritten. Local work
+    # only; unable to raise; a failure keeps the old files and fails the run.
+    update_team_history(sources, stats)
 
     # Club places (#87): on the day's sweep, after the state write and the team index
     # (so a club new in today's standings is fetched today). Bounded; never raises.
@@ -1407,6 +1492,13 @@ def main():
     ap.add_argument("--team-index", action="store_true",
                     help="Rebuild public/archive/teams/<season>.json from the archive "
                          "(no API calls). With --all, every season.")
+    ap.add_argument("--team-history", action="store_true",
+                    help="Rebuild public/archive/history/<teamID>.json, every team's squad history "
+                         "across all seasons (#107), from the archive (no API calls). Always all "
+                         "seasons; --dry-run counts what would change.")
+    ap.add_argument("--check", action="store_true",
+                    help="With --team-history: write nothing, and exit 1 when a committed history "
+                         "file differs from a fresh build of the archive (the CI drift check).")
     ap.add_argument("--clubs", action="store_true",
                     help="Fetch the city and state of the season's clubs (--all: every season) "
                          "that have no entry in public/archive/clubs.json yet; with --force, "
@@ -1417,11 +1509,14 @@ def main():
         clash = [flag for flag, on in (
             ("--all", args.all), ("--national", args.national), ("--conference", args.conference),
             ("--refresh", args.refresh), ("--export", args.export),
-            ("--team-index", args.team_index), ("--clubs", args.clubs)) if on]
+            ("--team-index", args.team_index), ("--team-history", args.team_history),
+            ("--clubs", args.clubs)) if on]
         if clash:
             ap.error(f"--event cannot be combined with {', '.join(clash)}")
         if not args.season or not args.showcases:
             ap.error("--event needs an explicit --season S and --showcases")
+    if args.check and not args.team_history:
+        ap.error("--check needs --team-history")
     if args.national and args.conference:
         ap.error("--national cannot be combined with --conference (the conference filter drops national events)")
     if args.showcases and (args.conference or args.national):
@@ -1442,6 +1537,9 @@ def main():
 
     if args.refresh:
         return cmd_refresh(sources, args)
+
+    if args.team_history:   # every season, whatever --season or --all says: a squad spans them
+        return cmd_team_history(sources, dry_run=args.dry_run, check=args.check)
 
     season_keys = list(sources["seasons"].keys())
     if args.all:
@@ -1509,6 +1607,9 @@ def main():
         for s in sorted({s for s, kind, _n, _e in api.iter_events(sources, season)
                          if kind == "showcase"}):
             update_team_index(sources, s, stats)
+    # Any crawl (conference, national or showcase) can change a team's history (#107).
+    if not args.dry_run:
+        update_team_history(sources, stats)
 
     if age_changes and not args.dry_run:
         save_sources(sources)

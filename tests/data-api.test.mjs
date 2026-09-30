@@ -235,6 +235,8 @@ test('direct visitor access to /archive and /data is blocked', async () => {
     '/%61rchive/teams/2026-27.json',
     '/archive/clubs.json',
     '/%61rchive/clubs.json',
+    '/archive/history/55477.json',
+    '/data/team-links.json',
     '/data',
     '/data/',
     '/data/sources.json',

@@ -107,6 +107,10 @@ class ApiTests(unittest.TestCase):
             self.assertEqual((status, body), (200, (ROOT / 'archive/clubs.json').read_bytes()))
             self.assertEqual(headers['Cache-Control'], 'no-cache')
             count += 1
+            for file in (ROOT / 'archive/history').glob('*.json'):   # #107
+                status, headers, body = self.request(f'/api/v1/teams/{file.stem}/history')
+                self.assertEqual((status, body), (200, file.read_bytes()), file.name)
+                count += 1
         self.assertGreater(count, 1200)
         print(f'Python archive parity: {count} resources')
 
@@ -135,6 +139,17 @@ class ApiTests(unittest.TestCase):
         for method in ('GET', 'HEAD'):
             status, conditional, body = self.request(teams, method, {'If-None-Match': headers['ETag']})
             self.assertEqual((status, body, conditional['ETag']), (304, b'', headers['ETag']))
+        # #107: a team's history, validated like every id; an id with no file is a JSON 404.
+        history = '/api/v1/teams/55477/history'
+        status, headers, body = self.request(history)
+        self.assertEqual((status, headers['Cache-Control'], body), (200, 'no-cache', (ROOT / 'archive/history/55477.json').read_bytes()))
+        self.assertEqual(headers['ETag'], '"' + hashlib.sha256(body).hexdigest() + '"')
+        for method in ('GET', 'HEAD'):
+            status, conditional, body = self.request(history, method, {'If-None-Match': headers['ETag']})
+            self.assertEqual((status, body, conditional['ETag']), (304, b'', headers['ETag']))
+            status, missing, body = self.request('/api/v1/teams/1/history', method)
+            self.assertEqual((status, missing['Cache-Control']), (404, 'no-store'))
+            self.assertEqual(body, b'' if method == 'HEAD' else b'{"ok":false,"error":"Not found"}')
         clubs = '/api/v1/clubs'
         status, headers, _ = self.request(clubs)
         self.assertEqual((status, headers['Cache-Control']), (200, 'no-cache'))
@@ -161,6 +176,8 @@ class ApiTests(unittest.TestCase):
             "/%61rchive/teams/2026-27.json",
             "/archive/clubs.json",
             "/%61rchive/clubs.json",
+            "/archive/history/55477.json",
+            "/data/team-links.json",
             "/data",
             "/data/",
             "/data/sources.json",
