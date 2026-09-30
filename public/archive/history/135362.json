@@ -1,0 +1,8 @@
+{"schema":1,"teamID":135362,"squads":[
+{"clubID":4603,"clubName":"Fairfax Virginia Union","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":135362,"name":"Fairfax Virginia Union ECNL G2011/12","clubID":4603,"clubName":"Fairfax Virginia Union","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FairfaxVAU_04-16-2026T20:45:12.085.png","conference":"Mid-Atlantic","eventID":4263,"divisionID":22409,"division":"GU15","flightID":40553,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":1,"of":11,"gp":1,"w":1,"d":0,"l":0,"pts":3,"gf":6,"ga":0,"gd":6,"ppg":3.0,"form":"W","games":10,"played":1,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":96997,"name":"Fairfax VA Union ECNL G11","division":"G2011","conference":"Mid-Atlantic"},
+{"season":"2025-26","teamID":96998,"name":"Fairfax VA Union ECNL G12","division":"G2012","conference":"Mid-Atlantic"}
+]}
+]}

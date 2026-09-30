@@ -1,0 +1,6 @@
+{"schema":1,"teamID":67771,"squads":[
+{"clubID":628,"clubName":"Beach FC","birthYears":[2006],"seasons":[
+{"season":"2022-23","teamID":67771,"name":"Beach FC (VA) ECNL G06","clubID":628,"clubName":"Beach FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Joelle_Palombo_8a73191ed5394d2384dedce211cc772b_BeachFC150.png","conference":"Mid-Atlantic","eventID":2523,"divisionID":9501,"division":"G2006","flightID":15724,"flightName":"ECNL","u":17,"birthYears":[2006],"rank":11,"of":13,"gp":12,"w":2,"d":2,"l":8,"pts":8,"gf":15,"ga":38,"gd":-23,"ppg":0.67,"form":"DLLDL","games":12,"played":12,"link":"start"},
+{"season":"2023-24","teamID":67771,"name":"Beach FC (VA) ECNL G06/05","clubID":628,"clubName":"Beach FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Joelle_Palombo_8a73191ed5394d2384dedce211cc772b_BeachFC150.png","conference":"Mid-Atlantic","eventID":2839,"divisionID":11507,"division":"G2006/2005","flightID":19659,"flightName":"ECNL","u":18,"birthYears":[2005,2006],"rank":12,"of":13,"gp":12,"w":1,"d":1,"l":10,"pts":4,"gf":7,"ga":53,"gd":-46,"ppg":0.33,"form":"LLLLL","games":12,"played":12,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

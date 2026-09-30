@@ -1,0 +1,8 @@
+{"schema":1,"teamID":94980,"squads":[
+{"clubID":28,"clubName":"Colorado Rush","birthYears":[2008],"best":0,"seasons":[
+{"season":"2024-25","teamID":94980,"name":"Colorado Rush ECNL G08","clubID":28,"clubName":"Colorado Rush","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Steve_Jobs_0c2f1c8501e34cc6875cd2c9e96f71aa_Blue_Logo_.png","conference":"Texas","eventID":3166,"divisionID":14274,"division":"G2008","flightID":24142,"flightName":"ECNL","u":17,"birthYears":[2008],"rank":6,"of":16,"gp":15,"w":7,"d":4,"l":4,"pts":25,"gf":29,"ga":19,"gd":10,"ppg":1.67,"form":"WLWLD","games":15,"played":15,"link":"start"},
+{"season":"2025-26","teamID":94980,"name":"Colorado Rush Academy Blue ECNL G08/07","clubID":28,"clubName":"Colorado Rush","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Steve_Jobs_0c2f1c8501e34cc6875cd2c9e96f71aa_Blue_Logo_.png","conference":"Texas","eventID":3934,"divisionID":18761,"division":"G2008/2007","flightID":32934,"flightName":"ECNL","u":18,"birthYears":[2007,2008],"rank":5,"of":16,"gp":15,"w":7,"d":3,"l":5,"pts":24,"gf":35,"ga":30,"gd":5,"ppg":1.6,"form":"WDWLW","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18503,"division":"G2008","flightID":32795,"flightName":"Champions League","tier":"Champions League","teamID":94980,"games":3,"played":3,"w":0,"d":1,"l":2,"gf":5,"ga":7,"group":{"name":"Group K","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

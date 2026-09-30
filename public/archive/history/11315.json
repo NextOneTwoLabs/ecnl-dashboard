@@ -1,0 +1,8 @@
+{"schema":1,"teamID":11315,"squads":[
+{"clubID":2359,"clubName":"Michigan Hawks","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":11315,"name":"Michigan Hawks Magic ECNL GU17","clubID":2359,"clubName":"Michigan Hawks","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Armand_Echeverria_172acc43febb49f1bc8d55ad6051072d_Hawks_Logo.png","conference":"Midwest","eventID":2035,"divisionID":5460,"division":"GU17","flightID":8864,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":9,"of":11,"gp":9,"w":1,"d":3,"l":5,"pts":6,"gf":5,"ga":18,"gd":-13,"ppg":0.67,"form":"LLWDL","games":10,"played":9,"link":"start"},
+{"season":"2021-22","teamID":11315,"name":"Michigan Hawks Magic ECNL GU18/U19","clubID":2359,"clubName":"Michigan Hawks","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Armand_Echeverria_172acc43febb49f1bc8d55ad6051072d_Hawks_Logo.png","conference":"Midwest","eventID":2369,"divisionID":7821,"division":"GU18/U19","flightID":12520,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":12,"of":14,"gp":13,"w":2,"d":3,"l":8,"pts":9,"gf":8,"ga":29,"gd":-21,"ppg":0.69,"form":"LWDDL","games":13,"played":13,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11934,"flightName":"Open Cup","tier":"Open Cup","teamID":11315,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":2,"ga":6,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

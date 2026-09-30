@@ -1,0 +1,7 @@
+{"schema":1,"teamID":7211,"squads":[
+{"clubID":69,"clubName":"Mustang Soccer","birthYears":[2002,2003],"best":0,"seasons":[
+{"season":"2020-21","teamID":7211,"name":"Mustang SC ECNL GU18/U19","clubID":69,"clubName":"Mustang Soccer","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tester_Test_1b0d43e346d148e3acdb90571711a606_TGS_Mustang_logo.jpg","conference":"Northwest","eventID":2033,"divisionID":5447,"division":"GU18/U19","flightID":9539,"flightName":"Bay Area","u":18,"birthYears":[2002,2003],"rank":1,"of":8,"gp":7,"w":5,"d":0,"l":2,"pts":15,"gf":17,"ga":7,"gd":10,"ppg":2.14,"form":"WWWWL","games":7,"played":7,"link":"start"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5850,"division":"U18/U19","flightID":9418,"flightName":"Champions League","tier":"Champions League","teamID":7211,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":5,"ga":9,"group":null,"reached":"Round of 16","champion":false,"cup":"Champions League Cup: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

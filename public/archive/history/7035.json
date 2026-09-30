@@ -1,0 +1,9 @@
+{"schema":1,"teamID":7035,"squads":[
+{"clubID":112,"clubName":"Washington Premier FC","birthYears":[2002,2003],"seasons":[
+{"season":"2020-21","teamID":7035,"name":"Washington Premier ECNL GU18/U19","clubID":112,"clubName":"Washington Premier FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/d894bc1820aa478694295f129c526c45_Washington.png","conference":"Northwest","eventID":2033,"divisionID":5447,"division":"GU18/U19","flightID":9540,"flightName":"Pacific","u":18,"birthYears":[2002,2003],"rank":3,"of":9,"gp":11,"w":6,"d":2,"l":3,"pts":20,"gf":21,"ga":10,"gd":11,"ppg":1.82,"form":"WWDLW","games":12,"played":11,"link":"start"}
+],"postseason":[],"showcases":[]},
+{"clubID":112,"clubName":"Washington Premier FC","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":11577,"name":"Washington Premier ECNL GU17","clubID":112,"clubName":"Washington Premier FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/d894bc1820aa478694295f129c526c45_Washington.png","conference":"Northwest","eventID":2033,"divisionID":5446,"division":"GU17","flightID":9538,"flightName":"Pacific","u":17,"birthYears":[2004],"rank":7,"of":9,"gp":12,"w":3,"d":1,"l":8,"pts":10,"gf":16,"ga":24,"gd":-8,"ppg":0.83,"form":"WDLWL","games":12,"played":12,"link":"start"},
+{"season":"2021-22","teamID":7035,"name":"Washington Premier ECNL GU18/U19","clubID":112,"clubName":"Washington Premier FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/d894bc1820aa478694295f129c526c45_Washington.png","conference":"Northwest","eventID":2367,"divisionID":7809,"division":"GU18/U19","flightID":12841,"flightName":"Pacific","u":18,"birthYears":[2003,2004],"rank":3,"of":9,"gp":20,"w":12,"d":3,"l":5,"pts":39,"gf":51,"ga":25,"gd":26,"ppg":1.95,"form":"WLDWW","games":18,"played":18,"link":"name"}
+],"postseason":[],"showcases":[]}
+]}

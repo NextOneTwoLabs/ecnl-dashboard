@@ -1,0 +1,8 @@
+{"schema":1,"teamID":45831,"squads":[
+{"clubID":7,"clubName":"No Club Selection","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":45831,"name":"Pipeline SC ECNL GU17","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"North Atlantic","eventID":2039,"divisionID":5486,"division":"GU17","flightID":8890,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":7,"of":9,"gp":16,"w":5,"d":3,"l":8,"pts":18,"gf":20,"ga":22,"gd":-2,"ppg":1.13,"form":"WLWLW","games":16,"played":16,"link":"start"},
+{"season":"2021-22","teamID":45831,"name":"Pipeline SC ECNL GU18/U19","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"North Atlantic","eventID":2373,"divisionID":7845,"division":"GU18/U19","flightID":12544,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":8,"of":9,"gp":15,"w":2,"d":5,"l":8,"pts":11,"gf":16,"ga":27,"gd":-11,"ppg":0.73,"form":"LWLDD","games":16,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11933,"flightName":"Showcase Cup B","tier":"Showcase Cup B","teamID":45831,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":6,"ga":2,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

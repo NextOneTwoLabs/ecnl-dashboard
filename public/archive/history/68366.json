@@ -1,0 +1,11 @@
+{"schema":1,"teamID":68366,"squads":[
+{"clubID":4603,"clubName":"Fairfax Virginia Union","birthYears":[2010],"best":1,"seasons":[
+{"season":"2022-23","teamID":68366,"name":"Fairfax BRAVE SC ECNL G10","clubID":4603,"clubName":"Fairfax Virginia Union","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FairfaxVAU_04-16-2026T20:45:12.085.png","conference":"Mid-Atlantic","eventID":2523,"divisionID":9497,"division":"G2010","flightID":15727,"flightName":"ECNL","u":13,"birthYears":[2010],"rank":5,"of":13,"gp":24,"w":15,"d":2,"l":7,"pts":47,"gf":71,"ga":26,"gd":45,"ppg":1.96,"form":"WWLWW","games":24,"played":24,"link":"start"},
+{"season":"2023-24","teamID":68366,"name":"Fairfax BRAVE SC ECNL G10","clubID":4603,"clubName":"Fairfax Virginia Union","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FairfaxVAU_04-16-2026T20:45:12.085.png","conference":"Mid-Atlantic","eventID":2839,"divisionID":11503,"division":"G2010","flightID":19662,"flightName":"ECNL","u":14,"birthYears":[2010],"rank":5,"of":13,"gp":24,"w":11,"d":5,"l":8,"pts":38,"gf":45,"ga":41,"gd":4,"ppg":1.58,"form":"DDDLW","games":24,"played":24,"link":"id"}
+],"postseason":[
+{"season":"2022-23","stage":"Playoffs","eventID":2719,"eventName":"ECNL National Playoffs","divisionID":11972,"division":"G2010","flightID":20450,"flightName":"Champions League","tier":"Champions League","teamID":68366,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":7,"ga":15,"group":{"name":"Group E","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false},
+{"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14600,"division":"G2010","flightID":24868,"flightName":"Champions League","tier":"Champions League","teamID":68366,"games":3,"played":3,"w":0,"d":1,"l":2,"gf":5,"ga":9,"group":{"name":"Group J","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2024-25","teamID":96996,"name":"Fairfax VA Union ECNL G10","division":"G2010","conference":"Mid-Atlantic"}
+]}
+]}

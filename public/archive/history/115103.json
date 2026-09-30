@@ -1,0 +1,8 @@
+{"schema":1,"teamID":115103,"squads":[
+{"clubID":1713,"clubName":"Nationals","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":115103,"name":"Nationals Soccer Club ECNL G13","clubID":1713,"clubName":"Nationals","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/John_Belardi_79a34d169fd84937bb6cdb6abfced368.jpeg","conference":"Midwest","eventID":3926,"divisionID":18541,"division":"G2013","flightID":32631,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":4,"of":16,"gp":15,"w":10,"d":1,"l":4,"pts":31,"gf":33,"ga":12,"gd":21,"ppg":2.07,"form":"WWWDL","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":115103,"name":"Nationals SC ECNL G2012/13","clubID":1713,"clubName":"Nationals","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/John_Belardi_79a34d169fd84937bb6cdb6abfced368.jpeg","conference":"Midwest","eventID":4264,"divisionID":22414,"division":"GU14","flightID":41607,"flightName":"EAST","u":14,"birthYears":[2012,2013],"rank":6,"of":8,"gp":2,"w":0,"d":1,"l":1,"pts":1,"gf":1,"ga":2,"gd":-1,"ppg":0.5,"form":"LD","games":17,"played":2,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":115103,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":2,"ga":5,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

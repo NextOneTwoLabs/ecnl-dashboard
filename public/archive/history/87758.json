@@ -1,0 +1,15 @@
+{"schema":1,"teamID":87758,"squads":[
+{"clubID":380,"clubName":"Carolina Elite Soccer Academy","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":87758,"name":"CESA Liberty ECNL G12","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Southeast","eventID":3164,"divisionID":14263,"division":"G2012","flightID":24127,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":7,"of":16,"gp":15,"w":8,"d":3,"l":4,"pts":27,"gf":34,"ga":11,"gd":23,"ppg":1.8,"form":"DWLWD","games":15,"played":15,"link":"start"},
+{"season":"2025-26","teamID":87758,"name":"CESA Liberty ECNL G12","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Southeast","eventID":3932,"divisionID":18750,"division":"G2012","flightID":32925,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":5,"of":16,"gp":15,"w":10,"d":1,"l":4,"pts":31,"gf":42,"ga":14,"gd":28,"ppg":2.07,"form":"WLLWL","games":15,"played":15,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":78145,"name":"CESA Liberty ECNL G2011/12","division":"GU15","conference":"Southeast"},
+{"season":"2026-27","teamID":87758,"name":"CESA Liberty ECNL G2012/13","division":"GU14","conference":"Southeast"}
+]},
+{"clubID":380,"clubName":"Carolina Elite Soccer Academy","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":87758,"name":"CESA Liberty ECNL G2012/13","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Southeast","eventID":4270,"divisionID":22450,"division":"GU14","flightID":40594,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":6,"of":16,"gp":6,"w":4,"d":1,"l":1,"pts":13,"gf":13,"ga":6,"gd":7,"ppg":2.17,"form":"WLWDW","games":15,"played":6,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":87758,"name":"CESA Liberty ECNL G12","division":"G2012","conference":"Southeast"},
+{"season":"2025-26","teamID":106034,"name":"CESA Liberty ECNL G13","division":"G2013","conference":"Southeast"}
+]}
+]}

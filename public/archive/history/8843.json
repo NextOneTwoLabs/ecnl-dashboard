@@ -1,0 +1,8 @@
+{"schema":1,"teamID":8843,"squads":[
+{"clubID":56,"clubName":"Gwinnett Soccer Academy","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":8843,"name":"GSA ECNL GU17","clubID":56,"clubName":"Gwinnett Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/kk_kk_93be4e524dee4d938f98de1b01e720ab_GSALogo18D.jpg","conference":"Southeast","eventID":2038,"divisionID":5479,"division":"GU17","flightID":8883,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":5,"of":12,"gp":15,"w":8,"d":3,"l":4,"pts":27,"gf":26,"ga":20,"gd":6,"ppg":1.8,"form":"WWDWD","games":16,"played":15,"link":"start"},
+{"season":"2021-22","teamID":8843,"name":"GSA ECNL GU18/U19","clubID":56,"clubName":"Gwinnett Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/kk_kk_93be4e524dee4d938f98de1b01e720ab_GSALogo18D.jpg","conference":"Southeast","eventID":2372,"divisionID":7839,"division":"GU18/U19","flightID":12538,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":3,"of":12,"gp":22,"w":15,"d":3,"l":4,"pts":48,"gf":62,"ga":26,"gd":36,"ppg":2.18,"form":"DWLWW","games":22,"played":22,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11931,"flightName":"North American Cup","tier":"North American Cup","teamID":8843,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":6,"ga":7,"group":null,"reached":"Semifinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":104671,"squads":[
+{"clubID":3712,"clubName":"Liverpool FC-IA Michigan","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":104671,"name":"Liverpool FC IA Michigan ECNL G13","clubID":3712,"clubName":"Liverpool FC-IA Michigan","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/IVAN_ISLAS_eceaaaf04a6741f79a505553e3b85cdb_Liverpool_.jpg","conference":"Midwest","eventID":3926,"divisionID":18541,"division":"G2013","flightID":32631,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":14,"of":16,"gp":15,"w":3,"d":1,"l":11,"pts":10,"gf":16,"ga":43,"gd":-27,"ppg":0.67,"form":"LWLLL","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":104671,"name":"Liverpool FC MI ECNL G2012/13","clubID":3712,"clubName":"Liverpool FC-IA Michigan","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/IVAN_ISLAS_eceaaaf04a6741f79a505553e3b85cdb_Liverpool_.jpg","conference":"Midwest","eventID":4264,"divisionID":22414,"division":"GU14","flightID":41607,"flightName":"EAST","u":14,"birthYears":[2012,2013],"rank":5,"of":8,"gp":3,"w":1,"d":1,"l":1,"pts":4,"gf":5,"ga":8,"gd":-3,"ppg":1.33,"form":"DLW","games":18,"played":3,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":104671,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":2,"d":0,"l":1,"gf":5,"ga":7}
+]}
+]}

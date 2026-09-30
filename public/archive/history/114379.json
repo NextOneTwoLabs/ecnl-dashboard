@@ -1,0 +1,6 @@
+{"schema":1,"teamID":114379,"squads":[
+{"clubID":1730,"clubName":"Missouri Rush","birthYears":[2011],"seasons":[
+{"season":"2025-26","teamID":114379,"name":"Missouri Rush ECNL G11","clubID":1730,"clubName":"Missouri Rush","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Zach_Fischel_609c769fd4564548813323aa104fc3a4_Screen_Sho.png","conference":"Midwest","eventID":3926,"divisionID":18543,"division":"G2011","flightID":32628,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":15,"of":16,"gp":15,"w":2,"d":2,"l":11,"pts":8,"gf":12,"ga":39,"gd":-27,"ppg":0.53,"form":"LLLLL","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":114379,"name":"Missouri Rush ECNL G2010/11","clubID":1730,"clubName":"Missouri Rush","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Zach_Fischel_609c769fd4564548813323aa104fc3a4_Screen_Sho.png","conference":"Midwest","eventID":4264,"divisionID":22416,"division":"GU16","flightID":40560,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":11,"of":16,"gp":7,"w":2,"d":1,"l":4,"pts":7,"gf":4,"ga":12,"gd":-8,"ppg":1.0,"form":"WWLDL","games":15,"played":7,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

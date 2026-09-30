@@ -1,0 +1,8 @@
+{"schema":1,"teamID":130035,"squads":[
+{"clubID":737,"clubName":"Oregon Surf SC","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":130035,"name":"Oregon Surf ECNL G2010/11","clubID":737,"clubName":"Oregon Surf SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Nino_Cuccinello_7d2db632a5ae4f2a8f519aac7882179a_OregonSurf.png","conference":"Northwest","eventID":4268,"divisionID":22440,"division":"GU16","flightID":40584,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":5,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":22,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":90908,"name":"Oregon Surf ECNL G10","division":"G2010","conference":"Northwest"},
+{"season":"2025-26","teamID":90909,"name":"Oregon Surf ECNL G11","division":"G2011","conference":"Northwest"}
+]}
+]}

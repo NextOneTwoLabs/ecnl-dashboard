@@ -1,0 +1,8 @@
+{"schema":1,"teamID":46992,"squads":[
+{"clubID":3478,"clubName":"Cleveland Force SC","birthYears":[2005],"seasons":[
+{"season":"2021-22","teamID":46992,"name":"Cleveland Force SC ECNL GU17","clubID":3478,"clubName":"Cleveland Force SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Ella_Neumann_73806358b04141acb9101a388a400c10_CFSC Logo no outline.png","conference":"Ohio Valley","eventID":2371,"divisionID":7832,"division":"GU17","flightID":12531,"flightName":"North","u":17,"birthYears":[2005],"rank":6,"of":6,"gp":16,"w":4,"d":1,"l":11,"pts":13,"gf":26,"ga":42,"gd":-16,"ppg":0.81,"form":"LWLLL","games":12,"played":12,"link":"start"},
+{"season":"2022-23","teamID":46992,"name":"Cleveland Force SC ECNL G05/04","clubID":3478,"clubName":"Cleveland Force SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Ella_Neumann_73806358b04141acb9101a388a400c10_CFSC Logo no outline.png","conference":"Ohio Valley","eventID":2524,"divisionID":9508,"division":"G2005/2004","flightID":16160,"flightName":"North","u":18,"birthYears":[2004,2005],"rank":6,"of":6,"gp":16,"w":4,"d":2,"l":10,"pts":14,"gf":24,"ga":42,"gd":-18,"ppg":0.88,"form":"LLLWL","games":14,"played":14,"link":"id"}
+],"postseason":[
+{"season":"2021-22","stage":"Playoffs","eventID":2436,"eventName":"ECNL National Playoffs","divisionID":9753,"division":"U17","flightID":15407,"flightName":"Showcase Cup A","tier":"Showcase Cup A","teamID":46992,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":5,"ga":8,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

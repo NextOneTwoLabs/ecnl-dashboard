@@ -1,0 +1,12 @@
+{"schema":1,"teamID":79621,"squads":[
+{"clubID":97,"clubName":"St. Louis Scott Gallagher","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":79621,"name":"SLSG Green MO ECNL G11","clubID":97,"clubName":"St. Louis Scott Gallagher","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Walter_Camargo_b8d19ace186741eeabcc2634605d5c33_SLSG_Prima.png","conference":"Midwest","eventID":2849,"divisionID":11606,"division":"G2011","flightID":19809,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":6,"of":15,"gp":14,"w":9,"d":2,"l":3,"pts":29,"gf":34,"ga":11,"gd":23,"ppg":2.07,"form":"WWWWW","games":14,"played":14,"link":"start"},
+{"season":"2024-25","teamID":79621,"name":"SLSG Green ECNL G11","clubID":97,"clubName":"St. Louis Scott Gallagher","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Walter_Camargo_b8d19ace186741eeabcc2634605d5c33_SLSG_Prima.png","conference":"Midwest","eventID":3158,"divisionID":14226,"division":"G2011","flightID":24083,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":12,"of":16,"gp":15,"w":2,"d":6,"l":7,"pts":12,"gf":16,"ga":23,"gd":-7,"ppg":0.8,"form":"WLLLL","games":15,"played":15,"link":"id"},
+{"season":"2025-26","teamID":79621,"name":"SLSG Green ECNL G11","clubID":97,"clubName":"St. Louis Scott Gallagher","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Walter_Camargo_b8d19ace186741eeabcc2634605d5c33_SLSG_Prima.png","conference":"Midwest","eventID":3926,"divisionID":18543,"division":"G2011","flightID":32628,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":13,"of":16,"gp":14,"w":2,"d":3,"l":9,"pts":9,"gf":12,"ga":32,"gd":-20,"ppg":0.64,"form":"LDLWL","games":15,"played":14,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":134850,"name":"St. Louis Scott Gallagher Navy ECNL G2011/12","division":"GU15","conference":"Midwest"},
+{"season":"2026-27","teamID":134851,"name":"St. Louis Scott Gallagher Green ECNL G2011/12","division":"GU15","conference":"Midwest"},
+{"season":"2026-27","teamID":134854,"name":"St. Louis Scott Gallagher Navy ECNL G2010/11","division":"GU16","conference":"Midwest"},
+{"season":"2026-27","teamID":134855,"name":"St. Louis Scott Gallagher Green ECNL G2010/11","division":"GU16","conference":"Midwest"}
+]}
+]}

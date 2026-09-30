@@ -1,0 +1,10 @@
+{"schema":1,"teamID":90682,"squads":[
+{"clubID":2357,"clubName":"PDA Blue (North)","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":90682,"name":"PDA Blue ECNL G13","clubID":2357,"clubName":"PDA Blue (North)","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Maria_Mendoza_f80006c58dcb4a64a914a2c0b1ae216e_thumbnail_.png","conference":"North Atlantic","eventID":3928,"divisionID":18553,"division":"G2013","flightID":32644,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":1,"of":10,"gp":18,"w":14,"d":0,"l":4,"pts":42,"gf":59,"ga":16,"gd":43,"ppg":2.33,"form":"WLWWW","games":18,"played":18,"link":"start"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":90682,"games":5,"played":5,"w":3,"d":0,"l":2,"gf":7,"ga":6,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Final","reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":128076,"name":"PDA Blue ECNL G2013/14","division":"GU13","conference":"North Atlantic"},
+{"season":"2026-27","teamID":128078,"name":"PDA Blue ECNL G2012/13","division":"GU14","conference":"North Atlantic"}
+]}
+]}

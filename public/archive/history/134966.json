@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134966,"squads":[
+{"clubID":1345,"clubName":"Philadelphia Ukrainian Nationals","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":134966,"name":"Philadelphia Ukrainian Nationals ECNL G2011/12","clubID":1345,"clubName":"Philadelphia Ukrainian Nationals","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Christian_Yogi_12e2d0d7ac9d484fb35ed2af9def8324_Ukrainian_.jpeg","conference":"North Atlantic","eventID":4266,"divisionID":22427,"division":"GU15","flightID":40571,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":9,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":9,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":68006,"name":"Philadelphia Ukrainian Nationals ECNL G11","division":"G2011","conference":"North Atlantic"},
+{"season":"2025-26","teamID":94617,"name":"Philadelphia Ukrainian Nationals ECNL G12","division":"G2012","conference":"North Atlantic"}
+]}
+]}

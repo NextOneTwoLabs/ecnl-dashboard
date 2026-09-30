@@ -1,0 +1,17 @@
+{"schema":1,"teamID":88412,"squads":[
+{"clubID":1643,"clubName":"Seattle United","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":88412,"name":"Seattle United ECNL G12","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":3162,"divisionID":14251,"division":"G2012","flightID":24109,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":8,"of":10,"gp":18,"w":3,"d":4,"l":11,"pts":13,"gf":20,"ga":27,"gd":-7,"ppg":0.72,"form":"LLDLW","games":18,"played":18,"link":"start"},
+{"season":"2025-26","teamID":88412,"name":"Seattle United ECNL G12","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":3930,"divisionID":18737,"division":"G2012","flightID":32904,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":8,"of":10,"gp":18,"w":3,"d":5,"l":10,"pts":14,"gf":20,"ga":32,"gd":-12,"ppg":0.78,"form":"LDLLD","games":18,"played":18,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20346,"division":"G2012","flightID":36387,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":88412,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":1,"d":0,"l":2,"gf":3,"ga":5}
+],"maybe":[
+{"season":"2026-27","teamID":77000,"name":"Seattle United ECNL G2011/12","division":"GU15","conference":"Northwest"},
+{"season":"2026-27","teamID":88412,"name":"Seattle United ECNL G2012/13","division":"GU14","conference":"Northwest"}
+]},
+{"clubID":1643,"clubName":"Seattle United","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":88412,"name":"Seattle United ECNL G2012/13","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":4268,"divisionID":22438,"division":"GU14","flightID":40582,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":8,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":18,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":88412,"name":"Seattle United ECNL G12","division":"G2012","conference":"Northwest"},
+{"season":"2025-26","teamID":103559,"name":"Seattle United ECNL G13","division":"G2013","conference":"Northwest"}
+]}
+]}

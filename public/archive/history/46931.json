@@ -1,0 +1,8 @@
+{"schema":1,"teamID":46931,"squads":[
+{"clubID":2017,"clubName":"Rockford Raptors FC","birthYears":[2006],"seasons":[
+{"season":"2022-23","teamID":46931,"name":"Rockford Raptors FC ECNL G06","clubID":2017,"clubName":"Rockford Raptors FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImage/thumbimage (1)45DD2018094545.jpe","conference":"Midwest","eventID":2529,"divisionID":9536,"division":"G2006","flightID":16139,"flightName":"ECNL","u":17,"birthYears":[2006],"rank":8,"of":15,"gp":14,"w":6,"d":3,"l":5,"pts":21,"gf":26,"ga":26,"gd":0,"ppg":1.5,"form":"WWWLD","games":14,"played":14,"link":"start"},
+{"season":"2023-24","teamID":46931,"name":"Rockford Raptors ECNL G06/05","clubID":2017,"clubName":"Rockford Raptors FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImage/thumbimage (1)45DD2018094545.jpe","conference":"Midwest","eventID":2849,"divisionID":11601,"division":"G2006/2005","flightID":19804,"flightName":"ECNL","u":18,"birthYears":[2005,2006],"rank":9,"of":15,"gp":14,"w":4,"d":3,"l":7,"pts":15,"gf":26,"ga":38,"gd":-12,"ppg":1.07,"form":"DLWLL","games":14,"played":14,"link":"id"}
+],"postseason":[
+{"season":"2022-23","stage":"Playoffs","eventID":2719,"eventName":"ECNL National Playoffs","divisionID":11967,"division":"G2006","flightID":20454,"flightName":"Showcase A","tier":"Showcase A","teamID":46931,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":4,"ga":8,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

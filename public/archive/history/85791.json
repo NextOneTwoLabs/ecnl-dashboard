@@ -1,0 +1,15 @@
+{"schema":1,"teamID":85791,"squads":[
+{"clubID":1656,"clubName":"Slammers FC HB Koge","birthYears":[2012],"best":2,"seasons":[
+{"season":"2024-25","teamID":85791,"name":"Slammers FC HB Koge ECNL G12","clubID":1656,"clubName":"Slammers FC HB Koge","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kaya_Pigoni_38de922dedfa42e3bf6a2cd53f20f42b_HB_KOGE_LO.png","conference":"Southwest","eventID":3165,"divisionID":14269,"division":"G2012","flightID":24132,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":1,"of":17,"gp":16,"w":14,"d":2,"l":0,"pts":44,"gf":62,"ga":4,"gd":58,"ppg":2.75,"form":"DWWWW","games":16,"played":16,"link":"start"},
+{"season":"2025-26","teamID":85791,"name":"Slammers FC HB Koge ECNL G12","clubID":1656,"clubName":"Slammers FC HB Koge","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kaya_Pigoni_38de922dedfa42e3bf6a2cd53f20f42b_HB_KOGE_LO.png","conference":"Southwest","eventID":3933,"divisionID":18758,"division":"G2012","flightID":32931,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":2,"of":17,"gp":16,"w":15,"d":0,"l":1,"pts":45,"gf":73,"ga":12,"gd":61,"ppg":2.81,"form":"LWWWW","games":16,"played":16,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":85791,"games":0,"played":0,"w":3,"d":0,"l":0,"gf":11,"ga":2,"fromTable":true,"group":{"name":"Group A","pos":1,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true},
+{"season":"2024-25","stage":"Finals","eventID":3975,"eventName":"ECNL Girls National Finals","divisionID":19454,"division":"G2012","flightID":34429,"flightName":"Champions League","tier":"Champions League","teamID":85791,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":5,"ga":3,"group":null,"reached":"Final","champion":false,"final":"lost","cup":null,"reconstructed":true,"dataGap":false},
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21552,"division":"G2012","flightID":39383,"flightName":"Champions League","tier":"Champions League","teamID":85791,"games":5,"played":5,"w":4,"d":0,"l":1,"gf":10,"ga":4,"group":null,"reached":"Final","champion":false,"final":"lost","cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20346,"division":"G2012","flightID":36387,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":85791,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":2,"d":1,"l":0,"gf":11,"ga":3}
+],"maybe":[
+{"season":"2026-27","teamID":133596,"name":"Slammers FC HB Koge ECNL G2012/13","division":"GU14","conference":"Southwest"},
+{"season":"2026-27","teamID":133597,"name":"Slammers FC HB Koge ECNL G2011/12","division":"GU15","conference":"Southwest"}
+]}
+]}

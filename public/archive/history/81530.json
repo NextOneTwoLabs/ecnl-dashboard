@@ -1,0 +1,6 @@
+{"schema":1,"teamID":81530,"squads":[
+{"clubID":1010,"clubName":"Charlotte Independence SC","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":81530,"name":"Charlotte Independence ECNL G11","clubID":1010,"clubName":"Charlotte Independence SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Ardo_Khedesian_dc473e08e1e447ad89110559b1c57e83_cisc_logo.png","conference":"Mid-Atlantic","eventID":2839,"divisionID":11502,"division":"G2011","flightID":19664,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":10,"of":13,"gp":24,"w":7,"d":4,"l":13,"pts":25,"gf":31,"ga":47,"gd":-16,"ppg":1.04,"form":"LWDDW","games":24,"played":24,"link":"start"},
+{"season":"2024-25","teamID":81530,"name":"Charlotte Independence ECNL G11","clubID":1010,"clubName":"Charlotte Independence SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Ardo_Khedesian_dc473e08e1e447ad89110559b1c57e83_cisc_logo.png","conference":"Mid-Atlantic","eventID":3157,"divisionID":14178,"division":"G2011","flightID":24011,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":10,"of":12,"gp":22,"w":3,"d":3,"l":16,"pts":12,"gf":18,"ga":65,"gd":-47,"ppg":0.55,"form":"LLLDL","games":22,"played":22,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

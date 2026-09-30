@@ -1,0 +1,8 @@
+{"schema":1,"teamID":59755,"squads":[
+{"clubID":3483,"clubName":"Sporting Iowa Central","birthYears":[2005],"seasons":[
+{"season":"2021-22","teamID":59755,"name":"Sporting Iowa ECNL GU17","clubID":3483,"clubName":"Sporting Iowa Central","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kelly_Nunn_5c3776ec0a8c4b538009458b855c7617_Sporting_Iowa.png","conference":"Midwest","eventID":2369,"divisionID":7820,"division":"GU17","flightID":12519,"flightName":"Flight 1","u":17,"birthYears":[2005],"rank":7,"of":14,"gp":13,"w":4,"d":5,"l":4,"pts":17,"gf":21,"ga":25,"gd":-4,"ppg":1.31,"form":"WDWLD","games":13,"played":13,"link":"start"},
+{"season":"2022-23","teamID":59755,"name":"Sporting Iowa ECNL G05/04","clubID":3483,"clubName":"Sporting Iowa Central","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kelly_Nunn_5c3776ec0a8c4b538009458b855c7617_Sporting_Iowa.png","conference":"Midwest","eventID":2529,"divisionID":9538,"division":"G2005/2004","flightID":16137,"flightName":"ECNL","u":18,"birthYears":[2004,2005],"rank":8,"of":15,"gp":14,"w":7,"d":0,"l":7,"pts":21,"gf":24,"ga":24,"gd":0,"ppg":1.5,"form":"WWWLL","games":14,"played":14,"link":"id"}
+],"postseason":[
+{"season":"2021-22","stage":"Playoffs","eventID":2436,"eventName":"ECNL National Playoffs","divisionID":9753,"division":"U17","flightID":15407,"flightName":"Showcase Cup A","tier":"Showcase Cup A","teamID":59755,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":4,"ga":3,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

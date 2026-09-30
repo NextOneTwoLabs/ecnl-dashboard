@@ -1,0 +1,9 @@
+{"schema":1,"teamID":82675,"squads":[
+{"clubID":1585,"clubName":"Marin FC","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":82675,"name":"Marin FC ECNL G13","clubID":1585,"clubName":"Marin FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Daniel_Rivera_cb63ccfd5af7426ca724b1ebbb4fef24_Unknown.jpeg","conference":"NorCal","eventID":3929,"divisionID":18735,"division":"G2013","flightID":32900,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":9,"of":11,"gp":20,"w":2,"d":4,"l":14,"pts":10,"gf":13,"ga":37,"gd":-24,"ppg":0.5,"form":"LLLLD","games":20,"played":20,"link":"start"},
+{"season":"2026-27","teamID":82675,"name":"Marin FC ECNL G2012/13","clubID":1585,"clubName":"Marin FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Daniel_Rivera_cb63ccfd5af7426ca724b1ebbb4fef24_Unknown.jpeg","conference":"NorCal","eventID":4267,"divisionID":22432,"division":"GU14","flightID":40576,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":6,"of":12,"gp":8,"w":4,"d":1,"l":3,"pts":13,"gf":14,"ga":18,"gd":-4,"ppg":1.63,"form":"LLWWD","games":23,"played":8,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19566,"division":"G2013","flightID":34646,"flightName":"San Diego","tier":"San Diego","teamID":82675,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":0,"d":2,"l":1,"gf":3,"ga":15},
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":82675,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":0,"d":0,"l":3,"gf":2,"ga":8}
+]}
+]}

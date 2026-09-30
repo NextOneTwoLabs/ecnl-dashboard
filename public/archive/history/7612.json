@@ -1,0 +1,8 @@
+{"schema":1,"teamID":7612,"squads":[
+{"clubID":343,"clubName":"WNY Flash Academy","birthYears":[2004],"titles":[0],"seasons":[
+{"season":"2020-21","teamID":7612,"name":"WNY Flash Academy ECNL GU17","clubID":343,"clubName":"WNY Flash Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/f607ce88639f4854af32474495e6feb5_Flash_Est_.png","conference":"Ohio Valley","eventID":2037,"divisionID":5473,"division":"GU17","flightID":8877,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":4,"of":10,"gp":18,"w":8,"d":6,"l":4,"pts":30,"gf":36,"ga":30,"gd":6,"ppg":1.67,"form":"DWLDW","games":18,"played":18,"link":"start"},
+{"season":"2021-22","teamID":7612,"name":"WNY Flash Academy ECNL GU18/U19","clubID":343,"clubName":"WNY Flash Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/f607ce88639f4854af32474495e6feb5_Flash_Est_.png","conference":"Ohio Valley","eventID":2371,"divisionID":7833,"division":"GU18/U19","flightID":12532,"flightName":"North","u":18,"birthYears":[2003,2004],"rank":2,"of":6,"gp":16,"w":8,"d":2,"l":6,"pts":26,"gf":43,"ga":24,"gd":19,"ppg":1.63,"form":"LWWWW","games":12,"played":12,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11931,"flightName":"North American Cup","tier":"North American Cup","teamID":7612,"games":4,"played":4,"w":4,"d":0,"l":0,"gf":9,"ga":5,"group":null,"reached":"Final","champion":true,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

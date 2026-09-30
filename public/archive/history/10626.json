@@ -1,0 +1,6 @@
+{"schema":1,"teamID":10626,"squads":[
+{"clubID":80,"clubName":"Pleasanton Rage","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":10626,"name":"Pleasanton Rage ECNL GU17","clubID":80,"clubName":"Pleasanton Rage","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_ac2f9ca7c45c4df3828c1aef02e4baa1_Pleasanton.jpg","conference":"Northwest","eventID":2033,"divisionID":5446,"division":"GU17","flightID":9537,"flightName":"Bay Area","u":17,"birthYears":[2004],"rank":8,"of":8,"gp":7,"w":0,"d":1,"l":6,"pts":1,"gf":4,"ga":20,"gd":-16,"ppg":0.14,"form":"LLLLL","games":7,"played":7,"link":"start"},
+{"season":"2021-22","teamID":10626,"name":"Pleasanton RAGE ECNL GU18/U19","clubID":80,"clubName":"Pleasanton Rage","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_ac2f9ca7c45c4df3828c1aef02e4baa1_Pleasanton.jpg","conference":"Northwest","eventID":2367,"divisionID":7809,"division":"GU18/U19","flightID":12508,"flightName":"Bay Area","u":18,"birthYears":[2003,2004],"rank":7,"of":8,"gp":18,"w":4,"d":5,"l":9,"pts":17,"gf":27,"ga":43,"gd":-16,"ppg":0.94,"form":"LLLDW","games":16,"played":16,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

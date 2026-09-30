@@ -1,0 +1,15 @@
+{"schema":1,"teamID":94389,"squads":[
+{"clubID":1353,"clubName":"Sporting SA","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":94389,"name":"Florida Elite ECNL G12","clubID":1353,"clubName":"Sporting SA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SJSA_logo_05-15-2026T16:52:25.216.png","conference":"Southeast","eventID":3164,"divisionID":14263,"division":"G2012","flightID":24127,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":10,"of":16,"gp":15,"w":5,"d":4,"l":6,"pts":19,"gf":29,"ga":20,"gd":9,"ppg":1.27,"form":"WLDWL","games":15,"played":15,"link":"start"},
+{"season":"2025-26","teamID":94389,"name":"Sporting Jax ECNL G12","clubID":1353,"clubName":"Sporting SA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SJSA_logo_05-15-2026T16:52:25.216.png","conference":"Southeast","eventID":3932,"divisionID":18750,"division":"G2012","flightID":32925,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":9,"of":16,"gp":15,"w":6,"d":3,"l":6,"pts":21,"gf":18,"ga":27,"gd":-9,"ppg":1.4,"form":"LDLDL","games":15,"played":15,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":69334,"name":"Sporting SA JAX ECNL G2011/12","division":"GU15","conference":"Southeast"},
+{"season":"2026-27","teamID":94389,"name":"Sporting SA JAX ECNL G2012/13","division":"GU14","conference":"Southeast"}
+]},
+{"clubID":1353,"clubName":"Sporting SA","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":94389,"name":"Sporting SA JAX ECNL G2012/13","clubID":1353,"clubName":"Sporting SA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SJSA_logo_05-15-2026T16:52:25.216.png","conference":"Southeast","eventID":4270,"divisionID":22450,"division":"GU14","flightID":40594,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":8,"of":16,"gp":7,"w":3,"d":1,"l":3,"pts":10,"gf":13,"ga":13,"gd":0,"ppg":1.43,"form":"WLLDL","games":15,"played":7,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":94389,"name":"Sporting Jax ECNL G12","division":"G2012","conference":"Southeast"},
+{"season":"2025-26","teamID":113642,"name":"Sporting Jax ECNL G13","division":"G2013","conference":"Southeast"}
+]}
+]}

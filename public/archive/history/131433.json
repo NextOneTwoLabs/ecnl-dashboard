@@ -1,0 +1,8 @@
+{"schema":1,"teamID":131433,"squads":[
+{"clubID":26,"clubName":"Charlotte Soccer Academy","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":131433,"name":"Charlotte SA ECNL G2011/12","clubID":26,"clubName":"Charlotte Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Charlotte-Soccer-Academy.jpg","conference":"Mid-Atlantic","eventID":4263,"divisionID":22409,"division":"GU15","flightID":40553,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":8,"of":11,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":10,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":82098,"name":"Charlotte SA ECNL G11","division":"G2011","conference":"Mid-Atlantic"},
+{"season":"2025-26","teamID":94387,"name":"Charlotte SA ECNL G12","division":"G2012","conference":"Mid-Atlantic"}
+]}
+]}

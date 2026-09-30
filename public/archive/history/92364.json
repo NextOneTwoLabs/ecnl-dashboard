@@ -1,0 +1,8 @@
+{"schema":1,"teamID":92364,"squads":[
+{"clubID":46,"clubName":"HEX FC","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":92364,"name":"HEX FC Bucks ECNL G13","clubID":46,"clubName":"HEX FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Vickie_Sochocki_8a9225c6728b46f4a0fcbd466301638a_transparen.png","conference":"North Atlantic","eventID":3928,"divisionID":18553,"division":"G2013","flightID":32644,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":9,"of":10,"gp":18,"w":1,"d":1,"l":16,"pts":4,"gf":6,"ga":65,"gd":-59,"ppg":0.22,"form":"LLLLL","games":18,"played":18,"link":"start"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":131588,"name":"HEX FC Bucks ECNL G2013/14","division":"GU13","conference":"North Atlantic"},
+{"season":"2026-27","teamID":131592,"name":"HEX FC Bucks ECNL G2012/13","division":"GU14","conference":"North Atlantic"}
+]}
+]}

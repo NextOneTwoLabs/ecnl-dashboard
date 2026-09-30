@@ -1,0 +1,6 @@
+{"schema":1,"teamID":110465,"squads":[
+{"clubID":3587,"clubName":"West Side Alliance SC","birthYears":[2009],"seasons":[
+{"season":"2025-26","teamID":110465,"name":"West Side Alliance ECNL G09","clubID":3587,"clubName":"West Side Alliance SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/WSA_Logo_05-07-2026T19:35:59.095.png","conference":"Texas","eventID":3934,"divisionID":18762,"division":"G2009","flightID":32936,"flightName":"ECNL","u":17,"birthYears":[2009],"rank":10,"of":16,"gp":15,"w":5,"d":3,"l":7,"pts":18,"gf":17,"ga":24,"gd":-7,"ppg":1.2,"form":"LLLWW","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":110465,"name":"West Side Alliance ECNL G2008/09","clubID":3587,"clubName":"West Side Alliance SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/WSA_Logo_05-07-2026T19:35:59.095.png","conference":"Texas","eventID":4272,"divisionID":22466,"division":"GU18/19","flightID":40610,"flightName":"ECNL","u":18,"birthYears":[2008,2009],"rank":13,"of":16,"gp":4,"w":1,"d":0,"l":3,"pts":3,"gf":3,"ga":6,"gd":-3,"ppg":0.75,"form":"LWLL","games":15,"played":4,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

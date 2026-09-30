@@ -1,0 +1,17 @@
+{"schema":1,"teamID":53320,"squads":[
+{"clubID":3405,"clubName":"Pipeline SC","birthYears":[2010],"seasons":[
+{"season":"2022-23","teamID":53320,"name":"Pipeline SC ECNL G10","clubID":3405,"clubName":"Pipeline SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Alex_Hahn_515a498066a64229bb13561564401354_PIPELINE_LOGO copy.jpg","conference":"North Atlantic","eventID":2530,"divisionID":9540,"division":"G2010","flightID":15721,"flightName":"ECNL","u":13,"birthYears":[2010],"rank":8,"of":10,"gp":18,"w":3,"d":5,"l":10,"pts":14,"gf":14,"ga":29,"gd":-15,"ppg":0.78,"form":"DLWLL","games":18,"played":18,"link":"start"},
+{"season":"2023-24","teamID":53320,"name":"Pipeline SC ECNL G10","clubID":3405,"clubName":"Pipeline SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Alex_Hahn_515a498066a64229bb13561564401354_PIPELINE_LOGO copy.jpg","conference":"North Atlantic","eventID":2850,"divisionID":11629,"division":"G2010","flightID":19912,"flightName":"ECNL","u":14,"birthYears":[2010],"rank":10,"of":10,"gp":17,"w":0,"d":2,"l":15,"pts":2,"gf":3,"ga":66,"gd":-63,"ppg":0.12,"form":"LLDLD","games":18,"played":17,"link":"id"},
+{"season":"2024-25","teamID":53320,"name":"Pipeline SC ECNL G10","clubID":3405,"clubName":"Pipeline SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Alex_Hahn_515a498066a64229bb13561564401354_PIPELINE_LOGO copy.jpg","conference":"North Atlantic","eventID":3160,"divisionID":14237,"division":"G2010","flightID":24093,"flightName":"ECNL","u":15,"birthYears":[2010],"rank":11,"of":11,"gp":10,"w":0,"d":0,"l":10,"pts":0,"gf":2,"ga":47,"gd":-45,"ppg":0.0,"form":"LLLLL","games":10,"played":10,"link":"id"},
+{"season":"2025-26","teamID":53320,"name":"Pipeline SC ECNL G10","clubID":3405,"clubName":"Pipeline SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Alex_Hahn_515a498066a64229bb13561564401354_PIPELINE_LOGO copy.jpg","conference":"North Atlantic","eventID":3928,"divisionID":18557,"division":"G2010","flightID":32643,"flightName":"ECNL","u":16,"birthYears":[2010],"rank":10,"of":10,"gp":9,"w":0,"d":2,"l":7,"pts":2,"gf":4,"ga":40,"gd":-36,"ppg":0.22,"form":"LLDLL","games":9,"played":9,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":46948,"name":"Pipeline SC ECNL G2009/10","division":"GU17","conference":"North Atlantic"},
+{"season":"2026-27","teamID":53320,"name":"Pipeline SC ECNL G2010/11","division":"GU16","conference":"North Atlantic"}
+]},
+{"clubID":3405,"clubName":"Pipeline SC","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":53320,"name":"Pipeline SC ECNL G2010/11","clubID":3405,"clubName":"Pipeline SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Alex_Hahn_515a498066a64229bb13561564401354_PIPELINE_LOGO copy.jpg","conference":"North Atlantic","eventID":4266,"divisionID":22428,"division":"GU16","flightID":40572,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":10,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":9,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":53320,"name":"Pipeline SC ECNL G10","division":"G2010","conference":"North Atlantic"},
+{"season":"2025-26","teamID":55341,"name":"Pipeline SC ECNL G11","division":"G2011","conference":"North Atlantic"}
+]}
+]}

@@ -1,0 +1,13 @@
+{"schema":1,"teamID":10594,"squads":[
+{"clubID":1643,"clubName":"Seattle United","birthYears":[2002,2003],"seasons":[
+{"season":"2020-21","teamID":10594,"name":"Seattle United ECNL GU18/U19","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":2033,"divisionID":5447,"division":"GU18/U19","flightID":9540,"flightName":"Pacific","u":18,"birthYears":[2002,2003],"rank":5,"of":9,"gp":12,"w":6,"d":1,"l":5,"pts":19,"gf":27,"ga":12,"gd":15,"ppg":1.58,"form":"WWLWL","games":12,"played":12,"link":"start"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5850,"division":"U18/U19","flightID":11936,"flightName":"Optional Showcase","tier":"Showcase Games","teamID":10594,"games":2,"played":2,"w":0,"d":0,"l":2,"gf":0,"ga":7,"group":{"name":"Group A","pos":9,"of":9},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]},
+{"clubID":1643,"clubName":"Seattle United","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":18546,"name":"Seattle United ECNL GU17","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":2033,"divisionID":5446,"division":"GU17","flightID":9538,"flightName":"Pacific","u":17,"birthYears":[2004],"rank":8,"of":9,"gp":12,"w":2,"d":1,"l":9,"pts":7,"gf":15,"ga":37,"gd":-22,"ppg":0.58,"form":"LLDWL","games":12,"played":12,"link":"start"},
+{"season":"2021-22","teamID":10594,"name":"Seattle United ECNL GU18/U19","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":2367,"divisionID":7809,"division":"GU18/U19","flightID":12841,"flightName":"Pacific","u":18,"birthYears":[2003,2004],"rank":5,"of":9,"gp":18,"w":9,"d":2,"l":7,"pts":29,"gf":37,"ga":38,"gd":-1,"ppg":1.61,"form":"LLLWL","games":18,"played":18,"link":"name"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11934,"flightName":"Open Cup","tier":"Open Cup","teamID":18546,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":5,"ga":12,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

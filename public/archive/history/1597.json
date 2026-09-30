@@ -1,0 +1,11 @@
+{"schema":1,"teamID":1597,"squads":[
+{"clubID":52,"clubName":"FC Stars","birthYears":[2002,2003],"seasons":[
+{"season":"2020-21","teamID":1597,"name":"FC Stars White ECNL GU18/U19","clubID":52,"clubName":"FC Stars","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Mike_O_Donnell_0649b850f07a48a9bd20199087304d6b_FCStarsofM.png","conference":"New England","eventID":2051,"divisionID":5561,"division":"GU18/U19","flightID":8965,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":7,"of":9,"gp":14,"w":4,"d":2,"l":8,"pts":14,"gf":21,"ga":34,"gd":-13,"ppg":1.0,"form":"LWLLL","games":16,"played":14,"link":"start"}
+],"postseason":[],"showcases":[]},
+{"clubID":52,"clubName":"FC Stars","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":7119,"name":"FC Stars White ECNL GU17","clubID":52,"clubName":"FC Stars","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Mike_O_Donnell_0649b850f07a48a9bd20199087304d6b_FCStarsofM.png","conference":"New England","eventID":2051,"divisionID":5560,"division":"GU17","flightID":8964,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":2,"of":9,"gp":15,"w":11,"d":2,"l":2,"pts":35,"gf":35,"ga":13,"gd":22,"ppg":2.33,"form":"LWWWW","games":16,"played":15,"link":"start"},
+{"season":"2021-22","teamID":1597,"name":"FC Stars White ECNL GU18/U19","clubID":52,"clubName":"FC Stars","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Mike_O_Donnell_0649b850f07a48a9bd20199087304d6b_FCStarsofM.png","conference":"New England","eventID":2374,"divisionID":7851,"division":"GU18/U19","flightID":12550,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":7,"of":9,"gp":16,"w":3,"d":2,"l":11,"pts":11,"gf":11,"ga":41,"gd":-30,"ppg":0.69,"form":"WLLLL","games":16,"played":16,"link":"name"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":7119,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":3,"ga":9,"group":{"name":"Group A","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134386,"squads":[
+{"clubID":592,"clubName":"Arizona Arsenal Soccer Club","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":134386,"name":"Arizona Arsenal ECNL G2012/13","clubID":592,"clubName":"Arizona Arsenal Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_ea27d5ee27dd48678c87e0e067ab4c71_ArsenalAZ.jpg","conference":"Southwest","eventID":4271,"divisionID":22456,"division":"GU14","flightID":40600,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":16,"of":17,"gp":2,"w":0,"d":0,"l":2,"pts":0,"gf":0,"ga":5,"gd":-5,"ppg":0.0,"form":"LL","games":16,"played":2,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":88341,"name":"Arizona Arsenal ECNL G12","division":"G2012","conference":"Southwest"},
+{"season":"2025-26","teamID":96162,"name":"Arizona Arsenal ECNL G13","division":"G2013","conference":"Southwest"}
+]}
+]}

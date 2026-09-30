@@ -1,0 +1,7 @@
+{"schema":1,"teamID":6871,"squads":[
+{"clubID":10,"clubName":"Albion Hurricanes FC","birthYears":[2002,2003],"seasons":[
+{"season":"2020-21","teamID":6871,"name":"AHFC ECNL GU18/U19","clubID":10,"clubName":"Albion Hurricanes FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jacob_Decker_b5174738f5fb404db82f157ca6f459d3_albion.png","conference":"Texas","eventID":2036,"divisionID":5467,"division":"GU18/U19","flightID":8871,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":8,"of":12,"gp":16,"w":5,"d":1,"l":10,"pts":16,"gf":25,"ga":33,"gd":-8,"ppg":1.0,"form":"DLLLL","games":22,"played":16,"link":"start"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5850,"division":"U18/U19","flightID":11936,"flightName":"Optional Showcase","tier":"Showcase Games","teamID":6871,"games":2,"played":2,"w":0,"d":0,"l":2,"gf":2,"ga":7,"group":{"name":"Group A","pos":8,"of":9},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

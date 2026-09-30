@@ -1,0 +1,8 @@
+{"schema":1,"teamID":46786,"squads":[
+{"clubID":47,"clubName":"FC Dallas Youth","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":46786,"name":"FC Dallas ECNL GU17","clubID":47,"clubName":"FC Dallas Youth","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Light_Vert_01-06-2026T22:46:08.014.png","conference":"Texas","eventID":2036,"divisionID":5466,"division":"GU17","flightID":8870,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":2,"of":12,"gp":21,"w":19,"d":1,"l":1,"pts":58,"gf":80,"ga":11,"gd":69,"ppg":2.76,"form":"WWLWW","games":22,"played":21,"link":"start"},
+{"season":"2021-22","teamID":46786,"name":"FC Dallas ECNL GU18/U19","clubID":47,"clubName":"FC Dallas Youth","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Light_Vert_01-06-2026T22:46:08.014.png","conference":"Texas","eventID":2370,"divisionID":7827,"division":"GU18/U19","flightID":12526,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":4,"of":12,"gp":22,"w":13,"d":4,"l":5,"pts":43,"gf":53,"ga":19,"gd":34,"ppg":1.95,"form":"LDWWD","games":22,"played":22,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":46786,"games":4,"played":4,"w":2,"d":1,"l":1,"gf":3,"ga":2,"group":{"name":"Group E","pos":1,"of":4},"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

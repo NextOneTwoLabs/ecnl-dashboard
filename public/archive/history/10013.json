@@ -1,0 +1,6 @@
+{"schema":1,"teamID":10013,"squads":[
+{"clubID":30,"clubName":"Concorde Fire","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":10013,"name":"Concorde Fire Premier ECNL GU17","clubID":30,"clubName":"Concorde Fire","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Concorde-Fire.jpg","conference":"Southeast","eventID":2038,"divisionID":5479,"division":"GU17","flightID":8883,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":11,"of":12,"gp":15,"w":1,"d":1,"l":13,"pts":4,"gf":15,"ga":50,"gd":-35,"ppg":0.27,"form":"DLLLL","games":16,"played":15,"link":"start"},
+{"season":"2021-22","teamID":10013,"name":"Concorde Fire Premier ECNL GU18/19","clubID":30,"clubName":"Concorde Fire","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Concorde-Fire.jpg","conference":"Southeast","eventID":2372,"divisionID":7839,"division":"GU18/U19","flightID":12538,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":8,"of":12,"gp":19,"w":8,"d":0,"l":11,"pts":24,"gf":35,"ga":45,"gd":-10,"ppg":1.26,"form":"WLWLL","games":22,"played":19,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

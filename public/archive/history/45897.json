@@ -1,0 +1,6 @@
+{"schema":1,"teamID":45897,"squads":[
+{"clubID":3408,"clubName":"Racing Louisville Academy","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":45897,"name":"Racing Louisville Academy ECNL GU17","clubID":3408,"clubName":"Racing Louisville Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Racing_Log_04-14-2026T18:00:06.983.jpeg","conference":"Ohio Valley","eventID":2037,"divisionID":5473,"division":"GU17","flightID":8877,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":10,"of":10,"gp":18,"w":0,"d":1,"l":17,"pts":1,"gf":20,"ga":72,"gd":-52,"ppg":0.06,"form":"LLLLL","games":18,"played":18,"link":"start"},
+{"season":"2021-22","teamID":45897,"name":"Racing Louisville Academy ECNL GU18/U19","clubID":3408,"clubName":"Racing Louisville Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Racing_Log_04-14-2026T18:00:06.983.jpeg","conference":"Ohio Valley","eventID":2371,"divisionID":7833,"division":"GU18/U19","flightID":12829,"flightName":"South","u":18,"birthYears":[2003,2004],"rank":6,"of":6,"gp":16,"w":2,"d":3,"l":11,"pts":9,"gf":19,"ga":43,"gd":-24,"ppg":0.56,"form":"LWLDL","games":14,"played":14,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

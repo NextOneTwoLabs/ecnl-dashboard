@@ -1,0 +1,10 @@
+{"schema":1,"teamID":108207,"squads":[
+{"clubID":4008,"clubName":"GTFC Impact","birthYears":[2007,2008],"seasons":[
+{"season":"2025-26","teamID":108207,"name":"GTFC Impact ECNL G08/07","clubID":4008,"clubName":"GTFC Impact","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Megan_Neumann_c5a54286810144058ef67b28f71dff93_Unknown.png","conference":"Ohio Valley","eventID":3931,"divisionID":18747,"division":"G2008/2007","flightID":32910,"flightName":"North","u":18,"birthYears":[2007,2008],"rank":6,"of":6,"gp":16,"w":6,"d":0,"l":10,"pts":18,"gf":44,"ga":48,"gd":-4,"ppg":1.13,"form":"LWLWL","games":14,"played":14,"link":"start"}
+],"postseason":[],"showcases":[]},
+{"clubID":4008,"clubName":"GTFC Impact","birthYears":[2008,2009],"seasons":[
+{"season":"2026-27","teamID":108207,"name":"GTFC Impact ECNL G2008/09","clubID":4008,"clubName":"GTFC Impact","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Megan_Neumann_c5a54286810144058ef67b28f71dff93_Unknown.png","conference":"Ohio Valley","eventID":4269,"divisionID":22448,"division":"GU18/19","flightID":40592,"flightName":"ECNL","u":18,"birthYears":[2008,2009],"rank":4,"of":12,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":11,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":108209,"name":"GTFC Impact ECNL G09","division":"G2009","conference":"Ohio Valley"}
+]}
+]}

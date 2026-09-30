@@ -1,0 +1,10 @@
+{"schema":1,"teamID":67902,"squads":[
+{"clubID":46,"clubName":"HEX FC","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":67902,"name":"HEX FC Bucks ECNL G11","clubID":46,"clubName":"HEX FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Vickie_Sochocki_8a9225c6728b46f4a0fcbd466301638a_transparen.png","conference":"North Atlantic","eventID":2850,"divisionID":11630,"division":"G2011","flightID":19914,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":5,"of":10,"gp":18,"w":9,"d":4,"l":5,"pts":31,"gf":28,"ga":21,"gd":7,"ppg":1.72,"form":"LWLWW","games":18,"played":18,"link":"start"},
+{"season":"2024-25","teamID":67902,"name":"HEX FC Bucks ECNL G11","clubID":46,"clubName":"HEX FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Vickie_Sochocki_8a9225c6728b46f4a0fcbd466301638a_transparen.png","conference":"North Atlantic","eventID":3160,"divisionID":14238,"division":"G2011","flightID":24094,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":9,"of":11,"gp":20,"w":6,"d":4,"l":10,"pts":22,"gf":25,"ga":31,"gd":-6,"ppg":1.1,"form":"LLDLL","games":20,"played":20,"link":"id"},
+{"season":"2025-26","teamID":67902,"name":"HEX FC Bucks ECNL G11","clubID":46,"clubName":"HEX FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Vickie_Sochocki_8a9225c6728b46f4a0fcbd466301638a_transparen.png","conference":"North Atlantic","eventID":3928,"divisionID":18555,"division":"G2011","flightID":32640,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":6,"of":10,"gp":9,"w":4,"d":0,"l":5,"pts":12,"gf":15,"ga":11,"gd":4,"ppg":1.33,"form":"WLLLL","games":9,"played":9,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":131593,"name":"HEX FC Bucks ECNL G2011/12","division":"GU15","conference":"North Atlantic"},
+{"season":"2026-27","teamID":131595,"name":"HEX FC Bucks ECNL G2010/11","division":"GU16","conference":"North Atlantic"}
+]}
+]}

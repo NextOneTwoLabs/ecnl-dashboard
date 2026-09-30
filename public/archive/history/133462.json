@@ -1,0 +1,7 @@
+{"schema":1,"teamID":133462,"squads":[
+{"clubID":1354,"clubName":"Tennessee SC","birthYears":[2013,2014],"seasons":[
+{"season":"2026-27","teamID":133462,"name":"Tennessee SC ECNL G2013/14","clubID":1354,"clubName":"Tennessee SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/TSC_Logo_09-02-2026T15:48:05.788.jpg","conference":"Ohio Valley","eventID":4269,"divisionID":22443,"division":"GU13","flightID":40587,"flightName":"ECNL","u":13,"birthYears":[2013,2014],"rank":4,"of":12,"gp":4,"w":3,"d":0,"l":1,"pts":9,"gf":11,"ga":7,"gd":4,"ppg":2.25,"form":"WLWW","games":22,"played":4,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":117710,"name":"Tennessee SC ECNL G13","division":"G2013","conference":"Ohio Valley"}
+]}
+]}

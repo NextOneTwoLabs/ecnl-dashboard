@@ -1,0 +1,12 @@
+{"schema":1,"teamID":94064,"squads":[
+{"clubID":525,"clubName":"Arlington Soccer Association","birthYears":[2012],"best":1,"seasons":[
+{"season":"2024-25","teamID":94064,"name":"Arlington Soccer ECNL G12","clubID":525,"clubName":"Arlington Soccer Association","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Thomas_Griffin_bee0acf7e2a84c378d3d08368546c844_ARL LOGO.png","conference":"Mid-Atlantic","eventID":3157,"divisionID":14177,"division":"G2012","flightID":24013,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":2,"of":12,"gp":22,"w":16,"d":4,"l":2,"pts":52,"gf":59,"ga":21,"gd":38,"ppg":2.36,"form":"DWWWD","games":22,"played":22,"link":"start"},
+{"season":"2025-26","teamID":94064,"name":"Arlington Soccer ECNL G12","clubID":525,"clubName":"Arlington Soccer Association","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Thomas_Griffin_bee0acf7e2a84c378d3d08368546c844_ARL LOGO.png","conference":"Mid-Atlantic","eventID":3925,"divisionID":18536,"division":"G2012","flightID":32624,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":2,"of":10,"gp":18,"w":12,"d":5,"l":1,"pts":41,"gf":50,"ga":18,"gd":32,"ppg":2.28,"form":"DWWDL","games":18,"played":18,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":94064,"games":0,"played":0,"w":2,"d":0,"l":1,"gf":5,"ga":5,"fromTable":true,"group":{"name":"Group B","pos":2,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true},
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21552,"division":"G2012","flightID":39383,"flightName":"Champions League","tier":"Champions League","teamID":94064,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":4,"ga":2,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Round of 16","reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":134238,"name":"Arlington Soccer Association ECNL G2011/12","division":"GU15","conference":"Mid-Atlantic"},
+{"season":"2026-27","teamID":134239,"name":"Arlington Soccer Association ECNL G2012/13","division":"GU14","conference":"Mid-Atlantic"}
+]}
+]}

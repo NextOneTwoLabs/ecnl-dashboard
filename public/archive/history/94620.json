@@ -1,0 +1,16 @@
+{"schema":1,"teamID":94620,"squads":[
+{"clubID":2510,"clubName":"Force","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":94620,"name":"De Anza Force ECNL G12","clubID":2510,"clubName":"Force","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tamara_Moyers_d07ec9708fb74bfa8510664705e1aed2_Force_Logo_Large.png","conference":"NorCal","eventID":3161,"divisionID":14245,"division":"G2012","flightID":24103,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":10,"of":10,"gp":18,"w":1,"d":1,"l":16,"pts":4,"gf":5,"ga":76,"gd":-71,"ppg":0.22,"form":"LDLLL","games":18,"played":18,"link":"start"},
+{"season":"2025-26","teamID":94620,"name":"De Anza Force ECNL G12","clubID":2510,"clubName":"Force","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tamara_Moyers_d07ec9708fb74bfa8510664705e1aed2_Force_Logo_Large.png","conference":"NorCal","eventID":3929,"divisionID":18734,"division":"G2012","flightID":32898,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":9,"of":11,"gp":20,"w":4,"d":2,"l":14,"pts":14,"gf":15,"ga":77,"gd":-62,"ppg":0.7,"form":"DLLWL","games":20,"played":20,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19567,"division":"G2012","flightID":34645,"flightName":"San Diego","tier":"San Diego","teamID":94620,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":0,"d":0,"l":3,"gf":0,"ga":11}
+],"maybe":[
+{"season":"2026-27","teamID":94620,"name":"Force (CA) ECNL G2012/13","division":"GU14","conference":"NorCal"}
+]},
+{"clubID":2510,"clubName":"Force","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":94620,"name":"Force (CA) ECNL G2012/13","clubID":2510,"clubName":"Force","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tamara_Moyers_d07ec9708fb74bfa8510664705e1aed2_Force_Logo_Large.png","conference":"NorCal","eventID":4267,"divisionID":22432,"division":"GU14","flightID":40576,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":12,"of":12,"gp":6,"w":0,"d":0,"l":6,"pts":0,"gf":1,"ga":29,"gd":-28,"ppg":0.0,"form":"LLLLL","games":22,"played":6,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":94620,"name":"De Anza Force ECNL G12","division":"G2012","conference":"NorCal"},
+{"season":"2025-26","teamID":112400,"name":"De Anza Force ECNL G13","division":"G2013","conference":"NorCal"}
+]}
+]}

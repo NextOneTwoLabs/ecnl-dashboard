@@ -1,0 +1,7 @@
+{"schema":1,"teamID":6902,"squads":[
+{"clubID":65,"clubName":"McLean Youth Soccer","birthYears":[2002,2003],"best":0,"seasons":[
+{"season":"2020-21","teamID":6902,"name":"McLean YSA ECNL GU18/U19","clubID":65,"clubName":"McLean Youth Soccer","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Zeca_Neto_bd2e82e7953b423ca396bf29401471e3_McLean_New.png","conference":"Mid-Atlantic","eventID":2040,"divisionID":5494,"division":"GU18/U19","flightID":8898,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":1,"of":13,"gp":8,"w":7,"d":1,"l":0,"pts":22,"gf":25,"ga":6,"gd":19,"ppg":2.75,"form":"WWDWW","games":8,"played":8,"link":"start"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5850,"division":"U18/U19","flightID":9418,"flightName":"Champions League","tier":"Champions League","teamID":6902,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":5,"ga":12,"group":null,"reached":"Round of 16","champion":false,"cup":"Champions League Cup: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

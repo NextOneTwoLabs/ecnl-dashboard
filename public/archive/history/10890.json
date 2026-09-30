@@ -1,0 +1,11 @@
+{"schema":1,"teamID":10890,"squads":[
+{"clubID":538,"clubName":"Pittsburgh Riverhounds","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":10889,"name":"Pittsburgh Riverhounds ECNL GU17","clubID":538,"clubName":"Pittsburgh Riverhounds","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Colby_Corcoran_ea3f6f671efa439b8444c62fd377c8e7_2018PGHLOG.png","conference":"Ohio Valley","eventID":2037,"divisionID":5473,"division":"GU17","flightID":8877,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":8,"of":10,"gp":18,"w":7,"d":2,"l":9,"pts":23,"gf":22,"ga":35,"gd":-13,"ppg":1.28,"form":"WLWLL","games":18,"played":18,"link":"start"},
+{"season":"2021-22","teamID":10890,"name":"Pittsburgh Riverhounds ECNL GU18/U19","clubID":538,"clubName":"Pittsburgh Riverhounds","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Colby_Corcoran_ea3f6f671efa439b8444c62fd377c8e7_2018PGHLOG.png","conference":"Ohio Valley","eventID":2371,"divisionID":7833,"division":"GU18/U19","flightID":12532,"flightName":"North","u":18,"birthYears":[2003,2004],"rank":5,"of":6,"gp":16,"w":6,"d":4,"l":6,"pts":22,"gf":30,"ga":30,"gd":0,"ppg":1.38,"form":"DWLLL","games":14,"played":14,"link":"name"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11933,"flightName":"Showcase Cup B","tier":"Showcase Cup B","teamID":10889,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":5,"ga":7,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[]},
+{"clubID":538,"clubName":"Pittsburgh Riverhounds","birthYears":[2002,2003],"seasons":[
+{"season":"2020-21","teamID":10890,"name":"Pittsburgh Riverhounds ECNL GU18/U19","clubID":538,"clubName":"Pittsburgh Riverhounds","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Colby_Corcoran_ea3f6f671efa439b8444c62fd377c8e7_2018PGHLOG.png","conference":"Ohio Valley","eventID":2037,"divisionID":5474,"division":"GU18/U19","flightID":8878,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":5,"of":10,"gp":17,"w":6,"d":2,"l":9,"pts":20,"gf":32,"ga":42,"gd":-10,"ppg":1.18,"form":"LWLWL","games":18,"played":17,"link":"start"}
+],"postseason":[],"showcases":[]}
+]}

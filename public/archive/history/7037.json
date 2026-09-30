@@ -1,0 +1,7 @@
+{"schema":1,"teamID":7037,"squads":[
+{"clubID":58,"clubName":"Internationals SC","birthYears":[2002,2003],"best":0,"seasons":[
+{"season":"2020-21","teamID":7037,"name":"Internationals SC ECNL GU18/U19","clubID":58,"clubName":"Internationals SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/ii_ii_584c08d490b04a789bf33f03d4a904bc_Internatio.png","conference":"Ohio Valley","eventID":2037,"divisionID":5474,"division":"GU18/U19","flightID":8878,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":1,"of":10,"gp":18,"w":17,"d":0,"l":1,"pts":51,"gf":81,"ga":14,"gd":67,"ppg":2.83,"form":"WWWWW","games":18,"played":18,"link":"start"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5850,"division":"U18/U19","flightID":9418,"flightName":"Champions League","tier":"Champions League","teamID":7037,"games":4,"played":4,"w":3,"d":0,"l":1,"gf":11,"ga":5,"group":null,"reached":"Final","champion":false,"final":"lost","cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

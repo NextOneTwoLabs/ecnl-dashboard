@@ -1,0 +1,10 @@
+{"schema":1,"teamID":117710,"squads":[
+{"clubID":1354,"clubName":"Tennessee SC","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":117710,"name":"Tennessee SC ECNL G13","clubID":1354,"clubName":"Tennessee SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/TSC_Logo_09-02-2026T15:48:05.788.jpg","conference":"Ohio Valley","eventID":3931,"divisionID":18743,"division":"G2013","flightID":36469,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":3,"of":12,"gp":22,"w":12,"d":4,"l":6,"pts":40,"gf":39,"ga":20,"gd":19,"ppg":1.82,"form":"WLWWW","games":22,"played":22,"link":"start"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":117710,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":1,"ga":9,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Round of 16","reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":133462,"name":"Tennessee SC ECNL G2013/14","division":"GU13","conference":"Ohio Valley"},
+{"season":"2026-27","teamID":133463,"name":"Tennessee SC ECNL G2012/13","division":"GU14","conference":"Ohio Valley"}
+]}
+]}

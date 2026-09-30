@@ -1,0 +1,8 @@
+{"schema":1,"teamID":1367,"squads":[
+{"clubID":17,"clubName":"Bethesda SC","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":1367,"name":"Bethesda SC ECNL GU17","clubID":17,"clubName":"Bethesda SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jose_Mourinho_63e8b63f510340a59f2c56ffe71ffc2b_Bethesda_T.png","conference":"North Atlantic","eventID":2039,"divisionID":5486,"division":"GU17","flightID":8890,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":8,"of":9,"gp":15,"w":4,"d":4,"l":7,"pts":16,"gf":20,"ga":29,"gd":-9,"ppg":1.07,"form":"LLLWL","games":16,"played":15,"link":"start"},
+{"season":"2021-22","teamID":1367,"name":"Bethesda SC ECNL GU18/U19","clubID":17,"clubName":"Bethesda SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jose_Mourinho_63e8b63f510340a59f2c56ffe71ffc2b_Bethesda_T.png","conference":"North Atlantic","eventID":2373,"divisionID":7845,"division":"GU18/U19","flightID":12544,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":6,"of":9,"gp":16,"w":4,"d":4,"l":8,"pts":16,"gf":19,"ga":24,"gd":-5,"ppg":1.0,"form":"DDLWL","games":16,"played":16,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11932,"flightName":"Showcase Cup A","tier":"Showcase Cup A","teamID":1367,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":9,"ga":4,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

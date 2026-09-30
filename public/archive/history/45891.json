@@ -1,0 +1,8 @@
+{"schema":1,"teamID":45891,"squads":[
+{"clubID":82,"clubName":"LAFC So Cal","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":45891,"name":"Real So Cal ECNL GU17","clubID":82,"clubName":"LAFC So Cal","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/LAFC_SC_8__06-18-2025T22:03:51.850.png","conference":"Southwest","eventID":2034,"divisionID":5453,"division":"GU17","flightID":8857,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":3,"of":14,"gp":14,"w":9,"d":1,"l":4,"pts":28,"gf":28,"ga":13,"gd":15,"ppg":2.0,"form":"WWWWD","games":14,"played":14,"link":"start"},
+{"season":"2021-22","teamID":45891,"name":"LAFC So Cal ECNL GU18/U19","clubID":82,"clubName":"LAFC So Cal","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/LAFC_SC_8__06-18-2025T22:03:51.850.png","conference":"Southwest","eventID":2368,"divisionID":7815,"division":"GU18/U19","flightID":12514,"flightName":"Mojave","u":18,"birthYears":[2003,2004],"rank":5,"of":9,"gp":24,"w":11,"d":4,"l":9,"pts":37,"gf":42,"ga":36,"gd":6,"ppg":1.54,"form":"LDWWL","games":19,"played":19,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":45891,"games":3,"played":3,"w":0,"d":1,"l":2,"gf":0,"ga":3,"group":{"name":"Group E","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

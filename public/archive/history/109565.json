@@ -1,0 +1,8 @@
+{"schema":1,"teamID":109565,"squads":[
+{"clubID":25,"clubName":"Challenge SC","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":109565,"name":"Challenge SC ECNL G13","clubID":25,"clubName":"Challenge SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/logo_05-05-2026T19:13:38.814.png","conference":"Texas","eventID":3934,"divisionID":18766,"division":"G2013","flightID":32939,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":12,"of":16,"gp":15,"w":3,"d":2,"l":10,"pts":11,"gf":19,"ga":36,"gd":-17,"ppg":0.73,"form":"WLDDL","games":15,"played":15,"link":"start"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":129342,"name":"Challenge SC ECNL G2012/13","division":"GU14","conference":"Texas"},
+{"season":"2026-27","teamID":129343,"name":"Challenge SC ECNL G2013/14","division":"GU13","conference":"Texas"}
+]}
+]}

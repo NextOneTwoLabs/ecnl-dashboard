@@ -1,0 +1,13 @@
+{"schema":1,"teamID":79701,"squads":[
+{"clubID":102,"clubName":"Sporting Blue Valley","birthYears":[2011],"best":0,"seasons":[
+{"season":"2023-24","teamID":79701,"name":"Sporting Blue Valley ECNL G11","clubID":102,"clubName":"Sporting Blue Valley","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SPORTING-Blue-Valley.jpg","conference":"Midwest","eventID":2849,"divisionID":11606,"division":"G2011","flightID":19809,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":4,"of":15,"gp":14,"w":11,"d":0,"l":3,"pts":33,"gf":39,"ga":11,"gd":28,"ppg":2.36,"form":"LWWWW","games":14,"played":14,"link":"start"},
+{"season":"2024-25","teamID":79701,"name":"Sporting Blue Valley ECNL G11","clubID":102,"clubName":"Sporting Blue Valley","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SPORTING-Blue-Valley.jpg","conference":"Midwest","eventID":3158,"divisionID":14226,"division":"G2011","flightID":24083,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":9,"of":16,"gp":14,"w":5,"d":3,"l":6,"pts":18,"gf":20,"ga":19,"gd":1,"ppg":1.29,"form":"LLWLW","games":15,"played":14,"link":"id"},
+{"season":"2025-26","teamID":79701,"name":"Sporting Blue Valley ECNL G11","clubID":102,"clubName":"Sporting Blue Valley","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SPORTING-Blue-Valley.jpg","conference":"Midwest","eventID":3926,"divisionID":18543,"division":"G2011","flightID":32628,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":8,"of":16,"gp":14,"w":5,"d":4,"l":5,"pts":19,"gf":29,"ga":19,"gd":10,"ppg":1.36,"form":"LLDDD","games":15,"played":14,"link":"id"}
+],"postseason":[
+{"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14601,"division":"G2011","flightID":24871,"flightName":"Champions League","tier":"Champions League","teamID":79701,"games":3,"played":3,"w":0,"d":1,"l":2,"gf":1,"ga":5,"group":{"name":"Group E","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false},
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21550,"division":"G2011","flightID":39389,"flightName":"Showcase Cup","tier":"Showcase Cup","teamID":79701,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":3,"ga":3,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":131581,"name":"Sporting Blue Valley ECNL G2011/12","division":"GU15","conference":"Midwest"},
+{"season":"2026-27","teamID":131582,"name":"Sporting Blue Valley ECNL G2010/11","division":"GU16","conference":"Midwest"}
+]}
+]}

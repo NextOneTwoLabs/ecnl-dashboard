@@ -1,0 +1,8 @@
+{"schema":1,"teamID":7645,"squads":[
+{"clubID":22,"clubName":"NCFC Youth","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":7645,"name":"NCFC Youth ECNL GU17","clubID":22,"clubName":"NCFC Youth","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/NCFC_Logo_TGS.png","conference":"Mid-Atlantic","eventID":2040,"divisionID":5493,"division":"GU17","flightID":8897,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":11,"of":13,"gp":14,"w":3,"d":1,"l":10,"pts":10,"gf":14,"ga":42,"gd":-28,"ppg":0.71,"form":"LLLWL","games":14,"played":14,"link":"start"},
+{"season":"2021-22","teamID":7645,"name":"NCFC Youth ECNL GU18/U19","clubID":22,"clubName":"NCFC Youth","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/NCFC_Logo_TGS.png","conference":"Mid-Atlantic","eventID":2366,"divisionID":7803,"division":"GU18/U19","flightID":12502,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":11,"of":14,"gp":13,"w":3,"d":2,"l":8,"pts":11,"gf":13,"ga":29,"gd":-16,"ppg":0.85,"form":"LDLDL","games":13,"played":13,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11934,"flightName":"Open Cup","tier":"Open Cup","teamID":7645,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":3,"ga":10,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

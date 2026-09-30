@@ -1,0 +1,12 @@
+{"schema":1,"teamID":97596,"squads":[
+{"clubID":43,"clubName":"Eclipse Select Soccer Club","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":97596,"name":"Eclipse Select SC ECNL G13","clubID":43,"clubName":"Eclipse Select Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Eclipse-Select-Soccer-Club.jpg","conference":"Midwest","eventID":3926,"divisionID":18541,"division":"G2013","flightID":32631,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":3,"of":16,"gp":15,"w":10,"d":5,"l":0,"pts":35,"gf":36,"ga":7,"gd":29,"ppg":2.33,"form":"WDWDW","games":15,"played":15,"link":"start"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":97596,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":5,"ga":6,"group":null,"reached":"Round of 16","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":97596,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":0,"d":2,"l":1,"gf":3,"ga":6}
+],"maybe":[
+{"season":"2026-27","teamID":136035,"name":"Eclipse Select Soccer Club ECNL G2013/14","division":"GU13","conference":"Midwest"},
+{"season":"2026-27","teamID":136036,"name":"Eclipse Select Soccer Club ECNL G2012/13","division":"GU14","conference":"Midwest"}
+]}
+]}

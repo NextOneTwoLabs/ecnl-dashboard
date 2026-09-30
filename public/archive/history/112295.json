@@ -1,0 +1,8 @@
+{"schema":1,"teamID":112295,"squads":[
+{"clubID":30,"clubName":"Concorde Fire","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":112295,"name":"Concorde Fire Platinum ECNL G13","clubID":30,"clubName":"Concorde Fire","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Concorde-Fire.jpg","conference":"Southeast","eventID":3932,"divisionID":18749,"division":"G2013","flightID":32927,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":2,"of":16,"gp":15,"w":12,"d":2,"l":1,"pts":38,"gf":49,"ga":10,"gd":39,"ppg":2.53,"form":"WWWWW","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":112295,"name":"Concorde Fire Platinum ECNL G2012/13","clubID":30,"clubName":"Concorde Fire","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Concorde-Fire.jpg","conference":"Southeast","eventID":4270,"divisionID":22450,"division":"GU14","flightID":40594,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":3,"of":16,"gp":6,"w":5,"d":0,"l":1,"pts":15,"gf":22,"ga":5,"gd":17,"ppg":2.5,"form":"WWWWW","games":15,"played":6,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":112295,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":7,"ga":3,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

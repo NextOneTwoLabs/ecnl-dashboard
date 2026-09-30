@@ -1,0 +1,8 @@
+{"schema":1,"teamID":136036,"squads":[
+{"clubID":43,"clubName":"Eclipse Select Soccer Club","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":136036,"name":"Eclipse Select Soccer Club ECNL G2012/13","clubID":43,"clubName":"Eclipse Select Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Eclipse-Select-Soccer-Club.jpg","conference":"Midwest","eventID":4264,"divisionID":22414,"division":"GU14","flightID":41607,"flightName":"EAST","u":14,"birthYears":[2012,2013],"rank":2,"of":8,"gp":4,"w":2,"d":2,"l":0,"pts":8,"gf":12,"ga":2,"gd":10,"ppg":2.0,"form":"DW","games":15,"played":2,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":84211,"name":"Eclipse Select SC ECNL G12","division":"G2012","conference":"Midwest"},
+{"season":"2025-26","teamID":97596,"name":"Eclipse Select SC ECNL G13","division":"G2013","conference":"Midwest"}
+]}
+]}

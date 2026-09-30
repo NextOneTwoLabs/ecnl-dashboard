@@ -1,0 +1,12 @@
+{"schema":1,"teamID":68207,"squads":[
+{"clubID":91,"clubName":"Santa Rosa United Soccer","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":68207,"name":"Santa Rosa United ECNL G12","clubID":91,"clubName":"Santa Rosa United Soccer","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Test_Man_88cca6932f3f4375bd0dbca4ae37627a_SRU_Logo.jpeg","conference":"NorCal","eventID":3161,"divisionID":14245,"division":"G2012","flightID":24103,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":6,"of":10,"gp":18,"w":7,"d":4,"l":7,"pts":25,"gf":31,"ga":30,"gd":1,"ppg":1.39,"form":"WWWLL","games":18,"played":18,"link":"start"},
+{"season":"2025-26","teamID":68207,"name":"Santa Rosa United ECNL G12","clubID":91,"clubName":"Santa Rosa United Soccer","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Test_Man_88cca6932f3f4375bd0dbca4ae37627a_SRU_Logo.jpeg","conference":"NorCal","eventID":3929,"divisionID":18734,"division":"G2012","flightID":32898,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":7,"of":11,"gp":20,"w":4,"d":5,"l":11,"pts":17,"gf":23,"ga":57,"gd":-34,"ppg":0.85,"form":"LWWLL","games":20,"played":20,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19567,"division":"G2012","flightID":34645,"flightName":"San Diego","tier":"San Diego","teamID":68207,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":0,"d":1,"l":2,"gf":1,"ga":9},
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20346,"division":"G2012","flightID":36387,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":68207,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":0,"d":2,"l":1,"gf":0,"ga":3}
+],"maybe":[
+{"season":"2026-27","teamID":132202,"name":"Santa Rosa United ECNL G2012/13","division":"GU14","conference":"NorCal"},
+{"season":"2026-27","teamID":132203,"name":"Santa Rosa United ECNL G2011/12","division":"GU15","conference":"NorCal"}
+]}
+]}

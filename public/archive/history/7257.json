@@ -1,0 +1,6 @@
+{"schema":1,"teamID":7257,"squads":[
+{"clubID":94,"clubName":"Scorpions SC","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":7257,"name":"Scorpions Soccer ECNL GU17","clubID":94,"clubName":"Scorpions SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/abc_def_f3dd4d427b6c4a0f8a7c77f575390256_scorpions_.png","conference":"New England","eventID":2051,"divisionID":5560,"division":"GU17","flightID":8964,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":8,"of":9,"gp":16,"w":3,"d":1,"l":12,"pts":10,"gf":17,"ga":48,"gd":-31,"ppg":0.63,"form":"LWLLL","games":16,"played":16,"link":"start"},
+{"season":"2021-22","teamID":7257,"name":"Scorpions Soccer ECNL GU18/U19","clubID":94,"clubName":"Scorpions SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/abc_def_f3dd4d427b6c4a0f8a7c77f575390256_scorpions_.png","conference":"New England","eventID":2374,"divisionID":7851,"division":"GU18/U19","flightID":12550,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":5,"of":9,"gp":16,"w":6,"d":1,"l":9,"pts":19,"gf":21,"ga":29,"gd":-8,"ppg":1.19,"form":"WWLLL","games":16,"played":16,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

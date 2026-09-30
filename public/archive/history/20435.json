@@ -1,0 +1,8 @@
+{"schema":1,"teamID":20435,"squads":[
+{"clubID":592,"clubName":"Arizona Arsenal Soccer Club","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":20435,"name":"AZ Arsenal ECNL GU17","clubID":592,"clubName":"Arizona Arsenal Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_ea27d5ee27dd48678c87e0e067ab4c71_ArsenalAZ.jpg","conference":"Southwest","eventID":2034,"divisionID":5453,"division":"GU17","flightID":8857,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":9,"of":14,"gp":15,"w":5,"d":4,"l":6,"pts":19,"gf":27,"ga":30,"gd":-3,"ppg":1.27,"form":"LDWWW","games":15,"played":15,"link":"start"},
+{"season":"2021-22","teamID":20435,"name":"AZ Arsenal ECNL GU18/U19","clubID":592,"clubName":"Arizona Arsenal Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_ea27d5ee27dd48678c87e0e067ab4c71_ArsenalAZ.jpg","conference":"Southwest","eventID":2368,"divisionID":7815,"division":"GU18/U19","flightID":12823,"flightName":"Sonoran","u":18,"birthYears":[2003,2004],"rank":4,"of":8,"gp":23,"w":11,"d":4,"l":8,"pts":37,"gf":38,"ga":28,"gd":10,"ppg":1.61,"form":"WDLWW","games":17,"played":17,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11932,"flightName":"Showcase Cup A","tier":"Showcase Cup A","teamID":20435,"games":4,"played":4,"w":3,"d":0,"l":1,"gf":10,"ga":8,"group":null,"reached":"Final","champion":false,"final":"lost","cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

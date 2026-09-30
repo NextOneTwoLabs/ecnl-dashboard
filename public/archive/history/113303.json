@@ -1,0 +1,6 @@
+{"schema":1,"teamID":113303,"squads":[
+{"clubID":1785,"clubName":"Virginia Development Academy","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":113303,"name":"VDA ECNL G13","clubID":1785,"clubName":"Virginia Development Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Serena_Starks_ade84da672814541a4e8a444d367f6af_NewVDALogo.jpg","conference":"Mid-Atlantic","eventID":3925,"divisionID":18535,"division":"G2013","flightID":32626,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":6,"of":10,"gp":18,"w":6,"d":5,"l":7,"pts":23,"gf":29,"ga":22,"gd":7,"ppg":1.28,"form":"LWDLL","games":18,"played":18,"link":"start"},
+{"season":"2026-27","teamID":113303,"name":"VDA ECNL G2012/13","clubID":1785,"clubName":"Virginia Development Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Serena_Starks_ade84da672814541a4e8a444d367f6af_NewVDALogo.jpg","conference":"Mid-Atlantic","eventID":4263,"divisionID":22408,"division":"GU14","flightID":40552,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":5,"of":11,"gp":3,"w":2,"d":1,"l":0,"pts":7,"gf":14,"ga":0,"gd":14,"ppg":2.33,"form":"DWW","games":20,"played":3,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

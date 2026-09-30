@@ -1,0 +1,8 @@
+{"schema":1,"teamID":47020,"squads":[
+{"clubID":3491,"clubName":"Kings Hammer Columbus","birthYears":[2005],"best":0,"seasons":[
+{"season":"2021-22","teamID":47020,"name":"Kings Hammer SC ECNL GU17","clubID":3491,"clubName":"Kings Hammer Columbus","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Amelie_Araya_519c51d381f1471886b8916212d6d6dd_Lion head image .png","conference":"Ohio Valley","eventID":2371,"divisionID":7832,"division":"GU17","flightID":12531,"flightName":"North","u":17,"birthYears":[2005],"rank":5,"of":6,"gp":16,"w":7,"d":1,"l":8,"pts":22,"gf":38,"ga":39,"gd":-1,"ppg":1.38,"form":"WLWLL","games":12,"played":12,"link":"start"},
+{"season":"2022-23","teamID":47020,"name":"Kings Hammer SC ECNL G05/04","clubID":3491,"clubName":"Kings Hammer Columbus","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Amelie_Araya_519c51d381f1471886b8916212d6d6dd_Lion head image .png","conference":"Ohio Valley","eventID":2524,"divisionID":9508,"division":"G2005/2004","flightID":16160,"flightName":"North","u":18,"birthYears":[2004,2005],"rank":4,"of":6,"gp":16,"w":4,"d":5,"l":7,"pts":17,"gf":40,"ga":45,"gd":-5,"ppg":1.06,"form":"LLWLL","games":14,"played":14,"link":"id"}
+],"postseason":[
+{"season":"2021-22","stage":"Playoffs","eventID":2436,"eventName":"ECNL National Playoffs","divisionID":9753,"division":"U17","flightID":15405,"flightName":"Champions League","tier":"Champions League","teamID":47020,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":5,"ga":10,"group":{"name":"Group H","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

@@ -1,0 +1,6 @@
+{"schema":1,"teamID":42914,"squads":[
+{"clubID":7,"clubName":"No Club Selection","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":42914,"name":"Tulsa SC ECNL G11","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Texas","eventID":2857,"divisionID":11659,"division":"G2011","flightID":19950,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":7,"of":16,"gp":15,"w":7,"d":3,"l":5,"pts":24,"gf":18,"ga":29,"gd":-11,"ppg":1.6,"form":"WWWWW","games":15,"played":15,"link":"start"},
+{"season":"2024-25","teamID":42914,"name":"Tulsa SC ECNL G11","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Texas","eventID":3166,"divisionID":14271,"division":"G2011","flightID":24143,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":13,"of":16,"gp":15,"w":3,"d":0,"l":12,"pts":9,"gf":7,"ga":36,"gd":-29,"ppg":0.6,"form":"WLLLL","games":15,"played":15,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

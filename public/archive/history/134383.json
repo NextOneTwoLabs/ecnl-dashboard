@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134383,"squads":[
+{"clubID":592,"clubName":"Arizona Arsenal Soccer Club","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":134383,"name":"Arizona Arsenal ECNL G2010/11","clubID":592,"clubName":"Arizona Arsenal Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_ea27d5ee27dd48678c87e0e067ab4c71_ArsenalAZ.jpg","conference":"Southwest","eventID":4271,"divisionID":22458,"division":"GU16","flightID":40602,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":15,"of":17,"gp":2,"w":0,"d":0,"l":2,"pts":0,"gf":1,"ga":6,"gd":-5,"ppg":0.0,"form":"LL","games":16,"played":2,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":65042,"name":"Arizona Arsenal ECNL G10","division":"G2010","conference":"Southwest"},
+{"season":"2025-26","teamID":77284,"name":"Arizona Arsenal ECNL G11","division":"G2011","conference":"Southwest"}
+]}
+]}

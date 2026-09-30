@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134094,"squads":[
+{"clubID":13,"clubName":"Sporting California USA","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":134094,"name":"Sporting California USA ECNL G2009/10","clubID":13,"clubName":"Sporting California USA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Screen_Sho_12-13-2024T20:08:49.668.png","conference":"Southwest","eventID":4271,"divisionID":22459,"division":"GU17","flightID":40603,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":16,"of":17,"gp":3,"w":0,"d":0,"l":3,"pts":0,"gf":3,"ga":13,"gd":-10,"ppg":0.0,"form":"LLL","games":15,"played":3,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":59459,"name":"Sporting CA USA ECNL G09","division":"G2009","conference":"Southwest"},
+{"season":"2025-26","teamID":69733,"name":"Sporting CA USA ECNL G10","division":"G2010","conference":"Southwest"}
+]}
+]}

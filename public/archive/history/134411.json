@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134411,"squads":[
+{"clubID":67,"clubName":"Minnesota Thunder Academy","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":134411,"name":"MN Thunder Academy ECNL G2012/13","clubID":67,"clubName":"Minnesota Thunder Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/MTA_new_lo_08-05-2025T15:25:15.298.png","conference":"Midwest","eventID":4264,"divisionID":22414,"division":"GU14","flightID":41609,"flightName":"WEST","u":14,"birthYears":[2012,2013],"rank":3,"of":8,"gp":2,"w":1,"d":1,"l":0,"pts":4,"gf":3,"ga":1,"gd":2,"ppg":2.0,"form":"DW","games":16,"played":2,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":71856,"name":"Minnesota Thunder ECNL G12","division":"G2012","conference":"Midwest"},
+{"season":"2025-26","teamID":87978,"name":"Minnesota Thunder ECNL G13","division":"G2013","conference":"Midwest"}
+]}
+]}

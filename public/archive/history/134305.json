@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134305,"squads":[
+{"clubID":2017,"clubName":"Rockford Raptors FC","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":134305,"name":"Rockford Raptors FC ECNL G2009/10","clubID":2017,"clubName":"Rockford Raptors FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImage/thumbimage (1)45DD2018094545.jpe","conference":"Midwest","eventID":4264,"divisionID":22417,"division":"GU17","flightID":40561,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":9,"of":16,"gp":7,"w":2,"d":2,"l":3,"pts":8,"gf":12,"ga":14,"gd":-2,"ppg":1.14,"form":"WLLWD","games":15,"played":7,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":60409,"name":"Rockford Raptors ECNL G09","division":"G2009","conference":"Midwest"},
+{"season":"2025-26","teamID":68288,"name":"Rockford Raptors ECNL G10","division":"G2010","conference":"Midwest"}
+]}
+]}

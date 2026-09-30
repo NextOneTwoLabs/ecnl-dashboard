@@ -1,0 +1,8 @@
+{"schema":1,"teamID":8953,"squads":[
+{"clubID":98,"clubName":"So Cal Blues","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":8953,"name":"So Cal Blues ECNL GU17","clubID":98,"clubName":"So Cal Blues","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Blues__blu_03-13-2026T19:12:01.147.png","conference":"Southwest","eventID":2034,"divisionID":5453,"division":"GU17","flightID":8857,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":2,"of":14,"gp":13,"w":9,"d":2,"l":2,"pts":29,"gf":38,"ga":10,"gd":28,"ppg":2.23,"form":"LWWDW","games":13,"played":13,"link":"start"},
+{"season":"2021-22","teamID":8953,"name":"So Cal Blues ECNL GU18/U19","clubID":98,"clubName":"So Cal Blues","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Blues__blu_03-13-2026T19:12:01.147.png","conference":"Southwest","eventID":2368,"divisionID":7815,"division":"GU18/U19","flightID":12823,"flightName":"Sonoran","u":18,"birthYears":[2003,2004],"rank":5,"of":8,"gp":23,"w":10,"d":4,"l":9,"pts":34,"gf":37,"ga":28,"gd":9,"ppg":1.48,"form":"LWDLW","games":20,"played":20,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":8953,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":8,"ga":5,"group":{"name":"Group B","pos":2,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

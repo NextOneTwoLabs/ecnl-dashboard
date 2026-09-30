@@ -1,0 +1,11 @@
+{"schema":1,"teamID":60092,"squads":[
+{"clubID":4603,"clubName":"Fairfax Virginia Union","birthYears":[2009],"seasons":[
+{"season":"2021-22","teamID":60092,"name":"VA Union ECNL GU13","clubID":4603,"clubName":"Fairfax Virginia Union","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FairfaxVAU_04-16-2026T20:45:12.085.png","conference":"Mid-Atlantic","eventID":2366,"divisionID":7798,"division":"GU13","flightID":12497,"flightName":"Flight 1","u":13,"birthYears":[2009],"rank":9,"of":14,"gp":26,"w":11,"d":3,"l":12,"pts":36,"gf":46,"ga":52,"gd":-6,"ppg":1.38,"form":"LWWLL","games":26,"played":26,"link":"start"},
+{"season":"2022-23","teamID":60092,"name":"VA Union ECNL G09","clubID":4603,"clubName":"Fairfax Virginia Union","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FairfaxVAU_04-16-2026T20:45:12.085.png","conference":"Mid-Atlantic","eventID":2523,"divisionID":9498,"division":"G2009","flightID":15725,"flightName":"ECNL","u":14,"birthYears":[2009],"rank":8,"of":13,"gp":24,"w":8,"d":1,"l":15,"pts":25,"gf":37,"ga":51,"gd":-14,"ppg":1.04,"form":"LLLLL","games":24,"played":24,"link":"id"},
+{"season":"2023-24","teamID":60092,"name":"VA Union ECNL G09","clubID":4603,"clubName":"Fairfax Virginia Union","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FairfaxVAU_04-16-2026T20:45:12.085.png","conference":"Mid-Atlantic","eventID":2839,"divisionID":11504,"division":"G2009","flightID":19660,"flightName":"ECNL","u":15,"birthYears":[2009],"rank":7,"of":13,"gp":12,"w":4,"d":4,"l":4,"pts":16,"gf":24,"ga":21,"gd":3,"ppg":1.33,"form":"WLWDL","games":12,"played":12,"link":"id"}
+],"postseason":[
+{"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14599,"division":"G2009","flightID":24872,"flightName":"North American Cup","tier":"North American Cup","teamID":60092,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":5,"ga":5,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2024-25","teamID":96995,"name":"Fairfax Virginia Union ECNL G09","division":"G2009","conference":"Mid-Atlantic"}
+]}
+]}

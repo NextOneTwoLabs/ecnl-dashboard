@@ -1,0 +1,10 @@
+{"schema":1,"teamID":111849,"squads":[
+{"clubID":36,"clubName":"Sting Soccer Club","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":111849,"name":"Sting Royal ECNL G13","clubID":36,"clubName":"Sting Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Steve_Patterson_6ac544d800a843b4aa3e7bd3182c7a59_TGS_Sting_.png","conference":"Texas","eventID":3934,"divisionID":18766,"division":"G2013","flightID":32939,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":2,"of":16,"gp":15,"w":13,"d":0,"l":2,"pts":39,"gf":49,"ga":20,"gd":29,"ppg":2.6,"form":"WWWWW","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":111849,"name":"Sting Royal ECNL G2012/13","clubID":36,"clubName":"Sting Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Steve_Patterson_6ac544d800a843b4aa3e7bd3182c7a59_TGS_Sting_.png","conference":"Texas","eventID":4272,"divisionID":22462,"division":"GU14","flightID":40606,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":1,"of":16,"gp":5,"w":5,"d":0,"l":0,"pts":15,"gf":15,"ga":6,"gd":9,"ppg":3.0,"form":"WWWWW","games":15,"played":5,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":111849,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":6,"ga":5,"group":null,"reached":"Round of 16","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":111849,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":3,"d":0,"l":0,"gf":8,"ga":1}
+]}
+]}

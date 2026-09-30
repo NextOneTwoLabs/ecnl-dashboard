@@ -1,0 +1,8 @@
+{"schema":1,"teamID":128084,"squads":[
+{"clubID":2357,"clubName":"PDA Blue (North)","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":128084,"name":"PDA Blue ECNL G2009/10","clubID":2357,"clubName":"PDA Blue (North)","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Maria_Mendoza_f80006c58dcb4a64a914a2c0b1ae216e_thumbnail_.png","conference":"North Atlantic","eventID":4266,"divisionID":22429,"division":"GU17","flightID":40573,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":6,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":9,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":13678,"name":"PDA Blue ECNL G09","division":"G2009","conference":"North Atlantic"},
+{"season":"2025-26","teamID":56324,"name":"PDA Blue ECNL G10","division":"G2010","conference":"North Atlantic"}
+]}
+]}

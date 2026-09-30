@@ -1,0 +1,8 @@
+{"schema":1,"teamID":133464,"squads":[
+{"clubID":1354,"clubName":"Tennessee SC","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":133464,"name":"Tennessee SC ECNL G2011/12","clubID":1354,"clubName":"Tennessee SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/TSC_Logo_09-02-2026T15:48:05.788.jpg","conference":"Ohio Valley","eventID":4269,"divisionID":22445,"division":"GU15","flightID":41862,"flightName":"SOUTH","u":15,"birthYears":[2011,2012],"rank":6,"of":6,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":14,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":82416,"name":"Tennessee SC ECNL G11","division":"G2011","conference":"Ohio Valley"},
+{"season":"2025-26","teamID":95659,"name":"Tennessee SC ECNL G12","division":"G2012","conference":"Ohio Valley"}
+]}
+]}

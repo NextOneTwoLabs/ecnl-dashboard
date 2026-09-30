@@ -1,0 +1,12 @@
+{"schema":1,"teamID":95659,"squads":[
+{"clubID":1354,"clubName":"Tennessee SC","birthYears":[2012],"best":1,"seasons":[
+{"season":"2024-25","teamID":95659,"name":"Tennessee SC ECNL G12","clubID":1354,"clubName":"Tennessee SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Cesar_Moreira_204ce553bd554ca5b9c8aa8ae40825c2_TennesseeS.jpg","conference":"Ohio Valley","eventID":3163,"divisionID":14257,"division":"G2012","flightID":26431,"flightName":"South","u":13,"birthYears":[2012],"rank":1,"of":6,"gp":16,"w":13,"d":2,"l":1,"pts":41,"gf":35,"ga":8,"gd":27,"ppg":2.56,"form":"WWDWW","games":12,"played":12,"link":"start"},
+{"season":"2025-26","teamID":95659,"name":"Tennessee SC ECNL G12","clubID":1354,"clubName":"Tennessee SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/TSC_Logo_09-02-2026T15:48:05.788.jpg","conference":"Ohio Valley","eventID":3931,"divisionID":18745,"division":"G2012","flightID":36470,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":2,"of":12,"gp":22,"w":17,"d":4,"l":1,"pts":55,"gf":66,"ga":12,"gd":54,"ppg":2.5,"form":"WWDWW","games":22,"played":22,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":95659,"games":0,"played":0,"w":2,"d":1,"l":0,"gf":4,"ga":1,"fromTable":true,"group":{"name":"Group K","pos":1,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true},
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21552,"division":"G2012","flightID":39383,"flightName":"Champions League","tier":"Champions League","teamID":95659,"games":5,"played":5,"w":3,"d":0,"l":2,"gf":16,"ga":7,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Final","reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":133463,"name":"Tennessee SC ECNL G2012/13","division":"GU14","conference":"Ohio Valley"},
+{"season":"2026-27","teamID":133464,"name":"Tennessee SC ECNL G2011/12","division":"GU15","conference":"Ohio Valley"}
+]}
+]}

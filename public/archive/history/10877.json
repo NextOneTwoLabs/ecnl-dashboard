@@ -1,0 +1,6 @@
+{"schema":1,"teamID":10877,"squads":[
+{"clubID":1353,"clubName":"Sporting SA","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":10877,"name":"Florida Elite SA ECNL GU17","clubID":1353,"clubName":"Sporting SA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SJSA_logo_05-15-2026T16:52:25.216.png","conference":"Southeast","eventID":2038,"divisionID":5479,"division":"GU17","flightID":8883,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":9,"of":12,"gp":14,"w":3,"d":3,"l":8,"pts":12,"gf":10,"ga":29,"gd":-19,"ppg":0.86,"form":"LLDLL","games":16,"played":14,"link":"start"},
+{"season":"2021-22","teamID":10877,"name":"Florida Elite ECNL GU18/19","clubID":1353,"clubName":"Sporting SA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SJSA_logo_05-15-2026T16:52:25.216.png","conference":"Southeast","eventID":2372,"divisionID":7839,"division":"GU18/U19","flightID":12538,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":10,"of":12,"gp":20,"w":4,"d":2,"l":14,"pts":14,"gf":15,"ga":76,"gd":-61,"ppg":0.7,"form":"LWWDW","games":22,"played":20,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

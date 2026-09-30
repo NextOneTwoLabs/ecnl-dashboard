@@ -1,0 +1,13 @@
+{"schema":1,"teamID":94581,"squads":[
+{"clubID":342,"clubName":"Select","birthYears":[2012],"best":0,"seasons":[
+{"season":"2024-25","teamID":94581,"name":"South Shore Select ECNL G12","clubID":342,"clubName":"Select","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Select_New_06-23-2025T23:03:13.487.png","conference":"New England","eventID":3159,"divisionID":14233,"division":"G2012","flightID":24091,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":3,"of":9,"gp":16,"w":11,"d":1,"l":4,"pts":34,"gf":39,"ga":20,"gd":19,"ppg":2.13,"form":"WLWWL","games":16,"played":16,"link":"start"},
+{"season":"2025-26","teamID":94581,"name":"Select ECNL G12","clubID":342,"clubName":"Select","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Select_New_06-23-2025T23:03:13.487.png","conference":"New England","eventID":3927,"divisionID":18548,"division":"G2012","flightID":32636,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":5,"of":9,"gp":16,"w":6,"d":5,"l":5,"pts":23,"gf":29,"ga":24,"gd":5,"ppg":1.44,"form":"WLWDD","games":16,"played":16,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":94581,"games":0,"played":0,"w":0,"d":1,"l":2,"gf":2,"ga":8,"fromTable":true,"group":{"name":"Group B","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true}
+],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20346,"division":"G2012","flightID":36387,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":94581,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":0,"d":1,"l":2,"gf":3,"ga":6}
+],"maybe":[
+{"season":"2026-27","teamID":134371,"name":"Select ECNL G2012/13","division":"GU14","conference":"New England"},
+{"season":"2026-27","teamID":134372,"name":"Select ECNL G2011/12","division":"GU15","conference":"New England"}
+]}
+]}

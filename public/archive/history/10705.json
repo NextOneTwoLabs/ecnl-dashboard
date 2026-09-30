@@ -1,0 +1,8 @@
+{"schema":1,"teamID":10705,"squads":[
+{"clubID":1010,"clubName":"Charlotte Independence SC","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":10705,"name":"Charlotte Independence ECNL GU17","clubID":1010,"clubName":"Charlotte Independence SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Ardo_Khedesian_dc473e08e1e447ad89110559b1c57e83_cisc_logo.png","conference":"Mid-Atlantic","eventID":2040,"divisionID":5493,"division":"GU17","flightID":8897,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":4,"of":13,"gp":14,"w":10,"d":0,"l":4,"pts":30,"gf":30,"ga":16,"gd":14,"ppg":2.14,"form":"WWLWW","games":14,"played":14,"link":"start"},
+{"season":"2021-22","teamID":10705,"name":"Charlotte Independence ECNL GU18/U19","clubID":1010,"clubName":"Charlotte Independence SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Ardo_Khedesian_dc473e08e1e447ad89110559b1c57e83_cisc_logo.png","conference":"Mid-Atlantic","eventID":2366,"divisionID":7803,"division":"GU18/U19","flightID":12502,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":4,"of":14,"gp":13,"w":9,"d":1,"l":3,"pts":28,"gf":30,"ga":16,"gd":14,"ppg":2.15,"form":"DWLWW","games":13,"played":13,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11931,"flightName":"North American Cup","tier":"North American Cup","teamID":10705,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":6,"ga":5,"group":null,"reached":"Semifinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

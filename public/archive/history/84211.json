@@ -1,0 +1,13 @@
+{"schema":1,"teamID":84211,"squads":[
+{"clubID":43,"clubName":"Eclipse Select Soccer Club","birthYears":[2012],"best":0,"seasons":[
+{"season":"2024-25","teamID":84211,"name":"Eclipse Select SC ECNL G12","clubID":43,"clubName":"Eclipse Select Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Eclipse-Select-Soccer-Club.jpg","conference":"Midwest","eventID":3158,"divisionID":14227,"division":"G2012","flightID":24085,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":4,"of":16,"gp":15,"w":10,"d":3,"l":2,"pts":33,"gf":42,"ga":14,"gd":28,"ppg":2.2,"form":"WWLWD","games":15,"played":15,"link":"start"},
+{"season":"2025-26","teamID":84211,"name":"Eclipse Select SC ECNL G12","clubID":43,"clubName":"Eclipse Select Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Eclipse-Select-Soccer-Club.jpg","conference":"Midwest","eventID":3926,"divisionID":18542,"division":"G2012","flightID":32630,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":7,"of":16,"gp":15,"w":5,"d":7,"l":3,"pts":22,"gf":25,"ga":20,"gd":5,"ppg":1.47,"form":"DDDWD","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":84211,"games":0,"played":0,"w":1,"d":0,"l":2,"gf":4,"ga":9,"fromTable":true,"group":{"name":"Group G","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true}
+],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20346,"division":"G2012","flightID":36387,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":84211,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":1,"d":0,"l":2,"gf":2,"ga":6}
+],"maybe":[
+{"season":"2026-27","teamID":136036,"name":"Eclipse Select Soccer Club ECNL G2012/13","division":"GU14","conference":"Midwest"},
+{"season":"2026-27","teamID":136037,"name":"Eclipse Select Soccer Club ECNL G2011/12","division":"GU15","conference":"Midwest"}
+]}
+]}

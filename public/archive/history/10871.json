@@ -1,0 +1,8 @@
+{"schema":1,"teamID":10871,"squads":[
+{"clubID":7,"clubName":"No Club Selection","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":10871,"name":"FC Pride Elite ECNL GU17","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Ohio Valley","eventID":2037,"divisionID":5473,"division":"GU17","flightID":8877,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":1,"of":10,"gp":18,"w":12,"d":2,"l":4,"pts":38,"gf":46,"ga":25,"gd":21,"ppg":2.11,"form":"WWWLL","games":18,"played":18,"link":"start"},
+{"season":"2021-22","teamID":10871,"name":"FC Pride Elite ECNL GU18/U19","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Ohio Valley","eventID":2371,"divisionID":7833,"division":"GU18/U19","flightID":12829,"flightName":"South","u":18,"birthYears":[2003,2004],"rank":4,"of":6,"gp":16,"w":8,"d":3,"l":5,"pts":27,"gf":31,"ga":30,"gd":1,"ppg":1.69,"form":"WWLDW","games":12,"played":12,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":10871,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":6,"ga":10,"group":{"name":"Group A","pos":2,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

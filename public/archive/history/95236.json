@@ -1,0 +1,15 @@
+{"schema":1,"teamID":95236,"squads":[
+{"clubID":3483,"clubName":"Sporting Iowa Central","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":95236,"name":"Sporting Iowa ECNL G12","clubID":3483,"clubName":"Sporting Iowa Central","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kelly_Nunn_5c3776ec0a8c4b538009458b855c7617_Sporting_Iowa.png","conference":"Midwest","eventID":3158,"divisionID":14227,"division":"G2012","flightID":24085,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":14,"of":16,"gp":15,"w":1,"d":2,"l":12,"pts":5,"gf":7,"ga":41,"gd":-34,"ppg":0.33,"form":"WLLLL","games":15,"played":15,"link":"start"},
+{"season":"2025-26","teamID":95236,"name":"Sporting Iowa ECNL G12","clubID":3483,"clubName":"Sporting Iowa Central","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kelly_Nunn_5c3776ec0a8c4b538009458b855c7617_Sporting_Iowa.png","conference":"Midwest","eventID":3926,"divisionID":18542,"division":"G2012","flightID":32630,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":16,"of":16,"gp":15,"w":0,"d":2,"l":13,"pts":2,"gf":6,"ga":36,"gd":-30,"ppg":0.13,"form":"DLDLL","games":15,"played":15,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":79780,"name":"Sporting Iowa ECNL G2011/12","division":"GU15","conference":"Midwest"},
+{"season":"2026-27","teamID":95236,"name":"Sporting Iowa ECNL G2012/13","division":"GU14","conference":"Midwest"}
+]},
+{"clubID":3483,"clubName":"Sporting Iowa Central","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":95236,"name":"Sporting Iowa ECNL G2012/13","clubID":3483,"clubName":"Sporting Iowa Central","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kelly_Nunn_5c3776ec0a8c4b538009458b855c7617_Sporting_Iowa.png","conference":"Midwest","eventID":4264,"divisionID":22414,"division":"GU14","flightID":41609,"flightName":"WEST","u":14,"birthYears":[2012,2013],"rank":7,"of":8,"gp":3,"w":0,"d":1,"l":2,"pts":1,"gf":0,"ga":3,"gd":-3,"ppg":0.33,"form":"L","games":19,"played":1,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":95236,"name":"Sporting Iowa ECNL G12","division":"G2012","conference":"Midwest"},
+{"season":"2025-26","teamID":97576,"name":"Sporting Iowa ECNL G13","division":"G2013","conference":"Midwest"}
+]}
+]}

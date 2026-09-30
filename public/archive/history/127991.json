@@ -1,0 +1,8 @@
+{"schema":1,"teamID":127991,"squads":[
+{"clubID":2167,"clubName":"Chicago Inter","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":127991,"name":"Chicago Inter ECNL G2011/12","clubID":2167,"clubName":"Chicago Inter","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/ronaldo_ramirez_c5b13a28733c425bacc71d169eb3ca3f_121chicago.png","conference":"Midwest","eventID":4264,"divisionID":22415,"division":"GU15","flightID":40559,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":15,"of":16,"gp":7,"w":0,"d":1,"l":6,"pts":1,"gf":2,"ga":19,"gd":-17,"ppg":0.14,"form":"LLLLL","games":15,"played":7,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":77722,"name":"Chicago Inter Soccer ECNL G12","division":"G2012","conference":"Midwest"},
+{"season":"2025-26","teamID":79680,"name":"Chicago Inter Soccer ECNL G11","division":"G2011","conference":"Midwest"}
+]}
+]}

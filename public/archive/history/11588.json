@@ -1,0 +1,9 @@
+{"schema":1,"teamID":11588,"squads":[
+{"clubID":7,"clubName":"No Club Selection","birthYears":[2004],"best":1,"seasons":[
+{"season":"2020-21","teamID":11588,"name":"DKSC ECNL GU17","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Texas","eventID":2036,"divisionID":5466,"division":"GU17","flightID":8870,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":3,"of":12,"gp":22,"w":17,"d":2,"l":3,"pts":53,"gf":80,"ga":17,"gd":63,"ppg":2.41,"form":"WWWWD","games":22,"played":22,"link":"start"},
+{"season":"2021-22","teamID":11588,"name":"DKSC ECNL GU18/U19","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Texas","eventID":2370,"divisionID":7827,"division":"GU18/U19","flightID":12526,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":2,"of":12,"gp":22,"w":15,"d":2,"l":5,"pts":47,"gf":62,"ga":20,"gd":42,"ppg":2.14,"form":"WWWWW","games":22,"played":22,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":11588,"games":3,"played":3,"w":2,"d":1,"l":0,"gf":7,"ga":3,"group":{"name":"Group H","pos":2,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false},
+{"season":"2021-22","stage":"Playoffs","eventID":2436,"eventName":"ECNL National Playoffs","divisionID":9754,"division":"U18/U19","flightID":15410,"flightName":"Champions League","tier":"Champions League","teamID":11588,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":5,"ga":6,"group":null,"reached":"Semifinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

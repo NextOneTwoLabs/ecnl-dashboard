@@ -1,0 +1,6 @@
+{"schema":1,"teamID":10859,"squads":[
+{"clubID":39,"clubName":"Legends FC - Del Mar","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":10859,"name":"Del Mar Sharks ECNL GU17","clubID":39,"clubName":"Legends FC - Del Mar","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/legendsfc__07-18-2024T18:18:28.115.png","conference":"Southwest","eventID":2034,"divisionID":5453,"division":"GU17","flightID":8857,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":14,"of":14,"gp":12,"w":0,"d":1,"l":11,"pts":1,"gf":5,"ga":41,"gd":-36,"ppg":0.08,"form":"LLLLL","games":13,"played":12,"link":"start"},
+{"season":"2021-22","teamID":59560,"name":"Del Mar Sharks ECNL GU18/U19","clubID":39,"clubName":"Legends FC - Del Mar","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/legendsfc__07-18-2024T18:18:28.115.png","conference":"Southwest","eventID":2368,"divisionID":7815,"division":"GU18/U19","flightID":12823,"flightName":"Sonoran","u":18,"birthYears":[2003,2004],"rank":8,"of":8,"gp":23,"w":1,"d":6,"l":16,"pts":9,"gf":10,"ga":76,"gd":-66,"ppg":0.39,"form":"DLLLL","games":19,"played":19,"link":"name"}
+],"postseason":[],"showcases":[]}
+]}

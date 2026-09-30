@@ -1,0 +1,6 @@
+{"schema":1,"teamID":20247,"squads":[
+{"clubID":603,"clubName":"FC Portland Academy","birthYears":[2006],"seasons":[
+{"season":"2020-21","teamID":20247,"name":"FC Portland ECNL GU15","clubID":603,"clubName":"FC Portland Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Juliet_Cushing_031eb82cfcaa47d3ae4bd1e4329ade23_FCPortland.png","conference":"Northwest","eventID":2033,"divisionID":5444,"division":"GU15","flightID":9534,"flightName":"Pacific","u":15,"birthYears":[2006],"rank":8,"of":9,"gp":12,"w":2,"d":0,"l":10,"pts":6,"gf":6,"ga":38,"gd":-32,"ppg":0.5,"form":"LLLWL","games":12,"played":12,"link":"start"},
+{"season":"2021-22","teamID":20247,"name":"FC Portland ECNL GU16","clubID":603,"clubName":"FC Portland Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Juliet_Cushing_031eb82cfcaa47d3ae4bd1e4329ade23_FCPortland.png","conference":"Northwest","eventID":2367,"divisionID":7807,"division":"GU16","flightID":12837,"flightName":"Pacific","u":16,"birthYears":[2006],"rank":9,"of":9,"gp":20,"w":1,"d":0,"l":19,"pts":3,"gf":5,"ga":81,"gd":-76,"ppg":0.15,"form":"LLLLL","games":16,"played":16,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":11284,"squads":[
+{"clubID":97,"clubName":"St. Louis Scott Gallagher","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":11284,"name":"SLSG Navy ECNL GU17","clubID":97,"clubName":"St. Louis Scott Gallagher","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Walter_Camargo_b8d19ace186741eeabcc2634605d5c33_SLSG_Prima.png","conference":"Midwest","eventID":2035,"divisionID":5460,"division":"GU17","flightID":8864,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":2,"of":11,"gp":8,"w":6,"d":2,"l":0,"pts":20,"gf":16,"ga":4,"gd":12,"ppg":2.5,"form":"WWDWW","games":10,"played":8,"link":"start"},
+{"season":"2021-22","teamID":11284,"name":"SLSG Navy ECNL GU18/U19","clubID":97,"clubName":"St. Louis Scott Gallagher","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Walter_Camargo_b8d19ace186741eeabcc2634605d5c33_SLSG_Prima.png","conference":"Midwest","eventID":2369,"divisionID":7821,"division":"GU18/U19","flightID":12520,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":3,"of":14,"gp":13,"w":10,"d":0,"l":3,"pts":30,"gf":44,"ga":12,"gd":32,"ppg":2.31,"form":"WLWWW","games":13,"played":13,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":11284,"games":3,"played":3,"w":1,"d":1,"l":1,"gf":3,"ga":5,"group":{"name":"Group B","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

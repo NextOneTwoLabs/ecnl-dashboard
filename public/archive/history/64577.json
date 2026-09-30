@@ -1,0 +1,11 @@
+{"schema":1,"teamID":64577,"squads":[
+{"clubID":42,"clubName":"East Meadow Soccer Club","birthYears":[2012],"best":0,"seasons":[
+{"season":"2024-25","teamID":64577,"name":"East Meadow SC ECNL G12","clubID":42,"clubName":"East Meadow Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kory_Patterson_546497e203014be5a834a127c0ae9ba0_New_EM_Cir.png","conference":"New England","eventID":3159,"divisionID":14233,"division":"G2012","flightID":24091,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":2,"of":9,"gp":16,"w":10,"d":4,"l":2,"pts":34,"gf":29,"ga":11,"gd":18,"ppg":2.13,"form":"WWLWD","games":16,"played":16,"link":"start"},
+{"season":"2025-26","teamID":64577,"name":"East Meadow SC ECNL G12","clubID":42,"clubName":"East Meadow Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kory_Patterson_546497e203014be5a834a127c0ae9ba0_New_EM_Cir.png","conference":"New England","eventID":3927,"divisionID":18548,"division":"G2012","flightID":32636,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":7,"of":9,"gp":16,"w":5,"d":3,"l":8,"pts":18,"gf":23,"ga":23,"gd":0,"ppg":1.13,"form":"LLLWW","games":16,"played":16,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":64577,"games":0,"played":0,"w":1,"d":0,"l":2,"gf":3,"ga":5,"fromTable":true,"group":{"name":"Group K","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":134811,"name":"East Meadow Soccer Club ECNL G2011/12","division":"GU15","conference":"New England"},
+{"season":"2026-27","teamID":134816,"name":"East Meadow Soccer Club ECNL G2012/13","division":"GU14","conference":"New England"}
+]}
+]}

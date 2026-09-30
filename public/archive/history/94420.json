@@ -1,0 +1,9 @@
+{"schema":1,"teamID":94420,"squads":[
+{"clubID":373,"clubName":"Gretna Elite Academy","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":94420,"name":"Gretna Elite Academy ECNL G12","clubID":373,"clubName":"Gretna Elite Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Brian_Gonzalez_51b5f97542d24608b46bee04063fe1bf_Gretna_Log.png","conference":"Midwest","eventID":3158,"divisionID":14227,"division":"G2012","flightID":24085,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":16,"of":16,"gp":15,"w":1,"d":1,"l":13,"pts":4,"gf":9,"ga":54,"gd":-45,"ppg":0.27,"form":"LLLLL","games":15,"played":15,"link":"start"},
+{"season":"2025-26","teamID":94420,"name":"Gretna Elite Academy ECNL G12","clubID":373,"clubName":"Gretna Elite Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Brian_Gonzalez_51b5f97542d24608b46bee04063fe1bf_Gretna_Log.png","conference":"Midwest","eventID":3926,"divisionID":18542,"division":"G2012","flightID":32630,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":13,"of":16,"gp":15,"w":3,"d":2,"l":10,"pts":11,"gf":15,"ga":34,"gd":-19,"ppg":0.73,"form":"DLDLL","games":15,"played":15,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":131819,"name":"Gretna Elite Academy ECNL G2012/13","division":"GU14","conference":"Midwest"},
+{"season":"2026-27","teamID":131831,"name":"Gretna Elite Academy ECNL G2011/12","division":"GU15","conference":"Midwest"}
+]}
+]}

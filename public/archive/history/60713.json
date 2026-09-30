@@ -1,0 +1,10 @@
+{"schema":1,"teamID":60713,"squads":[
+{"clubID":373,"clubName":"Gretna Elite Academy","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":60713,"name":"Gretna Elite Academy ECNL G11","clubID":373,"clubName":"Gretna Elite Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Brian_Gonzalez_51b5f97542d24608b46bee04063fe1bf_Gretna_Log.png","conference":"Midwest","eventID":2849,"divisionID":11606,"division":"G2011","flightID":19809,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":14,"of":15,"gp":14,"w":0,"d":2,"l":12,"pts":2,"gf":5,"ga":50,"gd":-45,"ppg":0.14,"form":"LDLLL","games":14,"played":14,"link":"start"},
+{"season":"2024-25","teamID":60713,"name":"Gretna Elite Academy ECNL G11","clubID":373,"clubName":"Gretna Elite Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Brian_Gonzalez_51b5f97542d24608b46bee04063fe1bf_Gretna_Log.png","conference":"Midwest","eventID":3158,"divisionID":14226,"division":"G2011","flightID":24083,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":15,"of":16,"gp":15,"w":2,"d":2,"l":11,"pts":8,"gf":8,"ga":44,"gd":-36,"ppg":0.53,"form":"LLLWL","games":15,"played":15,"link":"id"},
+{"season":"2025-26","teamID":60713,"name":"Gretna Elite Academy ECNL G11","clubID":373,"clubName":"Gretna Elite Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Brian_Gonzalez_51b5f97542d24608b46bee04063fe1bf_Gretna_Log.png","conference":"Midwest","eventID":3926,"divisionID":18543,"division":"G2011","flightID":32628,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":14,"of":16,"gp":15,"w":2,"d":2,"l":11,"pts":8,"gf":8,"ga":37,"gd":-29,"ppg":0.53,"form":"DLLLL","games":15,"played":15,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":131831,"name":"Gretna Elite Academy ECNL G2011/12","division":"GU15","conference":"Midwest"},
+{"season":"2026-27","teamID":131832,"name":"Gretna Elite Academy ECNL G2010/11","division":"GU16","conference":"Midwest"}
+]}
+]}

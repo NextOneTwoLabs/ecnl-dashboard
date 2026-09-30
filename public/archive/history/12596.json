@@ -1,0 +1,16 @@
+{"schema":1,"teamID":12596,"squads":[
+{"clubID":91,"clubName":"Santa Rosa United Soccer","birthYears":[2005],"seasons":[
+{"season":"2020-21","teamID":12596,"name":"Santa Rosa United ECNL GU16","clubID":91,"clubName":"Santa Rosa United Soccer","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Test_Man_88cca6932f3f4375bd0dbca4ae37627a_SRU_Logo.jpeg","conference":"Northwest","eventID":2033,"divisionID":5445,"division":"GU16","flightID":9535,"flightName":"Bay Area","u":16,"birthYears":[2005],"rank":7,"of":8,"gp":7,"w":2,"d":0,"l":5,"pts":6,"gf":7,"ga":26,"gd":-19,"ppg":0.86,"form":"LWLLL","games":7,"played":7,"link":"start"},
+{"season":"2021-22","teamID":12596,"name":"Santa Rosa United ECNL GU17","clubID":91,"clubName":"Santa Rosa United Soccer","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Test_Man_88cca6932f3f4375bd0dbca4ae37627a_SRU_Logo.jpeg","conference":"Northwest","eventID":2367,"divisionID":7808,"division":"GU17","flightID":12507,"flightName":"Bay Area","u":17,"birthYears":[2005],"rank":7,"of":8,"gp":18,"w":2,"d":2,"l":14,"pts":8,"gf":18,"ga":78,"gd":-60,"ppg":0.44,"form":"WLLLL","games":16,"played":16,"link":"id"},
+{"season":"2022-23","teamID":12596,"name":"Santa Rosa United ECNL G05/04","clubID":91,"clubName":"Santa Rosa United Soccer","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Test_Man_88cca6932f3f4375bd0dbca4ae37627a_SRU_Logo.jpeg","conference":"NorCal","eventID":2528,"divisionID":9532,"division":"G2005/2004","flightID":16166,"flightName":"ECNL","u":18,"birthYears":[2004,2005],"rank":10,"of":10,"gp":18,"w":2,"d":4,"l":12,"pts":10,"gf":19,"ga":60,"gd":-41,"ppg":0.56,"form":"LLLLL","games":18,"played":18,"link":"id"}
+],"postseason":[],"showcases":[]},
+{"clubID":91,"clubName":"Santa Rosa United Soccer","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":12596,"name":"Santa Rosa United ECNL G13","clubID":91,"clubName":"Santa Rosa United Soccer","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Test_Man_88cca6932f3f4375bd0dbca4ae37627a_SRU_Logo.jpeg","conference":"NorCal","eventID":3929,"divisionID":18735,"division":"G2013","flightID":32900,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":6,"of":11,"gp":20,"w":7,"d":3,"l":10,"pts":24,"gf":30,"ga":41,"gd":-11,"ppg":1.2,"form":"LWDLL","games":20,"played":20,"link":"start"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19566,"division":"G2013","flightID":34646,"flightName":"San Diego","tier":"San Diego","teamID":12596,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":0,"d":2,"l":1,"gf":3,"ga":4},
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":12596,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":0,"d":0,"l":3,"gf":0,"ga":9}
+],"maybe":[
+{"season":"2026-27","teamID":132201,"name":"Santa Rosa United ECNL G2013/14","division":"GU13","conference":"NorCal"},
+{"season":"2026-27","teamID":132202,"name":"Santa Rosa United ECNL G2012/13","division":"GU14","conference":"NorCal"}
+]}
+]}

@@ -1,0 +1,21 @@
+{"schema":1,"teamID":62229,"squads":[
+{"clubID":1643,"clubName":"Seattle United","birthYears":[2010],"best":0,"seasons":[
+{"season":"2022-23","teamID":62229,"name":"Seattle United ECNL G10","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":2522,"divisionID":9491,"division":"G2010","flightID":16237,"flightName":"ECNL","u":13,"birthYears":[2010],"rank":4,"of":14,"gp":13,"w":7,"d":3,"l":3,"pts":24,"gf":26,"ga":7,"gd":19,"ppg":1.85,"form":"DDWLW","games":13,"played":13,"merged":true,"link":"start"},
+{"season":"2023-24","teamID":62229,"name":"Seattle United ECNL G10","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":2855,"divisionID":11647,"division":"G2010","flightID":19930,"flightName":"ECNL","u":14,"birthYears":[2010],"rank":4,"of":10,"gp":18,"w":10,"d":6,"l":2,"pts":36,"gf":43,"ga":17,"gd":26,"ppg":2.0,"form":"WLDDW","games":18,"played":18,"link":"id"},
+{"season":"2024-25","teamID":62229,"name":"Seattle United ECNL G10","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":3162,"divisionID":14249,"division":"G2010","flightID":24105,"flightName":"ECNL","u":15,"birthYears":[2010],"rank":7,"of":10,"gp":18,"w":6,"d":4,"l":8,"pts":22,"gf":24,"ga":19,"gd":5,"ppg":1.22,"form":"LDDLW","games":18,"played":18,"link":"id"},
+{"season":"2025-26","teamID":62229,"name":"Seattle United ECNL G10","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":3930,"divisionID":18740,"division":"G2010","flightID":32905,"flightName":"ECNL","u":16,"birthYears":[2010],"rank":9,"of":10,"gp":18,"w":3,"d":4,"l":11,"pts":13,"gf":18,"ga":38,"gd":-20,"ppg":0.72,"form":"LDDLD","games":18,"played":18,"link":"id"}
+],"postseason":[
+{"season":"2022-23","stage":"Playoffs","eventID":2719,"eventName":"ECNL National Playoffs","divisionID":11972,"division":"G2010","flightID":20450,"flightName":"Champions League","tier":"Champions League","teamID":62229,"games":3,"played":3,"w":0,"d":1,"l":2,"gf":0,"ga":5,"group":{"name":"Group D","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20344,"division":"G2010","flightID":36388,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":62229,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":2,"d":0,"l":1,"gf":5,"ga":2}
+],"maybe":[
+{"season":"2026-27","teamID":56728,"name":"Seattle United ECNL G2009/10","division":"GU17","conference":"Northwest"},
+{"season":"2026-27","teamID":62229,"name":"Seattle United ECNL G2010/11","division":"GU16","conference":"Northwest"}
+]},
+{"clubID":1643,"clubName":"Seattle United","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":62229,"name":"Seattle United ECNL G2010/11","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":4268,"divisionID":22440,"division":"GU16","flightID":40584,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":8,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":18,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":62229,"name":"Seattle United ECNL G10","division":"G2010","conference":"Northwest"},
+{"season":"2025-26","teamID":77000,"name":"Seattle United ECNL G11","division":"G2011","conference":"Northwest"}
+]}
+]}

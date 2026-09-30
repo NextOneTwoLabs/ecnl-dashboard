@@ -1,0 +1,16 @@
+{"schema":1,"teamID":94017,"squads":[
+{"clubID":97,"clubName":"St. Louis Scott Gallagher","birthYears":[2012],"best":1,"seasons":[
+{"season":"2024-25","teamID":94017,"name":"SLSG Navy ECNL G12","clubID":97,"clubName":"St. Louis Scott Gallagher","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Walter_Camargo_b8d19ace186741eeabcc2634605d5c33_SLSG_Prima.png","conference":"Midwest","eventID":3158,"divisionID":14227,"division":"G2012","flightID":24085,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":5,"of":16,"gp":15,"w":8,"d":5,"l":2,"pts":29,"gf":27,"ga":14,"gd":13,"ppg":1.93,"form":"WDWDD","games":15,"played":15,"link":"start"},
+{"season":"2025-26","teamID":94017,"name":"SLSG Navy ECNL G12","clubID":97,"clubName":"St. Louis Scott Gallagher","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Walter_Camargo_b8d19ace186741eeabcc2634605d5c33_SLSG_Prima.png","conference":"Midwest","eventID":3926,"divisionID":18542,"division":"G2012","flightID":32630,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":3,"of":16,"gp":15,"w":12,"d":1,"l":2,"pts":37,"gf":41,"ga":16,"gd":25,"ppg":2.47,"form":"WWWLW","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":94017,"games":0,"played":0,"w":1,"d":0,"l":2,"gf":5,"ga":7,"fromTable":true,"group":{"name":"Group D","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true},
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21552,"division":"G2012","flightID":39383,"flightName":"Champions League","tier":"Champions League","teamID":94017,"games":4,"played":4,"w":2,"d":0,"l":2,"gf":4,"ga":8,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20346,"division":"G2012","flightID":36387,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":94017,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":1,"d":1,"l":1,"gf":3,"ga":4}
+],"maybe":[
+{"season":"2026-27","teamID":134836,"name":"St. Louis Scott Gallagher Navy ECNL G2012/13","division":"GU14","conference":"Midwest"},
+{"season":"2026-27","teamID":134837,"name":"St. Louis Scott Gallagher Green ECNL G2012/13","division":"GU14","conference":"Midwest"},
+{"season":"2026-27","teamID":134850,"name":"St. Louis Scott Gallagher Navy ECNL G2011/12","division":"GU15","conference":"Midwest"},
+{"season":"2026-27","teamID":134851,"name":"St. Louis Scott Gallagher Green ECNL G2011/12","division":"GU15","conference":"Midwest"}
+]}
+]}

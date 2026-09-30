@@ -1,0 +1,19 @@
+{"schema":1,"teamID":65960,"squads":[
+{"clubID":1353,"clubName":"Sporting SA","birthYears":[2010],"best":0,"seasons":[
+{"season":"2022-23","teamID":65960,"name":"Florida Elite ECNL G10","clubID":1353,"clubName":"Sporting SA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SJSA_logo_05-15-2026T16:52:25.216.png","conference":"Southeast","eventID":2527,"divisionID":9521,"division":"G2010","flightID":16110,"flightName":"ECNL","u":13,"birthYears":[2010],"rank":7,"of":16,"gp":15,"w":6,"d":4,"l":5,"pts":22,"gf":18,"ga":18,"gd":0,"ppg":1.47,"form":"DDDWL","games":15,"played":15,"link":"start"},
+{"season":"2023-24","teamID":65960,"name":"Florida Elite ECNL G10","clubID":1353,"clubName":"Sporting SA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SJSA_logo_05-15-2026T16:52:25.216.png","conference":"Southeast","eventID":2838,"divisionID":11596,"division":"G2010","flightID":19791,"flightName":"ECNL","u":14,"birthYears":[2010],"rank":6,"of":16,"gp":15,"w":6,"d":4,"l":5,"pts":22,"gf":23,"ga":21,"gd":2,"ppg":1.47,"form":"WLDDL","games":15,"played":15,"link":"id"},
+{"season":"2024-25","teamID":65960,"name":"Florida Elite ECNL G10","clubID":1353,"clubName":"Sporting SA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SJSA_logo_05-15-2026T16:52:25.216.png","conference":"Southeast","eventID":3164,"divisionID":14261,"division":"G2010","flightID":24123,"flightName":"ECNL","u":15,"birthYears":[2010],"rank":12,"of":16,"gp":15,"w":4,"d":0,"l":11,"pts":12,"gf":14,"ga":28,"gd":-14,"ppg":0.8,"form":"WLLLL","games":15,"played":15,"link":"id"},
+{"season":"2025-26","teamID":65960,"name":"Sporting Jax ECNL G10","clubID":1353,"clubName":"Sporting SA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SJSA_logo_05-15-2026T16:52:25.216.png","conference":"Southeast","eventID":3932,"divisionID":18752,"division":"G2010","flightID":32926,"flightName":"ECNL","u":16,"birthYears":[2010],"rank":13,"of":16,"gp":15,"w":4,"d":1,"l":10,"pts":13,"gf":16,"ga":20,"gd":-4,"ppg":0.87,"form":"LWLWL","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14600,"division":"G2010","flightID":24868,"flightName":"Champions League","tier":"Champions League","teamID":65960,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":0,"ga":11,"group":{"name":"Group I","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":45064,"name":"Sporting SA JAX ECNL G2009/10","division":"GU17","conference":"Southeast"},
+{"season":"2026-27","teamID":65960,"name":"Sporting SA JAX ECNL G2010/11","division":"GU16","conference":"Southeast"}
+]},
+{"clubID":1353,"clubName":"Sporting SA","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":65960,"name":"Sporting SA JAX ECNL G2010/11","clubID":1353,"clubName":"Sporting SA","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SJSA_logo_05-15-2026T16:52:25.216.png","conference":"Southeast","eventID":4270,"divisionID":22452,"division":"GU16","flightID":40596,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":8,"of":16,"gp":7,"w":3,"d":2,"l":2,"pts":11,"gf":14,"ga":15,"gd":-1,"ppg":1.57,"form":"DLDWW","games":15,"played":7,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":65960,"name":"Sporting Jax ECNL G10","division":"G2010","conference":"Southeast"},
+{"season":"2025-26","teamID":69334,"name":"Sporting Jax ECNL G11","division":"G2011","conference":"Southeast"}
+]}
+]}

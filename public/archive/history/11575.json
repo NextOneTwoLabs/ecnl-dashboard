@@ -1,0 +1,8 @@
+{"schema":1,"teamID":11575,"squads":[
+{"clubID":42,"clubName":"East Meadow Soccer Club","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":11575,"name":"East Meadow SC ECNL GU17","clubID":42,"clubName":"East Meadow Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kory_Patterson_546497e203014be5a834a127c0ae9ba0_New_EM_Cir.png","conference":"New England","eventID":2051,"divisionID":5560,"division":"GU17","flightID":8964,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":3,"of":9,"gp":15,"w":7,"d":4,"l":4,"pts":25,"gf":26,"ga":24,"gd":2,"ppg":1.67,"form":"WWWWD","games":16,"played":15,"link":"start"},
+{"season":"2021-22","teamID":11575,"name":"East Meadow SC ECNL GU18/U19","clubID":42,"clubName":"East Meadow Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kory_Patterson_546497e203014be5a834a127c0ae9ba0_New_EM_Cir.png","conference":"New England","eventID":2374,"divisionID":7851,"division":"GU18/U19","flightID":12550,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":4,"of":9,"gp":16,"w":10,"d":3,"l":3,"pts":33,"gf":30,"ga":18,"gd":12,"ppg":2.06,"form":"DWLWW","games":16,"played":16,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":11575,"games":3,"played":3,"w":1,"d":1,"l":1,"gf":5,"ga":7,"group":{"name":"Group D","pos":2,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

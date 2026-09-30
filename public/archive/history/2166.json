@@ -1,0 +1,8 @@
+{"schema":1,"teamID":2166,"squads":[
+{"clubID":64,"clubName":"Match Fit Surf","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":2166,"name":"Match Fit Academy ECNL GU17","clubID":64,"clubName":"Match Fit Surf","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Patrick_Uriz_ee42f93340594ad18fc6a644edee93fb_MatchFitSu.png","conference":"North Atlantic","eventID":2039,"divisionID":5486,"division":"GU17","flightID":8890,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":2,"of":9,"gp":15,"w":9,"d":3,"l":3,"pts":30,"gf":32,"ga":19,"gd":13,"ppg":2.0,"form":"WWDWL","games":16,"played":15,"link":"start"},
+{"season":"2021-22","teamID":2166,"name":"Match Fit Academy ECNL GU18/19","clubID":64,"clubName":"Match Fit Surf","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Patrick_Uriz_ee42f93340594ad18fc6a644edee93fb_MatchFitSu.png","conference":"North Atlantic","eventID":2373,"divisionID":7845,"division":"GU18/U19","flightID":12544,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":2,"of":9,"gp":14,"w":10,"d":1,"l":3,"pts":31,"gf":26,"ga":15,"gd":11,"ppg":2.21,"form":"LLWLW","games":16,"played":14,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":2166,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":5,"ga":8,"group":{"name":"Group G","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

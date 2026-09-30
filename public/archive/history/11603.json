@@ -1,0 +1,8 @@
+{"schema":1,"teamID":11603,"squads":[
+{"clubID":1693,"clubName":"FC Alliance TN","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":11603,"name":"FC Alliance ECNL GU17","clubID":1693,"clubName":"FC Alliance TN","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/Sierra_Goller_c027bcfa9c764581ae73ada2824fb4c0.png","conference":"Ohio Valley","eventID":2037,"divisionID":5473,"division":"GU17","flightID":8877,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":9,"of":10,"gp":18,"w":5,"d":1,"l":12,"pts":16,"gf":20,"ga":34,"gd":-14,"ppg":0.89,"form":"WLWLL","games":18,"played":18,"link":"start"},
+{"season":"2021-22","teamID":11603,"name":"FC Alliance ECNL GU18/U19","clubID":1693,"clubName":"FC Alliance TN","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/Sierra_Goller_c027bcfa9c764581ae73ada2824fb4c0.png","conference":"Ohio Valley","eventID":2371,"divisionID":7833,"division":"GU18/U19","flightID":12829,"flightName":"South","u":18,"birthYears":[2003,2004],"rank":5,"of":6,"gp":16,"w":3,"d":3,"l":10,"pts":12,"gf":17,"ga":35,"gd":-18,"ppg":0.75,"form":"DLLLD","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11932,"flightName":"Showcase Cup A","tier":"Showcase Cup A","teamID":11603,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":1,"ga":4,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

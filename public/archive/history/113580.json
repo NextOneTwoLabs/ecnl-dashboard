@@ -1,0 +1,6 @@
+{"schema":1,"teamID":113580,"squads":[
+{"clubID":1470,"clubName":"California Odyssey Soccer Club","birthYears":[2012],"seasons":[
+{"season":"2025-26","teamID":113580,"name":"COSC ECNL G12","clubID":1470,"clubName":"California Odyssey Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Nicholas_Hodge_5e75cd08060b47319f782cff8fac7204_IMG_4880.png","conference":"NorCal","eventID":3929,"divisionID":18734,"division":"G2012","flightID":32898,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":6,"of":11,"gp":20,"w":8,"d":2,"l":10,"pts":26,"gf":42,"ga":71,"gd":-29,"ppg":1.3,"form":"WLLWW","games":20,"played":20,"link":"start"},
+{"season":"2026-27","teamID":113580,"name":"COSC ECNL G2011/12","clubID":1470,"clubName":"California Odyssey Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Nicholas_Hodge_5e75cd08060b47319f782cff8fac7204_IMG_4880.png","conference":"NorCal","eventID":4267,"divisionID":22433,"division":"GU15","flightID":40577,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":5,"of":12,"gp":8,"w":5,"d":2,"l":1,"pts":17,"gf":22,"ga":9,"gd":13,"ppg":2.13,"form":"WLDDW","games":22,"played":8,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

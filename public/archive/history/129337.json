@@ -1,0 +1,7 @@
+{"schema":1,"teamID":129337,"squads":[
+{"clubID":25,"clubName":"Challenge SC","birthYears":[2008,2009],"seasons":[
+{"season":"2026-27","teamID":129337,"name":"Challenge SC ECNL G2008/09","clubID":25,"clubName":"Challenge SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/logo_05-05-2026T19:13:38.814.png","conference":"Texas","eventID":4272,"divisionID":22466,"division":"GU18/19","flightID":40610,"flightName":"ECNL","u":18,"birthYears":[2008,2009],"rank":12,"of":16,"gp":5,"w":1,"d":1,"l":3,"pts":4,"gf":7,"ga":15,"gd":-8,"ppg":0.8,"form":"LLDLW","games":15,"played":5,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":55881,"name":"Challenge SC ECNL G09","division":"G2009","conference":"Texas"}
+]}
+]}

@@ -1,0 +1,7 @@
+{"schema":1,"teamID":45858,"squads":[
+{"clubID":81,"clubName":"Real Colorado","birthYears":[2002,2003],"best":0,"seasons":[
+{"season":"2020-21","teamID":45858,"name":"Real Colorado National ECNL GU18/U19","clubID":81,"clubName":"Real Colorado","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/test_data_2875e32909454afcba2ebdd9eff22103_RealColora.jpg","conference":"Northwest","eventID":2033,"divisionID":5447,"division":"GU18/U19","flightID":8851,"flightName":"Mountain","u":18,"birthYears":[2002,2003],"rank":1,"of":6,"gp":10,"w":9,"d":0,"l":1,"pts":27,"gf":36,"ga":12,"gd":24,"ppg":2.7,"form":"WWWWW","games":10,"played":10,"link":"start"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5850,"division":"U18/U19","flightID":9418,"flightName":"Champions League","tier":"Champions League","teamID":45858,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":9,"ga":1,"group":null,"reached":"Round of 16","champion":false,"cup":"Champions League Cup: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

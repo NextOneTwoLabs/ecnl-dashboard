@@ -1,0 +1,8 @@
+{"schema":1,"teamID":133597,"squads":[
+{"clubID":96,"clubName":"Slammers FC","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":133597,"name":"Slammers FC HB Koge ECNL G2011/12","clubID":96,"clubName":"Slammers FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/larger_hor_08-10-2026T19:29:55.019.png","conference":"Southwest","eventID":4271,"divisionID":22457,"division":"GU15","flightID":40601,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":1,"of":17,"gp":3,"w":3,"d":0,"l":0,"pts":9,"gf":15,"ga":3,"gd":12,"ppg":3.0,"form":"WWW","games":16,"played":3,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":64493,"name":"Slammers FC HB Koge ECNL G11","division":"G2011","conference":"Southwest"},
+{"season":"2025-26","teamID":85791,"name":"Slammers FC HB Koge ECNL G12","division":"G2012","conference":"Southwest"}
+]}
+]}

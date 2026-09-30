@@ -1,0 +1,8 @@
+{"schema":1,"teamID":11614,"squads":[
+{"clubID":96,"clubName":"Slammers FC","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":11614,"name":"SLAMMERS FC ECNL GU17","clubID":96,"clubName":"Slammers FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/larger_hor_08-10-2026T19:29:55.019.png","conference":"Southwest","eventID":2034,"divisionID":5453,"division":"GU17","flightID":8857,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":7,"of":14,"gp":13,"w":6,"d":4,"l":3,"pts":22,"gf":15,"ga":14,"gd":1,"ppg":1.69,"form":"WWDWW","games":13,"played":13,"link":"start"},
+{"season":"2021-22","teamID":11614,"name":"SLAMMERS FC ECNL GU18/U19","clubID":96,"clubName":"Slammers FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/larger_hor_08-10-2026T19:29:55.019.png","conference":"Southwest","eventID":2368,"divisionID":7815,"division":"GU18/U19","flightID":12514,"flightName":"Mojave","u":18,"birthYears":[2003,2004],"rank":6,"of":9,"gp":24,"w":9,"d":3,"l":12,"pts":30,"gf":32,"ga":38,"gd":-6,"ppg":1.25,"form":"LLLLL","games":11,"played":11,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11932,"flightName":"Showcase Cup A","tier":"Showcase Cup A","teamID":11614,"games":3,"played":3,"w":1,"d":1,"l":1,"gf":3,"ga":2,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

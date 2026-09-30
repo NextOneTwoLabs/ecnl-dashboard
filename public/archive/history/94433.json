@@ -1,0 +1,13 @@
+{"schema":1,"teamID":94433,"squads":[
+{"clubID":1760,"clubName":"La Roca FC","birthYears":[2012],"best":0,"seasons":[
+{"season":"2024-25","teamID":94433,"name":"La Roca FC ECNL G12","clubID":1760,"clubName":"La Roca FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jacob_Sanchez_3053a2297e38469bb77ccf9c65e938d1_LOGO_La_Ro.jpg","conference":"Northwest","eventID":3162,"divisionID":14251,"division":"G2012","flightID":24109,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":3,"of":10,"gp":18,"w":12,"d":1,"l":5,"pts":37,"gf":43,"ga":21,"gd":22,"ppg":2.06,"form":"WWDWW","games":18,"played":18,"link":"start"},
+{"season":"2025-26","teamID":94433,"name":"La Roca FC ECNL G12","clubID":1760,"clubName":"La Roca FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jacob_Sanchez_3053a2297e38469bb77ccf9c65e938d1_LOGO_La_Ro.jpg","conference":"Northwest","eventID":3930,"divisionID":18737,"division":"G2012","flightID":32904,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":4,"of":10,"gp":18,"w":9,"d":6,"l":3,"pts":33,"gf":31,"ga":27,"gd":4,"ppg":1.83,"form":"WWWWD","games":18,"played":18,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":94433,"games":0,"played":0,"w":0,"d":0,"l":3,"gf":1,"ga":13,"fromTable":true,"group":{"name":"Group D","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true}
+],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19567,"division":"G2012","flightID":34645,"flightName":"San Diego","tier":"San Diego","teamID":94433,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":0,"d":0,"l":3,"gf":2,"ga":10}
+],"maybe":[
+{"season":"2026-27","teamID":134137,"name":"La Roca FC ECNL G2011/12","division":"GU15","conference":"Northwest"},
+{"season":"2026-27","teamID":134144,"name":"La Roca FC ECNL G2012/13","division":"GU14","conference":"Northwest"}
+]}
+]}

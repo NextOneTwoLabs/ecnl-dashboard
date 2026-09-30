@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134485,"squads":[
+{"clubID":37,"clubName":"Dallas Texans","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":134485,"name":"Dallas Texans ECNL G2009/10","clubID":37,"clubName":"Dallas Texans","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Dallas-Texans.jpg","conference":"Texas","eventID":4272,"divisionID":22465,"division":"GU17","flightID":40609,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":8,"of":16,"gp":2,"w":1,"d":0,"l":1,"pts":3,"gf":4,"ga":8,"gd":-4,"ppg":1.5,"form":"WL","games":15,"played":2,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":59998,"name":"Dallas Texans ECNL G09","division":"G2009","conference":"Texas"},
+{"season":"2025-26","teamID":69269,"name":"Dallas Texans ECNL G10","division":"G2010","conference":"Texas"}
+]}
+]}

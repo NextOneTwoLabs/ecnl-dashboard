@@ -1,0 +1,6 @@
+{"schema":1,"teamID":2195,"squads":[
+{"clubID":7,"clubName":"No Club Selection","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":2195,"name":"Eagles SC ECNL GU17","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Southwest","eventID":2034,"divisionID":5453,"division":"GU17","flightID":8857,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":13,"of":14,"gp":14,"w":0,"d":4,"l":10,"pts":4,"gf":12,"ga":46,"gd":-34,"ppg":0.29,"form":"LLLDL","games":15,"played":14,"link":"start"},
+{"season":"2021-22","teamID":2195,"name":"Eagles SC ECNL GU17/U18","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Southwest","eventID":2368,"divisionID":7815,"division":"GU18/U19","flightID":12514,"flightName":"Mojave","u":18,"birthYears":[2003,2004],"rank":7,"of":9,"gp":24,"w":4,"d":5,"l":15,"pts":17,"gf":19,"ga":51,"gd":-32,"ppg":0.71,"form":"DLLWL","games":19,"played":19,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

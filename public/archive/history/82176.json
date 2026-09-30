@@ -1,0 +1,8 @@
+{"schema":1,"teamID":82176,"squads":[
+{"clubID":431,"clubName":"FSA FC","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":82176,"name":"FSA FC ECNL G13","clubID":431,"clubName":"FSA FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FSAFC.png","conference":"New England","eventID":3927,"divisionID":18547,"division":"G2013","flightID":32637,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":2,"of":9,"gp":16,"w":8,"d":8,"l":0,"pts":32,"gf":25,"ga":10,"gd":15,"ppg":2.0,"form":"DWWWD","games":16,"played":16,"link":"start"},
+{"season":"2026-27","teamID":82176,"name":"FSA FC ECNL G2012/13","clubID":431,"clubName":"FSA FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FSAFC.png","conference":"New England","eventID":4265,"divisionID":22420,"division":"GU14","flightID":40564,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":5,"of":9,"gp":2,"w":1,"d":0,"l":1,"pts":3,"gf":1,"ga":3,"gd":-2,"ppg":1.5,"form":"LW","games":16,"played":2,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":82176,"games":4,"played":4,"w":2,"d":0,"l":2,"gf":3,"ga":9,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

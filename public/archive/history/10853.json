@@ -1,0 +1,8 @@
+{"schema":1,"teamID":10853,"squads":[
+{"clubID":1425,"clubName":"Davis Legacy Soccer Club","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":10853,"name":"Davis Legacy ECNL GU17","clubID":1425,"clubName":"Davis Legacy Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jordy_Castillo_8365679f5324452581760a42307efcd0_Legacy_Log.jpg","conference":"Northwest","eventID":2033,"divisionID":5446,"division":"GU17","flightID":9537,"flightName":"Bay Area","u":17,"birthYears":[2004],"rank":7,"of":8,"gp":7,"w":1,"d":1,"l":5,"pts":4,"gf":7,"ga":18,"gd":-11,"ppg":0.57,"form":"LDLLW","games":7,"played":7,"link":"start"},
+{"season":"2021-22","teamID":10853,"name":"Davis Legacy ECNL GU18/U19","clubID":1425,"clubName":"Davis Legacy Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jordy_Castillo_8365679f5324452581760a42307efcd0_Legacy_Log.jpg","conference":"Northwest","eventID":2367,"divisionID":7809,"division":"GU18/U19","flightID":12508,"flightName":"Bay Area","u":18,"birthYears":[2003,2004],"rank":5,"of":8,"gp":18,"w":4,"d":7,"l":7,"pts":19,"gf":33,"ga":38,"gd":-5,"ppg":1.06,"form":"LWLDL","games":16,"played":16,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11933,"flightName":"Showcase Cup B","tier":"Showcase Cup B","teamID":10853,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":7,"ga":9,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

@@ -1,0 +1,12 @@
+{"schema":1,"teamID":59429,"squads":[
+{"clubID":1693,"clubName":"FC Alliance TN","birthYears":[2011],"best":0,"seasons":[
+{"season":"2023-24","teamID":59429,"name":"FC Alliance ECNL G11","clubID":1693,"clubName":"FC Alliance TN","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/Sierra_Goller_c027bcfa9c764581ae73ada2824fb4c0.png","conference":"Ohio Valley","eventID":2856,"divisionID":11654,"division":"G2011","flightID":19944,"flightName":"SOUTH","u":13,"birthYears":[2011],"rank":2,"of":6,"gp":16,"w":5,"d":6,"l":5,"pts":21,"gf":32,"ga":25,"gd":7,"ppg":1.31,"form":"DWDDD","games":14,"played":14,"link":"start"},
+{"season":"2024-25","teamID":59429,"name":"FC Alliance ECNL G11","clubID":1693,"clubName":"FC Alliance TN","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/Sierra_Goller_c027bcfa9c764581ae73ada2824fb4c0.png","conference":"Ohio Valley","eventID":3163,"divisionID":14256,"division":"G2011","flightID":26430,"flightName":"South","u":14,"birthYears":[2011],"rank":4,"of":6,"gp":16,"w":4,"d":4,"l":8,"pts":16,"gf":18,"ga":34,"gd":-16,"ppg":1.0,"form":"WDDWL","games":12,"played":12,"link":"id"},
+{"season":"2025-26","teamID":59429,"name":"FC Alliance ECNL G11","clubID":1693,"clubName":"FC Alliance TN","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/Sierra_Goller_c027bcfa9c764581ae73ada2824fb4c0.png","conference":"Ohio Valley","eventID":3931,"divisionID":18744,"division":"G2011","flightID":32917,"flightName":"South","u":15,"birthYears":[2011],"rank":4,"of":6,"gp":16,"w":6,"d":2,"l":8,"pts":20,"gf":25,"ga":32,"gd":-7,"ppg":1.25,"form":"WDWDL","games":12,"played":12,"link":"id"}
+],"postseason":[
+{"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14601,"division":"G2011","flightID":24871,"flightName":"Champions League","tier":"Champions League","teamID":59429,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":7,"ga":14,"group":{"name":"Group A","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":134640,"name":"FC Alliance TN ECNL G2011/12","division":"GU15","conference":"Ohio Valley"},
+{"season":"2026-27","teamID":134641,"name":"FC Alliance TN ECNL G2010/11","division":"GU16","conference":"Ohio Valley"}
+]}
+]}

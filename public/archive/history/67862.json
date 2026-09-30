@@ -1,0 +1,12 @@
+{"schema":1,"teamID":67862,"squads":[
+{"clubID":7,"clubName":"No Club Selection","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":67862,"name":"Beach FC (VA) ECNL G11","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Mid-Atlantic","eventID":2839,"divisionID":11502,"division":"G2011","flightID":19664,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":6,"of":13,"gp":24,"w":11,"d":7,"l":6,"pts":40,"gf":30,"ga":20,"gd":10,"ppg":1.67,"form":"LLLDL","games":24,"played":24,"link":"start"},
+{"season":"2024-25","teamID":67862,"name":"Beach FC (VA) ECNL G11","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Mid-Atlantic","eventID":3157,"divisionID":14178,"division":"G2011","flightID":24011,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":8,"of":12,"gp":22,"w":7,"d":2,"l":13,"pts":23,"gf":37,"ga":50,"gd":-13,"ppg":1.05,"form":"LWLWL","games":22,"played":22,"link":"id"},
+{"season":"2025-26","teamID":67862,"name":"Beach FC (VA) ECNL G11","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Mid-Atlantic","eventID":3925,"divisionID":18537,"division":"G2011","flightID":32622,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":7,"of":10,"gp":9,"w":2,"d":2,"l":5,"pts":8,"gf":7,"ga":19,"gd":-12,"ppg":0.89,"form":"LLWLL","games":9,"played":9,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20345,"division":"G2011","flightID":36390,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":67862,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":1,"d":0,"l":2,"gf":2,"ga":4}
+],"maybe":[
+{"season":"2026-27","teamID":135518,"name":"Beach FC (VA) ECNL G2011/12","division":"GU15","conference":"Mid-Atlantic"},
+{"season":"2026-27","teamID":135520,"name":"Beach FC (VA) ECNL G2010/11","division":"GU16","conference":"Mid-Atlantic"}
+]}
+]}

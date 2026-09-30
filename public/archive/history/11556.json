@@ -1,0 +1,7 @@
+{"schema":1,"teamID":11556,"squads":[
+{"clubID":109,"clubName":"Vardar","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":11556,"name":"Vardar ECNL GU17","clubID":109,"clubName":"Vardar","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Janvi_Subramanyan_f24b4597384844fa86ece0b0577d52ec_VardarBadg.jpg","conference":"Midwest","eventID":2035,"divisionID":5460,"division":"GU17","flightID":8864,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":4,"of":11,"gp":8,"w":3,"d":4,"l":1,"pts":13,"gf":9,"ga":9,"gd":0,"ppg":1.63,"form":"WWDDD","games":10,"played":8,"link":"start"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11933,"flightName":"Showcase Cup B","tier":"Showcase Cup B","teamID":11556,"games":4,"played":4,"w":3,"d":0,"l":1,"gf":9,"ga":3,"group":null,"reached":"Final","champion":false,"final":"lost","cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

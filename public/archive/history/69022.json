@@ -1,0 +1,20 @@
+{"schema":1,"teamID":69022,"squads":[
+{"clubID":2510,"clubName":"Force","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":69022,"name":"De Anza Force ECNL G11","clubID":2510,"clubName":"Force","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tamara_Moyers_d07ec9708fb74bfa8510664705e1aed2_Force_Logo_Large.png","conference":"NorCal","eventID":2854,"divisionID":11642,"division":"G2011","flightID":19926,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":6,"of":10,"gp":18,"w":5,"d":3,"l":10,"pts":18,"gf":13,"ga":22,"gd":-9,"ppg":1.0,"form":"WLLDW","games":18,"played":18,"link":"start"},
+{"season":"2024-25","teamID":69022,"name":"De Anza Force ECNL G11","clubID":2510,"clubName":"Force","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tamara_Moyers_d07ec9708fb74bfa8510664705e1aed2_Force_Logo_Large.png","conference":"NorCal","eventID":3161,"divisionID":14244,"division":"G2011","flightID":24101,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":5,"of":10,"gp":18,"w":7,"d":5,"l":6,"pts":26,"gf":38,"ga":22,"gd":16,"ppg":1.44,"form":"LWWLD","games":18,"played":18,"link":"id"},
+{"season":"2025-26","teamID":69022,"name":"Force (CA) ECNL G11","clubID":2510,"clubName":"Force","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tamara_Moyers_d07ec9708fb74bfa8510664705e1aed2_Force_Logo_Large.png","conference":"NorCal","eventID":3929,"divisionID":18733,"division":"G2011","flightID":32896,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":4,"of":11,"gp":20,"w":12,"d":3,"l":5,"pts":39,"gf":48,"ga":22,"gd":26,"ppg":1.95,"form":"WWWWW","games":20,"played":20,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21550,"division":"G2011","flightID":39392,"flightName":"North American Cup","tier":"North American Cup","teamID":69022,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":6,"ga":9,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19568,"division":"G2011","flightID":34643,"flightName":"San Diego","tier":"San Diego","teamID":69022,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":2,"d":0,"l":1,"gf":7,"ga":6},
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20345,"division":"G2011","flightID":36390,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":69022,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":2,"d":0,"l":1,"gf":8,"ga":3}
+],"maybe":[
+{"season":"2026-27","teamID":62271,"name":"Force (CA) ECNL G2010/11","division":"GU16","conference":"NorCal"},
+{"season":"2026-27","teamID":69022,"name":"Force (CA) ECNL G2011/12","division":"GU15","conference":"NorCal"}
+]},
+{"clubID":2510,"clubName":"Force","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":69022,"name":"Force (CA) ECNL G2011/12","clubID":2510,"clubName":"Force","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tamara_Moyers_d07ec9708fb74bfa8510664705e1aed2_Force_Logo_Large.png","conference":"NorCal","eventID":4267,"divisionID":22433,"division":"GU15","flightID":40577,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":11,"of":12,"gp":6,"w":0,"d":1,"l":5,"pts":1,"gf":1,"ga":21,"gd":-20,"ppg":0.17,"form":"LLLLL","games":22,"played":6,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":69022,"name":"Force (CA) ECNL G11","division":"G2011","conference":"NorCal"}
+]}
+]}
