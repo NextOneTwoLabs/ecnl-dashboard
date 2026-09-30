@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-16T20:50:47Z",
+  "updated": "2026-09-30T03:33:33Z",
   "events": {
     "2025-26/Mid-Atlantic": {
       "season": "2025-26",
@@ -7343,6 +7343,77 @@
           "teams": 0,
           "games": 4,
           "brackets": []
+        }
+      ]
+    },
+    "2025-26/Phoenix Spring": {
+      "season": "2025-26",
+      "kind": "showcase",
+      "name": "Phoenix Spring",
+      "eventId": 4133,
+      "eventName": "ECNL Phoenix - Spring",
+      "fetchedAt": "2026-09-30T03:33:19Z",
+      "publicUrl": "https://public.totalglobalsports.com/public/event/4133/schedules-standings",
+      "divisions": [
+        {
+          "divisionID": 20343,
+          "divisionName": "G2009",
+          "flightID": 36386,
+          "flightName": "Phoenix - Spring",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/4133/standings/36386",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/4133/schedules/36386",
+          "teams": 54,
+          "games": 81
+        },
+        {
+          "divisionID": 20344,
+          "divisionName": "G2010",
+          "flightID": 36388,
+          "flightName": "Phoenix - Spring",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/4133/standings/36388",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/4133/schedules/36388",
+          "teams": 54,
+          "games": 81
+        },
+        {
+          "divisionID": 20345,
+          "divisionName": "G2011",
+          "flightID": 36390,
+          "flightName": "Phoenix - Spring",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/4133/standings/36390",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/4133/schedules/36390",
+          "teams": 54,
+          "games": 81
+        },
+        {
+          "divisionID": 20346,
+          "divisionName": "G2012",
+          "flightID": 36387,
+          "flightName": "Phoenix - Spring",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/4133/standings/36387",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/4133/schedules/36387",
+          "teams": 58,
+          "games": 87
+        },
+        {
+          "divisionID": 20347,
+          "divisionName": "G2013",
+          "flightID": 36389,
+          "flightName": "Phoenix - Spring",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/4133/standings/36389",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/4133/schedules/36389",
+          "teams": 58,
+          "games": 87
+        },
+        {
+          "divisionID": 20348,
+          "divisionName": "G2014",
+          "flightID": 36391,
+          "flightName": "Phoenix - Spring",
+          "standingsUrl": "https://public.totalglobalsports.com/public/event/4133/standings/36391",
+          "schedulesUrl": "https://public.totalglobalsports.com/public/event/4133/schedules/36391",
+          "teams": 24,
+          "games": 36
         }
       ]
     }
