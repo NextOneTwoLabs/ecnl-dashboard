@@ -8,6 +8,7 @@ Crawls the events listed in public/data/sources.json and writes:
   public/archive/teams/<season>.json        per-season team index (derived, #81)
   public/archive/clubs.json                 club city and state (derived, #87)
   export/<season>/<conference>/*.csv        human-readable standings & schedules
+  export/<season>/showcases/<showcase>/*.csv  the same for a showcase (#97)
   public/archive/manifest.json              index tying event IDs to season/conference
 
 Scheduled use (what the GitHub workflow runs every 2h):
@@ -20,6 +21,9 @@ Manual/bulk use:
     python archive.py --season 2026-27        full crawl of one season
     python archive.py --all                   every season (~1200+ requests)
     python archive.py --all --force           ignore the freshness check
+    python archive.py --season 2025-26 --showcases --max-requests 20
+                                              only the season's showcases, at most
+                                              20 HTTP requests, retries included
     python archive.py --team-index --all      rebuild every season's team index
                                               from the archive (no API calls)
     python archive.py --clubs --all           fetch the city and state of every club
@@ -189,10 +193,13 @@ def write_csv(path, columns, rows):
 
 # ---------- verification ----------
 
-def verify(sources, season, conference):
-    """Confirm each configured event ID resolves to the expected event name."""
+def verify(sources, season, conference, kind=None):
+    """Confirm each configured event ID resolves to the expected event name.
+    `kind` ("national" or "showcase") checks only that kind of event."""
     ok = bad = 0
-    for season_key, kind, name, event in api.iter_events(sources, season, conference):
+    for season_key, ev_kind, name, event in api.iter_events(sources, season, conference):
+        if kind and ev_kind != kind:
+            continue
         eid = event.get("eventId")
         if not eid:
             print(f"  SKIP  {season_key} {name}: no eventId set")
@@ -220,6 +227,14 @@ def verify(sources, season, conference):
 
 # ---------- archiving ----------
 
+def export_dir(season, kind, name):
+    """Where an event's CSVs go: export/<season>/<name>/ for a conference or national
+    event, export/<season>/showcases/<name>/ for a showcase (#97), so a showcase can
+    never share a folder with a conference or national event of the same name."""
+    parts = [api.EXPORT_DIR, api.slug(season)] + (["showcases"] if kind == "showcase" else [])
+    return os.path.join(*parts, api.slug(name))
+
+
 def archive_event(sources, season_key, kind, name, event, stats, force, dry_run):
     eid = event.get("eventId")
     if not eid:
@@ -246,7 +261,7 @@ def archive_event(sources, season_key, kind, name, event, stats, force, dry_run)
 
     divisions = (hierarchy or {}).get("girlsDivAndFlightList") or []
     templates = sources.get("publicUrlTemplates", {})
-    export_base = os.path.join(api.EXPORT_DIR, api.slug(season_key), api.slug(name))
+    export_base = export_dir(season_key, kind, name)
 
     entry = {
         "season": season_key,
@@ -318,6 +333,7 @@ def archive_event(sources, season_key, kind, name, event, stats, force, dry_run)
 
             # Brackets, for national playoff/finals events only. The design
             # endpoint returns every named bracket (main, cup, consolations).
+            # Never for a showcase: showcases have no brackets (#97).
             if kind == "national":
                 try:
                     payload = api.unwrap(get_json(api.p_brackets_design(eid, flight_id), stats, force))
@@ -431,18 +447,35 @@ def national_event_active(event, today, before_days=7, after_days=14):
     return s <= today <= e
 
 
+def showcase_event_active(event, today):
+    """Include a showcase in the refresh only on its own dates, startDate to endDate
+    inclusive (UTC days), with no padding either side: a showcase is one weekend,
+    and after its end date it is frozen (#97, owner decision 9). A showcase without
+    valid dates is never refreshed; tests/test_showcases.py requires them."""
+    try:
+        start = datetime.date.fromisoformat(event["startDate"])
+        end = datetime.date.fromisoformat(event["endDate"])
+    except (KeyError, TypeError, ValueError):
+        return False
+    return start <= today <= end
+
+
 def season_flights(sources, season, today=None):
     """Every flight in a season, from the archived hierarchies.
 
     Conference events are always included; national events only within their
-    date window (see national_event_active). Each dict carries the event's
-    kind, name, division and flight identifiers.
+    date window (see national_event_active), showcases only on their own dates
+    (see showcase_event_active). Each dict carries the event's kind, name,
+    division and flight identifiers. `today` defaults to the UTC date; the
+    refresh passes its own (--date), so a dry run for a given day is that day's.
     """
     today = today or datetime.datetime.now(datetime.timezone.utc).date()
     season_data = sources["seasons"][season]
     events = [("conference", n, ev) for n, ev in (season_data.get("conferences") or {}).items()]
     events += [("national", n, ev) for n, ev in (season_data.get("national") or {}).items()
                if national_event_active(ev, today)]
+    events += [("showcase", n, ev) for n, ev in (season_data.get("showcases") or {}).items()
+               if showcase_event_active(ev, today)]
 
     out = []
     for kind, name, ev in events:
@@ -558,8 +591,8 @@ def export_flight_csv(sources, season, fl):
 
     Returns the standings rows so callers can rebuild _all.standings.csv.
     """
-    base = os.path.join(api.EXPORT_DIR, api.slug(season), api.slug(fl["conference"]))
-    stem = f"{api.slug(fl['divisionName'])}-{api.slug(fl['flightName'])}"
+    base = export_dir(season, fl["kind"], fl["conference"])
+    stem =f"{api.slug(fl['divisionName'])}-{api.slug(fl['flightName'])}"
 
     standings = []
     raw, _ = api.read_archive(api.p_standings(fl["divisionID"], fl["flightID"], fl["eventId"]))
@@ -659,15 +692,61 @@ def build_team_index(sources, season):
                     row.update(conference=conf, flightName=f.get("flightName"), rank=rank)
                     row.update({k: t.get(k) for k in TEAM_INDEX_STATS})
                     teams.append(row)
-    return {"schema": TEAM_INDEX_SCHEMA, "season": season, "teams": teams}
+    index = {"schema": TEAM_INDEX_SCHEMA, "season": season, "teams": teams}
+    showcases = showcase_index_rows(sources, season)
+    if showcases:
+        index["showcases"] = showcases
+    return index
+
+
+def showcase_index_rows(sources, season):
+    """#97: one row per archived showcase flight of the season, with the ids of the
+    teams that play in it, so a team page fetches only the showcase schedules its team
+    played in. The ids come from the schedule (a flight without a table still counts),
+    in first-appearance order; rows are in registry, then hierarchy order. `aliases`
+    carries the registry's hand-reviewed teamAliases (showcase id -> the same team's
+    conference id) for the ids in this flight; the showcase ids themselves stay as the
+    games carry them. The `teams` rows above are unchanged, so the schema stays 1."""
+    out = []
+    for _name, ev in ((sources["seasons"].get(season) or {}).get("showcases") or {}).items():
+        eid = ev.get("eventId")
+        raw, _ = api.read_archive(api.p_hierarchy(eid)) if eid else (None, None)
+        if not raw:
+            continue
+        try:
+            divs = json.loads(raw)["data"]["girlsDivAndFlightList"] or []
+        except (ValueError, KeyError, TypeError):
+            continue
+        aliases = {str(k): v for k, v in (ev.get("teamAliases") or {}).items()}
+        for d in divs:
+            for f in d.get("flightList") or []:
+                ids = []
+                for g in archived_games(eid, f.get("flightID")):
+                    for t in (g.get("hometeamID"), g.get("awayteamID")):
+                        if t and t not in ids:
+                            ids.append(t)
+                if not ids:
+                    continue
+                row = {"eventID": eid, "divisionID": d.get("divisionID"),
+                       "flightID": f.get("flightID"), "teamIDs": ids}
+                here = {k: v for k, v in aliases.items() if k.isdigit() and int(k) in ids}
+                if here:
+                    row["aliases"] = here
+                out.append(row)
+    return out
 
 
 def team_index_bytes(index):
-    """One team per line, so a refresh diff shows only the rows that moved."""
-    head = json.dumps({k: v for k, v in index.items() if k != "teams"},
+    """One team (or showcase flight) per line, so a refresh diff shows only the rows
+    that moved."""
+    head = json.dumps({k: v for k, v in index.items() if k not in ("teams", "showcases")},
                       ensure_ascii=False, separators=(",", ":"))[:-1]
     rows = ",\n".join(json.dumps(t, ensure_ascii=False, separators=(",", ":")) for t in index["teams"])
-    return (head + ',"teams":[\n' + rows + "\n]}\n").encode("utf-8")
+    tail = ""
+    if index.get("showcases"):
+        tail = ',"showcases":[\n' + ",\n".join(
+            json.dumps(s, ensure_ascii=False, separators=(",", ":")) for s in index["showcases"]) + "\n]"
+    return (head + ',"teams":[\n' + rows + "\n]" + tail + "}\n").encode("utf-8")
 
 
 def write_team_index(sources, season):
@@ -1050,7 +1129,7 @@ def cmd_refresh(sources, args):
         except ValueError:
             pass
 
-    flights = season_flights(sources, season)
+    flights = season_flights(sources, season, today)
     if not flights:
         print(f"No archived hierarchy for {season}; run: python archive.py --season {season}")
         return 2
@@ -1109,7 +1188,16 @@ def cmd_refresh(sources, args):
                 fetch_json(api.p_hierarchy(ev["eventId"]), stats)
             except api.ApiError as e:
                 stats.fail(f"{season}/{conf}: hierarchy: {e}")
-        flights = season_flights(sources, season) or flights
+        # A showcase can add flights late, so on its own dates the sweep re-reads its
+        # hierarchy too (#97). Outside them it is never fetched.
+        for name, ev in (sources["seasons"][season].get("showcases") or {}).items():
+            if not ev.get("eventId") or not showcase_event_active(ev, today):
+                continue
+            try:
+                fetch_json(api.p_hierarchy(ev["eventId"]), stats)
+            except api.ApiError as e:
+                stats.fail(f"{season}/{name}: hierarchy: {e}")
+        flights = season_flights(sources, season, today) or flights
 
     by_key = {fl["key"]: fl for fl in flights}
     for key in sorted(candidates):
@@ -1216,6 +1304,12 @@ def main():
     ap.add_argument("--conference", help="Single conference name, e.g. Texas.")
     ap.add_argument("--national", action="store_true",
                     help="Only the season's national (Playoffs/Finals) events; skips conferences.")
+    ap.add_argument("--showcases", action="store_true",
+                    help="Only the season's showcases (#97); skips conferences and national events. "
+                         "With --verify, verifies only them.")
+    ap.add_argument("--max-requests", type=int, metavar="N",
+                    help="Stop asking upstream after N HTTP requests, retries included "
+                         "(a request budget for a crawl or --verify).")
     ap.add_argument("--all", action="store_true", help="Every season in the registry.")
     ap.add_argument("--verify", action="store_true",
                     help="Only check that event IDs resolve to the expected names.")
@@ -1248,6 +1342,12 @@ def main():
     args = ap.parse_args()
     if args.national and args.conference:
         ap.error("--national cannot be combined with --conference (the conference filter drops national events)")
+    if args.showcases and (args.conference or args.national):
+        ap.error("--showcases cannot be combined with --conference or --national")
+    if args.max_requests is not None:
+        if args.max_requests < 0:
+            ap.error("--max-requests must be 0 or more")
+        api.HTTP_BUDGET = args.max_requests
 
     global FORCE_RECONSTRUCTED
     FORCE_RECONSTRUCTED = args.force_reconstructed
@@ -1274,7 +1374,10 @@ def main():
         print(f"No --season/--all given; defaulting to {season}.\n")
 
     if args.verify:
-        return verify(sources, season, args.conference)
+        code = verify(sources, season, args.conference,
+                      "showcase" if args.showcases else "national" if args.national else None)
+        print(f"HTTP requests: {api.HTTP_ATTEMPTS} (retries included).")
+        return code
 
     if args.export:
         return cmd_export(sources, season)
@@ -1293,6 +1396,8 @@ def main():
     for season_key, kind, name, event in api.iter_events(sources, season, args.conference):
         if args.national and kind != "national":
             continue
+        if args.showcases and kind != "showcase":
+            continue
         entry = archive_event(sources, season_key, kind, name, event, stats, args.force, args.dry_run)
         if entry:
             div_team_names = entry.pop("_divTeamNames", {})
@@ -1304,12 +1409,18 @@ def main():
             save_manifest(manifest)  # checkpoint, so an interrupted crawl keeps progress
 
     # Rebuild the team index of every season whose conferences were crawled (#81).
-    if not args.dry_run and not args.national:
+    if not args.dry_run and not args.national and not args.showcases:
         for s in sorted({s for s, kind, _n, _e in api.iter_events(sources, season, args.conference)
                          if kind == "conference"}):
             update_team_index(sources, s, stats)
             # Then the season's clubs with no place yet (#87); usually none.
             fetch_new_club_places([s], stats, s)
+    # A showcase crawl rebuilds the index for its showcase rows (#97), and never runs the
+    # club step: clubs seen only at a showcase are never fetched.
+    if not args.dry_run and args.showcases:
+        for s in sorted({s for s, kind, _n, _e in api.iter_events(sources, season)
+                         if kind == "showcase"}):
+            update_team_index(sources, s, stats)
 
     if age_changes and not args.dry_run:
         save_sources(sources)
@@ -1319,7 +1430,8 @@ def main():
 
     elapsed = time.time() - started
     print(f"\nFetched {stats.fetched}, reused {stats.skipped} fresh, "
-          f"{stats.failed} failed, in {elapsed:.0f}s.")
+          f"{stats.failed} failed, in {elapsed:.0f}s. "
+          f"HTTP requests: {api.HTTP_ATTEMPTS} (retries included).")
     if stats.errors:
         print("\nProblems:")
         for e in stats.errors:
