@@ -15,7 +15,7 @@ upstream API or website ever goes away.
 - **Self-refreshing** — a scheduled job updates the data on match days and keeps the fixture calendar current
 - **CSV exports** — Human-readable standings and schedule tables under `export/`, openable in Excel
 - **Playoffs & Finals** — National post-season per age group and competition (Champions League, North American Cup, Showcase Cup, Showcase Games): knockout brackets drawn as trees, cup and consolation brackets, group tables where a group stage exists, round-tagged schedules, and a format note per competition
-- **Showcases** — ECNL showcase weekends (starting with Phoenix Spring 2026) per age group: a Results table (TGS's order, no positions) and the Games, with conference teams linked to their team pages
+- **Showcases** — ECNL showcase weekends (2025-26: San Diego Fall and Phoenix Spring) per age group: a Results table (TGS's order, no positions) and the Games, with conference teams linked to their team pages
 - **★ My Teams** — Follow any team (the ★ My Teams button at the foot of the sidebar opens the list); each favorite opens a summary page: the glance panel, the full table with the team highlighted, the team's own fixtures and results, its showcase games, and its post-season games when it played any
 - **One team search** — Find a team across every age group and conference in the current season; a result opens it on its conference page with the age group and team selected
 - **Age group navigation** — Tabs populated from the API; keyboard arrow-key navigation, `/` to search
@@ -580,8 +580,9 @@ roster or an endpoint TGS adds later can never be written into the public repo.
 | 2021-22 | 9 (no NorCal) | age (`GU13`; the national events say `U13`) | one | ✅ event 2436 — U15 Regional League Finals bracket corrupt at TGS (placeholder team before the final); final correct | ✅ event 2437 |
 | 2020-21 | 9 (no NorCal) | age (`GU13`; the national events say `U13`, the Finals `GU13`) | one | ✅ event 2118 — Tropical Storm Elsa cut the event short: the U13 Champions League and the four U15 cups have no final and the U15 Champions League no knockout (U13 and U15 finished at the Finals); U18/U19 Composite placement rows corrupt at TGS, left out of the bracket; finals correct | ✅ event 2289 — GU15 quarterfinal and semifinal rows and GU17 semifinal rows corrupt at TGS (GU17's left out of the bracket); finals correct |
 
-Showcases: 2025-26 **Phoenix Spring** (event 4133, Phoenix, AZ, 27–29 March 2026; U17 to
-U12, 302 teams, 453 games). No other showcase is archived yet.
+Showcases: 2025-26 **San Diego Fall** (event 4041, Del Mar, CA, 11–13 October 2025; U15 to
+U12, 110 teams, 165 games) and **Phoenix Spring** (event 4133, Phoenix, AZ, 27–29 March 2026;
+U17 to U12, 302 teams, 453 games). No other showcase is archived yet.
 
 Age labels are computed relative to the season being viewed, so historical seasons
 stay correctly labelled.
