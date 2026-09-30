@@ -109,11 +109,15 @@ SCHEDULE_COLUMNS = [
 ]
 
 
-def standings_rows(teams):
+def standings_rows(teams, kind="conference"):
+    """CSV rows in table order. `rank` is the 1-based position, except for a showcase
+    (#97): its table is a results list, not a ranking, so `rank` is TGS's own `rank`
+    field as published (1 on most rows at Phoenix Spring, 2 on some), never a position
+    the site would have invented."""
     rows = []
     for i, t in enumerate(teams):
         rows.append({
-            "rank": i + 1,
+            "rank": t.get("rank") if kind == "showcase" else i + 1,
             "team": t.get("name"),
             "club": t.get("clubName"),
             "teamID": t.get("teamID"),
@@ -302,7 +306,7 @@ def archive_event(sources, season_key, kind, name, event, stats, force, dry_run)
                 record["teams"] = len(teams)
                 div_team_names.setdefault(div_name, []).extend(
                     t.get("name") or "" for t in teams)
-                rows = standings_rows(teams)
+                rows = standings_rows(teams, kind)
                 if rows:
                     write_csv(os.path.join(export_base, stem + ".standings.csv"),
                               STANDINGS_COLUMNS, rows)
@@ -476,7 +480,12 @@ def season_flights(sources, season, today=None):
                if national_event_active(ev, today)]
     events += [("showcase", n, ev) for n, ev in (season_data.get("showcases") or {}).items()
                if showcase_event_active(ev, today)]
+    return event_flights(events)
 
+
+def event_flights(events):
+    """The archived flights of (kind, name, event) triples, in order, as season_flights
+    returns them. An event with no archived hierarchy has none."""
     out = []
     for kind, name, ev in events:
         eid = ev.get("eventId")
@@ -592,14 +601,14 @@ def export_flight_csv(sources, season, fl):
     Returns the standings rows so callers can rebuild _all.standings.csv.
     """
     base = export_dir(season, fl["kind"], fl["conference"])
-    stem =f"{api.slug(fl['divisionName'])}-{api.slug(fl['flightName'])}"
+    stem = f"{api.slug(fl['divisionName'])}-{api.slug(fl['flightName'])}"
 
     standings = []
     raw, _ = api.read_archive(api.p_standings(fl["divisionID"], fl["flightID"], fl["eventId"]))
     if raw:
         try:
             payload = json.loads(raw).get("data")
-            standings = standings_rows(merge_standings_blocks(payload))
+            standings = standings_rows(merge_standings_blocks(payload), fl["kind"])
             if standings:
                 write_csv(os.path.join(base, stem + ".standings.csv"), STANDINGS_COLUMNS, standings)
         except (ValueError, AttributeError, TypeError):
@@ -614,26 +623,29 @@ def export_flight_csv(sources, season, fl):
 def cmd_export(sources, season):
     """Rebuild every CSV under export/ from the archive, with no API calls.
 
-    Per-flight files come from export_flight_csv; each conference's
-    _all.standings.csv is rebuilt from those rows in the same order
-    archive_event writes it.
+    Conferences and showcases (#97, every archived one, whatever its dates); national
+    events are not rebuilt here (a crawl writes theirs). Per-flight files come from
+    export_flight_csv; each event's _all.standings.csv is rebuilt from those rows in
+    the same order archive_event writes it.
     """
     seasons = [season] if season else list(sources["seasons"].keys())
     for s in seasons:
-        flights = season_flights(sources, s)
-        per_conf = {}
+        data = sources["seasons"][s]
+        flights = event_flights(
+            [("conference", n, ev) for n, ev in (data.get("conferences") or {}).items()]
+            + [("showcase", n, ev) for n, ev in (data.get("showcases") or {}).items()])
+        per_event = {}
         for fl in flights:
-            if fl["kind"] != "conference":
-                continue
             rows = export_flight_csv(sources, s, fl)
-            per_conf.setdefault(fl["conference"], []).extend(
+            per_event.setdefault((fl["kind"], fl["conference"]), []).extend(
                 dict(r, division=fl["divisionName"], flight=fl["flightName"]) for r in rows)
-        for conf, rows in per_conf.items():
+        for (kind, name), rows in per_event.items():
             if rows:
-                write_csv(os.path.join(api.EXPORT_DIR, api.slug(s), api.slug(conf), "_all.standings.csv"),
+                write_csv(os.path.join(export_dir(s, kind, name), "_all.standings.csv"),
                           STANDINGS_COLUMNS + ["division", "flight"], rows)
-        print(f"{s}: exported {sum(1 for f in flights if f['kind'] == 'conference')} flights "
-              f"across {len(per_conf)} conferences")
+        count = lambda kind: sum(1 for k, _n in per_event if k == kind)
+        print(f"{s}: exported {len(flights)} flights across {count('conference')} conferences"
+              f" and {count('showcase')} showcases")
     return 0
 
 

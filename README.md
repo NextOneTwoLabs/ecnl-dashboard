@@ -168,6 +168,9 @@ hardcoded in the HTML.
    python archive.py --verify --season 2026-27
    ```
 
+   `--verify` checks every event of the season; add `--national` or `--showcases` to
+   verify only the national events or only the showcases (since #97).
+
 3. Archive it: `python archive.py --season 2026-27`
 
 The season dropdown rebuilds itself from the registry, so no HTML edit is needed.
@@ -294,10 +297,13 @@ display name shown on the Showcases tab (#97):
 - `python archive.py --season 2025-26 --showcases` crawls only the season's showcases (1 + 2 ×
   flights requests; `--verify --showcases` checks their names). It rebuilds the season's team
   index, whose optional `showcases` rows let a team page fetch only the showcase schedules its
-  team played in, and never fetches clubs. CSVs go to `export/<season>/showcases/<name>/`.
+  team played in, and never fetches clubs. CSVs go to `export/<season>/showcases/<name>/`;
+  their `rank` column is TGS's own `rank` as published, not a position, and `--export`
+  rebuilds them with the conferences'.
 - **Request budgets count retries.** A 5xx is retried up to 3 times, so `--max-requests N`
-  counts every HTTP request, retries included, and stops before request N + 1; each crawl
-  prints the count.
+  counts every HTTP request, retries included, and stops before request N + 1. With a budget
+  set, the crawler prints one line per attempt (UTC time, path, status, bytes); that printed
+  log is the request record for the issue.
 - **Cost on the site:** a team page in a season with showcases reads the season's team index
   once per session (on a My Teams page that is one request more than before) and one
   schedule per showcase flight the team played in.
@@ -341,7 +347,8 @@ competition) rather than the viewer's last state. The season can be changed from
 the Playoffs tab; the tab is kept and the hash follows the new season.
 
 Showcases is `#tab=showcases&season=2025-26`, with `&event=<eventId>`, `&age=`,
-`&flight=` (only when an age group has several) and `&view=schedule` (the Games view).
+`&flight=<flightId>` (the page always writes it; a link without it opens the age group's
+first flight) and `&view=schedule` (the Games view).
 
 ## Feedback
 
@@ -608,8 +615,9 @@ season, and shows it on hover over an age-group tab. It refreshes on each
   three in 2022-23, Southwest GU13 in 2020-21). The page and the CSV export merge them into one table: the
   larger block keeps its published order and the stray teams are slotted in by
   points per game (`mergeStandingsBlocks` in the page, `merge_standings_blocks` in
-  `archive.py`). `python archive.py --export --season <key>` rebuilds the CSVs from
-  the archive without any API calls.
+  `archive.py`). `python archive.py --export --season <key>` rebuilds the conference and
+  showcase CSVs from the archive without any API calls (national events' CSVs are
+  written only by a crawl).
 - 2020-21 had no NorCal conference: the Bay Area clubs' first ECNL season was played
   in the Northwest conference, whose divisions were split into Bay Area, Mountain and
   Pacific flights (the page shows one panel per flight). Six conferences also ran a

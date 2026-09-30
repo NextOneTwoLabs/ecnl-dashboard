@@ -286,6 +286,20 @@ HTTP_ATTEMPTS = 0
 HTTP_BUDGET = None
 
 
+def _utc_ms():
+    now = time.time()
+    return time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(now)) + f".{int(now % 1 * 1000):03d}Z"
+
+
+def _log_attempt(stamp, api_path, status, size):
+    """Under a budget (a crawl or --verify run with --max-requests), one line per HTTP
+    attempt, retries included: number of the budget, UTC start time, path, status (or
+    the transport error), bytes. This printed log is the request record kept on the
+    onboarding issue. Silent otherwise (the refresh and the local proxy)."""
+    if HTTP_BUDGET is not None:
+        print(f"  request {HTTP_ATTEMPTS}/{HTTP_BUDGET}\t{stamp}\t{api_path}\t{status}\t{size} B", flush=True)
+
+
 def fetch_api_raw(api_path, timeout=20, retries=3, backoff=1.5):
     """GET `<API_BASE>/api/<api_path>` and return raw bytes.
 
@@ -301,15 +315,20 @@ def fetch_api_raw(api_path, timeout=20, retries=3, backoff=1.5):
         if HTTP_BUDGET is not None and HTTP_ATTEMPTS >= HTTP_BUDGET:
             raise BudgetSpent(f"request budget of {HTTP_BUDGET} spent; not requested: {api_path}")
         HTTP_ATTEMPTS += 1
+        stamp = _utc_ms()
         try:
             req = urllib.request.Request(url, headers=API_HEADERS)
             with urllib.request.urlopen(req, timeout=timeout) as resp:
-                return resp.read()
+                data = resp.read()
+                _log_attempt(stamp, api_path, getattr(resp, "status", 200), len(data))
+                return data
         except urllib.error.HTTPError as e:
+            _log_attempt(stamp, api_path, e.code, 0)
             last = ApiError(f"HTTP {e.code} for {api_path}")
             if e.code < 500:
                 raise last  # client error: retrying will not help
         except Exception as e:  # URLError, socket.timeout, ...
+            _log_attempt(stamp, api_path, type(e).__name__, 0)
             last = ApiError(f"{type(e).__name__}: {e} for {api_path}")
         if attempt < retries - 1:
             time.sleep(delay)

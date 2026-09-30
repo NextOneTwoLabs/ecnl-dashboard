@@ -46,11 +46,20 @@ GAMES = {
 }
 
 
+# TGS's showcase tables give most rows rank 1 and some 2: a results list, not a ranking.
+STANDINGS_21 = [{"flightGroupID": 0, "teamStandings": [
+    {"teamID": 5001, "name": "A", "rank": 1, "ppg": 1.5, "gp": 2},
+    {"teamID": 5003, "name": "C", "rank": 2, "ppg": 0.0, "gp": 1},
+    {"teamID": 5002, "name": "B", "rank": 1, "ppg": 0.0, "gp": 1},
+]}]
+
+
 def fixture_archive(event_id=FAKE_ID):
-    """read_archive answering the fixture showcase's hierarchy and schedules, and the
-    real archive for everything else."""
+    """read_archive answering the fixture showcase's hierarchy, schedules and one
+    standings file, and the real archive for everything else."""
     real = api.read_archive
-    files = {api.p_hierarchy(event_id): HIERARCHY}
+    files = {api.p_hierarchy(event_id): HIERARCHY,
+             api.p_standings(11, 21, event_id): {"result": "success", "data": STANDINGS_21}}
     files.update({api.p_schedule(event_id, f): {"result": "success", "data": g} for f, g in GAMES.items()})
 
     def read(path):
@@ -161,8 +170,9 @@ class ShowcaseKindTests(unittest.TestCase):
         written = []
         with fixture_archive(), patch.object(archive, "write_csv", side_effect=lambda p, c, r: written.append(p)):
             archive.export_flight_csv(self.src, self.active, fl)
-        self.assertEqual(written, [os.path.join(api.EXPORT_DIR, api.slug(self.active), "showcases", "Fixture",
-                                                "GU13-Fixture.schedule.csv")])
+        folder = os.path.join(api.EXPORT_DIR, api.slug(self.active), "showcases", "Fixture")
+        self.assertEqual(written, [os.path.join(folder, "GU13-Fixture.standings.csv"),
+                                   os.path.join(folder, "GU13-Fixture.schedule.csv")])
 
     def test_archive_event_never_asks_for_brackets(self):
         asked = []
@@ -183,6 +193,36 @@ class ShowcaseKindTests(unittest.TestCase):
         self.assertFalse(any("brackets" in p or "event-details" in p for p in asked))
         self.assertEqual(entry["kind"], "showcase")
         self.assertTrue(csvs and all(os.sep + "showcases" + os.sep in p for p in csvs))
+
+    def test_showcase_csv_rank_is_tgs_own(self):
+        # S-A: a showcase CSV never carries a position the site invented; a conference's does.
+        teams = STANDINGS_21[0]["teamStandings"]
+        self.assertEqual([r["rank"] for r in archive.standings_rows(teams, "showcase")], [1, 2, 1])
+        self.assertEqual([r["rank"] for r in archive.standings_rows(teams)], [1, 2, 3])
+        self.assertEqual([r["rank"] for r in archive.standings_rows(teams, "national")], [1, 2, 3])
+        written = {}
+        with fixture_archive(), patch.object(archive, "write_csv", side_effect=lambda p, c, r: written.__setitem__(p, r)):
+            archive.export_flight_csv(self.src, self.active, {
+                "kind": "showcase", "conference": "Fixture", "eventId": FAKE_ID, "divisionID": 11,
+                "divisionName": "GU13", "flightID": 21, "flightName": "Fixture"})
+        standings = [r for p, r in written.items() if p.endswith(".standings.csv")]
+        self.assertEqual([[x["rank"] for x in r] for r in standings], [[1, 2, 1]])
+
+    def test_export_rebuilds_showcase_csvs(self):
+        # S-D: --export covers every archived showcase, whatever its dates, in its own folder,
+        # with its _all.standings.csv; national events stay out as before.
+        src = {"seasons": {"2099-00": {"startYear": 2099, "conferences": {},
+                                       "national": {"Finals": {"eventId": FAKE_ID + 1}},
+                                       "showcases": {"Fixture": dict(FAKE, startDate="2000-01-01", endDate="2000-01-02")}}}}
+        written = {}
+        with fixture_archive(), patch.object(archive, "write_csv", side_effect=lambda p, c, r: written.__setitem__(p, r)), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(archive.cmd_export(src, "2099-00"), 0)
+        base = os.path.join(api.EXPORT_DIR, "2099-00", "showcases", "Fixture")
+        self.assertEqual(sorted(os.path.relpath(p, base) for p in written), [
+            "GU13-Fixture.schedule.csv", "GU13-Fixture.standings.csv", "GU14-Fixture.schedule.csv", "_all.standings.csv"])
+        self.assertEqual([r["rank"] for r in written[os.path.join(base, "_all.standings.csv")]], [1, 2, 1])
+        self.assertIn("3 flights across 0 conferences and 1 showcases", out.getvalue())
 
     def test_cli_rejects_mixed_filters(self):
         for extra in (["--national"], ["--conference", "Texas"]):
@@ -290,6 +330,8 @@ class ArchivedShowcaseTests(unittest.TestCase):
         # Onboarding checklist, alias review (M3): the showcase id plays at the event under
         # exactly the conference team's name, in the same age group; the conference id is in
         # the season's index and does not itself play at the event.
+        if not self.events:
+            self.skipTest("no showcase archived yet")
         for season, name, ev in self.events:
             index = api.read_json_file(api.team_index_path(season))["teams"]
             by_id = {t["teamID"]: t for t in index}
@@ -322,6 +364,8 @@ class ArchivedShowcaseTests(unittest.TestCase):
         self.assertEqual(sum(len(g) for *_x, g in self.showcase_rows(4133)), 453)
 
     def test_only_mirrored_families(self):
+        if not self.events:
+            self.skipTest("no showcase archived yet")
         for _s, _n, ev in self.events:
             eid = ev["eventId"]
             self.assertIsNone(api.read_archive(api.p_event_details(eid))[0], "event details are never archived")
@@ -355,7 +399,7 @@ class RequestBudgetTests(unittest.TestCase):
     def test_budget_stops_inside_a_retry_loop(self):
         api.HTTP_BUDGET = 2
         with patch.object(api.urllib.request, "urlopen", side_effect=self.answer_503) as urlopen, \
-                patch.object(api.time, "sleep"):
+                patch.object(api.time, "sleep"), contextlib.redirect_stdout(io.StringIO()):
             with self.assertRaises(api.BudgetSpent):
                 api.fetch_api_raw("Event/get-event-schedule-or-standings/1")
             with self.assertRaises(api.BudgetSpent):
@@ -363,6 +407,31 @@ class RequestBudgetTests(unittest.TestCase):
         self.assertEqual(urlopen.call_count, 2)
         self.assertEqual(api.HTTP_ATTEMPTS, 2)
         self.assertTrue(issubclass(api.BudgetSpent, api.ApiError))   # the crawl reports it as a failure
+
+    def test_budget_prints_every_attempt(self):
+        # S-C: under --max-requests each attempt is one printed line (the record kept on
+        # the onboarding issue); without a budget nothing is printed.
+        class Ok:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+            def read(self):
+                return b'{"data":[]}'
+        answers = [Ok(), urllib.error.HTTPError("https://example.invalid/", 503, "x", {}, io.BytesIO(b"")), Ok()]
+        with patch.object(api.urllib.request, "urlopen", side_effect=answers), patch.object(api.time, "sleep"), contextlib.redirect_stdout(io.StringIO()) as out:
+            api.fetch_api_raw("Event/get-event-schedule-or-standings/1")      # silent: no budget
+            api.HTTP_BUDGET = 5
+            api.fetch_api_raw("Event/get-event-schedule-or-standings/2")      # a 503, then a 200
+        lines = out.getvalue().splitlines()
+        self.assertEqual(len(lines), 2, lines)
+        self.assertRegex(lines[0], r"^  request 2/5\t\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z\t"
+                                   r"Event/get-event-schedule-or-standings/2\t503\t0 B$")
+        self.assertRegex(lines[1], r"^  request 3/5\t.*Z\tEvent/get-event-schedule-or-standings/2\t200\t11 B$")
 
 
 if __name__ == "__main__":
