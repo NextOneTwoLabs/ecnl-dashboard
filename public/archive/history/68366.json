@@ -6,6 +6,6 @@
 {"season":"2022-23","stage":"Playoffs","eventID":2719,"eventName":"ECNL National Playoffs","divisionID":11972,"division":"G2010","flightID":20450,"flightName":"Champions League","tier":"Champions League","teamID":68366,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":7,"ga":15,"group":{"name":"Group E","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false},
 {"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14600,"division":"G2010","flightID":24868,"flightName":"Champions League","tier":"Champions League","teamID":68366,"games":3,"played":3,"w":0,"d":1,"l":2,"gf":5,"ga":9,"group":{"name":"Group J","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
 ],"showcases":[],"maybe":[
-{"season":"2024-25","teamID":96996,"name":"Fairfax VA Union ECNL G10","division":"G2010","conference":"Mid-Atlantic"}
+{"season":"2024-25","teamID":96996,"name":"Fairfax VA Union ECNL G10","division":"G2010","conference":"Mid-Atlantic","alsoClaimedBy":[{"season":"2023-24","teamID":69871,"name":"VA Union ECNL G10"}]}
 ]}
 ]}

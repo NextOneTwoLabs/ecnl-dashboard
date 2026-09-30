@@ -7,6 +7,6 @@
 ],"postseason":[
 {"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14598,"division":"G2008","flightID":24876,"flightName":"Showcase Cup A","tier":"Showcase Cup A","teamID":46827,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":3,"ga":5,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
 ],"showcases":[],"maybe":[
-{"season":"2024-25","teamID":96994,"name":"Fairfax Virginia Union ECNL G08","division":"G2008","conference":"Mid-Atlantic"}
+{"season":"2024-25","teamID":96994,"name":"Fairfax Virginia Union ECNL G08","division":"G2008","conference":"Mid-Atlantic","alsoClaimedBy":[{"season":"2023-24","teamID":11956,"name":"Fairfax BRAVE SC ECNL G08"}]}
 ]}
 ]}

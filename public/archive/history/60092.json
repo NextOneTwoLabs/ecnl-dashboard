@@ -6,6 +6,6 @@
 ],"postseason":[
 {"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14599,"division":"G2009","flightID":24872,"flightName":"North American Cup","tier":"North American Cup","teamID":60092,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":5,"ga":5,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Semifinals","reconstructed":false,"dataGap":false}
 ],"showcases":[],"maybe":[
-{"season":"2024-25","teamID":96995,"name":"Fairfax Virginia Union ECNL G09","division":"G2009","conference":"Mid-Atlantic"}
+{"season":"2024-25","teamID":96995,"name":"Fairfax Virginia Union ECNL G09","division":"G2009","conference":"Mid-Atlantic","alsoClaimedBy":[{"season":"2023-24","teamID":11955,"name":"Fairfax BRAVE SC ECNL G09"}]}
 ]}
 ]}

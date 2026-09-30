@@ -7,6 +7,6 @@
 ],"postseason":[
 {"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14598,"division":"G2008","flightID":24870,"flightName":"Champions League","tier":"Champions League","teamID":11956,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":4,"ga":11,"group":{"name":"Group C","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
 ],"showcases":[],"maybe":[
-{"season":"2024-25","teamID":96994,"name":"Fairfax Virginia Union ECNL G08","division":"G2008","conference":"Mid-Atlantic"}
+{"season":"2024-25","teamID":96994,"name":"Fairfax Virginia Union ECNL G08","division":"G2008","conference":"Mid-Atlantic","alsoClaimedBy":[{"season":"2023-24","teamID":46827,"name":"VA Union ECNL G08"}]}
 ]}
 ]}
