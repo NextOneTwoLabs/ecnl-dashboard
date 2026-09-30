@@ -161,3 +161,122 @@ test('S6: a successful half is kept; a failed one is asked again; a 404 is no er
   assert.equal(m, 2);
   assert.deepEqual(await p.showcaseHalf('g/2', () => Promise.reject(refused(404))), { value: null, error: null });
 });
+
+// S-B: the page's own loadShowcaseFlight, with a stub document. A load whose answer arrives
+// after the viewer moved on (another tab, showcase or flight) must leave the screen, the
+// state and the hash alone.
+const LOADER = [
+  block('    const showcaseMemo = new Map();', 'function showcaseHalf('),
+  block('    async function showcaseIndex('),
+  block('    function showcaseLoadStale('),
+  block('    let showcaseLoad = null;', 'async function loadShowcaseFlight('),
+].join('\n');
+
+function showcasePage({ holdHierarchy = false, holdStandings = false } = {}) {
+  const els = new Map();
+  const el = id => {
+    if (!els.has(id)) {
+      els.set(id, { id, children: [], style: {}, textContent: '', open: false, html: '',
+        get innerHTML() { return this.html; }, set innerHTML(v) { this.html = v; this.children = []; },
+        appendChild(c) { this.children.push(c); return c; }, insertAdjacentHTML(_p, h) { this.html += h; } });
+    }
+    return els.get(id);
+  };
+  const gates = {};
+  const hold = name => new Promise((resolve, reject) => { gates[name] = { resolve, reject }; });
+  const log = { saves: 0, hashes: 0, standings: 0 };
+  const H = { girlsDivAndFlightList: [
+    { divisionID: 20345, divisionName: 'G2011', flightList: [{ flightID: 36390, flightName: 'Phoenix - Spring' }] },
+    { divisionID: 20346, divisionName: 'G2012', flightList: [{ flightID: 36387, flightName: 'Phoenix - Spring' }] }] };
+  const EVT = { eventId: 4133, location: 'Phoenix, AZ', startDate: '2026-03-27', endDate: '2026-03-29' };
+  const stubs = {
+    document: { getElementById: el }, esc: s => String(s), console: { error() {} },
+    currentShowcaseEntry: () => ({ name: 'Phoenix Spring', evt: EVT }),
+    clearTeamFilter() {}, sortAgeGroups: a => a, getAgeLabel: a => a, tierLabel: (e, f) => f, formatDateRange: () => '',
+    getEventHierarchy: () => holdHierarchy ? hold('hierarchy') : Promise.resolve(H),
+    getStandingsBlocks: () => { log.standings++; return holdStandings ? hold('standings') : Promise.resolve([{ teamStandings: [{ teamID: 1 }] }]); },
+    getSchedule: () => Promise.resolve([]), getTeamIndex: () => Promise.resolve([{ teamID: 1 }]),
+    isMissing: e => !!e && e.status === 404, mergeStandingsBlocks: b => b[0] || null,
+    updateViewTabsUI() {}, getSchedulesUrl: () => '#', publicUrl: () => '#', EXTERNAL_ICON: '',
+    loadWarning: () => ({ style: {} }), failedFlightPanel: () => ({ kind: 'failed' }),
+    renderScheduleTable: () => ({ kind: 'games' }), renderStandingsTable: () => ({ kind: 'results', insertAdjacentHTML() {} }),
+    SHOWCASE_COLS: [], retryText: () => 'try again', saveState: () => { log.saves++; }, pushHash: () => { log.hashes++; },
+  };
+  const api = new Function(...Object.keys(stubs), `
+    let currentTab = 'showcases', currentShowcase = 4133, currentShowcaseAge = 'G2011', currentShowcaseFlight = null,
+      currentSeason = '2025-26', currentView = 'standings', showcaseLinkable = null, showcaseAliases = {};
+    ${LOADER}
+    return { loadShowcaseFlight, state: () => ({ showcaseLoad, currentShowcaseFlight }),
+      setTab: v => { currentTab = v; }, setShowcase: v => { currentShowcase = v; }, setFlight: v => { currentShowcaseFlight = v; } };`)(
+    ...Object.values(stubs));
+  const until = async cond => {
+    for (let i = 0; i < 200 && !cond(); i++) await new Promise(r => setImmediate(r));
+    assert.ok(cond(), 'the load never reached the held request');
+  };
+  return { ...api, el, gates, log, until };
+}
+const ANSWER = [{ teamStandings: [{ teamID: 1 }] }];
+
+test('S-B control: an undisturbed load paints the table and saves its state', async () => {
+  const p = showcasePage();
+  await p.loadShowcaseFlight();
+  assert.deepEqual(p.el('standingsContainer').children.map(c => c.kind), ['results']);
+  assert.equal(p.log.hashes, 1);
+  assert.equal(p.state().showcaseLoad.key, '4133/36390');
+  assert.match(p.el('showcaseAgeGroupTabs').innerHTML, /G2011/);
+});
+
+test('S-B: switching tab while the answers are pending leaves the new tab alone', async () => {
+  const p = showcasePage({ holdStandings: true });
+  const load = p.loadShowcaseFlight();
+  await p.until(() => p.gates.standings);
+  p.setTab('conferences');
+  p.el('standingsContainer').innerHTML = 'CONFERENCES';
+  p.gates.standings.resolve(ANSWER);
+  await load;
+  assert.equal(p.el('standingsContainer').innerHTML, 'CONFERENCES');
+  assert.equal(p.el('standingsContainer').children.length, 0);
+  assert.deepEqual([p.log.saves, p.log.hashes], [0, 0], 'no state or hash written');
+  assert.equal(p.state().showcaseLoad, null);
+});
+
+test('S-B: another age group (flight) chosen while the answers are pending', async () => {
+  const p = showcasePage({ holdStandings: true });
+  const load = p.loadShowcaseFlight();
+  await p.until(() => p.gates.standings);
+  p.setFlight(36387);
+  p.el('standingsContainer').innerHTML = 'U14';
+  p.gates.standings.resolve(ANSWER);
+  await load;
+  assert.equal(p.el('standingsContainer').innerHTML, 'U14');
+  assert.deepEqual([p.log.saves, p.log.hashes], [0, 0]);
+  assert.equal(p.state().showcaseLoad, null);
+});
+
+test('S-B: switching tab or showcase while the hierarchy is pending', async () => {
+  for (const move of [p => p.setTab('playoffs'), p => p.setShowcase(9999)]) {
+    const p = showcasePage({ holdHierarchy: true });
+    const load = p.loadShowcaseFlight();
+    await p.until(() => p.gates.hierarchy);
+    move(p);
+    p.el('standingsContainer').innerHTML = 'ELSEWHERE';
+    p.gates.hierarchy.resolve({ girlsDivAndFlightList: [{ divisionID: 20345, divisionName: 'G2011', flightList: [{ flightID: 36390, flightName: 'x' }] }] });
+    await load;
+    assert.equal(p.el('standingsContainer').innerHTML, 'ELSEWHERE');
+    assert.equal(p.el('showcaseAgeGroupTabs').innerHTML, '', 'no age chips written');
+    assert.equal(p.log.standings, 0, 'nothing more requested');
+    assert.deepEqual([p.log.saves, p.log.hashes], [0, 0]);
+  }
+});
+
+test('S-B: a failure that arrives after the tab changed paints nothing', async () => {
+  const p = showcasePage({ holdHierarchy: true });
+  const load = p.loadShowcaseFlight();
+  await p.until(() => p.gates.hierarchy);
+  p.setTab('conferences');
+  p.el('standingsContainer').innerHTML = 'CONFERENCES';
+  p.gates.hierarchy.reject(refused(429));
+  await load;
+  assert.equal(p.el('standingsContainer').innerHTML, 'CONFERENCES');
+  assert.deepEqual([p.log.saves, p.log.hashes], [0, 0]);
+});

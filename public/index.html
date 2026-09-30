@@ -3992,6 +3992,14 @@
         error => ({ value: null, error: isMissing(error) ? null : error }));
     }
 
+    // S-B: true once the viewer has moved on from the load that asked (another tab, another
+    // showcase, or, when `flightId` is given, another flight). A load checks it after every
+    // await, so a slow answer never paints over what is on screen now, nor saves its state.
+    function showcaseLoadStale(eventId, flightId) {
+      return currentTab !== 'showcases' || currentShowcase !== eventId
+        || (flightId !== undefined && currentShowcaseFlight !== flightId);
+    }
+
     // The flight on screen and its answers: Results <-> Games re-renders from them with no
     // request, and a "couldn't load" notice is announced after a load, never on a re-render.
     let showcaseLoad = null;
@@ -4006,6 +4014,7 @@
       if (!rerender) container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading ${esc(name)}…</div></div>`;
       try {
         const hierarchy = await getEventHierarchy(evt.eventId);
+        if (showcaseLoadStale(evt.eventId)) return;
         const divs = hierarchy.girlsDivAndFlightList || [];
         const ages = sortAgeGroups(divs.map(d => d.divisionName), currentSeason);
         if (!ages.includes(currentShowcaseAge)) currentShowcaseAge = ages[0] || null;
@@ -4037,6 +4046,7 @@
             showcaseHalf(`g/${key}`, () => getSchedule(evt.eventId, flight.flightID)),
             showcaseIndex(currentSeason),
           ]);
+          if (showcaseLoadStale(evt.eventId, flight.flightID)) return;
           showcaseLoad = { key, rawBlocks: s.value || [], games: g.value || [], standingsError: s.error,
             gamesError: g.error, linkable: idx.linkable, indexError: idx.error };
         }
@@ -4096,6 +4106,7 @@
           container.appendChild(panel);
         }
       } catch (err) {
+        if (showcaseLoadStale(evt.eventId)) return;
         console.error(err);
         container.innerHTML = `<div class="error-message"><strong>Couldn't load ${esc(name)}.</strong><br><small>${esc(retryText(err))}</small></div>`;
       }
