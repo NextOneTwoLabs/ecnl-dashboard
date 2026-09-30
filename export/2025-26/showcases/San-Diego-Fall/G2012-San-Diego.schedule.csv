@@ -1,0 +1,43 @@
+date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
+2025-10-11,08:20 AM,Group Play,LA Breakers FC ECNL G12,0,5,Mustang SC ECNL G12,Surf Cup Sports Park,Field #07,On Time,960321
+2025-10-11,08:20 AM,Group Play,Placer United ECNL G12,3,2,Phoenix Rising ECNL G12,Surf Cup Sports Park,Field #08,On Time,960322
+2025-10-11,08:20 AM,Group Play,Legends FC ECNL G12,4,0,Portland Thorns ECNL G12,Surf Cup Sports Park,Field #09,On Time,960323
+2025-10-11,10:10 AM,Group Play,Santa Rosa United ECNL G12 ,0,7,Rebels SC - ECNL G12,Surf Cup Sports Park,Field #07,On Time,960334
+2025-10-11,10:10 AM,Group Play,Davis Legacy ECNL G12,0,7,Eastside FC ECNL G12,Surf Cup Sports Park,Field #08,On Time,960335
+2025-10-11,10:10 AM,Group Play,De Anza Force ECNL G12,0,2,Eagles SC ECNL G12,Surf Cup Sports Park,Field #09,On Time,960336
+2025-10-11,12:00 PM,Group Play,Arizona Arsenal ECNL G12,3,2,La Roca FC ECNL G12,Surf Cup Sports Park,Field #07,On Time,960346
+2025-10-11,12:00 PM,Group Play,MVLA ECNL G12,4,0,Legends FC San Diego ECNL G12,Surf Cup Sports Park,Field #08,On Time,960347
+2025-10-11,12:00 PM,Group Play,San Francisco Elite Academy ECNL RL G12,0,4,Sporting CA USA ECNL G12,Surf Cup Sports Park,Field #09,On Time,960348
+2025-10-11,01:50 PM,Group Play,Bay Area Surf ECNL G12,1,1,Beach FC (CA) ECNL G12,Surf Cup Sports Park,Field #07,On Time,960359
+2025-10-11,01:50 PM,Group Play,Pleasanton RAGE ECNL G12,1,1,LAFC So Cal ECNL G12,Surf Cup Sports Park,Field #08,On Time,960360
+2025-10-11,01:50 PM,Group Play,Washington Premier ECNL G12,0,3,San Diego Surf ECNL G12,Surf Cup Sports Park,Field #09,On Time,960361
+2025-10-11,03:40 PM,Group Play,So Cal Blues ECNL G12,10,1,Dallas Texans ECNL G12,Surf Cup Sports Park,Field #07,On Time,960372
+2025-10-11,03:40 PM,Group Play,Utah Royals FC-AZ ECNL G12,2,0,Colorado Rush Academy Blue ECNL G12,Surf Cup Sports Park,Field #08,On Time,960373
+2025-10-12,08:00 AM,Group Play,LA Breakers FC ECNL G12,5,0,De Anza Force ECNL G12,Surf Cup Sports Park,Field #01,On Time,960432
+2025-10-12,08:20 AM,Group Play,Legends FC ECNL G12,2,1,Placer United ECNL G12,Surf Cup Sports Park,Field #07,On Time,960386
+2025-10-12,08:20 AM,Group Play,Pleasanton RAGE ECNL G12,1,6,Phoenix Rising ECNL G12,Surf Cup Sports Park,Field #08,On Time,960387
+2025-10-12,08:20 AM,Group Play,Santa Rosa United ECNL G12 ,0,1,Sporting CA USA ECNL G12,Surf Cup Sports Park,Field #09,On Time,960388
+2025-10-12,09:50 AM,Group Play,La Roca FC ECNL G12,0,3,Beach FC (CA) ECNL G12,Surf Cup Sports Park,Field #06,On Time,960431
+2025-10-12,10:10 AM,Group Play,Washington Premier ECNL G12,3,0,Rebels SC - ECNL G12,Surf Cup Sports Park,Field #07,On Time,960397
+2025-10-12,10:10 AM,Group Play,San Diego Surf ECNL G12,9,0,Eastside FC ECNL G12,Surf Cup Sports Park,Field #08,On Time,960398
+2025-10-12,10:10 AM,Group Play,LAFC So Cal ECNL G12,0,1,Portland Thorns ECNL G12,Surf Cup Sports Park,Field #09,On Time,960399
+2025-10-12,12:00 PM,Group Play,Davis Legacy ECNL G12,0,7,So Cal Blues ECNL G12,Surf Cup Sports Park,Field #07,On Time,960408
+2025-10-12,12:00 PM,Group Play,Utah Royals FC-AZ ECNL G12,,,San Francisco Elite Academy ECNL RL G12,Surf Cup Sports Park,Field #08,On Time,960409
+2025-10-12,12:00 PM,Group Play,Legends FC San Diego ECNL G12,1,6,Mustang SC ECNL G12,Surf Cup Sports Park,Field #09,On Time,960410
+2025-10-12,01:50 PM,Group Play,MVLA ECNL G12,1,0,Eagles SC ECNL G12,Surf Cup Sports Park,Field #07,On Time,960419
+2025-10-12,01:50 PM,Group Play,Arizona Arsenal ECNL G12,2,2,Colorado Rush Academy Blue ECNL G12,Surf Cup Sports Park,Field #08,On Time,960420
+2025-10-12,01:50 PM,Group Play,Bay Area Surf ECNL G12,3,0,Dallas Texans ECNL G12,Surf Cup Sports Park,Field #09,On Time,960421
+2025-10-13,08:00 AM,Group Play,Colorado Rush Academy Blue ECNL G12,1,0,Davis Legacy ECNL G12,Surf Cup Sports Park,Field #07,On Time,960439
+2025-10-13,09:30 AM,Group Play,San Francisco Elite Academy ECNL RL G12,0,9,Rebels SC - ECNL G12,Surf Cup Sports Park,Field #04,On Time,960443
+2025-10-13,09:30 AM,Group Play,Dallas Texans ECNL G12,0,3,Beach FC (CA) ECNL G12,Surf Cup Sports Park,Field #05,On Time,960444
+2025-10-13,09:30 AM,Group Play,Placer United ECNL G12,2,0,LAFC So Cal ECNL G12,Surf Cup Sports Park,Field #06,On Time,960445
+2025-10-13,09:30 AM,Group Play,La Roca FC ECNL G12,0,4,So Cal Blues ECNL G12,Surf Cup Sports Park,Field #07,On Time,960446
+2025-10-13,09:45 AM,Group Play,Portland Thorns ECNL G12,0,2,Phoenix Rising ECNL G12,Surf Cup Sports Park,Field #08,On Time,960447
+2025-10-13,09:45 AM,Group Play,Eastside FC ECNL G12,4,3,Arizona Arsenal ECNL G12,Surf Cup Sports Park,Field #09,On Time,960448
+2025-10-13,09:45 AM,Group Play,Washington Premier ECNL G12,2,0,Sporting CA USA ECNL G12,Surf Cup Sports Park,Field #10,On Time,960449
+2025-10-13,11:15 AM,Group Play,Bay Area Surf ECNL G12,0,3,San Diego Surf ECNL G12,Surf Cup Sports Park,Field #08,On Time,960457
+2025-10-13,11:15 AM,Group Play,De Anza Force ECNL G12,0,4,Legends FC San Diego ECNL G12,Surf Cup Sports Park,Field #09,On Time,960458
+2025-10-13,11:15 AM,Group Play,Eagles SC ECNL G12,3,1,Mustang SC ECNL G12,Surf Cup Sports Park,Field #10,On Time,960459
+2025-10-13,12:45 PM,Group Play,LA Breakers FC ECNL G12,0,2,MVLA ECNL G12,Surf Cup Sports Park,Field #08,On Time,960467
+2025-10-13,12:45 PM,Group Play,Pleasanton RAGE ECNL G12,1,7,Legends FC ECNL G12,Surf Cup Sports Park,Field #22,On Time,960468
+2025-10-13,12:45 PM,Group Play,Santa Rosa United ECNL G12 ,1,1,Utah Royals FC-AZ ECNL G12,Surf Cup Sports Park,Field #10,On Time,960469
