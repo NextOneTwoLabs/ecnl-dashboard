@@ -1,55 +1,55 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,Pateadores ECNL G11,Pateadores Soccer Club,75387,3,3,0,0,9,3.0,7,2,5
-2,So Cal Blues ECNL G11,So Cal Blues,82132,3,3,0,0,9,3.0,4,1,3
-3,Legends FC ECNL G11,Legends FC (CA),24716,3,2,0,1,7,2.33,11,3,8
-4,Legends FC San Diego ECNL G11 ,Legends FC - Del Mar,79944,3,2,0,1,7,2.33,10,5,5
-5,LA Breakers FC ECNL G11,LA Breakers FC,82166,3,2,0,1,7,2.33,5,2,3
-6,San Diego Surf ECNL G11,San Diego Surf Soccer Club,77020,3,2,0,1,7,2.33,5,2,3
-7,Pleasanton RAGE ECNL G11,Pleasanton Rage,44313,3,2,0,1,7,2.33,6,4,2
-8,Penn Fusion SA ECNL G11,Penn Fusion Soccer Academy,68841,3,2,0,1,7,2.33,6,4,2
-9,SLAMMERS FC ECNL G11,Slammers FC,61426,3,2,0,1,7,2.33,4,2,2
-10,Oregon Surf ECNL G11,Oregon Surf SC,90909,3,2,0,1,7,2.33,3,1,2
-11,Force (CA) ECNL G11,Force,69022,3,2,1,0,6,2.0,8,3,5
-12,Ohio Premier ECNL G11,Ohio Premier,65017,3,2,1,0,6,2.0,5,2,3
-13,Colorado Rush Academy Blue ECNL G11,Colorado Rush,95046,3,2,1,0,6,2.0,5,2,3
-14,Washington Premier ECNL G11,Washington Premier FC,81526,3,2,1,0,6,2.0,5,2,3
-15,MVLA ECNL G11,MVLA,55477,3,2,1,0,6,2.0,4,2,2
-16,Cleveland Force SC ECNL G11,Cleveland Force SC,60170,3,2,1,0,6,2.0,3,2,1
-17,Mustang SC ECNL G11,Mustang Soccer,31529,3,2,1,0,6,2.0,3,2,1
-18,Minnesota Thunder ECNL G11 ,Minnesota Thunder Academy,71852,3,2,1,0,6,2.0,3,3,0
-19,Eagles SC ECNL G11,Eagles SC,25917,3,1,0,2,5,1.67,3,1,2
-20,Placer United ECNL G11,Placer United Soccer Club,81251,3,1,0,2,5,1.67,4,3,1
-21,Marin FC ECNL G11,Marin FC,82192,3,1,0,2,5,1.67,2,1,1
-22,Slammers FC HB Koge ECNL G11,Slammers FC HB Koge,64493,3,1,0,2,5,1.67,2,1,1
-23,Scorpions SC ECNL G11,Scorpions SC,69533,3,1,0,2,5,1.67,2,1,1
-24,OK Energy FC ECNL G11,Oklahoma Energy FC,80774,3,1,1,1,4,1.33,4,2,2
-25,Utah Avalanche ECNL G11,No Club Selection,112470,3,1,1,1,4,1.33,4,3,1
-26,Boise Thorns FC ECNL G11,Boise Timbers | Thorns,82108,3,1,1,1,4,1.33,4,3,1
-27,Eastside FC ECNL G11,Eastside FC (WA),76992,3,1,1,1,4,1.33,3,3,0
-28,Seattle United ECNL G11,Seattle United,77000,3,1,1,1,4,1.33,3,3,0
-29,Rebels SC ECNL G11,Rebels Soccer Club,81798,3,1,1,1,4,1.33,3,4,-1
-30,SUSA FC ECNL G11,SUSA FC,59943,3,1,1,1,4,1.33,2,3,-1
-31,Arizona Arsenal ECNL G11,Arizona Arsenal Soccer Club,77284,3,1,1,1,4,1.33,2,3,-1
-32,San Juan SC - ECNL G11,San Juan Soccer Club,77003,3,1,1,1,4,1.33,1,3,-2
-33,Beach FC (CA) ECNL G11,Beach Futbol Club,77421,3,1,2,0,3,1.0,3,3,0
-34,Utah Royals FC-AZ ECNL G11,Utah Royals FC - AZ,77350,3,1,2,0,3,1.0,2,2,0
-35,Portland Thorns ECNL G11,Portland Thorns FC,78876,3,1,2,0,3,1.0,2,3,-1
-36,Davis Legacy ECNL G11,Davis Legacy Soccer Club,81189,3,1,2,0,3,1.0,1,2,-1
-37,DKSC ECNL G11,DKSC,81104,3,1,2,0,3,1.0,2,4,-2
-38,Beach FC (VA) ECNL G11,No Club Selection,67862,3,1,2,0,3,1.0,2,4,-2
-39,Phoenix Rising ECNL G11,Phoenix Rising FC,62249,3,1,2,0,3,1.0,2,4,-2
-40,Sporting CA USA ECNL G11,Sporting California USA,79198,3,1,2,0,3,1.0,1,3,-2
-41,COSC ECNL G11,California Odyssey Soccer Club,88375,3,1,2,0,3,1.0,6,9,-3
-42,Connecticut FC United ECNL G11,Connecticut FC,82324,3,0,1,2,2,0.67,2,3,-1
-43,LAFC So Cal ECNL G11,LAFC So Cal,82136,3,0,1,2,2,0.67,2,3,-1
-44,XF Academy ECNL G11,Crossfire Premier,82131,3,0,1,2,2,0.67,1,2,-1
-45,LV Heat Surf ECNL G11,LV Heat Surf SC ,48247,3,0,2,1,1,0.33,4,6,-2
-46,Michigan Hawks ECNL G11,Michigan Hawks,54493,3,0,2,1,1,0.33,2,4,-2
-47,Los Gatos United - ECNL RL G11,No Club Selection,113270,3,0,2,1,1,0.33,2,4,-2
-48,La Roca FC ECNL G2011,La Roca FC,45851,3,0,2,1,1,0.33,1,3,-2
-49,Select ECNL G11,Select,95005,3,0,2,1,1,0.33,3,6,-3
-50,Internationals SC ECNL G11,Internationals SC,54724,3,0,2,1,1,0.33,1,4,-3
-51,PacNW SC ECNL G11,PacNW,81140,3,0,2,1,1,0.33,1,13,-12
-52,San Francisco Elite Academy - ECNL RL G11,San Francisco Elite Academy,112669,3,0,3,0,0,0.0,0,3,-3
-53,Bay Area Surf ECNL G11,Bay Area Surf,74987,3,0,3,0,0,0.0,1,5,-4
-54,Santa Rosa United ECNL G11,Santa Rosa United Soccer,77797,3,0,3,0,0,0.0,1,10,-9
+1,So Cal Blues ECNL G11,So Cal Blues,82132,3,3,0,0,9,3.0,4,1,3
+1,Legends FC ECNL G11,Legends FC (CA),24716,3,2,0,1,7,2.33,11,3,8
+1,Legends FC San Diego ECNL G11 ,Legends FC - Del Mar,79944,3,2,0,1,7,2.33,10,5,5
+1,LA Breakers FC ECNL G11,LA Breakers FC,82166,3,2,0,1,7,2.33,5,2,3
+1,San Diego Surf ECNL G11,San Diego Surf Soccer Club,77020,3,2,0,1,7,2.33,5,2,3
+1,Pleasanton RAGE ECNL G11,Pleasanton Rage,44313,3,2,0,1,7,2.33,6,4,2
+1,Penn Fusion SA ECNL G11,Penn Fusion Soccer Academy,68841,3,2,0,1,7,2.33,6,4,2
+1,SLAMMERS FC ECNL G11,Slammers FC,61426,3,2,0,1,7,2.33,4,2,2
+1,Oregon Surf ECNL G11,Oregon Surf SC,90909,3,2,0,1,7,2.33,3,1,2
+1,Force (CA) ECNL G11,Force,69022,3,2,1,0,6,2.0,8,3,5
+1,Ohio Premier ECNL G11,Ohio Premier,65017,3,2,1,0,6,2.0,5,2,3
+1,Colorado Rush Academy Blue ECNL G11,Colorado Rush,95046,3,2,1,0,6,2.0,5,2,3
+1,Washington Premier ECNL G11,Washington Premier FC,81526,3,2,1,0,6,2.0,5,2,3
+1,MVLA ECNL G11,MVLA,55477,3,2,1,0,6,2.0,4,2,2
+1,Cleveland Force SC ECNL G11,Cleveland Force SC,60170,3,2,1,0,6,2.0,3,2,1
+1,Mustang SC ECNL G11,Mustang Soccer,31529,3,2,1,0,6,2.0,3,2,1
+1,Minnesota Thunder ECNL G11 ,Minnesota Thunder Academy,71852,3,2,1,0,6,2.0,3,3,0
+1,Eagles SC ECNL G11,Eagles SC,25917,3,1,0,2,5,1.67,3,1,2
+1,Placer United ECNL G11,Placer United Soccer Club,81251,3,1,0,2,5,1.67,4,3,1
+1,Marin FC ECNL G11,Marin FC,82192,3,1,0,2,5,1.67,2,1,1
+1,Slammers FC HB Koge ECNL G11,Slammers FC HB Koge,64493,3,1,0,2,5,1.67,2,1,1
+1,Scorpions SC ECNL G11,Scorpions SC,69533,3,1,0,2,5,1.67,2,1,1
+1,OK Energy FC ECNL G11,Oklahoma Energy FC,80774,3,1,1,1,4,1.33,4,2,2
+1,Utah Avalanche ECNL G11,No Club Selection,112470,3,1,1,1,4,1.33,4,3,1
+1,Boise Thorns FC ECNL G11,Boise Timbers | Thorns,82108,3,1,1,1,4,1.33,4,3,1
+1,Eastside FC ECNL G11,Eastside FC (WA),76992,3,1,1,1,4,1.33,3,3,0
+1,Seattle United ECNL G11,Seattle United,77000,3,1,1,1,4,1.33,3,3,0
+1,Rebels SC ECNL G11,Rebels Soccer Club,81798,3,1,1,1,4,1.33,3,4,-1
+1,SUSA FC ECNL G11,SUSA FC,59943,3,1,1,1,4,1.33,2,3,-1
+1,Arizona Arsenal ECNL G11,Arizona Arsenal Soccer Club,77284,3,1,1,1,4,1.33,2,3,-1
+1,San Juan SC - ECNL G11,San Juan Soccer Club,77003,3,1,1,1,4,1.33,1,3,-2
+1,Beach FC (CA) ECNL G11,Beach Futbol Club,77421,3,1,2,0,3,1.0,3,3,0
+1,Utah Royals FC-AZ ECNL G11,Utah Royals FC - AZ,77350,3,1,2,0,3,1.0,2,2,0
+1,Portland Thorns ECNL G11,Portland Thorns FC,78876,3,1,2,0,3,1.0,2,3,-1
+1,Davis Legacy ECNL G11,Davis Legacy Soccer Club,81189,3,1,2,0,3,1.0,1,2,-1
+1,DKSC ECNL G11,DKSC,81104,3,1,2,0,3,1.0,2,4,-2
+1,Beach FC (VA) ECNL G11,No Club Selection,67862,3,1,2,0,3,1.0,2,4,-2
+1,Phoenix Rising ECNL G11,Phoenix Rising FC,62249,3,1,2,0,3,1.0,2,4,-2
+1,Sporting CA USA ECNL G11,Sporting California USA,79198,3,1,2,0,3,1.0,1,3,-2
+1,COSC ECNL G11,California Odyssey Soccer Club,88375,3,1,2,0,3,1.0,6,9,-3
+1,Connecticut FC United ECNL G11,Connecticut FC,82324,3,0,1,2,2,0.67,2,3,-1
+1,LAFC So Cal ECNL G11,LAFC So Cal,82136,3,0,1,2,2,0.67,2,3,-1
+1,XF Academy ECNL G11,Crossfire Premier,82131,3,0,1,2,2,0.67,1,2,-1
+1,LV Heat Surf ECNL G11,LV Heat Surf SC ,48247,3,0,2,1,1,0.33,4,6,-2
+1,Michigan Hawks ECNL G11,Michigan Hawks,54493,3,0,2,1,1,0.33,2,4,-2
+1,Los Gatos United - ECNL RL G11,No Club Selection,113270,3,0,2,1,1,0.33,2,4,-2
+1,La Roca FC ECNL G2011,La Roca FC,45851,3,0,2,1,1,0.33,1,3,-2
+1,Select ECNL G11,Select,95005,3,0,2,1,1,0.33,3,6,-3
+1,Internationals SC ECNL G11,Internationals SC,54724,3,0,2,1,1,0.33,1,4,-3
+1,PacNW SC ECNL G11,PacNW,81140,3,0,2,1,1,0.33,1,13,-12
+1,San Francisco Elite Academy - ECNL RL G11,San Francisco Elite Academy,112669,3,0,3,0,0,0.0,0,3,-3
+1,Bay Area Surf ECNL G11,Bay Area Surf,74987,3,0,3,0,0,0.0,1,5,-4
+1,Santa Rosa United ECNL G11,Santa Rosa United Soccer,77797,3,0,3,0,0,0.0,1,10,-9
