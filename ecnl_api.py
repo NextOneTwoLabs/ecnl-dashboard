@@ -67,10 +67,12 @@ def load_sources(path=SOURCES_PATH):
         return json.load(f)
 
 
-def iter_events(sources, season=None, conference=None, include_national=True):
+def iter_events(sources, season=None, conference=None, include_national=True,
+                include_showcases=True):
     """Yield (season, kind, name, event_dict) for each configured event.
 
-    kind is "conference" or "national".
+    kind is "conference", "national" or "showcase" (#97: a season's `showcases`
+    map). A conference filter drops national events and showcases.
     """
     for season_key, season_data in sources["seasons"].items():
         if season and season_key != season:
@@ -82,6 +84,9 @@ def iter_events(sources, season=None, conference=None, include_national=True):
         if include_national and not conference:
             for name, event in (season_data.get("national") or {}).items():
                 yield season_key, "national", name, event
+        if include_showcases and not conference:
+            for name, event in (season_data.get("showcases") or {}).items():
+                yield season_key, "showcase", name, event
 
 
 # ---------- archive paths ----------
@@ -269,24 +274,61 @@ class ApiError(Exception):
     pass
 
 
+class BudgetSpent(ApiError):
+    """The process's request budget (HTTP_BUDGET) is spent; nothing was requested."""
+
+
+# Every HTTP attempt this process makes upstream, retries included (#97). A retried 5xx
+# costs up to `retries` requests, so a budget is counted here, per attempt, not per
+# path: with HTTP_BUDGET set (archive.py --max-requests), fetch_api_raw refuses to
+# send once HTTP_ATTEMPTS has reached it, even in the middle of a retry loop.
+HTTP_ATTEMPTS = 0
+HTTP_BUDGET = None
+
+
+def _utc_ms():
+    now = time.time()
+    return time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(now)) + f".{int(now % 1 * 1000):03d}Z"
+
+
+def _log_attempt(stamp, api_path, status, size):
+    """Under a budget (a crawl or --verify run with --max-requests), one line per HTTP
+    attempt, retries included: number of the budget, UTC start time, path, status (or
+    the transport error), bytes. This printed log is the request record kept on the
+    onboarding issue. Silent otherwise (the refresh and the local proxy)."""
+    if HTTP_BUDGET is not None:
+        print(f"  request {HTTP_ATTEMPTS}/{HTTP_BUDGET}\t{stamp}\t{api_path}\t{status}\t{size} B", flush=True)
+
+
 def fetch_api_raw(api_path, timeout=20, retries=3, backoff=1.5):
     """GET `<API_BASE>/api/<api_path>` and return raw bytes.
 
-    Retries on 5xx and transport errors; 4xx fails immediately.
+    Retries on 5xx and transport errors; 4xx fails immediately. Each attempt counts
+    in HTTP_ATTEMPTS; with HTTP_BUDGET set, raises BudgetSpent instead of sending
+    once the budget is reached.
     """
+    global HTTP_ATTEMPTS
     url = f"{API_BASE}/api/{api_path}"
     delay = backoff
     last = None
     for attempt in range(retries):
+        if HTTP_BUDGET is not None and HTTP_ATTEMPTS >= HTTP_BUDGET:
+            raise BudgetSpent(f"request budget of {HTTP_BUDGET} spent; not requested: {api_path}")
+        HTTP_ATTEMPTS += 1
+        stamp = _utc_ms()
         try:
             req = urllib.request.Request(url, headers=API_HEADERS)
             with urllib.request.urlopen(req, timeout=timeout) as resp:
-                return resp.read()
+                data = resp.read()
+                _log_attempt(stamp, api_path, getattr(resp, "status", 200), len(data))
+                return data
         except urllib.error.HTTPError as e:
+            _log_attempt(stamp, api_path, e.code, 0)
             last = ApiError(f"HTTP {e.code} for {api_path}")
             if e.code < 500:
                 raise last  # client error: retrying will not help
         except Exception as e:  # URLError, socket.timeout, ...
+            _log_attempt(stamp, api_path, type(e).__name__, 0)
             last = ApiError(f"{type(e).__name__}: {e} for {api_path}")
         if attempt < retries - 1:
             time.sleep(delay)

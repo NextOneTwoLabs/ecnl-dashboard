@@ -1,0 +1,438 @@
+"""Showcases, the third event kind (#97): a season's `showcases` map in sources.json.
+
+(a) The crawler and the refresh, on fixtures: the event kind, the refresh window (the
+    event's own dates only, with --date passed through), the team index's showcase
+    rows, the export folder, no brackets, the CLI guards, and the request budget that
+    counts retries.
+(b) The registry: every showcase has what the refresh and the page need, names are unique
+    across a season's conferences, national events and showcases (they are manifest keys
+    and export folders), and every teamAliases entry is well formed and documented.
+(c) The archived showcases: a hand-declared alias really is the same team (onboarding
+    checklist, alias review), the index rows, and only the mirrored families.
+No test reaches the network (tests/netguard).
+"""
+import argparse
+import contextlib
+import copy
+import datetime
+import io
+import json
+import os
+from pathlib import Path
+import sys
+import tempfile
+import unittest
+import urllib.error
+from unittest.mock import patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import archive  # noqa: E402
+import ecnl_api as api  # noqa: E402
+
+FAKE_ID = 990001          # an event id no registry entry uses
+FAKE = {"eventId": FAKE_ID, "eventName": "Fixture Showcase", "location": "Phoenix, AZ",
+        "startDate": "2026-11-20", "endDate": "2026-11-22",
+        "teamAliases": {"5003": 7003}, "teamAliasesNote": "fixture"}
+HIERARCHY = {"result": "success", "data": {"girlsDivAndFlightList": [
+    {"divisionID": 11, "divisionName": "GU13", "flightList": [{"flightID": 21, "flightName": "Fixture"}]},
+    {"divisionID": 12, "divisionName": "GU14", "flightList": [{"flightID": 22, "flightName": "Fixture"},
+                                                              {"flightID": 23, "flightName": "Empty"}]},
+]}}
+GAMES = {
+    21: [{"matchID": 1, "hometeamID": 5001, "awayteamID": 5002, "gameDate": "2026-11-20T08:00:00"},
+         {"matchID": 2, "hometeamID": 5003, "awayteamID": 5001, "gameDate": "2026-11-21T08:00:00"}],
+    22: [{"matchID": 3, "hometeamID": 6001, "awayteamID": 6002, "gameDate": "2026-11-20T09:00:00"}],
+    23: [],
+}
+
+
+# TGS's showcase tables give most rows rank 1 and some 2: a results list, not a ranking.
+STANDINGS_21 = [{"flightGroupID": 0, "teamStandings": [
+    {"teamID": 5001, "name": "A", "rank": 1, "ppg": 1.5, "gp": 2},
+    {"teamID": 5003, "name": "C", "rank": 2, "ppg": 0.0, "gp": 1},
+    {"teamID": 5002, "name": "B", "rank": 1, "ppg": 0.0, "gp": 1},
+]}]
+
+
+def fixture_archive(event_id=FAKE_ID):
+    """read_archive answering the fixture showcase's hierarchy, schedules and one
+    standings file, and the real archive for everything else."""
+    real = api.read_archive
+    files = {api.p_hierarchy(event_id): HIERARCHY,
+             api.p_standings(11, 21, event_id): {"result": "success", "data": STANDINGS_21}}
+    files.update({api.p_schedule(event_id, f): {"result": "success", "data": g} for f, g in GAMES.items()})
+
+    def read(path):
+        if path in files:
+            return json.dumps(files[path]).encode(), "2026-01-01T00:00:00Z"
+        return real(path)
+    return patch.object(api, "read_archive", side_effect=read)
+
+
+def with_fake_showcase(sources, season):
+    src = copy.deepcopy(sources)
+    src["seasons"][season]["showcases"] = {"Fixture": dict(FAKE)}
+    return src
+
+
+class ShowcaseKindTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.sources = api.load_sources()
+        cls.active = archive.refresh_policy(cls.sources)["activeSeason"]
+        cls.src = with_fake_showcase(cls.sources, cls.active)
+
+    def test_iter_events_yields_the_showcase_kind(self):
+        rows = [(s, k, n) for s, k, n, _e in api.iter_events(self.src, self.active) if k == "showcase"]
+        self.assertEqual(rows, [(self.active, "showcase", "Fixture")])
+        conf = next(iter(self.src["seasons"][self.active]["conferences"]))
+        self.assertEqual({k for _s, k, _n, _e in api.iter_events(self.src, self.active, conf)}, {"conference"})
+        self.assertNotIn("showcase", {k for _s, k, _n, _e in
+                                      api.iter_events(self.src, self.active, include_showcases=False)})
+
+    def test_refresh_window_is_the_event_dates_only(self):
+        d = datetime.date
+        cases = [(d(2026, 11, 19), False), (d(2026, 11, 20), True), (d(2026, 11, 22), True), (d(2026, 11, 23), False)]
+        for day, want in cases:
+            self.assertIs(archive.showcase_event_active(FAKE, day), want, day)
+        for bad in ({}, {"startDate": "2026-11-20"}, {"startDate": "11/20/26", "endDate": "11/22/26"},
+                    {"startDate": None, "endDate": None}):
+            self.assertFalse(archive.showcase_event_active(bad, d(2026, 11, 21)), bad)
+        with fixture_archive():
+            n = lambda day: sorted(f["flightID"] for f in archive.season_flights(self.src, self.active, day)
+                                   if f["kind"] == "showcase")
+            self.assertEqual(n(d(2026, 11, 19)), [])
+            self.assertEqual(n(d(2026, 11, 20)), [21, 22, 23])
+            self.assertEqual(n(d(2026, 11, 22)), [21, 22, 23])
+            self.assertEqual(n(d(2026, 11, 23)), [])
+
+    @staticmethod
+    def refresh_args(date, hour, **kw):
+        return argparse.Namespace(**dict(dict(date=date, at_hour=hour, sweep=False, dry_run=False, force=True), **kw))
+
+    def test_refresh_dry_run_uses_the_given_date(self):
+        # S4: --date drives the flight list, not the wall clock.
+        with fixture_archive(), \
+                patch.object(archive, "fetch_json", side_effect=AssertionError("dry run fetched")), \
+                patch.object(api, "write_json_file", side_effect=AssertionError("dry run wrote a file")):
+            for date, listed in (("2026-11-21", True), ("2026-11-24", False)):
+                with contextlib.redirect_stdout(io.StringIO()) as out:
+                    self.assertEqual(archive.cmd_refresh(self.src, self.refresh_args(date, 7, dry_run=True, sweep=True)), 0)
+                self.assertEqual("would refresh Fixture" in out.getvalue(), listed, date)
+
+    def test_sweep_rereads_the_showcase_hierarchy_only_on_its_dates(self):
+        for date, want in (("2026-11-21", True), ("2026-11-23", False)):
+            asked = []
+
+            def fetch(path, stats):
+                asked.append(path)
+                raise api.ApiError("offline fixture")
+            with self.subTest(date=date), tempfile.TemporaryDirectory() as tmp, fixture_archive(), \
+                    patch.object(api, "REFRESH_STATE_PATH", os.path.join(tmp, "refresh-state.json")), \
+                    patch.object(api, "MATCH_DAYS_PATH", os.path.join(tmp, "match-days.json")), \
+                    patch.object(archive, "fetch_json", side_effect=fetch), \
+                    patch.object(archive, "export_flight_csv", side_effect=AssertionError("nothing was fetched")), \
+                    patch.object(archive, "update_team_index"), \
+                    patch.object(archive, "refresh_club_places"), \
+                    patch.object(api, "fetch_api_raw", side_effect=AssertionError("network in a test")), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                archive.cmd_refresh(self.src, self.refresh_args(date, 7, sweep=True))
+            self.assertEqual(api.p_hierarchy(FAKE_ID) in asked, want)
+            self.assertEqual(any(p.startswith(f"Event/get-schedules-by-flight/{FAKE_ID}/") for p in asked), want)
+            self.assertFalse(any("brackets" in p for p in asked))
+
+    def test_team_index_showcase_rows(self):
+        with fixture_archive():
+            rows = archive.showcase_index_rows(self.src, self.active)
+        self.assertEqual(rows, [
+            {"eventID": FAKE_ID, "divisionID": 11, "flightID": 21, "teamIDs": [5001, 5002, 5003],
+             "aliases": {"5003": 7003}},
+            {"eventID": FAKE_ID, "divisionID": 12, "flightID": 22, "teamIDs": [6001, 6002]},
+        ])   # the flight with no games has no row; the alias only where its id plays
+
+    def test_team_index_bytes_keep_the_teams_rows(self):
+        base = {"schema": 1, "season": "2025-26", "teams": [{"teamID": 1, "name": "A"}]}
+        plain = archive.team_index_bytes(base)
+        self.assertEqual(plain, b'{"schema":1,"season":"2025-26","teams":[\n{"teamID":1,"name":"A"}\n]}\n')
+        withsc = dict(base, showcases=[{"eventID": 9, "divisionID": 1, "flightID": 2, "teamIDs": [1]}])
+        out = archive.team_index_bytes(withsc)
+        self.assertTrue(out.startswith(plain[:-3]))
+        self.assertEqual(json.loads(out), withsc)
+        self.assertEqual(out.count(b"\n"), 5)   # one row per line
+
+    def test_export_folder(self):
+        self.assertEqual(archive.export_dir("2025-26", "showcase", "Phoenix Spring"),
+                         os.path.join(api.EXPORT_DIR, "2025-26", "showcases", "Phoenix-Spring"))
+        for kind in ("conference", "national"):
+            self.assertEqual(archive.export_dir("2025-26", kind, "Texas"), os.path.join(api.EXPORT_DIR, "2025-26", "Texas"))
+        fl = {"kind": "showcase", "conference": "Fixture", "eventId": FAKE_ID, "divisionID": 11,
+              "divisionName": "GU13", "flightID": 21, "flightName": "Fixture"}
+        written = []
+        with fixture_archive(), patch.object(archive, "write_csv", side_effect=lambda p, c, r: written.append(p)):
+            archive.export_flight_csv(self.src, self.active, fl)
+        folder = os.path.join(api.EXPORT_DIR, api.slug(self.active), "showcases", "Fixture")
+        self.assertEqual(written, [os.path.join(folder, "GU13-Fixture.standings.csv"),
+                                   os.path.join(folder, "GU13-Fixture.schedule.csv")])
+
+    def test_archive_event_never_asks_for_brackets(self):
+        asked = []
+
+        def get(path, stats, force):
+            asked.append(path)
+            if path == api.p_hierarchy(FAKE_ID):
+                return HIERARCHY
+            if "/get-schedules-by-flight/" in path:
+                return {"data": GAMES[int(path.split("/")[3])]}
+            return {"data": []}
+        csvs = []
+        with patch.object(archive, "get_json", side_effect=get), \
+                patch.object(archive, "write_csv", side_effect=lambda p, c, r: csvs.append(p)), \
+                contextlib.redirect_stdout(io.StringIO()):
+            entry = archive.archive_event(self.src, self.active, "showcase", "Fixture", FAKE, archive.Stats(), False, False)
+        self.assertEqual(len(asked), 1 + 2 * 3)   # hierarchy, then standings + schedule per flight
+        self.assertFalse(any("brackets" in p or "event-details" in p for p in asked))
+        self.assertEqual(entry["kind"], "showcase")
+        self.assertTrue(csvs and all(os.sep + "showcases" + os.sep in p for p in csvs))
+
+    def test_showcase_csv_rank_is_tgs_own(self):
+        # S-A: a showcase CSV never carries a position the site invented; a conference's does.
+        teams = STANDINGS_21[0]["teamStandings"]
+        self.assertEqual([r["rank"] for r in archive.standings_rows(teams, "showcase")], [1, 2, 1])
+        self.assertEqual([r["rank"] for r in archive.standings_rows(teams)], [1, 2, 3])
+        self.assertEqual([r["rank"] for r in archive.standings_rows(teams, "national")], [1, 2, 3])
+        written = {}
+        with fixture_archive(), patch.object(archive, "write_csv", side_effect=lambda p, c, r: written.__setitem__(p, r)):
+            archive.export_flight_csv(self.src, self.active, {
+                "kind": "showcase", "conference": "Fixture", "eventId": FAKE_ID, "divisionID": 11,
+                "divisionName": "GU13", "flightID": 21, "flightName": "Fixture"})
+        standings = [r for p, r in written.items() if p.endswith(".standings.csv")]
+        self.assertEqual([[x["rank"] for x in r] for r in standings], [[1, 2, 1]])
+
+    def test_export_rebuilds_showcase_csvs(self):
+        # S-D: --export covers every archived showcase, whatever its dates, in its own folder,
+        # with its _all.standings.csv; national events stay out as before.
+        src = {"seasons": {"2099-00": {"startYear": 2099, "conferences": {},
+                                       "national": {"Finals": {"eventId": FAKE_ID + 1}},
+                                       "showcases": {"Fixture": dict(FAKE, startDate="2000-01-01", endDate="2000-01-02")}}}}
+        written = {}
+        with fixture_archive(), patch.object(archive, "write_csv", side_effect=lambda p, c, r: written.__setitem__(p, r)), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(archive.cmd_export(src, "2099-00"), 0)
+        base = os.path.join(api.EXPORT_DIR, "2099-00", "showcases", "Fixture")
+        self.assertEqual(sorted(os.path.relpath(p, base) for p in written), [
+            "GU13-Fixture.schedule.csv", "GU13-Fixture.standings.csv", "GU14-Fixture.schedule.csv", "_all.standings.csv"])
+        self.assertEqual([r["rank"] for r in written[os.path.join(base, "_all.standings.csv")]], [1, 2, 1])
+        self.assertIn("3 flights across 0 conferences and 1 showcases", out.getvalue())
+
+    def test_cli_rejects_mixed_filters(self):
+        for extra in (["--national"], ["--conference", "Texas"]):
+            with patch.object(sys, "argv", ["archive.py", "--showcases"] + extra), \
+                    patch.object(api, "fetch_api_raw", side_effect=AssertionError("network")), \
+                    contextlib.redirect_stderr(io.StringIO()) as err, self.assertRaises(SystemExit) as cm:
+                archive.main()
+            self.assertEqual(cm.exception.code, 2)
+            self.assertIn("--showcases cannot be combined", err.getvalue())
+
+    def test_verify_filters_by_kind(self):
+        asked = []
+
+        def details(path, **kw):
+            asked.append(path)
+            return {"data": {"name": "Fixture Showcase"}}
+        with patch.object(api, "fetch_api", side_effect=details), patch.object(archive.time, "sleep"), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(archive.verify(self.src, self.active, None, "showcase"), 0)
+        self.assertEqual(asked, [api.p_event_details(FAKE_ID)])
+        self.assertIn("1 verified, 0 problem(s)", out.getvalue())
+
+
+class RegistryTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.sources = api.load_sources()
+
+    def test_names_are_unique_within_a_season(self):
+        # S5: `<season>/<name>` is the manifest key and slug(name) the export folder, for
+        # every kind; "showcases" is the showcase export folder itself.
+        for season, data in self.sources["seasons"].items():
+            names = [n for kind in ("conferences", "national", "showcases") for n in (data.get(kind) or {})]
+            self.assertEqual(len(names), len(set(names)), f"{season}: a name is used twice: {names}")
+            slugs = [api.slug(n).lower() for n in names]
+            self.assertEqual(len(slugs), len(set(slugs)), f"{season}: two names share an export folder: {names}")
+            self.assertNotIn("showcases", slugs[:len(names) - len(data.get("showcases") or {})], season)
+
+    def test_showcase_entries(self):
+        ids = {e["eventId"] for _s, k, _n, e in api.iter_events(self.sources) if k != "showcase"}
+        seen = 0
+        for season, kind, name, ev in api.iter_events(self.sources):
+            if kind != "showcase":
+                continue
+            seen += 1
+            label = f"{season}/{name}"
+            self.assertIsInstance(ev.get("eventId"), int, label)
+            self.assertNotIn(ev["eventId"], ids, f"{label}: event id also registered as another event")
+            self.assertTrue(ev.get("eventName"), f"{label}: eventName (TGS's exact name) is required")
+            self.assertRegex(ev.get("location") or "", r"^[^,]+, [A-Z]{2}$", f"{label}: location is 'City, ST'")
+            start = datetime.date.fromisoformat(ev["startDate"])
+            end = datetime.date.fromisoformat(ev["endDate"])
+            first = self.sources["seasons"][season].get("startYear") or int(season[:4])
+            self.assertTrue(datetime.date(first, 8, 1) <= start <= end <= datetime.date(first + 1, 7, 31),
+                            f"{label}: dates must be ISO, in order, and inside the season")
+            for bad in ("reconstructed", "defaultTier"):
+                self.assertNotIn(bad, ev, f"{label}: showcases have no brackets or tiers to default")
+            aliases = ev.get("teamAliases") or {}
+            for k, v in aliases.items():
+                self.assertRegex(k, r"^[1-9][0-9]*$", label)
+                self.assertIsInstance(v, int, label)
+                self.assertNotEqual(int(k), v, label)
+            if aliases:
+                self.assertTrue(ev.get("teamAliasesNote"), f"{label}: every alias needs its source note")
+        self.assertGreaterEqual(seen, 1)
+
+    def test_phoenix_spring(self):
+        ev = self.sources["seasons"]["2025-26"]["showcases"]["Phoenix Spring"]
+        self.assertEqual((ev["eventId"], ev["eventName"], ev["location"], ev["startDate"], ev["endDate"]),
+                         (4133, "ECNL Phoenix - Spring", "Phoenix, AZ", "2026-03-27", "2026-03-29"))
+        self.assertEqual(ev["teamAliases"], {"112470": 69910})
+        # 2025-26 is not the active season, so 4133 is never refreshed.
+        self.assertNotEqual(archive.refresh_policy(self.sources)["activeSeason"], "2025-26")
+
+
+def _archived(path):
+    raw, _ = api.read_archive(path)
+    return json.loads(raw) if raw else None
+
+
+class ArchivedShowcaseTests(unittest.TestCase):
+    """Checks on the committed showcase data; each archived showcase is checked (the registry
+    test above requires every showcase's fields, so a registered one is never skipped silently
+    once crawled)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.sources = api.load_sources()
+        cls.events = [(s, n, e) for s, k, n, e in api.iter_events(cls.sources)
+                      if k == "showcase" and _archived(api.p_hierarchy(e["eventId"]))]
+
+    def showcase_rows(self, eid):
+        """(flightID, standings rows, games) for each flight of an archived showcase."""
+        h = _archived(api.p_hierarchy(eid))["data"]
+        out = []
+        for d in h["girlsDivAndFlightList"] or []:
+            for f in d.get("flightList") or []:
+                st = _archived(api.p_standings(d["divisionID"], f["flightID"], eid))
+                rows = archive.merge_standings_blocks(st["data"]) if st else []
+                games = (_archived(api.p_schedule(eid, f["flightID"])) or {}).get("data") or []
+                out.append((d, f, rows, games))
+        return out
+
+    def test_aliases_are_the_same_team(self):
+        # Onboarding checklist, alias review (M3): the showcase id plays at the event under
+        # exactly the conference team's name, in the same age group; the conference id is in
+        # the season's index and does not itself play at the event.
+        if not self.events:
+            self.skipTest("no showcase archived yet")
+        for season, name, ev in self.events:
+            index = api.read_json_file(api.team_index_path(season))["teams"]
+            by_id = {t["teamID"]: t for t in index}
+            flights = self.showcase_rows(ev["eventId"])
+            played = {t for _d, _f, _r, games in flights for g in games for t in (g["hometeamID"], g["awayteamID"])}
+            for k, v in (ev.get("teamAliases") or {}).items():
+                with self.subTest(showcase=f"{season}/{name}", alias=k):
+                    self.assertIn(int(k), played)
+                    self.assertNotIn(v, played)
+                    self.assertIn(v, by_id)
+                    row = next(r for d, _f, rows, _g in flights for r in rows if r["teamID"] == int(k))
+                    div = next(d for d, _f, rows, _g in flights if any(r["teamID"] == int(k) for r in rows))
+                    self.assertEqual(row["name"], by_id[v]["name"])
+                    self.assertEqual(div["divisionName"], by_id[v]["division"])
+
+    def test_phoenix_spring_index_rows(self):
+        idx = api.read_json_file(api.team_index_path("2025-26"))
+        rows = [r for r in idx.get("showcases") or [] if r["eventID"] == 4133]
+        if not any(e["eventId"] == 4133 for _s, _n, e in self.events):
+            self.skipTest("4133 not archived yet")
+        self.assertEqual([r["flightID"] for r in rows], [36386, 36388, 36390, 36387, 36389, 36391])
+        self.assertEqual([len(r["teamIDs"]) for r in rows], [54, 54, 54, 58, 58, 24])
+        self.assertEqual([r.get("aliases") for r in rows], [None, None, {"112470": 69910}, None, None, None])
+        bare = copy.deepcopy(self.sources)
+        bare["seasons"]["2025-26"].pop("showcases")
+        self.assertEqual(archive.build_team_index(bare, "2025-26")["teams"], idx["teams"],
+                         "the conference rows are what they were without showcases")
+        for d, f, standings, games in self.showcase_rows(4133):
+            self.assertEqual(len(games) and all(g.get("type") == "Group Play" for g in games), True)
+        self.assertEqual(sum(len(g) for *_x, g in self.showcase_rows(4133)), 453)
+
+    def test_only_mirrored_families(self):
+        if not self.events:
+            self.skipTest("no showcase archived yet")
+        for _s, _n, ev in self.events:
+            eid = ev["eventId"]
+            self.assertIsNone(api.read_archive(api.p_event_details(eid))[0], "event details are never archived")
+            for d, f, _r, _g in self.showcase_rows(eid):
+                self.assertIsNone(api.read_archive(api.p_brackets_design(eid, f["flightID"]))[0])
+                self.assertIsNone(api.read_archive(api.p_brackets(eid, f["flightID"]))[0])
+
+
+class RequestBudgetTests(unittest.TestCase):
+    """S7: every HTTP attempt counts, retries included, and a budget stops the next one."""
+
+    def setUp(self):
+        self.saved = (api.HTTP_ATTEMPTS, api.HTTP_BUDGET)
+        api.HTTP_ATTEMPTS, api.HTTP_BUDGET = 0, None
+
+    def tearDown(self):
+        api.HTTP_ATTEMPTS, api.HTTP_BUDGET = self.saved
+
+    @staticmethod
+    def answer_503(*a, **kw):
+        raise urllib.error.HTTPError("https://example.invalid/", 503, "Service Unavailable", {}, io.BytesIO(b""))
+
+    def test_retries_count(self):
+        with patch.object(api.urllib.request, "urlopen", side_effect=self.answer_503) as urlopen, \
+                patch.object(api.time, "sleep"):
+            with self.assertRaises(api.ApiError):
+                api.fetch_api_raw("Event/get-event-schedule-or-standings/1")
+        self.assertEqual(urlopen.call_count, 3)
+        self.assertEqual(api.HTTP_ATTEMPTS, 3)
+
+    def test_budget_stops_inside_a_retry_loop(self):
+        api.HTTP_BUDGET = 2
+        with patch.object(api.urllib.request, "urlopen", side_effect=self.answer_503) as urlopen, \
+                patch.object(api.time, "sleep"), contextlib.redirect_stdout(io.StringIO()):
+            with self.assertRaises(api.BudgetSpent):
+                api.fetch_api_raw("Event/get-event-schedule-or-standings/1")
+            with self.assertRaises(api.BudgetSpent):
+                api.fetch_api_raw("Event/get-event-schedule-or-standings/2")
+        self.assertEqual(urlopen.call_count, 2)
+        self.assertEqual(api.HTTP_ATTEMPTS, 2)
+        self.assertTrue(issubclass(api.BudgetSpent, api.ApiError))   # the crawl reports it as a failure
+
+    def test_budget_prints_every_attempt(self):
+        # S-C: under --max-requests each attempt is one printed line (the record kept on
+        # the onboarding issue); without a budget nothing is printed.
+        class Ok:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+            def read(self):
+                return b'{"data":[]}'
+        answers = [Ok(), urllib.error.HTTPError("https://example.invalid/", 503, "x", {}, io.BytesIO(b"")), Ok()]
+        with patch.object(api.urllib.request, "urlopen", side_effect=answers), patch.object(api.time, "sleep"), contextlib.redirect_stdout(io.StringIO()) as out:
+            api.fetch_api_raw("Event/get-event-schedule-or-standings/1")      # silent: no budget
+            api.HTTP_BUDGET = 5
+            api.fetch_api_raw("Event/get-event-schedule-or-standings/2")      # a 503, then a 200
+        lines = out.getvalue().splitlines()
+        self.assertEqual(len(lines), 2, lines)
+        self.assertRegex(lines[0], r"^  request 2/5\t\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z\t"
+                                   r"Event/get-event-schedule-or-standings/2\t503\t0 B$")
+        self.assertRegex(lines[1], r"^  request 3/5\t.*Z\tEvent/get-event-schedule-or-standings/2\t200\t11 B$")
+
+
+if __name__ == "__main__":
+    unittest.main()

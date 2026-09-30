@@ -1,0 +1,59 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
+1,Arizona Arsenal ECNL G12,Arizona Arsenal Soccer Club,88341,3,3,0,0,9,3.0,12,1,11
+1,Legends FC San Diego ECNL G12,Legends FC - Del Mar,90127,3,3,0,0,9,3.0,12,1,11
+1,San Diego Surf - ECNL G12,San Diego Surf Soccer Club,84689,3,3,0,0,9,3.0,9,0,9
+1,Sporting CA USA ECNL G12,Sporting California USA,95281,3,3,0,0,9,3.0,6,0,6
+1,Pateadores ECNL G12,Pateadores Soccer Club,53888,3,3,0,0,9,3.0,6,0,6
+1,DKSC ECNL G12,DKSC,81105,3,3,0,0,9,3.0,6,1,5
+1,Connecticut FC United ECNL G12,Connecticut FC,82332,3,3,0,0,9,3.0,5,0,5
+1,Slammers FC HB Koge ECNL G12,Slammers FC HB Koge,85791,3,2,0,1,7,2.33,11,3,8
+1,OK Energy FC ECNL G12,Oklahoma Energy FC,94440,3,2,0,1,7,2.33,9,2,7
+1,Utah Royals FC-AZ ECNL G12,Utah Royals FC - AZ,85099,3,2,0,1,7,2.33,8,1,7
+1,Sting Royal ECNL G12,Sting Soccer Club,59609,3,2,0,1,7,2.33,8,2,6
+1,LV Heat Surf ECNL G12,LV Heat Surf SC ,84197,3,2,0,1,7,2.33,7,2,5
+1,SLAMMERS FC ECNL G12,Slammers FC,89212,3,2,0,1,7,2.33,5,0,5
+1,XF Academy ECNL G12,Crossfire Premier,94927,3,2,0,1,7,2.33,3,0,3
+1,So Cal Blues ECNL G12,So Cal Blues,84702,3,2,0,1,7,2.33,2,0,2
+1,Scorpions SC ECNL G12,Scorpions SC,81552,3,2,1,0,6,2.0,7,4,3
+1,LAFC So Cal ECNL G12,LAFC So Cal,94592,3,2,1,0,6,2.0,5,2,3
+1,Kansas City Athletics ECNL G12,KC Athletics,95580,3,2,1,0,6,2.0,6,4,2
+1,SUSA FC ECNL G12,SUSA FC,68848,3,2,1,0,6,2.0,4,2,2
+1,Portland Thorns ECNL G12,Portland Thorns FC,78875,3,2,1,0,6,2.0,5,4,1
+1,Washington Premier ECNL G12,Washington Premier FC,83471,3,2,1,0,6,2.0,3,3,0
+1,Utah Avalanche - ECNL G12,Utah Avalanche,81565,3,2,1,0,6,2.0,3,3,0
+1,Sporting Blue Valley ECNL G12,Sporting Blue Valley,94797,3,2,1,0,6,2.0,3,3,0
+1,Eagles SC ECNL G12,Eagles SC,64010,3,1,0,2,5,1.67,4,2,2
+1,FC Wisconsin ECNL G12,FC Wisconsin Girls,79684,3,1,0,2,5,1.67,3,1,2
+1,Oregon Surf ECNL G12,Oregon Surf SC,90910,3,1,0,2,5,1.67,3,2,1
+1,Legends FC ECNL G12,Legends FC (CA),88395,3,1,0,2,5,1.67,2,1,1
+1,Placer United ECNL G12,Placer United Soccer Club,68030,3,1,1,1,4,1.33,4,4,0
+1,SLSG Navy ECNL G12,St. Louis Scott Gallagher,94017,3,1,1,1,4,1.33,3,4,-1
+1,Phoenix Rising ECNL G12,Phoenix Rising FC,81125,3,1,2,0,3,1.0,3,3,0
+1,Philadelphia Ukrainian Nationals - ECNL G12,Philadelphia Ukrainian Nationals,94617,3,1,2,0,3,1.0,3,3,0
+1,Colorado Rapids ECNL G12,Colorado Storm,71847,3,0,0,3,3,1.0,3,3,0
+1,Penn Fusion SA ECNL G12,Penn Fusion Soccer Academy,81252,3,0,0,3,3,1.0,1,1,0
+1,Liverpool FC IA Michigan ECNL G12,Liverpool FC-IA Michigan,94483,3,1,2,0,3,1.0,3,4,-1
+1,Bay Area Surf ECNL G12,Bay Area Surf,95449,3,1,2,0,3,1.0,3,5,-2
+1,Seattle United ECNL G12,Seattle United,88412,3,1,2,0,3,1.0,3,5,-2
+1,Sting Black ECNL G12,Sting Soccer Club,116000,3,1,2,0,3,1.0,3,5,-2
+1,San Juan SC - ECNL G12,San Juan Soccer Club,84677,3,1,2,0,3,1.0,1,4,-3
+1,Eclipse Select SC ECNL G12,Eclipse Select Soccer Club,84211,3,1,2,0,3,1.0,2,6,-4
+1,Rockford Raptors ECNL G12,Rockford Raptors FC,95073,3,0,1,2,2,0.67,2,3,-1
+1,LA Breakers FC ECNL G12,LA Breakers FC,84686,3,0,1,2,2,0.67,1,2,-1
+1,Minnesota Thunder ECNL G12,Minnesota Thunder Academy,71856,3,0,1,2,2,0.67,0,2,-2
+1,Michigan Hawks ECNL G12,Michigan Hawks,64467,3,0,1,2,2,0.67,3,6,-3
+1,Santa Rosa United ECNL G12 ,Santa Rosa United Soccer,68207,3,0,1,2,2,0.67,0,3,-3
+1,Chicago Inter Soccer ECNL G12,Chicago Inter,77722,3,0,1,2,2,0.67,1,6,-5
+1,Select ECNL G12,Select,94581,3,0,2,1,1,0.33,3,6,-3
+1,SLSG Green ECNL G12,St. Louis Scott Gallagher,94015,3,0,2,1,1,0.33,0,3,-3
+1,Davis Legacy ECNL G12,Davis Legacy Soccer Club,90732,3,0,2,1,1,0.33,2,6,-4
+1,Michigan Hawks Magic ECNL G12,Michigan Hawks,79690,3,0,2,1,1,0.33,2,8,-6
+1,Sting Austin ECNL G12,Sting Austin,94677,3,0,3,0,0,0.0,0,4,-4
+1,Boise Thorns FC ECNL G12,Boise Timbers | Thorns,82285,3,0,3,0,0,0.0,3,8,-5
+1,Marin FC ECNL G12,Marin FC,92794,3,0,3,0,0,0.0,0,5,-5
+1,Los Gatos United - ECNL RL G12,No Club Selection,113273,3,0,3,0,0,0.0,0,6,-6
+1,MVLA ECNL G12,MVLA,55325,3,0,3,0,0,0.0,2,10,-8
+1,PacNW SC ECNL G12,PacNW,85527,3,0,3,0,0,0.0,0,9,-9
+1,Pleasanton RAGE ECNL G12,Pleasanton Rage,63606,3,0,3,0,0,0.0,1,11,-10
+1,Eastside FC ECNL G12,Eastside FC (WA),80480,3,0,3,0,0,0.0,0,10,-10
+1,Classics Elite ECNL G12,Classics Elite Soccer Academy,94418,3,0,3,0,0,0.0,0,10,-10

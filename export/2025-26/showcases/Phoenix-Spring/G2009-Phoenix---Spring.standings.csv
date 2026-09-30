@@ -1,0 +1,55 @@
+rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
+1,Phoenix Rising ECNL G09,Phoenix Rising FC,59771,3,3,0,0,9,3.0,11,2,9
+1,Boise Thorns FC ECNL G09,Boise Timbers | Thorns,59556,3,3,0,0,9,3.0,9,1,8
+1,Bay Area Surf ECNL G09,Bay Area Surf,69035,3,3,0,0,9,3.0,8,1,7
+1,Rebels SC ECNL G09,Rebels Soccer Club,26385,3,3,0,0,9,3.0,7,2,5
+1,LA Breakers FC ECNL G09,LA Breakers FC,55512,3,3,0,0,9,3.0,6,1,5
+1,Select ECNL G09,Select,95007,3,3,0,0,9,3.0,4,0,4
+1,Slammers FC HB Koge ECNL G09,Slammers FC HB Koge,54921,3,2,0,1,7,2.33,9,4,5
+1,Stanislaus United SC - ECNL RL G09,Stanislaus Surf Soccer Club,62306,3,2,0,1,7,2.33,8,4,4
+1,San Juan SC ECNL G09,San Juan Soccer Club,31488,3,2,0,1,7,2.33,7,3,4
+1,Beach FC (CA) ECNL G09,Beach Futbol Club,60046,3,2,0,1,7,2.33,3,0,3
+1,PacNW SC ECNL G09,PacNW,46755,3,2,1,0,6,2.0,2,1,1
+2,Utah Royals FC-AZ ECNL G09,Utah Royals FC - AZ,56530,3,2,1,0,6,2.0,8,2,6
+2,So Cal Blues ECNL G09,So Cal Blues,60035,3,2,1,0,6,2.0,7,2,5
+2,Placer United ECNL G09,Placer United Soccer Club,68831,3,2,1,0,6,2.0,7,3,4
+2,San Diego Surf ECNL G09,San Diego Surf Soccer Club,61178,3,2,1,0,6,2.0,8,6,2
+2,Marin FC ECNL G09,Marin FC,56277,3,2,1,0,6,2.0,4,2,2
+2,Cleveland Force SC ECNL G09,Cleveland Force SC,46987,3,2,1,0,6,2.0,4,3,1
+2,La Roca FC ECNL G2009,La Roca FC,45847,3,2,1,0,6,2.0,3,3,0
+2,Davis Legacy ECNL G09,Davis Legacy Soccer Club,60301,3,2,1,0,6,2.0,7,8,-1
+1,LAFC So Cal ECNL G09,LAFC So Cal,59866,3,1,0,2,5,1.67,3,2,1
+1,MVLA ECNL G09,MVLA,33438,3,1,0,2,5,1.67,2,1,1
+1,Pateadores ECNL G09,Pateadores Soccer Club,68893,3,1,1,1,4,1.33,4,2,2
+1,Minnesota Thunder ECNL G09,Minnesota Thunder Academy,52518,3,1,1,1,4,1.33,3,2,1
+1,Force (CA) ECNL G09,Force,60044,3,1,1,1,4,1.33,3,2,1
+1,Arizona Arsenal ECNL G09,Arizona Arsenal Soccer Club,58586,3,1,1,1,4,1.33,5,5,0
+1,Internationals SC ECNL G09,Internationals SC,47003,3,1,1,1,4,1.33,5,5,0
+1,Pleasanton RAGE ECNL G09,Pleasanton Rage,39256,3,1,1,1,4,1.33,4,4,0
+1,Seattle United ECNL G09,Seattle United,56728,3,1,1,1,4,1.33,2,2,0
+1,Washington Premier ECNL G09,Washington Premier FC,54576,3,1,1,1,4,1.33,2,2,0
+1,Mustang SC ECNL G09,Mustang Soccer,31328,3,1,1,1,4,1.33,2,3,-1
+1,Sporting CA USA ECNL G09,Sporting California USA,59459,3,1,1,1,4,1.33,2,3,-1
+1,LV Heat Surf ECNL G09,LV Heat Surf SC ,50614,3,0,0,3,3,1.0,2,2,0
+1,PDA Blue ECNL G09,PDA Blue (North),13678,3,0,0,3,3,1.0,2,2,0
+1,Legends FC San Diego ECNL G09 ,Legends FC - Del Mar,53810,3,1,2,0,3,1.0,3,4,-1
+1,Eagles SC ECNL G09,Eagles SC,5544,3,1,2,0,3,1.0,2,3,-1
+1,Oregon Surf ECNL G09,Oregon Surf SC,90907,3,1,2,0,3,1.0,4,6,-2
+1,Ohio Premier ECNL G09,Ohio Premier,60137,3,1,2,0,3,1.0,3,5,-2
+1,Beach FC (VA) ECNL G09,No Club Selection,68414,3,1,2,0,3,1.0,3,5,-2
+1,Scorpions SC ECNL G09,Scorpions SC,36639,3,1,2,0,3,1.0,2,4,-2
+1,Legends FC ECNL G09,Legends FC (CA),10361,3,1,2,0,3,1.0,4,8,-4
+1,Utah Avalanche ECNL G09,Utah Avalanche,58149,3,1,2,0,3,1.0,2,6,-4
+1,Michigan Hawks Magic ECNL G09,Michigan Hawks,54823,3,1,2,0,3,1.0,2,6,-4
+1,XF - Academy ECNL G09,Crossfire Premier,60436,3,0,1,2,2,0.67,2,3,-1
+1,WNY Flash ECNL G09,WNY Flash Academy,47038,3,0,1,2,2,0.67,4,6,-2
+1,West Coast Soccer Club - 09 ECNL-RL,West Coast Soccer,101994,3,0,2,1,1,0.33,0,2,-2
+1,Colorado Rush Blue ECNL G09,Colorado Rush,94982,3,0,2,1,1,0.33,0,2,-2
+1,SLAMMERS FC ECNL G09,Slammers FC,42498,3,0,2,1,1,0.33,2,6,-4
+1,Portland Thorns ECNL G09,Portland Thorns FC,59582,3,0,2,1,1,0.33,2,6,-4
+1,Eastside FC ECNL G09,Eastside FC (WA),59855,3,0,3,0,0,0.0,0,4,-4
+1,Santa Rosa United ECNL G09,Santa Rosa United Soccer,49621,3,0,3,0,0,0.0,3,8,-5
+1,COSC ECNL G09,California Odyssey Soccer Club,95560,3,0,3,0,0,0.0,3,9,-6
+1,Los Gatos United - ECNL RL G09,No Club Selection,113263,3,0,3,0,0,0.0,3,10,-7
+1,Connecticut FC United ECNL G09,Connecticut FC,47024,3,0,3,0,0,0.0,2,10,-8
+1,San Francisco Elite Academy - ECNL RL G09,San Francisco Elite Academy,112667,3,0,3,0,0,0.0,0,11,-11

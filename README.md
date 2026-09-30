@@ -15,7 +15,8 @@ upstream API or website ever goes away.
 - **Self-refreshing** — a scheduled job updates the data on match days and keeps the fixture calendar current
 - **CSV exports** — Human-readable standings and schedule tables under `export/`, openable in Excel
 - **Playoffs & Finals** — National post-season per age group and competition (Champions League, North American Cup, Showcase Cup, Showcase Games): knockout brackets drawn as trees, cup and consolation brackets, group tables where a group stage exists, round-tagged schedules, and a format note per competition
-- **★ My Teams** — Follow any team; each favorite opens a summary page: the glance panel, the full table with the team highlighted, the team's own fixtures and results, and its post-season games when it played any
+- **Showcases** — ECNL showcase weekends (starting with Phoenix Spring 2026) per age group: a Results table (TGS's order, no positions) and the Games, with conference teams linked to their team pages
+- **★ My Teams** — Follow any team (the ★ My Teams button at the foot of the sidebar opens the list); each favorite opens a summary page: the glance panel, the full table with the team highlighted, the team's own fixtures and results, its showcase games, and its post-season games when it played any
 - **One team search** — Find a team across every age group and conference in the current season; a result opens it on its conference page with the age group and team selected
 - **Age group navigation** — Tabs populated from the API; keyboard arrow-key navigation, `/` to search
 - **Dark mode**, and **deep links** (season, age group, conference, view, selected team and match filter in the URL hash)
@@ -72,7 +73,7 @@ always read the local archive, even when the server is not in offline mode.
 ## Validate changes
 
 ```bash
-node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs  # Node 22+
+node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs  # Node 22+
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -167,12 +168,15 @@ hardcoded in the HTML.
    python archive.py --verify --season 2026-27
    ```
 
+   `--verify` checks every event of the season; add `--national` or `--showcases` to
+   verify only the national events or only the showcases (since #97).
+
 3. Archive it: `python archive.py --season 2026-27`
 
 The season dropdown rebuilds itself from the registry, so no HTML edit is needed.
 It sits under the sidebar tabs, above the tab panels, and is available on
-Conferences and Playoffs (My Teams hides it, since a favorite belongs to one
-season).
+Conferences, Playoffs and Showcases (My Teams hides it, since a favorite belongs
+to one season).
 
 ## National playoffs
 
@@ -260,6 +264,57 @@ the score rests on a single sentence of ECNL prose (the U17 final is corroborate
 Real Colorado's own club page). The Day 1 recap itself contradicts its own score list
 in one place, which is why the Playoffs cross-check exists.
 
+## Showcases
+
+A season's showcases (weekend events where teams from different conferences play each
+other, with no title at stake) live under `showcases` in `data/sources.json`, keyed by the
+display name shown on the Showcases tab (#97):
+
+```json
+"showcases": {
+  "Phoenix Spring": {
+    "eventId": 4133,
+    "eventName": "ECNL Phoenix - Spring",
+    "location": "Phoenix, AZ",
+    "startDate": "2026-03-27", "endDate": "2026-03-29",
+    "tierNotes": { "Phoenix - Spring": "A showcase, not a competition: …" },
+    "teamAliases": { "112470": 69910 },
+    "teamAliasesNote": "Utah Avalanche ECNL G11 is team 112470 in this showcase's G2011 table …"
+  }
+}
+```
+
+- `eventName`, `location`, `startDate` and `endDate` are required. The dates gate the refresh:
+  an active-season showcase is refreshed **only on its own dates**, then frozen (national
+  events get a week before and two weeks after). `tierNotes` is the "Format" note.
+- `teamAliases` maps a showcase team id to the same team's conference id, declared by hand
+  after review; see [docs/showcases.md](docs/showcases.md#team-aliases).
+- The page shows a **Results** table per age group (TGS's rows in TGS's order, with no
+  position column and no follow star: TGS's own rank is not a ranking) and the **Games**.
+  Conference teams link to their team page, whose showcase block lists their games there;
+  other rows (ECNL RL, Pre-ECNL, guests) show TGS's full name and "no team page". Showcases
+  have no brackets; the crawler never fetches them.
+- `python archive.py --season 2025-26 --showcases` crawls only the season's showcases (1 + 2 ×
+  flights requests; `--verify --showcases` checks their names). It rebuilds the season's team
+  index, whose optional `showcases` rows let a team page fetch only the showcase schedules its
+  team played in, and never fetches clubs. CSVs go to `export/<season>/showcases/<name>/`;
+  their `rank` column is TGS's own `rank` as published, not a position, and `--export`
+  rebuilds them with the conferences'.
+- **Request budgets count retries.** A 5xx is retried up to 3 times, so `--max-requests N`
+  counts every HTTP request, retries included, and stops before request N + 1. With a budget
+  set, the crawler prints one line per attempt (UTC time, path, status, bytes); that printed
+  log is the request record for the issue.
+- **Cost on the site:** a team page in a season with showcases reads the season's team index
+  once per session (on a My Teams page that is one request more than before) and one
+  schedule per showcase flight the team played in.
+
+To add a showcase, follow the checklist in
+[docs/showcases.md, "Onboarding a showcase"](docs/showcases.md#onboarding-a-showcase):
+identify it (2 requests), write the registry hunk by hand, `--verify` (1), crawl
+(1 + 2 × flights, with `--max-requests`), audit the data offline including the **name check**
+(the display name is unique in its season) and the **alias review**, check the pages offline,
+then a PR the owner approves. Discovery of other showcases is deferred.
+
 ## My Teams
 
 Favorites are stored in the browser (`localStorage`) as records — the team name plus
@@ -270,8 +325,15 @@ by the earlier version (name only) are located through each season's team index 
 without one, by scanning the archived standings) the first time My Teams is opened,
 and upgraded in place.
 
+The sidebar has three tabs, **Conferences | 🏆 Playoffs | Showcases**. My Teams is the
+**★ My Teams** button at the foot of the sidebar, below the "Find a team" hint (with the
+number of followed teams). It opens the My Teams list in place of the tab panels, with
+"‹ Back to <last tab>"; Back, the button again, or any tab closes it. While it is open no
+tab is selected. It is not reachable while the desktop sidebar is collapsed, as before.
+
 `#tab=teams&season=2026-27&team=<teamID>` deep-links to a team's summary even in a
-browser where it isn't a favorite (it is shown, not added to the list).
+browser where it isn't a favorite (it is shown, not added to the list). `#tab=myteams…`
+is accepted too and rewritten to `#tab=teams…`.
 
 A conference view is `#season=2026-27&age=GU16&conf=NorCal`, optionally with
 `&view=schedule`, `&team=<teamID>` (the team shown in the glance panel) and
@@ -283,6 +345,10 @@ their defaults (Standings, upcoming matches, no selected team — the glance pan
 falls back to a favourite, if any; for Playoffs the first stage, age group and
 competition) rather than the viewer's last state. The season can be changed from
 the Playoffs tab; the tab is kept and the hash follows the new season.
+
+Showcases is `#tab=showcases&season=2025-26`, with `&event=<eventId>`, `&age=`,
+`&flight=<flightId>` (the page always writes it; a link without it opens the age group's
+first flight) and `&view=schedule` (the Games view).
 
 ## Feedback
 
@@ -366,7 +432,8 @@ cover the sibling site's `/api/*`, since the rule has no hostname field) or move
 | `proxy_server.py` | Local static and archive-only v1 server, plus the `?live=1` API proxy |
 | `reconstruct.py` | Rebuilds schedules TGS removed from a hand-entered CSV; `--check` validates them (see "Reconstructed data") |
 | `reconstructed/` | The CSVs behind the reconstructed archive files — one line per game, with its source URL |
-| `export/<season>/<conf>/` | CSVs — not published; `*.standings.csv`, `*.schedule.csv` |
+| `export/<season>/<conf>/` | CSVs — not published; `*.standings.csv`, `*.schedule.csv` (a showcase's go to `export/<season>/showcases/<name>/`) |
+| `docs/showcases.md` | Showcases: how they are stored, their request cost, team aliases, and the onboarding checklist |
 | `worker.js` | Redirects the `workers.dev` hostname, blocks raw data paths, sets the session cookie on `/`, and handles `/api/v1/*` and `POST /api/feedback` |
 | `api/session.mjs` | Session cookie, rate limits and counts for `/api/v1/*` (see `docs/data-api.md`, "Sessions and rate limits") |
 | `api/apikey.mjs` | API keys for direct use of `/api/v1/*`: format, hash check, key-in-URL check, cached KV lookup (see `docs/data-api.md`, "API keys") |
@@ -504,6 +571,9 @@ roster or an endpoint TGS adds later can never be written into the public repo.
 | 2021-22 | 9 (no NorCal) | age (`GU13`; the national events say `U13`) | one | ✅ event 2436 — U15 Regional League Finals bracket corrupt at TGS (placeholder team before the final); final correct | ✅ event 2437 |
 | 2020-21 | 9 (no NorCal) | age (`GU13`; the national events say `U13`, the Finals `GU13`) | one | ✅ event 2118 — Tropical Storm Elsa cut the event short: the U13 Champions League and the four U15 cups have no final and the U15 Champions League no knockout (U13 and U15 finished at the Finals); U18/U19 Composite placement rows corrupt at TGS, left out of the bracket; finals correct | ✅ event 2289 — GU15 quarterfinal and semifinal rows and GU17 semifinal rows corrupt at TGS (GU17's left out of the bracket); finals correct |
 
+Showcases: 2025-26 **Phoenix Spring** (event 4133, Phoenix, AZ, 27–29 March 2026; U17 to
+U12, 302 teams, 453 games). No other showcase is archived yet.
+
 Age labels are computed relative to the season being viewed, so historical seasons
 stay correctly labelled.
 
@@ -545,8 +615,9 @@ season, and shows it on hover over an age-group tab. It refreshes on each
   three in 2022-23, Southwest GU13 in 2020-21). The page and the CSV export merge them into one table: the
   larger block keeps its published order and the stray teams are slotted in by
   points per game (`mergeStandingsBlocks` in the page, `merge_standings_blocks` in
-  `archive.py`). `python archive.py --export --season <key>` rebuilds the CSVs from
-  the archive without any API calls.
+  `archive.py`). `python archive.py --export --season <key>` rebuilds the conference and
+  showcase CSVs from the archive without any API calls (national events' CSVs are
+  written only by a crawl).
 - 2020-21 had no NorCal conference: the Bay Area clubs' first ECNL season was played
   in the Northwest conference, whose divisions were split into Bay Area, Mountain and
   Pacific flights (the page shows one panel per flight). Six conferences also ran a
