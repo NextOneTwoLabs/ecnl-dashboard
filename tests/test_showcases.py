@@ -409,6 +409,48 @@ class EventFilterTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(self.asked, [api.p_event_details(ALPHA), api.p_event_details(BETA)])
 
+    def test_repeated_event_is_rejected(self):
+        # S1: argparse would keep the last value and act on the other showcase.
+        for argv in (["--verify", "--event", str(ALPHA), "--event", str(BETA)],
+                     ["--dry-run", "--event", str(ALPHA), "--event", str(ALPHA)],
+                     [f"--event={BETA}", "--event", str(ALPHA)]):
+            with self.subTest(argv=argv):
+                code, _out, err = self.run_main(["--season", S, "--showcases"] + argv, sources=None, **self.WRITERS)
+                self.assertEqual(code, 2, err)
+                self.assertIn("--event given more than once", err)
+                self.assertEqual(self.asked, [])
+
+    def test_a_showcase_id_registered_twice(self):
+        # S2: an invalid registry with one eventId on two showcases of the season exits 2
+        # with its own message, before any request.
+        dup = copy.deepcopy(TWO)
+        dup["seasons"][S]["showcases"]["Beta"]["eventId"] = ALPHA
+        with self.assertRaises(archive.EventFilterError) as cm:
+            archive.select_events(dup, S, kind="showcase", event_id=ALPHA)
+        self.assertEqual(str(cm.exception), f"--event {ALPHA} is registered 2 times in {S}: showcases "
+                                            f"'Alpha', 'Beta'; an eventId must be unique in sources.json")
+        for mode in (["--verify"], ["--dry-run"], []):
+            with self.subTest(mode=mode):
+                code, _out, err = self.run_main(["--season", S, "--showcases", "--event", str(ALPHA)] + mode,
+                                                sources=dup, **self.WRITERS)
+                self.assertEqual(code, 2, err)
+                self.assertIn(f"is registered 2 times in {S}", err)
+                self.assertNotIn("is not a", err)
+                self.assertEqual(self.asked, [])
+
+    def test_select_events_without_event(self):
+        # S3: the helper's path without --event is the old filter: the kind, and the
+        # conference filter that drops national events and showcases.
+        names = lambda **kw: [(s, k, n) for s, k, n, _e in archive.select_events(TWO, **kw)]
+        self.assertEqual(names(season=S, kind="national"), [(S, "national", "Finals")])
+        self.assertEqual(names(season=S, kind="showcase"), [(S, "showcase", "Alpha"), (S, "showcase", "Beta")])
+        self.assertEqual(names(season=S), [(S, "conference", "Gamma"), (S, "national", "Finals"),
+                                           (S, "showcase", "Alpha"), (S, "showcase", "Beta")])
+        self.assertEqual(names(season=S, conference="Gamma"), [(S, "conference", "Gamma")])
+        self.assertEqual(names(season=S, conference="Gamma", kind=None), [(S, "conference", "Gamma")])
+        self.assertEqual(names(season=None, kind="showcase"),
+                         [(S, "showcase", "Alpha"), (S, "showcase", "Beta"), ("2098-99", "showcase", "Old")])
+
     def test_dry_run_prints_one_would_archive_line(self):
         code, out, err = self.run_main(["--dry-run", "--season", S, "--showcases", "--event", str(ALPHA)],
                                        **dict.fromkeys(["save_manifest", "write_csv", "update_team_index", "get_json"]))
@@ -509,6 +551,17 @@ class RegistryTests(unittest.TestCase):
             slugs = [api.slug(n).lower() for n in names]
             self.assertEqual(len(slugs), len(set(slugs)), f"{season}: two names share an export folder: {names}")
             self.assertNotIn("showcases", slugs[:len(names) - len(data.get("showcases") or {})], season)
+
+    def test_event_ids_are_unique(self):
+        # #103 S2: `--event <id>` resolves an id to one event, so no eventId may be
+        # registered twice, across every kind and season.
+        seen = {}
+        for season, kind, name, ev in api.iter_events(self.sources):
+            if ev.get("eventId"):
+                seen.setdefault(ev["eventId"], []).append(f"{season} {kind} {name}")
+        dupes = {eid: where for eid, where in seen.items() if len(where) > 1}
+        self.assertEqual(dupes, {}, "an eventId is registered more than once")
+        self.assertGreater(len(seen), 1)
 
     def test_showcase_entries(self):
         ids = {e["eventId"] for _s, k, _n, e in api.iter_events(self.sources) if k != "showcase"}

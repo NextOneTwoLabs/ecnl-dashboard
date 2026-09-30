@@ -305,9 +305,10 @@ display name shown on the Showcases tab (#97):
   limits `--verify` (one request), `--dry-run` (one "would archive" line) and the crawl
   (`--force` included) to that showcase; without `--event`, verify and the crawl act on every
   showcase of the season. The team index is still rebuilt for the whole season, and only that
-  showcase's manifest entry is written. An id that is not a showcase of that season, or
-  `--event` with `--all`, `--national`, `--conference`, `--refresh`, `--export`,
-  `--team-index` or `--clubs`, exits 2 before any request.
+  showcase's manifest entry is written. An id that is not a showcase of that season, a
+  repeated `--event`, or `--event` with `--all`, `--national`, `--conference`, `--refresh`,
+  `--export`, `--team-index` or `--clubs`, exits 2 before any request. Every `eventId` is
+  unique in `sources.json` (a test checks this).
 - **Request budgets count retries.** A 5xx is retried up to 3 times, so `--max-requests N`
   counts every HTTP request, retries included, and stops before request N + 1. With a budget
   set, the crawler prints one line per attempt (UTC time, path, status, bytes); that printed

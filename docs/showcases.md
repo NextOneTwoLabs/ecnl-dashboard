@@ -52,8 +52,8 @@ event. `tests/test_showcases.py` re-checks every declared alias against the arch
 - **Onboarding** one showcase: 1 (`--verify --event <id>`) + 1 + 2 × flights (the crawl with
   `--event <id>`). Phoenix Spring has 6 flights: 14 requests. `--event <id>` (#103) needs an
   explicit `--season` and `--showcases`, and exits 2 before any request with `--all`,
-  `--national`, `--conference`, `--refresh`, `--export`, `--team-index` or `--clubs`, or when
-  the id is not a showcase of that season. A 5xx is retried up to 3 times, so every budget counts HTTP
+  `--national`, `--conference`, `--refresh`, `--export`, `--team-index` or `--clubs`, when
+  given twice, or when the id is not a showcase of that season. A 5xx is retried up to 3 times, so every budget counts HTTP
   requests, retries included: `--max-requests N` stops the run before request N + 1, and the
   crawl's summary prints the count.
 - **The standard for a budgeted run is the crawler's own pace under `--max-requests`**

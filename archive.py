@@ -227,6 +227,10 @@ def select_events(sources, season, conference=None, kind=None, event_id=None):
     chosen = [row for row in found if row[0] == season and row[1] == "showcase"]
     if len(chosen) == 1:
         return chosen
+    if len(chosen) > 1:
+        names = ", ".join(repr(n) for _s, _k, n, _e in chosen)
+        raise EventFilterError(f"--event {event_id} is registered {len(chosen)} times in {season}: "
+                               f"showcases {names}; an eventId must be unique in sources.json")
     if not found:
         raise EventFilterError(f"--event {event_id}: no event in the registry "
                                f"(public/data/sources.json) has this id")
@@ -1346,6 +1350,17 @@ def save_manifest(manifest):
         f.write("\n")
 
 
+class _OnceAction(argparse.Action):
+    """Store an option that may be given only once: argparse would silently keep the
+    last of two `--event` values, and act on a showcase the caller did not mean."""
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        if getattr(namespace, self.dest, None) is not None:
+            parser.error(f"{option_string} given more than once "
+                         f"({getattr(namespace, self.dest)}, then {values}); name one showcase")
+        setattr(namespace, self.dest, values)
+
+
 def main():
     ap = argparse.ArgumentParser(description="Archive ECNL standings and schedules locally.")
     ap.add_argument("--season", help="Season key, e.g. 2024-25. Defaults to the newest season.")
@@ -1355,14 +1370,15 @@ def main():
     ap.add_argument("--showcases", action="store_true",
                     help="Only the season's showcases (#97); skips conferences and national events. "
                          "With --verify, verifies only them.")
-    ap.add_argument("--event", type=int, metavar="ID",
+    ap.add_argument("--event", type=int, metavar="ID", action=_OnceAction,
                     help="Only with an explicit --season S and --showcases: act on the one "
                          "showcase of S with this TGS event id (#103), for --verify (one "
                          "request), --dry-run and the crawl (--force re-fetches only it). "
                          "Without --event, verify and the crawl act on every showcase of the "
                          "season. The team index is still rebuilt for the whole season; only "
                          "this showcase's manifest entry is written. Not with --all, --national, "
-                         "--conference, --refresh, --export, --team-index or --clubs.")
+                         "--conference, --refresh, --export, --team-index or --clubs, and "
+                         "given only once.")
     ap.add_argument("--max-requests", type=int, metavar="N",
                     help="Stop asking upstream after N HTTP requests, retries included "
                          "(a request budget for a crawl or --verify).")
