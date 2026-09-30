@@ -9,6 +9,9 @@
     and export folders), and every teamAliases entry is well formed and documented.
 (c) The archived showcases: a hand-declared alias really is the same team (onboarding
     checklist, alias review), the index rows, and only the mirrored families.
+(d) `--event <id>` (#103) on a two-showcase fixture: the flag checks, the id resolution,
+    one details request for --verify, one "would archive" line for --dry-run, and a crawl
+    that fetches and writes only that showcase.
 No test reaches the network (tests/netguard).
 """
 import argparse
@@ -244,6 +247,252 @@ class ShowcaseKindTests(unittest.TestCase):
             self.assertEqual(archive.verify(self.src, self.active, None, "showcase"), 0)
         self.assertEqual(asked, [api.p_event_details(FAKE_ID)])
         self.assertIn("1 verified, 0 problem(s)", out.getvalue())
+
+
+# #103: a fixture season with two showcases, a conference and a national event, and an
+# older season with a showcase of its own.
+S = "2099-00"
+ALPHA, BETA, CONF, OLD, NAT, NOWHERE = 990011, 990012, 990013, 990014, 990015, 990099
+FLIGHTS = {ALPHA: [(31, "GU13", 41), (32, "GU14", 42)], BETA: [(33, "GU13", 43), (34, "GU14", 44)]}
+
+
+def _showcase(eid, event_name):
+    return {"eventId": eid, "eventName": event_name, "location": "Phoenix, AZ",
+            "startDate": "2099-11-20", "endDate": "2099-11-22"}
+
+
+TWO = {"seasons": {
+    S: {"startYear": 2099,
+        "conferences": {"Gamma": {"eventId": CONF, "eventName": "Fixture Gamma"}},
+        "national": {"Finals": {"eventId": NAT, "eventName": "Fixture Finals"}},
+        "showcases": {"Alpha": _showcase(ALPHA, "Fixture Alpha"), "Beta": _showcase(BETA, "Fixture Beta")}},
+    "2098-99": {"startYear": 2098, "conferences": {}, "showcases": {"Old": _showcase(OLD, "Fixture Old")}},
+}}
+
+
+def _upstream(version):
+    """What the fake upstream answers for the two showcases; `version` moves every score, so
+    a showcase crawled again writes different CSVs."""
+    ok = lambda data: json.dumps({"result": "success", "data": data}).encode()
+    out = {}
+    for eid, flights in FLIGHTS.items():
+        out[api.p_event_details(eid)] = ok({"name": TWO["seasons"][S]["showcases"]
+                                            ["Alpha" if eid == ALPHA else "Beta"]["eventName"]})
+        out[api.p_hierarchy(eid)] = ok({"girlsDivAndFlightList": [
+            {"divisionID": d, "divisionName": dn, "flightList": [{"flightID": f, "flightName": "Fixture"}]}
+            for d, dn, f in flights], "boysDivAndFlightList": []})
+        for d, _dn, f in flights:
+            home, away = f * 100 + 1, f * 100 + 2
+            out[api.p_standings(d, f, eid)] = ok([{"flightGroupID": 0, "teamStandings": [
+                {"teamID": home, "name": f"H{f}", "rank": 1, "gp": 1, "wins": 1, "goalsfor": version},
+                {"teamID": away, "name": f"A{f}", "rank": 1, "gp": 1, "losses": 1, "goalsagainst": version}]}])
+            out[api.p_schedule(eid, f)] = ok([{
+                "matchID": f * 10, "hometeamID": home, "awayteamID": away, "homeTeam": f"H{f}",
+                "awayTeam": f"A{f}", "gameDate": "2099-11-20T08:00:00", "type": "Group Play",
+                "hometeamscore": version, "awayteamscore": 0}])
+    return out
+
+
+class EventFilterTests(unittest.TestCase):
+    """#103: `archive.py --season S --showcases --event <id>` acts on exactly one showcase."""
+
+    def setUp(self):
+        self.asked = []
+        self.upstream = _upstream(1)
+        self.saved = (api.HTTP_ATTEMPTS, api.HTTP_BUDGET)
+
+    def tearDown(self):
+        api.HTTP_ATTEMPTS, api.HTTP_BUDGET = self.saved
+
+    def fetch(self, path, **kw):
+        self.asked.append(path)
+        if path not in self.upstream:
+            raise AssertionError(f"unexpected request: {path}")
+        return self.upstream[path]
+
+    def run_main(self, argv, sources=TWO, **never):
+        """archive.main() with `argv` on `sources`, the fake upstream and every writer named
+        in `never` refused (sources=None: the registry must not even be read). Returns (exit
+        code, stdout, stderr); an ap.error is exit 2."""
+        with contextlib.ExitStack() as stack:
+            stack.enter_context(patch.object(sys, "argv", ["archive.py"] + argv))
+            stack.enter_context(patch.object(api, "load_sources", return_value=copy.deepcopy(sources))
+                                if sources is not None else
+                                patch.object(api, "load_sources", side_effect=AssertionError("registry read")))
+            stack.enter_context(patch.object(api, "_PROTECTED_PATHS", frozenset()))
+            stack.enter_context(patch.object(api, "fetch_api_raw", side_effect=self.fetch))
+            stack.enter_context(patch.object(archive.time, "sleep"))
+            stack.enter_context(patch.object(archive, "save_sources",
+                                             side_effect=AssertionError("sources.json written")))
+            for name in never:
+                stack.enter_context(patch.object(archive, name, side_effect=AssertionError(f"{name} called")))
+            out = stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+            err = stack.enter_context(contextlib.redirect_stderr(io.StringIO()))
+            try:
+                code = archive.main()
+            except SystemExit as e:
+                code = e.code
+        return code, out.getvalue(), err.getvalue()
+
+    WRITERS = dict.fromkeys(["archive_event", "save_manifest", "write_csv", "update_team_index",
+                             "cmd_refresh", "cmd_export", "cmd_team_index", "cmd_clubs"])
+
+    def test_a_rejected_combinations(self):
+        # (a) Each exits 2 before the registry is even read, so before any request.
+        ok = ["--season", S, "--showcases", "--event", str(ALPHA)]
+        cases = [
+            (["--all", "--showcases", "--event", str(ALPHA)], "--all"),
+            (["--showcases", "--event", str(ALPHA)], "needs an explicit --season S and --showcases"),
+            (["--season", S, "--event", str(ALPHA)], "needs an explicit --season S and --showcases"),
+            (["--season", S, "--verify", "--event", str(ALPHA)], "needs an explicit --season S and --showcases"),
+            (ok + ["--national"], "--national"),
+            (["--season", S, "--national", "--event", str(ALPHA)], "--national"),
+            (ok + ["--conference", "Gamma"], "--conference"),
+            (ok + ["--refresh"], "--refresh"),
+            (ok + ["--refresh", "--dry-run"], "--refresh"),
+            (ok + ["--export"], "--export"),
+            (ok + ["--team-index"], "--team-index"),
+            (ok + ["--clubs"], "--clubs"),
+            (ok + ["--clubs", "--dry-run"], "--clubs"),
+        ]
+        for argv, says in cases:
+            with self.subTest(argv=" ".join(argv)):
+                attempts = api.HTTP_ATTEMPTS
+                code, _out, err = self.run_main(argv, sources=None, **self.WRITERS)
+                self.assertEqual(code, 2, err)
+                self.assertIn("--event", err)
+                self.assertIn(says, err)
+                self.assertEqual(self.asked, [])
+                self.assertEqual(api.HTTP_ATTEMPTS, attempts)
+
+    def test_b_ids_that_are_not_a_showcase_of_the_season(self):
+        # (b) Unknown, another kind's and another season's ids: exit 2, naming what the id
+        # is, with 0 requests and nothing written, in every mode.
+        cases = [
+            (NOWHERE, "no event in the registry"),
+            (CONF, f"not a {S} showcase: it is the {S} conference 'Gamma'"),
+            (NAT, f"not a {S} showcase: it is the {S} national 'Finals'"),
+            (OLD, f"not a {S} showcase: it is the 2098-99 showcase 'Old'"),
+        ]
+        for eid, says in cases:
+            for mode in (["--verify"], ["--dry-run"], [], ["--force"]):
+                with self.subTest(event=eid, mode=mode):
+                    code, _out, err = self.run_main(["--season", S, "--showcases", "--event", str(eid)] + mode,
+                                                    **dict.fromkeys(["archive_event", "save_manifest",
+                                                                     "write_csv", "update_team_index"]))
+                    self.assertEqual(code, 2, err)
+                    self.assertIn(f"--event {eid}", err)
+                    self.assertIn(says, err)
+                    self.assertEqual(self.asked, [])
+        # The real registry: 4133 is a 2025-26 showcase, and a conference id is not one.
+        real = api.load_sources()
+        conf_name, conf = next(iter(real["seasons"]["2025-26"]["conferences"].items()))
+        for season, eid, says in (("2026-27", 4133, "it is the 2025-26 showcase 'Phoenix Spring'"),
+                                  ("2025-26", conf["eventId"], f"it is the 2025-26 conference {conf_name!r}")):
+            with self.subTest(season=season, event=eid):
+                code, _out, err = self.run_main(["--season", season, "--showcases", "--event", str(eid), "--dry-run"],
+                                                sources=real, **dict.fromkeys(["archive_event", "save_manifest"]))
+                self.assertEqual(code, 2, err)
+                self.assertIn(says, err)
+                self.assertEqual(self.asked, [])
+
+    def test_c_verify_asks_exactly_one_details_path(self):
+        # (c) Two showcases in the season: with --event, one details request; without, both.
+        never = dict.fromkeys(["archive_event", "save_manifest", "write_csv", "update_team_index"])
+        code, out, err = self.run_main(["--verify", "--season", S, "--showcases", "--event", str(BETA)], **never)
+        self.assertEqual(code, 0, out + err)
+        self.assertEqual(self.asked, [api.p_event_details(BETA)])
+        self.assertIn("1 verified, 0 problem(s)", out)
+        self.assertIn("'Fixture Beta'", out)
+        self.asked.clear()
+        code, out, _err = self.run_main(["--verify", "--season", S, "--showcases"], **never)
+        self.assertEqual(code, 0)
+        self.assertEqual(self.asked, [api.p_event_details(ALPHA), api.p_event_details(BETA)])
+
+    def test_dry_run_prints_one_would_archive_line(self):
+        code, out, err = self.run_main(["--dry-run", "--season", S, "--showcases", "--event", str(ALPHA)],
+                                       **dict.fromkeys(["save_manifest", "write_csv", "update_team_index", "get_json"]))
+        self.assertEqual(code, 0, out + err)
+        lines = [l for l in out.splitlines() if "would archive" in l]
+        self.assertEqual(lines, [f"  would archive {S} / Alpha ({ALPHA})"])
+        self.assertEqual(self.asked, [])
+
+    def test_d_crawl_fetches_and_writes_only_that_showcase(self):
+        # (d) Crawl both showcases, then `--event ALPHA --force` with every score moved
+        # upstream: only Alpha's paths are asked; Beta's manifest entry, CSVs and archive
+        # files stay byte-identical; the team index is rebuilt for the whole season.
+        with tempfile.TemporaryDirectory() as tmp, contextlib.ExitStack() as stack:
+            archive_dir = os.path.join(tmp, "public", "archive")
+            for name, value in (("ARCHIVE_DIR", archive_dir),
+                                ("ARCHIVE_API_DIR", os.path.join(archive_dir, "api")),
+                                ("MANIFEST_PATH", os.path.join(archive_dir, "manifest.json")),
+                                ("TEAM_INDEX_DIR", os.path.join(archive_dir, "teams")),
+                                ("CLUBS_PATH", os.path.join(archive_dir, "clubs.json")),
+                                ("EXPORT_DIR", os.path.join(tmp, "export"))):
+                stack.enter_context(patch.object(api, name, value))
+            stack.enter_context(patch.object(archive, "fetch_new_club_places",
+                                             side_effect=AssertionError("club step")))
+            # A conference already archived, so the season's index has `teams` rows.
+            with patch.object(api, "_PROTECTED_PATHS", frozenset()):
+                api.write_archive(api.p_hierarchy(CONF), json.dumps({"result": "success", "data": {
+                    "girlsDivAndFlightList": [{"divisionID": 51, "divisionName": "GU13",
+                                               "flightList": [{"flightID": 61, "flightName": "Gamma"}]}]}}).encode())
+                api.write_archive(api.p_standings(51, 61, CONF), json.dumps({"result": "success", "data": [
+                    {"teamStandings": [{"teamID": 4101, "name": "H41", "clubID": 7}]}]}).encode())
+
+            code, out, err = self.run_main(["--season", S, "--showcases", "--no-update-sources"])
+            self.assertEqual(code, 0, out + err)
+            self.assertEqual(len(self.asked), 2 * (1 + 2 * 2))
+
+            # Give Beta's entry a stamp this run could never write, so any rewrite shows.
+            with open(api.MANIFEST_PATH, "r", encoding="utf-8") as f:
+                manifest = json.load(f)
+            manifest["events"][f"{S}/Beta"]["fetchedAt"] = "2000-01-01T00:00:00Z"
+            manifest["updated"] = "2000-01-01T00:00:00Z"
+            with open(api.MANIFEST_PATH, "w", encoding="utf-8") as f:
+                json.dump(manifest, f, indent=2, ensure_ascii=False)
+                f.write("\n")
+
+            def files(folder):
+                return {os.path.relpath(os.path.join(d, n), folder): Path(d, n).read_bytes()
+                        for d, _s, names in os.walk(folder) for n in names}
+            beta_csv = os.path.join(api.EXPORT_DIR, S, "showcases", "Beta")
+            alpha_csv = os.path.join(api.EXPORT_DIR, S, "showcases", "Alpha")
+            beta_paths = [p for p in _upstream(1) if f"/{BETA}" in p and "event-details" not in p]
+            before_beta_csv, before_alpha_csv = files(beta_csv), files(alpha_csv)
+            before_beta_archive = {p: api.read_archive(p)[0] for p in beta_paths}
+            index_before = api.read_json_file(api.team_index_path(S))
+            self.assertEqual(len(before_beta_csv), 5)       # 2 flights x 2 files + _all.standings.csv
+            self.assertTrue(all(before_beta_archive.values()))
+            self.assertEqual([r["eventID"] for r in index_before["showcases"]], [ALPHA, ALPHA, BETA, BETA])
+
+            self.asked.clear()
+            self.upstream = _upstream(2)
+            with patch.object(archive, "update_team_index", wraps=archive.update_team_index) as index_step:
+                code, out, err = self.run_main(["--season", S, "--showcases", "--event", str(ALPHA),
+                                                "--force", "--no-update-sources"])
+            self.assertEqual(code, 0, out + err)
+            self.assertEqual(self.asked, [api.p_hierarchy(ALPHA),
+                                          api.p_standings(31, 41, ALPHA), api.p_schedule(ALPHA, 41),
+                                          api.p_standings(32, 42, ALPHA), api.p_schedule(ALPHA, 42)])
+            self.assertEqual(files(beta_csv), before_beta_csv)
+            self.assertEqual({p: api.read_archive(p)[0] for p in beta_paths}, before_beta_archive)
+            self.assertNotEqual(files(alpha_csv), before_alpha_csv)     # Alpha was crawled again
+            # The manifest: Alpha's entry and `updated` replaced, every other byte as before.
+            with open(api.MANIFEST_PATH, "r", encoding="utf-8") as f:
+                text = f.read()
+            after = json.loads(text)
+            self.assertNotEqual(after["updated"], manifest["updated"])
+            expected = copy.deepcopy(manifest)
+            expected["events"][f"{S}/Alpha"] = after["events"][f"{S}/Alpha"]
+            expected["updated"] = after["updated"]
+            self.assertEqual(text, json.dumps(expected, indent=2, ensure_ascii=False) + "\n")
+            self.assertEqual(list(after["events"]), [f"{S}/Alpha", f"{S}/Beta"])
+            # The team index: rebuilt once, for the whole season, with both showcases' rows.
+            self.assertEqual([c.args[1] for c in index_step.call_args_list], [S])
+            index_after = api.read_json_file(api.team_index_path(S))
+            self.assertEqual(index_after, index_before)
+            self.assertEqual([r["eventID"] for r in index_after["showcases"]], [ALPHA, ALPHA, BETA, BETA])
 
 
 class RegistryTests(unittest.TestCase):
