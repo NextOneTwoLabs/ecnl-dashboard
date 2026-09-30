@@ -53,6 +53,15 @@ def built():
     return th.build()
 
 
+def seed_history(out):
+    """A private copy of the history files: the committed ones, or (in a checkout without the
+    data commit) a fresh build. Tests never write into the checkout's own directory."""
+    if os.path.isdir(th.history_dir()):
+        shutil.copytree(th.history_dir(), out)
+    else:
+        th.write_history(out_dir=out)
+
+
 def links_of(rows, manual=None):
     nxt, maybe, _stats, errors = th.link_seasons(rows, manual or {})
     return nxt, maybe, errors
@@ -340,7 +349,7 @@ class Writing(unittest.TestCase):
         self.tmp = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
         self.out = os.path.join(self.tmp, "history")
-        shutil.copytree(th.history_dir(), self.out)
+        seed_history(self.out)
 
     def snapshot(self):
         return {n: Path(self.out, n).read_bytes() for n in sorted(os.listdir(self.out))}
@@ -371,6 +380,56 @@ class Writing(unittest.TestCase):
         self.assertEqual(th.write_history(out_dir=self.out)[:2], (3, 1))
         self.assertEqual(th.check_history(out_dir=self.out), ([], []))
 
+    def test_a_failed_move_puts_back_the_files_already_replaced(self):
+        # Review: os.replace failing on the 3rd of 4 changed files. The 2 already replaced are
+        # restored, the new file that had no predecessor is removed, and no .tmp is left.
+        for n in ("55477.json", "54493.json", "46817.json"):
+            Path(self.out, n).write_text('{"schema":1,"teamID":0,"squads":[]}\n', encoding="utf-8")
+        Path(self.out, "11586.json").unlink()
+        before = self.snapshot()
+        real, calls = th._move, []
+
+        def flaky(src, dst):
+            calls.append(dst)
+            if len(calls) == 3:
+                raise OSError("rename refused (fixture)")
+            return real(src, dst)
+        with patch.object(th, "_move", side_effect=flaky):
+            with self.assertRaisesRegex(OSError, "rename refused"):
+                th.write_history(out_dir=self.out)
+        self.assertEqual(len(calls), 3)
+        self.assertEqual(self.snapshot(), before, "every file as it was, and no .tmp left")
+
+    def test_a_restore_that_fails_says_so(self):
+        Path(self.out, "55477.json").write_text("{}", encoding="utf-8")
+        Path(self.out, "54493.json").write_text("{}", encoding="utf-8")
+        real, calls = th._move, []
+
+        def flaky(src, dst):
+            calls.append(dst)
+            if len(calls) == 2:
+                raise OSError("rename refused (fixture)")
+            return real(src, dst)
+        real_replace = os.replace
+
+        def no_restore(src, dst):
+            if src.endswith(".bak.tmp"):
+                raise OSError("restore refused (fixture)")
+            return real_replace(src, dst)
+        with patch.object(th, "_move", side_effect=flaky), patch.object(th.os, "replace", side_effect=no_restore):
+            with self.assertRaisesRegex(th.PartialWrite, r"1 could not be put back \(54493\.json\)"):
+                th.write_history(out_dir=self.out)
+        self.assertFalse([n for n in os.listdir(self.out) if n.endswith(".tmp")])
+
+    def test_the_check_compares_bytes_but_not_line_endings(self):
+        # Review: a reformatted file fails the drift check; a CRLF checkout of the same bytes doesn't.
+        p = Path(self.out, "55477.json")
+        data = p.read_bytes().replace(b"\r\n", b"\n")
+        p.write_bytes(data.replace(b"\n", b"\r\n"))
+        self.assertEqual(th.check_history(out_dir=self.out), ([], []))
+        p.write_text(json.dumps(json.loads(data), indent=1), encoding="utf-8")
+        self.assertEqual(th.check_history(out_dir=self.out), (["55477.json"], []))
+
     def test_a_build_that_would_remove_many_files_refuses(self):
         for i in range(1, 121):
             Path(self.out, f"{900000000 + i}.json").write_text("{}", encoding="utf-8")
@@ -396,7 +455,7 @@ class Refresh(unittest.TestCase):
         self.tmp = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
         self.hist = os.path.join(self.tmp, "history")
-        shutil.copytree(th.history_dir(), self.hist)
+        seed_history(self.hist)
         self.state = os.path.join(self.tmp, "refresh-state.json")
         shutil.copy(api.REFRESH_STATE_PATH, self.state)
         self.index = os.path.join(self.tmp, f"{self.ACTIVE}.json")
@@ -502,7 +561,7 @@ class Refresh(unittest.TestCase):
         self.assertEqual(self.snapshot(), before)
         state = api.read_json_file(self.state)
         self.assertNotEqual(state["updatedAt"], old["updatedAt"], "the season data is still saved")
-        self.assertEqual(state["historyAsOf"], old["historyAsOf"], "the page can say how old the history is")
+        self.assertEqual(state.get("historyAsOf"), old.get("historyAsOf"), "the page can say how old the history is")
 
     def test_dry_runs_never_build_the_history(self):
         for date, hour in (("2026-08-20", 0), ("2026-09-26", 7)):

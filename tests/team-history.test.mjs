@@ -7,7 +7,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -82,24 +82,11 @@ const env = { ASSETS: { async fetch(req) {
   catch { return new Response('<html>missing</html>', { status: 404 }); }
 } } };
 
-test('the history route: ids validated like every route, one asset read, JSON 404 for no file', async () => {
+test('the history route: ids validated like every route, validators forwarded, JSON 404 for no file', async () => {
   assert.deepEqual(resolveResource('/api/v1/teams/55477/history'), { kind: 'history', team: '55477' });
   assert.equal(assetPath({ kind: 'history', team: '55477' }), '/archive/history/55477.json');
   for (const bad of ['0', '01', '-1', 'abc', '1.5', '%2e%2e%2f', '55477%2F..']) assert.equal(resolveResource(`/api/v1/teams/${bad}/history`).status, 400, bad);
   for (const none of ['/api/v1/teams/55477', '/api/v1/teams/55477/history/', '/api/v1/teams']) assert.equal(resolveResource(none).status, 404, none);
-  let count = 0;
-  for (const file of await readdir(new URL('archive/history/', root))) {
-    const match = /^(\d+)\.json$/.exec(file);
-    if (!match) continue;
-    let reads = 0;
-    const response = await dataApi(request(`/api/v1/teams/${match[1]}/history`), { ASSETS: { fetch(req) { reads++; return env.ASSETS.fetch(req); } } });
-    assert.equal(response.status, 200, file);
-    assert.deepEqual(Buffer.from(await response.arrayBuffer()), await readFile(new URL('archive/history/' + file, root)));
-    assert.equal(reads, 1);
-    assert.equal(response.headers.get('cache-control'), 'no-cache');
-    count++;
-  }
-  assert.ok(count > 1800, `only ${count} history files`);
   for (const method of ['GET', 'HEAD']) {
     const missing = await dataApi(request('/api/v1/teams/1/history', { method }), env);
     assert.equal(missing.status, 404);
@@ -113,6 +100,24 @@ test('the history route: ids validated like every route, one asset read, JSON 40
     assert.equal(conditional.status, 304);
     assert.equal(await conditional.text(), '');
   }
+});
+
+// The history files are committed separately from the code (#107): without them this is skipped.
+const hasHistory = existsSync(new URL('archive/history/55477.json', root));
+test('every history file is served byte for byte by one asset read', { skip: !hasHistory && 'no team-history data in this checkout' }, async () => {
+  let count = 0;
+  for (const file of await readdir(new URL('archive/history/', root))) {
+    const match = /^(\d+)\.json$/.exec(file);
+    if (!match) continue;
+    let reads = 0;
+    const response = await dataApi(request(`/api/v1/teams/${match[1]}/history`), { ASSETS: { fetch(req) { reads++; return env.ASSETS.fetch(req); } } });
+    assert.equal(response.status, 200, file);
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()), await readFile(new URL('archive/history/' + file, root)));
+    assert.equal(reads, 1);
+    assert.equal(response.headers.get('cache-control'), 'no-cache');
+    count++;
+  }
+  assert.ok(count > 1800, `only ${count} history files`);
 });
 
 test('the history route is behind the #90 gate like every /api/v1 route', async () => {
@@ -197,7 +202,12 @@ test('page history: a 503, a network error or bad JSON rejects and is asked agai
 });
 
 // ---- the words: M4, S2 ----
-const words = new Function(block('    function historyYears(', 'function historyOutcome(') + '\nreturn { historyYears, historyOutcome };')();
+const words = new Function(block('    function historyYears(', 'function historyOutcome(') + '\nreturn { historyYears, historyOutcome, historyStamp };')();
+
+test('page history: "History as of" gives the date and the UTC time', () => {
+  assert.equal(words.historyStamp('2026-09-30T19:55:34Z'), 'Sep 30, 2026, 7:55 PM UTC');
+  assert.equal(words.historyStamp(null), '');
+});
 
 test('page history: a post-season entry says only what the bracket decided (M4)', () => {
   const o = e => words.historyOutcome({ tier: 'Champions League', ...e }).text;

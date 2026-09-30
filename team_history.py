@@ -710,10 +710,11 @@ def document(tid, squads):
 
 
 def plan(sources=None, links_path=None, out_dir=None):
-    """Build everything in memory and compare it with the files on disk by parsed content (so
-    line endings in a checkout never count as a change). Returns (changes {path: bytes},
-    stale [path], total, errors). Raises if nothing could be built, or if the build would
-    remove more than a few files (a season's index missing, not teams TGS dropped)."""
+    """Build everything in memory and compare it with the files on disk byte for byte, line
+    endings normalised (a CRLF checkout is not a change; a reformatted file is). Returns
+    (changes {path: bytes}, stale [path], total, errors). Raises if nothing could be built, or
+    if the build would remove more than a few files (a season's index missing, not teams TGS
+    dropped)."""
     out_dir = out_dir or history_dir()
     squads, _stats, _rows, errors = build(sources, links_path)
     files = by_team(squads)
@@ -722,8 +723,9 @@ def plan(sources=None, links_path=None, out_dir=None):
     changes = {}
     for tid, sq in sorted(files.items()):
         path = os.path.join(out_dir, f"{tid}.json")
-        if api.read_json_file(path) != document(tid, sq):
-            changes[path] = file_bytes(tid, sq)
+        data = file_bytes(tid, sq)
+        if _on_disk(path) != data:
+            changes[path] = data
     stale = []
     if os.path.isdir(out_dir):
         for name in sorted(os.listdir(out_dir)):
@@ -736,9 +738,26 @@ def plan(sources=None, links_path=None, out_dir=None):
     return changes, stale, len(files), errors
 
 
+def _on_disk(path):
+    """A file's bytes with CRLF read as LF (git's autocrlf checkout), or None."""
+    try:
+        with open(path, "rb") as f:
+            return f.read().replace(b"\r\n", b"\n")
+    except OSError:
+        return None
+
+
 def _write_tmp(path, data):
     with open(path + ".tmp", "wb") as f:
         f.write(data)
+
+
+def _move(src, dst):
+    os.replace(src, dst)
+
+
+class PartialWrite(OSError):
+    """Some history files were replaced and could not be put back."""
 
 
 def write_history(sources=None, dry_run=False, links_path=None, out_dir=None):
@@ -746,27 +765,59 @@ def write_history(sources=None, dry_run=False, links_path=None, out_dir=None):
     any conference table. Returns (written, removed, total, errors).
 
     Never a half-built set: the whole build happens in memory first (a failure there writes
-    nothing), then every changed file is written beside its target as <id>.json.tmp (a failure
-    there removes the .tmp files and writes nothing), and only then are they moved into place."""
+    nothing); every changed file is then written beside its target as <id>.json.tmp (a failure
+    there removes the .tmp files and writes nothing); only then are they moved into place, and
+    a failure while moving puts back every file already replaced (its old bytes are kept in
+    memory) before it raises. Only if that restore itself fails does it raise PartialWrite,
+    naming the files, so the log never says "left as they were" when they were not."""
     out_dir = out_dir or history_dir()
     changes, stale, total, errors = plan(sources, links_path, out_dir)
     if dry_run:
         return len(changes), len(stale), total, errors
     os.makedirs(out_dir, exist_ok=True)
-    done = []
+    old = {}
+    for path in changes:
+        try:
+            with open(path, "rb") as f:
+                old[path] = f.read()
+        except FileNotFoundError:
+            old[path] = None
+
+    def drop_tmp():
+        for path in changes:
+            for leftover in (path + ".tmp", path + ".bak.tmp"):
+                try:
+                    os.remove(leftover)
+                except OSError:
+                    pass
     try:
         for path, data in changes.items():
             _write_tmp(path, data)
-            done.append(path)
     except BaseException:
-        for path in done + [p for p in changes if p not in done]:
-            try:
-                os.remove(path + ".tmp")
-            except OSError:
-                pass
+        drop_tmp()
         raise
-    for path in done:
-        os.replace(path + ".tmp", path)
+    replaced = []
+    try:
+        for path in changes:
+            _move(path + ".tmp", path)
+            replaced.append(path)
+    except BaseException as e:
+        lost = []
+        for path in replaced:
+            try:
+                if old[path] is None:
+                    os.remove(path)
+                else:
+                    with open(path + ".bak.tmp", "wb") as f:
+                        f.write(old[path])
+                    os.replace(path + ".bak.tmp", path)
+            except OSError:
+                lost.append(os.path.basename(path))
+        drop_tmp()
+        if lost:
+            raise PartialWrite(f"moving the new files failed ({e}) and {len(lost)} could not be put back "
+                               f"({', '.join(lost[:8])}); run: python archive.py --team-history") from e
+        raise
     for path in stale:
         os.remove(path)
     return len(changes), len(stale), total, errors

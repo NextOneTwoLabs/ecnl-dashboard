@@ -310,6 +310,7 @@ class RefreshTests(unittest.TestCase):
                 patch.object(archive, "build_match_days", return_value={"days": {}}), \
                 patch.object(archive, "export_flight_csv"), \
                 patch.object(archive, "update_team_index"), \
+                patch.object(archive, "update_team_history"), \
                 patch.object(archive, "club_ids", return_value=self.IDS), \
                 patch.object(api, "fetch_api_raw", side_effect=fake), \
                 contextlib.redirect_stdout(io.StringIO()):
@@ -387,6 +388,7 @@ class CliTests(unittest.TestCase):
                 patch.object(archive, "club_ids", side_effect=ids), \
                 patch.object(archive, "archive_event", return_value=None), \
                 patch.object(archive, "update_team_index"), \
+                patch.object(archive, "update_team_history"), \
                 patch.object(archive, "save_sources", side_effect=AssertionError("wrote sources.json")), \
                 patch.object(api, "fetch_api_raw", side_effect=fake), \
                 contextlib.redirect_stdout(io.StringIO()):

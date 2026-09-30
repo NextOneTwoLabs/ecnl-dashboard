@@ -252,6 +252,14 @@ one that played in the link's season.
   `fromTable` (only in a flight the catalog lists under `dataGaps`: TGS published the group
   table but not its games, so the record is the table's plus the published knockout games).
   Showcase rows add `location`, `startDate`, `endDate`.
+- **Known limitation: a flight TGS published badly.** An entry is only as good as the
+  bracket TGS's games allow. UFA born 2004 played the 2020-21 Champions League Finals, but
+  its only Finals game, the third-place game against Solar SC, is in flight 12357, listed
+  under `dataGaps`: TGS's two semifinal rows are both MVLA against LAFC Slammers, so all three
+  rows before the final are left out of the bracket (`omitFromBracket`). That entry therefore
+  reaches no round and reads "Played" (1 game, 0-0-1), and UFA's best Champions League finish
+  stays the 2020-21 Playoffs Quarterfinals. The Playoffs page shows the same flight the same way. No code works around
+  it; a corrected flight would be a `reconstructed` block, as for the 2024-25 Finals.
 - **Privacy.** Team-level public data only: team and club names, TGS ids, logos (already on
   every table), tables, scores and results. No player, roster, staff or contact field; the
   tests hold an allow-list of every key written. Club 7's place is never shown.
@@ -299,16 +307,28 @@ use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a min
   whole files).
 - **If the build fails** during a refresh, nothing of it is written: the whole set is built
   in memory first, changed files are written as `.tmp` files beside their targets and only
-  then moved into place, and a failure before that removes the `.tmp` files. The season data
-  is still committed (it matters most), the log says `Team history: FAILED: …` and the run
-  exits 1 (the workflow's last step fails). `refresh-state.json` keeps `historyAsOf`, the
-  `updatedAt` of the data the history files were last built from; while it differs from
-  `updatedAt`, the History tab says "History as of <date>". A build that would delete more
-  than 5 % of the files (or 20) refuses, as a missing season index would look like that.
-  The next refresh tries again.
+  then moved into place, and a failure before that removes the `.tmp` files. If moving them
+  into place fails part-way, every file already replaced is put back from its old bytes (kept
+  in memory) and a file that had no predecessor is removed, so the set is the old one again;
+  only if putting a file back also fails does the log say `Team history: FAILED: … Some
+  history files are NEW and some OLD`, naming them. The season data is still committed (it
+  matters most), the log says `Team history: FAILED: …` and the run exits 1 (the workflow's
+  last step fails). `refresh-state.json` keeps `historyAsOf`, the `updatedAt` of the data
+  the history files were last built from; while it differs from `updatedAt`, the History tab
+  says "History as of Sep 30, 2026, 7:55 PM UTC" (the date and time in UTC). A build that
+  would delete more than 20 files or 5 % of them, whichever is larger, refuses, as a missing
+  season index would look like that. The next refresh tries again.
 - **Drift check.** CI's `contract` job runs `python archive.py --team-history --check`,
   which writes nothing and fails when any committed history file differs from a fresh build
-  of the committed archive (and `tests/test_team_history.py` asserts the same). A data
+  of the committed archive, byte for byte with only line endings normalised (so a
+  reformatted file fails too; a CRLF checkout does not), and `tests/test_team_history.py`
+  asserts the same. The builder compares the same way, so a reformatted file is rewritten.
+- **Tests never write into the checkout.** Every test that runs a refresh or a crawl stubs
+  `update_team_history` or points the archive at a temporary directory, and
+  `tests/test_zz_checkout_untouched.py`, which runs last, fails if the suite changed any file
+  under `public/archive/history/`, `teams/`, `clubs.json` or `refresh-state.json`. Without
+  the history data (the code commit before its data commit), the route tests that need a
+  file skip and say so; the drift check still fails, by design. A data
   change committed without its rebuild, a builder change without regenerated files, or an
   override that no longer fits fails there.
 - **Past seasons** are frozen: the refresh fetches only `refresh.activeSeason`. A TGS

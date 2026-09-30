@@ -872,8 +872,12 @@ def update_team_history(sources, stats, dry_run=False):
         tb = [f for f in traceback.extract_tb(e.__traceback__) if os.path.dirname(os.path.abspath(f.filename)) == here]
         where = f" [{type(e).__name__} at {os.path.basename(tb[-1].filename)}:{tb[-1].lineno}]" if tb else f" [{type(e).__name__}]"
         stats.fail(f"team history: {e}{where} (fix, then run: python archive.py --team-history)")
-        print(f"Team history: FAILED: {e}{where}. The history files were left as they were "
-              f"(built from the data of {state.get('historyAsOf') or 'an earlier run'}).")
+        if isinstance(e, team_history.PartialWrite):
+            print(f"Team history: FAILED: {e}{where}. Some history files are NEW and some OLD until "
+                  f"it is rebuilt; the drift check (--team-history --check) lists them.")
+        else:
+            print(f"Team history: FAILED: {e}{where}. The history files were left as they were "
+                  f"(built from the data of {state.get('historyAsOf') or 'an earlier run'}).")
         return None
     for err in errors:
         stats.fail(f"team history: {err}")

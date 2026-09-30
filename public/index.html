@@ -4919,6 +4919,13 @@
       return years.length === 1 ? String(years[0]) : `${years[0]}/${String(years[years.length - 1]).slice(-2)}`;
     }
 
+    // "Sep 30, 2026, 7:55 PM UTC": the refresh's own instant, in UTC so every visitor reads the same.
+    function historyStamp(iso) {
+      const d = iso ? new Date(iso) : null;
+      if (!d || isNaN(d)) return '';
+      return d.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'UTC' }).replace(/\u202f/g, ' ') + ' UTC';
+    }
+
     function ordinal(n) {
       const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
       return n + (s[(v - 20) % 10] || s[v] || s[0]);
@@ -4960,8 +4967,20 @@
       </svg>`;
     }
 
+    // The History breadcrumb: season › [My Teams ›] the team's name › History. A cold link
+    // without &name= has only a placeholder ("Team 55477") until the file names the team.
+    function historyCrumb(rec, season, name) {
+      const real = name || (/^Team \d+$/.test(rec.name || '') ? '' : rec.name);
+      document.getElementById('breadcrumb').innerHTML =
+        `<span>${esc(season)}</span><span class="breadcrumb-sep">›</span>` +
+        (currentFavorite ? `<span>My Teams</span><span class="breadcrumb-sep">›</span>` : '') +
+        (real ? `<span>${esc(real)}</span><span class="breadcrumb-sep">›</span>` : '') + `<span class="breadcrumb-current">History</span>`;
+      if (!real) document.getElementById('contentTitle').textContent = 'Team history';
+    }
+
     async function loadTeamHistory(rec, season, token) {
       const container = document.getElementById('standingsContainer');
+      historyCrumb(rec, season);
       document.getElementById('contentSubtitle').textContent = 'Loading its history…';
       container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading the history…</div></div>`;
       let data;
@@ -4998,7 +5017,6 @@
       const rows = sq.seasons, last = rows[rows.length - 1];
       const here = mineIn(sq).find(r => r.season === season) || mineIn(sq).slice(-1)[0] || last;
       if (previewTeam === rec && /^Team \d+$/.test(rec.name || '')) rec.name = here.name;   // a link without &name=
-      const followed = !!currentFavorite;
       const open = (SOURCES && SOURCES.refresh && SOURCES.refresh.activeSeason) || Object.keys(SEASONS)[0];
       const ended = last.season !== open;
       const short = shortTeamName(last.name) || last.clubName;
@@ -5007,9 +5025,7 @@
       const logo = last.logo ? `<img class="team-title-logo" src="${esc(last.logo)}" alt="" onerror="this.style.display='none'">` : '';
       const span = rows.length === 1 ? seasonLabel(last.season) : `${seasonLabel(rows[0].season)} to ${seasonLabel(last.season)}`;
 
-      document.getElementById('breadcrumb').innerHTML =
-        `<span>${esc(season)}</span><span class="breadcrumb-sep">›</span>` + (followed ? `<span>My Teams</span><span class="breadcrumb-sep">›</span>` : '') +
-        `<span>${esc(here.name)}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">History</span>`;
+      historyCrumb(rec, season, here.name);
       document.getElementById('contentTitle').innerHTML = logo + esc(`${short} · born ${years}`);
       document.getElementById('contentSubtitle').textContent = [place,
         `${rows.length} season${rows.length === 1 ? '' : 's'} in ECNL (${span})`,
@@ -5032,7 +5048,7 @@
       // Built from older data than the page shows (a failed rebuild; docs/data-api.md).
       const st = refreshState || {};
       if (st.historyAsOf && st.updatedAt && st.historyAsOf !== st.updatedAt) {
-        add('hist-stale', `History as of ${esc(formatObservedDate(st.historyAsOf))}: results since then aren't in it yet.`);
+        add('hist-stale', `History as of ${esc(historyStamp(st.historyAsOf))}: results since then aren't in it yet.`);
       }
 
       // Totals: ours, summed from TGS's standings rows; first places count finished seasons (M2).
@@ -5062,7 +5078,15 @@
       const refLink = p => `<a href="${pageHref(p, true)}">${esc(p.name)}</a> (${esc(seasonLabel(p.season))}, ${esc(p.conference)}, ${esc(getAgeLabel(p.division, p.season))})`;
       if (data.squads.length > 1) {
         const others = data.squads.filter(q => q !== sq);
-        add('hist-maybe', `<strong>One TGS id, ${data.squads.length} squads</strong>TGS used team id ${esc(id)} for an age slot rather than for one group of players, so it belongs to more than one squad. This page follows the squad born ${esc(years)} that played in ${esc(seasonLabel(here.season))}. Also: ` +
+        // Why the id starts another squad: an earlier reuse for an age slot (its age group didn't
+        // move up), or the 2026-27 regroup, where TGS kept it in the same age group and we can't
+        // tell whether it followed the players or the slot.
+        const splits = data.squads.map(q => mineIn(q)[0]).filter(Boolean).sort((a, b) => a.season.localeCompare(b.season)).slice(1);
+        const reuse = splits.some(r => !r.regroup), carry = splits.some(r => r.regroup);
+        add('hist-maybe', `<strong>One TGS id, ${data.squads.length} squads</strong>Team id ${esc(id)} belongs to more than one squad here.` +
+          (reuse ? ' In an earlier season TGS reused it for an age slot rather than for one group of players: its age group did not move up.' : '') +
+          (carry ? " In 2026–27 TGS kept it in the same age group, so we can't tell whether it followed these players or the age slot; that season is shown as a squad of its own." : '') +
+          ` This page follows the squad born ${esc(years)} that played in ${esc(seasonLabel(here.season))}. Also: ` +
           others.map(q => { const r0 = mineIn(q)[0] || q.seasons[0]; return `<a href="${pageHref(r0, true)}">born ${esc(historyYears(q.birthYears))} (${esc(seasonLabel(r0.season))})</a>`; }).join(', ') + '.');
       }
       if (sq.maybePrev && sq.maybePrev.length) {
@@ -5075,7 +5099,8 @@
 
       // Season by season: a table on a wide panel, one card per season on a narrow one.
       const posHtml = r => `<span class="hist-pos${r.rank === 1 && !r.inProgress ? ' first' : ''}">${r.rank}${r.merged ? '†' : ''}<span class="stat-of"> / ${r.of}</span></span>`;
-      const formHtml = r => r.form ? `<span class="hist-form" aria-label="Last ${r.form.length} results, oldest first: ${esc([...r.form].join(' '))}">${[...r.form].map(x => `<span class="form-chip inline ${x.toLowerCase()}" aria-hidden="true">${x}</span>`).join('')}</span>` : '';
+      const RESULT = { W: 'win', D: 'draw', L: 'loss' };
+      const formHtml = r => r.form ? `<span class="hist-form"><span class="sr-only">Last ${r.form.length} results, oldest first: ${esc([...r.form].map(x => RESULT[x] || x).join(', '))}.</span>${[...r.form].map(x => `<span class="form-chip inline ${x.toLowerCase()}" aria-hidden="true">${x}</span>`).join('')}</span>` : '';
       // S7: each label is explained in a visible legend under the table, not only in a tooltip.
       const BADGES = {
         live: ['live', 'In progress', r => `${r.played} of ${r.games} games played`, 'the season is still being played'],
@@ -5111,7 +5136,7 @@
             <th scope="col" class="num">W-D-L</th><th scope="col" class="num">Goals</th><th scope="col" class="num" title="Goal difference">GD</th><th scope="col" class="num">Pts</th><th scope="col">Form</th></tr></thead>
           <tbody>${tableRows}</tbody></table></div>
         <div class="hist-cards">${cards}</div>
-        ${legend ? `<div class="hist-legend" aria-label="What the labels mean">${legend}</div>` : ''}
+        ${legend ? `<div class="hist-legend"><span class="sr-only">What the labels mean:</span>${legend}</div>` : ''}
         <div class="hist-note">Pos is the team's place in its conference table in TGS's published order${rows.some(r => r.merged) ? `, except where marked †: one of the 11 tables (2020-21 to 2022-23) TGS published in two blocks, which we merge by points per game` : ''}.
           GP, W-D-L, goals and points are TGS's standings; form is ours, from TGS's scores (oldest first).${live ? ` "In progress" is as of ${esc(st.updatedAt ? formatObservedDate(st.updatedAt) : 'the last refresh')}.` : ''}</div>`);
 
