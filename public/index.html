@@ -458,6 +458,38 @@
       font-weight: 600;
     }
 
+    /* My Teams (#97): a disclosure button in the sidebar footer, outside the tablist. Sticky,
+       so it stays in view at the foot of a sidebar (or phone drawer) whose content scrolls. */
+    .myteams-toggle {
+      display: flex; align-items: center; gap: 8px; width: 100%;
+      padding: 10px 16px; border: 0; border-top: 1px solid var(--border);
+      background: var(--bg-surface-alt); color: var(--text-primary);
+      font: 600 13px var(--font); text-align: left; cursor: pointer;
+      position: sticky; bottom: 0; z-index: 2; box-shadow: 0 -1px 0 var(--border);
+    }
+    .myteams-toggle:hover { color: var(--accent-text); }
+    .myteams-toggle[aria-expanded="true"] { background: var(--accent-surface); color: var(--accent-text); box-shadow: inset 3px 0 0 var(--accent); }
+    .myteams-toggle .myteams-star { color: var(--star-color); font-size: 15px; line-height: 1; }
+    .myteams-toggle .myteams-count {
+      margin-left: auto; min-width: 22px; padding: 1px 8px; border-radius: 999px; text-align: center;
+      font-size: 11px; font-weight: 600; color: var(--text-secondary);
+      background: var(--bg-surface); border: 1px solid var(--border);
+    }
+    .myteams-toggle .myteams-count:empty { display: none; }
+    .myteams-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px 4px 8px; }
+    .myteams-back {
+      border: 0; background: none; color: var(--accent-text); font: 600 12px var(--font);
+      padding: 6px 8px; border-radius: var(--radius-sm); cursor: pointer;
+    }
+    .myteams-back:hover { background: var(--accent-surface); }
+    .myteams-title { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); }
+    /* Showcases (#97): the results table's team links and notes */
+    .sc-team-link { color: inherit; text-decoration: none; }
+    .sc-team-link .team-name { border-bottom: 1px dotted var(--text-secondary); }
+    .sc-team-link:hover .team-name { color: var(--accent-text); border-bottom-color: var(--accent); }
+    .sc-muted { font-size: 10.5px; color: var(--text-secondary); margin-left: 6px; white-space: nowrap; }
+    .sc-foot { padding: 10px 14px; font-size: 12px; color: var(--text-secondary); line-height: 1.45; }
+
     /* Favorites tab */
     .sidebar-tabs {
       display: flex;
@@ -1269,7 +1301,7 @@
     @media (max-width: 768px), (pointer: coarse) {
       .age-tab, .conference-item, .view-tab, .sidebar-tab, .seg-btn, .stage-tab, .playoff-age-tab,
       .more-stats-btn, .open-external, .btn-primary, .theme-toggle, .hamburger, .wordmark, .section-label,
-      .season-select {
+      .season-select, .myteams-toggle, .myteams-back {
         min-height: 44px;
       }
       .star-btn { min-width: 40px; min-height: 40px; }
@@ -2069,9 +2101,9 @@
   <div class="layout">
     <div class="sidebar" id="sidebar">
       <div class="sidebar-tabs" role="tablist" aria-label="Sections">
-        <button class="sidebar-tab active" id="tabConferences" role="tab" aria-selected="true" aria-controls="conferencesPanel" onclick="switchTab('conferences')">Conferences</button>
-        <button class="sidebar-tab" id="tabFavorites" role="tab" aria-selected="false" aria-controls="favoritesPanel" onclick="switchTab('favorites')">★ My Teams</button>
-        <button class="sidebar-tab" id="tabPlayoffs" role="tab" aria-selected="false" aria-controls="playoffsPanel" onclick="switchTab('playoffs')">🏆 Playoffs</button>
+        <button class="sidebar-tab active" id="tabConferences" role="tab" aria-selected="true" tabindex="0" aria-controls="conferencesPanel" onclick="switchTab('conferences')">Conferences</button>
+        <button class="sidebar-tab" id="tabPlayoffs" role="tab" aria-selected="false" tabindex="-1" aria-controls="playoffsPanel" onclick="switchTab('playoffs')">🏆 Playoffs</button>
+        <button class="sidebar-tab" id="tabShowcases" role="tab" aria-selected="false" tabindex="-1" aria-controls="showcasesPanel" onclick="switchTab('showcases')">Showcases</button>
       </div>
 
       <!-- Shared by Conferences and Playoffs; My Teams hides it because a
@@ -2102,7 +2134,12 @@
         <ul class="conference-list" id="conferenceList"></ul>
       </div>
 
-      <div id="favoritesPanel" role="tabpanel" aria-labelledby="tabFavorites" style="display:none;flex:1;overflow-y:auto;">
+      <!-- My Teams (#97 addendum): opened from the footer button, it takes over the sidebar body. -->
+      <div id="favoritesPanel" role="region" aria-labelledby="myTeamsTitle" style="display:none;flex:1;overflow-y:auto;flex-direction:column;">
+        <div class="myteams-head">
+          <button type="button" class="myteams-back" id="myTeamsBack" onclick="closeMyTeams()">‹ Back to <span id="myTeamsBackLabel">Conferences</span></button>
+          <span class="myteams-title" id="myTeamsTitle">★ My Teams</span>
+        </div>
         <div class="favorites-empty" id="favoritesEmpty">
           <span class="star-icon">☆</span>
           No teams followed yet
@@ -2131,11 +2168,33 @@
         <div class="team-filter-count" id="playoffTeamFilterCount"></div>
       </div>
 
+      <!-- Showcases (#97): the season's `showcases` registry map. -->
+      <div id="showcasesPanel" role="tabpanel" aria-labelledby="tabShowcases" style="display:none;flex:1;overflow-y:auto;flex-direction:column;">
+        <div class="sidebar-section-title">Showcase</div>
+        <ul class="conference-list" id="showcaseList" style="flex:none"></ul>
+        <div class="sidebar-section-title" style="margin-top:4px;">Age Group</div>
+        <div id="showcaseAgeGroupTabs" class="playoff-age-group-tabs"></div>
+        <div id="showcaseFlightSection" style="display:none">
+          <div class="sidebar-section-title" style="margin-top:4px;">Flight</div>
+          <ul class="conference-list" id="showcaseFlightList"></ul>
+        </div>
+        <div class="sidebar-section-title" style="margin-top:4px;">Find a Team</div>
+        <div class="sidebar-search">
+          <input type="text" class="search-input" id="showcaseTeamSearch" placeholder="Highlight a team…"
+            oninput="filterTeams(this.value)">
+        </div>
+        <div class="team-filter-count" id="showcaseTeamFilterCount"></div>
+      </div>
+
       <div class="shortcut-hint">
         <span><kbd>/</kbd> Find a team</span>
         <span class="hint-conf"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> Age groups</span>
         <span class="hint-conf"><kbd>&uarr;</kbd> <kbd>&darr;</kbd> Conferences</span>
       </div>
+
+      <button type="button" class="myteams-toggle" id="myTeamsToggle" aria-controls="favoritesPanel" aria-expanded="false" onclick="toggleMyTeams()">
+        <span class="myteams-star" aria-hidden="true">★</span><span>My Teams</span><span class="myteams-count" id="myTeamsCount"></span>
+      </button>
 
       <!-- Hidden until the script reveals it: the form has no plain-POST fallback, and the
            dashboard needs JavaScript to show anything anyway. -->
@@ -2210,6 +2269,10 @@
         if (data.national && Object.keys(data.national).length) {
           NATIONAL_EVENTS[season] = data.national;
         }
+      }
+      SHOWCASES = {};
+      for (const [season, data] of Object.entries(SEASONS)) {
+        if (data.showcases && Object.keys(data.showcases).length) SHOWCASES[season] = data.showcases;
       }
 
       // Season dropdown is built from the registry, so new seasons appear automatically
@@ -2337,6 +2400,12 @@
     let currentPlayoffAgeGroup = null;
     let currentPlayoffTier = null;       // flightID of the selected competition (Champions League, …)
     let playoffAgeGroupsCache = {};  // { "2024-25-Playoffs": [...], ... }
+    let SHOWCASES = {};                 // #97: { season -> { name -> {eventId, location, startDate, …} } }
+    let currentShowcase = null;         // eventId of the selected showcase
+    let currentShowcaseAge = null;      // its divisionName
+    let currentShowcaseFlight = null;   // flightID
+    let showcaseLinkable = null;        // teamIDs with a team page; null when the season's index was not read
+    let showcaseAliases = {};           // showcase teamID -> the same team's conference teamID (registry teamAliases, M3)
 
     // ========== DATA FETCH ==========
     // The versioned API owns storage paths. Explicit ?live=1 uses the legacy
@@ -2554,6 +2623,7 @@
     // (noteSession's sessionBackAt); a 503, a network error or bad JSON is forgotten at once,
     // so the next search or lookup asks again (one request, never a scan).
     const teamIndexMemo = {};
+    const teamIndexShowcases = {};   // #97: season -> [{eventID, divisionID, flightID, teamIDs, aliases?}], kept by getTeamIndex
     function getTeamIndex(season) {
       if (LIVE) return Promise.resolve(null);
       const memo = teamIndexMemo[season];
@@ -2561,7 +2631,11 @@
       if (memo && !stale) return memo.p;
       const entry = { until: 0 };
       entry.p = fetchJSON(`seasons/${encodeURIComponent(season)}/teams`)
-        .then(d => (d && d.schema === 1 && d.season === season && Array.isArray(d.teams)) ? d.teams : null)
+        .then(d => {
+          const ok = d && d.schema === 1 && d.season === season && Array.isArray(d.teams);
+          if (ok) teamIndexShowcases[season] = Array.isArray(d.showcases) ? d.showcases : [];
+          return ok ? d.teams : null;
+        })
         .catch(e => {
           if (isMissing(e)) return null;
           if (teamIndexMemo[season] === entry) {
@@ -2611,7 +2685,7 @@
     async function getSchedule(eventId, flightId, opts) {
       const data = await fetchJSON(`events/${eventId}/flights/${flightId}/schedule`, opts);
       const games = data.data || [];
-      return (eventContext(eventId) || {}).kind === 'national' ? games : undateBorrowedDates(games);
+      return ['national', 'showcase'].includes((eventContext(eventId) || {}).kind) ? games : undateBorrowedDates(games);
     }
 
     // TGS's data can list both legs of a home-and-away pairing on one date, one leg
@@ -2650,7 +2724,7 @@
           conference: currentConference, view: currentView,
           tab: currentTab, stage: currentPlayoffStage,
           playoffAgeGroup: currentPlayoffAgeGroup, tier: currentPlayoffTier,
-          favorite: currentFavorite,
+          favorite: currentFavorite, showcase: currentShowcase, showcaseAge: currentShowcaseAge,
           team: selectedTeamID, sched: scheduleFilter, moreStats: showMoreStats
         }));
       } catch (e) { }
@@ -2665,6 +2739,9 @@
           if (SEASONS[currentSeason].conferences[s.conference]) currentConference = s.conference;
           if (s.view === 'schedule' || s.view === 'standings') currentView = s.view;
           if (s.tab === 'playoffs') currentTab = 'playoffs';
+          if (s.tab === 'showcases') currentTab = 'showcases';
+          if (s.showcase) currentShowcase = Number(s.showcase) || null;
+          if (s.showcaseAge) currentShowcaseAge = s.showcaseAge;
           if (s.tab === 'favorites' && favorites.size) currentTab = 'favorites';
           if (s.favorite && favorites.has(s.favorite)) currentFavorite = s.favorite;
           if (s.stage) currentPlayoffStage = s.stage;              // validated in buildStageTabs
@@ -2689,6 +2766,7 @@
         const list = [...favorites].map(n => favoriteMeta.get(n) || { name: n });
         localStorage.setItem(FAVORITES_KEY, JSON.stringify(list));
       } catch (e) { }
+      updateMyTeamsCount();
     }
 
     function loadFavorites() {
@@ -2711,7 +2789,12 @@
       const e = encodeURIComponent;
       const view = currentView !== 'standings' ? `&view=${e(currentView)}` : '';
       const fav = currentFavorite ? favoriteMeta.get(currentFavorite) : previewTeam;
-      const h = currentTab === 'playoffs'
+      const h = currentTab === 'showcases'
+        ? `#tab=showcases&season=${e(currentSeason)}` +
+          (currentShowcase ? `&event=${e(currentShowcase)}` : '') +
+          (currentShowcaseAge ? `&age=${e(currentShowcaseAge)}` : '') +
+          (currentShowcaseFlight ? `&flight=${e(currentShowcaseFlight)}` : '') + view
+        : currentTab === 'playoffs'
         // stage/age/tier are unset when the season has no national events yet
         ? `#tab=playoffs&season=${e(currentSeason)}` +
           (currentPlayoffStage ? `&stage=${e(currentPlayoffStage)}` : '') +
@@ -2733,7 +2816,7 @@
       let changed = false;
       if (p.get('season') && SEASONS[p.get('season')]) { currentSeason = p.get('season'); changed = true; }
       if (p.get('view') === 'schedule' || p.get('view') === 'standings') { currentView = p.get('view'); changed = true; }
-      if (p.get('tab') === 'teams') {
+      if (p.get('tab') === 'teams' || p.get('tab') === 'myteams') {   // myteams: an alias (#97 addendum)
         currentTab = 'favorites';
         const teamID = Number(p.get('team')) || null;
         const name = p.get('name') || null;
@@ -2745,6 +2828,14 @@
           previewTeam = { name: name || `Team ${teamID}`, teamID: teamID || undefined };
         }
         currentFavorite = rec ? rec.name : null;
+        return true;
+      }
+      if (p.get('tab') === 'showcases') {
+        currentTab = 'showcases';
+        if (!p.has('view')) currentView = 'standings';
+        currentShowcase = Number(p.get('event')) || null;            // validated in loadShowcasesPanel
+        currentShowcaseAge = p.get('age') || null;                   // validated in loadShowcaseFlight
+        currentShowcaseFlight = Number(p.get('flight')) || null;
         return true;
       }
       if (p.get('tab') === 'playoffs') {
@@ -2776,7 +2867,7 @@
     window.addEventListener('hashchange', () => {
       if (!loadFromHash()) return;
       syncSeasonUI();
-      if (currentTab === 'playoffs' || currentTab === 'favorites') switchTab(currentTab);
+      if (currentTab === 'playoffs' || currentTab === 'favorites' || currentTab === 'showcases') switchTab(currentTab);
       else { switchTab('conferences'); rebuildAll(); }
     });
 
@@ -3075,24 +3166,72 @@
       if (isPhone() && document.getElementById('sidebar').classList.contains('open')) toggleSidebar();
     }
 
+    const TOP_TABS = [['tabConferences', 'conferences'], ['tabPlayoffs', 'playoffs'], ['tabShowcases', 'showcases']];
+    const TOP_TAB_LABELS = { conferences: 'Conferences', playoffs: 'Playoffs', showcases: 'Showcases' };
+    let lastTopTab = 'conferences';   // where My Teams' Back goes
+
+    // The footer's My Teams button opens and closes the My Teams panel.
+    function toggleMyTeams() {
+      if (currentTab === 'favorites') { closeMyTeams(); return; }
+      switchTab('favorites');
+      const b = document.getElementById('myTeamsBack');
+      if (b) b.focus({ preventScroll: true });
+    }
+    function closeMyTeams() {
+      previewTeam = null;
+      switchTab(lastTopTab);
+      document.getElementById('myTeamsToggle').focus({ preventScroll: true });
+    }
+    function updateMyTeamsCount() {
+      const n = favorites.size;
+      const c = document.getElementById('myTeamsCount');
+      if (c) c.textContent = n ? String(n) : '';
+      const t = document.getElementById('myTeamsToggle');
+      if (t) t.setAttribute('aria-label', n ? `My Teams, ${n} followed` : 'My Teams, none followed yet');
+    }
+    // Arrow keys, Home and End move between the three tabs (WAI-ARIA tabs, automatic activation).
+    document.querySelector('.sidebar-tabs').addEventListener('keydown', e => {
+      const i = TOP_TABS.findIndex(([id]) => id === e.target.id);
+      if (i < 0) return;
+      const n = TOP_TABS.length;
+      const j = e.key === 'ArrowRight' ? (i + 1) % n : e.key === 'ArrowLeft' ? (i + n - 1) % n
+        : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : -1;
+      if (j < 0) return;
+      e.preventDefault();
+      document.getElementById(TOP_TABS[j][0]).focus();
+      switchTab(TOP_TABS[j][1]);
+    });
+
     function switchTab(tab, { silent = false } = {}) {
       currentTab = tab;
       const isConf = tab === 'conferences';
       const isFav  = tab === 'favorites';
       const isPO   = tab === 'playoffs';
+      const isSC   = tab === 'showcases';
       document.getElementById('sidebarSeason').style.display    = isFav  ? 'none' : '';
+      document.getElementById('showcasesPanel').style.display   = isSC   ? 'flex' : 'none';
       document.getElementById('conferencesPanel').style.display = isConf ? '' : 'none';
       document.getElementById('favoritesPanel').style.display   = isFav  ? 'flex' : 'none';
       document.getElementById('playoffsPanel').style.display    = isPO   ? 'flex' : 'none';
-      [['tabConferences', isConf], ['tabFavorites', isFav], ['tabPlayoffs', isPO]].forEach(([id, on]) => {
+      if (!isFav) lastTopTab = tab;
+      // A tablist of three; My Teams sits outside it. With My Teams open no tab is
+      // selected, and the last one keeps tabindex 0 so the tablist stays reachable.
+      TOP_TABS.forEach(([id, name]) => {
         const b = document.getElementById(id);
+        const on = name === tab;
         b.classList.toggle('active', on);
         b.setAttribute('aria-selected', String(on));
+        b.tabIndex = name === lastTopTab ? 0 : -1;
       });
+      const mt = document.getElementById('myTeamsToggle');
+      if (mt) mt.setAttribute('aria-expanded', String(isFav));
+      const back = document.getElementById('myTeamsBackLabel');
+      if (back) back.textContent = TOP_TAB_LABELS[lastTopTab];
       // The arrow shortcuts only work on Conferences, so only advertise them there.
       document.querySelectorAll('.shortcut-hint .hint-conf').forEach(el => { el.hidden = !isConf; });
       if (isFav) openFavoritesTab();
       if (isPO)  loadPlayoffsPanel();
+      if (isSC)  loadShowcasesPanel();
       // Returning to Conferences must repaint the main pane, which the
       // Playoffs panel writes into as well.
       if (isConf && currentAgeGroup && !silent) loadCurrentView();
@@ -3153,14 +3292,14 @@
           text = `${visible} of ${total} ${noun}${total !== 1 ? 's' : ''} shown`;
         }
       }
-      ['teamFilterCount', 'playoffTeamFilterCount'].forEach(id => {
+      ['teamFilterCount', 'playoffTeamFilterCount', 'showcaseTeamFilterCount'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.textContent = text;
       });
     }
 
     function clearTeamFilter() {
-      ['teamSearch', 'playoffTeamSearch'].forEach(id => {
+      ['teamSearch', 'playoffTeamSearch', 'showcaseTeamSearch'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
       });
@@ -3763,6 +3902,268 @@
       pushHash();
     }
 
+    // ========== SHOWCASES (#97) ==========
+    // A showcase is a weekend event outside the conference season: teams from different
+    // conferences (and some guest teams) play a few games each, and no title is at stake. The
+    // registry lists them per season under `showcases`; the data comes from the same v1 routes
+    // as every other event. Showcases have no brackets: knockoutGames never sees them.
+    function getShowcasesForSeason() { return SHOWCASES[currentSeason] || null; }
+    function currentShowcaseEntry() {
+      const list = getShowcasesForSeason() || {};
+      const hit = Object.entries(list).find(([, e]) => e.eventId === currentShowcase);
+      return hit ? { name: hit[0], evt: hit[1] } : null;
+    }
+
+    function buildShowcaseList() {
+      const list = getShowcasesForSeason() || {};
+      document.getElementById('showcaseList').innerHTML = Object.entries(list).map(([name, e]) =>
+        `<li class="conference-item fav-item ${e.eventId === currentShowcase ? 'active' : ''}" data-event="${e.eventId}" tabindex="0" onclick="selectShowcase(Number(this.dataset.event))">
+          <span><span class="fav-name">${esc(name)}</span><span class="fav-meta">${esc([formatDateRange(e.startDate, e.endDate), e.location].filter(Boolean).join(' · '))}</span></span>
+        </li>`).join('');
+    }
+
+    async function loadShowcasesPanel() {
+      const list = getShowcasesForSeason();
+      document.getElementById('formatNote').style.display = 'none';
+      if (!list) {
+        const label = seasonLabel(currentSeason);
+        const latest = Object.keys(SHOWCASES).sort().reverse()[0] || null;
+        document.getElementById('breadcrumb').innerHTML =
+          `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Showcases</span>`;
+        document.getElementById('contentTitle').textContent = 'Showcases';
+        document.getElementById('contentSubtitle').textContent = `${label} · none archived yet`;
+        document.getElementById('extLinks').innerHTML = '';
+        document.getElementById('viewTabs').style.display = 'none';
+        ['showcaseList', 'showcaseAgeGroupTabs', 'showcaseFlightList'].forEach(id => { document.getElementById(id).innerHTML = ''; });
+        document.getElementById('showcaseFlightSection').style.display = 'none';
+        document.getElementById('standingsContainer').innerHTML = `
+          <div class="no-national-events">
+            <div class="no-national-events-icon">📅</div>
+            <div class="no-national-events-text">No ${esc(label)} showcases here yet</div>
+            <div class="no-national-events-sub">Showcases are weekend events where teams from different conferences play each other, and no title is at stake. Each one is added after its data has been checked.</div>
+            ${latest ? `<button type="button" class="btn-primary" data-season="${esc(latest)}" onclick="changeSeason(this.dataset.season).then(focusContentTitle)">See the ${esc(seasonLabel(latest))} showcases</button>` : ''}
+          </div>`;
+        currentShowcase = currentShowcaseAge = currentShowcaseFlight = null;
+        saveState(); pushHash();
+        return;
+      }
+      const events = Object.values(list);
+      if (!events.some(e => e.eventId === currentShowcase)) currentShowcase = events[0].eventId;
+      buildShowcaseList();
+      await loadShowcaseFlight();
+    }
+
+    function selectShowcase(eventId) {
+      currentShowcase = eventId; currentShowcaseAge = null; currentShowcaseFlight = null;
+      buildShowcaseList(); loadShowcaseFlight(); closeSidebarIfMobile();
+    }
+    function selectShowcaseAge(ag) { currentShowcaseAge = ag; currentShowcaseFlight = null; loadShowcaseFlight(); }
+    function selectShowcaseFlight(id) { currentShowcaseFlight = id; loadShowcaseFlight(); closeSidebarIfMobile(); }
+
+    // Which showcase rows have a team page (M2c). The season's index resolves to its rows, or to
+    // null (no index: a 404, an unknown schema, ?live=1), or rejects (#92: refused, a 5xx or a
+    // network error). Only rows read from the index are labelled either way; without them every
+    // row is a plain name, and a rejection is reported with "try again".
+    async function showcaseIndex(season) {
+      try {
+        const index = await getTeamIndex(season);
+        return { linkable: index ? new Set(index.map(t => t.teamID)) : null, error: null };
+      } catch (error) {
+        return { linkable: null, error };
+      }
+    }
+    // The team page a showcase row links to: the row's id, or its reviewed alias (the registry's
+    // teamAliases, M3), when that id is in the season's conference standings; false for a row
+    // with no team page; null when the index was not read, so nothing is claimed.
+    function showcaseTeamPage(teamID, linkable, aliases) {
+      if (!linkable) return null;
+      const id = (aliases && aliases[teamID]) || teamID;
+      return linkable.has(id) ? id : false;
+    }
+
+    // S6: a response half is kept for the session once it has succeeded, and a failed half is
+    // asked again only by a new load (Try again, another age group), never by a re-render.
+    // Resolves { value, error }: a 404 is "nothing published" (no error), anything else is
+    // "couldn't load" (#92).
+    const showcaseMemo = new Map();
+    function showcaseHalf(key, get) {
+      if (showcaseMemo.has(key)) return Promise.resolve({ value: showcaseMemo.get(key), error: null });
+      return get().then(value => { showcaseMemo.set(key, value); return { value, error: null }; },
+        error => ({ value: null, error: isMissing(error) ? null : error }));
+    }
+
+    // The flight on screen and its answers: Results <-> Games re-renders from them with no
+    // request, and a "couldn't load" notice is announced after a load, never on a re-render.
+    let showcaseLoad = null;
+    async function loadShowcaseFlight({ rerender = false } = {}) {
+      const entry = currentShowcaseEntry();
+      if (!entry) return;
+      const { name, evt } = entry;
+      const container = document.getElementById('standingsContainer');
+      const noteEl = document.getElementById('formatNote');
+      noteEl.style.display = 'none';
+      clearTeamFilter();
+      if (!rerender) container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading ${esc(name)}…</div></div>`;
+      try {
+        const hierarchy = await getEventHierarchy(evt.eventId);
+        const divs = hierarchy.girlsDivAndFlightList || [];
+        const ages = sortAgeGroups(divs.map(d => d.divisionName), currentSeason);
+        if (!ages.includes(currentShowcaseAge)) currentShowcaseAge = ages[0] || null;
+        document.getElementById('showcaseAgeGroupTabs').innerHTML = ages.map(ag =>
+          `<button class="playoff-age-tab ${ag === currentShowcaseAge ? 'active' : ''}" data-age="${esc(ag)}" onclick="selectShowcaseAge(this.dataset.age)">${esc(getAgeLabel(ag))}</button>`).join('');
+        const division = divs.find(d => d.divisionName === currentShowcaseAge);
+        const flights = (division && division.flightList) || [];
+        if (!flights.some(f => f.flightID === currentShowcaseFlight)) currentShowcaseFlight = flights.length ? flights[0].flightID : null;
+        document.getElementById('showcaseFlightSection').style.display = flights.length > 1 ? '' : 'none';
+        document.getElementById('showcaseFlightList').innerHTML = flights.map(f =>
+          `<li class="conference-item ${f.flightID === currentShowcaseFlight ? 'active' : ''}" data-flight="${f.flightID}" tabindex="0" onclick="selectShowcaseFlight(Number(this.dataset.flight))"><span>${esc(tierLabel(evt, f.flightName))}</span></li>`).join('');
+        const flight = flights.find(f => f.flightID === currentShowcaseFlight);
+        const ageLabel = currentShowcaseAge ? getAgeLabel(currentShowcaseAge) : '';
+        document.getElementById('breadcrumb').innerHTML =
+          `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span><span>Showcases</span><span class="breadcrumb-sep">›</span>` +
+          `<span>${esc(name)}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">${esc(ageLabel)}</span>`;
+        document.getElementById('contentTitle').textContent = `${name} — ${ageLabel}${currentShowcaseAge && ageLabel !== currentShowcaseAge ? ` (${currentShowcaseAge})` : ''}`;
+        document.getElementById('contentSubtitle').textContent =
+          [`${currentSeason} · Showcase`, evt.location, formatDateRange(evt.startDate, evt.endDate)].filter(Boolean).join(' · ');
+        if (!flight) {
+          container.innerHTML = `<div class="error-message">No games found for ${esc(ageLabel)} at ${esc(name)}</div>`;
+          return;
+        }
+        const key = `${evt.eventId}/${flight.flightID}`;
+        const fresh = !(rerender && showcaseLoad && showcaseLoad.key === key);
+        if (fresh) {
+          const [s, g, idx] = await Promise.all([
+            showcaseHalf(`s/${key}`, () => getStandingsBlocks(division.divisionID, flight.flightID, evt.eventId)),
+            showcaseHalf(`g/${key}`, () => getSchedule(evt.eventId, flight.flightID)),
+            showcaseIndex(currentSeason),
+          ]);
+          showcaseLoad = { key, rawBlocks: s.value || [], games: g.value || [], standingsError: s.error,
+            gamesError: g.error, linkable: idx.linkable, indexError: idx.error };
+        }
+        const { rawBlocks, games, standingsError, gamesError, indexError } = showcaseLoad;
+        showcaseLinkable = showcaseLoad.linkable;
+        showcaseAliases = Object.fromEntries(Object.entries(evt.teamAliases || {}).map(([k, v]) => [Number(k), Number(v)]));
+        const table = mergeStandingsBlocks(rawBlocks);
+        // A flight with games but no table opens on Games; Results then says why it is empty.
+        if (fresh && !table && !standingsError && games.length && currentView === 'standings') currentView = 'schedule';
+        updateViewTabsUI('Results', 'Games');
+        const note = (evt.tierNotes || {})[flight.flightName];
+        if (note) {
+          document.getElementById('formatNoteText').textContent = note;
+          noteEl.style.display = '';
+          noteEl.open = false;
+        }
+        document.getElementById('extLinks').innerHTML =
+          `<a class="open-external" href="${getSchedulesUrl(evt.eventId, flight.flightID)}" target="_blank" rel="noopener">${EXTERNAL_ICON} Schedule on TGS</a>` +
+          `<a class="open-external" href="${publicUrl('eventHome', evt.eventId, flight.flightID)}" target="_blank" rel="noopener">${EXTERNAL_ICON} Event on TGS</a>`;
+
+        container.innerHTML = '';
+        const loadError = standingsError || gamesError || (currentView === 'standings' && indexError);
+        if (loadError) {
+          const w = loadWarning(loadError, () => loadShowcaseFlight(), fresh);
+          w.style.flexBasis = '100%';   // a full-width row above the table in the wrapping container
+          container.appendChild(w);
+        }
+        if (currentView === 'schedule') {
+          if (gamesError) container.appendChild(failedFlightPanel(name, 'these games'));
+          else {
+            if (!table && !standingsError) {
+              const n = document.createElement('div');
+              n.className = 'reconstructed-note';
+              n.style.flexBasis = '100%';
+              n.textContent = 'TGS publishes no results table for this showcase, only its games.';
+              container.appendChild(n);
+            }
+            container.appendChild(renderScheduleTable(games, flight.flightName, flight.flightID, evt.eventId, null,
+              `${ageLabel} · all games`, 'No games published for this age group yet.'));
+          }
+        } else if (standingsError) {
+          container.appendChild(failedFlightPanel(name, 'this table'));
+        } else if (!table) {
+          container.insertAdjacentHTML('beforeend', games.length
+            ? `<div class="no-national-events"><div class="no-national-events-icon">📋</div>
+                <div class="no-national-events-text">No table for this showcase</div>
+                <div class="no-national-events-sub">TGS publishes no table for ${esc(name)} — ${esc(ageLabel)}; its games are under Games.</div></div>`
+            : `<div class="no-national-events"><div class="no-national-events-icon">📋</div>
+                <div class="no-national-events-text">No results yet</div>
+                <div class="no-national-events-sub">Nothing has been published for ${esc(name)} — ${esc(ageLabel)}.</div></div>`);
+        } else {
+          const panel = renderStandingsTable(table, flight.flightName, flight.flightID, evt.eventId,
+            { cols: SHOWCASE_COLS, footnote: false, title: `Results · ${ageLabel}` });
+          // M1: no position and no tie-break claim: TGS's own rank is not a ranking (it gives
+          // 1 to most rows and 2 to some), so the rows keep TGS's order and say so.
+          panel.insertAdjacentHTML('beforeend', `<div class="sc-foot">Results only, not a ranking. Showcase games don't count toward conference standings. Listed in the order TGS publishes it.${showcaseLinkable ? ' Underlined teams play in an ECNL conference this season and link to their team page.' : ''}</div>`);
+          container.appendChild(panel);
+        }
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="error-message"><strong>Couldn't load ${esc(name)}.</strong><br><small>${esc(retryText(err))}</small></div>`;
+      }
+      saveState();
+      pushHash();
+    }
+
+    // The showcase flights a team played in this season, with the ids it has there (its own
+    // and any reviewed alias, M3), in date order. From the team index's showcase rows, so a
+    // team page asks only for the schedules its team is in. Only a resolved "no index" (404,
+    // unknown schema, ?live=1) falls back to scanning the team's age group in each showcase;
+    // a refused index rejects, and nothing is scanned (#92, M2a).
+    async function showcaseFlightsForTeam(season, teamID, divisionName) {
+      const events = Object.entries(SHOWCASES[season] || {});
+      if (!events.length || !teamID) return [];
+      const byId = new Map(events.map(([name, evt]) => [evt.eventId, { name, evt }]));
+      const index = await getTeamIndex(season);
+      const out = [];
+      if (index) {
+        for (const r of teamIndexShowcases[season] || []) {
+          if (!byId.has(r.eventID)) continue;
+          const ids = [teamID, ...Object.entries(r.aliases || {}).filter(([, v]) => Number(v) === teamID).map(([k]) => Number(k))];
+          if (ids.some(id => (r.teamIDs || []).includes(id))) out.push({ ...byId.get(r.eventID), flightID: r.flightID, ids });
+        }
+      } else {
+        for (const [name, evt] of events) {
+          const h = await getEventHierarchy(evt.eventId);
+          const nds = (h && h.girlsDivAndFlightList) || [];
+          const nd = nds.find(d => d.divisionName === divisionName)
+            || nds.find(d => getAgeLabel(d.divisionName, season) === getAgeLabel(divisionName, season));
+          const ids = [teamID, ...Object.entries(evt.teamAliases || {}).filter(([, v]) => Number(v) === teamID).map(([k]) => Number(k))];
+          for (const f of (nd && nd.flightList) || []) out.push({ name, evt, flightID: f.flightID, ids });
+        }
+      }
+      return out.sort((a, b) => String(a.evt.startDate || '').localeCompare(String(b.evt.startDate || '')));
+    }
+
+    // A team's games at this season's showcases, for its team page: one entry per showcase
+    // flight it played in, with its games and its record there (W, L, D and goals, from the
+    // scored games), or with the error that stopped that schedule (#92, M2b: the page shows
+    // "couldn't load", never a silent gap that reads as "didn't attend"). A 404 schedule is
+    // skipped. A refused team index rejects (M2a).
+    async function teamShowcaseSections(season, teamID, divisionName) {
+      const out = [];
+      for (const sc of await showcaseFlightsForTeam(season, teamID, divisionName)) {
+        let sched;
+        try { sched = await getSchedule(sc.evt.eventId, sc.flightID); }
+        catch (error) {
+          if (!isMissing(error)) out.push({ ...sc, error });
+          continue;
+        }
+        const mineAt = g => sc.ids.find(id => g.hometeamID === id || g.awayteamID === id);
+        const games = sched.filter(g => mineAt(g) != null);
+        if (!games.length) continue;
+        const record = { W: 0, L: 0, D: 0, gf: 0, ga: 0 };
+        for (const g of games) {
+          const me = mineAt(g), res = resultFor(g, me);
+          if (!res) continue;
+          record[res]++;
+          const home = g.hometeamID === me;
+          record.gf += home ? g.hometeamscore : g.awayteamscore;
+          record.ga += home ? g.awayteamscore : g.hometeamscore;
+        }
+        out.push({ ...sc, games, record });
+      }
+      return out;
+    }
+
     // ========== DYNAMIC AGE GROUPS ==========
     async function loadAgeGroupsForSeason() {
       if (seasonAgeGroups[currentSeason]) {
@@ -3927,6 +4328,9 @@
         }
         for (const [name, ev] of Object.entries(data.national || {})) {
           if (ev.eventId === eventID) return { season, name, kind: 'national', event: ev };
+        }
+        for (const [name, ev] of Object.entries(data.showcases || {})) {
+          if (ev.eventId === eventID) return { season, name, kind: 'showcase', event: ev };
         }
       }
       return null;
@@ -4259,6 +4663,32 @@
         if (gamesError) stack.appendChild(failedFlightPanel(`${short} · all games`, 'these matches'));
         else stack.appendChild(renderScheduleTable(mine, flightName, rec.flightID, rec.eventID, null, `${short} · all games`));
 
+        // Showcases (#97): the team's games at this season's showcases, which never count
+        // toward the conference table above. A refusal shows "try again" in place (#92).
+        let showcaseSections = [];
+        let warned = !!gamesError;
+        try { showcaseSections = await teamShowcaseSections(ctx.season, teamID, divisionName); }
+        catch (e) {
+          if (!warned) stack.appendChild(loadWarning(e, () => loadTeamSummary(rec)));
+          warned = true;
+        }
+        for (const sc of showcaseSections) {
+          if (sc.error) {
+            if (!warned) stack.appendChild(loadWarning(sc.error, () => loadTeamSummary(rec)));
+            warned = true;
+            stack.appendChild(failedFlightPanel(`${sc.name} · ${short}`, 'these games'));
+            continue;
+          }
+          const r = sc.record, played = r.W + r.L + r.D;
+          const panel = document.createElement('div');
+          panel.className = 'postseason-note';
+          panel.innerHTML = `<div class="postseason-title">Showcase · ${esc(sc.name)} · ${esc([formatDateRange(sc.evt.startDate, sc.evt.endDate), sc.evt.location].filter(Boolean).join(' · '))}</div>` +
+            (played ? `<div class="postseason-outcome">${r.W} won · ${r.L} lost · ${r.D} drawn · goals ${r.gf}–${r.ga}</div>` : '') +
+            `<div class="stat-sub">Showcase games don't count toward the conference table.</div>`;
+          stack.appendChild(panel);
+          stack.appendChild(renderScheduleTable(sc.games, sc.name, sc.flightID, sc.evt.eventId, null, `${sc.name} · ${short}`));
+        }
+
         // Post-season, if the team appears in a national event of this season
         for (const [stage, evt] of Object.entries(NATIONAL_EVENTS[ctx.season] || {})) {
           if (!evt.eventId || evt.eventId === rec.eventID) continue;
@@ -4335,6 +4765,18 @@
     const CONF_COLS   = colSet(['rank', 'star', 'name', 'gp', 'pts', 'ppg'], ['w', 'l', 'd', 'gf', 'ga', 'gd']);
     const GROUP_COLS  = colSet(['rank', 'star', 'name', 'gp', 'w', 'l', 'd', 'pts', 'gd']);
     const SEARCH_COLS = colSet(['rank', 'star', 'name', 'conf', 'flight', 'gp', 'w', 'l', 'd', 'pts', 'gd']);
+    // #97: a showcase table is results only: no position and no follow star. A row whose team
+    // has a team page (it is in the season's conference standings, under its own id or a
+    // reviewed alias) links to it with the site's short name; any other row shows TGS's full
+    // name (S3), marked "no team page" only when the season's index was read (M2c).
+    COL.scTeam = { label: 'Team', sort: 'name', render: t => {
+      const page = showcaseTeamPage(t.teamID, showcaseLinkable, showcaseAliases);
+      if (page) return `<a class="sc-team-link" href="#tab=teams&season=${encodeURIComponent(currentSeason)}&team=${encodeURIComponent(page)}&name=${encodeURIComponent(t.name)}" title="Team page: its conference table and every game">${teamCellHtml(t)}</a>`;
+      const logo = t.clublogo ? `<img class="team-logo" src="${esc(t.clublogo)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
+      return `<div class="team-cell">${logo}<span class="team-name" title="${esc(t.name)}">${esc(t.name)}</span>` +
+        (page === false ? `<span class="sc-muted" title="Not in this season's ECNL conference standings (ECNL RL, Pre-ECNL or a guest team)">no team page</span>` : '') + '</div>';
+    } };
+    const SHOWCASE_COLS = colSet(['scTeam', 'gp', 'w', 'l', 'd', 'pts'], ['gf', 'ga', 'gd']);
 
     function rankHtml(rank) {
       return `<span class="rank-num${rank <= 3 ? ' rank-top' : ''}">${rank}</span>`;
@@ -4626,6 +5068,7 @@
       const s = document.getElementById('viewTabStandings');
       updateViewTabsUI(s ? s.textContent : undefined);
       if (currentTab === 'playoffs') loadPlayoffFlight();
+      else if (currentTab === 'showcases') loadShowcaseFlight({ rerender: true });
       else if (!leavingSearch && currentConfMeta && currentFlightData.length) { renderConferenceView(); saveState(); pushHash(); }
       else loadCurrentView();
     }
@@ -5033,6 +5476,9 @@
 
       if (currentTab === 'playoffs') {
         await loadPlayoffsPanel();
+      } else if (currentTab === 'showcases') {
+        currentShowcase = currentShowcaseAge = currentShowcaseFlight = null;
+        await loadShowcasesPanel();
       } else if (currentTab === 'favorites') {
         // A favourite is bound to its own season; choosing another season
         // means browsing that season, so go to Conferences.
@@ -5152,6 +5598,7 @@
       loadTheme();
       loadSidebarState();
       loadFavorites();
+      updateMyTeamsCount();
       purgeLegacyCache();
 
       try {
@@ -5169,7 +5616,7 @@
 
       if (!loadFromHash()) loadSavedState();
       syncSeasonUI();
-      if (currentTab === 'playoffs' || currentTab === 'favorites') {
+      if (currentTab === 'playoffs' || currentTab === 'favorites' || currentTab === 'showcases') {
         // Build the conference sidebar so switching back is instant, but land on the saved tab.
         await loadAgeGroupsForSeason();
         if (!currentAgeGroup || !AGE_GROUPS.includes(currentAgeGroup)) currentAgeGroup = AGE_GROUPS[0] || null;
