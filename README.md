@@ -18,7 +18,7 @@ upstream API or website ever goes away.
 - **Showcases** — ECNL showcase weekends (2025-26: San Diego Fall and Phoenix Spring) per age group: a Results table (TGS's order, no positions) and the Games, with conference teams linked to their team pages
 - **★ My Teams** — Follow any team (the ★ My Teams button at the foot of the sidebar opens the list); each favorite opens a summary page: the glance panel, the full table with the team highlighted, the team's own fixtures and results, its showcase games, and its post-season games when it played any
 - **Team overview** — A team page opens on **Overview** (tabs **Overview | Current season**, or e.g. **Overview | 2024–25 season**): one squad (e.g. MVLA, girls born 2011) across every archived season, with its conference finishes, Playoffs and Finals, showcases and totals; see [Team history](#team-history)
-- **Team search** — One bar in the header, on every tab, finds any team since 2020-21 (one club and age group) by name, club, place ("California", "Dallas", "SC"), birth year, age group or conference ("MVLA 2011", "U15 NorCal"); a ranked list, each team with a one-line description, opens its team page (Shift+Enter: its History); see [Team search](#team-search)
+- **Team search** — One bar in the header, on every tab, finds any team since 2020-21 (one club and age group) by name, club, place ("California", "Dallas", "SC"), birth year, age group or conference ("MVLA 2011", "U15 NorCal"); a ranked list, each team with a one-line description, opens its team page on Overview (Shift+Enter: its season tab); see [Team search](#team-search)
 - **Age group navigation** — Tabs populated from the API; keyboard arrow-key navigation, `/` to search
 - **Dark mode**, and **deep links** (season, age group, conference, view, selected team and match filter in the URL hash)
 - **Send feedback** — A panel at the foot of the sidebar posts a message (and an optional reply
@@ -422,7 +422,10 @@ overview →", "Current season page →"). Overview follows one *squad*, a group
 every archived season: "MVLA · born 2011", with its place and seasons, totals (ours, from
 TGS's standings), the best Champions League finish and any titles, one row or card per
 conference season, every Playoffs and Finals appearance and every showcase, each linked to
-its table, bracket or results and to TGS. Another team always opens on Overview.
+its table, bracket or results and to TGS. Another team always opens on Overview, except
+under `?live=1` (no history route) and for a team with no history file (one seen only at
+events, or new before the next history build): those open on the season tab, with no
+Overview tab.
 
 - **Linking.** `team_history.py` links a team-season to the next by the same TGS id (with a
   birth-year check), else by name, else by club, never guessing when two teams could claim

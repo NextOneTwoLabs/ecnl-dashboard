@@ -4391,6 +4391,9 @@
     async function loadTeamSummary(rec) {
       const container = document.getElementById('standingsContainer');
       if (!sameTeam(teamViewFor, rec)) teamView = 'history';   // #107 S11: another team opens on Overview
+      // ... where it has one: never in live mode (no history route), nor for an id with no history
+      // file (a 404 or an unknown schema): those open on the season tab (prreview122b MF2, SC1).
+      if (teamView === 'history' && !overviewAvailable(rec)) teamView = 'season';
       teamViewFor = { id: rec.teamID, name: rec.name };
       const token = ++teamToken;
       showTeamViewTabs();
@@ -4604,10 +4607,16 @@
       const active = SOURCES && SOURCES.refresh && SOURCES.refresh.activeSeason;
       return season === active ? 'Current season' : `${seasonLabel(season)} season`;
     }
+    // Whether a team has an Overview: not in live mode, nor for an id the history route has no file for.
+    // A team known only by name (an old favourite) is located first, so it is given the benefit.
+    function overviewAvailable(rec) {
+      return !LIVE && (!rec || rec.teamID == null || historyAvailable(rec.teamID));
+    }
     function showTeamViewTabs() {
       document.getElementById('viewTabs').style.display = '';
       const o = document.getElementById('viewTabStandings'), s = document.getElementById('viewTabSchedule');
       o.textContent = 'Overview'; s.textContent = teamSeasonTabLabel(currentSeason);
+      o.style.display = overviewAvailable(teamViewFor && { teamID: teamViewFor.id }) ? '' : 'none';
       o.classList.toggle('active', teamView === 'history'); o.setAttribute('aria-selected', String(teamView === 'history'));
       s.classList.toggle('active', teamView !== 'history'); s.setAttribute('aria-selected', String(teamView !== 'history'));
     }
@@ -4710,7 +4719,7 @@
       const container = document.getElementById('standingsContainer');
       historyCrumb(rec, season);
       document.getElementById('contentSubtitle').textContent = 'Loading its overview…';
-      container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading the history…</div></div>`;
+      container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading the overview…</div></div>`;
       let data;
       try { [data] = await Promise.all([getTeamHistory(rec.teamID), loadClubPlaces()]); }
       catch (e) {
@@ -4725,9 +4734,12 @@
       }
       if (token !== teamToken) return;
       if (!data || !data.squads.length) {
-        document.getElementById('contentSubtitle').textContent = '';
-        container.innerHTML = `<div class="error-message"><strong>No overview for this team.</strong><br><small>Only teams in an ECNL conference table have one.</small></div>`;
-        saveState(); pushHash();
+        // SC1: no history file for this id (a team new this season before its first history build,
+        // or one seen only at events): its season tab instead, without the Overview tab.
+        if (rec.teamID != null) teamHistoryMissing.add(String(rec.teamID));
+        teamView = 'season';
+        teamViewFor = { id: rec.teamID, name: rec.name };
+        loadTeamSummary(rec);
         return;
       }
       renderTeamHistory(rec, season, data);
@@ -4838,7 +4850,7 @@
       const badges = (r, i) => [r.inProgress ? badge('live', r) : '', r.regroup ? badge('regroup', r) : '',
         ['name', 'club', 'manual'].includes(r.link) ? badge(r.link, r) : '',
         i > 0 && rows[i - 1].conference !== r.conference ? badge('moved', r, `moved from ${rows[i - 1].conference}`) : ''].filter(Boolean).join('');
-      const links = r => `<span class="hist-links"><a href="${confHref(r)}">Table</a><a href="${pageHref(r)}" title="That season's team page">Team page</a>` +
+      const links = r => `<span class="hist-links"><a href="${confHref(r)}">Table</a><a href="${pageHref(r)}" title="That season's tab: its table and games">${esc(seasonLabel(r.season))} season</a>` +
         `<a href="${getStandingsUrl(r.eventID, r.flightID)}" target="_blank" rel="noopener">TGS</a></span>`;
       const age = r => getAgeLabel(r.division, r.season);
       const conf = r => esc(r.conference) + (r.flightName && !/^(ECNL|Flight 1)$/i.test(r.flightName) ? ` <span class="hist-name">· ${esc(r.flightName)}</span>` : '');
@@ -5231,6 +5243,7 @@
       const s = document.getElementById('viewTabStandings');
       const c = document.getElementById('viewTabSchedule');
       if (s) {
+        s.style.display = '';   // a team page may have hidden it (no Overview)
         s.classList.toggle('active', currentView === 'standings');
         s.setAttribute('aria-selected', String(currentView === 'standings'));
         s.textContent = firstLabel || 'Standings';
