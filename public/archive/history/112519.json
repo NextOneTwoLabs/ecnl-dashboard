@@ -1,0 +1,10 @@
+{"schema":1,"teamID":112519,"squads":[
+{"clubID":26,"clubName":"Charlotte Soccer Academy","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":112519,"name":"Charlotte SA ECNL G13","clubID":26,"clubName":"Charlotte Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Charlotte-Soccer-Academy.jpg","conference":"Mid-Atlantic","eventID":3925,"divisionID":18535,"division":"G2013","flightID":32626,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":2,"of":10,"gp":18,"w":12,"d":3,"l":3,"pts":39,"gf":47,"ga":12,"gd":35,"ppg":2.17,"form":"DWWDW","games":18,"played":18,"link":"start"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":112519,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":3,"ga":5,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":131428,"name":"Charlotte SA ECNL G2013/14","division":"GU13","conference":"Mid-Atlantic"},
+{"season":"2026-27","teamID":131431,"name":"Charlotte SA ECNL G2012/13","division":"GU14","conference":"Mid-Atlantic"}
+]}
+]}

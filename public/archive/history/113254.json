@@ -1,0 +1,8 @@
+{"schema":1,"teamID":113254,"squads":[
+{"clubID":1693,"clubName":"FC Alliance TN","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":113254,"name":"FC Alliance ECNL G13","clubID":1693,"clubName":"FC Alliance TN","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/Sierra_Goller_c027bcfa9c764581ae73ada2824fb4c0.png","conference":"Ohio Valley","eventID":3931,"divisionID":18743,"division":"G2013","flightID":36469,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":12,"of":12,"gp":22,"w":1,"d":4,"l":17,"pts":7,"gf":11,"ga":79,"gd":-68,"ppg":0.32,"form":"LLLLL","games":22,"played":22,"link":"start"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":134638,"name":"FC Alliance TN ECNL G2013/14","division":"GU13","conference":"Ohio Valley"},
+{"season":"2026-27","teamID":134639,"name":"FC Alliance TN ECNL G2012/13","division":"GU14","conference":"Ohio Valley"}
+]}
+]}

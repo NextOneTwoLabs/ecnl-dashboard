@@ -1,0 +1,8 @@
+{"schema":1,"teamID":130975,"squads":[
+{"clubID":186,"clubName":"Pateadores Soccer Club","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":130975,"name":"Pateadores Soccer Club ECNL G2009/10","clubID":186,"clubName":"Pateadores Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/EADORES_04-15-2026T15:14:45.022.png","conference":"Southwest","eventID":4271,"divisionID":22459,"division":"GU17","flightID":40603,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":15,"of":17,"gp":3,"w":0,"d":0,"l":3,"pts":0,"gf":1,"ga":10,"gd":-9,"ppg":0.0,"form":"LLL","games":16,"played":3,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":68892,"name":"Pateadores ECNL G10","division":"G2010","conference":"Southwest"},
+{"season":"2025-26","teamID":68893,"name":"Pateadores ECNL G09","division":"G2009","conference":"Southwest"}
+]}
+]}

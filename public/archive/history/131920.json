@@ -1,0 +1,7 @@
+{"schema":1,"teamID":131920,"squads":[
+{"clubID":16,"clubName":"Beach Futbol Club","birthYears":[2008,2009],"seasons":[
+{"season":"2026-27","teamID":131920,"name":"Beach Futbol Club (CA) ECNL G2008/09","clubID":16,"clubName":"Beach Futbol Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Beach-FC.jpg","conference":"Southwest","eventID":4271,"divisionID":22460,"division":"GU18/19","flightID":40604,"flightName":"ECNL","u":18,"birthYears":[2008,2009],"rank":3,"of":17,"gp":3,"w":3,"d":0,"l":0,"pts":9,"gf":6,"ga":1,"gd":5,"ppg":3.0,"form":"WWW","games":16,"played":3,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":60046,"name":"Beach FC (CA) ECNL G09","division":"G2009","conference":"Southwest"}
+]}
+]}

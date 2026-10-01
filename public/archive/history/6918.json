@@ -1,0 +1,11 @@
+{"schema":1,"teamID":6918,"squads":[
+{"clubID":380,"clubName":"Carolina Elite Soccer Academy","birthYears":[2002,2003],"seasons":[
+{"season":"2020-21","teamID":6918,"name":"CESA ECNL GU18/U19","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Mid-Atlantic","eventID":2040,"divisionID":5494,"division":"GU18/U19","flightID":8898,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":10,"of":13,"gp":14,"w":3,"d":2,"l":9,"pts":11,"gf":13,"ga":19,"gd":-6,"ppg":0.79,"form":"LDLWD","games":14,"played":14,"link":"start"}
+],"postseason":[],"showcases":[]},
+{"clubID":380,"clubName":"Carolina Elite Soccer Academy","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":11512,"name":"CESA ECNL GU17","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Mid-Atlantic","eventID":2040,"divisionID":5493,"division":"GU17","flightID":8897,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":7,"of":13,"gp":14,"w":7,"d":0,"l":7,"pts":21,"gf":27,"ga":25,"gd":2,"ppg":1.5,"form":"WWWLL","games":14,"played":14,"link":"start"},
+{"season":"2021-22","teamID":6918,"name":"CESA ECNL GU18/U19","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Mid-Atlantic","eventID":2366,"divisionID":7803,"division":"GU18/U19","flightID":12502,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":5,"of":14,"gp":13,"w":8,"d":1,"l":4,"pts":25,"gf":18,"ga":11,"gd":7,"ppg":1.92,"form":"WWLWL","games":13,"played":13,"link":"name"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11932,"flightName":"Showcase Cup A","tier":"Showcase Cup A","teamID":11512,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":7,"ga":8,"group":null,"reached":"Semifinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

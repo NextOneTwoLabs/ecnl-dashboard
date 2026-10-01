@@ -1,0 +1,7 @@
+{"schema":1,"teamID":69502,"squads":[
+{"clubID":431,"clubName":"FSA FC","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":69502,"name":"FSA FC ECNL G12","clubID":431,"clubName":"FSA FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FSAFC.png","conference":"New England","eventID":3159,"divisionID":14233,"division":"G2012","flightID":24091,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":8,"of":9,"gp":16,"w":1,"d":3,"l":12,"pts":6,"gf":10,"ga":50,"gd":-40,"ppg":0.38,"form":"LLLLW","games":16,"played":16,"link":"start"},
+{"season":"2025-26","teamID":69502,"name":"FSA FC ECNL G12","clubID":431,"clubName":"FSA FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FSAFC.png","conference":"New England","eventID":3927,"divisionID":18548,"division":"G2012","flightID":32636,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":9,"of":9,"gp":16,"w":0,"d":5,"l":11,"pts":5,"gf":19,"ga":51,"gd":-32,"ppg":0.31,"form":"LLDLL","games":16,"played":16,"link":"id"},
+{"season":"2026-27","teamID":69502,"name":"FSA FC ECNL G2011/12","clubID":431,"clubName":"FSA FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FSAFC.png","conference":"New England","eventID":4265,"divisionID":22421,"division":"GU15","flightID":40565,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":5,"of":9,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":16,"played":0,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

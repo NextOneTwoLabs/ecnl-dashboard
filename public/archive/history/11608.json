@@ -1,0 +1,8 @@
+{"schema":1,"teamID":11608,"squads":[
+{"clubID":874,"clubName":"Tampa Bay United","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":11608,"name":"Tampa Bay United Rowdies ECNL GU17","clubID":874,"clubName":"Tampa Bay United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Hugo_Acosta_15ad970dfb1e4ea39726de93b4ff5a6e_tbu_2_star.png","conference":"Southeast","eventID":2038,"divisionID":5479,"division":"GU17","flightID":8883,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":4,"of":12,"gp":16,"w":9,"d":3,"l":4,"pts":30,"gf":36,"ga":17,"gd":19,"ppg":1.88,"form":"LDWWW","games":16,"played":16,"link":"start"},
+{"season":"2021-22","teamID":7068,"name":"Tampa Bay United ECNL GU18/U19","clubID":874,"clubName":"Tampa Bay United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Hugo_Acosta_15ad970dfb1e4ea39726de93b4ff5a6e_tbu_2_star.png","conference":"Southeast","eventID":2372,"divisionID":7839,"division":"GU18/U19","flightID":12538,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":7,"of":12,"gp":22,"w":8,"d":4,"l":10,"pts":28,"gf":38,"ga":51,"gd":-13,"ppg":1.27,"form":"LLDDD","games":22,"played":22,"link":"club"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11931,"flightName":"North American Cup","tier":"North American Cup","teamID":11608,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":5,"ga":6,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

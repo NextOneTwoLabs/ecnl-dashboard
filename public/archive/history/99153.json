@@ -1,0 +1,6 @@
+{"schema":1,"teamID":99153,"squads":[
+{"clubID":81,"clubName":"Real Colorado","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":99153,"name":"Real Colorado Athletico ECNL G13","clubID":81,"clubName":"Real Colorado","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/test_data_2875e32909454afcba2ebdd9eff22103_RealColora.jpg","conference":"Texas","eventID":3934,"divisionID":18766,"division":"G2013","flightID":32939,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":13,"of":16,"gp":15,"w":3,"d":2,"l":10,"pts":11,"gf":14,"ga":41,"gd":-27,"ppg":0.73,"form":"LLLLD","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":99153,"name":"Real Colorado Athletico ECNL G2012/13","clubID":81,"clubName":"Real Colorado","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/test_data_2875e32909454afcba2ebdd9eff22103_RealColora.jpg","conference":"Texas","eventID":4272,"divisionID":22462,"division":"GU14","flightID":40606,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":14,"of":16,"gp":3,"w":0,"d":1,"l":2,"pts":1,"gf":1,"ga":5,"gd":-4,"ppg":0.33,"form":"LLD","games":15,"played":3,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

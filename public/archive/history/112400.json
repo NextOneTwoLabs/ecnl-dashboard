@@ -1,0 +1,15 @@
+{"schema":1,"teamID":112400,"squads":[
+{"clubID":2510,"clubName":"Force","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":112400,"name":"De Anza Force ECNL G13","clubID":2510,"clubName":"Force","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tamara_Moyers_d07ec9708fb74bfa8510664705e1aed2_Force_Logo_Large.png","conference":"NorCal","eventID":3929,"divisionID":18735,"division":"G2013","flightID":32900,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":11,"of":11,"gp":20,"w":1,"d":3,"l":16,"pts":6,"gf":8,"ga":71,"gd":-63,"ppg":0.3,"form":"LWLLD","games":20,"played":20,"link":"start"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19566,"division":"G2013","flightID":34646,"flightName":"San Diego","tier":"San Diego","teamID":112400,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":0,"d":0,"l":3,"gf":0,"ga":15}
+],"maybe":[
+{"season":"2026-27","teamID":94620,"name":"Force (CA) ECNL G2012/13","division":"GU14","conference":"NorCal"},
+{"season":"2026-27","teamID":112400,"name":"Force (CA) ECNL G2013/14","division":"GU13","conference":"NorCal"}
+]},
+{"clubID":2510,"clubName":"Force","birthYears":[2013,2014],"seasons":[
+{"season":"2026-27","teamID":112400,"name":"Force (CA) ECNL G2013/14","clubID":2510,"clubName":"Force","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tamara_Moyers_d07ec9708fb74bfa8510664705e1aed2_Force_Logo_Large.png","conference":"NorCal","eventID":4267,"divisionID":22431,"division":"GU13","flightID":40575,"flightName":"ECNL","u":13,"birthYears":[2013,2014],"rank":11,"of":12,"gp":5,"w":0,"d":1,"l":4,"pts":1,"gf":3,"ga":17,"gd":-14,"ppg":0.2,"form":"DLLLL","games":22,"played":5,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":112400,"name":"De Anza Force ECNL G13","division":"G2013","conference":"NorCal"}
+]}
+]}

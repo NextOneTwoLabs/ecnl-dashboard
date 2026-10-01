@@ -1,0 +1,8 @@
+{"schema":1,"teamID":6883,"squads":[
+{"clubID":29,"clubName":"Colorado Storm","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":6883,"name":"Colorado Rapids ECNL GU17","clubID":29,"clubName":"Colorado Storm","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/ColoradoSt_06-26-2026T19:48:50.230.png","conference":"Northwest","eventID":2033,"divisionID":5446,"division":"GU17","flightID":8850,"flightName":"Mountain","u":17,"birthYears":[2004],"rank":3,"of":5,"gp":10,"w":5,"d":1,"l":4,"pts":16,"gf":25,"ga":19,"gd":6,"ppg":1.6,"form":"LWLDW","games":10,"played":10,"link":"start"},
+{"season":"2021-22","teamID":6883,"name":"Colorado Rapids ECNL GU18/U19","clubID":29,"clubName":"Colorado Storm","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/ColoradoSt_06-26-2026T19:48:50.230.png","conference":"Northwest","eventID":2367,"divisionID":7809,"division":"GU18/U19","flightID":12840,"flightName":"Mountain","u":18,"birthYears":[2003,2004],"rank":3,"of":6,"gp":15,"w":7,"d":2,"l":6,"pts":23,"gf":35,"ga":27,"gd":8,"ppg":1.53,"form":"WWLWD","games":12,"played":12,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11931,"flightName":"North American Cup","tier":"North American Cup","teamID":6883,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":8,"ga":4,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

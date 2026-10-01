@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134867,"squads":[
+{"clubID":97,"clubName":"St. Louis Scott Gallagher","birthYears":[2008,2009],"seasons":[
+{"season":"2026-27","teamID":134867,"name":"St. Louis Scott Gallagher Green ECNL G2008/09","clubID":97,"clubName":"St. Louis Scott Gallagher","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Walter_Camargo_b8d19ace186741eeabcc2634605d5c33_SLSG_Prima.png","conference":"Midwest","eventID":4264,"divisionID":22418,"division":"GU18/19","flightID":40562,"flightName":"ECNL","u":18,"birthYears":[2008,2009],"rank":12,"of":16,"gp":8,"w":1,"d":1,"l":6,"pts":4,"gf":9,"ga":28,"gd":-19,"ppg":0.5,"form":"LLLLW","games":15,"played":8,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":53259,"name":"SLSG Green ECNL G09","division":"G2009","conference":"Midwest"},
+{"season":"2025-26","teamID":54343,"name":"SLSG Navy ECNL G09","division":"G2009","conference":"Midwest"}
+]}
+]}

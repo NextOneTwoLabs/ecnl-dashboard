@@ -1,0 +1,6 @@
+{"schema":1,"teamID":59920,"squads":[
+{"clubID":525,"clubName":"Arlington Soccer Association","birthYears":[2005],"seasons":[
+{"season":"2021-22","teamID":59920,"name":"Arlington Soccer ECNL GU17","clubID":525,"clubName":"Arlington Soccer Association","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Thomas_Griffin_bee0acf7e2a84c378d3d08368546c844_ARL LOGO.png","conference":"Mid-Atlantic","eventID":2366,"divisionID":7802,"division":"GU17","flightID":12501,"flightName":"Flight 1","u":17,"birthYears":[2005],"rank":11,"of":14,"gp":13,"w":4,"d":0,"l":9,"pts":12,"gf":11,"ga":32,"gd":-21,"ppg":0.92,"form":"LWWLL","games":13,"played":13,"link":"start"},
+{"season":"2022-23","teamID":59920,"name":"Arlington Soccer ECNL G05/04","clubID":525,"clubName":"Arlington Soccer Association","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Thomas_Griffin_bee0acf7e2a84c378d3d08368546c844_ARL LOGO.png","conference":"Mid-Atlantic","eventID":2523,"divisionID":9502,"division":"G2005/2004","flightID":15722,"flightName":"ECNL","u":18,"birthYears":[2004,2005],"rank":10,"of":13,"gp":12,"w":1,"d":5,"l":6,"pts":8,"gf":11,"ga":34,"gd":-23,"ppg":0.67,"form":"DLLLD","games":12,"played":12,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

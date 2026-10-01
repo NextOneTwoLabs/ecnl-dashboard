@@ -1,0 +1,15 @@
+{"schema":1,"teamID":94657,"squads":[
+{"clubID":16,"clubName":"Beach Futbol Club","birthYears":[2012],"best":1,"seasons":[
+{"season":"2024-25","teamID":94657,"name":"Beach FC ECNL G12","clubID":16,"clubName":"Beach Futbol Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Beach-FC.jpg","conference":"Southwest","eventID":3165,"divisionID":14269,"division":"G2012","flightID":24132,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":5,"of":17,"gp":16,"w":8,"d":3,"l":5,"pts":27,"gf":28,"ga":20,"gd":8,"ppg":1.69,"form":"WLWLW","games":16,"played":16,"link":"start"},
+{"season":"2025-26","teamID":94657,"name":"Beach FC (CA) ECNL G12","clubID":16,"clubName":"Beach Futbol Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Beach-FC.jpg","conference":"Southwest","eventID":3933,"divisionID":18758,"division":"G2012","flightID":32931,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":4,"of":17,"gp":16,"w":11,"d":1,"l":4,"pts":34,"gf":37,"ga":15,"gd":22,"ppg":2.13,"form":"WLLLW","games":16,"played":16,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":94657,"games":0,"played":0,"w":2,"d":0,"l":1,"gf":7,"ga":4,"fromTable":true,"group":{"name":"Group K","pos":2,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true},
+{"season":"2024-25","stage":"Finals","eventID":3975,"eventName":"ECNL Girls National Finals","divisionID":19454,"division":"G2012","flightID":34429,"flightName":"Champions League","tier":"Champions League","teamID":94657,"games":2,"played":2,"w":1,"d":0,"l":1,"gf":3,"ga":4,"group":null,"reached":"Semifinals","champion":false,"cup":null,"reconstructed":true,"dataGap":false},
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21552,"division":"G2012","flightID":39383,"flightName":"Champions League","tier":"Champions League","teamID":94657,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":4,"ga":3,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19567,"division":"G2012","flightID":34645,"flightName":"San Diego","tier":"San Diego","teamID":94657,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":2,"d":1,"l":0,"gf":7,"ga":1}
+],"maybe":[
+{"season":"2026-27","teamID":131923,"name":"Beach Futbol Club (CA) ECNL G2011/12","division":"GU15","conference":"Southwest"},
+{"season":"2026-27","teamID":131924,"name":"Beach Futbol Club (CA) ECNL G2012/13","division":"GU14","conference":"Southwest"}
+]}
+]}

@@ -1,0 +1,9 @@
+{"schema":1,"teamID":91608,"squads":[
+{"clubID":25,"clubName":"Challenge SC","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":91608,"name":"Challenge SC ECNL G12","clubID":25,"clubName":"Challenge SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/logo_05-05-2026T19:13:38.814.png","conference":"Texas","eventID":3166,"divisionID":14270,"division":"G2012","flightID":24145,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":9,"of":16,"gp":15,"w":7,"d":3,"l":5,"pts":24,"gf":45,"ga":23,"gd":22,"ppg":1.6,"form":"WWLDW","games":15,"played":15,"link":"start"},
+{"season":"2025-26","teamID":91608,"name":"Challenge SC ECNL G12","clubID":25,"clubName":"Challenge SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/logo_05-05-2026T19:13:38.814.png","conference":"Texas","eventID":3934,"divisionID":18765,"division":"G2012","flightID":32937,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":8,"of":16,"gp":15,"w":8,"d":1,"l":6,"pts":25,"gf":30,"ga":29,"gd":1,"ppg":1.67,"form":"WWLWL","games":15,"played":15,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":129341,"name":"Challenge SC ECNL G2011/12","division":"GU15","conference":"Texas"},
+{"season":"2026-27","teamID":129342,"name":"Challenge SC ECNL G2012/13","division":"GU14","conference":"Texas"}
+]}
+]}

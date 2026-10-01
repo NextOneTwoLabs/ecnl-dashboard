@@ -8,6 +8,7 @@ const routes = [
   [/^\/api\/v1\/events\/([^/]+)\/flights\/([^/]+)\/schedule$/, 'schedule', ['event', 'flight']],
   [/^\/api\/v1\/seasons\/([^/]+)\/teams$/, 'teams', ['season']],
   [/^\/api\/v1\/clubs$/, 'clubs', []],
+  [/^\/api\/v1\/teams\/([^/]+)\/history$/, 'history', ['team']],
 ];
 
 // IDs are canonical positive decimals; a season is "YYYY-YY" with consecutive years.

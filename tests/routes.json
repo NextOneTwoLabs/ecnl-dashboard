@@ -114,5 +114,49 @@
   [
     "/api/v1/clubs/1425",
     404
+  ],
+  [
+    "/api/v1/teams/55477/history",
+    200
+  ],
+  [
+    "/api/v1/teams/46817/history",
+    200
+  ],
+  [
+    "/api/v1/teams/0/history",
+    400
+  ],
+  [
+    "/api/v1/teams/01/history",
+    400
+  ],
+  [
+    "/api/v1/teams/-1/history",
+    400
+  ],
+  [
+    "/api/v1/teams/abc/history",
+    400
+  ],
+  [
+    "/api/v1/teams/1.5/history",
+    400
+  ],
+  [
+    "/api/v1/teams/%2e%2e%2f/history",
+    400
+  ],
+  [
+    "/api/v1/teams/55477/history/",
+    404
+  ],
+  [
+    "/api/v1/teams/55477",
+    404
+  ],
+  [
+    "/api/v1/teams",
+    404
   ]
 ]

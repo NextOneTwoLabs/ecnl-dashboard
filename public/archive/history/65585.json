@@ -1,0 +1,19 @@
+{"schema":1,"teamID":65585,"squads":[
+{"clubID":380,"clubName":"Carolina Elite Soccer Academy","birthYears":[2010],"seasons":[
+{"season":"2022-23","teamID":65585,"name":"CESA Liberty ECNL G10","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Southeast","eventID":2527,"divisionID":9521,"division":"G2010","flightID":16110,"flightName":"ECNL","u":13,"birthYears":[2010],"rank":11,"of":16,"gp":15,"w":4,"d":4,"l":7,"pts":16,"gf":15,"ga":26,"gd":-11,"ppg":1.07,"form":"WWLDL","games":15,"played":15,"link":"start"},
+{"season":"2023-24","teamID":65585,"name":"CESA Liberty ECNL G10","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Southeast","eventID":2838,"divisionID":11596,"division":"G2010","flightID":19791,"flightName":"ECNL","u":14,"birthYears":[2010],"rank":11,"of":16,"gp":15,"w":5,"d":1,"l":9,"pts":16,"gf":22,"ga":25,"gd":-3,"ppg":1.07,"form":"DLWWL","games":15,"played":15,"link":"id"},
+{"season":"2024-25","teamID":65585,"name":"CESA Liberty ECNL G10","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Southeast","eventID":3164,"divisionID":14261,"division":"G2010","flightID":24123,"flightName":"ECNL","u":15,"birthYears":[2010],"rank":13,"of":16,"gp":15,"w":2,"d":6,"l":7,"pts":12,"gf":11,"ga":31,"gd":-20,"ppg":0.8,"form":"LLLDD","games":15,"played":15,"link":"id"},
+{"season":"2025-26","teamID":65585,"name":"CESA Liberty ECNL G10","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Southeast","eventID":3932,"divisionID":18752,"division":"G2010","flightID":32926,"flightName":"ECNL","u":16,"birthYears":[2010],"rank":12,"of":16,"gp":15,"w":4,"d":3,"l":8,"pts":15,"gf":12,"ga":31,"gd":-19,"ppg":1.0,"form":"DLWDD","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21549,"division":"G2010","flightID":39394,"flightName":"Friendlies","tier":"Showcase Games","teamID":65585,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":2,"ga":6,"group":{"name":"","pos":14,"of":18},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":46817,"name":"CESA Liberty ECNL G2009/10","division":"GU17","conference":"Southeast"},
+{"season":"2026-27","teamID":65585,"name":"CESA Liberty ECNL G2010/11","division":"GU16","conference":"Southeast"}
+]},
+{"clubID":380,"clubName":"Carolina Elite Soccer Academy","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":65585,"name":"CESA Liberty ECNL G2010/11","clubID":380,"clubName":"Carolina Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/CESAShield_06-11-2026T15:27:26.040.jpg","conference":"Southeast","eventID":4270,"divisionID":22452,"division":"GU16","flightID":40596,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":10,"of":16,"gp":6,"w":3,"d":0,"l":3,"pts":9,"gf":14,"ga":11,"gd":3,"ppg":1.5,"form":"WLWLW","games":15,"played":6,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":65585,"name":"CESA Liberty ECNL G10","division":"G2010","conference":"Southeast"},
+{"season":"2025-26","teamID":78145,"name":"CESA Liberty ECNL G11","division":"G2011","conference":"Southeast"}
+]}
+]}

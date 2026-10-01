@@ -1,0 +1,8 @@
+{"schema":1,"teamID":133002,"squads":[
+{"clubID":3475,"clubName":"LouCity / Racing Youth Academy","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":133002,"name":"Racing Louisville Academy ECNL G2010/11","clubID":3475,"clubName":"LouCity / Racing Youth Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/AcademyLog_07-29-2026T22:44:46.317.jpg","conference":"Ohio Valley","eventID":4269,"divisionID":22446,"division":"GU16","flightID":41863,"flightName":"SOUTH","u":16,"birthYears":[2010,2011],"rank":5,"of":6,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":12,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":60641,"name":"Racing Louisville Academy ECNL G11","division":"G2011","conference":"Ohio Valley"},
+{"season":"2025-26","teamID":60642,"name":"Racing Louisville Academy ECNL G10","division":"G2010","conference":"Ohio Valley"}
+]}
+]}

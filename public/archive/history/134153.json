@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134153,"squads":[
+{"clubID":2359,"clubName":"Michigan Hawks","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":134153,"name":"Michigan Hawks ECNL G2010/11","clubID":2359,"clubName":"Michigan Hawks","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Armand_Echeverria_172acc43febb49f1bc8d55ad6051072d_Hawks_Logo.png","conference":"Midwest","eventID":4264,"divisionID":22416,"division":"GU16","flightID":40560,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":3,"of":16,"gp":6,"w":5,"d":0,"l":1,"pts":15,"gf":14,"ga":1,"gd":13,"ppg":2.5,"form":"WWWWL","games":15,"played":6,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":54493,"name":"Michigan Hawks ECNL G11","division":"G2011","conference":"Midwest"},
+{"season":"2025-26","teamID":69108,"name":"Michigan Hawks ECNL G10","division":"G2010","conference":"Midwest"}
+]}
+]}

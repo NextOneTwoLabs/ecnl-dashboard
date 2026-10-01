@@ -1,0 +1,8 @@
+{"schema":1,"teamID":11617,"squads":[
+{"clubID":57,"clubName":"LV Heat Surf SC","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":11617,"name":"Heat FC ECNL GU17","clubID":57,"clubName":"LV Heat Surf SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/pp_pp_803edf3f45c84ef180a5c7f3174edf03_LV_HEAT_SU.png","conference":"Southwest","eventID":2034,"divisionID":5453,"division":"GU17","flightID":8857,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":6,"of":14,"gp":16,"w":7,"d":6,"l":3,"pts":27,"gf":28,"ga":13,"gd":15,"ppg":1.69,"form":"WLWDD","games":16,"played":16,"link":"start"},
+{"season":"2021-22","teamID":11617,"name":"Heat FC ECNL GU18/U19","clubID":57,"clubName":"LV Heat Surf SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/pp_pp_803edf3f45c84ef180a5c7f3174edf03_LV_HEAT_SU.png","conference":"Southwest","eventID":2368,"divisionID":7815,"division":"GU18/U19","flightID":12514,"flightName":"Mojave","u":18,"birthYears":[2003,2004],"rank":4,"of":9,"gp":24,"w":11,"d":4,"l":9,"pts":37,"gf":31,"ga":26,"gd":5,"ppg":1.54,"form":"DWLWW","games":19,"played":19,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11933,"flightName":"Showcase Cup B","tier":"Showcase Cup B","teamID":11617,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":1,"ga":6,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":10434,"squads":[
+{"clubID":737,"clubName":"Oregon Surf SC","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":10434,"name":"Crossfire United ECNL GU17","clubID":737,"clubName":"Oregon Surf SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Nino_Cuccinello_7d2db632a5ae4f2a8f519aac7882179a_OregonSurf.png","conference":"Northwest","eventID":2033,"divisionID":5446,"division":"GU17","flightID":9538,"flightName":"Pacific","u":17,"birthYears":[2004],"rank":2,"of":9,"gp":12,"w":9,"d":2,"l":1,"pts":29,"gf":49,"ga":13,"gd":36,"ppg":2.42,"form":"WWDDW","games":12,"played":12,"link":"start"},
+{"season":"2021-22","teamID":10434,"name":"Northwest Elite FC ECNL GU18/U19","clubID":737,"clubName":"Oregon Surf SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Nino_Cuccinello_7d2db632a5ae4f2a8f519aac7882179a_OregonSurf.png","conference":"Northwest","eventID":2367,"divisionID":7809,"division":"GU18/U19","flightID":12841,"flightName":"Pacific","u":18,"birthYears":[2003,2004],"rank":4,"of":9,"gp":20,"w":11,"d":3,"l":6,"pts":36,"gf":47,"ga":31,"gd":16,"ppg":1.8,"form":"DLWLW","games":18,"played":18,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":10434,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":3,"ga":11,"group":{"name":"Group H","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

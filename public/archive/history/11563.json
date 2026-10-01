@@ -1,0 +1,6 @@
+{"schema":1,"teamID":11563,"squads":[
+{"clubID":97,"clubName":"St. Louis Scott Gallagher","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":11563,"name":"SLSG White ECNL GU17","clubID":97,"clubName":"St. Louis Scott Gallagher","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Walter_Camargo_b8d19ace186741eeabcc2634605d5c33_SLSG_Prima.png","conference":"Midwest","eventID":2035,"divisionID":5460,"division":"GU17","flightID":8864,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":10,"of":11,"gp":6,"w":0,"d":2,"l":4,"pts":2,"gf":5,"ga":18,"gd":-13,"ppg":0.33,"form":"LDLLL","games":10,"played":6,"link":"start"},
+{"season":"2021-22","teamID":11563,"name":"SLSG Green ECNL GU18/U19","clubID":97,"clubName":"St. Louis Scott Gallagher","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Walter_Camargo_b8d19ace186741eeabcc2634605d5c33_SLSG_Prima.png","conference":"Midwest","eventID":2369,"divisionID":7821,"division":"GU18/U19","flightID":12520,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":11,"of":14,"gp":13,"w":3,"d":1,"l":9,"pts":10,"gf":18,"ga":32,"gd":-14,"ppg":0.77,"form":"LLLLL","games":13,"played":13,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":131924,"squads":[
+{"clubID":16,"clubName":"Beach Futbol Club","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":131924,"name":"Beach Futbol Club (CA) ECNL G2012/13","clubID":16,"clubName":"Beach Futbol Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Beach-FC.jpg","conference":"Southwest","eventID":4271,"divisionID":22456,"division":"GU14","flightID":40600,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":2,"of":17,"gp":3,"w":3,"d":0,"l":0,"pts":9,"gf":11,"ga":2,"gd":9,"ppg":3.0,"form":"WWW","games":16,"played":3,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":54767,"name":"Beach FC (CA) ECNL G13","division":"G2013","conference":"Southwest"},
+{"season":"2025-26","teamID":94657,"name":"Beach FC (CA) ECNL G12","division":"G2012","conference":"Southwest"}
+]}
+]}

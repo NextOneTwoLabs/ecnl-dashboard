@@ -1,0 +1,6 @@
+{"schema":1,"teamID":59824,"squads":[
+{"clubID":43,"clubName":"Eclipse Select Soccer Club","birthYears":[2009],"seasons":[
+{"season":"2021-22","teamID":59824,"name":"Eclipse Select SC North ECNL GU13","clubID":43,"clubName":"Eclipse Select Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Eclipse-Select-Soccer-Club.jpg","conference":"Midwest","eventID":2369,"divisionID":7816,"division":"GU13","flightID":12515,"flightName":"East","u":13,"birthYears":[2009],"rank":4,"of":7,"gp":19,"w":7,"d":4,"l":8,"pts":25,"gf":18,"ga":18,"gd":0,"ppg":1.32,"form":"DWDDW","games":14,"played":14,"merged":true,"link":"start"},
+{"season":"2022-23","teamID":59824,"name":"Eclipse Select SC North ECNL G09","clubID":43,"clubName":"Eclipse Select Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Eclipse-Select-Soccer-Club.jpg","conference":"Midwest","eventID":2529,"divisionID":9534,"division":"G2009","flightID":16140,"flightName":"ECNL","u":14,"birthYears":[2009],"rank":14,"of":15,"gp":14,"w":1,"d":2,"l":11,"pts":5,"gf":8,"ga":52,"gd":-44,"ppg":0.36,"form":"LWLLL","games":14,"played":14,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

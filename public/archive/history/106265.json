@@ -1,0 +1,10 @@
+{"schema":1,"teamID":106265,"squads":[
+{"clubID":3054,"clubName":"Placer United Soccer Club","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":106265,"name":"Placer United ECNL G13","clubID":3054,"clubName":"Placer United Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Fernando_Pincay_39ede3b29dd345bc872e3a988866117a_logo.png","conference":"NorCal","eventID":3929,"divisionID":18735,"division":"G2013","flightID":32900,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":3,"of":11,"gp":20,"w":16,"d":1,"l":3,"pts":49,"gf":46,"ga":13,"gd":33,"ppg":2.45,"form":"WWWWW","games":20,"played":20,"link":"start"},
+{"season":"2026-27","teamID":106265,"name":"Placer United ECNL G2012/13","clubID":3054,"clubName":"Placer United Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Fernando_Pincay_39ede3b29dd345bc872e3a988866117a_logo.png","conference":"NorCal","eventID":4267,"divisionID":22432,"division":"GU14","flightID":40576,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":7,"of":12,"gp":7,"w":2,"d":3,"l":2,"pts":9,"gf":13,"ga":9,"gd":4,"ppg":1.29,"form":"WWDLD","games":22,"played":7,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":106265,"games":3,"played":3,"w":0,"d":0,"l":3,"gf":3,"ga":7,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Round of 16","reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19566,"division":"G2013","flightID":34646,"flightName":"San Diego","tier":"San Diego","teamID":106265,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":0,"d":2,"l":1,"gf":3,"ga":8}
+]}
+]}

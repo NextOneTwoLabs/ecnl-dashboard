@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134805,"squads":[
+{"clubID":42,"clubName":"East Meadow Soccer Club","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":134805,"name":"East Meadow Soccer Club ECNL G2009/10","clubID":42,"clubName":"East Meadow Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kory_Patterson_546497e203014be5a834a127c0ae9ba0_New_EM_Cir.png","conference":"New England","eventID":4265,"divisionID":22423,"division":"GU17","flightID":40567,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":2,"of":9,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":16,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":46957,"name":"East Meadow SC ECNL G09","division":"G2009","conference":"New England"},
+{"season":"2025-26","teamID":60351,"name":"East Meadow SC ECNL G10","division":"G2010","conference":"New England"}
+]}
+]}

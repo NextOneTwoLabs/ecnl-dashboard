@@ -136,6 +136,7 @@ class ShowcaseKindTests(unittest.TestCase):
                     patch.object(archive, "fetch_json", side_effect=fetch), \
                     patch.object(archive, "export_flight_csv", side_effect=AssertionError("nothing was fetched")), \
                     patch.object(archive, "update_team_index"), \
+                    patch.object(archive, "update_team_history"), \
                     patch.object(archive, "refresh_club_places"), \
                     patch.object(api, "fetch_api_raw", side_effect=AssertionError("network in a test")), \
                     contextlib.redirect_stdout(io.StringIO()):
@@ -324,6 +325,8 @@ class EventFilterTests(unittest.TestCase):
             stack.enter_context(patch.object(archive.time, "sleep"))
             stack.enter_context(patch.object(archive, "save_sources",
                                              side_effect=AssertionError("sources.json written")))
+            # The team histories (#107) are tested in tests/test_team_history.py.
+            stack.enter_context(patch.object(archive, "update_team_history"))
             for name in never:
                 stack.enter_context(patch.object(archive, name, side_effect=AssertionError(f"{name} called")))
             out = stack.enter_context(contextlib.redirect_stdout(io.StringIO()))

@@ -1,0 +1,5 @@
+{"schema":1,"teamID":6912,"squads":[
+{"clubID":88,"clubName":"San Juan Soccer Club","birthYears":[2002,2003],"seasons":[
+{"season":"2020-21","teamID":6912,"name":"San Juan SC ECNL GU18/U19","clubID":88,"clubName":"San Juan Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_bc7497442e354fd1889e34cd0b736cbf_ECNLLogoTe.jpg","conference":"Northwest","eventID":2033,"divisionID":5447,"division":"GU18/U19","flightID":9539,"flightName":"Bay Area","u":18,"birthYears":[2002,2003],"rank":5,"of":8,"gp":6,"w":2,"d":2,"l":2,"pts":8,"gf":10,"ga":13,"gd":-3,"ppg":1.33,"form":"DDLWL","games":7,"played":6,"link":"start"}
+],"postseason":[],"showcases":[]}
+]}

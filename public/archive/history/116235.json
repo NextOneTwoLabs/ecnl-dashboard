@@ -1,0 +1,8 @@
+{"schema":1,"teamID":116235,"squads":[
+{"clubID":2330,"clubName":"KC Athletics","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":116235,"name":"Kansas City Athletics ECNL G13","clubID":2330,"clubName":"KC Athletics","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Beck_Peterson_0b2caad8298f44d7bc24a09b8787a29b_Unknown.jpeg","conference":"Midwest","eventID":3926,"divisionID":18541,"division":"G2013","flightID":32631,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":7,"of":16,"gp":15,"w":9,"d":2,"l":4,"pts":29,"gf":25,"ga":19,"gd":6,"ppg":1.93,"form":"WLWWW","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":116235,"name":"Kansas City Athletics ECNL G2012/13","clubID":2330,"clubName":"KC Athletics","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Beck_Peterson_0b2caad8298f44d7bc24a09b8787a29b_Unknown.jpeg","conference":"Midwest","eventID":4264,"divisionID":22414,"division":"GU14","flightID":41609,"flightName":"WEST","u":14,"birthYears":[2012,2013],"rank":2,"of":8,"gp":2,"w":1,"d":1,"l":0,"pts":4,"gf":5,"ga":3,"gd":2,"ppg":2.0,"form":"DW","games":18,"played":2,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":116235,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":1,"d":0,"l":2,"gf":3,"ga":2}
+]}
+]}

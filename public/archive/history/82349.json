@@ -1,0 +1,11 @@
+{"schema":1,"teamID":82349,"squads":[
+{"clubID":419,"clubName":"Maryland United Football Club","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":82349,"name":"Maryland United FC ECNL G12","clubID":419,"clubName":"Maryland United Football Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Deonyra_Mitchell_4db3a963b3834d0e9943388633e2b542_marylandun.png","conference":"North Atlantic","eventID":3160,"divisionID":14239,"division":"G2012","flightID":24097,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":7,"of":11,"gp":18,"w":7,"d":1,"l":10,"pts":22,"gf":24,"ga":27,"gd":-3,"ppg":1.22,"form":"WWLWL","games":20,"played":18,"link":"start"},
+{"season":"2025-26","teamID":82349,"name":"Maryland United FC ECNL G12","clubID":419,"clubName":"Maryland United Football Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Deonyra_Mitchell_4db3a963b3834d0e9943388633e2b542_marylandun.png","conference":"North Atlantic","eventID":3928,"divisionID":18554,"division":"G2012","flightID":32642,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":6,"of":10,"gp":18,"w":7,"d":2,"l":9,"pts":23,"gf":23,"ga":25,"gd":-2,"ppg":1.28,"form":"LWLLW","games":18,"played":18,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":118684,"name":"Maryland United FC ECNL G2011/12","division":"GU15","conference":"North Atlantic"}
+]},
+{"clubID":419,"clubName":"Maryland United Football Club","birthYears":[2013,2014],"seasons":[
+{"season":"2026-27","teamID":82349,"name":"Maryland United FC ECNL G2013/14","clubID":419,"clubName":"Maryland United Football Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Deonyra_Mitchell_4db3a963b3834d0e9943388633e2b542_marylandun.png","conference":"North Atlantic","eventID":4266,"divisionID":22425,"division":"GU13","flightID":40569,"flightName":"ECNL","u":13,"birthYears":[2013,2014],"rank":6,"of":10,"gp":2,"w":1,"d":0,"l":1,"pts":3,"gf":1,"ga":4,"gd":-3,"ppg":1.5,"form":"WL","games":18,"played":2,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[]}
+]}

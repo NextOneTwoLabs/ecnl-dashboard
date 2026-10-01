@@ -1,0 +1,5 @@
+{"schema":1,"teamID":2886,"squads":[
+{"clubID":37,"clubName":"Dallas Texans","birthYears":[2002,2003],"seasons":[
+{"season":"2020-21","teamID":2886,"name":"Dallas Texans ECNL GU18/U19","clubID":37,"clubName":"Dallas Texans","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Dallas-Texans.jpg","conference":"Texas","eventID":2036,"divisionID":5467,"division":"GU18/U19","flightID":8871,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":5,"of":12,"gp":19,"w":11,"d":3,"l":5,"pts":36,"gf":41,"ga":28,"gd":13,"ppg":1.89,"form":"WWLDL","games":22,"played":19,"link":"start"}
+],"postseason":[],"showcases":[]}
+]}

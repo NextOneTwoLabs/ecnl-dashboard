@@ -228,6 +228,7 @@ class TeamIndexTests(unittest.TestCase):
                 patch.object(archive, "export_flight_csv", side_effect=AssertionError("nothing was fetched")), \
                 patch.object(archive, "build_team_index", side_effect=RuntimeError("index fixture fault")), \
                 patch.object(archive, "refresh_club_places") as clubs, \
+                patch.object(archive, "update_team_history"), \
                 patch.object(api, "fetch_api_raw", side_effect=AssertionError("network in a test")), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             code = archive.cmd_refresh(self.sources, self.refresh_args("2026-09-26", 7, sweep=True))
@@ -244,6 +245,7 @@ class TeamIndexTests(unittest.TestCase):
         with patch.object(archive, "fetch_json", side_effect=AssertionError("no network on a quiet day")), \
                 patch.object(archive, "build_team_index", side_effect=RuntimeError("index fixture fault")), \
                 patch.object(archive, "write_team_index", wraps=archive.write_team_index) as writer, \
+                patch.object(archive, "update_team_history"), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             code = archive.cmd_refresh(self.sources, self.refresh_args("2026-08-20", 0))
         self.assertIn("nothing due", out.getvalue())

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":82513,"squads":[
+{"clubID":54,"clubName":"FC Wisconsin Girls","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":82513,"name":"FC Wisconsin ECNL G13","clubID":54,"clubName":"FC Wisconsin Girls","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/35cfa3ff72554f968719b3db5d2fbe39_FCWTGS.png","conference":"Midwest","eventID":3926,"divisionID":18541,"division":"G2013","flightID":32631,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":15,"of":16,"gp":15,"w":2,"d":1,"l":12,"pts":7,"gf":11,"ga":42,"gd":-31,"ppg":0.47,"form":"LLLDW","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":82513,"name":"FC Wisconsin ECNL G2012/13","clubID":54,"clubName":"FC Wisconsin Girls","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/35cfa3ff72554f968719b3db5d2fbe39_FCWTGS.png","conference":"Midwest","eventID":4264,"divisionID":22414,"division":"GU14","flightID":41607,"flightName":"EAST","u":14,"birthYears":[2012,2013],"rank":7,"of":8,"gp":4,"w":0,"d":1,"l":3,"pts":1,"gf":0,"ga":8,"gd":-8,"ppg":0.25,"form":"DLL","games":19,"played":3,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":82513,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":0,"d":0,"l":3,"gf":0,"ga":15}
+]}
+]}

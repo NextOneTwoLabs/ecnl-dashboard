@@ -1,0 +1,6 @@
+{"schema":1,"teamID":89660,"squads":[
+{"clubID":3384,"clubName":"AC Florida West","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":89660,"name":"Florida West FC ECNL G12","clubID":3384,"clubName":"AC Florida West","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/e002a721db314975ad374b396cbfd5af_Screenshot.png","conference":"Southeast","eventID":3164,"divisionID":14263,"division":"G2012","flightID":24127,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":13,"of":16,"gp":15,"w":3,"d":1,"l":11,"pts":10,"gf":14,"ga":41,"gd":-27,"ppg":0.67,"form":"LLLWL","games":15,"played":15,"link":"start"},
+{"season":"2025-26","teamID":89660,"name":"Florida West FC ECNL G12","clubID":3384,"clubName":"AC Florida West","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/e002a721db314975ad374b396cbfd5af_Screenshot.png","conference":"Southeast","eventID":3932,"divisionID":18750,"division":"G2012","flightID":32925,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":11,"of":16,"gp":15,"w":4,"d":2,"l":9,"pts":14,"gf":13,"ga":39,"gd":-26,"ppg":0.93,"form":"WWLLD","games":15,"played":15,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

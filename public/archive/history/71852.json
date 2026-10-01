@@ -1,0 +1,14 @@
+{"schema":1,"teamID":71852,"squads":[
+{"clubID":67,"clubName":"Minnesota Thunder Academy","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":71852,"name":"Minnesota Thunder ECNL G11","clubID":67,"clubName":"Minnesota Thunder Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/MTA_new_lo_08-05-2025T15:25:15.298.png","conference":"Midwest","eventID":2849,"divisionID":11606,"division":"G2011","flightID":19809,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":11,"of":15,"gp":14,"w":3,"d":2,"l":9,"pts":11,"gf":14,"ga":26,"gd":-12,"ppg":0.79,"form":"DLWLL","games":14,"played":14,"link":"start"},
+{"season":"2024-25","teamID":71852,"name":"Minnesota Thunder ECNL G11","clubID":67,"clubName":"Minnesota Thunder Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/MTA_new_lo_08-05-2025T15:25:15.298.png","conference":"Midwest","eventID":3158,"divisionID":14226,"division":"G2011","flightID":24083,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":8,"of":16,"gp":15,"w":7,"d":1,"l":7,"pts":22,"gf":24,"ga":24,"gd":0,"ppg":1.47,"form":"WLLWW","games":15,"played":15,"link":"id"},
+{"season":"2025-26","teamID":71852,"name":"Minnesota Thunder ECNL G11","clubID":67,"clubName":"Minnesota Thunder Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/MTA_new_lo_08-05-2025T15:25:15.298.png","conference":"Midwest","eventID":3926,"divisionID":18543,"division":"G2011","flightID":32628,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":7,"of":16,"gp":15,"w":9,"d":3,"l":3,"pts":30,"gf":39,"ga":12,"gd":27,"ppg":2.0,"form":"DWWWW","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21550,"division":"G2011","flightID":39392,"flightName":"North American Cup","tier":"North American Cup","teamID":71852,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":1,"ga":6,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20345,"division":"G2011","flightID":36390,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":71852,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":2,"d":0,"l":1,"gf":3,"ga":3}
+],"maybe":[
+{"season":"2026-27","teamID":134412,"name":"MN Thunder Academy ECNL G2011/12","division":"GU15","conference":"Midwest"},
+{"season":"2026-27","teamID":134413,"name":"MN Thunder Academy ECNL G2010/11","division":"GU16","conference":"Midwest"}
+]}
+]}

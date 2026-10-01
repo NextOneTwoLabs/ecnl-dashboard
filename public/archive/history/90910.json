@@ -1,0 +1,11 @@
+{"schema":1,"teamID":90910,"squads":[
+{"clubID":737,"clubName":"Oregon Surf SC","birthYears":[2012],"seasons":[
+{"season":"2024-25","teamID":90910,"name":"Oregon Surf ECNL G12","clubID":737,"clubName":"Oregon Surf SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Nino_Cuccinello_7d2db632a5ae4f2a8f519aac7882179a_OregonSurf.png","conference":"Northwest","eventID":3162,"divisionID":14251,"division":"G2012","flightID":24109,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":9,"of":10,"gp":18,"w":1,"d":5,"l":12,"pts":8,"gf":7,"ga":38,"gd":-31,"ppg":0.44,"form":"LLDLL","games":18,"played":18,"link":"start"},
+{"season":"2025-26","teamID":90910,"name":"Oregon Surf ECNL G12","clubID":737,"clubName":"Oregon Surf SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Nino_Cuccinello_7d2db632a5ae4f2a8f519aac7882179a_OregonSurf.png","conference":"Northwest","eventID":3930,"divisionID":18737,"division":"G2012","flightID":32904,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":7,"of":10,"gp":18,"w":5,"d":1,"l":12,"pts":16,"gf":11,"ga":46,"gd":-35,"ppg":0.89,"form":"WLLWL","games":18,"played":18,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20346,"division":"G2012","flightID":36387,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":90910,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":1,"d":2,"l":0,"gf":3,"ga":2}
+],"maybe":[
+{"season":"2026-27","teamID":130041,"name":"Oregon Surf ECNL G2011/12","division":"GU15","conference":"Northwest"},
+{"season":"2026-27","teamID":130048,"name":"Oregon Surf ECNL G2012/13","division":"GU14","conference":"Northwest"}
+]}
+]}

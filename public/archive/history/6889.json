@@ -1,0 +1,7 @@
+{"schema":1,"teamID":6889,"squads":[
+{"clubID":43,"clubName":"Eclipse Select Soccer Club","birthYears":[2002,2003],"best":0,"titles":[0],"seasons":[
+{"season":"2020-21","teamID":6889,"name":"Eclipse Select SC ECNL GU18/U19","clubID":43,"clubName":"Eclipse Select Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Eclipse-Select-Soccer-Club.jpg","conference":"Midwest","eventID":2035,"divisionID":5461,"division":"GU18/U19","flightID":8865,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":1,"of":11,"gp":9,"w":9,"d":0,"l":0,"pts":27,"gf":44,"ga":5,"gd":39,"ppg":3.0,"form":"WWDWW","games":10,"played":10,"link":"start"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5850,"division":"U18/U19","flightID":9418,"flightName":"Champions League","tier":"Champions League","teamID":6889,"games":4,"played":4,"w":4,"d":0,"l":0,"gf":12,"ga":4,"group":null,"reached":"Final","champion":true,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

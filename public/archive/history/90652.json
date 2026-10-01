@@ -1,0 +1,8 @@
+{"schema":1,"teamID":90652,"squads":[
+{"clubID":28,"clubName":"Colorado Rush","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":90652,"name":"Colorado Rush Academy Blue ECNL G13","clubID":28,"clubName":"Colorado Rush","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Steve_Jobs_0c2f1c8501e34cc6875cd2c9e96f71aa_Blue_Logo_.png","conference":"Texas","eventID":3934,"divisionID":18766,"division":"G2013","flightID":32939,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":10,"of":16,"gp":15,"w":5,"d":1,"l":9,"pts":16,"gf":26,"ga":42,"gd":-16,"ppg":1.07,"form":"LLWLW","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":90652,"name":"Colorado Rush ECNL G2012/13","clubID":28,"clubName":"Colorado Rush","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Steve_Jobs_0c2f1c8501e34cc6875cd2c9e96f71aa_Blue_Logo_.png","conference":"Texas","eventID":4272,"divisionID":22462,"division":"GU14","flightID":40606,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":5,"of":16,"gp":3,"w":2,"d":0,"l":1,"pts":6,"gf":4,"ga":1,"gd":3,"ppg":2.0,"form":"LWW","games":15,"played":3,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19566,"division":"G2013","flightID":34646,"flightName":"San Diego","tier":"San Diego","teamID":90652,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":0,"d":1,"l":2,"gf":1,"ga":3}
+]}
+]}

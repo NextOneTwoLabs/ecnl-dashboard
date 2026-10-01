@@ -1,0 +1,5 @@
+{"schema":1,"teamID":6875,"squads":[
+{"clubID":18,"clubName":"Alabama FC","birthYears":[2002,2003],"seasons":[
+{"season":"2020-21","teamID":6875,"name":"Alabama FC ECNL GU18/U19","clubID":18,"clubName":"Alabama FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_da463c0400e545cbbfb1f23ee81d0cde_afc.png","conference":"Southeast","eventID":2038,"divisionID":5480,"division":"GU18/U19","flightID":8884,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":10,"of":12,"gp":16,"w":4,"d":3,"l":9,"pts":15,"gf":17,"ga":37,"gd":-20,"ppg":0.94,"form":"DLLLW","games":16,"played":16,"link":"start"}
+],"postseason":[],"showcases":[]}
+]}

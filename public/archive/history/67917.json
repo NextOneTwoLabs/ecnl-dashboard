@@ -1,0 +1,8 @@
+{"schema":1,"teamID":67917,"squads":[
+{"clubID":3054,"clubName":"Placer United Soccer Club","birthYears":[2006],"seasons":[
+{"season":"2022-23","teamID":67917,"name":"Placer United ECNL G06","clubID":3054,"clubName":"Placer United Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Fernando_Pincay_39ede3b29dd345bc872e3a988866117a_logo.png","conference":"NorCal","eventID":2528,"divisionID":9531,"division":"G2006","flightID":16168,"flightName":"ECNL","u":17,"birthYears":[2006],"rank":7,"of":10,"gp":18,"w":5,"d":2,"l":11,"pts":17,"gf":25,"ga":28,"gd":-3,"ppg":0.94,"form":"LLWWW","games":18,"played":18,"link":"start"},
+{"season":"2023-24","teamID":67917,"name":"Placer United ECNL G06/05","clubID":3054,"clubName":"Placer United Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Fernando_Pincay_39ede3b29dd345bc872e3a988866117a_logo.png","conference":"NorCal","eventID":2854,"divisionID":11637,"division":"G2006/2005","flightID":19921,"flightName":"ECNL","u":18,"birthYears":[2005,2006],"rank":4,"of":10,"gp":18,"w":7,"d":5,"l":6,"pts":26,"gf":32,"ga":30,"gd":2,"ppg":1.44,"form":"WLWDW","games":18,"played":18,"link":"id"}
+],"postseason":[
+{"season":"2022-23","stage":"Playoffs","eventID":2719,"eventName":"ECNL National Playoffs","divisionID":11967,"division":"G2006","flightID":20456,"flightName":"Showcase Cup B","tier":"Showcase Cup B","teamID":67917,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":5,"ga":5,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

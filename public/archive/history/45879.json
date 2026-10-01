@@ -1,0 +1,8 @@
+{"schema":1,"teamID":45879,"squads":[
+{"clubID":87,"clubName":"San Diego Surf Soccer Club","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":45879,"name":"San Diego Surf ECNL GU17","clubID":87,"clubName":"San Diego Surf Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/_a7f6cc7dd0b746678ccc847ddbb7d25a.jpg","conference":"Southwest","eventID":2034,"divisionID":5453,"division":"GU17","flightID":8857,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":4,"of":14,"gp":13,"w":7,"d":3,"l":3,"pts":24,"gf":35,"ga":10,"gd":25,"ppg":1.85,"form":"WWLDW","games":13,"played":13,"link":"start"},
+{"season":"2021-22","teamID":45879,"name":"San Diego Surf ECNL GU18/U19","clubID":87,"clubName":"San Diego Surf Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/_a7f6cc7dd0b746678ccc847ddbb7d25a.jpg","conference":"Southwest","eventID":2368,"divisionID":7815,"division":"GU18/U19","flightID":12823,"flightName":"Sonoran","u":18,"birthYears":[2003,2004],"rank":2,"of":8,"gp":22,"w":13,"d":5,"l":4,"pts":44,"gf":57,"ga":26,"gd":31,"ppg":2.0,"form":"DDWDW","games":19,"played":18,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":45879,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":7,"ga":9,"group":{"name":"Group F","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":7104,"squads":[
+{"clubID":79,"clubName":"Penn Fusion Soccer Academy","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":7104,"name":"Penn Fusion ECNL GU17","clubID":79,"clubName":"Penn Fusion Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_09495b37f6d74e29bd78fa7add3643f7_Penn_Fusio.jpg","conference":"North Atlantic","eventID":2039,"divisionID":5486,"division":"GU17","flightID":8890,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":5,"of":9,"gp":16,"w":7,"d":4,"l":5,"pts":25,"gf":27,"ga":20,"gd":7,"ppg":1.56,"form":"WLWWW","games":16,"played":16,"link":"start"},
+{"season":"2021-22","teamID":7104,"name":"Penn Fusion SA ECNL GU18/19","clubID":79,"clubName":"Penn Fusion Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_09495b37f6d74e29bd78fa7add3643f7_Penn_Fusio.jpg","conference":"North Atlantic","eventID":2373,"divisionID":7845,"division":"GU18/U19","flightID":12544,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":3,"of":9,"gp":16,"w":10,"d":3,"l":3,"pts":33,"gf":38,"ga":23,"gd":15,"ppg":2.06,"form":"WLWWW","games":16,"played":16,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11931,"flightName":"North American Cup","tier":"North American Cup","teamID":7104,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":5,"ga":6,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

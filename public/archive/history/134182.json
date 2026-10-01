@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134182,"squads":[
+{"clubID":2359,"clubName":"Michigan Hawks","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":134182,"name":"Michigan Hawks Magic ECNL G2012/13","clubID":2359,"clubName":"Michigan Hawks","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Armand_Echeverria_172acc43febb49f1bc8d55ad6051072d_Hawks_Logo.png","conference":"Midwest","eventID":4264,"divisionID":22414,"division":"GU14","flightID":41607,"flightName":"EAST","u":14,"birthYears":[2012,2013],"rank":8,"of":8,"gp":4,"w":0,"d":0,"l":4,"pts":0,"gf":1,"ga":13,"gd":-12,"ppg":0.0,"form":"LLLL","games":19,"played":4,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":79690,"name":"Michigan Hawks Magic ECNL G12","division":"G2012","conference":"Midwest"},
+{"season":"2025-26","teamID":79692,"name":"Michigan Hawks Magic ECNL G13","division":"G2013","conference":"Midwest"}
+]}
+]}

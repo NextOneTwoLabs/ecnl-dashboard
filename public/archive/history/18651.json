@@ -1,0 +1,10 @@
+{"schema":1,"teamID":18651,"squads":[
+{"clubID":3313,"clubName":"PDA White (Shore)","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":18651,"name":"PDA White ECNL G11","clubID":3313,"clubName":"PDA White (Shore)","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/PDA_Logo_11-04-2025T20:01:51.328.png","conference":"North Atlantic","eventID":2850,"divisionID":11630,"division":"G2011","flightID":19914,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":10,"of":10,"gp":18,"w":1,"d":4,"l":13,"pts":7,"gf":10,"ga":41,"gd":-31,"ppg":0.39,"form":"LLLDL","games":18,"played":18,"link":"start"},
+{"season":"2024-25","teamID":18651,"name":"PDA White ECNL G11","clubID":3313,"clubName":"PDA White (Shore)","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/PDA_Logo_11-04-2025T20:01:51.328.png","conference":"North Atlantic","eventID":3160,"divisionID":14238,"division":"G2011","flightID":24094,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":11,"of":11,"gp":20,"w":1,"d":0,"l":19,"pts":3,"gf":11,"ga":51,"gd":-40,"ppg":0.15,"form":"LLLLL","games":20,"played":20,"link":"id"},
+{"season":"2025-26","teamID":18651,"name":"PDA White ECNL G11","clubID":3313,"clubName":"PDA White (Shore)","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/PDA_Logo_11-04-2025T20:01:51.328.png","conference":"North Atlantic","eventID":3928,"divisionID":18555,"division":"G2011","flightID":32640,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":9,"of":10,"gp":9,"w":1,"d":2,"l":6,"pts":5,"gf":5,"ga":21,"gd":-16,"ppg":0.56,"form":"LLLLW","games":9,"played":9,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":128281,"name":"PDA White ECNL G2011/12","division":"GU15","conference":"North Atlantic"},
+{"season":"2026-27","teamID":128283,"name":"PDA White ECNL G2010/11","division":"GU16","conference":"North Atlantic"}
+]}
+]}

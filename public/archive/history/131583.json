@@ -1,0 +1,8 @@
+{"schema":1,"teamID":131583,"squads":[
+{"clubID":102,"clubName":"Sporting Blue Valley","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":131583,"name":"Sporting Blue Valley ECNL G2009/10","clubID":102,"clubName":"Sporting Blue Valley","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/SPORTING-Blue-Valley.jpg","conference":"Midwest","eventID":4264,"divisionID":22417,"division":"GU17","flightID":40561,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":14,"of":16,"gp":6,"w":0,"d":1,"l":5,"pts":1,"gf":4,"ga":25,"gd":-21,"ppg":0.17,"form":"LLDLL","games":15,"played":6,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":60884,"name":"Sporting Blue Valley ECNL G09","division":"G2009","conference":"Midwest"},
+{"season":"2025-26","teamID":68425,"name":"Sporting Blue Valley ECNL G10","division":"G2010","conference":"Midwest"}
+]}
+]}

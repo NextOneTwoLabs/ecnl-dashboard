@@ -1,0 +1,6 @@
+{"schema":1,"teamID":105806,"squads":[
+{"clubID":2329,"clubName":"Athletic Club Florida","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":105806,"name":"FC Prime ECNL G13","clubID":2329,"clubName":"Athletic Club Florida","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/009a7d67c61243a28dc446bd5ea8d4fe_logopng.png","conference":"Southeast","eventID":3932,"divisionID":18749,"division":"G2013","flightID":32927,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":8,"of":16,"gp":15,"w":6,"d":2,"l":7,"pts":20,"gf":24,"ga":27,"gd":-3,"ppg":1.33,"form":"WDLLL","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":105806,"name":"Athletic Club Florida ECNL G2012/13","clubID":2329,"clubName":"Athletic Club Florida","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/009a7d67c61243a28dc446bd5ea8d4fe_logopng.png","conference":"Southeast","eventID":4270,"divisionID":22450,"division":"GU14","flightID":40594,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":9,"of":16,"gp":6,"w":2,"d":1,"l":3,"pts":7,"gf":11,"ga":16,"gd":-5,"ppg":1.17,"form":"LLWLW","games":15,"played":6,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

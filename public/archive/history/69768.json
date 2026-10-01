@@ -1,0 +1,13 @@
+{"schema":1,"teamID":69768,"squads":[
+{"clubID":10,"clubName":"Albion Hurricanes FC","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":69768,"name":"Albion Hurricanes FC ECNL G13","clubID":10,"clubName":"Albion Hurricanes FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jacob_Decker_b5174738f5fb404db82f157ca6f459d3_albion.png","conference":"Texas","eventID":3934,"divisionID":18766,"division":"G2013","flightID":32939,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":8,"of":16,"gp":15,"w":7,"d":0,"l":8,"pts":21,"gf":27,"ga":30,"gd":-3,"ppg":1.4,"form":"WWLWW","games":15,"played":15,"link":"start"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":69768,"name":"Albion Hurricanes FC ECNL G2013/14","division":"GU13","conference":"Texas"},
+{"season":"2026-27","teamID":71431,"name":"Albion Hurricanes FC ECNL G2012/13","division":"GU14","conference":"Texas"}
+]},
+{"clubID":10,"clubName":"Albion Hurricanes FC","birthYears":[2013,2014],"seasons":[
+{"season":"2026-27","teamID":69768,"name":"Albion Hurricanes FC ECNL G2013/14","clubID":10,"clubName":"Albion Hurricanes FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jacob_Decker_b5174738f5fb404db82f157ca6f459d3_albion.png","conference":"Texas","eventID":4272,"divisionID":22461,"division":"GU13","flightID":40605,"flightName":"ECNL","u":13,"birthYears":[2013,2014],"rank":11,"of":16,"gp":4,"w":1,"d":1,"l":2,"pts":4,"gf":4,"ga":5,"gd":-1,"ppg":1.0,"form":"DWLL","games":15,"played":4,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":69768,"name":"Albion Hurricanes FC ECNL G13","division":"G2013","conference":"Texas"}
+]}
+]}

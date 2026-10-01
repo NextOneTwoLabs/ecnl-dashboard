@@ -1,0 +1,8 @@
+{"schema":1,"teamID":69289,"squads":[
+{"clubID":2731,"clubName":"Florida Premier FC","birthYears":[2006],"seasons":[
+{"season":"2022-23","teamID":69289,"name":"FL Premier FC ECNL G06","clubID":2731,"clubName":"Florida Premier FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/New_FP_Cre_08-19-2025T15:04:18.692.png","conference":"Southeast","eventID":2527,"divisionID":9525,"division":"G2006","flightID":16107,"flightName":"ECNL","u":17,"birthYears":[2006],"rank":11,"of":16,"gp":15,"w":4,"d":2,"l":9,"pts":14,"gf":18,"ga":43,"gd":-25,"ppg":0.93,"form":"LDDWW","games":15,"played":15,"link":"start"},
+{"season":"2023-24","teamID":69289,"name":"FL Premier FC ECNL G05/06","clubID":2731,"clubName":"Florida Premier FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/New_FP_Cre_08-19-2025T15:04:18.692.png","conference":"Southeast","eventID":2838,"divisionID":11600,"division":"G2006/2005","flightID":19788,"flightName":"ECNL","u":18,"birthYears":[2005,2006],"rank":11,"of":16,"gp":15,"w":6,"d":1,"l":8,"pts":19,"gf":25,"ga":22,"gd":3,"ppg":1.27,"form":"WLLWW","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2022-23","stage":"Playoffs","eventID":2719,"eventName":"ECNL National Playoffs","divisionID":11967,"division":"G2006","flightID":20456,"flightName":"Showcase Cup B","tier":"Showcase Cup B","teamID":69289,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":5,"ga":5,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

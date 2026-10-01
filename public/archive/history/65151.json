@@ -1,0 +1,8 @@
+{"schema":1,"teamID":65151,"squads":[
+{"clubID":3986,"clubName":"Bay Area Surf","birthYears":[2006],"seasons":[
+{"season":"2022-23","teamID":65151,"name":"Bay Area Surf ECNL G06","clubID":3986,"clubName":"Bay Area Surf","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Allessandro_Perez_87888f604ba8407ab7007ae6c837e777_Blue_Wave_.png","conference":"NorCal","eventID":2528,"divisionID":9531,"division":"G2006","flightID":16168,"flightName":"ECNL","u":17,"birthYears":[2006],"rank":6,"of":10,"gp":18,"w":8,"d":3,"l":7,"pts":27,"gf":31,"ga":32,"gd":-1,"ppg":1.5,"form":"LWLLL","games":18,"played":18,"link":"start"},
+{"season":"2023-24","teamID":65151,"name":"Bay Area Surf ECNL G06/05","clubID":3986,"clubName":"Bay Area Surf","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Allessandro_Perez_87888f604ba8407ab7007ae6c837e777_Blue_Wave_.png","conference":"NorCal","eventID":2854,"divisionID":11637,"division":"G2006/2005","flightID":19921,"flightName":"ECNL","u":18,"birthYears":[2005,2006],"rank":6,"of":10,"gp":18,"w":7,"d":4,"l":7,"pts":25,"gf":31,"ga":34,"gd":-3,"ppg":1.39,"form":"WWLDL","games":18,"played":18,"link":"id"}
+],"postseason":[
+{"season":"2022-23","stage":"Playoffs","eventID":2719,"eventName":"ECNL National Playoffs","divisionID":11967,"division":"G2006","flightID":20456,"flightName":"Showcase Cup B","tier":"Showcase Cup B","teamID":65151,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":8,"ga":7,"group":null,"reached":"Semifinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

@@ -1,0 +1,6 @@
+{"schema":1,"teamID":69457,"squads":[
+{"clubID":75,"clubName":"Ohio Elite Soccer Academy","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":69457,"name":"Ohio Elite SA ECNL G13","clubID":75,"clubName":"Ohio Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/92b5e54e58e945cd9c61bcd960f81512_Ohio_Elite.png","conference":"Ohio Valley","eventID":3931,"divisionID":18743,"division":"G2013","flightID":36469,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":8,"of":12,"gp":22,"w":8,"d":3,"l":11,"pts":27,"gf":31,"ga":38,"gd":-7,"ppg":1.23,"form":"LWLLW","games":22,"played":22,"link":"start"},
+{"season":"2026-27","teamID":69457,"name":"Ohio Elite SA ECNL G2012/13","clubID":75,"clubName":"Ohio Elite Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/92b5e54e58e945cd9c61bcd960f81512_Ohio_Elite.png","conference":"Ohio Valley","eventID":4269,"divisionID":22444,"division":"GU14","flightID":40588,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":2,"of":12,"gp":4,"w":3,"d":1,"l":0,"pts":10,"gf":11,"ga":6,"gd":5,"ppg":2.5,"form":"WDWW","games":22,"played":4,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134374,"squads":[
+{"clubID":342,"clubName":"Select","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":134374,"name":"Select ECNL G2009/10","clubID":342,"clubName":"Select","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Select_New_06-23-2025T23:03:13.487.png","conference":"New England","eventID":4265,"divisionID":22423,"division":"GU17","flightID":40567,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":7,"of":9,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":16,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":95006,"name":"Select ECNL G10","division":"G2010","conference":"New England"},
+{"season":"2025-26","teamID":95007,"name":"Select ECNL G09","division":"G2009","conference":"New England"}
+]}
+]}

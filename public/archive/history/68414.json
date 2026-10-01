@@ -1,0 +1,13 @@
+{"schema":1,"teamID":68414,"squads":[
+{"clubID":7,"clubName":"No Club Selection","birthYears":[2009],"seasons":[
+{"season":"2022-23","teamID":68414,"name":"Beach FC (VA) ECNL G09","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Mid-Atlantic","eventID":2523,"divisionID":9498,"division":"G2009","flightID":15725,"flightName":"ECNL","u":14,"birthYears":[2009],"rank":9,"of":13,"gp":24,"w":7,"d":4,"l":13,"pts":25,"gf":34,"ga":51,"gd":-17,"ppg":1.04,"form":"WWWLL","games":24,"played":24,"link":"start"},
+{"season":"2023-24","teamID":68414,"name":"Beach FC (VA) ECNL G09","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Mid-Atlantic","eventID":2839,"divisionID":11504,"division":"G2009","flightID":19660,"flightName":"ECNL","u":15,"birthYears":[2009],"rank":11,"of":13,"gp":12,"w":2,"d":1,"l":9,"pts":7,"gf":13,"ga":36,"gd":-23,"ppg":0.58,"form":"DLLLL","games":12,"played":12,"link":"id"},
+{"season":"2024-25","teamID":68414,"name":"Beach FC (VA) ECNL G09","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Mid-Atlantic","eventID":3157,"divisionID":14180,"division":"G2009","flightID":24012,"flightName":"ECNL","u":16,"birthYears":[2009],"rank":9,"of":12,"gp":11,"w":3,"d":2,"l":6,"pts":11,"gf":6,"ga":16,"gd":-10,"ppg":1.0,"form":"WLDLW","games":11,"played":11,"link":"id"},
+{"season":"2025-26","teamID":68414,"name":"Beach FC (VA) ECNL G09","clubID":7,"clubName":"No Club Selection","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/AthleteOne/Default_Club_Logo.png","conference":"Mid-Atlantic","eventID":3925,"divisionID":18539,"division":"G2009","flightID":32623,"flightName":"ECNL","u":17,"birthYears":[2009],"rank":9,"of":10,"gp":9,"w":2,"d":2,"l":5,"pts":8,"gf":5,"ga":21,"gd":-16,"ppg":0.89,"form":"LLDWD","games":9,"played":9,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20343,"division":"G2009","flightID":36386,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":68414,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":1,"d":0,"l":2,"gf":3,"ga":5}
+],"maybe":[
+{"season":"2026-27","teamID":135521,"name":"Beach FC (VA) ECNL G2009/10","division":"GU17","conference":"Mid-Atlantic"},
+{"season":"2026-27","teamID":135522,"name":"Beach FC (VA) ECNL G2008/09","division":"GU18/19","conference":"Mid-Atlantic"}
+]}
+]}

@@ -1,0 +1,7 @@
+{"schema":1,"teamID":134546,"squads":[
+{"clubID":112,"clubName":"Washington Premier FC","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":134546,"name":"Washington Premier ECNL G2011/12","clubID":112,"clubName":"Washington Premier FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/d894bc1820aa478694295f129c526c45_Washington.png","conference":"Northwest","eventID":4268,"divisionID":22439,"division":"GU15","flightID":40583,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":9,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":18,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":83471,"name":"Washington Premier ECNL G12","division":"G2012","conference":"Northwest"}
+]}
+]}

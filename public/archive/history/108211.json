@@ -1,0 +1,14 @@
+{"schema":1,"teamID":108211,"squads":[
+{"clubID":4008,"clubName":"GTFC Impact","birthYears":[2011],"seasons":[
+{"season":"2025-26","teamID":108211,"name":"GTFC Impact ECNL G11","clubID":4008,"clubName":"GTFC Impact","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Megan_Neumann_c5a54286810144058ef67b28f71dff93_Unknown.png","conference":"Ohio Valley","eventID":3931,"divisionID":18744,"division":"G2011","flightID":32911,"flightName":"North","u":15,"birthYears":[2011],"rank":6,"of":6,"gp":16,"w":3,"d":1,"l":12,"pts":10,"gf":25,"ga":56,"gd":-31,"ppg":0.63,"form":"LLWWL","games":14,"played":14,"link":"start"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":108210,"name":"GTFC Impact ECNL G2010/11","division":"GU16","conference":"Ohio Valley"},
+{"season":"2026-27","teamID":108211,"name":"GTFC Impact ECNL G2011/12","division":"GU15","conference":"Ohio Valley"}
+]},
+{"clubID":4008,"clubName":"GTFC Impact","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":108211,"name":"GTFC Impact ECNL G2011/12","clubID":4008,"clubName":"GTFC Impact","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Megan_Neumann_c5a54286810144058ef67b28f71dff93_Unknown.png","conference":"Ohio Valley","eventID":4269,"divisionID":22445,"division":"GU15","flightID":41861,"flightName":"NORTH","u":15,"birthYears":[2011,2012],"rank":2,"of":6,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":14,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":108211,"name":"GTFC Impact ECNL G11","division":"G2011","conference":"Ohio Valley"},
+{"season":"2025-26","teamID":108213,"name":"GTFC Impact ECNL G12","division":"G2012","conference":"Ohio Valley"}
+]}
+]}

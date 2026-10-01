@@ -1,0 +1,16 @@
+{"schema":1,"teamID":61270,"squads":[
+{"clubID":52,"clubName":"FC Stars","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":61270,"name":"FC Stars White ECNL G11","clubID":52,"clubName":"FC Stars","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Mike_O_Donnell_0649b850f07a48a9bd20199087304d6b_FCStarsofM.png","conference":"New England","eventID":2853,"divisionID":11636,"division":"G2011","flightID":19920,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":8,"of":8,"gp":14,"w":0,"d":2,"l":12,"pts":2,"gf":4,"ga":44,"gd":-40,"ppg":0.14,"form":"DLLLL","games":14,"played":14,"link":"start"},
+{"season":"2024-25","teamID":61270,"name":"FC Stars White ECNL G11","clubID":52,"clubName":"FC Stars","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Mike_O_Donnell_0649b850f07a48a9bd20199087304d6b_FCStarsofM.png","conference":"New England","eventID":3159,"divisionID":14232,"division":"G2011","flightID":24089,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":8,"of":9,"gp":16,"w":2,"d":5,"l":9,"pts":11,"gf":13,"ga":30,"gd":-17,"ppg":0.69,"form":"LWDLL","games":16,"played":16,"link":"id"},
+{"season":"2025-26","teamID":61270,"name":"FC Stars White ECNL G11","clubID":52,"clubName":"FC Stars","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Mike_O_Donnell_0649b850f07a48a9bd20199087304d6b_FCStarsofM.png","conference":"New England","eventID":3927,"divisionID":18549,"division":"G2011","flightID":32634,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":8,"of":9,"gp":16,"w":0,"d":5,"l":11,"pts":5,"gf":6,"ga":37,"gd":-31,"ppg":0.31,"form":"LLLLD","games":16,"played":16,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":46951,"name":"FC Stars White ECNL G2010/11","division":"GU16","conference":"New England"},
+{"season":"2026-27","teamID":61270,"name":"FC Stars White ECNL G2011/12","division":"GU15","conference":"New England"}
+]},
+{"clubID":52,"clubName":"FC Stars","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":61270,"name":"FC Stars White ECNL G2011/12","clubID":52,"clubName":"FC Stars","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Mike_O_Donnell_0649b850f07a48a9bd20199087304d6b_FCStarsofM.png","conference":"New England","eventID":4265,"divisionID":22421,"division":"GU15","flightID":40565,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":4,"of":9,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":16,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":61270,"name":"FC Stars White ECNL G11","division":"G2011","conference":"New England"},
+{"season":"2025-26","teamID":81913,"name":"FC Stars White ECNL G12","division":"G2012","conference":"New England"}
+]}
+]}

@@ -1,0 +1,6 @@
+{"schema":1,"teamID":35188,"squads":[
+{"clubID":2,"clubName":"Strikers FC ECNL","birthYears":[2007],"seasons":[
+{"season":"2020-21","teamID":35188,"name":"Strikers FC ECNL GU14","clubID":2,"clubName":"Strikers FC ECNL","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/TGS_Admin_0b7e3ddf2bb245efac3e50ddf9f0296f_ECNL_PNG_F.png","conference":"Southwest","eventID":2034,"divisionID":5450,"division":"GU14","flightID":8854,"flightName":"ECNL","u":14,"birthYears":[2007],"rank":10,"of":14,"gp":15,"w":4,"d":2,"l":9,"pts":14,"gf":19,"ga":39,"gd":-20,"ppg":0.93,"form":"DWWLL","games":15,"played":15,"link":"start"},
+{"season":"2021-22","teamID":35188,"name":"Strikers FC ECNL GU15","clubID":2,"clubName":"Strikers FC ECNL","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/TGS_Admin_0b7e3ddf2bb245efac3e50ddf9f0296f_ECNL_PNG_F.png","conference":"Southwest","eventID":2368,"divisionID":7812,"division":"GU15","flightID":12820,"flightName":"Sonoran","u":15,"birthYears":[2007],"rank":7,"of":8,"gp":23,"w":3,"d":1,"l":19,"pts":10,"gf":16,"ga":62,"gd":-46,"ppg":0.43,"form":"LLDLL","games":18,"played":18,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

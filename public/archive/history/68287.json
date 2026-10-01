@@ -1,0 +1,10 @@
+{"schema":1,"teamID":68287,"squads":[
+{"clubID":2017,"clubName":"Rockford Raptors FC","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":68287,"name":"Rockford Raptors ECNL G11","clubID":2017,"clubName":"Rockford Raptors FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImage/thumbimage (1)45DD2018094545.jpe","conference":"Midwest","eventID":2849,"divisionID":11606,"division":"G2011","flightID":19809,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":13,"of":15,"gp":14,"w":2,"d":1,"l":11,"pts":7,"gf":15,"ga":34,"gd":-19,"ppg":0.5,"form":"LLLLL","games":14,"played":14,"link":"start"},
+{"season":"2024-25","teamID":68287,"name":"Rockford Raptors ECNL G11","clubID":2017,"clubName":"Rockford Raptors FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImage/thumbimage (1)45DD2018094545.jpe","conference":"Midwest","eventID":3158,"divisionID":14226,"division":"G2011","flightID":24083,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":11,"of":16,"gp":15,"w":3,"d":5,"l":7,"pts":14,"gf":25,"ga":40,"gd":-15,"ppg":0.93,"form":"DWWLD","games":15,"played":15,"link":"id"},
+{"season":"2025-26","teamID":68287,"name":"Rockford Raptors ECNL G11","clubID":2017,"clubName":"Rockford Raptors FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImage/thumbimage (1)45DD2018094545.jpe","conference":"Midwest","eventID":3926,"divisionID":18543,"division":"G2011","flightID":32628,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":12,"of":16,"gp":15,"w":3,"d":1,"l":11,"pts":10,"gf":16,"ga":38,"gd":-22,"ppg":0.67,"form":"LWLLL","games":15,"played":15,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":134302,"name":"Rockford Raptors FC ECNL G2011/12","division":"GU15","conference":"Midwest"},
+{"season":"2026-27","teamID":134303,"name":"Rockford Raptors FC ECNL G2010/11","division":"GU16","conference":"Midwest"}
+]}
+]}

@@ -1,0 +1,10 @@
+{"schema":1,"teamID":68940,"squads":[
+{"clubID":2329,"clubName":"Athletic Club Florida","birthYears":[2012],"best":0,"seasons":[
+{"season":"2024-25","teamID":68940,"name":"FC Prime ECNL G12","clubID":2329,"clubName":"Athletic Club Florida","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/009a7d67c61243a28dc446bd5ea8d4fe_logopng.png","conference":"Southeast","eventID":3164,"divisionID":14263,"division":"G2012","flightID":24127,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":9,"of":16,"gp":15,"w":6,"d":4,"l":5,"pts":22,"gf":30,"ga":19,"gd":11,"ppg":1.47,"form":"WDDLW","games":15,"played":15,"link":"start"},
+{"season":"2025-26","teamID":68940,"name":"FC Prime ECNL G12","clubID":2329,"clubName":"Athletic Club Florida","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/009a7d67c61243a28dc446bd5ea8d4fe_logopng.png","conference":"Southeast","eventID":3932,"divisionID":18750,"division":"G2012","flightID":32925,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":3,"of":16,"gp":15,"w":11,"d":2,"l":2,"pts":35,"gf":49,"ga":25,"gd":24,"ppg":2.33,"form":"WWWWW","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21552,"division":"G2012","flightID":39383,"flightName":"Champions League","tier":"Champions League","teamID":68940,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":3,"ga":8,"group":null,"reached":"Round of 16","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":83371,"name":"Athletic Club Florida ECNL G2011/12","division":"GU15","conference":"Southeast"}
+]}
+]}

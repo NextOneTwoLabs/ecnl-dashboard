@@ -1,0 +1,6 @@
+{"schema":1,"teamID":112271,"squads":[
+{"clubID":874,"clubName":"Tampa Bay United","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":112271,"name":"Tampa Bay United ECNL G13","clubID":874,"clubName":"Tampa Bay United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Hugo_Acosta_15ad970dfb1e4ea39726de93b4ff5a6e_tbu_2_star.png","conference":"Southeast","eventID":3932,"divisionID":18749,"division":"G2013","flightID":32927,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":16,"of":16,"gp":15,"w":1,"d":2,"l":12,"pts":5,"gf":11,"ga":51,"gd":-40,"ppg":0.33,"form":"WLLLD","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":112271,"name":"Tampa Bay United ECNL G2012/13","clubID":874,"clubName":"Tampa Bay United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Hugo_Acosta_15ad970dfb1e4ea39726de93b4ff5a6e_tbu_2_star.png","conference":"Southeast","eventID":4270,"divisionID":22450,"division":"GU14","flightID":40594,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":12,"of":16,"gp":6,"w":1,"d":2,"l":3,"pts":5,"gf":4,"ga":17,"gd":-13,"ppg":0.83,"form":"LDDLW","games":15,"played":6,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":7521,"squads":[
+{"clubID":419,"clubName":"Maryland United Football Club","birthYears":[2004],"seasons":[
+{"season":"2020-21","teamID":7521,"name":"Maryland United ECNL GU17","clubID":419,"clubName":"Maryland United Football Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Deonyra_Mitchell_4db3a963b3834d0e9943388633e2b542_marylandun.png","conference":"North Atlantic","eventID":2039,"divisionID":5486,"division":"GU17","flightID":8890,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":4,"of":9,"gp":16,"w":8,"d":2,"l":6,"pts":26,"gf":20,"ga":16,"gd":4,"ppg":1.63,"form":"LWWWD","games":16,"played":16,"link":"start"},
+{"season":"2021-22","teamID":7521,"name":"Maryland United FC ECNL GU18/19","clubID":419,"clubName":"Maryland United Football Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Deonyra_Mitchell_4db3a963b3834d0e9943388633e2b542_marylandun.png","conference":"North Atlantic","eventID":2373,"divisionID":7845,"division":"GU18/U19","flightID":12544,"flightName":"Flight 1","u":18,"birthYears":[2003,2004],"rank":7,"of":9,"gp":16,"w":3,"d":7,"l":6,"pts":16,"gf":14,"ga":25,"gd":-11,"ppg":1.0,"form":"DLWLD","games":16,"played":16,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":11932,"flightName":"Showcase Cup A","tier":"Showcase Cup A","teamID":7521,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":4,"ga":3,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

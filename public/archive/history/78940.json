@@ -1,0 +1,12 @@
+{"schema":1,"teamID":78940,"squads":[
+{"clubID":737,"clubName":"Oregon Surf SC","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":78940,"name":"Northwest Elite FC ECNL G11","clubID":737,"clubName":"Oregon Surf SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Nino_Cuccinello_7d2db632a5ae4f2a8f519aac7882179a_OregonSurf.png","conference":"Northwest","eventID":2855,"divisionID":11648,"division":"G2011","flightID":19932,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":9,"of":10,"gp":18,"w":2,"d":4,"l":12,"pts":10,"gf":7,"ga":48,"gd":-41,"ppg":0.56,"form":"LDLDL","games":18,"played":18,"link":"start"},
+{"season":"2024-25","teamID":90909,"name":"Oregon Surf ECNL G11","clubID":737,"clubName":"Oregon Surf SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Nino_Cuccinello_7d2db632a5ae4f2a8f519aac7882179a_OregonSurf.png","conference":"Northwest","eventID":3162,"divisionID":14250,"division":"G2011","flightID":24107,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":9,"of":10,"gp":18,"w":1,"d":4,"l":13,"pts":7,"gf":7,"ga":42,"gd":-35,"ppg":0.39,"form":"LLLLL","games":18,"played":18,"link":"club"},
+{"season":"2025-26","teamID":90909,"name":"Oregon Surf ECNL G11","clubID":737,"clubName":"Oregon Surf SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Nino_Cuccinello_7d2db632a5ae4f2a8f519aac7882179a_OregonSurf.png","conference":"Northwest","eventID":3930,"divisionID":18739,"division":"G2011","flightID":32902,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":8,"of":10,"gp":18,"w":3,"d":2,"l":13,"pts":11,"gf":9,"ga":35,"gd":-26,"ppg":0.61,"form":"WLLLL","games":18,"played":18,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20345,"division":"G2011","flightID":36390,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":90909,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":2,"d":1,"l":0,"gf":3,"ga":1}
+],"maybe":[
+{"season":"2026-27","teamID":130035,"name":"Oregon Surf ECNL G2010/11","division":"GU16","conference":"Northwest"},
+{"season":"2026-27","teamID":130041,"name":"Oregon Surf ECNL G2011/12","division":"GU15","conference":"Northwest"}
+]}
+]}

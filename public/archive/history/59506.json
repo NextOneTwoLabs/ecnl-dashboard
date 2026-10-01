@@ -1,0 +1,8 @@
+{"schema":1,"teamID":59506,"squads":[
+{"clubID":2133,"clubName":"Oklahoma Energy FC","birthYears":[2005],"best":0,"seasons":[
+{"season":"2021-22","teamID":59506,"name":"OK Energy FC ECNL GU17","clubID":2133,"clubName":"Oklahoma Energy FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/new_logo2_10-15-2025T21:05:06.934.jpg","conference":"Texas","eventID":2370,"divisionID":7826,"division":"GU17","flightID":12525,"flightName":"Flight 1","u":17,"birthYears":[2005],"rank":4,"of":12,"gp":22,"w":11,"d":6,"l":5,"pts":39,"gf":30,"ga":24,"gd":6,"ppg":1.77,"form":"WWWLW","games":22,"played":22,"link":"start"},
+{"season":"2022-23","teamID":59506,"name":"OK Energy FC ECNL G05/04","clubID":2133,"clubName":"Oklahoma Energy FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/new_logo2_10-15-2025T21:05:06.934.jpg","conference":"Texas","eventID":2526,"divisionID":9520,"division":"G2005/2004","flightID":16099,"flightName":"ECNL","u":18,"birthYears":[2004,2005],"rank":7,"of":12,"gp":22,"w":7,"d":6,"l":9,"pts":27,"gf":39,"ga":47,"gd":-8,"ppg":1.23,"form":"WLLDD","games":22,"played":22,"link":"id"}
+],"postseason":[
+{"season":"2021-22","stage":"Playoffs","eventID":2436,"eventName":"ECNL National Playoffs","divisionID":9753,"division":"U17","flightID":15405,"flightName":"Champions League","tier":"Champions League","teamID":59506,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":7,"ga":9,"group":{"name":"Group E","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

@@ -1,0 +1,7 @@
+{"schema":1,"teamID":3022,"squads":[
+{"clubID":101,"clubName":"Solar SC","birthYears":[2002,2003],"seasons":[
+{"season":"2020-21","teamID":3022,"name":"Solar ECNL U18/U19 Composite","clubID":101,"clubName":"Solar SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tatum_Warrington_fdf6158b54114df09283c69bf04b12ee_Solar_logo.png","conference":"Texas","eventID":2036,"divisionID":5468,"division":"GU18/U19 Composite","flightID":8872,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":2,"of":12,"gp":21,"w":17,"d":2,"l":2,"pts":53,"gf":64,"ga":13,"gd":51,"ppg":2.52,"form":"WWWWW","games":22,"played":21,"link":"start"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5850,"division":"U18/U19","flightID":11935,"flightName":"Composite","tier":"U18/U19 Composite","teamID":3022,"games":4,"played":4,"w":2,"d":0,"l":2,"gf":9,"ga":7,"group":null,"reached":"Semifinals","champion":false,"cup":null,"reconstructed":false,"dataGap":true}
+],"showcases":[]}
+]}

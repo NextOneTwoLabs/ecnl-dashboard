@@ -1,0 +1,8 @@
+{"schema":1,"teamID":131498,"squads":[
+{"clubID":56,"clubName":"Gwinnett Soccer Academy","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":131498,"name":"GSA ECNL G2010/11","clubID":56,"clubName":"Gwinnett Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/kk_kk_93be4e524dee4d938f98de1b01e720ab_GSALogo18D.jpg","conference":"Southeast","eventID":4270,"divisionID":22452,"division":"GU16","flightID":40596,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":3,"of":16,"gp":6,"w":4,"d":2,"l":0,"pts":14,"gf":10,"ga":4,"gd":6,"ppg":2.33,"form":"DWDWW","games":15,"played":6,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":68924,"name":"GSA ECNL G10","division":"G2010","conference":"Southeast"},
+{"season":"2025-26","teamID":78200,"name":"GSA ECNL G11","division":"G2011","conference":"Southeast"}
+]}
+]}

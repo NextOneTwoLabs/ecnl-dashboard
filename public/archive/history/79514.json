@@ -1,0 +1,12 @@
+{"schema":1,"teamID":79514,"squads":[
+{"clubID":25,"clubName":"Challenge SC","birthYears":[2011],"best":0,"seasons":[
+{"season":"2023-24","teamID":79514,"name":"Challenge SC ECNL G11","clubID":25,"clubName":"Challenge SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/logo_05-05-2026T19:13:38.814.png","conference":"Texas","eventID":2857,"divisionID":11659,"division":"G2011","flightID":19950,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":6,"of":16,"gp":15,"w":8,"d":1,"l":6,"pts":25,"gf":33,"ga":25,"gd":8,"ppg":1.67,"form":"DLLWW","games":15,"played":15,"link":"start"},
+{"season":"2024-25","teamID":79514,"name":"Challenge SC ECNL G11","clubID":25,"clubName":"Challenge SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/logo_05-05-2026T19:13:38.814.png","conference":"Texas","eventID":3166,"divisionID":14271,"division":"G2011","flightID":24143,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":10,"of":16,"gp":15,"w":3,"d":6,"l":6,"pts":15,"gf":14,"ga":29,"gd":-15,"ppg":1.0,"form":"LLDLW","games":15,"played":15,"link":"id"},
+{"season":"2025-26","teamID":79514,"name":"Challenge SC ECNL G11","clubID":25,"clubName":"Challenge SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/logo_05-05-2026T19:13:38.814.png","conference":"Texas","eventID":3934,"divisionID":18764,"division":"G2011","flightID":32935,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":13,"of":16,"gp":15,"w":3,"d":2,"l":10,"pts":11,"gf":8,"ga":28,"gd":-20,"ppg":0.73,"form":"WLWLL","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14601,"division":"G2011","flightID":24871,"flightName":"Champions League","tier":"Champions League","teamID":79514,"games":3,"played":3,"w":0,"d":2,"l":1,"gf":3,"ga":9,"group":{"name":"Group D","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":129340,"name":"Challenge SC ECNL G2010/11","division":"GU16","conference":"Texas"},
+{"season":"2026-27","teamID":129341,"name":"Challenge SC ECNL G2011/12","division":"GU15","conference":"Texas"}
+]}
+]}

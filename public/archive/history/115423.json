@@ -1,0 +1,10 @@
+{"schema":1,"teamID":115423,"squads":[
+{"clubID":525,"clubName":"Arlington Soccer Association","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":115423,"name":"Arlington Soccer ECNL G13","clubID":525,"clubName":"Arlington Soccer Association","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Thomas_Griffin_bee0acf7e2a84c378d3d08368546c844_ARL LOGO.png","conference":"Mid-Atlantic","eventID":3925,"divisionID":18535,"division":"G2013","flightID":32626,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":3,"of":10,"gp":18,"w":11,"d":1,"l":6,"pts":34,"gf":29,"ga":21,"gd":8,"ppg":1.89,"form":"LLWWW","games":18,"played":18,"link":"start"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":115423,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":3,"ga":7,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":134239,"name":"Arlington Soccer Association ECNL G2012/13","division":"GU14","conference":"Mid-Atlantic"},
+{"season":"2026-27","teamID":134240,"name":"Arlington Soccer Association ECNL G2013/14","division":"GU13","conference":"Mid-Atlantic"}
+]}
+]}

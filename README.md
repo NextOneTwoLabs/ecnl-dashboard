@@ -17,6 +17,7 @@ upstream API or website ever goes away.
 - **Playoffs & Finals** — National post-season per age group and competition (Champions League, North American Cup, Showcase Cup, Showcase Games): knockout brackets drawn as trees, cup and consolation brackets, group tables where a group stage exists, round-tagged schedules, and a format note per competition
 - **Showcases** — ECNL showcase weekends (2025-26: San Diego Fall and Phoenix Spring) per age group: a Results table (TGS's order, no positions) and the Games, with conference teams linked to their team pages
 - **★ My Teams** — Follow any team (the ★ My Teams button at the foot of the sidebar opens the list); each favorite opens a summary page: the glance panel, the full table with the team highlighted, the team's own fixtures and results, its showcase games, and its post-season games when it played any
+- **Team history** — A team page's **This season | History** tabs: one squad (e.g. MVLA, girls born 2011) across every archived season, with its conference finishes, Playoffs and Finals, showcases and totals; see [Team history](#team-history)
 - **One team search** — Find a team across every age group and conference in the current season; a result opens it on its conference page with the age group and team selected
 - **Age group navigation** — Tabs populated from the API; keyboard arrow-key navigation, `/` to search
 - **Dark mode**, and **deep links** (season, age group, conference, view, selected team and match filter in the URL hash)
@@ -73,11 +74,17 @@ always read the local archive, even when the server is not in offline mode.
 ## Validate changes
 
 ```bash
-node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs  # Node 22+
+HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
+PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
+  python archive.py --team-history --check      # the team histories equal a fresh build
 ```
+
+`tests/team-history.test.mjs` runs `python team_history.py --parity` itself, under the
+Python guard, into a temporary `.parity-*` directory in the checkout that it removes.
 
 The API contract workflow runs these checks on pull requests and main commits.
 No test may reach the network: `tests/netguard/sitecustomize.py` (Python) and
@@ -130,6 +137,7 @@ python archive.py --refresh --dry-run --date 2026-09-12  # test a given day
 python archive.py --season 2026-27                     # full crawl of one season
 python archive.py --all                                # every season (~1,200 requests)
 python archive.py --team-index --all                   # rebuild every season's team index (no API calls)
+python archive.py --team-history                       # rebuild every team history (no API calls); --check: drift only
 python archive.py --clubs --all                        # fetch club city/state for clubs with no entry yet
 python archive.py --clubs --season 2026-27 --force     # re-check every club of one season
 ```
@@ -149,6 +157,11 @@ which lets a shared team link, My Teams and a Teams search find a team with one
 request instead of reading every standings file. It is rewritten only when a row
 changes. If `tests/test_team_index.py` reports it stale, run
 `python archive.py --team-index --all` and commit the result.
+
+Right after the index, the same run rebuilds the team histories
+(`public/archive/history/<teamID>.json`; see [Team history](#team-history)), writing only
+the files that changed, so the workflow commits them with the data they come from. If that
+build fails, the old files stay, the data is still committed and the run fails.
 
 Commit `public/archive/` and `export/` — that is what makes the data durable, and
 pushing to `main` is what deploys.
@@ -358,6 +371,34 @@ the Playoffs tab; the tab is kept and the hash follows the new season.
 Showcases is `#tab=showcases&season=2025-26`, with `&event=<eventId>`, `&age=`,
 `&flight=<flightId>` (the page always writes it; a link without it opens the age group's
 first flight) and `&view=schedule` (the Games view).
+
+## Team history
+
+A team page has two tabs, **This season** (as before) and **History**
+(`#tab=teams&season=2026-27&team=55477&view=history`), and every Team at a glance card links
+to it ("Season-by-season history →"). History follows one *squad*, a group of players, across
+every archived season: "MVLA · born 2011", with its place and seasons, totals (ours, from
+TGS's standings), the best Champions League finish and any titles, one row or card per
+conference season, every Playoffs and Finals appearance and every showcase, each linked to
+its table, bracket or results and to TGS. History is not kept when you open another team.
+
+- **Linking.** `team_history.py` links a team-season to the next by the same TGS id (with a
+  birth-year check), else by name, else by club, never guessing when two teams could claim
+  the same successor. At the 2026-27 school-year regroup it merges only ids TGS moved up an
+  age group; a new id, or an id kept in the same age group, is shown as a *possible
+  continuation* with every candidate. Uncertain links carry a visible label ("linked by
+  name", "linked by club"). The rules and the file format are in
+  [docs/data-api.md](docs/data-api.md#team-history-apiv1teamsteamidhistory).
+- **Overrides.** `public/data/team-links.json` (empty today) holds hand-reviewed links and
+  unlinks, declared with evidence and approved in a PR, like showcase `teamAliases`. The
+  builder rejects an entry that doesn't fit, and the run fails.
+- **Data.** One file per team id (1,906 files, 4.6 MB), built from the archive with no API
+  calls by every crawl and refresh, and by `python archive.py --team-history`. CI fails if the
+  committed files differ from a fresh build (`--team-history --check`). What happens when the
+  data changes, a build fails, or a past season is corrected:
+  [When the data changes](docs/data-api.md#when-the-data-changes).
+- **Not in this phase:** RL, guest and showcase-only teams (no conference table, so no
+  history and no link), following a squad in My Teams, and History links in search results.
 
 ## Feedback
 

@@ -1,0 +1,20 @@
+{"schema":1,"teamID":83371,"squads":[
+{"clubID":2329,"clubName":"Athletic Club Florida","birthYears":[2011],"best":1,"seasons":[
+{"season":"2023-24","teamID":83371,"name":"FC Prime ECNL G11","clubID":2329,"clubName":"Athletic Club Florida","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/009a7d67c61243a28dc446bd5ea8d4fe_logopng.png","conference":"Southeast","eventID":2838,"divisionID":11595,"division":"G2011","flightID":19793,"flightName":"ECNL","u":13,"birthYears":[2011],"rank":3,"of":16,"gp":15,"w":11,"d":1,"l":3,"pts":34,"gf":40,"ga":17,"gd":23,"ppg":2.27,"form":"WDWWW","games":15,"played":15,"link":"start"},
+{"season":"2024-25","teamID":83371,"name":"FC Prime ECNL G11","clubID":2329,"clubName":"Athletic Club Florida","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/009a7d67c61243a28dc446bd5ea8d4fe_logopng.png","conference":"Southeast","eventID":3164,"divisionID":14262,"division":"G2011","flightID":24125,"flightName":"ECNL","u":14,"birthYears":[2011],"rank":3,"of":16,"gp":15,"w":11,"d":2,"l":2,"pts":35,"gf":40,"ga":16,"gd":24,"ppg":2.33,"form":"WWWWW","games":15,"played":15,"link":"id"},
+{"season":"2025-26","teamID":83371,"name":"FC Prime ECNL G11","clubID":2329,"clubName":"Athletic Club Florida","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/009a7d67c61243a28dc446bd5ea8d4fe_logopng.png","conference":"Southeast","eventID":3932,"divisionID":18751,"division":"G2011","flightID":32923,"flightName":"ECNL","u":15,"birthYears":[2011],"rank":6,"of":16,"gp":15,"w":9,"d":1,"l":5,"pts":28,"gf":23,"ga":24,"gd":-1,"ppg":1.87,"form":"WWWWL","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2023-24","stage":"Playoffs","eventID":3064,"eventName":"ECNL Girls National Playoffs","divisionID":14601,"division":"G2011","flightID":24871,"flightName":"Champions League","tier":"Champions League","teamID":83371,"games":3,"played":3,"w":0,"d":1,"l":2,"gf":2,"ga":9,"group":{"name":"Group C","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false},
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18500,"division":"G2011","flightID":32792,"flightName":"Champions League","tier":"Champions League","teamID":83371,"games":0,"played":0,"w":0,"d":0,"l":3,"gf":0,"ga":11,"fromTable":true,"group":{"name":"Group I","pos":4,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true},
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21550,"division":"G2011","flightID":39389,"flightName":"Showcase Cup","tier":"Showcase Cup","teamID":83371,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":6,"ga":5,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":46727,"name":"Athletic Club Florida ECNL G2010/11","division":"GU16","conference":"Southeast"},
+{"season":"2026-27","teamID":83371,"name":"Athletic Club Florida ECNL G2011/12","division":"GU15","conference":"Southeast"}
+]},
+{"clubID":2329,"clubName":"Athletic Club Florida","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":83371,"name":"Athletic Club Florida ECNL G2011/12","clubID":2329,"clubName":"Athletic Club Florida","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/009a7d67c61243a28dc446bd5ea8d4fe_logopng.png","conference":"Southeast","eventID":4270,"divisionID":22451,"division":"GU15","flightID":40595,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":6,"of":16,"gp":6,"w":3,"d":1,"l":2,"pts":10,"gf":11,"ga":6,"gd":5,"ppg":1.67,"form":"DLWLW","games":15,"played":6,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":68940,"name":"FC Prime ECNL G12","division":"G2012","conference":"Southeast"},
+{"season":"2025-26","teamID":83371,"name":"FC Prime ECNL G11","division":"G2011","conference":"Southeast"}
+]}
+]}

@@ -1,0 +1,10 @@
+{"schema":1,"teamID":98305,"squads":[
+{"clubID":2017,"clubName":"Rockford Raptors FC","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":98305,"name":"Rockford Raptors ECNL G13","clubID":2017,"clubName":"Rockford Raptors FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImage/thumbimage (1)45DD2018094545.jpe","conference":"Midwest","eventID":3926,"divisionID":18541,"division":"G2013","flightID":32631,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":9,"of":16,"gp":15,"w":4,"d":4,"l":7,"pts":16,"gf":16,"ga":24,"gd":-8,"ppg":1.07,"form":"DWLLL","games":15,"played":15,"link":"start"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":98305,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":1,"d":0,"l":2,"gf":4,"ga":4}
+],"maybe":[
+{"season":"2026-27","teamID":134300,"name":"Rockford Raptors FC ECNL G2013/14","division":"GU13","conference":"Midwest"},
+{"season":"2026-27","teamID":134301,"name":"Rockford Raptors FC ECNL G2012/13","division":"GU14","conference":"Midwest"}
+]}
+]}

@@ -1,0 +1,12 @@
+{"schema":1,"teamID":79689,"squads":[
+{"clubID":2359,"clubName":"Michigan Hawks","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":79689,"name":"Michigan Hawks ECNL G13","clubID":2359,"clubName":"Michigan Hawks","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Armand_Echeverria_172acc43febb49f1bc8d55ad6051072d_Hawks_Logo.png","conference":"Midwest","eventID":3926,"divisionID":18541,"division":"G2013","flightID":32631,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":2,"of":16,"gp":15,"w":12,"d":1,"l":2,"pts":37,"gf":37,"ga":6,"gd":31,"ppg":2.47,"form":"WWWLW","games":15,"played":15,"link":"start"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":79689,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":4,"ga":5,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Round of 16","reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":79689,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":0,"d":1,"l":2,"gf":2,"ga":4}
+],"maybe":[
+{"season":"2026-27","teamID":134178,"name":"Michigan Hawks ECNL G2012/13","division":"GU14","conference":"Midwest"},
+{"season":"2026-27","teamID":134190,"name":"Michigan Hawks ECNL G2013/14","division":"GU13","conference":"Midwest"}
+]}
+]}

@@ -1,0 +1,13 @@
+{"schema":1,"teamID":94387,"squads":[
+{"clubID":26,"clubName":"Charlotte Soccer Academy","birthYears":[2012],"best":1,"seasons":[
+{"season":"2024-25","teamID":94387,"name":"Charlotte SA ECNL G12","clubID":26,"clubName":"Charlotte Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Charlotte-Soccer-Academy.jpg","conference":"Mid-Atlantic","eventID":3157,"divisionID":14177,"division":"G2012","flightID":24013,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":3,"of":12,"gp":22,"w":14,"d":4,"l":4,"pts":46,"gf":40,"ga":11,"gd":29,"ppg":2.09,"form":"DWLWD","games":22,"played":22,"link":"start"},
+{"season":"2025-26","teamID":94387,"name":"Charlotte SA ECNL G12","clubID":26,"clubName":"Charlotte Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Charlotte-Soccer-Academy.jpg","conference":"Mid-Atlantic","eventID":3925,"divisionID":18536,"division":"G2012","flightID":32624,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":3,"of":10,"gp":18,"w":12,"d":3,"l":3,"pts":39,"gf":45,"ga":13,"gd":32,"ppg":2.17,"form":"WWLWW","games":18,"played":18,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":94387,"games":0,"played":0,"w":2,"d":1,"l":0,"gf":5,"ga":2,"fromTable":true,"group":{"name":"Group F","pos":1,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true},
+{"season":"2024-25","stage":"Finals","eventID":3975,"eventName":"ECNL Girls National Finals","divisionID":19454,"division":"G2012","flightID":34429,"flightName":"Champions League","tier":"Champions League","teamID":94387,"games":2,"played":2,"w":1,"d":0,"l":1,"gf":3,"ga":3,"group":null,"reached":"Semifinals","champion":false,"cup":null,"reconstructed":true,"dataGap":false},
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21552,"division":"G2012","flightID":39383,"flightName":"Champions League","tier":"Champions League","teamID":94387,"games":5,"played":5,"w":4,"d":0,"l":1,"gf":12,"ga":3,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Final","reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":131431,"name":"Charlotte SA ECNL G2012/13","division":"GU14","conference":"Mid-Atlantic"},
+{"season":"2026-27","teamID":131433,"name":"Charlotte SA ECNL G2011/12","division":"GU15","conference":"Mid-Atlantic"}
+]}
+]}

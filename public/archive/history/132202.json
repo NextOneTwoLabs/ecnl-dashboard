@@ -1,0 +1,8 @@
+{"schema":1,"teamID":132202,"squads":[
+{"clubID":91,"clubName":"Santa Rosa United Soccer","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":132202,"name":"Santa Rosa United ECNL G2012/13","clubID":91,"clubName":"Santa Rosa United Soccer","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Test_Man_88cca6932f3f4375bd0dbca4ae37627a_SRU_Logo.jpeg","conference":"NorCal","eventID":4267,"divisionID":22432,"division":"GU14","flightID":40576,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":5,"of":12,"gp":8,"w":4,"d":1,"l":3,"pts":13,"gf":11,"ga":11,"gd":0,"ppg":1.63,"form":"LWWLW","games":22,"played":8,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":12596,"name":"Santa Rosa United ECNL G13","division":"G2013","conference":"NorCal"},
+{"season":"2025-26","teamID":68207,"name":"Santa Rosa United ECNL G12","division":"G2012","conference":"NorCal"}
+]}
+]}

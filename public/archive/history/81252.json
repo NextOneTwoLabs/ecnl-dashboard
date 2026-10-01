@@ -1,0 +1,13 @@
+{"schema":1,"teamID":81252,"squads":[
+{"clubID":79,"clubName":"Penn Fusion Soccer Academy","birthYears":[2012],"best":0,"seasons":[
+{"season":"2024-25","teamID":81252,"name":"Penn Fusion SA ECNL G12","clubID":79,"clubName":"Penn Fusion Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_09495b37f6d74e29bd78fa7add3643f7_Penn_Fusio.jpg","conference":"North Atlantic","eventID":3160,"divisionID":14239,"division":"G2012","flightID":24097,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":3,"of":11,"gp":20,"w":11,"d":5,"l":4,"pts":38,"gf":41,"ga":16,"gd":25,"ppg":1.9,"form":"LLWWW","games":20,"played":20,"link":"start"},
+{"season":"2025-26","teamID":81252,"name":"Penn Fusion SA ECNL G12","clubID":79,"clubName":"Penn Fusion Soccer Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/_09495b37f6d74e29bd78fa7add3643f7_Penn_Fusio.jpg","conference":"North Atlantic","eventID":3928,"divisionID":18554,"division":"G2012","flightID":32642,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":4,"of":10,"gp":18,"w":11,"d":2,"l":5,"pts":35,"gf":39,"ga":20,"gd":19,"ppg":1.94,"form":"WWLDW","games":18,"played":18,"link":"id"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":81252,"games":0,"played":0,"w":1,"d":0,"l":2,"gf":5,"ga":10,"fromTable":true,"group":{"name":"Group J","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true}
+],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20346,"division":"G2012","flightID":36387,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":81252,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":0,"d":3,"l":0,"gf":1,"ga":1}
+],"maybe":[
+{"season":"2026-27","teamID":135481,"name":"Penn Fusion Soccer Academy ECNL G2012/13","division":"GU14","conference":"North Atlantic"},
+{"season":"2026-27","teamID":135485,"name":"Penn Fusion Soccer Academy ECNL G2011/12","division":"GU15","conference":"North Atlantic"}
+]}
+]}

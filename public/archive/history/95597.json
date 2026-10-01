@@ -1,0 +1,8 @@
+{"schema":1,"teamID":95597,"squads":[
+{"clubID":42,"clubName":"East Meadow Soccer Club","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":95597,"name":"East Meadow SC ECNL G13","clubID":42,"clubName":"East Meadow Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kory_Patterson_546497e203014be5a834a127c0ae9ba0_New_EM_Cir.png","conference":"New England","eventID":3927,"divisionID":18547,"division":"G2013","flightID":32637,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":6,"of":9,"gp":16,"w":4,"d":4,"l":8,"pts":16,"gf":13,"ga":21,"gd":-8,"ppg":1.0,"form":"LDLLW","games":16,"played":16,"link":"start"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":134816,"name":"East Meadow Soccer Club ECNL G2012/13","division":"GU14","conference":"New England"},
+{"season":"2026-27","teamID":134818,"name":"East Meadow Soccer Club ECNL G2013/14","division":"GU13","conference":"New England"}
+]}
+]}

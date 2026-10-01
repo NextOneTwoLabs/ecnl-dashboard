@@ -1,0 +1,8 @@
+{"schema":1,"teamID":135176,"squads":[
+{"clubID":17,"clubName":"Bethesda SC","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":135176,"name":"Bethesda SC ECNL G2009/10","clubID":17,"clubName":"Bethesda SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jose_Mourinho_63e8b63f510340a59f2c56ffe71ffc2b_Bethesda_T.png","conference":"North Atlantic","eventID":4266,"divisionID":22429,"division":"GU17","flightID":40573,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":1,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":9,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":46940,"name":"Bethesda SC ECNL G09","division":"G2009","conference":"North Atlantic"},
+{"season":"2025-26","teamID":60101,"name":"Bethesda SC ECNL G10","division":"G2010","conference":"North Atlantic"}
+]}
+]}

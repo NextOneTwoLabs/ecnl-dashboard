@@ -1,0 +1,13 @@
+{"schema":1,"teamID":99192,"squads":[
+{"clubID":98,"clubName":"So Cal Blues","birthYears":[2013],"best":0,"seasons":[
+{"season":"2025-26","teamID":99192,"name":"So Cal Blues ECNL G13","clubID":98,"clubName":"So Cal Blues","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Blues__blu_03-13-2026T19:12:01.147.png","conference":"Southwest","eventID":3933,"divisionID":18760,"division":"G2013","flightID":32933,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":5,"of":17,"gp":16,"w":11,"d":1,"l":4,"pts":34,"gf":29,"ga":14,"gd":15,"ppg":2.13,"form":"WWWWW","games":16,"played":16,"link":"start"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21551,"division":"G2013","flightID":39384,"flightName":"Champions League","tier":"Champions League","teamID":99192,"games":4,"played":4,"w":2,"d":0,"l":2,"gf":9,"ga":6,"group":null,"reached":"Round of 32","champion":false,"cup":"Champions League Cup: Semifinals","reconstructed":false,"dataGap":false}
+],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19566,"division":"G2013","flightID":34646,"flightName":"San Diego","tier":"San Diego","teamID":99192,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":3,"d":0,"l":0,"gf":11,"ga":0},
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":99192,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":2,"d":1,"l":0,"gf":4,"ga":0}
+],"maybe":[
+{"season":"2026-27","teamID":135883,"name":"So Cal Blues ECNL G2013/14","division":"GU13","conference":"Southwest"},
+{"season":"2026-27","teamID":135886,"name":"So Cal Blues ECNL G2012/13","division":"GU14","conference":"Southwest"}
+]}
+]}

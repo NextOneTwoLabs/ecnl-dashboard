@@ -1,0 +1,8 @@
+{"schema":1,"teamID":128285,"squads":[
+{"clubID":3313,"clubName":"PDA White (Shore)","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":128285,"name":"PDA White ECNL G2009/10","clubID":3313,"clubName":"PDA White (Shore)","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/PDA_Logo_11-04-2025T20:01:51.328.png","conference":"North Atlantic","eventID":4266,"divisionID":22429,"division":"GU17","flightID":40573,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":7,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":9,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":13679,"name":"PDA White ECNL G09","division":"G2009","conference":"North Atlantic"},
+{"season":"2025-26","teamID":35695,"name":"PDA White ECNL G10","division":"G2010","conference":"North Atlantic"}
+]}
+]}

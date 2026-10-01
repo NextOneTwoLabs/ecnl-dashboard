@@ -1,0 +1,7 @@
+{"schema":1,"teamID":10580,"squads":[
+{"clubID":1656,"clubName":"Slammers FC HB Koge","birthYears":[2002,2003],"best":0,"seasons":[
+{"season":"2020-21","teamID":10580,"name":"LAFC Slammers ECNL GU18/U19","clubID":1656,"clubName":"Slammers FC HB Koge","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kaya_Pigoni_38de922dedfa42e3bf6a2cd53f20f42b_HB_KOGE_LO.png","conference":"Southwest","eventID":2034,"divisionID":5454,"division":"GU18/U19","flightID":8858,"flightName":"ECNL","u":18,"birthYears":[2002,2003],"rank":2,"of":14,"gp":13,"w":10,"d":2,"l":1,"pts":32,"gf":43,"ga":9,"gd":34,"ppg":2.46,"form":"WWWWD","games":13,"played":13,"link":"start"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5850,"division":"U18/U19","flightID":9418,"flightName":"Champions League","tier":"Champions League","teamID":10580,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":2,"ga":5,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

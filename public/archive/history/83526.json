@@ -1,0 +1,7 @@
+{"schema":1,"teamID":83526,"squads":[
+{"clubID":69,"clubName":"Mustang Soccer","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":83526,"name":"Mustang SC ECNL G2009/10","clubID":69,"clubName":"Mustang Soccer","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tester_Test_1b0d43e346d148e3acdb90571711a606_TGS_Mustang_logo.jpg","conference":"NorCal","eventID":4267,"divisionID":22435,"division":"GU17","flightID":40579,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":6,"of":12,"gp":8,"w":4,"d":1,"l":3,"pts":13,"gf":29,"ga":8,"gd":21,"ppg":1.63,"form":"LWLWW","games":21,"played":8,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":18712,"name":"Mustang SC ECNL G10","division":"G2010","conference":"NorCal"}
+]}
+]}

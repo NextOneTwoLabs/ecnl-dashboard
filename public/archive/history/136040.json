@@ -1,0 +1,7 @@
+{"schema":1,"teamID":136040,"squads":[
+{"clubID":43,"clubName":"Eclipse Select Soccer Club","birthYears":[2008,2009],"seasons":[
+{"season":"2026-27","teamID":136040,"name":"Eclipse Select Soccer Club ECNL G2008/09","clubID":43,"clubName":"Eclipse Select Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Eclipse-Select-Soccer-Club.jpg","conference":"Midwest","eventID":4264,"divisionID":22418,"division":"GU18/19","flightID":40562,"flightName":"ECNL","u":18,"birthYears":[2008,2009],"rank":7,"of":16,"gp":6,"w":3,"d":2,"l":1,"pts":11,"gf":20,"ga":12,"gd":8,"ppg":1.83,"form":"WWWLD","games":15,"played":6,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":59906,"name":"Eclipse Select SC ECNL G09","division":"G2009","conference":"Midwest"}
+]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":95008,"squads":[
+{"clubID":342,"clubName":"Select","birthYears":[2008],"seasons":[
+{"season":"2024-25","teamID":95008,"name":"South Shore Select ECNL G08","clubID":342,"clubName":"Select","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Select_New_06-23-2025T23:03:13.487.png","conference":"New England","eventID":3159,"divisionID":14229,"division":"G2008","flightID":24088,"flightName":"ECNL","u":17,"birthYears":[2008],"rank":5,"of":9,"gp":8,"w":3,"d":2,"l":3,"pts":11,"gf":13,"ga":15,"gd":-2,"ppg":1.38,"form":"LWWLL","games":8,"played":8,"link":"start"},
+{"season":"2025-26","teamID":95009,"name":"Select ECNL G08/07","clubID":342,"clubName":"Select","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Select_New_06-23-2025T23:03:13.487.png","conference":"New England","eventID":3927,"divisionID":18552,"division":"G2008/2007","flightID":32633,"flightName":"ECNL","u":18,"birthYears":[2007,2008],"rank":7,"of":9,"gp":12,"w":3,"d":2,"l":7,"pts":11,"gf":11,"ga":26,"gd":-15,"ppg":0.92,"form":"LLLWD","games":12,"played":12,"link":"club"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18503,"division":"G2008","flightID":32799,"flightName":"North American Cup","tier":"North American Cup","teamID":95008,"games":3,"played":3,"w":1,"d":0,"l":2,"gf":7,"ga":7,"group":null,"reached":"Round of 16","champion":false,"cup":"Round 1 Losers: Quarterfinals","reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":136038,"squads":[
+{"clubID":43,"clubName":"Eclipse Select Soccer Club","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":136038,"name":"Eclipse Select Soccer Club ECNL G2010/11","clubID":43,"clubName":"Eclipse Select Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Eclipse-Select-Soccer-Club.jpg","conference":"Midwest","eventID":4264,"divisionID":22416,"division":"GU16","flightID":40560,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":1,"of":16,"gp":6,"w":5,"d":1,"l":0,"pts":16,"gf":20,"ga":6,"gd":14,"ppg":2.67,"form":"DWWWW","games":15,"played":6,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":69955,"name":"Eclipse Select SC ECNL G10","division":"G2010","conference":"Midwest"},
+{"season":"2025-26","teamID":78148,"name":"Eclipse Select SC ECNL G11","division":"G2011","conference":"Midwest"}
+]}
+]}

@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134137,"squads":[
+{"clubID":1760,"clubName":"La Roca FC","birthYears":[2011,2012],"seasons":[
+{"season":"2026-27","teamID":134137,"name":"La Roca FC ECNL G2011/12","clubID":1760,"clubName":"La Roca FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jacob_Sanchez_3053a2297e38469bb77ccf9c65e938d1_LOGO_La_Ro.jpg","conference":"Northwest","eventID":4268,"divisionID":22439,"division":"GU15","flightID":40583,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":4,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":23,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":45851,"name":"La Roca FC ECNL G11","division":"G2011","conference":"Northwest"},
+{"season":"2025-26","teamID":94433,"name":"La Roca FC ECNL G12","division":"G2012","conference":"Northwest"}
+]}
+]}

@@ -1,0 +1,17 @@
+{"schema":1,"teamID":69510,"squads":[
+{"clubID":3483,"clubName":"Sporting Iowa Central","birthYears":[2010],"seasons":[
+{"season":"2022-23","teamID":69510,"name":"Sporting Iowa ECNL G10","clubID":3483,"clubName":"Sporting Iowa Central","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kelly_Nunn_5c3776ec0a8c4b538009458b855c7617_Sporting_Iowa.png","conference":"Midwest","eventID":2529,"divisionID":9533,"division":"G2010","flightID":16142,"flightName":"ECNL","u":13,"birthYears":[2010],"rank":13,"of":15,"gp":14,"w":2,"d":3,"l":9,"pts":9,"gf":25,"ga":43,"gd":-18,"ppg":0.64,"form":"LDLLL","games":14,"played":14,"link":"start"},
+{"season":"2023-24","teamID":69510,"name":"Sporting Iowa ECNL G10","clubID":3483,"clubName":"Sporting Iowa Central","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kelly_Nunn_5c3776ec0a8c4b538009458b855c7617_Sporting_Iowa.png","conference":"Midwest","eventID":2849,"divisionID":11605,"division":"G2010","flightID":19807,"flightName":"ECNL","u":14,"birthYears":[2010],"rank":14,"of":15,"gp":14,"w":2,"d":2,"l":10,"pts":8,"gf":14,"ga":40,"gd":-26,"ppg":0.57,"form":"WLLLW","games":14,"played":14,"link":"id"},
+{"season":"2024-25","teamID":69510,"name":"Sporting Iowa ECNL G10","clubID":3483,"clubName":"Sporting Iowa Central","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kelly_Nunn_5c3776ec0a8c4b538009458b855c7617_Sporting_Iowa.png","conference":"Midwest","eventID":3158,"divisionID":14225,"division":"G2010","flightID":24081,"flightName":"ECNL","u":15,"birthYears":[2010],"rank":13,"of":16,"gp":15,"w":4,"d":2,"l":9,"pts":14,"gf":20,"ga":38,"gd":-18,"ppg":0.93,"form":"DLLWL","games":15,"played":15,"link":"id"},
+{"season":"2025-26","teamID":69510,"name":"Sporting Iowa ECNL G10","clubID":3483,"clubName":"Sporting Iowa Central","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kelly_Nunn_5c3776ec0a8c4b538009458b855c7617_Sporting_Iowa.png","conference":"Midwest","eventID":3926,"divisionID":18544,"division":"G2010","flightID":32632,"flightName":"ECNL","u":16,"birthYears":[2010],"rank":16,"of":16,"gp":15,"w":1,"d":2,"l":12,"pts":5,"gf":12,"ga":36,"gd":-24,"ppg":0.33,"form":"LLLWL","games":15,"played":15,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":59750,"name":"Sporting Iowa ECNL G2009/10","division":"GU17","conference":"Midwest"},
+{"season":"2026-27","teamID":69510,"name":"Sporting Iowa ECNL G2010/11","division":"GU16","conference":"Midwest"}
+]},
+{"clubID":3483,"clubName":"Sporting Iowa Central","birthYears":[2010,2011],"seasons":[
+{"season":"2026-27","teamID":69510,"name":"Sporting Iowa ECNL G2010/11","clubID":3483,"clubName":"Sporting Iowa Central","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Kelly_Nunn_5c3776ec0a8c4b538009458b855c7617_Sporting_Iowa.png","conference":"Midwest","eventID":4264,"divisionID":22416,"division":"GU16","flightID":40560,"flightName":"ECNL","u":16,"birthYears":[2010,2011],"rank":8,"of":16,"gp":5,"w":3,"d":0,"l":2,"pts":9,"gf":13,"ga":10,"gd":3,"ppg":1.8,"form":"WWLWL","games":15,"played":5,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":69510,"name":"Sporting Iowa ECNL G10","division":"G2010","conference":"Midwest"},
+{"season":"2025-26","teamID":79780,"name":"Sporting Iowa ECNL G11","division":"G2011","conference":"Midwest"}
+]}
+]}

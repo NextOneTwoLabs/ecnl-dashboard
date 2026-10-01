@@ -12,6 +12,21 @@ import proxy_server
 import data_api
 
 ROOT = Path(proxy_server.SERVE_DIR)
+HISTORY_DATA = (ROOT / 'archive/history/55477.json').exists()
+
+
+def route_cases():
+    """tests/routes.json. The team-history files (#107) are committed separately from the code:
+    without them, the history 200 cases are skipped (and printed), not failed."""
+    import re
+    out = []
+    for path, expected in json.loads((Path(__file__).parent / 'routes.json').read_text()):
+        m = re.fullmatch(r'/api/v1/teams/(\d+)/history', path)
+        if m and expected == 200 and not (ROOT / f'archive/history/{m[1]}.json').exists():
+            print(f'skipped (no history data): {path}')
+            continue
+        out.append((path, expected))
+    return out
 
 class ApiTests(unittest.TestCase):
     @classmethod
@@ -36,7 +51,7 @@ class ApiTests(unittest.TestCase):
 
     def test_contract(self):
         with patch.object(proxy_server.api, 'fetch_api_raw', side_effect=AssertionError('v1 must not contact upstream')), patch.object(proxy_server.ProxyHandler, 'log_message'):
-            for path, expected in json.loads((Path(__file__).parent / 'routes.json').read_text()):
+            for path, expected in route_cases():
                 for method in ('GET', 'HEAD', 'POST', 'OPTIONS'):
                     status, headers, body = self.request(path, method)
                     self.assertEqual(status, 405 if expected == 200 and method not in ('GET', 'HEAD') else expected, path)
@@ -49,7 +64,7 @@ class ApiTests(unittest.TestCase):
         # cookie change nothing, every v1 answer says "off", and none sets a cookie.
         forged = '__Host-ecnl_s=v1.1790000000.1790086400.AAAAAAAAAAAAAAAAAAAAAA.' + 'A' * 43
         with patch.object(proxy_server.api, 'fetch_api_raw', side_effect=AssertionError('v1 must not contact upstream')), patch.object(proxy_server.ProxyHandler, 'log_message'):
-            for path, expected in json.loads((Path(__file__).parent / 'routes.json').read_text()):
+            for path, expected in route_cases():
                 for cookie in (None, forged):
                     for method in ('GET', 'HEAD', 'POST', 'OPTIONS'):
                         status, headers, body = self.request(path, method, {'Cookie': cookie} if cookie else None)
@@ -107,6 +122,10 @@ class ApiTests(unittest.TestCase):
             self.assertEqual((status, body), (200, (ROOT / 'archive/clubs.json').read_bytes()))
             self.assertEqual(headers['Cache-Control'], 'no-cache')
             count += 1
+            for file in (ROOT / 'archive/history').glob('*.json'):   # #107
+                status, headers, body = self.request(f'/api/v1/teams/{file.stem}/history')
+                self.assertEqual((status, body), (200, file.read_bytes()), file.name)
+                count += 1
         self.assertGreater(count, 1200)
         print(f'Python archive parity: {count} resources')
 
@@ -144,6 +163,23 @@ class ApiTests(unittest.TestCase):
         with patch.object(Path, 'open', side_effect=PermissionError('fixture fault')):
             self.assertEqual(self.request(path)[0], 503)
 
+    def test_history_missing_is_json_404(self):
+        # #107: an id with no history file is a JSON 404, with or without the data committed.
+        for method in ('GET', 'HEAD'):
+            status, missing, body = self.request('/api/v1/teams/1/history', method)
+            self.assertEqual((status, missing['Cache-Control']), (404, 'no-store'))
+            self.assertEqual(body, b'' if method == 'HEAD' else b'{"ok":false,"error":"Not found"}')
+
+    @unittest.skipUnless(HISTORY_DATA, 'the team-history data (#107) is not in this checkout')
+    def test_history_etag_and_304(self):
+        history = '/api/v1/teams/55477/history'
+        status, headers, body = self.request(history)
+        self.assertEqual((status, headers['Cache-Control'], body), (200, 'no-cache', (ROOT / 'archive/history/55477.json').read_bytes()))
+        self.assertEqual(headers['ETag'], '"' + hashlib.sha256(body).hexdigest() + '"')
+        for method in ('GET', 'HEAD'):
+            status, conditional, body = self.request(history, method, {'If-None-Match': headers['ETag']})
+            self.assertEqual((status, body, conditional['ETag']), (304, b'', headers['ETag']))
+
     def test_live_reconstructed_guard(self):
         protected = next(iter(proxy_server.api.protected_paths()))
         with patch.object(proxy_server.api, 'fetch_api_raw', side_effect=AssertionError('protected data must not contact upstream')):
@@ -161,6 +197,8 @@ class ApiTests(unittest.TestCase):
             "/%61rchive/teams/2026-27.json",
             "/archive/clubs.json",
             "/%61rchive/clubs.json",
+            "/archive/history/55477.json",
+            "/data/team-links.json",
             "/data",
             "/data/",
             "/data/sources.json",

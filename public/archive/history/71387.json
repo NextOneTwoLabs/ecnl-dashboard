@@ -1,0 +1,6 @@
+{"schema":1,"teamID":71387,"squads":[
+{"clubID":3478,"clubName":"Cleveland Force SC","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":71387,"name":"Cleveland Force SC ECNL G13","clubID":3478,"clubName":"Cleveland Force SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Ella_Neumann_73806358b04141acb9101a388a400c10_CFSC Logo no outline.png","conference":"Ohio Valley","eventID":3931,"divisionID":18743,"division":"G2013","flightID":36469,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":7,"of":12,"gp":22,"w":8,"d":3,"l":11,"pts":27,"gf":26,"ga":31,"gd":-5,"ppg":1.23,"form":"LWLLL","games":22,"played":22,"link":"start"},
+{"season":"2026-27","teamID":71387,"name":"Cleveland Force SC ECNL G2012/13","clubID":3478,"clubName":"Cleveland Force SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Ella_Neumann_73806358b04141acb9101a388a400c10_CFSC Logo no outline.png","conference":"Ohio Valley","eventID":4269,"divisionID":22444,"division":"GU14","flightID":40588,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":1,"of":12,"gp":4,"w":3,"d":1,"l":0,"pts":10,"gf":9,"ga":2,"gd":7,"ppg":2.5,"form":"WWWD","games":22,"played":4,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

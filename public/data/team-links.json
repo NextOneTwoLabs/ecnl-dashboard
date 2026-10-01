@@ -1,0 +1,5 @@
+{
+  "_comment": "Hand-reviewed squad links for the team histories (#107; docs/data-api.md, 'Team history'). A 'link' entry joins a team-season to the next season's team: {\"from\": \"2025-26/54493\", \"to\": \"2026-27/134153\", \"note\": \"the evidence\"}. An 'unlink' entry forbids a link the rules would make: {\"from\": \"SEASON/ID\", \"to\": \"SEASON/ID\", \"note\": \"why\"}. Declared by the SWE with evidence and approved by the Reviewer and the owner in a PR, like showcase teamAliases; never from a visitor's request alone. team_history.py validates every entry on every build: both team-seasons must be in a conference table, 'to' in the season after 'from', the link must age correctly, and neither end may be claimed twice or already continued by another team's id. An entry that fails is reported (the build fails the run) and has no effect.",
+  "link": [],
+  "unlink": []
+}

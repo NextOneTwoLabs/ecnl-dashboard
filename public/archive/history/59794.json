@@ -1,0 +1,6 @@
+{"schema":1,"teamID":59794,"squads":[
+{"clubID":101,"clubName":"Solar SC","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":59794,"name":"SOLAR SC ECNL G13","clubID":101,"clubName":"Solar SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tatum_Warrington_fdf6158b54114df09283c69bf04b12ee_Solar_logo.png","conference":"Texas","eventID":3934,"divisionID":18766,"division":"G2013","flightID":32939,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":5,"of":16,"gp":15,"w":10,"d":2,"l":3,"pts":32,"gf":52,"ga":19,"gd":33,"ppg":2.13,"form":"WWWLD","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":59794,"name":"SOLAR SC ECNL G2012/13","clubID":101,"clubName":"Solar SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Tatum_Warrington_fdf6158b54114df09283c69bf04b12ee_Solar_logo.png","conference":"Texas","eventID":4272,"divisionID":22462,"division":"GU14","flightID":40606,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":2,"of":16,"gp":1,"w":1,"d":0,"l":0,"pts":3,"gf":2,"ga":1,"gd":1,"ppg":3.0,"form":"W","games":15,"played":1,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

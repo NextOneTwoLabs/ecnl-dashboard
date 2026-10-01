@@ -1,0 +1,8 @@
+{"schema":1,"teamID":135183,"squads":[
+{"clubID":17,"clubName":"Bethesda SC","birthYears":[2012,2013],"seasons":[
+{"season":"2026-27","teamID":135183,"name":"Bethesda SC ECNL G2012/13","clubID":17,"clubName":"Bethesda SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jose_Mourinho_63e8b63f510340a59f2c56ffe71ffc2b_Bethesda_T.png","conference":"North Atlantic","eventID":4266,"divisionID":22426,"division":"GU14","flightID":40570,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":6,"of":10,"gp":4,"w":2,"d":0,"l":2,"pts":6,"gf":9,"ga":4,"gd":5,"ppg":1.5,"form":"WLLW","games":18,"played":4,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":82193,"name":"Bethesda SC ECNL G12","division":"G2012","conference":"North Atlantic"},
+{"season":"2025-26","teamID":95839,"name":"Bethesda SC ECNL G13","division":"G2013","conference":"North Atlantic"}
+]}
+]}

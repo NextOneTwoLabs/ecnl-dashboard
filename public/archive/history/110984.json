@@ -1,0 +1,8 @@
+{"schema":1,"teamID":110984,"squads":[
+{"clubID":1425,"clubName":"Davis Legacy Soccer Club","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":110984,"name":"Davis Legacy ECNL G13","clubID":1425,"clubName":"Davis Legacy Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jordy_Castillo_8365679f5324452581760a42307efcd0_Legacy_Log.jpg","conference":"NorCal","eventID":3929,"divisionID":18735,"division":"G2013","flightID":32900,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":7,"of":11,"gp":20,"w":6,"d":4,"l":10,"pts":22,"gf":24,"ga":38,"gd":-14,"ppg":1.1,"form":"WLLLL","games":20,"played":20,"link":"start"},
+{"season":"2026-27","teamID":110984,"name":"Davis Legacy ECNL G2012/13","clubID":1425,"clubName":"Davis Legacy Soccer Club","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jordy_Castillo_8365679f5324452581760a42307efcd0_Legacy_Log.jpg","conference":"NorCal","eventID":4267,"divisionID":22432,"division":"GU14","flightID":40576,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":8,"of":12,"gp":7,"w":2,"d":0,"l":5,"pts":6,"gf":11,"ga":13,"gd":-2,"ppg":0.86,"form":"WLWLL","games":22,"played":7,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"San Diego Fall","eventID":4041,"eventName":"ECNL Girls San Diego","divisionID":19566,"division":"G2013","flightID":34646,"flightName":"San Diego","tier":"San Diego","teamID":110984,"location":"Del Mar, CA","startDate":"2025-10-11","endDate":"2025-10-13","games":3,"played":3,"w":0,"d":0,"l":3,"gf":0,"ga":10}
+]}
+]}

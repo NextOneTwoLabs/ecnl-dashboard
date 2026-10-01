@@ -1,0 +1,11 @@
+{"schema":1,"teamID":96998,"squads":[
+{"clubID":4603,"clubName":"Fairfax Virginia Union","birthYears":[2012],"best":0,"seasons":[
+{"season":"2024-25","teamID":96998,"name":"Fairfax Virginia Union ECNL G12","clubID":4603,"clubName":"Fairfax Virginia Union","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FairfaxVAU_04-16-2026T20:45:12.085.png","conference":"Mid-Atlantic","eventID":3157,"divisionID":14177,"division":"G2012","flightID":24013,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":5,"of":12,"gp":22,"w":12,"d":4,"l":6,"pts":40,"gf":44,"ga":33,"gd":11,"ppg":1.82,"form":"LDDWD","games":22,"played":22,"link":"start"},
+{"season":"2025-26","teamID":96998,"name":"Fairfax VA Union ECNL G12","clubID":4603,"clubName":"Fairfax Virginia Union","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FairfaxVAU_04-16-2026T20:45:12.085.png","conference":"Mid-Atlantic","eventID":3925,"divisionID":18536,"division":"G2012","flightID":32624,"flightName":"ECNL","u":14,"birthYears":[2012],"rank":1,"of":10,"gp":18,"w":13,"d":3,"l":2,"pts":42,"gf":58,"ga":20,"gd":38,"ppg":2.33,"form":"WWWDW","games":18,"played":18,"link":"id"}
+],"postseason":[
+{"season":"2025-26","stage":"Playoffs & Finals","eventID":4251,"eventName":"ECNL Girls National Playoffs and Finals","divisionID":21552,"division":"G2012","flightID":39383,"flightName":"Champions League","tier":"Champions League","teamID":96998,"games":3,"played":3,"w":2,"d":0,"l":1,"gf":9,"ga":7,"group":null,"reached":"Quarterfinals","champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":135362,"name":"Fairfax Virginia Union ECNL G2011/12","division":"GU15","conference":"Mid-Atlantic"},
+{"season":"2026-27","teamID":135363,"name":"Fairfax Virginia Union ECNL G2012/13","division":"GU14","conference":"Mid-Atlantic"}
+]}
+]}

@@ -1,0 +1,7 @@
+{"schema":1,"teamID":94585,"squads":[
+{"clubID":4369,"clubName":"Northern Virginia Alliance","birthYears":[2012],"best":0,"seasons":[
+{"season":"2024-25","teamID":94585,"name":"NVA ECNL G12","clubID":4369,"clubName":"Northern Virginia Alliance","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Jose_Estrella_20b0af4500a948f29ba99f5ee91cbdcf_NVALogo.png","conference":"Mid-Atlantic","eventID":3157,"divisionID":14177,"division":"G2012","flightID":24013,"flightName":"ECNL","u":13,"birthYears":[2012],"rank":4,"of":12,"gp":22,"w":13,"d":5,"l":4,"pts":44,"gf":37,"ga":15,"gd":22,"ppg":2.0,"form":"WLWDL","games":22,"played":22,"link":"start"}
+],"postseason":[
+{"season":"2024-25","stage":"Playoffs","eventID":3865,"eventName":"ECNL Girls National Playoffs","divisionID":18499,"division":"G2012","flightID":32791,"flightName":"Champions League","tier":"Champions League","teamID":94585,"games":0,"played":0,"w":0,"d":1,"l":2,"gf":2,"ga":6,"fromTable":true,"group":{"name":"Group A","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":true}
+],"showcases":[]}
+]}

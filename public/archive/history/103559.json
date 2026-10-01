@@ -1,0 +1,15 @@
+{"schema":1,"teamID":103559,"squads":[
+{"clubID":1643,"clubName":"Seattle United","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":103559,"name":"Seattle United ECNL G13","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":3930,"divisionID":18738,"division":"G2013","flightID":32906,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":7,"of":10,"gp":18,"w":6,"d":2,"l":10,"pts":20,"gf":22,"ga":27,"gd":-5,"ppg":1.11,"form":"LWLDW","games":18,"played":18,"link":"start"}
+],"postseason":[],"showcases":[
+{"season":"2025-26","stage":"Phoenix Spring","eventID":4133,"eventName":"ECNL Phoenix - Spring","divisionID":20347,"division":"G2013","flightID":36389,"flightName":"Phoenix - Spring","tier":"Phoenix - Spring","teamID":103559,"location":"Phoenix, AZ","startDate":"2026-03-27","endDate":"2026-03-29","games":3,"played":3,"w":2,"d":0,"l":1,"gf":3,"ga":2}
+],"maybe":[
+{"season":"2026-27","teamID":88412,"name":"Seattle United ECNL G2012/13","division":"GU14","conference":"Northwest"},
+{"season":"2026-27","teamID":103559,"name":"Seattle United ECNL G2013/14","division":"GU13","conference":"Northwest"}
+]},
+{"clubID":1643,"clubName":"Seattle United","birthYears":[2013,2014],"seasons":[
+{"season":"2026-27","teamID":103559,"name":"Seattle United ECNL G2013/14","clubID":1643,"clubName":"Seattle United","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Isabelle_Esparza_2e653213e12842d5903aca33dbba68fd_SU_Logo.jpg","conference":"Northwest","eventID":4268,"divisionID":22437,"division":"GU13","flightID":40581,"flightName":"ECNL","u":13,"birthYears":[2013,2014],"rank":8,"of":10,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":18,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":103559,"name":"Seattle United ECNL G13","division":"G2013","conference":"Northwest"}
+]}
+]}

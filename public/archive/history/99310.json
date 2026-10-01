@@ -1,0 +1,8 @@
+{"schema":1,"teamID":99310,"squads":[
+{"clubID":2181,"clubName":"Wilmington Hammerheads","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":99310,"name":"Wilmington Hammerheads ECNL G13","clubID":2181,"clubName":"Wilmington Hammerheads","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/New_Logo_07-22-2024T19:22:58.638.png","conference":"Mid-Atlantic","eventID":3925,"divisionID":18535,"division":"G2013","flightID":32626,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":4,"of":10,"gp":18,"w":9,"d":3,"l":6,"pts":30,"gf":27,"ga":23,"gd":4,"ppg":1.67,"form":"DWWWW","games":18,"played":18,"link":"start"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":134657,"name":"Wilmington Hammerheads ECNL G2013/14","division":"GU13","conference":"Mid-Atlantic"},
+{"season":"2026-27","teamID":134658,"name":"Wilmington Hammerheads ECNL G2012/13","division":"GU14","conference":"Mid-Atlantic"}
+]}
+]}

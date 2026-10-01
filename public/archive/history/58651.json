@@ -1,0 +1,6 @@
+{"schema":1,"teamID":58651,"squads":[
+{"clubID":3712,"clubName":"Liverpool FC-IA Michigan","birthYears":[2005],"seasons":[
+{"season":"2021-22","teamID":58651,"name":"Liverpool FC IA Michigan ECNL GU17","clubID":3712,"clubName":"Liverpool FC-IA Michigan","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/IVAN_ISLAS_eceaaaf04a6741f79a505553e3b85cdb_Liverpool_.jpg","conference":"Midwest","eventID":2369,"divisionID":7820,"division":"GU17","flightID":12519,"flightName":"Flight 1","u":17,"birthYears":[2005],"rank":14,"of":14,"gp":13,"w":0,"d":0,"l":13,"pts":0,"gf":5,"ga":57,"gd":-52,"ppg":0.0,"form":"LLLLL","games":13,"played":13,"link":"start"},
+{"season":"2022-23","teamID":58651,"name":"Liverpool FC IA Michigan ECNL G05/04","clubID":3712,"clubName":"Liverpool FC-IA Michigan","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/IVAN_ISLAS_eceaaaf04a6741f79a505553e3b85cdb_Liverpool_.jpg","conference":"Midwest","eventID":2529,"divisionID":9538,"division":"G2005/2004","flightID":16137,"flightName":"ECNL","u":18,"birthYears":[2004,2005],"rank":11,"of":15,"gp":14,"w":4,"d":3,"l":7,"pts":15,"gf":27,"ga":32,"gd":-5,"ppg":1.07,"form":"WLLLW","games":14,"played":14,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

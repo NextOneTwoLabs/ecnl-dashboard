@@ -1,0 +1,10 @@
+{"schema":1,"teamID":60641,"squads":[
+{"clubID":3408,"clubName":"Racing Louisville Academy","birthYears":[2011],"seasons":[
+{"season":"2023-24","teamID":60641,"name":"Racing Louisville Academy ECNL G11","clubID":3408,"clubName":"Racing Louisville Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Racing_Log_04-14-2026T18:00:06.983.jpeg","conference":"Ohio Valley","eventID":2856,"divisionID":11654,"division":"G2011","flightID":19944,"flightName":"SOUTH","u":13,"birthYears":[2011],"rank":5,"of":6,"gp":16,"w":2,"d":5,"l":9,"pts":11,"gf":22,"ga":35,"gd":-13,"ppg":0.69,"form":"WDLDL","games":12,"played":12,"link":"start"},
+{"season":"2024-25","teamID":60641,"name":"Racing Louisville Academy ECNL G11","clubID":3408,"clubName":"Racing Louisville Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Racing_Log_04-14-2026T18:00:06.983.jpeg","conference":"Ohio Valley","eventID":3163,"divisionID":14256,"division":"G2011","flightID":26430,"flightName":"South","u":14,"birthYears":[2011],"rank":6,"of":6,"gp":16,"w":0,"d":4,"l":12,"pts":4,"gf":20,"ga":54,"gd":-34,"ppg":0.25,"form":"LDLLD","games":14,"played":14,"link":"id"},
+{"season":"2025-26","teamID":60641,"name":"Racing Louisville Academy ECNL G11","clubID":3408,"clubName":"Racing Louisville Academy","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/Racing_Log_04-14-2026T18:00:06.983.jpeg","conference":"Ohio Valley","eventID":3931,"divisionID":18744,"division":"G2011","flightID":32917,"flightName":"South","u":15,"birthYears":[2011],"rank":5,"of":6,"gp":16,"w":2,"d":2,"l":12,"pts":8,"gf":25,"ga":49,"gd":-24,"ppg":0.5,"form":"LLLLL","games":14,"played":14,"link":"id"}
+],"postseason":[],"showcases":[],"maybe":[
+{"season":"2026-27","teamID":133000,"name":"Racing Louisville Academy ECNL G2011/12","division":"GU15","conference":"Ohio Valley"},
+{"season":"2026-27","teamID":133002,"name":"Racing Louisville Academy ECNL G2010/11","division":"GU16","conference":"Ohio Valley"}
+]}
+]}

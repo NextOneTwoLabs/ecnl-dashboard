@@ -1,0 +1,8 @@
+{"schema":1,"teamID":10849,"squads":[
+{"clubID":1354,"clubName":"Tennessee SC","birthYears":[2004],"best":0,"seasons":[
+{"season":"2020-21","teamID":10849,"name":"Tennessee Soccer Club ECNL GU17","clubID":1354,"clubName":"Tennessee SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/TSC_Logo_09-02-2026T15:48:05.788.jpg","conference":"Ohio Valley","eventID":2037,"divisionID":5473,"division":"GU17","flightID":8877,"flightName":"ECNL","u":17,"birthYears":[2004],"rank":3,"of":10,"gp":18,"w":8,"d":6,"l":4,"pts":30,"gf":27,"ga":14,"gd":13,"ppg":1.67,"form":"DWWDW","games":18,"played":18,"link":"start"},
+{"season":"2021-22","teamID":10849,"name":"Tennessee Soccer Club ECNL GU18/U19","clubID":1354,"clubName":"Tennessee SC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Cesar_Moreira_204ce553bd554ca5b9c8aa8ae40825c2_TennesseeS.jpg","conference":"Ohio Valley","eventID":2371,"divisionID":7833,"division":"GU18/U19","flightID":12829,"flightName":"South","u":18,"birthYears":[2003,2004],"rank":3,"of":6,"gp":16,"w":8,"d":5,"l":3,"pts":29,"gf":22,"ga":10,"gd":12,"ppg":1.81,"form":"DWLWD","games":15,"played":15,"link":"id"}
+],"postseason":[
+{"season":"2020-21","stage":"Playoffs","eventID":2118,"eventName":"ECNL Girls National Playoffs","divisionID":5849,"division":"U17","flightID":9417,"flightName":"Champions League","tier":"Champions League","teamID":10849,"games":3,"played":3,"w":1,"d":1,"l":1,"gf":1,"ga":4,"group":{"name":"Group C","pos":3,"of":4},"reached":null,"champion":false,"cup":null,"reconstructed":false,"dataGap":false}
+],"showcases":[]}
+]}

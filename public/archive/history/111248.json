@@ -1,0 +1,6 @@
+{"schema":1,"teamID":111248,"squads":[
+{"clubID":990,"clubName":"Jacksonville FC","birthYears":[2013],"seasons":[
+{"season":"2025-26","teamID":111248,"name":"Jacksonville FC ECNL G13","clubID":990,"clubName":"Jacksonville FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/JOEL_HERNANDEZ_310dd57f9c604f8a9237bbafc95329d7_JFC_Logo.jpg","conference":"Southeast","eventID":3932,"divisionID":18749,"division":"G2013","flightID":32927,"flightName":"ECNL","u":13,"birthYears":[2013],"rank":11,"of":16,"gp":15,"w":4,"d":1,"l":10,"pts":13,"gf":9,"ga":33,"gd":-24,"ppg":0.87,"form":"LWLLW","games":15,"played":15,"link":"start"},
+{"season":"2026-27","teamID":111248,"name":"Jacksonville FC ECNL G2012/13","clubID":990,"clubName":"Jacksonville FC","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/JOEL_HERNANDEZ_310dd57f9c604f8a9237bbafc95329d7_JFC_Logo.jpg","conference":"Southeast","eventID":4270,"divisionID":22450,"division":"GU14","flightID":40594,"flightName":"ECNL","u":14,"birthYears":[2012,2013],"rank":15,"of":16,"gp":7,"w":0,"d":0,"l":7,"pts":0,"gf":2,"ga":14,"gd":-12,"ppg":0.0,"form":"LLLLL","games":15,"played":7,"inProgress":true,"regroup":true,"link":"id"}
+],"postseason":[],"showcases":[]}
+]}

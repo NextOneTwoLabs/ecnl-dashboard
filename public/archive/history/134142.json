@@ -1,0 +1,8 @@
+{"schema":1,"teamID":134142,"squads":[
+{"clubID":2359,"clubName":"Michigan Hawks","birthYears":[2009,2010],"seasons":[
+{"season":"2026-27","teamID":134142,"name":"Michigan Hawks Magic ECNL G2009/10","clubID":2359,"clubName":"Michigan Hawks","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerForm/Armand_Echeverria_172acc43febb49f1bc8d55ad6051072d_Hawks_Logo.png","conference":"Midwest","eventID":4264,"divisionID":22417,"division":"GU17","flightID":40561,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":4,"of":16,"gp":7,"w":5,"d":1,"l":1,"pts":16,"gf":29,"ga":12,"gd":17,"ppg":2.29,"form":"WWDWW","games":15,"played":7,"inProgress":true,"regroup":true,"link":"start"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2025-26","teamID":54823,"name":"Michigan Hawks Magic ECNL G09","division":"G2009","conference":"Midwest"},
+{"season":"2025-26","teamID":69104,"name":"Michigan Hawks Magic ECNL G10","division":"G2010","conference":"Midwest"}
+]}
+]}

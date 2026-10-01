@@ -1,0 +1,9 @@
+{"schema":1,"teamID":96994,"squads":[
+{"clubID":4603,"clubName":"Fairfax Virginia Union","birthYears":[2008],"seasons":[
+{"season":"2024-25","teamID":96994,"name":"Fairfax Virginia Union ECNL G08","clubID":4603,"clubName":"Fairfax Virginia Union","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FairfaxVAU_04-16-2026T20:45:12.085.png","conference":"Mid-Atlantic","eventID":3157,"divisionID":14181,"division":"G2008","flightID":24010,"flightName":"ECNL","u":17,"birthYears":[2008],"rank":9,"of":12,"gp":11,"w":2,"d":1,"l":8,"pts":7,"gf":12,"ga":29,"gd":-17,"ppg":0.64,"form":"LWLLL","games":11,"played":11,"link":"start"},
+{"season":"2025-26","teamID":96994,"name":"Fairfax VA Union ECNL G08/07","clubID":4603,"clubName":"Fairfax Virginia Union","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/FairfaxVAU_04-16-2026T20:45:12.085.png","conference":"Mid-Atlantic","eventID":3925,"divisionID":18540,"division":"G2008/2007","flightID":32621,"flightName":"ECNL","u":18,"birthYears":[2007,2008],"rank":5,"of":10,"gp":9,"w":5,"d":1,"l":3,"pts":16,"gf":18,"ga":20,"gd":-2,"ppg":1.78,"form":"WWLWW","games":9,"played":9,"link":"id"}
+],"postseason":[],"showcases":[],"maybePrev":[
+{"season":"2023-24","teamID":11956,"name":"Fairfax BRAVE SC ECNL G08","division":"G2008","conference":"Mid-Atlantic"},
+{"season":"2023-24","teamID":46827,"name":"VA Union ECNL G08","division":"G2008","conference":"Mid-Atlantic"}
+]}
+]}

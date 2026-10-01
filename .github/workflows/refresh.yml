@@ -7,6 +7,11 @@ name: Refresh ECNL data
 #     -> refreshes every flight's schedule, rebuilding the fixture calendar
 #   - match day -> refreshes the flights that played
 # Standings are only refetched where a result actually changed.
+# Every run then rebuilds the team index and the team histories (#107) from what is on disk, in
+# the same "Refresh data" step, so "Commit changed data" commits a history change together with
+# the season data it comes from. If the history build fails, the old history files are kept,
+# the data is still committed, and the last step fails the run (docs/data-api.md, "When the
+# data changes").
 #
 # Pushing to main triggers the Cloudflare Pages deploy.
 
