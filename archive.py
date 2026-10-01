@@ -862,10 +862,13 @@ def update_team_history(sources, stats, dry_run=False):
     refresh-state.json's historyAsOf becomes its updatedAt (the data the files were built from);
     on failure historyAsOf keeps its old value, the page says "history as of <date>", and the
     failure goes to stats.fail, so the run exits non-zero. A team-links.json entry that no
-    longer fits is reported the same way, and only that entry is left out (#107 S1)."""
+    longer fits is reported the same way, and only that entry is left out (#107 S1).
+
+    Returns the squads it built (for update_team_directory, #114), or None on failure."""
     import team_history
+    keep = {}
     try:
-        written, removed, total, errors = team_history.write_history(sources, dry_run=dry_run)
+        written, removed, total, errors = team_history.write_history(sources, dry_run=dry_run, keep=keep)
     except Exception as e:  # noqa: BLE001 — must never escape into the refresh
         state = api.load_refresh_state()
         here = os.path.dirname(os.path.abspath(__file__))
@@ -891,7 +894,35 @@ def update_team_history(sources, stats, dry_run=False):
         if state.get("updatedAt") and state.get("historyAsOf") != state["updatedAt"]:
             state["historyAsOf"] = state["updatedAt"]
             api.write_json_file(api.REFRESH_STATE_PATH, state)
-    return written + removed
+    return keep.get("squads")
+
+
+# ---------- team directory (#114) ----------
+#
+# public/archive/directory.json: every team (one #107 squad per row) in one file, for the
+# page's team search, served at /api/v1/teams. Built by team_directory.py from the squads of
+# the history build in the same run, so it needs no second build and never lags the
+# histories. It is rebuilt LAST in every path (after the club places and the catalog's
+# birth-year anchor, which it carries), and only from a successful history build.
+
+def update_team_directory(sources, stats, squads, dry_run=False):
+    """team_directory.write_directory for the crawl, refresh, --team-history and --clubs paths.
+    Never raises. With no squad list (the history build failed, or a test stubbed it), the file
+    is left as it was. A failure goes to stats.fail, so the run exits non-zero, and leaves the
+    old file. Never touches refresh-state.json: historyAsOf belongs to the histories (#113)."""
+    import team_directory
+    if not isinstance(squads, list):
+        print("Team directory: not rebuilt (no team history build in this run); left as it was.")
+        return None
+    try:
+        changed = team_directory.write_directory(sources, squads, dry_run=dry_run)
+    except Exception as e:  # noqa: BLE001 (must never escape into the refresh)
+        stats.fail(f"team directory: {e} [{type(e).__name__}] (fix, then run: python archive.py --team-history)")
+        print(f"Team directory: FAILED: {e}. The directory was left as it was.")
+        return None
+    state = ("would change" if dry_run else "written") if changed else "unchanged"
+    print(f"Team directory: {len(squads)} teams, {state}.")
+    return changed
 
 
 def cmd_team_history(sources, dry_run=False, check=False):
@@ -899,9 +930,12 @@ def cmd_team_history(sources, dry_run=False, check=False):
     writes nothing and fails when a committed file differs from a fresh build (CI's drift
     check); --dry-run counts what would change."""
     import team_history
+    import team_directory
     if check:
+        keep = {}
         try:
-            diff, errors = team_history.check_history(sources)
+            diff, errors = team_history.check_history(sources, keep=keep)
+            stale_directory = team_directory.check_directory(sources, keep["squads"])
         except Exception as e:  # noqa: BLE001
             print(f"Team history check: FAILED: {e}")
             return 1
@@ -912,9 +946,15 @@ def cmd_team_history(sources, dry_run=False, check=False):
                   f"{', '.join(diff[:8])}. Run: python archive.py --team-history, then commit public/archive/history/")
         else:
             print("Team history check: every file equals a fresh build of the archive.")
-        return 1 if diff or errors else 0
+        if stale_directory:
+            print("Team directory check: public/archive/directory.json differs from a fresh build. "
+                  "Run: python archive.py --team-history, then commit public/archive/directory.json")
+        else:
+            print("Team directory check: directory.json equals a fresh build of the archive.")
+        return 1 if diff or errors or stale_directory else 0
     stats = Stats()
-    update_team_history(sources, stats, dry_run=dry_run)
+    squads = update_team_history(sources, stats, dry_run=dry_run)
+    update_team_directory(sources, stats, squads, dry_run=dry_run)
     for e in stats.errors:
         print(f"  - {e}")
     return 1 if stats.failed else 0
@@ -1217,6 +1257,14 @@ def cmd_clubs(sources, season, force=False, dry_run=False):
         return 0
     stats = Stats()
     update_club_places(todo, stats, "--clubs")
+    # The team directory carries each club's place (#114 M3): only that column can change here,
+    # so it is updated in place, with no squad build. Never raises.
+    try:
+        import team_directory
+        if team_directory.refresh_places():
+            print("Team directory: club places updated.")
+    except Exception as e:  # noqa: BLE001
+        stats.fail(f"team directory: {e} (fix, then run: python archive.py --team-history)")
     for e in stats.errors:
         print(f"  - {e}")
     return 1 if stats.failed else 0
@@ -1306,7 +1354,8 @@ def cmd_refresh(sources, args):
         # histories follow it the same way (#107).
         stats = Stats()
         update_team_index(sources, season, stats)
-        update_team_history(sources, stats)
+        squads = update_team_history(sources, stats)
+        update_team_directory(sources, stats, squads)
         return 1 if stats.failed else 0
     if args.dry_run:
         for fl in sorted((f for f in flights if f["key"] in candidates),
@@ -1410,12 +1459,16 @@ def cmd_refresh(sources, args):
     # events changed is rewritten in this run, so the workflow commits it with the data. All
     # seasons are rebuilt (a squad spans them); unchanged files are not rewritten. Local work
     # only; unable to raise; a failure keeps the old files and fails the run.
-    update_team_history(sources, stats)
+    squads = update_team_history(sources, stats)
 
     # Club places (#87): on the day's sweep, after the state write and the team index
     # (so a club new in today's standings is fetched today). Bounded; never raises.
     if sweep:
         refresh_club_places(season, today, stats)
+
+    # The team directory (#114) last, after the club places it carries, from the squads of the
+    # history build above. Local work only; unable to raise; never touches historyAsOf.
+    update_team_directory(sources, stats, squads)
 
     print(f"{stats.fetched} requests ({standings_refreshed} standings), "
           f"{stats.failed} failed, {elapsed:.0f}s. "
@@ -1618,14 +1671,19 @@ def main():
                          if kind == "showcase"}):
             update_team_index(sources, s, stats)
     # Any crawl (conference, national or showcase) can change a team's history (#107).
+    squads = None
     if not args.dry_run:
-        update_team_history(sources, stats)
+        squads = update_team_history(sources, stats)
 
     if age_changes and not args.dry_run:
         save_sources(sources)
         print(f"\nBirth-year anchor updated in {api.SOURCES_PATH}:")
         for c in age_changes:
             print(f"  {c}")
+
+    # The team directory (#114) last: after the club places and the birth-year anchor above.
+    if not args.dry_run:
+        update_team_directory(sources, stats, squads)
 
     elapsed = time.time() - started
     print(f"\nFetched {stats.fetched}, reused {stats.skipped} fresh, "

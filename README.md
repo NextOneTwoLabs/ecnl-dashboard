@@ -85,7 +85,7 @@ PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  python archive.py --team-history --check      # the team histories equal a fresh build
+  python archive.py --team-history --check      # the team histories and the team directory equal a fresh build
 ```
 
 `tests/team-history.test.mjs` runs `python team_history.py --parity` itself, under the
@@ -142,7 +142,7 @@ python archive.py --refresh --dry-run --date 2026-09-12  # test a given day
 python archive.py --season 2026-27                     # full crawl of one season
 python archive.py --all                                # every season (~1,200 requests)
 python archive.py --team-index --all                   # rebuild every season's team index (no API calls)
-python archive.py --team-history                       # rebuild every team history (no API calls); --check: drift only
+python archive.py --team-history                       # rebuild every team history and the team directory (no API calls); --check: drift only
 python archive.py --clubs --all                        # fetch club city/state for clubs with no entry yet
 python archive.py --clubs --season 2026-27 --force     # re-check every club of one season
 ```
@@ -169,6 +169,10 @@ Right after the index, the same run rebuilds the team histories
 (`public/archive/history/<teamID>.json`; see [Team history](#team-history)), writing only
 the files that changed, so the workflow commits them with the data they come from. If that
 build fails, the old files stay, the data is still committed and the run fails.
+
+Last, after the club places, the same run rebuilds the team directory
+(`public/archive/directory.json`, every team in one file for team search, #114) from that
+history build; a failed history build leaves it as it was.
 
 Commit `public/archive/` and `export/` — that is what makes the data durable, and
 pushing to `main` is what deploys.
@@ -483,6 +487,7 @@ cover the sibling site's `/api/*`, since the rule has no hostname field) or move
 | `public/archive/refresh-state.json` | When the data was last refreshed (powers "Updated 3h ago"; read via `/api/v1/status`) |
 | `public/archive/manifest.json` | Index tying event IDs back to season/conference/flight |
 | `public/archive/teams/<season>.json` | Per-season team index, derived from the archived hierarchies and standings by `archive.py` (read via `/api/v1/seasons/{season}/teams`; see `docs/data-api.md`) |
+| `public/archive/directory.json` | The team directory: every team (club and age group, one #107 squad per row) in one file, for team search, derived by `team_directory.py` from the team histories, the team indexes and `clubs.json` (read via `/api/v1/teams`; see `docs/data-api.md`) |
 | `public/archive/clubs.json` | Club city and state for every season's clubs (`null` when TGS lists none), derived by `archive.py` from TGS's club records, keeping nothing else (read via `/api/v1/clubs`; see `docs/data-api.md`) |
 | `archive.py` | Crawler: match-day refresh, bulk backfill, CSV exports, `--verify` |
 | `ecnl_api.py` | Shared API/archive helpers |

@@ -86,7 +86,7 @@ test('the history route: ids validated like every route, validators forwarded, J
   assert.deepEqual(resolveResource('/api/v1/teams/55477/history'), { kind: 'history', team: '55477' });
   assert.equal(assetPath({ kind: 'history', team: '55477' }), '/archive/history/55477.json');
   for (const bad of ['0', '01', '-1', 'abc', '1.5', '%2e%2e%2f', '55477%2F..']) assert.equal(resolveResource(`/api/v1/teams/${bad}/history`).status, 400, bad);
-  for (const none of ['/api/v1/teams/55477', '/api/v1/teams/55477/history/', '/api/v1/teams']) assert.equal(resolveResource(none).status, 404, none);
+  for (const none of ['/api/v1/teams/55477', '/api/v1/teams/55477/history/', '/api/v1/teams/']) assert.equal(resolveResource(none).status, 404, none);
   for (const method of ['GET', 'HEAD']) {
     const missing = await dataApi(request('/api/v1/teams/1/history', { method }), env);
     assert.equal(missing.status, 404);
