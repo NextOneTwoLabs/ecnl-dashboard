@@ -82,7 +82,12 @@ test('#128: chips are buttons in a group with one Tab stop, named by their lette
   }
   assert.ok(!/title=/.test(out));
   assert.match(page.formChipsHtml(games, false), /class="form-chip w"/);
-  assert.match(page.formChipsHtml([{ ...games[0], opp: 'A "B" <C> ECNL' }], true), /aria-label="W, win 2–1 vs A &quot;B&quot; &lt;C&gt;, Sep 1"/);
+  // A hostile opponent name stays text in both attributes (review SC2): escaped here, and the
+  // tooltip is filled with textContent, so it shows literally.
+  const hostile = page.formChipsHtml([{ ...games[0], opp: 'A "B" <C> & <img src=x onerror="x()"> ECNL' }], true);
+  assert.match(hostile, /aria-label="W, win 2–1 vs A &quot;B&quot; &lt;C&gt; &amp; &lt;img src=x onerror=&quot;x\(\)&quot;&gt;, Sep 1"/);
+  assert.match(hostile, /data-tip="W 2–1 vs A &quot;B&quot; &lt;C&gt; &amp; &lt;img src=x onerror=&quot;x\(\)&quot;&gt; · Sep 1"/);
+  assert.ok(!/<img/.test(hostile));
 });
 
 test('#128: the glance card\'s chips read exactly as the Overview\'s, for every season row', { skip }, () => {

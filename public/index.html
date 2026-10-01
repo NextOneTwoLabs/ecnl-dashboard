@@ -5628,7 +5628,7 @@
     function chipGames(played, teamID) {
       return played.map(g => {
         const home = g.hometeamID === teamID;
-        const oppID = home ? g.awayteamID : g.hometeamID, opp = String((home ? g.awayTeam : g.homeTeam) || '').trim();
+        const oppID = home ? g.awayteamID : g.hometeamID, opp = String((home ? g.awayTeam : g.homeTeam) || '').split(/\s+/).filter(Boolean).join(' ');
         const known = !!(oppID && opp);
         const gf = home ? g.hometeamscore : g.awayteamscore, ga = home ? g.awayteamscore : g.hometeamscore;
         const hp = g.hometeamPKscore, ap = g.awayteamPKscore;
@@ -6407,6 +6407,7 @@
       const onTip = t => !!t && (t === tip || tip.contains(t));
       const touching = () => Date.now() - touchAt < 800;
       function place(chip) {
+        tip.style.left = '0px'; tip.style.top = '0px';   // measured unconstrained, then placed
         const r = chip.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight, m = 8;
         const x = Math.max(m, Math.min(r.left + r.width / 2 - w / 2, window.innerWidth - m - w));
         const y = r.top - h - 6 >= m ? r.top - h - 6 : r.bottom + 6;
@@ -6449,7 +6450,11 @@
         if (c && c === owner && !chipOf(e.relatedTarget) && !c.matches(':hover')) hide();
       });
       document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && !tip.hidden) { e.preventDefault(); e.stopImmediatePropagation(); hide(); return; }
+        if (e.key === 'Escape' && !tip.hidden) {
+          hide();
+          if (!(e.target.closest && e.target.closest('input, textarea, select'))) { e.preventDefault(); e.stopImmediatePropagation(); }
+          return;
+        }
         const c = chipOf(e.target);
         if (!c || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
         const all = [...c.parentElement.querySelectorAll('.form-chip[data-tip]')], i = all.indexOf(c);
@@ -6458,7 +6463,10 @@
         all.forEach((x, k) => { x.tabIndex = k === j ? 0 : -1; });
         all[j].focus();
       }, true);
-      document.addEventListener('scroll', () => { if (!tip.hidden) hide(); }, { capture: true, passive: true });
+      document.addEventListener('scroll', () => {
+        if (tip.hidden) return;
+        if (owner && owner.isConnected && owner.matches(':focus-visible')) place(owner); else hide();
+      }, { capture: true, passive: true });
       window.addEventListener('resize', () => { if (!tip.hidden) hide(); });
       window.addEventListener('hashchange', hide);
     })();

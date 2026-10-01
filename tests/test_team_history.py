@@ -298,10 +298,17 @@ class Built(unittest.TestCase):
         self.assertEqual({s for s, _ in unknown}, {"2021-22"})
 
     def test_history_files_stay_small(self):
-        # #128 S6: `last` grew the files 57% (gzip 40%); a later field must not grow them unnoticed.
+        # #128 S6: `last` grew the files 57% (gzip 40%); a later *field* must not grow them unnoticed,
+        # while a new *season* must not trip the budget on its own (review SC3).
+        # - Total, per archived season: 1.95 MB gzip for 7 seasons today, about 280 KB a season
+        #   (a full season adds about 830 row lines with `last`). The limit, 340 KB a season, grows
+        #   with each season, so only a fatter row (a new field) can cross it.
+        # - Largest file: one TGS id's squads, 23.8 KB today, growing at most about 1.5 KB a season,
+        #   so about five seasons out; then revisit the format rather than raise the limit.
         sizes = [th.file_bytes(tid, sqs) for tid, sqs in self.files.items()]
+        seasons = len({r["season"] for r in self.byk.values()})
         self.assertLess(max(len(b) for b in sizes), 32 * 1024)
-        self.assertLess(sum(len(gzip.compress(b, 9)) for b in sizes), 2.2 * 1024 * 1024)
+        self.assertLess(sum(len(gzip.compress(b, 9)) for b in sizes), seasons * 340 * 1024)
 
     def test_pos_is_tgs_order_except_the_merged_tables(self):
         # S6: the page says Pos is TGS's order except in the 11 tables TGS published in two
