@@ -186,8 +186,12 @@ class Writing(unittest.TestCase):
         places = json.loads(json.dumps(api.read_json_file(api.CLUBS_PATH)["clubs"]))
         cid = next(c[0] for c in json.loads(fresh())["clubs"] if c[3])
         places[str(cid)] = {"city": "Fixture City", "state": "CA"}
+        places[str(td.NO_CLUB)] = {"city": "El Paso", "state": "TX"}     # SC2: club 7 never gets one
         self.assertTrue(td.refresh_places(places, path=self.path))
         self.assertEqual(Path(self.path).read_bytes(), td.file_bytes(self.sources, built(), places))
+        doc = json.loads(Path(self.path).read_bytes())
+        self.assertTrue(all(c[3] == "" for c in doc["clubs"] if c[0] == td.NO_CLUB))
+        self.assertTrue(all(c[3] == "" for c in td.build(self.sources, built(), places)["clubs"] if c[0] == td.NO_CLUB))
         self.assertFalse(td.refresh_places(places, path=self.path), "a second run changes nothing")
         missing = os.path.join(self.tmp, "none.json")
         self.assertFalse(td.refresh_places(places, path=missing))
@@ -197,7 +201,7 @@ class Writing(unittest.TestCase):
 class Pipeline(unittest.TestCase):
     """archive.py builds the directory last, from the same history build (#114 M3)."""
 
-    ACTIVE = "2026-27"
+    ACTIVE = api.load_sources()["refresh"]["activeSeason"]
 
     def setUp(self):
         self.sources = api.load_sources()
@@ -317,6 +321,66 @@ class Pipeline(unittest.TestCase):
             Path(self.directory).write_bytes(fresh().replace(b'"schema":1', b'"schema":1 ', 1))
             self.assertEqual(archive.cmd_team_history(self.sources, check=True), 1)
             self.assertIn("Team directory check: public/archive/directory.json differs", out.getvalue())
+
+    # ---- SC1 (#118 review): each path that writes the directory, run in the sandbox ----
+    def test_clubs_updates_the_directory_places_in_place(self):
+        Path(self.directory).write_bytes(fresh())
+        cid = next(c[0] for c in json.loads(fresh())["clubs"] if c[3])
+
+        def fetched(todo, stats, why):            # the club step, with no network: one place changes
+            places = load(self.clubs)
+            places["clubs"][str(cid)] = {"city": "Fixture City", "state": "CA"}
+            Path(self.clubs).write_text(json.dumps(places), encoding="utf-8")
+        with contextlib.ExitStack() as stack:
+            for p in self.paths() + [patch.object(archive, "update_club_places", side_effect=fetched)]:
+                stack.enter_context(p)
+            stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+            self.assertEqual(archive.cmd_clubs(self.sources, None, force=True), 0)
+        new = load(self.clubs)["clubs"]
+        self.assertEqual(Path(self.directory).read_bytes(), td.file_bytes(self.sources, built(), new))
+        self.assertIn("Fixture City, CA", Path(self.directory).read_text(encoding="utf-8"))
+
+    def test_team_history_writes_the_directory(self):
+        with contextlib.ExitStack() as stack:
+            for p in self.paths():
+                stack.enter_context(p)
+            stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+            self.assertEqual(archive.cmd_team_history(self.sources), 0)
+        self.assertEqual(Path(self.directory).read_bytes(), fresh())
+
+    def test_a_refresh_with_nothing_due_builds_the_history_then_the_directory(self):
+        calls = []
+        history, directory = archive.update_team_history, td.write_directory
+
+        def h(*a, **k):
+            calls.append("history")
+            return history(*a, **k)
+
+        def w(*a, **k):
+            calls.append("directory")
+            return directory(*a, **k)
+        with contextlib.ExitStack() as stack:
+            for p in self.paths() + [patch.object(archive, "update_team_history", side_effect=h),
+                                     patch.object(td, "write_directory", side_effect=w),
+                                     patch.object(archive, "fetch_json", side_effect=AssertionError("nothing due fetched"))]:
+                stack.enter_context(p)
+            out = stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+            args = argparse.Namespace(date="2026-08-20", at_hour=0, sweep=False, dry_run=False, force=True)
+            self.assertEqual(archive.cmd_refresh(self.sources, args), 0, out.getvalue())
+        self.assertIn("nothing due", out.getvalue())
+        self.assertEqual(calls, ["history", "directory"])
+        self.assertEqual(Path(self.directory).read_bytes(), fresh())
+
+    def test_every_history_build_in_archive_py_is_followed_by_the_directory(self):
+        """The crawl tail is not run here (it needs upstream), so this checks the source: in every
+        function that rebuilds the histories, the directory is rebuilt after it."""
+        src = Path(archive.__file__).read_text(encoding="utf-8").replace("\r\n", "\n")
+        funcs = [f for f in src.split("\ndef ")[1:]
+                 if "update_team_history(sources" in f and not f.startswith("update_team_history(")]
+        self.assertGreaterEqual(len(funcs), 3, "cmd_team_history, cmd_refresh and the crawl")
+        for f in funcs:
+            name = f.split("(", 1)[0]
+            self.assertGreater(f.rfind("update_team_directory("), f.rfind("update_team_history(sources"), name)
 
 
 if __name__ == "__main__":

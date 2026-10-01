@@ -112,9 +112,9 @@ flight the team played in**. A season without showcases costs nothing extra. On 
 Showcases tab, the index tells which rows have a team page: if it is refused, every row is
 shown by its plain name with "try again", never as "no team page".
 
-The page uses the index to find a deep-linked team or a saved favourite and to
-run a Teams search: one request per season instead of every hierarchy and
-standings file. What the page does with the index answer (#92):
+The page uses the index to find a deep-linked team or a saved favourite: one request per
+season instead of every hierarchy and standings file. (Team search reads the team directory
+instead, #114.) What the page does with the index answer (#92):
 
 | Index answer | The page | Remembered |
 | --- | --- | --- |
@@ -420,9 +420,13 @@ holds, and writes it only when its bytes change:
 **Caching and cost.** `no-cache` with a validator, like the histories and the club places: it
 changes with the active season, and its route has its own kind (`directory`), so the
 closed-season policy (#82) never applies to it and no catalog read is made for it. The page
-reads it once per page load, when team search is first opened; searching costs no further
-request. After a data refresh that changed a team, the next load downloads it again (about
-74 KB); otherwise it revalidates with a 304.
+reads it once per page load, when team search is first opened, never on page load; searching
+costs no further request. After a data refresh that changed a team, the next load downloads it
+again (about 74 KB); otherwise it revalidates with a 304. What the page does with the answer
+follows the team index (#92): a refusal shows "try again" and is remembered for a minute (a
+`none` refusal until the session is back); a 404 or an unknown schema means "Team search isn't
+available right now" for the page; a 5xx, a network error or bad JSON is asked again at the next
+focus. There is never a fallback scan, and `?live=1` has no team search.
 
 ## HTTP behavior
 
@@ -838,10 +842,10 @@ characters. The API sends no CORS headers, so a key only works from servers, scr
 agents, not from another site's page.
 
 **Limits.** 120 requests per 60 s per key (`RL_KEY`), and every keyed request also counts
-toward the per-IP ceiling (`RL_IP`, 3,000 per 60 s). To find a team, start from
-`/api/v1/teams` (the team directory, one request for every team) rather than walking the
-season indexes and histories. That is 2 requests a second: a full
-copy of every resource takes about 11 minutes. Over a limit: 429 with `Retry-After: 60`.
+toward the per-IP ceiling (`RL_IP`, 3,000 per 60 s). That is 2 requests a second: a full
+copy of every resource takes about 11 minutes. To find a team, start from `/api/v1/teams`
+(the team directory, one request for every team) rather than walking the season indexes and
+histories. Over a limit: 429 with `Retry-After: 60`.
 
 **Answers.** Every answer to a keyed request says `X-ECNL-Session: key`. Refusals (400, 401,
 429, 503) are JSON with `Cache-Control: no-store`. A served request is answered as any other:
