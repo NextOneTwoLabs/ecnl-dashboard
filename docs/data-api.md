@@ -352,11 +352,16 @@ use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a min
   those two seasons' rows (and the overrides), so adding a season never changes an older
   link (tested by building with and without the newest season). A `team-links.json` entry
   that no longer fits fails loudly, as above.
-- **Caching.** Like every route, history answers are `no-cache` with a validator; the ETag
-  changes whenever a file's bytes change. Most files hold no open season and change only
-  when the builder, `reconstruct.py` or an override does, but they *can* change, so any
-  future longer caching (#82) must be versioned (for example a build id in the URL or a
-  `closed` list published with the data), never a bare long `max-age`.
+- **Caching.** History answers stay `no-cache` with a validator; the ETag changes whenever a
+  file's bytes change. #82 gives closed seasons' event routes and team indexes a one-day
+  `max-age` (see "HTTP behavior") because the Worker can tell from the URL alone that they
+  belong to a season the refresh never fetches again: the season is in the URL (team index)
+  or is the event's season in the catalog. A history URL names a team, not a season: 778 of
+  the 1,906 files hold an active-season row and change with refreshes (6 to 317 files a run),
+  and the rest change when the builder, `reconstruct.py`, `team-links.json` or a closed
+  re-crawl does, so a lifetime would show stale results. Any longer caching of history must
+  be versioned (for example a build id in the URL or a `closed` list published with the
+  data), never a bare long `max-age`. It costs one request per History opened.
 
 ## HTTP behavior
 
@@ -367,8 +372,10 @@ use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a min
   `Allow: GET, HEAD`. Storage faults return 503.
 - Errors are `{ "ok": false, "error": "..." }` JSON and `Cache-Control: no-store`.
   Missing assets never fall through to an HTML page or the live upstream API.
-- Success and 304 responses use `Cache-Control: no-cache`: stored browser copies
-  must revalidate. The Worker forwards If-None-Match / If-Modified-Since to the
+- Success and 304 responses use `Cache-Control: no-cache` (stored browser copies
+  must revalidate), except a closed season's event routes and team index, which the
+  browser may keep for a day (#82; see "Browser caching of closed seasons" below).
+  The Worker forwards If-None-Match / If-Modified-Since to the
   asset binding and retains its validators and 304 status. Python generates a
   content ETag and Last-Modified and implements conditional requests, with ETag
   taking precedence. Validators can differ between local Python and Cloudflare.
@@ -380,6 +387,92 @@ use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a min
 - Requests are session-scoped or keyed, and rate-limited, and every answer carries
   `X-ECNL-Session` (see "Sessions and rate limits" below). A limited request gets a
   JSON 429 with `Retry-After: 60`.
+
+### Browser caching of closed seasons (#82)
+
+| Answer (200 or 304) | `Cache-Control` |
+| --- | --- |
+| `hierarchy`, `standings` and `schedule` of an event whose catalog season is earlier than `refresh.activeSeason`; `seasons/{s}/teams` with `s` earlier than it | `private, max-age=86400, stale-while-revalidate=86400` |
+| the active season; a future one (registered before the rollover); an event the catalog doesn't list; `catalog`, `status`, `clubs`, `teams/{id}/history` | `no-cache`, as before |
+| every error, 429 and other refusal | `no-store`, as before |
+
+- **Closed** means earlier than the catalog's `refresh.activeSeason` (a string compare of two
+  validated `YYYY-YY` keys). The refresh only ever fetches the active season, so a closed
+  season changes only by a deliberate act merged in a PR: a `--force` re-crawl,
+  `reconstruct.py`, a showcase added to it, a correction. In September 2026 that happened in
+  4 deploys.
+- **How the Worker decides** (`cachePolicy` in `api/data-api.mjs`): it reads the catalog
+  through `ASSETS` once per isolate and maps every event id to its season. The result is kept
+  in module scope, not per `env.ASSETS` object: a Worker version's assets never change and an
+  isolate runs one version, so this holds whether or not the binding keeps its identity
+  across requests. Only the parsed result is kept, never a pending read, and a failed read is
+  not kept (the next request reads again). It fails safe: a catalog that is missing, HTML, bad
+  JSON, without a valid `activeSeason` (a strict `YYYY-YY` with consecutive years; `2026-27 `,
+  `2026-99` or a number is not one) or without `seasons` gives `no-cache` everywhere, and the
+  data is still served. `data_api.py`'s `cache_policy` is the twin, and
+  `tests/cache-policy.json` holds the cases (routes, rollover, broken and malformed catalogs)
+  that both test suites run.
+- **ETags are kept.** A 304 carries the same `Cache-Control`, so a revalidation renews the
+  stored copy for another day.
+- **`private`, and no `Vary: Cookie`.** No shared cache stores these answers: they carry
+  `X-ECNL-Session` and may answer a keyed request. `Vary: Cookie` would miss on every hourly
+  cookie renewal, since the cookie's value changes.
+- **Only answers that are safe to replay keep the lifetime.** A stored copy replays the
+  `X-ECNL-Session` it was stored with to the page's `noteSession`. So only `ok`, `off` and
+  `key` answers keep it; `none`, `error` and `renewed` are sent `no-cache` (`decorate` in
+  `api/session.mjs`, and the Worker's path for a fault in `decorate`), and a response that
+  sets a cookie stays `private, no-cache`. A stored `none` therefore never starts a renewal or
+  the cookies-blocked verdict (#92). A replayed `ok` has one bounded effect, accepted for #82
+  and pinned by `tests/page-refusals.test.mjs`: the page takes it as the session being back,
+  so a remembered `none` refusal is forgotten and the next search or lookup asks once more
+  (likely refused again), and in a tab that blocks cookies renewal resumes, still at most one
+  `HEAD /` a minute. It needs a lost or expired cookie, the anonymous allowance spent and
+  closed views stored in the last two days; it costs one request per replayed view, never a
+  loop.
+- **No edge cache.** Workers run before Cloudflare's cache, and every request that reaches
+  the Worker is billed whether its answer comes from a cache or not, so Workers Cache or the
+  Cache API would save no quota (and a cache hit would skip the rate-limit gate). The
+  visitor's browser cache is the only lever on the daily quota.
+
+**When cached data changes.**
+
+- **How stale.** After a correction to a closed season is deployed, a browser that stored the
+  old copy shows it for up to a day, plus one stale view: the first view after the day shows
+  the old copy while `stale-while-revalidate` fetches the new one in the background, and the
+  view after that shows the new one.
+- **The closed team index can lag the catalog.** When a showcase is added to a closed season,
+  the catalog (`no-cache`) lists it at once, but a stored `seasons/{s}/teams` lacks it for up
+  to a day plus one stale view, so team pages and search silently leave out its rows. The
+  showcase's own routes are new URLs and show at once.
+- **`stale-while-revalidate` and 429s.** If the background revalidation is refused (a 429 or
+  any `no-store` answer), the stale copy is still shown, but Chrome drops the stored entry, so
+  the next view asks the Worker and is refused too ("Some tables couldn't load"). That is
+  still better than no `stale-while-revalidate`, where the first view would be the refused one.
+- **The rollover.** Moving `activeSeason` on (2026-27 to 2027-28) closes the old season from
+  that deploy on. It was `no-cache` until then, so no browser holds a long-lived copy of it,
+  and a season registered early stays `no-cache` until it is the active one. Flip
+  `activeSeason` only after the season's last refresh has been deployed: anything corrected
+  after the flip reaches browsers only within a day plus one view. A wrong flip caches the
+  wrongly closed season for at most that long; a broken catalog closes nothing.
+- **Feedback triage** should allow for up to two days of browser staleness after a
+  closed-season correction before treating "the old numbers still show" as a bug.
+- **Forcing fresh data.** There is no server-side purge of visitors' browser caches. In your
+  own browser, a hard reload (Ctrl+Shift+R, Cmd+Shift+R on a Mac) or DevTools "Disable cache";
+  everyone else gets it within a day plus one view. If same-day visibility is ever needed, the
+  page's `fetchJSON` already has an unused `refresh` option (`cache: 'reload'`), the natural
+  hook for a hand-bumped epoch in the catalog (a possible follow-up, not built).
+- **Debugging.** The header says which policy applied. DevTools shows "(memory cache)" or
+  "(disk cache)" for a stored closed answer, and a stored answer's `Date` says how old it is.
+- **Locally** the Python server sends the same headers (sessions are `off` there, which
+  keeps the lifetime), so closed data is cached in a developer's browser too: after changing
+  local data, use DevTools "Disable cache" or a hard reload.
+
+What it saves, measured offline in Chrome with the browser cache on: a closed conference
+session (open, Matches, back, another age group, back, reload, a new tab) fell from 24 to 11
+`/api/v1` requests, a closed team link (open, History, reload, a new tab) from 31 to 22, and
+closed Playoffs from 15 to 10. Active-season journeys don't change. Every page load still
+asks for the catalog and status, and the `/` load is itself a Worker request. See "The
+Workers Free quota".
 
 ## Sessions and rate limits
 
@@ -418,7 +511,8 @@ valid session or it is over an hour old:
   renewing until an answer says `ok` or `renewed` (#92). A renewal that fails (5xx or
   network) does not count, so renewal goes on.
 - A response that sets the cookie is marked `Cache-Control: private, no-cache` (an API
-  error keeps `no-store`). The archive read never sees the cookie.
+  error keeps `no-store`), a closed season's answer included (#82). The archive read never
+  sees the cookie.
 - `Sec-Fetch-Site: cross-site` with a cookie (someone following a link to an API URL;
   `SameSite=Lax` withholds it from cross-site fetches) is served on the anonymous tier and
   counted as `anon-cross-site`.
@@ -515,6 +609,14 @@ flood can take `/` and `/api/*` down for the rest of the UTC day.** This risk pr
   partial: it still lets a determined client through at roughly the same pace, and whether
   it runs before the Worker (so that blocked requests are not Worker requests) is to be
   confirmed in Security Events.
+- **#82 trims ordinary traffic; it is not a quota fix.** A closed season's views repeated
+  within a day come from the browser cache (see "Browser caching of closed seasons"). There
+  are no route-level counts to measure the daily effect (#35). As an illustration only: if a
+  fifth of a day's `/api/v1` requests were closed event or index reads and a third to a half
+  of those were repeats within a day (the share the measured journeys show), that is roughly
+  7 to 10 % of the `/api/v1` requests, and a little less of all Worker requests, since every
+  `/` load is one too and is unchanged. Active-season traffic, the bulk on a match day, is
+  unchanged, and a flood never uses a browser cache.
 
 ### What is recorded
 
@@ -680,7 +782,10 @@ copy of every resource takes about 11 minutes. Over a limit: 429 with `Retry-Aft
 
 **Answers.** Every answer to a keyed request says `X-ECNL-Session: key`. Refusals (400, 401,
 429, 503) are JSON with `Cache-Control: no-store`. A served request is answered as any other:
-the data with `Cache-Control: no-cache`, or a 304 with no body. HEAD never has a body.
+the data with `Cache-Control: no-cache`, or for a closed season's event routes and team index
+`private, max-age=86400, stale-while-revalidate=86400` (#82; a client with an HTTP cache may
+keep those for a day, see "Browser caching of closed seasons"), or a 304 with no body and the
+same `Cache-Control`. HEAD never has a body.
 
 | Case | Status | Body and headers |
 | --- | --- | --- |
@@ -813,7 +918,8 @@ of 78, a Teams search 1 instead of 73, and opening My Teams with three favourite
 9 instead of 226. Without the index
 (the fallback, after a 404; never after a refused or failed index, #92) a cold search
 makes roughly 75 Worker requests per selected season; page-memory caches still
-eliminate repeated standings reads. Include
+eliminate repeated standings reads, and since #82 the browser cache serves a closed
+season's event and team-index answers again within a day without a Worker request. Include
 this request volume in usage monitoring before increasing traffic: on Workers Free
 every one of these requests counts against the 100,000-a-day quota (see "The Workers
 Free quota").
@@ -825,6 +931,8 @@ tiers or billing on top of the API keys (#93).
 
 The Python server offers the same archive-only v1 routes with stdlib only, with
 sessions off (`X-ECNL-Session: off`, no cookie, no rate limits) and no API key checks.
+It sends the Worker's `Cache-Control` (#82), so a closed season is cached in a developer's
+browser for a day too: use DevTools "Disable cache" or a hard reload after changing local data.
 Its explicit `?live=1` debug path still uses the legacy proxy and reconstructed
 schedule guards. Use Wrangler to test the actual Worker and feedback, which the
 Python server does not implement.
