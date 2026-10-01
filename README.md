@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -423,7 +423,10 @@ every archived season: "MVLA · born 2011", with its place and seasons, totals (
 TGS's standings), the best Champions League finish and any titles, one row or card per
 conference season, every Playoffs and Finals appearance and every showcase, each linked to
 its table, bracket or results and to TGS. The lists run newest first (#127); the finishing-position
-chart and each row's form still read oldest to newest, left to right. Another team always opens on Overview, except
+chart and each row's form still read oldest to newest, left to right. Each form chip shows its game
+on hover, keyboard focus or tap (#128), for example "W 3–1 vs <opponent> · Sep 27": "vs" for a home
+game and "at" for an away game, as TGS lists them. The glance card's chips, on the season tab and
+on Conferences, do the same from the games the page already has. Another team always opens on Overview, except
 under `?live=1` (no history route) and for a team with no history file (one seen only at
 events, or new before the next history build): those open on the season tab, with no
 Overview tab.
@@ -438,7 +441,7 @@ Overview tab.
 - **Overrides.** `public/data/team-links.json` (empty today) holds hand-reviewed links and
   unlinks, declared with evidence and approved in a PR, like showcase `teamAliases`. The
   builder rejects an entry that doesn't fit, and the run fails.
-- **Data.** One file per team id (1,906 files, 4.6 MB), built from the archive with no API
+- **Data.** One file per team id (1,906 files, 7.2 MB), built from the archive with no API
   calls by every crawl and refresh, and by `python archive.py --team-history`. CI fails if the
   committed files differ from a fresh build (`--team-history --check`). What happens when the
   data changes, a build fails, or a past season is corrected:
