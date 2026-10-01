@@ -1905,10 +1905,11 @@
 
     /* ===== #107: team history (the team page's Overview tab, #114) ===== */
     .hist-stack { container-type: inline-size; }
-    .hist-tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    /* #121: a column never narrower than its longest word ("Quarterfinals"), so no tile breaks one mid-word */
+    .hist-tiles { display: grid; grid-template-columns: repeat(5, minmax(min-content, 1fr)); }
     .hist-tile { padding: 14px 16px; border-right: 1px solid var(--border-light); min-width: 0; }
     .hist-tile:last-child { border-right: 0; }
-    .hist-tile .stat-value { font-size: 19px; white-space: normal; overflow-wrap: anywhere; }
+    .hist-tile .stat-value { font-size: 19px; white-space: normal; overflow-wrap: break-word; }
     .hist-tile .stat-sub { white-space: normal; }
     .hist-titles { padding: 10px 16px; border-top: 1px solid var(--border-light); font-size: 13px; line-height: 1.5; }
     .hist-titles b { color: var(--gold); }
@@ -2408,6 +2409,8 @@
     let teamView = 'history';
     let teamViewFor = null;           // the team teamView belongs to: another team starts on Overview (S11)
     let teamToken = 0;                // drops a team page load that was superseded
+    let playoffToken = 0;             // #99: drops a Playoffs panel load (tab, season, stage) that was superseded
+    let playoffFlightToken = 0;       // #99: drops a Playoffs competition load superseded by another view, age group or competition
     // Playoffs state
     let currentPlayoffStage = null;      // a key of the season's `national` map, e.g. "Playoffs & Finals"
     let currentPlayoffAgeGroup = null;
@@ -3014,6 +3017,7 @@
       // #102: leaving My Teams cancels a team page still loading, which would otherwise paint
       // over this tab (and could move the season) when its requests answer.
       if (!isFav) { lastTopTab = tab; teamToken++; }
+      playoffToken++; loadToken++;   // #99: a Playoffs or Conferences load still in flight, whichever tab this is
       // A tablist of three; My Teams sits outside it. With My Teams open no tab is
       // selected, and the last one keeps tabindex 0 so the tablist stays reachable.
       TOP_TABS.forEach(([id, name]) => {
@@ -3157,6 +3161,7 @@
     }
 
     async function loadPlayoffsPanel() {
+      const token = ++playoffToken;   // #99: also drops the season before, even when this one paints at once
       const natEvents = getNationalEventsForSeason();
 
       if (!natEvents) {
@@ -3194,6 +3199,7 @@
 
       buildStageTabs();
       await loadPlayoffAgeGroups();
+      if (token !== playoffToken) return;
 
       const key = getPlayoffCacheKey();
       const groups = key ? (playoffAgeGroupsCache[key] || []) : [];
@@ -3237,7 +3243,9 @@
       currentPlayoffAgeGroup = null;
       currentPlayoffTier = null;
       buildStageTabs();
+      const token = ++playoffToken;
       loadPlayoffAgeGroups().then(() => {
+        if (token !== playoffToken) return;
         const key = getPlayoffCacheKey();
         const groups = key ? (playoffAgeGroupsCache[key] || []) : [];
         currentPlayoffAgeGroup = groups[0] || null;
@@ -3552,6 +3560,8 @@
     async function loadPlayoffFlight() {
       const evt = currentNationalEvent();
       if (!evt) return;
+      const nav = playoffToken, token = ++playoffFlightToken;
+      const stale = () => nav !== playoffToken || token !== playoffFlightToken;
 
       const ageLabel = currentPlayoffAgeGroup ? getAgeLabel(currentPlayoffAgeGroup) : '';
       const container = document.getElementById('standingsContainer');
@@ -3577,6 +3587,7 @@
 
       try {
         const hierarchy = await getEventHierarchy(evt.eventId);
+        if (stale()) return;
         const division = (hierarchy.girlsDivAndFlightList || []).find(d => d.divisionName === currentPlayoffAgeGroup);
         if (!division) {
           container.innerHTML = `<div class="error-message">No data found for ${esc(ageLabel)} in ${esc(currentPlayoffStage)}</div>`;
@@ -3613,6 +3624,7 @@
           getSchedule(evt.eventId, flight.flightID)
             .catch(e => { if (!isMissing(e)) gamesError = e; return []; }),
         ]);
+        if (stale()) return;   // #99: another tab, season, stage, view, age group or competition since
         const loadError = standingsError || gamesError;
         // TGS's unnamed remainder block (id 0) beside "Group A" is not a group: one table.
         const blocks = rawBlocks.every(b => b.flightGroupID) ? rawBlocks : [mergeStandingsBlocks(rawBlocks)];
@@ -3699,6 +3711,7 @@
         }
       } catch (err) {
         console.error(err);
+        if (stale()) return;
         container.innerHTML = `<div class="error-message">
           <strong>Couldn't load ${esc(currentPlayoffStage)}.</strong><br>
           <small>${esc(retryText(err))}</small>
@@ -3810,10 +3823,13 @@
     // The flight on screen and its answers: Results <-> Games re-renders from them with no
     // request, and a "couldn't load" notice is announced after a load, never on a re-render.
     let showcaseLoad = null;
+    let showcaseToken = 0;   // #99: a newer Showcases load (leave and come back, Try again) drops this one
     async function loadShowcaseFlight({ rerender = false } = {}) {
       const entry = currentShowcaseEntry();
       if (!entry) return;
       const { name, evt } = entry;
+      const token = rerender ? showcaseToken : ++showcaseToken;   // a re-render supersedes nothing
+      const stale = flightId => token !== showcaseToken || showcaseLoadStale(evt.eventId, flightId);
       const container = document.getElementById('standingsContainer');
       const noteEl = document.getElementById('formatNote');
       noteEl.style.display = 'none';
@@ -3821,7 +3837,7 @@
       if (!rerender) container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading ${esc(name)}…</div></div>`;
       try {
         const hierarchy = await getEventHierarchy(evt.eventId);
-        if (showcaseLoadStale(evt.eventId)) return;
+        if (stale()) return;
         const divs = hierarchy.girlsDivAndFlightList || [];
         const ages = sortAgeGroups(divs.map(d => d.divisionName), currentSeason);
         if (!ages.includes(currentShowcaseAge)) currentShowcaseAge = ages[0] || null;
@@ -3853,7 +3869,7 @@
             showcaseHalf(`g/${key}`, () => getSchedule(evt.eventId, flight.flightID)),
             showcaseIndex(currentSeason),
           ]);
-          if (showcaseLoadStale(evt.eventId, flight.flightID)) return;
+          if (stale(flight.flightID)) return;
           showcaseLoad = { key, rawBlocks: s.value || [], games: g.value || [], standingsError: s.error,
             gamesError: g.error, linkable: idx.linkable, indexError: idx.error };
         }
@@ -3913,7 +3929,7 @@
           container.appendChild(panel);
         }
       } catch (err) {
-        if (showcaseLoadStale(evt.eventId)) return;
+        if (stale()) return;
         console.error(err);
         container.innerHTML = `<div class="error-message"><strong>Couldn't load ${esc(name)}.</strong><br><small>${esc(retryText(err))}</small></div>`;
       }
@@ -3926,7 +3942,7 @@
     // team page asks only for the schedules its team is in. Only a resolved "no index" (404,
     // unknown schema, ?live=1) falls back to scanning the team's age group in each showcase;
     // a refused index rejects, and nothing is scanned (#92, M2a).
-    async function showcaseFlightsForTeam(season, teamID, divisionName) {
+    async function showcaseFlightsForTeam(season, teamID, divisionName, live = () => true) {
       const events = Object.entries(SHOWCASES[season] || {});
       if (!events.length || !teamID) return [];
       const byId = new Map(events.map(([name, evt]) => [evt.eventId, { name, evt }]));
@@ -3941,6 +3957,7 @@
       } else {
         for (const [name, evt] of events) {
           const h = await getEventHierarchy(evt.eventId);
+          if (!live()) return [];
           const nds = (h && h.girlsDivAndFlightList) || [];
           const nd = nds.find(d => d.divisionName === divisionName)
             || nds.find(d => getAgeLabel(d.divisionName, season) === getAgeLabel(divisionName, season));
@@ -3956,9 +3973,10 @@
     // scored games), or with the error that stopped that schedule (#92, M2b: the page shows
     // "couldn't load", never a silent gap that reads as "didn't attend"). A 404 schedule is
     // skipped. A refused team index rejects (M2a).
-    async function teamShowcaseSections(season, teamID, divisionName) {
+    async function teamShowcaseSections(season, teamID, divisionName, live = () => true) {
       const out = [];
-      for (const sc of await showcaseFlightsForTeam(season, teamID, divisionName)) {
+      for (const sc of await showcaseFlightsForTeam(season, teamID, divisionName, live)) {
+        if (!live()) break;   // #120: the team page was left
         let sched;
         try { sched = await getSchedule(sc.evt.eventId, sc.flightID); }
         catch (error) {
@@ -4429,6 +4447,7 @@
         if (teamView === 'history') { await loadTeamHistory(rec, ctx.season, token); return; }   // #107
 
         const hierarchy = await getEventHierarchy(rec.eventID);
+        if (token !== teamToken) return;   // #120: the page was left while it loaded; ask for nothing more
         const division = (hierarchy.girlsDivAndFlightList || []).find(d => d.divisionID === rec.divisionID);
         const flight = ((division && division.flightList) || []).find(f => f.flightID === rec.flightID);
         const divisionName = (division && division.divisionName) || rec.divisionName || '';
@@ -4494,7 +4513,7 @@
         // toward the conference table above. A refusal shows "try again" in place (#92).
         let showcaseSections = [];
         let warned = !!gamesError;
-        try { showcaseSections = await teamShowcaseSections(ctx.season, teamID, divisionName); }
+        try { showcaseSections = await teamShowcaseSections(ctx.season, teamID, divisionName, () => token === teamToken); }
         catch (e) {
           if (!warned) stack.appendChild(loadWarning(e, () => loadTeamSummary(rec)));
           warned = true;
@@ -4518,9 +4537,11 @@
 
         // Post-season, if the team appears in a national event of this season
         for (const [stage, evt] of Object.entries(NATIONAL_EVENTS[ctx.season] || {})) {
+          if (token !== teamToken) return;
           if (!evt.eventId || evt.eventId === rec.eventID) continue;
           try {
             const nh = await getEventHierarchy(evt.eventId);
+            if (token !== teamToken) return;
             // 2021-22 names national divisions "U13" where its conferences say "GU13"
             const nds = nh.girlsDivAndFlightList || [];
             const nd = nds.find(d => d.divisionName === divisionName)
@@ -4529,11 +4550,13 @@
             if (!nd) continue;
             for (const f of (nd.flightList || [])) {
               const sched = await getSchedule(evt.eventId, f.flightID).catch(() => []);
+              if (token !== teamToken) return;
               const ours = sched.filter(g => g.hometeamID === teamID || g.awayteamID === teamID);
               if (!ours.length) continue;
               const tier = tierLabel(evt, f.flightName);
               // Fetch everything first so the section appears in one piece.
               const blocks = await getStandingsBlocks(nd.divisionID, f.flightID, evt.eventId).catch(() => []);
+              if (token !== teamToken) return;
               const bracketGames = knockoutGames(sched, blocks, (((evt.dataGaps || {})[f.flightID] || {}).omitFromBracket) || []);
               const brackets = bracketGames.length ? buildBrackets(bracketGames, f.flightName, tier) : null;
               const outcome = postseasonOutcome(brackets, teamID, rec.name, tier);
@@ -4556,6 +4579,7 @@
         container.innerHTML = `<div class="error-message"><strong>Couldn't load this team.</strong><br><small>${esc(retryText(err))}</small></div>`;
       }
 
+      if (token !== teamToken) return;   // #120: a page left while it loaded saves nothing
       saveState();
       pushHash();
     }
@@ -5278,6 +5302,7 @@
     let warnedFlightData = null;  // the load whose "couldn't load" notice was last announced (#92)
 
     async function loadCurrentView(opts = {}) {
+      if (currentTab !== 'conferences') return;   // #99: e.g. rebuildAll's continuation after a tab switch
       const conf = getSeasonData().conferences[currentConference];
       if (!conf) return;
 
