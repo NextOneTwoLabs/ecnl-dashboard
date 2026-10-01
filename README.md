@@ -403,6 +403,8 @@ Ctrl/Cmd-click or middle-click a new tab.
 - **A place on its own** lists the teams playing now ("150 teams · based in California · playing
   in 2026-27"), by club, then team line, then oldest age group; add a season, a birth year or an
   age group for earlier teams. A place whose teams have all ended lists them all, and says so.
+  A two-letter code for a state with no club ("LA") lists the teams with that word in their name,
+  and says so.
 - **Cost.** It reads the team directory (`/api/v1/teams`, about 74 KB gzipped) once per page
   load, on the first focus, and nothing per keystroke. A refusal shows "try again" and is
   remembered as the team index's is (#92); `?live=1` has no team search.

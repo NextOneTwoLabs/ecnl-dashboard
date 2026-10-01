@@ -1903,23 +1903,6 @@
       min-height: 18px;
     }
 
-    .search-conf-badge {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 10px;
-      background: var(--accent-surface);
-      color: var(--accent-text);
-      white-space: nowrap;
-    }
-
-    .search-flight-badge {
-      font-size: 10px;
-      color: var(--text-secondary);
-      white-space: nowrap;
-    }
-
     /* ===== #107: team history (the team page's Overview tab, #114) ===== */
     .hist-stack { container-type: inline-size; }
     .hist-tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
@@ -2074,7 +2057,7 @@
       .us-sheet-head .usearch-box { flex: 1; }
       .us-cancel { border: 0; background: none; color: var(--accent-text); font: 600 14px var(--font); min-height: 40px; padding: 0 6px; }
       .us-row { grid-template-columns: 16px 32px minmax(0, 1fr); gap: 8px; padding: 10px 12px; }
-      .us-act { grid-column: 3; }
+      .us-act { display: none; }
       .us-actions { padding: 10px 12px; }
       .us-actions a { min-height: 32px; }
       .us-foot .us-keys { display: none; }
@@ -2127,7 +2110,7 @@
     </div>
     <div class="us-status" id="usearchStatus"></div>
     <div class="us-tipsbox" id="usearchTips" hidden><p>Type a team or club name, a place, a birth year or an age group. For example:</p></div>
-    <ul class="us-list" id="usearchList" role="listbox" aria-label="Teams"></ul>
+    <ul class="us-list" id="usearchList" role="listbox" aria-label="Teams" tabindex="-1"></ul>
     <div class="us-actions" id="usearchActions" hidden><span id="usearchActive"></span><a id="usearchOpen" href="#">Overview</a><a id="usearchHist" href="#">Current season</a></div>
     <div class="us-foot"><span class="us-keys"><kbd>↑</kbd> <kbd>↓</kbd> move · <kbd>Enter</kbd> open · <kbd>Shift</kbd>+<kbd>Enter</kbd> season · <kbd>Esc</kbd> close</span><span>Every ECNL Girls team since 2020-21</span></div>
     <div class="us-sr" id="usearchLive" role="status" aria-live="polite"></div>
@@ -4234,7 +4217,7 @@
             <div class="no-national-events-icon">☆</div>
             <div class="no-national-events-text">No teams followed yet</div>
             <div class="no-national-events-sub">Search for a team, or click the ★ next to any team in a standings table.</div>
-            <button type="button" class="btn-primary" onclick="focusTeamSearch()">Find a team</button>
+            <button type="button" class="btn-primary" onclick="focusTeamSearch()">Search teams</button>
           </div>`;
         saveState(); pushHash();
         return;
@@ -4939,7 +4922,7 @@
           <dt>Conferences</dt><dd>${esc([...new Set(rows.map(r => r.conference))].join(', '))}</dd>
           <dt>Showcases</dt><dd>${shows.length}</dd>
         </dl>
-        <div class="glance-actions"><a class="glance-link" href="${pageHref(last)}">${esc(seasonLabel(last.season))} team page →</a></div>`;
+        <div class="glance-actions"><a class="glance-link" href="${pageHref(last)}">${esc(teamSeasonTabLabel(last.season))} page →</a></div>`;
     }
     const confHref = r => `#season=${encodeURIComponent(r.season)}&age=${encodeURIComponent(r.division)}&conf=${encodeURIComponent(r.conference)}&team=${encodeURIComponent(r.teamID)}`;
     // A team page link: its Overview (history), or that season's tab (&view=season, #114).
@@ -4962,8 +4945,6 @@
       gf:     { label: 'GF', sort: 'goalsfor', num: true, title: 'Goals for', render: t => t.goalsfor || 0 },
       ga:     { label: 'GA', sort: 'goalsagainst', num: true, title: 'Goals against', render: t => t.goalsagainst || 0 },
       gd:     { label: 'GD', sort: 'goaldifferential', num: true, title: 'Goal difference', render: gdHtml },
-      conf:   { label: 'Conference', render: (t, r, ctx) => `<span class="search-conf-badge">${esc(ctx.confName || '')}</span>` },
-      flight: { label: 'Flight', render: (t, r, ctx) => `<span class="search-flight-badge">${esc(ctx.flightName || '')}</span>` },
     };
     const colSet = (keys, extraKeys = []) =>
       keys.map(k => ({ key: k, ...COL[k] })).concat(extraKeys.map(k => ({ key: k, ...COL[k], extra: true })));
@@ -5747,6 +5728,8 @@
       const WORD_CODES = new Set(['in', 'or', 'me']);
       // Spellings of place words that mean the same ("Mount Pleasant" = "Mt. Pleasant").
       const PLACE_ALIAS = { mount: 'mt', saint: 'st' };
+      // ... and in names, both ways ("saint louis" finds "St Louis", SC6).
+      const NAME_ALIAS = { mount: 'mt', mt: 'mount', saint: 'st', st: 'saint' };
 
       // Optimal string alignment distance, stopping once it passes max.
       function osa(a, b, max) {
@@ -5818,7 +5801,8 @@
           // older name scores at most 2, so "Sting Royal" ranks the squad that is Sting Royal now first.
           const latest = new Set(nameWords(rows[rows.length - 1].name));
           if (c.id !== NO_CLUB) { nameWords(c.name).forEach(w => latest.add(w)); const a = acronym(c.name); if (a) latest.add(a); }
-          const older = new Set(rows.slice(0, -1).flatMap(r => nameWords(r.name)).filter(w => !latest.has(w)));
+          for (const w of [...latest]) if (NAME_ALIAS[w]) latest.add(NAME_ALIAS[w]);
+          const older = new Set(rows.slice(0, -1).flatMap(r => nameWords(r.name)).flatMap(w => (NAME_ALIAS[w] ? [w, NAME_ALIAS[w]] : [w])).filter(w => !latest.has(w)));
           const title = teamTitle(rows[rows.length - 1].name, c.name);
           return { club: c, born: sq.b, rows, events, best: sq.best, latest, older, title, titleWords: nameWords(title),
             key: `${rows[0].season}/${rows[0].teamID}`, m: sq.m || [], mp: sq.mp || [] };
@@ -5897,13 +5881,15 @@
       const teamHref = (season, teamID, name) =>
         `#tab=teams&season=${encodeURIComponent(season)}&team=${encodeURIComponent(teamID)}&name=${encodeURIComponent(name)}`;
 
-      // -> { query, results, total, note }. `note` explains a list that differs from the plain reading:
-      // { kind: 'ended', label, n } when no team based there plays in the active season (the list is
-      // then every season's), or { kind: 'name', code, label } when a code alone matched no club and
-      // the list is its name reading ("LA", "DE").
+      // -> { query, results, total, note, currentOnly }. `currentOnly`: the list holds only teams
+      // playing in the active season (a place on its own, D-P3). `note` explains a list that
+      // differs from the plain reading: { kind: 'ended', label, n } when no team based there plays
+      // in the active season (the list is then every season's), or { kind: 'name', code, label, n }
+      // when a code alone matched no club: the list is the teams with that code as a whole word in
+      // their name ("LA" -> LA Breakers), and n is 0 when none has ("RI").
       function search(db, q, { season = null, limit = 60 } = {}) {
         const p = parseQuery(q, db);
-        const empty = { query: p, results: [], total: 0, note: null };
+        const empty = { query: p, results: [], total: 0, note: null, currentOnly: false };
         const strictPlaces = [...p.places, ...p.codes.filter(c => c.strict).map(c => ({ type: 'state', value: c.code, label: c.label, words: [], code: true }))];
         const tableQuery = !p.text.length && !p.places.length && !p.codes.length && !!p.conf && !!(p.u || p.band);
         const placeQuery = !p.text.length && strictPlaces.length > 0;
@@ -5913,19 +5899,24 @@
         // a place: "Tulsa SC" names a club, and lists its ended teams too.
         const currentOnly = placeQuery && !p.season && !p.u && !p.years.length && p.codes.every(c => c.strict);
         let res = run(db, p, { season, tableQuery, placeQuery, strictPlaces, currentOnly });
-        let note = null;
+        let note = null, current = currentOnly;
         if (!res.length && currentOnly) {                    // every team based there has ended
           res = run(db, p, { season, tableQuery, placeQuery, strictPlaces, currentOnly: false });
+          current = false;
           if (res.length) note = { kind: 'ended', label: strictPlaces.map(x => x.label).join(' or '), n: res.length };
         }
         const lone = p.codes.length === 1 && p.codes[0].strict && !p.places.length;
         if (!res.length && lone) {                           // "LA", "DE": no club based there, so the name
-          const c = p.codes[0];
-          const q2 = { ...p, codes: [], text: [c.code.toLowerCase()] };
-          res = run(db, q2, { season, tableQuery: false, placeQuery: false, strictPlaces: [], currentOnly: false });
+          const c = p.codes[0], w = c.code.toLowerCase();
+          const q2 = { ...p, codes: [], text: [w] };
+          res = run(db, q2, { season, tableQuery: false, placeQuery: false, strictPlaces: [], currentOnly: false })
+            .filter(r => r.doc.latest.has(w) || r.doc.older.has(w));   // the whole word, never a prefix (MF2)
+          current = false;
           note = { kind: 'name', code: c.code, label: c.label, n: res.length };
         }
-        return { query: p, results: res.slice(0, limit), total: res.length, note };
+        const results = res.slice(0, limit);
+        for (const r of results) r.desc = describe(r, db);   // only for the rows shown
+        return { query: p, results, total: res.length, note, currentOnly: current };
       }
 
       function run(db, p, { season, tableQuery, placeQuery, strictPlaces, currentOnly }) {
@@ -5937,7 +5928,7 @@
           for (const m of maps) {
             let s = 0;
             for (const w of d.latest) { const v = m.get(w); if (v > s) s = v; if (s === 3) break; }
-            for (const w of d.older) { const v = Math.min(2, m.get(w) || 0); if (v > s) s = v; }
+            for (const w of d.older) { const x = m.get(w) || 0; const v = x === 3 ? 2 : Math.min(1, x); if (v > s) s = v; }
             if (!s) { text = -1; break; }
             text += s;
           }
@@ -6013,7 +6004,6 @@
         const groups = new Map();
         for (const r of ordered) { const k = `${r.title}\n${bornText(r.born)}`; groups.set(k, [...(groups.get(k) || []), r]); }
         for (const g of groups.values()) if (g.length > 1) for (const r of g) r.distinct = distinguish(r, g);
-        for (const r of ordered) r.desc = describe(r, db);
         return ordered;
       }
 
@@ -6139,7 +6129,7 @@
     function usRun(q) {
       usItems = []; usActiveIdx = -1;
       const tips = document.getElementById('usearchTips');
-      if (!q.trim()) {
+      if (q.trim().length < 2) {
         usShowStatus('Every ECNL Girls team since 2020-21: one row per club and age group.');
         if (!tips.querySelector('button')) tips.insertAdjacentHTML('beforeend', US_TIPS.map(t =>
           `<button type="button" class="us-chip" onmousedown="event.preventDefault()" onclick="usFill(this.textContent)">${esc(t)}</button>`).join(''));
@@ -6178,17 +6168,19 @@
       let h = res.results.map(row).join('');
       const placed = p.places.length || p.codes.some(c => c.strict);
       if (res.total > res.results.length) h += `<li role="presentation" class="us-more">${res.total - res.results.length} more. Add a birth year or an age group` +
-        (placed ? ` (“${esc(q.trim())} 2011”, “U15 ${esc(q.trim())}”)` : '') + '.</li>';
-      if (!h) h = `<li role="presentation" class="us-more">${usEmptyText(q, p)}</li>`;
+        (placed ? ` (“${esc(usPlaceWord(p))} 2011”, “U15 ${esc(usPlaceWord(p))}”)` : '') + '.</li>';
+      if (!h) h = `<li role="presentation" class="us-more">${usEmptyText(q, p, res)}</li>`;
       usList(h);
       const n = res.total;
       usShowStatus(n ? usStatus(res, p) : 'No teams');
       document.getElementById('usearchLive').textContent = n ? `${n} team${n === 1 ? '' : 's'}. Use the up and down arrows to choose.` : 'No teams found.';
       if (usItems.length) usSetActive(0);
     }
-    function usEmptyText(q, p) {
+    const usPlaceWord = p => (p.places[0] ? p.places[0].label : (p.codes.find(c => c.strict) || {}).code || '');
+    function usEmptyText(q, p, res) {
+      if (res && res.note && res.note.kind === 'name') return `No teams based in ${esc(res.note.label)}, and no team has “${esc(res.note.code)}” in its name.`;
       if (!p.text.length && !p.places.length && !p.codes.length && !p.conf) return 'Add a team or club name, or a place. For example “MVLA 2011” or “California”.';
-      if (p.places.length > 1 || p.codes.length > 1) return 'No team is based in all of those places. Try one place at a time.';
+      if (p.places.length > 1 || p.codes.length > 1) return 'No team is based in any of those places.';
       return `No team matches “${esc(q.trim())}”. Try a club name with a birth year (2011, G11) or an age group (U15).`;
     }
     // "150 teams · based in California · playing in 2026-27"; the notes say why a list is not the
@@ -6205,8 +6197,7 @@
       if (placeLabels.length) bits.push(`based in ${placeLabels.join(' or ')}`);
       p.codes.filter(c => !c.strict).forEach(c => bits.push(`${c.code}: ${c.label} or in the name`));
       if (p.season) bits.push(p.season);
-      const placeOnly = !p.text.length && placeLabels.length && !p.season && !p.u && !p.years.length;
-      if (placeOnly) bits.push(`playing in ${currentSeasonActive()}`);
+      if (res.currentOnly) bits.push(`playing in ${currentSeasonActive()}`);   // the engine says so (MF1)
       return bits.map((b, i) => (i ? esc(b) : b)).join(' · ');
     }
     const currentSeasonActive = () => (usDb ? usDb.active : currentSeason);

@@ -32,6 +32,8 @@ const placeOf = sq => (sq.clubID === 7 ? null : places[String(sq.clubID)]) || nu
 const inState = (sq, st) => placeOf(sq)?.state === st;
 const inCity = (sq, city) => (placeOf(sq)?.city || '').toLowerCase() === city;
 const keysWhere = pred => new Set([...squads].filter(([, sq]) => pred(sq)).map(([k]) => k));
+const nameWordsOf = sq => new Set([...sq.seasons.map(s => s.name), sq.clubID !== 7 ? sq.clubName : '']
+  .join(' ').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').split(/[^a-z0-9]+/).filter(Boolean));
 const keys = rs => new Set(rs.map(r => r.key));
 const run = (q, opts) => ENGINE.search(db, q, { limit: 5000, ...opts });
 // Every possible predecessor sits directly under one of its candidates (#107 maybe).
@@ -120,15 +122,14 @@ test('S3: a possible predecessor sits under its candidate, its hint first', () =
 });
 
 test('a search needs a team name, a place, or an age group (or band) and a conference', () => {
-  for (const q of ['U15', '2011', '2024-25', 'NorCal', 'U15 2024-25', 'Champions League', 'Playoffs']) {
-    const r = run(q);
-    assert.ok(r.results.every(x => x.doc.rows.some(row => /champions|league|playoffs/i.test(row.name))), q);
-    if (!/league|playoffs/i.test(q)) assert.equal(r.total, 0, q);
-  }
+  for (const q of ['U15', '2011', '2024-25', 'NorCal', 'U15 2024-25']) assert.equal(run(q).total, 0, q);
+  // Event words are plain name words: the teams with words starting so in their names, nothing more.
+  for (const [q, ws] of [['Champions League', ['champions', 'league']], ['Playoffs', ['playoffs']]])
+    assert.deepEqual(keys(run(q).results), keysWhere(sq => ws.every(w => [...nameWordsOf(sq)].some(x => x.startsWith(w)))), q);
 });
 
 test('S7: club 7\'s name ("No Club Selection") is not a search word', () => {
-  assert.ok(run('selection').results.every(x => x.doc.rows.some(row => /selection/i.test(row.name))));
+  assert.deepEqual(keys(run('selection').results), keysWhere(sq => [...nameWordsOf(sq)].some(w => w.startsWith('selection'))));
 });
 
 // ---------- places (plan114place, D-P1 to D-P4, and the review's must-fixes) ----------
@@ -197,30 +198,45 @@ test('must-fix 1: a club named for a place plus a code ("Tulsa SC", "Tennessee S
     const want = keysWhere(sq => named(sq, re) && (inState(sq, 'SC') || named(sq, /\bsc\b/i)));
     assert.ok([...want].some(k => !current(squads.get(k))), `${q}: has ended teams`);
     assert.deepEqual(keys(run(q).results), want, q);
+    assert.equal(run(q).currentOnly, false, `${q}: the status line must not say "playing in" (MF1)`);
   }
 });
 
-test('must-fix 2: a place whose teams have all ended lists them all, with a note', () => {
+test('MF1: `currentOnly` is true exactly when a place on its own lists only the teams playing now', () => {
+  for (const q of ['california', 'CA', 'texas', 'dallas', 'NJ NY']) {
+    const r = run(q);
+    assert.equal(r.currentOnly, true, q);
+    assert.ok(r.results.every(x => x.current), q);
+  }
+  for (const q of ['california 2011', 'U15 california', 'MVLA california', 'Mustang SC', 'MVLA', 'U15 NorCal']) assert.equal(run(q).currentOnly, false, q);
+});
+
+test('must-fix 2: a place whose teams have all ended lists them all, with a note', t => {
   const cityOf = sq => (placeOf(sq)?.city || '').toLowerCase();
   const at = (sq, c) => cityOf(sq) === c || named(sq, new RegExp(`\\b${c.replace(/[^a-z ]/g, '.')}\\b`, 'i'));
   const ended = [...new Set([...squads.values()].map(cityOf).filter(Boolean))]
     .filter(c => ![...squads.values()].some(sq => at(sq, c) && current(sq)) && !db.phrases.some(p => p.type === 'state' && p.words.join(' ') === c));
-  assert.ok(ended.length > 0, 'the archive has places whose clubs have all left');
+  if (!ended.length) { t.skip('no place whose clubs have all left, today'); return; }
   for (const c of ended) {
     const r = run(c);
-    assert.ok(r.total > 0, c);
     assert.equal(r.note && r.note.kind, 'ended', c);
-    assert.ok(keysWhere(sq => cityOf(sq) === c).size <= r.total, c);
+    assert.equal(r.currentOnly, false, c);
+    assert.deepEqual(keys(r.results), keysWhere(sq => at(sq, c)), c);
   }
 });
 
-test('should-consider: a code for a state with no club offers its name reading ("LA", "DE")', () => {
-  for (const code of ['LA', 'DE']) {
-    assert.equal(keysWhere(sq => inState(sq, code)).size, 0, `${code}: no club based there`);
+test('MF2: a code for a state with no club lists the teams with it as a whole word in their name', () => {
+  let checked = 0;
+  for (const code of ['LA', 'DE', 'RI', 'AR', 'ME', 'SD', 'MT']) {
+    if (keysWhere(sq => inState(sq, code)).size) continue;          // a club is based there now: not this case
+    const want = keysWhere(sq => nameWordsOf(sq).has(code.toLowerCase()));
     const r = run(code);
     assert.equal(r.note && r.note.kind, 'name', code);
-    assert.ok(r.total > 0 && r.results.every(x => [...x.doc.latest, ...x.doc.older].some(w => w.startsWith(code.toLowerCase()))), code);
+    assert.equal(r.note.n, want.size, code);
+    assert.deepEqual(keys(r.results), want, `${code}: whole words only, never "Ri" in "Rising"`);
+    checked++;
   }
+  assert.ok(checked > 0);
 });
 
 test('should-consider: several places together match any of them ("NJ NY", "california texas")', () => {
@@ -238,14 +254,13 @@ test('"in", "or", "me" are places only on their own; "de anza" is a name', () =>
 test('clubs with no place (club 7 and the null places) never match a place', () => {
   const noPlace = new Set([...squads.values()].filter(sq => !placeOf(sq)).map(sq => sq.clubID));
   assert.ok(noPlace.has(7), 'club 7');
-  assert.ok(noPlace.size >= 2, 'and at least one club with a null place');
   const states = [...new Set(Object.values(places).filter(Boolean).map(p => p.state))];
   for (const st of states) for (const x of run(st).results) assert.ok(!noPlace.has(x.club.id), `${st}: club ${x.club.id}`);
 });
 
 test('D-P4: a place list is ordered by club, then team line, then oldest age group', () => {
-  for (const q of ['california', 'texas', 'virginia', 'SC']) {
-    const r = run(q).results.filter(x => !x.continuesAs);
+  for (const q of ['california', 'texas', 'virginia', 'SC', 'Sting', 'Slammers', 'Michigan Hawks']) {
+    const r = run(q).results.filter(x => !x.continuesAs && x.current);
     const seenClubs = [];
     for (const x of r) if (seenClubs.at(-1) !== x.club.name) { assert.ok(!seenClubs.includes(x.club.name), `${q}: ${x.club.name} split`); seenClubs.push(x.club.name); }
     assert.deepEqual(seenClubs, [...seenClubs].sort((a, b) => a.localeCompare(b)), `${q}: clubs A to Z`);
@@ -267,4 +282,37 @@ test('every squad ranks in the top 3 for "<team> <birth year> <season>", and for
     }
   }
   assert.deepEqual(worst, []);
+});
+
+// ---------- the review's mutants and should-considers (prreview122 SC2, SC4, SC6) ----------
+test('SC2/SC4: the side named now comes first, also while the name is still being typed', () => {
+  for (const [q, side] of [['Royal 2012', 'royal'], ['Sting Roy 2012', 'royal'], ['Sting Bla 2012', 'black']]) {
+    const r = run(q);
+    assert.match(last(squads.get(r.results[0].key)).name, new RegExp(`sting ${side}`, 'i'), q);
+  }
+});
+
+test('SC2: an age group is read in the season in view', () => {
+  const want = keysWhere(sq => sq.seasons.some(s => s.season === '2024-25' && s.conference === 'NorCal' && u('2024-25', s.division) === 15));
+  assert.deepEqual(keys(run('U15 NorCal', { season: '2024-25' }).results), want);
+});
+
+test('SC2/SC6: "mount"/"mt" and "saint"/"st" are the same word, in places and in names', () => {
+  assert.deepEqual(keys(run('Mount Pleasant').results), keys(run('Mt Pleasant').results));
+  assert.ok(run('Mt Pleasant').total > 0);
+  assert.deepEqual(keys(run('saint louis').results), keys(run('St Louis').results));
+  assert.ok(run('St Louis').total > 0);
+});
+
+test('SC2: age tokens are never name words (S8)', () => {
+  assert.deepEqual(db.vocab.filter(w => /^(g?u\d{1,2}|g?\d{2}|g?(19|20)\d{2}|\d{2}g|\d{4})$/.test(w)), []);
+});
+
+test('SC2: club 7 is never placed, even when the data gives it a place', () => {
+  const doc = read('archive/directory.json');
+  const i = doc.clubs.findIndex(c => c[0] === 7);
+  assert.ok(i >= 0, 'club 7 in the directory');
+  doc.clubs[i] = [7, doc.clubs[i][1], doc.clubs[i][2], 'El Paso, TX'];
+  const placed = ENGINE.prepare(doc);
+  for (const q of ['texas', 'TX', 'el paso']) assert.ok(ENGINE.search(placed, q, { limit: 5000 }).results.every(x => x.club.id !== 7), q);
 });

@@ -346,7 +346,10 @@ test('directory: a 429 is remembered for a minute: three focuses, one request', 
   const p = page(route([[DIRECTORY, { status: 429, session: 'ok' }]]));
   for (let i = 0; i < 3; i++) await assert.rejects(p.getTeamDirectory());
   assert.deepEqual(p.apiCalls(), ['GET /api/v1/teams']);
-  p.clock.t += 60000;
+  p.clock.t += 59000;                               // still within the minute (prreview122 R7)
+  await assert.rejects(p.getTeamDirectory());
+  assert.equal(p.apiCalls().length, 1);
+  p.clock.t += 1000;
   await assert.rejects(p.getTeamDirectory());
   assert.equal(p.apiCalls().length, 2);
 });
