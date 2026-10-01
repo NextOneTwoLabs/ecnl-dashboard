@@ -33,6 +33,7 @@ const CODE = [
   block('    async function changeSeason('), block('    async function rebuildAll('),
   block('    let currentConfMeta = null;', 'async function loadCurrentView('),
   teamSummary,
+  block('    async function loadTeamHistory('),             // Overview, the team page's default (#114)
 ].join('\n');
 
 // Three seasons; 2020-21 Mid-Atlantic never ran the GU18/U19 Composite that other conferences did.
@@ -53,7 +54,7 @@ function page() {
   const els = new Map();
   const node = id => ({ id, style: {}, hidden: false, textContent: '', innerHTML: '', value: '', tabIndex: 0,
     classList: { toggle() {}, add() {}, remove() {}, contains: () => false }, setAttribute() {}, getAttribute: () => null,
-    focus() {}, append() {}, appendChild() {} });
+    focus() {}, append() {}, appendChild() {}, querySelector: () => node() });
   const el = id => { if (!els.has(id)) els.set(id, node(id)); return els.get(id); };
   const document = { getElementById: el, querySelector: () => null, querySelectorAll: () => [], createElement: () => node() };
   const listeners = {};
@@ -91,10 +92,20 @@ function page() {
     eventContext: id => ({ season: seasonOf(id), name: 'Midwest', kind: 'conference' }),
     computeTeamSummary: () => ({ mine: [], form: [], next: null }), getStandingsUrl: () => '', glancePanelHtml: () => '',
     loadWarning: () => node(), renderStandingsTable: () => node(), renderScheduleTable: () => node(), failedFlightPanel: () => node(),
-    shortTeamName: n => n, teamShowcaseSections: async () => [], NATIONAL_EVENTS: {}, loadTeamHistory: async () => {},
+    shortTeamName: n => n, teamShowcaseSections: async () => [], NATIONAL_EVENTS: {},
+    // Overview's collaborators (the real loadTeamHistory, #114). hold.history holds its answer back;
+    // rejecting it is a failed history request. A painted Overview reads 'OVERVIEW'.
+    LIVE: false, overviewAvailable: () => true, historyCrumb() {}, teamHistoryMissing: new Set(),
+    getTeamHistory: async () => { if (hold.history) await hold.history.promise; return { squads: [{}] }; },
+    renderTeamHistory: () => { el('standingsContainer').innerHTML = 'OVERVIEW'; },
   };
-  const api = new Function(...Object.keys(stubs), CODE + `
+  let api;
+  api = new Function(...Object.keys(stubs), CODE + `
     return { switchTab, closeMyTeams, toggleMyTeams, changeSeason, rebuildAll, selectAgeGroup, loadTeamSummary,
+      // The season tab for the followed team (as &view=season would), so a test can take the
+      // path that locates the team and reads its tables.
+      seasonTab: () => { teamView = 'season'; teamViewFor = { id: ${TEAM.teamID}, name: ${JSON.stringify(TEAM.name)} }; },
+      view: () => teamView,
       setSeason: s => { currentSeason = s; },
       state: () => ({ season: currentSeason, age: currentAgeGroup, conf: currentConference, ages: AGE_GROUPS.join() }) };`)(...Object.values(stubs));
   // My Teams shows the followed team.
@@ -122,8 +133,10 @@ test('#102: Back to Conferences from a team in another season shows a valid view
   p.toggleMyTeams();
   await p.flush();
   assert.equal(p.title(), 'Followed team');
+  assert.equal(p.view(), 'history', 'My Teams opens the team on Overview (#114)');
   assert.equal(p.state().season, '2025-26', "the team page takes the team's season");
   assert.match(p.location.hash, /^#tab=teams&season=2025-26/);
+  assert.doesNotMatch(p.location.hash, /view=/, 'Overview is the default: no view in the address');
   const d = p.since();
   p.closeMyTeams();
   await p.flush();
@@ -230,22 +243,30 @@ const EXITS = {
   'the Conferences tab': async p => { p.switchTab('conferences'); },
   'a conference link': async p => { await p.fire(HASH_2025); },
 };
-for (const [exit, leave] of Object.entries(EXITS)) {
-  test(`#102: a slow team page does not paint over the page after ${exit}`, async () => {
+const VIEWS = {
+  'its season tab': { set: p => p.seasonTab(), hold: p => (p.hold[TEAM.eventID] = deferred()), late: d => d.resolve() },
+  'Overview': { set: () => {}, hold: p => (p.hold.history = deferred()), late: d => d.resolve() },
+  'a failing Overview': { set: () => {}, hold: p => (p.hold.history = deferred()), late: d => d.reject(Object.assign(new Error('503'), { status: 503 })) },
+};
+for (const [exit, leave] of Object.entries(EXITS)) for (const [viewName, view] of Object.entries(VIEWS)) {
+  test(`#102: a slow team page (${viewName}) does not paint over the page after ${exit}`, async () => {
     const p = page();
     await p.cold();
     const playoffs = exit.endsWith('Playoffs');
     if (playoffs) p.switchTab('playoffs');             // where ‹ Back goes
-    p.hold[TEAM.eventID] = deferred();                  // the team's hierarchy answers late
+    view.set(p);
+    const held = view.hold(p);                          // its answer comes late
     p.toggleMyTeams();
     await p.flush();
+    assert.equal(p.view(), viewName === 'its season tab' ? 'season' : 'history');
     await leave(p);
     await p.flush();
     const shown = p.shown(), title = p.title();
     assert.equal(shown, playoffs ? 'PLAYOFFS' : 'TABLE');
     if (!playoffs) assert.deepEqual(p.state(), VALID_2025);   // the season had moved before leaving
-    p.hold[TEAM.eventID].resolve();
-    await p.flush();
+    const error = console.error;
+    console.error = () => {};
+    try { view.late(held); await p.flush(); } finally { console.error = error; }
     assert.equal(p.shown(), shown, 'the team page did not paint over it');
     assert.equal(p.title(), title);
     if (!playoffs) assert.equal(p.location.hash, HASH_2025);
@@ -255,6 +276,7 @@ for (const [exit, leave] of Object.entries(EXITS)) {
 test('#102: leaving while the team is still being located keeps the season and the view', async () => {
   const p = page();
   await p.cold();
+  p.seasonTab();                                       // Overview needs no locating (#114)
   p.hooks.locate = deferred();
   p.toggleMyTeams();
   await p.flush();
@@ -271,6 +293,7 @@ test('#102: leaving while the team is still being located keeps the season and t
 test('#102: a team page that fails after ‹ Back shows no error over Conferences', async () => {
   const p = page();
   await p.cold();
+  p.seasonTab();                                       // the season tab reads the event's tables (#114)
   p.hold[TEAM.eventID] = deferred();
   p.toggleMyTeams();
   await p.flush();
@@ -286,4 +309,20 @@ test('#102: a team page that fails after ‹ Back shows no error over Conference
   assert.equal(p.shown(), 'TABLE');
   assert.deepEqual(p.heading(), before, "the title and subtitle are still the conference view's");
   assert.equal(p.location.hash, HASH_2025);
+});
+
+test('#102 with #114: on the season tab, Back to Conferences still shows that season, once', async () => {
+  const p = page();
+  await p.cold();
+  p.seasonTab();
+  p.toggleMyTeams();
+  await p.flush();
+  assert.match(p.location.hash, /^#tab=teams&season=2025-26.*&view=season$/);
+  const d = p.since();
+  p.closeMyTeams();
+  await p.flush();
+  assert.equal(p.shown(), 'TABLE');
+  assert.deepEqual(p.state(), VALID_2025);
+  assert.equal(p.location.hash, HASH_2025);
+  assert.deepEqual(d(), { hierarchy: 1, standings: 1, schedule: 1, ageTabs: 1 });
 });

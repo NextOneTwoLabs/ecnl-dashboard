@@ -20,6 +20,7 @@ const CODE = [
   block('    async function fetchJSON(', 'function failedFlightPanel('),
   block('    async function getEventHierarchy(', 'function mergeStandingsBlocks('),
   block('    const teamIndexMemo = {};', 'function getTeamIndex('),
+  block('    let directoryMemo = null;', 'function getTeamDirectory('),   // #114
   block('    async function resolveFavorite(', 'async function resolveFavorite('),
 ].join('\n');
 
@@ -34,7 +35,7 @@ const HELP = 'https://github.com/NextOneTwoLabs/ecnl-dashboard/blob/main/docs/da
 // renewal HEAD / (a status, or an Error), one event-loop turn later (see settle). `delay` holds
 // every answer back that many ms. `bodyDelay` sends each API body that many ms after its headers,
 // and `step` moves the clock that far when a renewal lands and when a slow body arrives.
-function page(answer, { head = 200, delay = 0, bodyDelay = 0, step = 0 } = {}) {
+function page(answer, { head = 200, delay = 0, bodyDelay = 0, step = 0, live = false } = {}) {
   const calls = [], clock = { t: 1e12 };
   const fetch = async (url, options = {}) => {
     calls.push(`${options.method || 'GET'} ${url}`);
@@ -62,8 +63,8 @@ function page(answer, { head = 200, delay = 0, bodyDelay = 0, step = 0 } = {}) {
   const favoriteResolved = rec => !!(rec && rec.eventID && rec.divisionID && rec.flightID);
   const api = new Function('LIVE', 'fetch', 'Date', 'dataUrl', 'esc', 'eventHierarchy', 'currentFlightData', 'currentSeason',
     'SEASONS', 'adoptStandingsRow', 'favoriteResolved', 'eventContext', 'undateBorrowedDates',
-    CODE + '\nreturn { noteSession, fetchJSON, isRefusal, retryText, getTeamIndex, resolveFavorite };')(
-    false, fetch, { now: () => clock.t }, p => '/api/v1/' + p, esc, {}, [], SEASON,
+    CODE + '\nreturn { noteSession, fetchJSON, isRefusal, retryText, getTeamIndex, getTeamDirectory, resolveFavorite };')(
+    live, fetch, { now: () => clock.t }, p => '/api/v1/' + p, esc, {}, [], SEASON,
     SEASONS, adoptStandingsRow, favoriteResolved, () => null, g => g);
   const apiCalls = () => calls.filter(c => c.startsWith('GET /api/v1/'));
   const heads = () => calls.filter(c => c === 'HEAD /').length;
@@ -332,4 +333,67 @@ test('#82: a cached "ok" in a tab that blocks cookies re-enables renewal, still 
   assert.equal(p.heads(), 2, 'one more renewal');
   for (let i = 0; i < 10; i++) { p.noteSession(answer('ok'), p.clock.t); p.noteSession(answer('none'), p.clock.t); }
   assert.equal(p.heads(), 2, 'still at most once a minute');
+});
+
+// #114: the team directory (team search) follows the same rules: one request per page load, a
+// refusal remembered (a minute, or until the session is back), a 404 or an unknown schema kept
+// for the page ("isn't available"), a 5xx, a network error or bad JSON forgotten; never a scan;
+// live mode never asks.
+const DIRECTORY = /\/api\/v1\/teams$/;
+const directoryOk = { ...ok, body: { schema: 1, squads: [] } };
+
+test('directory: a 429 is remembered for a minute: three focuses, one request', async () => {
+  const p = page(route([[DIRECTORY, { status: 429, session: 'ok' }]]));
+  for (let i = 0; i < 3; i++) await assert.rejects(p.getTeamDirectory());
+  assert.deepEqual(p.apiCalls(), ['GET /api/v1/teams']);
+  p.clock.t += 59000;                               // still within the minute (prreview122 R7)
+  await assert.rejects(p.getTeamDirectory());
+  assert.equal(p.apiCalls().length, 1);
+  p.clock.t += 1000;
+  await assert.rejects(p.getTeamDirectory());
+  assert.equal(p.apiCalls().length, 2);
+});
+
+test('directory: a "none" refusal is asked again once the session is back, not before', async () => {
+  const p = page(route([[DIRECTORY, { status: 429, session: 'none' }]]));
+  await assert.rejects(p.getTeamDirectory());     // its "none" answer sends the renewal HEAD /
+  p.clock.t += 50;
+  await settle();                                 // the renewal lands: the session is back
+  p.clock.t += 10;
+  await assert.rejects(p.getTeamDirectory());
+  await assert.rejects(p.getTeamDirectory());
+  assert.equal(p.apiCalls().length, 2);
+  assert.equal(p.heads(), 1);
+});
+
+test('directory: a 404 or an unknown schema means "not available", kept for the page', async () => {
+  for (const a of [{ status: 404 }, { status: 200, session: 'ok', body: { schema: 2 } }]) {
+    const p = page(route([[DIRECTORY, a]]));
+    assert.equal(await p.getTeamDirectory(), null);
+    assert.equal(await p.getTeamDirectory(), null);
+    assert.equal(p.apiCalls().length, 1);
+  }
+});
+
+test('directory: a 503, a network error or bad JSON is forgotten: the next focus asks once more', async () => {
+  for (const a of [{ status: 503, session: 'ok' }, new TypeError('Failed to fetch'), { status: 200, session: 'ok', raw: '{"schema":1,' }]) {
+    const p = page(route([[DIRECTORY, a]]));
+    await assert.rejects(p.getTeamDirectory());
+    await assert.rejects(p.getTeamDirectory());
+    assert.equal(p.apiCalls().length, 2);
+  }
+});
+
+test('directory: a 200 is kept for the page, and concurrent calls share one request', async () => {
+  const p = page(route([[DIRECTORY, directoryOk]]), { delay: 5 });
+  const all = await Promise.all([p.getTeamDirectory(), p.getTeamDirectory(), p.getTeamDirectory()]);
+  assert.ok(all.every(d => d.schema === 1));
+  for (let i = 0; i < 5; i++) await p.getTeamDirectory();
+  assert.equal(p.apiCalls().length, 1);
+});
+
+test('directory: live mode (?live=1) never asks', async () => {
+  const p = page(route([[DIRECTORY, directoryOk]]), { live: true });
+  assert.equal(await p.getTeamDirectory(), 'live');
+  assert.equal(p.calls.length, 0);
 });

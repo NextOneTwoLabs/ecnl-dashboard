@@ -498,11 +498,16 @@ class PlaceholderClubTests(unittest.TestCase):
         self.assertLessEqual(found, archive.NO_CLUB_IDS, "a new placeholder club: add it to NO_CLUB_IDS")
 
     def test_the_three_copies_agree(self):
-        """archive.NO_CLUB_IDS, team_history.NO_CLUB and the page's NO_CLUB name the same id."""
+        """archive.NO_CLUB_IDS, team_history.NO_CLUB, team_directory.NO_CLUB and the page's NO_CLUB
+        constants (the glance card's and team search's, #114) name the same id."""
         import team_history
+        import team_directory
         html = (Path(api.PUBLIC_DIR) / "index.html").read_text(encoding="utf-8")
         self.assertEqual(archive.NO_CLUB_IDS, {str(team_history.NO_CLUB)})
-        self.assertEqual(re.findall(r"^ *const NO_CLUB = (\d+);", html, re.M), [str(team_history.NO_CLUB)])
+        self.assertEqual(team_directory.NO_CLUB, team_history.NO_CLUB)
+        page = re.findall(r"^ *const NO_CLUB = (\d+);", html, re.M)
+        self.assertEqual(len(page), 2, "the glance card's and team search's")
+        self.assertEqual(set(page), {str(team_history.NO_CLUB)})
 
     def test_club_ids_skips_the_placeholder(self):
         in_index = {str(t["clubID"]) for t in self.index_teams() if t.get("clubID")}
