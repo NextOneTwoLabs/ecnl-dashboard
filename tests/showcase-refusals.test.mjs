@@ -280,3 +280,71 @@ test('S-B: a failure that arrives after the tab changed paints nothing', async (
   assert.equal(p.el('standingsContainer').innerHTML, 'CONFERENCES');
   assert.deepEqual([p.log.saves, p.log.hashes], [0, 0]);
 });
+
+// #99 (S): every Showcases load takes a token as well; a newer load (leave and come back, Try again)
+// drops the older one, in every phase. A re-render (Results <-> Games) supersedes nothing.
+const H_4133 = { girlsDivAndFlightList: [{ divisionID: 20345, divisionName: 'G2011', flightList: [{ flightID: 36390, flightName: 'x' }] }] };
+test('S: an older load of the same flight asks for nothing once a newer one has started (hierarchy phase)', async () => {
+  const p = showcasePage({ holdHierarchy: true });
+  const first = p.loadShowcaseFlight();
+  await p.until(() => p.gates.hierarchy);
+  const g1 = p.gates.hierarchy; delete p.gates.hierarchy;
+  const second = p.loadShowcaseFlight();                // Showcases -> another tab -> Showcases
+  await p.until(() => p.gates.hierarchy);
+  g1.resolve(H_4133);
+  await first;
+  assert.equal(p.log.standings, 0, 'the older load asked for no tables');
+  p.gates.hierarchy.resolve(H_4133);
+  await second;
+  assert.equal(p.log.standings, 1);
+  assert.equal(p.log.hashes, 1);
+});
+
+test('S: an older load whose tables answer after a newer one started paints and saves nothing (tables phase)', async () => {
+  const p = showcasePage({ holdStandings: true });
+  const first = p.loadShowcaseFlight();
+  await p.until(() => p.gates.standings);
+  const g1 = p.gates.standings; delete p.gates.standings;
+  const second = p.loadShowcaseFlight();
+  await p.until(() => p.gates.standings);
+  g1.resolve(ANSWER);
+  await first;
+  assert.deepEqual([p.log.saves, p.log.hashes], [0, 0], 'the older load saved nothing');
+  assert.equal(p.el('standingsContainer').children.length, 0, 'and painted nothing');
+  p.gates.standings.resolve(ANSWER);
+  await second;
+  assert.deepEqual(p.el('standingsContainer').children.map(c => c.kind), ['results']);
+  assert.equal(p.log.hashes, 1);
+});
+
+test('S: an older load that fails after a newer one started paints no error', async () => {
+  const p = showcasePage({ holdHierarchy: true });
+  const first = p.loadShowcaseFlight();
+  await p.until(() => p.gates.hierarchy);
+  const g1 = p.gates.hierarchy; delete p.gates.hierarchy;
+  const second = p.loadShowcaseFlight();
+  await p.until(() => p.gates.hierarchy);
+  g1.reject(refused(503));
+  await first;
+  assert.doesNotMatch(p.el('standingsContainer').innerHTML, /Couldn't load/);
+  p.gates.hierarchy.resolve(H_4133);
+  await second;
+  assert.deepEqual(p.el('standingsContainer').children.map(c => c.kind), ['results']);
+});
+
+// Review R5 (M2): "Try again" on a failed table, then Results <-> Games before the retry answers.
+test('S R5: a retry is not dropped by a re-render that starts while it loads', async () => {
+  const p = showcasePage({ holdStandings: true });
+  const first = p.loadShowcaseFlight();
+  await p.until(() => p.gates.standings);
+  const g0 = p.gates.standings; delete p.gates.standings;
+  g0.reject(refused(503));
+  await first;
+  assert.deepEqual(p.el('standingsContainer').children.map(c => c.kind).filter(Boolean), ['failed']);
+  const retry = p.loadShowcaseFlight();                 // Try again
+  await p.until(() => p.gates.standings);
+  await p.loadShowcaseFlight({ rerender: true });       // Results <-> Games while the retry loads
+  p.gates.standings.resolve(ANSWER);
+  await retry;
+  assert.deepEqual(p.el('standingsContainer').children.map(c => c.kind).filter(Boolean), ['results'], 'the retry painted its table');
+});

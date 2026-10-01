@@ -326,3 +326,50 @@ test('#102 with #114: on the season tab, Back to Conferences still shows that se
   assert.equal(p.location.hash, HASH_2025);
   assert.deepEqual(d(), { hierarchy: 1, standings: 1, schedule: 1, ageTabs: 1 });
 });
+
+// #99 (C): a Conferences load still in flight is dropped by any tab switch, so its table never
+// paints over the tab the viewer chose: Playoffs, My Teams, or a team page opened from a link.
+const HELD_CONF = async p => {
+  await p.cold();
+  p.hold[3925] = deferred();                            // 2025-26 Mid-Atlantic answers late
+  const change = p.changeSeason('2025-26');
+  await p.flush();
+  return change;
+};
+const LEAVE = {
+  'the Playoffs tab': async p => { p.switchTab('playoffs'); },
+  'My Teams': async p => { p.switchTab('favorites'); },
+  'a team link (#tab=teams)': async (p, on) => { await p.fire('#tab=teams&season=2025-26&team=9' + (on === 'its season tab' ? '&view=season' : '')); },
+};
+const ON = { 'Overview': () => {}, 'its season tab': p => p.seasonTab() };   // the team page's two views (#114)
+for (const [to, leave] of Object.entries(LEAVE)) for (const [onName, on] of Object.entries(to === 'the Playoffs tab' ? { '': () => {} } : ON)) {
+  test(`#99 C: a Conferences load that answers after a switch to ${to}${onName && ` (${onName})`} paints nothing`, async () => {
+    const p = page();
+    const change = await HELD_CONF(p);
+    on(p);
+    await leave(p, onName);
+    await p.flush();
+    const shown = p.shown(), title = p.title();
+    assert.notEqual(shown, 'TABLE');
+    p.hold[3925].resolve();
+    await change;
+    await p.flush();
+    assert.equal(p.shown(), shown, 'the conference table did not paint over it');
+    assert.equal(p.title(), title);
+  });
+}
+
+// #99: a conference load that would start after the switch (rebuildAll's continuation, once its
+// age groups are known) does not start at all.
+test('#99: a Conferences rebuild that continues after a switch to Playoffs paints nothing', async () => {
+  const p = page();
+  await p.cold();
+  const d = p.since();
+  const rebuild = p.rebuildAll();
+  p.switchTab('playoffs');
+  await rebuild;
+  await p.flush();
+  assert.equal(p.shown(), 'PLAYOFFS');
+  assert.equal(p.title(), 'Playoffs');
+  assert.deepEqual([d().standings, d().schedule], [0, 0], 'no conference table requested');
+});
