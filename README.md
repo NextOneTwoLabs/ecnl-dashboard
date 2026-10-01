@@ -75,7 +75,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -146,8 +146,10 @@ The Team at a glance card shows the club's city and state from
 `public/archive/clubs.json` (served at `/api/v1/clubs`; see `docs/data-api.md`).
 The refresh's daily sweep fetches clubs new in the active season, and the first
 successful sweep of each calendar month re-checks all of them (121 requests);
-after a failed re-check it retries at most once a week. The 22 clubs seen only in
+after a failed re-check it retries at most once a week. The 21 clubs seen only in
 past seasons were backfilled once with `--clubs --all` and are never re-checked.
+TGS's placeholder club 7 ("No Club Selection", teams of many unrelated clubs) is
+never fetched (`archive.NO_CLUB_IDS`), is `null` in the file, and never shows a place.
 Only city and state are stored; the rest of TGS's club record (street, zip, phone,
 the club president's contacts) is never kept.
 

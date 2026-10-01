@@ -2758,8 +2758,12 @@
       }
       return clubPlacesPromise;
     }
+    // TGS's placeholder club 7, "No Club Selection", holds teams of many unrelated clubs: it has
+    // no place, whatever its TGS record lists (#108). The same id as archive.NO_CLUB_IDS and
+    // team_history.NO_CLUB (tests/test_club_places.py checks that the three agree).
+    const NO_CLUB = 7;
     function clubPlaceText(clubID) {
-      const p = clubPlaces && clubID != null ? clubPlaces[clubID] : null;
+      const p = clubPlaces && clubID != null && Number(clubID) !== NO_CLUB ? clubPlaces[clubID] : null;
       return p && p.city && p.state ? `${p.city}, ${p.state}` : '';
     }
     // Whether a followed team is recorded in this event's division, so a cold
@@ -3722,9 +3726,11 @@
         });
         const last = rounds[rounds.length - 1];
         const finalEntry = (path === '' && last && last.games.length === 1) ? last.games[0] : null;
-        const champion = finalEntry && finalEntry.winner
-          ? (finalEntry.winner === 'home' ? finalEntry.game.homeTeam : finalEntry.game.awayTeam) : null;
-        return { path, name: bracketName(path, flightName, tierName), teams, rounds, champion, isMain: path === '' };
+        const home = finalEntry && finalEntry.winner === 'home';
+        // The name is what the banner shows; the id is what decides a team's own line (#109).
+        const champion = finalEntry && finalEntry.winner ? (home ? finalEntry.game.homeTeam : finalEntry.game.awayTeam) : null;
+        const championID = finalEntry && finalEntry.winner ? (home ? finalEntry.game.hometeamID : finalEntry.game.awayteamID) ?? null : null;
+        return { path, name: bracketName(path, flightName, tierName), teams, rounds, champion, championID, isMain: path === '' };
       }).sort((a, b) => a.path.length - b.path.length || a.path.localeCompare(b.path));
 
       const tagByMatch = new Map();
@@ -3732,7 +3738,23 @@
         tagByMatch.set(e.game.matchID, b.isMain ? r.name : `${b.name} · ${r.name}`))));
 
       const main = list.find(b => b.isMain);
-      return { list, tagByMatch, champion: main ? main.champion : null };
+      return { list, tagByMatch, champion: main ? main.champion : null, championID: main ? main.championID : null };
+    }
+
+    // The Playoffs panel's one line for a team (#109). The champion is decided by team id, since a
+    // team often carries another name at the national event than in its conference ("G2008/09"
+    // for "G09"); by name only when TGS gave the final's winner no id.
+    function postseasonOutcome(brackets, teamID, name, tier) {
+      if (!brackets) return '';
+      const main = brackets.list.find(b => b.isMain);
+      const reached = b => b.rounds.filter(r => r.games.some(e => e.game.hometeamID === teamID || e.game.awayteamID === teamID)).map(r => r.name);
+      const won = brackets.championID != null ? brackets.championID === teamID : !!brackets.champion && brackets.champion === name;
+      let outcome = '';
+      if (won) outcome = `🏆 ${tier} Champion`;
+      else if (main && reached(main).length) outcome = `Reached the ${reached(main).slice(-1)[0]} of the ${tier}`;
+      const cup = brackets.list.find(b => b.path === 'L1');
+      if (cup && reached(cup).length) outcome += `${outcome ? ' · ' : ''}${cup.name}: ${reached(cup).slice(-1)[0]}`;
+      return outcome;
     }
 
     // ---- Bracket rendering ----
@@ -4821,15 +4843,7 @@
               const blocks = await getStandingsBlocks(nd.divisionID, f.flightID, evt.eventId).catch(() => []);
               const bracketGames = knockoutGames(sched, blocks, (((evt.dataGaps || {})[f.flightID] || {}).omitFromBracket) || []);
               const brackets = bracketGames.length ? buildBrackets(bracketGames, f.flightName, tier) : null;
-              let outcome = '';
-              if (brackets) {
-                const main = brackets.list.find(b => b.isMain);
-                const reached = b => b.rounds.filter(r => r.games.some(e => e.game.hometeamID === teamID || e.game.awayteamID === teamID)).map(r => r.name);
-                if (brackets.champion === rec.name) outcome = `🏆 ${tier} Champion`;
-                else if (main && reached(main).length) outcome = `Reached the ${reached(main).slice(-1)[0]} of the ${tier}`;
-                const cup = brackets.list.find(b => b.path === 'L1');
-                if (cup && reached(cup).length) outcome += `${outcome ? ' · ' : ''}${cup.name}: ${reached(cup).slice(-1)[0]}`;
-              }
+              const outcome = postseasonOutcome(brackets, teamID, rec.name, tier);
               const myBlock = blocks.find(b => (b.teamStandings || []).some(t => t.teamID === teamID));
               const panel = document.createElement('div');
               panel.className = 'postseason-note';
@@ -5040,7 +5054,7 @@
       const open = (SOURCES && SOURCES.refresh && SOURCES.refresh.activeSeason) || Object.keys(SEASONS)[0];
       const ended = last.season !== open;
       const short = shortTeamName(last.name) || last.clubName;
-      const place = sq.clubID !== 7 ? clubPlaceText(sq.clubID) : '';
+      const place = clubPlaceText(sq.clubID);
       const years = historyYears(sq.birthYears);
       const logo = last.logo ? `<img class="team-title-logo" src="${esc(last.logo)}" alt="" onerror="this.style.display='none'">` : '';
       const span = rows.length === 1 ? seasonLabel(last.season) : `${seasonLabel(rows[0].season)} to ${seasonLabel(last.season)}`;
