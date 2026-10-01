@@ -235,6 +235,20 @@ class Built(unittest.TestCase):
         self.assertGreater(len(past), 300)
         self.assertEqual(sum(1 for r in past if r["rank"] == 1), 36, "first places a played < games rule would drop")
 
+    def test_every_list_is_oldest_first(self):
+        # #127: the Overview shows these lists newest first by reversing them for display, and
+        # sq.best/sq.titles index postseason in this order.
+        for sq in self.squads:
+            seasons = [r["season"] for r in sq["seasons"]]
+            self.assertEqual(seasons, sorted(set(seasons)), seasons)
+            posts = sq.get("postseason", [])
+            self.assertEqual([e["season"] for e in posts], sorted(e["season"] for e in posts))
+            for a, b in zip(posts, posts[1:]):
+                if a["season"] == b["season"]:
+                    self.assertLessEqual(th.stage_rank(a["stage"]), th.stage_rank(b["stage"]), (a["season"], a["stage"], b["stage"]))
+            dates = [e.get("startDate") or "" for e in sq.get("showcases", [])]
+            self.assertEqual(dates, sorted(dates))
+
     def test_pos_is_tgs_order_except_the_merged_tables(self):
         # S6: the page says Pos is TGS's order except in the 11 tables TGS published in two
         # blocks (2020-21 to 2022-23), which it marks †.
