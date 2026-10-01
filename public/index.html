@@ -1905,10 +1905,11 @@
 
     /* ===== #107: team history (the team page's Overview tab, #114) ===== */
     .hist-stack { container-type: inline-size; }
-    .hist-tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    /* #121: a column never narrower than its longest word ("Quarterfinals"), so no tile breaks one mid-word */
+    .hist-tiles { display: grid; grid-template-columns: repeat(5, minmax(min-content, 1fr)); }
     .hist-tile { padding: 14px 16px; border-right: 1px solid var(--border-light); min-width: 0; }
     .hist-tile:last-child { border-right: 0; }
-    .hist-tile .stat-value { font-size: 19px; white-space: normal; overflow-wrap: anywhere; }
+    .hist-tile .stat-value { font-size: 19px; white-space: normal; overflow-wrap: break-word; }
     .hist-tile .stat-sub { white-space: normal; }
     .hist-titles { padding: 10px 16px; border-top: 1px solid var(--border-light); font-size: 13px; line-height: 1.5; }
     .hist-titles b { color: var(--gold); }
