@@ -2461,6 +2461,7 @@
     // Dynamic age groups — populated from API
     let AGE_GROUPS = [];  // populated dynamically
     let AGE_LABELS = {};  // populated dynamically
+    let ageGroupsSeason = null;  // #102: the season AGE_GROUPS and the Conferences sidebar were built for
 
     const EXTERNAL_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3H3.5A1.5 1.5 0 0 0 2 4.5v8A1.5 1.5 0 0 0 3.5 14h8A1.5 1.5 0 0 0 13 12.5V10"/><path d="M9 2h5v5"/><path d="M14 2 7 9"/></svg>`;
 
@@ -2967,7 +2968,7 @@
       if (!loadFromHash()) return;
       syncSeasonUI();
       if (currentTab === 'playoffs' || currentTab === 'favorites' || currentTab === 'showcases') switchTab(currentTab);
-      else { switchTab('conferences'); rebuildAll(); }
+      else { switchTab('conferences', { silent: true }); rebuildAll(); }
     });
 
     // ========== THEME ==========
@@ -3312,7 +3313,9 @@
       document.getElementById('conferencesPanel').style.display = isConf ? '' : 'none';
       document.getElementById('favoritesPanel').style.display   = isFav  ? 'flex' : 'none';
       document.getElementById('playoffsPanel').style.display    = isPO   ? 'flex' : 'none';
-      if (!isFav) lastTopTab = tab;
+      // #102: leaving My Teams cancels a team page still loading, which would otherwise paint
+      // over this tab (and could move the season) when its requests answer.
+      if (!isFav) { lastTopTab = tab; teamToken++; }
       // A tablist of three; My Teams sits outside it. With My Teams open no tab is
       // selected, and the last one keeps tabindex 0 so the tablist stays reachable.
       TOP_TABS.forEach(([id, name]) => {
@@ -3333,7 +3336,13 @@
       if (isSC)  loadShowcasesPanel();
       // Returning to Conferences must repaint the main pane, which the
       // Playoffs panel writes into as well.
-      if (isConf && currentAgeGroup && !silent) loadCurrentView();
+      // #102: the season can move on behind the Conferences sidebar (a team page in another
+      // season, the season picker on Playoffs or Showcases, a #tab= link). Then rebuild it for
+      // that season as a deep link does: the conference and age group stay if they exist there.
+      if (isConf && !silent) {
+        if (ageGroupsSeason !== currentSeason) rebuildAll();
+        else if (currentAgeGroup) loadCurrentView();
+      }
     }
 
     // ========== PLAYOFFS & FINALS ==========
@@ -4298,6 +4307,7 @@
         AGE_GROUPS = seasonAgeGroups[currentSeason];
         AGE_LABELS = {};
         AGE_GROUPS.forEach(ag => { AGE_LABELS[ag] = getAgeLabel(ag); });
+        ageGroupsSeason = currentSeason;
         return;
       }
       // The registry's ageGroups (archive.py derives them from every conference of the
@@ -4314,6 +4324,7 @@
       AGE_LABELS = {};
       groups.forEach(ag => { AGE_LABELS[ag] = getAgeLabel(ag); });
       seasonAgeGroups[currentSeason] = groups;
+      ageGroupsSeason = currentSeason;
     }
 
     // ========== BUILDERS ==========
@@ -4858,6 +4869,7 @@
         }
       } catch (err) {
         console.error(err);
+        if (token !== teamToken) return;   // #102: the page was left while it loaded
         document.getElementById('contentSubtitle').textContent = '';
         container.innerHTML = `<div class="error-message"><strong>Couldn't load this team.</strong><br><small>${esc(retryText(err))}</small></div>`;
       }
@@ -5604,6 +5616,7 @@
         if (token !== loadToken) return;
         if (!division) {
           container.innerHTML = `<div class="error-message">No data found for ${esc(ageLabel)} in ${esc(currentConference)}</div>`;
+          saveState(); pushHash();   // #102: the address names the view on screen
           return;
         }
 
@@ -5982,7 +5995,7 @@
       } else if (currentTab === 'favorites') {
         // A favourite is bound to its own season; choosing another season
         // means browsing that season, so go to Conferences.
-        switchTab('conferences');
+        switchTab('conferences', { silent: true });
         currentConference = Object.keys(getSeasonData().conferences)[0];
         currentAgeGroup = null;
         await rebuildAll();
