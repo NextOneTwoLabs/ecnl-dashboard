@@ -19,6 +19,7 @@ import argparse
 import contextlib
 import copy
 import functools
+import gzip
 import io
 import json
 import os
@@ -38,7 +39,8 @@ import team_history as th
 FIX = "run `python archive.py --team-history`, then commit public/archive/history/"
 SEASON_KEYS = {"season", "teamID", "name", "clubID", "clubName", "logo", "conference", "eventID", "divisionID",
                "division", "flightID", "flightName", "u", "birthYears", "rank", "of", "gp", "w", "d", "l", "pts",
-               "gf", "ga", "gd", "ppg", "form", "games", "played", "link", "merged", "inProgress", "regroup"}
+               "gf", "ga", "gd", "ppg", "form", "games", "played", "link", "merged", "inProgress", "regroup", "last"}
+LAST_KEYS = {"date", "home", "opp", "oppID", "gf", "ga", "pk"}   # #128: one played game behind a form letter
 EVENT_KEYS = {"season", "stage", "eventID", "eventName", "divisionID", "division", "flightID", "flightName", "tier",
               "teamID", "games", "played", "w", "d", "l", "gf", "ga", "fromTable", "group", "reached", "champion",
               "final", "cup", "reconstructed", "dataGap", "inProgress", "location", "startDate", "endDate"}
@@ -249,6 +251,58 @@ class Built(unittest.TestCase):
             dates = [e.get("startDate") or "" for e in sq.get("showcases", [])]
             self.assertEqual(dates, sorted(dates))
 
+    def test_last_is_the_games_behind_form(self):
+        # #128: `last` lists the played games behind `form`, in its order, read straight from the
+        # archived schedule (checked here against the schedule itself, game by game).
+        games = functools.lru_cache(maxsize=None)(th.archived_games)
+        level_placeholders = 0
+        for r in self.byk.values():
+            if not r["played"]:
+                self.assertNotIn("last", r, "no key before a first result (the page shows plain chips)")
+                self.assertEqual(r["form"], "")
+                continue
+            last = r["last"]
+            self.assertEqual(len(last), len(r["form"]), (r["season"], r["teamID"]))
+            self.assertEqual(len(last), min(5, r["played"]))
+            self.assertEqual([g["date"] for g in last], sorted(g["date"] for g in last))
+            sched = games(r["eventID"], r["flightID"])
+            for letter, g in zip(r["form"], last):
+                # The game itself: on that date, with that opponent, the same sides and score.
+                hits = [x for x in sched if (x.get("gameDate") or "")[:10] == g["date"] and r["teamID"] in (x.get("hometeamID"), x.get("awayteamID"))
+                        and th.played(x) and (g["oppID"] is None or g["oppID"] in (x.get("hometeamID"), x.get("awayteamID")))]
+                self.assertTrue(hits, (r["season"], r["teamID"], g["date"]))
+                x = hits[0]
+                home = x.get("hometeamID") == r["teamID"]
+                self.assertEqual((g["gf"], g["ga"]), (x["hometeamscore"], x["awayteamscore"]) if home else (x["awayteamscore"], x["hometeamscore"]))
+                # Home or away is TGS's; it is unknown only with the opponent (all three, or none).
+                self.assertEqual(g["home"] is None, g["opp"] is None)
+                self.assertEqual(g["home"] is None, g["oppID"] is None)
+                if g["home"] is not None:
+                    self.assertEqual(g["home"], home)
+                    self.assertNotEqual(g["oppID"], r["teamID"])
+                # M1 (review): `pk` only when a shoot-out decided a level game; TGS's 0-0 on a draw
+                # is a placeholder, not a shoot-out.
+                level = g["gf"] == g["ga"]
+                self.assertEqual("pk" in g, level and letter in "WL", (r["season"], r["teamID"], g))
+                if "pk" in g:
+                    self.assertNotEqual(*g["pk"])
+                    self.assertEqual(letter, "W" if g["pk"][0] > g["pk"][1] else "L")
+                else:
+                    self.assertEqual(letter, "W" if g["gf"] > g["ga"] else "L" if g["gf"] < g["ga"] else "D")
+                if level and x.get("hometeamPKscore") is not None and x.get("hometeamPKscore") == x.get("awayteamPKscore"):
+                    level_placeholders += 1
+        self.assertGreater(level_placeholders, 0, "draws with TGS's 0-0 placeholder exist, and carry no pk")
+        # Closed seasons: the 7 games with no opponent listed are all 2021-22 bracket games.
+        unknown = [(r["season"], g["date"]) for r in self.byk.values() for g in r.get("last", []) if g["home"] is None]
+        self.assertEqual(len(unknown), 7)
+        self.assertEqual({s for s, _ in unknown}, {"2021-22"})
+
+    def test_history_files_stay_small(self):
+        # #128 S6: `last` grew the files 57% (gzip 40%); a later field must not grow them unnoticed.
+        sizes = [th.file_bytes(tid, sqs) for tid, sqs in self.files.items()]
+        self.assertLess(max(len(b) for b in sizes), 32 * 1024)
+        self.assertLess(sum(len(gzip.compress(b, 9)) for b in sizes), 2.2 * 1024 * 1024)
+
     def test_pos_is_tgs_order_except_the_merged_tables(self):
         # S6: the page says Pos is TGS's order except in the 11 tables TGS published in two
         # blocks (2020-21 to 2022-23), which it marks †.
@@ -320,6 +374,9 @@ class Built(unittest.TestCase):
             self.assertLessEqual(set(sq), SQUAD_KEYS)
             for r in sq["seasons"]:
                 self.assertLessEqual(set(r), SEASON_KEYS)
+                for g in r.get("last", []):
+                    self.assertLessEqual(set(g), LAST_KEYS)
+                    self.assertLessEqual({"date", "home", "opp", "oppID", "gf", "ga"}, set(g))
             for e in sq["postseason"] + sq["showcases"]:
                 self.assertLessEqual(set(e), EVENT_KEYS)
                 self.assertLessEqual(set(e.get("group") or {}), {"name", "pos", "of"})

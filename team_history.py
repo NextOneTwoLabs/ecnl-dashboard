@@ -105,6 +105,26 @@ def result_for(g, tid):
     return "W" if (w == "home") == (g.get("hometeamID") == tid) else "L"
 
 
+def last_game(g, tid):
+    """#128: one played game behind a `form` letter, as the team saw it: the date (TGS's local
+    date, as text), home (True when TGS lists this team as the home team: the page says "vs",
+    else "at"; TGS has no neutral-site flag), the opponent's name and id, goals for and against,
+    and `pk` (ours, then theirs) only when a shoot-out decided a level game: TGS also fills 0-0
+    placeholders on draws, which are not shoot-outs. A game with no opponent listed (7, all
+    2021-22 bracket games) has home, opp and oppID null."""
+    home = g.get("hometeamID") == tid
+    opp_id = g.get("awayteamID") if home else g.get("hometeamID")
+    opp = " ".join(((g.get("awayTeam") if home else g.get("homeTeam")) or "").split())
+    hs, as_ = g["hometeamscore"], g["awayteamscore"]
+    known = bool(opp_id and opp)
+    e = {"date": (g.get("gameDate") or "")[:10], "home": home if known else None, "opp": opp if known else None,
+         "oppID": opp_id if known else None, "gf": hs if home else as_, "ga": as_ if home else hs}
+    hp, ap = g.get("hometeamPKscore"), g.get("awayteamPKscore")
+    if hs == as_ and hp is not None and ap is not None and hp != ap:
+        e["pk"] = [hp, ap] if home else [ap, hp]
+    return e
+
+
 def sort_games(games):
     return sorted(games, key=lambda g: ((g.get("gameDate") or ""), (g.get("gameTime") or ""), g.get("gamenumber") or 0))
 
@@ -314,6 +334,8 @@ def season_rows(sources):
                 "form": "".join(result_for(g, r["teamID"]) for g in done[-5:]),
                 "games": len(mine), "played": len(done),
             }
+            if done:   # #128: the games behind `form`, in its order; no key at all before a first result
+                row["last"] = [last_game(g, r["teamID"]) for g in done[-5:]]
             if nblocks > 1:
                 row["merged"] = True          # TGS published this table in two blocks; we merge them
             # M2: only the open season can be in progress; an unplayed game in a past season
@@ -666,6 +688,8 @@ def build(sources=None, links_path=None):
         while cur:
             r = dict(byk[cur])
             r["link"] = how
+            if "last" in r:
+                r["last"] = r.pop("last")   # the long list ends the line, after the short fields
             chain.append(r)
             n = nxt.get(cur)
             cur, how = (n[0], n[1]) if n else (None, None)

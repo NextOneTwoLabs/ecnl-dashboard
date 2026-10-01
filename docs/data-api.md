@@ -253,6 +253,17 @@ anything else is "reused for another age group", with both ages and seasons.
   `merged` (TGS published the table in two blocks; 11 tables, 2020-21 to 2022-23),
   `inProgress` (only in the open season, `refresh.activeSeason`, while a game is unplayed; a
   cancelled game never reopens a past season) and `regroup` (every 2026-27 row).
+- `last` (#128, last on its line): the played games behind `form`, in the same order (oldest
+  first, the same count), each `{date, home, opp, oppID, gf, ga}` as the team saw it: `date` is
+  TGS's local date as text (`"2026-09-27"`), `home` is `true` when TGS lists the team as the
+  home team (the page says "vs"; `false`, "at"; TGS has no neutral-site flag, so a game at a
+  neutral venue still has a home team), `opp`/`oppID` the opponent's TGS name and id, and
+  `gf`/`ga` the score. `pk` (`[ours, theirs]`) is added only when a shoot-out decided a level
+  game: TGS also fills `0`–`0` on many draws, which is not a shoot-out (2 of the 24,665 games
+  are). A game with no opponent listed (7, all 2021-22 bracket games) has `home`, `opp` and
+  `oppID` `null`. A row with no played game has no `last` key (its `form` is `""`); the page
+  shows letter-only chips whenever `last` is missing or doesn't match `form`. The field is
+  additive, so `schema` stays 1.
 - Event rows: `season`, `stage`, `eventID`, `eventName`, `divisionID`, `division`,
   `flightID`, `flightName`, `tier` (the catalog's tier label), `teamID` (the id at the event;
   a showcase alias keeps the showcase id), `games`, `played`, and our `w`, `d`, `l`, `gf`, `ga`
