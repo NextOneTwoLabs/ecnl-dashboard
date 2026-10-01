@@ -2758,8 +2758,12 @@
       }
       return clubPlacesPromise;
     }
+    // TGS's placeholder club 7, "No Club Selection", holds teams of many unrelated clubs: it has
+    // no place, whatever its TGS record lists (#108). The same id as archive.NO_CLUB_IDS and
+    // team_history.NO_CLUB (tests/test_club_places.py checks that the three agree).
+    const NO_CLUB = 7;
     function clubPlaceText(clubID) {
-      const p = clubPlaces && clubID != null ? clubPlaces[clubID] : null;
+      const p = clubPlaces && clubID != null && Number(clubID) !== NO_CLUB ? clubPlaces[clubID] : null;
       return p && p.city && p.state ? `${p.city}, ${p.state}` : '';
     }
     // Whether a followed team is recorded in this event's division, so a cold
@@ -5040,7 +5044,7 @@
       const open = (SOURCES && SOURCES.refresh && SOURCES.refresh.activeSeason) || Object.keys(SEASONS)[0];
       const ended = last.season !== open;
       const short = shortTeamName(last.name) || last.clubName;
-      const place = sq.clubID !== 7 ? clubPlaceText(sq.clubID) : '';
+      const place = clubPlaceText(sq.clubID);
       const years = historyYears(sq.birthYears);
       const logo = last.logo ? `<img class="team-title-logo" src="${esc(last.logo)}" alt="" onerror="this.style.display='none'">` : '';
       const span = rows.length === 1 ? seasonLabel(last.season) : `${seasonLabel(rows[0].season)} to ${seasonLabel(last.season)}`;

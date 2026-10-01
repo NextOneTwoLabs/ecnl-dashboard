@@ -11,6 +11,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import sys
 import tempfile
 import unittest
@@ -41,8 +42,18 @@ def fail_503(path, **kw):
     raise api.ApiError("HTTP 503")
 
 
+def el_paso(path, **kw):
+    """Every club answers with the placeholder club's TGS place (#108)."""
+    return by_path(path, city="El Paso", name="Texas", code="TX")
+
+
 class Sandbox:
-    """Temporary clubs.json, refresh-state.json and match-days.json; nothing sleeps."""
+    """Temporary clubs.json, refresh-state.json and match-days.json; nothing sleeps.
+    With `index`, every season's team index is a temporary one holding those club ids,
+    so the real archive.club_ids() can run."""
+    def __init__(self, index=None):
+        self.index = index
+
     def __enter__(self):
         self.tmp = tempfile.TemporaryDirectory()
         d = self.tmp.name
@@ -51,6 +62,14 @@ class Sandbox:
         self.stack.enter_context(patch.object(api, "REFRESH_STATE_PATH", os.path.join(d, "refresh-state.json")))
         self.stack.enter_context(patch.object(api, "MATCH_DAYS_PATH", os.path.join(d, "match-days.json")))
         self.stack.enter_context(patch.object(api, "MANIFEST_PATH", os.path.join(d, "manifest.json")))
+        if self.index is not None:
+            teams = os.path.join(d, "teams")
+            os.makedirs(teams)
+            for s in api.load_sources()["seasons"]:
+                with open(os.path.join(teams, f"{s}.json"), "w", encoding="utf-8") as f:
+                    json.dump({"schema": 1, "season": s,
+                               "teams": [{"teamID": 1000 + i, "clubID": c} for i, c in enumerate(self.index)]}, f)
+            self.stack.enter_context(patch.object(api, "TEAM_INDEX_DIR", teams))
         self.sleep = self.stack.enter_context(patch.object(archive.time, "sleep"))
         return self
 
@@ -298,20 +317,22 @@ class RefreshTests(unittest.TestCase):
     def args(date, hour, **kw):
         return argparse.Namespace(**dict(dict(date=date, at_hour=hour, sweep=False, dry_run=False, force=True), **kw))
 
-    def run_refresh(self, date, sweep=True, raws=by_path, dry_run=False):
+    def run_refresh(self, date, sweep=True, raws=by_path, dry_run=False, real_ids=False):
+        """`real_ids`: run the real archive.club_ids() (over a Sandbox(index=...)) instead of IDS."""
         calls = []
         def fake(path, **kw):
             calls.append(path)
             return raws(path)
         flight = {"key": "1/2", "eventId": 1, "flightID": 2, "divisionID": 3,
                   "conference": "Fixture", "divisionName": "GU16", "flightName": "ECNL"}
+        ids = contextlib.nullcontext() if real_ids else patch.object(archive, "club_ids", return_value=self.IDS)
         with patch.object(archive, "fetch_json", side_effect=api.ApiError("offline fixture")), \
                 patch.object(archive, "season_flights", return_value=[flight]), \
                 patch.object(archive, "build_match_days", return_value={"days": {}}), \
                 patch.object(archive, "export_flight_csv"), \
                 patch.object(archive, "update_team_index"), \
                 patch.object(archive, "update_team_history"), \
-                patch.object(archive, "club_ids", return_value=self.IDS), \
+                ids, \
                 patch.object(api, "fetch_api_raw", side_effect=fake), \
                 contextlib.redirect_stdout(io.StringIO()):
             archive.cmd_refresh(self.sources, self.args(date, 7, sweep=sweep, dry_run=dry_run))
@@ -372,12 +393,31 @@ class RefreshTests(unittest.TestCase):
         with Sandbox():
             self.assertEqual(self.run_refresh("2026-10-03", dry_run=True), [])
 
+    def test_monthly_recheck_never_requests_the_placeholder_club(self):
+        """#108: the monthly re-check (update_club_places over club_ids) with club 7 in the index."""
+        with Sandbox(index=[7, 1425]) as sb:
+            sb.seed({"7": None})
+            self.assertEqual(self.run_refresh("2026-10-03", raws=el_paso, real_ids=True), [api.p_club_info(1425)])
+            self.assertEqual(self.dates(), ("2026-10-03", "2026-10-03"))          # a completed re-check
+            self.assertEqual(sb.clubs(), {"7": None, "1425": {"city": "El Paso", "state": "TX"}})
+
+    def test_new_club_sweep_never_requests_the_placeholder_club(self):
+        """#108: a sweep between re-checks (fetch_new_club_places) with club 7 in the index and
+        missing from clubs.json: a missing entry must not bring it back."""
+        with Sandbox(index=[7, 1425]) as sb:
+            with open(api.REFRESH_STATE_PATH, "w", encoding="utf-8") as f:
+                json.dump({"lastClubSweepDate": "2026-10-01", "lastClubSweepAttempt": "2026-10-01"}, f)
+            self.assertEqual(self.run_refresh("2026-10-03", raws=el_paso, real_ids=True), [api.p_club_info(1425)])
+            self.assertEqual(self.dates(), ("2026-10-01", "2026-10-01"))          # not a re-check
+            self.assertEqual(sb.clubs(), {"1425": {"city": "El Paso", "state": "TX"}})
+
 
 class CliTests(unittest.TestCase):
     """`archive.py --clubs [--season S | --all] [--force] [--dry-run]` and the crawl hook."""
     SEASON_IDS = {"2026-27": ["1", "2", "3"], "2025-26": ["3", "4"]}
 
-    def main(self, *argv, raws=by_path):
+    def main(self, *argv, raws=by_path, real_ids=False):
+        """`real_ids`: run the real archive.club_ids() (over a Sandbox(index=...)) instead of SEASON_IDS."""
         calls = []
         def fake(path, **kw):
             calls.append(path)
@@ -385,7 +425,7 @@ class CliTests(unittest.TestCase):
         def ids(seasons):
             return list(dict.fromkeys(c for s in seasons for c in self.SEASON_IDS.get(s, [])))
         with patch.object(sys, "argv", ["archive.py", *argv]), \
-                patch.object(archive, "club_ids", side_effect=ids), \
+                (contextlib.nullcontext() if real_ids else patch.object(archive, "club_ids", side_effect=ids)), \
                 patch.object(archive, "archive_event", return_value=None), \
                 patch.object(archive, "update_team_index"), \
                 patch.object(archive, "update_team_history"), \
@@ -424,6 +464,56 @@ class CliTests(unittest.TestCase):
             self.assertEqual(self.main("--season", "2026-27"), (0, [2, 3]))
             self.assertEqual(self.main("--season", "2026-27"), (0, []))
             self.assertEqual(self.main("--season", "2026-27", "--national"), (0, []))
+
+    def test_force_and_crawl_never_request_the_placeholder_club(self):
+        """#108: `--clubs --all --force` and the crawl hook, each in its own sandbox, through the
+        real club_ids() with club 7 in every season's index."""
+        for argv in (["--clubs", "--all", "--force"], ["--season", "2025-26"]):
+            with self.subTest(argv=argv), Sandbox(index=[7, 1425]) as sb:
+                sb.seed({"7": None})
+                self.assertEqual(self.main(*argv, raws=el_paso, real_ids=True), (0, [1425]))
+                self.assertEqual(sb.clubs(), {"7": None, "1425": {"city": "El Paso", "state": "TX"}})
+
+
+class PlaceholderClubTests(unittest.TestCase):
+    """#108: TGS's placeholder club 7 ("No Club Selection") is never fetched and has no place.
+    Bounds come from the committed indexes, so the tests hold as the archive grows."""
+    @staticmethod
+    def index_teams():
+        for s in api.load_sources()["seasons"]:
+            yield from (api.read_json_file(api.team_index_path(s)) or {}).get("teams") or []
+
+    def test_placeholder_is_club_7(self):
+        self.assertIn("7", archive.NO_CLUB_IDS)     # direct, so an emptied set cannot pass the tripwire
+
+    def test_every_no_club_name_is_a_placeholder(self):
+        """Tripwire: any clubName like "No Club Selection" in a committed index has its id in NO_CLUB_IDS."""
+        found = {str(t["clubID"]) for t in self.index_teams()
+                 if t.get("clubID") and re.search(r"no club", t.get("clubName") or "", re.I)}
+        self.assertIn("7", found)
+        self.assertLessEqual(found, archive.NO_CLUB_IDS, "a new placeholder club: add it to NO_CLUB_IDS")
+
+    def test_the_three_copies_agree(self):
+        """archive.NO_CLUB_IDS, team_history.NO_CLUB and the page's NO_CLUB name the same id."""
+        import team_history
+        html = (Path(api.PUBLIC_DIR) / "index.html").read_text(encoding="utf-8")
+        self.assertEqual(archive.NO_CLUB_IDS, {str(team_history.NO_CLUB)})
+        self.assertEqual(re.findall(r"^ *const NO_CLUB = (\d+);", html, re.M), [str(team_history.NO_CLUB)])
+
+    def test_club_ids_skips_the_placeholder(self):
+        in_index = {str(t["clubID"]) for t in self.index_teams() if t.get("clubID")}
+        ids = archive.club_ids(list(api.load_sources()["seasons"]))
+        self.assertIn("7", in_index)
+        self.assertNotIn("7", ids)
+        self.assertEqual(len(ids), len(in_index) - 1)
+        self.assertEqual(set(ids), in_index - archive.NO_CLUB_IDS)
+
+    def test_committed_file_has_no_place_for_the_placeholder(self):
+        clubs = api.read_json_file(api.CLUBS_PATH)["clubs"]
+        for k in archive.NO_CLUB_IDS:
+            self.assertIn(k, clubs)                 # null: "no usable place", not "not fetched yet"
+            self.assertIsNone(clubs[k], k)
+        self.assertGreaterEqual(len(clubs), 143)
 
 
 if __name__ == "__main__":

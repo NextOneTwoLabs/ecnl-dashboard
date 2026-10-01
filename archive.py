@@ -935,6 +935,11 @@ CLUB_FAILURE_CAP = 10         # a sweep stops at this many failed clubs
 CLUB_BUDGET_SECONDS = 8 * 60  # and after this much wall-clock time
 CLUB_WIPE_LIMIT = 0.05        # abort, writing nothing, if more usable entries than this would go null
 CLUB_RETRY_DAYS = 7           # after a failed monthly re-check, retry at most once a week
+# TGS's placeholder club "No Club Selection": teams of about 22 unrelated clubs share it, and its
+# record's place (El Paso, TX) is none of theirs (#108). club_ids() never yields it, so no path
+# fetches it; clubs.json holds it as null. The same id as team_history.NO_CLUB and the page's
+# NO_CLUB (tests/test_club_places.py checks that the three agree).
+NO_CLUB_IDS = frozenset({"7"})
 
 US_STATES = {
     "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA",
@@ -1040,11 +1045,12 @@ def fetch_club_place(club_id):
 
 
 def club_ids(seasons):
-    """Distinct clubIDs of the seasons' team indexes, in first-seen order."""
+    """Distinct clubIDs of the seasons' team indexes, in first-seen order, without the
+    placeholder NO_CLUB_IDS. Every club fetch takes its ids from here."""
     seen = {}
     for s in seasons:
         for t in (api.read_json_file(api.team_index_path(s)) or {}).get("teams") or []:
-            if t.get("clubID"):
+            if t.get("clubID") and str(t["clubID"]) not in NO_CLUB_IDS:
                 seen.setdefault(str(t["clubID"]), None)
     return list(seen)
 

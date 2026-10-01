@@ -143,7 +143,9 @@ and writes one global file for every season (the endpoint has no season paramete
 
 - `schema` is `1`, with the same bump rule as the team index. `clubs` maps a
   `clubID` (the team index's and the standings' `clubID`) to `{city, state}`, or to
-  `null` when TGS has a record for the club but no usable city and state. A club
+  `null` when TGS has a record for the club but no usable city and state. TGS's
+  placeholder club 7 ("No Club Selection", which holds teams of many unrelated clubs)
+  is also `null`: it is never requested, whatever place its record lists. A club
   missing from the map has not been fetched yet. One club per line, sorted by id.
 - **Only city and state are stored.** The TGS response also carries the street,
   zip, phone and the club president's name, email and phone; none of it is kept,
