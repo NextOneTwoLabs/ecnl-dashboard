@@ -210,7 +210,10 @@ age slots), is offered as a possible continuation (`maybe` / `maybePrev`) and ne
 Every candidate list is computed before anything is linked, so the links never depend on the
 order of the input rows. Normally a file holds one squad; an id TGS reused for an age slot
 (2020-22, and the same-age carries of 2026-27) holds two or three, and the page follows the
-one that played in the link's season.
+one that played in the link's season. Its "One TGS id" note says why from the age groups: the
+same age group a season later is a carry at the 2026-27 regroup ("we can't tell whether it
+followed these players or the age slot") or an age slot kept for younger players otherwise;
+anything else is "reused for another age group", with both ages and seasons.
 
 ```json
 {"schema":1,"teamID":55477,"squads":[
@@ -232,7 +235,8 @@ one that played in the link's season.
 - Squad fields: `clubID`, `clubName` (its latest), `birthYears` (the years every season of
   the chain agrees on: `[2011]`, or `[2010, 2011]` for a squad seen only in a two-year
   group), `seasons`, `postseason`, `showcases`; optional `best` (index into `postseason` of
-  the best Champions League finish: depth, then Finals above Playoffs, then the latest),
+  the best Champions League finish: depth, then Finals above Playoffs, then the better group
+  place, then the latest season),
   `titles` (indexes of every title, by tier then stage), `maybe` and `maybePrev` (possible
   continuations and predecessors: `season`, `teamID`, `name`, `division`, `conference`). A
   `maybe` entry outside the 2026-27 regroup that another predecessor could also claim (the

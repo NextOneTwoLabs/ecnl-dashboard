@@ -4949,6 +4949,26 @@
       return { text: 'Played', short: 'Played' };
     }
 
+    // Why a TGS id starts another squad (#107 review): for each squad after the first, the id's
+    // first row there against the same id's latest earlier row. The same age group a season
+    // later is a carry at the 2026-27 regroup (the players or the slot: we can't tell) and an
+    // age slot kept for younger players otherwise; anything else is another age group, or a gap.
+    function historySplitNotes(squads, teamID, age) {
+      const mine = q => q.seasons.filter(r => String(r.teamID) === String(teamID));
+      const rows = squads.flatMap(mine);
+      const firsts = squads.map(q => mine(q)[0]).filter(Boolean).sort((a, b) => a.season.localeCompare(b.season)).slice(1);
+      return firsts.map(r => {
+        const s = seasonLabel(r.season);
+        const prev = rows.filter(x => x.season < r.season).sort((a, b) => b.season.localeCompare(a.season))[0];
+        if (!prev) return `In ${s} TGS used it for another team.`;
+        const next = Number(prev.season.slice(0, 4)) + 1 === Number(r.season.slice(0, 4));
+        if (prev.u === r.u && next && r.regroup) return `In ${s} TGS kept it in the same age group (${age(r)}), so we can't tell whether it followed these players or the age slot; that season is shown as a squad of its own.`;
+        if (prev.u === r.u && next) return `In ${s} TGS kept it for its age slot (${age(r)}) rather than for one group of players.`;
+        if (prev.u === r.u) return `In ${s} TGS used it again, after ${seasonLabel(prev.season)}, for the same age group (${age(r)}).`;
+        return `In ${s} TGS reused it for another age group (${age(prev)} in ${seasonLabel(prev.season)}, ${age(r)} in ${s}).`;
+      });
+    }
+
     function historyChartSvg(rows) {
       const W = 264, H = 122, L = 26, R = 16, T = 18, B = 26;
       const n = rows.length, maxOf = Math.max(...rows.map(r => r.of || 1), 2);
@@ -5078,14 +5098,9 @@
       const refLink = p => `<a href="${pageHref(p, true)}">${esc(p.name)}</a> (${esc(seasonLabel(p.season))}, ${esc(p.conference)}, ${esc(getAgeLabel(p.division, p.season))})`;
       if (data.squads.length > 1) {
         const others = data.squads.filter(q => q !== sq);
-        // Why the id starts another squad: an earlier reuse for an age slot (its age group didn't
-        // move up), or the 2026-27 regroup, where TGS kept it in the same age group and we can't
-        // tell whether it followed the players or the slot.
-        const splits = data.squads.map(q => mineIn(q)[0]).filter(Boolean).sort((a, b) => a.season.localeCompare(b.season)).slice(1);
-        const reuse = splits.some(r => !r.regroup), carry = splits.some(r => r.regroup);
+        const notes = historySplitNotes(data.squads, id, r => getAgeLabel(r.division, r.season));
         add('hist-maybe', `<strong>One TGS id, ${data.squads.length} squads</strong>Team id ${esc(id)} belongs to more than one squad here.` +
-          (reuse ? ' In an earlier season TGS reused it for an age slot rather than for one group of players: its age group did not move up.' : '') +
-          (carry ? " In 2026–27 TGS kept it in the same age group, so we can't tell whether it followed these players or the age slot; that season is shown as a squad of its own." : '') +
+          notes.map(n => ' ' + esc(n)).join('') +
           ` This page follows the squad born ${esc(years)} that played in ${esc(seasonLabel(here.season))}. Also: ` +
           others.map(q => { const r0 = mineIn(q)[0] || q.seasons[0]; return `<a href="${pageHref(r0, true)}">born ${esc(historyYears(q.birthYears))} (${esc(seasonLabel(r0.season))})</a>`; }).join(', ') + '.');
       }

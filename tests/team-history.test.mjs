@@ -204,6 +204,28 @@ test('page history: a 503, a network error or bad JSON rejects and is asked agai
 // ---- the words: M4, S2 ----
 const words = new Function(block('    function historyYears(', 'function historyOutcome(') + '\nreturn { historyYears, historyOutcome, historyStamp };')();
 
+// The "One TGS id, N squads" note (#107 re-check): a carry only when the same id is in the same
+// age group a season later at the 2026-27 regroup; otherwise the age groups say what happened.
+test('page history: the "One TGS id" note follows the age groups', { skip: !hasHistory && 'no team-history data in this checkout' }, async () => {
+  const splitNotes = new Function('seasonLabel', block('    function historySplitNotes(') + '\nreturn historySplitNotes;')(s => s.replace('-', '–'));
+  const age = r => `U${r.u}`;
+  const notes = async id => splitNotes((await json(`archive/history/${id}.json`)).squads, id, age);
+  const carry = /kept it in the same age group/;
+  // Not carries: a different age group across the regroup, or no 2025-26 row at all.
+  assert.deepEqual(await notes(34961), ['In 2026–27 TGS reused it for another age group (U18 in 2025–26, U13 in 2026–27).']);
+  assert.deepEqual(await notes(82349), ['In 2026–27 TGS reused it for another age group (U14 in 2025–26, U13 in 2026–27).']);
+  assert.deepEqual(await notes(46765), ['In 2026–27 TGS reused it for another age group (U17 in 2024–25, U18 in 2026–27).']);
+  // The earlier reuses: two age groups up, and a gap of two seasons.
+  assert.deepEqual(await notes(19409), ['In 2021–22 TGS reused it for another age group (U16 in 2020–21, U18 in 2021–22).']);
+  assert.deepEqual(await notes(46961), ['In 2022–23 TGS reused it for another age group (U13 in 2021–22, U15 in 2022–23).']);
+  assert.deepEqual(await notes(12596), ['In 2025–26 TGS reused it for another age group (U18 in 2022–23, U13 in 2025–26).']);
+  // Carries (controls): the same age group a season later, across the regroup.
+  assert.match((await notes(94620))[0], carry);
+  assert.deepEqual((await notes(46817)).map(n => carry.test(n) ? 'carry' : n),
+    ['In 2021–22 TGS kept it for its age slot (U13) rather than for one group of players.', 'carry']);
+  for (const id of [34961, 82349, 46765, 19409, 46961, 12596]) assert.ok(!(await notes(id)).some(n => carry.test(n) || /did not move up/.test(n)), id);
+});
+
 test('page history: "History as of" gives the date and the UTC time', () => {
   assert.equal(words.historyStamp('2026-09-30T19:55:34Z'), 'Sep 30, 2026, 7:55 PM UTC');
   assert.equal(words.historyStamp(null), '');
