@@ -30,6 +30,8 @@ const CODE = [
   block('    async function changeSeason('),
   block('    async function showcaseFlightsForTeam('), block('    async function teamShowcaseSections('),
   block('    async function loadTeamSummary('),
+  block('    function historyAvailable('), block('    function overviewAvailable('),
+  block('    async function loadTeamHistory('),             // Overview, the team page's default (#114)
 ].join('\n');
 
 const NOINDEX = { on: false };   // no team index (?live=1, a 404): showcases are found by scanning
@@ -43,7 +45,7 @@ const HIER = {
   601: [{ divisionID: 62, divisionName: 'G2011', flightList: [{ flightID: 6011, flightName: 'Finals' }] }],
 };
 
-function page({ national = true } = {}) {
+function page({ national = true, history = { squads: [{}] } } = {}) {
   const els = new Map();
   const node = id => ({ id, style: {}, hidden: false, textContent: '', value: '', tabIndex: 0, html: '', children: [], open: false,
     get innerHTML() { return this.html; }, set innerHTML(v) { this.html = v; this.children = []; },
@@ -60,7 +62,7 @@ function page({ national = true } = {}) {
     if (h) { delete hold[`${kind}:${id}`]; h.asked = true; await h.promise; }
     return value;
   };
-  const teamIndexShowcases = {};
+  const teamIndexShowcases = {}, teamHistoryMissing = new Set();
   const stubs = {
     document, window: { location: { hash: '' }, addEventListener() {} }, console: { error() {}, warn() {} },
     SEASONS: {}, NATIONAL_EVENTS: national ? { '2025-26': { Playoffs: { eventId: 600 }, Finals: { eventId: 601 } } } : {},
@@ -72,6 +74,10 @@ function page({ national = true } = {}) {
     getStandingsBlocks: (_d, _f, id) => ask('blocks', id, [{ flightGroupID: 1, teamStandings: [{ teamID: 9 }] }]),
     getSchedule: (id, f) => ask('schedule', id, [{ matchID: f, hometeamID: 9, awayteamID: 10, hometeamscore: 1, awayteamscore: 0 }]),
     loadClubPlaces: () => ask('clubs', '', null),
+    // Overview (#114): the real loadTeamHistory; `history` is the history route's answer (null: no file).
+    LIVE: false, teamHistoryMissing, currentFavorite: null, historyCrumb() {},
+    getTeamHistory: id => ask('history', id, history),
+    renderTeamHistory: () => { el('standingsContainer').innerHTML = 'OVERVIEW'; },
     // Collaborators that paint the other tabs, or render pieces of this one.
     openFavoritesTab: () => { el('standingsContainer').innerHTML = 'MY TEAMS'; el('contentTitle').textContent = 'My Teams'; },
     rebuildAll: () => { el('standingsContainer').innerHTML = 'CONFERENCES'; el('contentTitle').textContent = 'Conferences'; },
@@ -86,7 +92,7 @@ function page({ national = true } = {}) {
     computeTeamSummary: () => ({ mine: [], form: [], next: null }), glancePanelHtml: () => '', shortTeamName: n => n,
     getStandingsUrl: () => '#', getSchedulesUrl: () => '#', publicUrl: () => '#', formatDateRange: () => '',
     resultFor: () => 'W', knockoutGames: () => [], buildBrackets: () => null, postseasonOutcome: () => '',
-    mergeStandingsBlocks: b => b[0] || null, updateViewTabsUI() {}, loadTeamHistory: async () => {},
+    mergeStandingsBlocks: b => b[0] || null, updateViewTabsUI() {},
     loadWarning: () => ({ kind: 'warning', querySelector: () => ({}) }), failedFlightPanel: () => ({ kind: 'failed' }),
     renderStandingsTable: () => ({ kind: 'standings' }), renderScheduleTable: () => ({ kind: 'schedule' }),
     renderGroupCards: () => ({ kind: 'groups' }), renderBrackets: () => ({ kind: 'bracket' }),
@@ -96,7 +102,7 @@ function page({ national = true } = {}) {
     teamView = 'season';   // the team page's tables (#122 opens a team on its Overview by default)
     SHOWCASES = { '2025-26': { 'Fall showcase': { eventId: 501, startDate: '2025-10-01' }, 'Spring showcase': { eventId: 502, startDate: '2026-03-01' } } };
     return { switchTab, selectStage, selectPlayoffTier, loadTeamSummary, changeSeason, loadPlayoffFlight, playoffTier: () => currentPlayoffTier,
-      setView: v => { currentView = v; }, setPlayoffAge: v => { currentPlayoffAgeGroup = v; }, playoffAge: () => currentPlayoffAgeGroup };`)(...Object.values(stubs));
+      setView: v => { currentView = v; }, setTeamView: v => { teamView = v; }, teamView: () => teamView, setPlayoffAge: v => { currentPlayoffAgeGroup = v; }, playoffAge: () => currentPlayoffAgeGroup };`)(...Object.values(stubs));
   const flush = async () => { for (let i = 0; i < 40; i++) await new Promise(r => setImmediate(r)); };
   const held = async key => { const h = (hold[key] = deferred()); return h; };
   const until = async h => { for (let i = 0; i < 200 && !h.asked; i++) await new Promise(r => setImmediate(r)); assert.ok(h.asked, 'the load never reached the held request'); };
@@ -104,7 +110,7 @@ function page({ national = true } = {}) {
   const shown = () => el('standingsContainer').innerHTML + el('standingsContainer').children.map(c => c.kind || 'node').join();
   const title = () => el('contentTitle').textContent;
   const ageTabs = () => el('playoffAgeGroupTabs').innerHTML;
-  return { ...api, calls, log, flush, held, until, since, shown, title, ageTabs };
+  return { ...api, calls, log, flush, held, until, since, shown, title, ageTabs, teamHistoryMissing };
 }
 
 // ---------- #120: a team page left in any phase asks for nothing more and saves nothing ----------
@@ -164,6 +170,71 @@ test('#120: a team page with no post-season, left during the showcase phase, ask
   assert.deepEqual(d().requests, [], 'not the second showcase');
   assert.equal(d().saves, 0, 'the final saveState is guarded');
   assert.equal(p.shown(), 'CONFERENCES');
+});
+
+// ---------- #120 on Overview (#114's default view): loadTeamHistory's own token checks ----------
+for (const [how, late] of Object.entries({ answers: h => h.resolve(), fails: h => h.reject(Object.assign(new Error('503'), { status: 503 })) })) {
+  test(`#120 Overview: a team page left while its Overview loads, which then ${how}, asks for and paints nothing`, async () => {
+    const p = page();
+    p.setTeamView('history');
+    p.switchTab('favorites');
+    const h = await p.held('history:9');
+    const load = p.loadTeamSummary({ ...TEAM });
+    await p.until(h);
+    p.switchTab('conferences');
+    await p.flush();
+    const d = p.since();
+    late(h);
+    await load;
+    await p.flush();
+    assert.deepEqual(d().requests, []);
+    assert.equal(d().saves, 0);
+    assert.equal(p.shown(), 'CONFERENCES');
+  });
+}
+
+test('#120 Overview: no history file, still on the page: the season-tab fallback loads in full', async () => {
+  const p = page({ history: null });
+  p.setTeamView('history');
+  p.switchTab('favorites');
+  const d = p.since();
+  await p.loadTeamSummary({ ...TEAM });
+  await p.flush();
+  assert.equal(p.teamView(), 'season');
+  assert.ok(p.teamHistoryMissing.has('9'), 'the id is remembered as having no Overview');
+  assert.deepEqual(d().requests.slice(0, 5), ['history:9', 'clubs:', 'hierarchy:3926', 'standings:3926', 'schedule:3926'],
+    'the fallback reload is not cancelled by the tokens');
+  assert.ok(d().requests.includes('blocks:601'), 'it runs to the end');
+  assert.equal(p.shown(), 'node', "the season tab's layout is on screen");
+  assert.equal(d().saves, 1);
+});
+
+test('#120 Overview: no history file, answered after leaving: no fallback reload', async () => {
+  const p = page({ history: null });
+  p.setTeamView('history');
+  p.switchTab('favorites');
+  const h = await p.held('history:9');
+  const load = p.loadTeamSummary({ ...TEAM });
+  await p.until(h);
+  p.switchTab('conferences');
+  await p.flush();
+  const d = p.since();
+  h.resolve();
+  await load;
+  await p.flush();
+  assert.deepEqual(d().requests, []);
+  assert.equal(p.shown(), 'CONFERENCES');
+});
+
+test('#120 Overview: an id known to have no history file opens on its season tab (overviewAvailable)', async () => {
+  const p = page();
+  p.teamHistoryMissing.add('9');
+  p.setTeamView('history');
+  p.switchTab('favorites');
+  const d = p.since();
+  await p.loadTeamSummary({ ...TEAM });
+  assert.equal(p.teamView(), 'season');
+  assert.equal(d().requests[0], 'hierarchy:3926', 'no history request');
 });
 
 // ---------- #99: a slow Playoffs load, then another tab, stage or competition ----------
