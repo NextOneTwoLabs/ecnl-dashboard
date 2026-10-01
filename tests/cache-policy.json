@@ -30,6 +30,8 @@
     ["/api/v1/clubs", "no-cache"],
     ["/api/v1/teams/35271/history", "no-cache"],
     ["/api/v1/teams/55477/history", "no-cache"],
+    ["/api/v1/teams", "no-cache"],
+    ["/api/v1/teams", "no-cache", "HEAD"],
     ["/api/v1/events/999999999/hierarchy", "no-store"],
     ["/api/v1/seasons/2030-31/teams", "no-store"],
     ["/api/v1/events/0/hierarchy", "no-store"],
@@ -59,6 +61,7 @@
       "/api/v1/seasons/2026-27/teams",
       "/api/v1/seasons/2027-28/teams",
       "/api/v1/clubs",
+      "/api/v1/teams",
       "/api/v1/status"
     ],
     "cases": [

@@ -62,6 +62,8 @@ class Sandbox:
         self.stack.enter_context(patch.object(api, "REFRESH_STATE_PATH", os.path.join(d, "refresh-state.json")))
         self.stack.enter_context(patch.object(api, "MATCH_DAYS_PATH", os.path.join(d, "match-days.json")))
         self.stack.enter_context(patch.object(api, "MANIFEST_PATH", os.path.join(d, "manifest.json")))
+        # #114: the team directory (its club places) is written under the sandbox, never the checkout.
+        self.stack.enter_context(patch.object(api, "ARCHIVE_DIR", d))
         if self.index is not None:
             teams = os.path.join(d, "teams")
             os.makedirs(teams)

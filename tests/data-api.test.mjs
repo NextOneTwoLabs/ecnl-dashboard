@@ -71,6 +71,7 @@ test('each archived resource is returned byte-for-byte with its cache policy: on
     if (match) await check(`/api/v1/seasons/${match[1]}/teams`, new URL('archive/teams/' + file, root), expectedPolicy(match[1]));
   }
   await check('/api/v1/clubs', new URL('archive/clubs.json', root), 'no-cache');
+  await check('/api/v1/teams', new URL('archive/directory.json', root), 'no-cache');   // #114, its own kind
   for (const file of existsSync(new URL('archive/history/', root)) ? await readdir(new URL('archive/history/', root)) : []) {
     const match = /^(\d+)\.json$/.exec(file);
     if (match) await check(`/api/v1/teams/${match[1]}/history`, new URL('archive/history/' + file, root), 'no-cache');
@@ -174,8 +175,8 @@ test('cache policy: the catalog is read once per isolate (N + 1 reads); a failed
   // one read is the catalog itself).
   resetCatalogMemo();
   const other = catalogEnv({ text: caseCatalog({}) });
-  for (const path of ['/api/v1/catalog', '/api/v1/status', '/api/v1/clubs', '/api/v1/teams/55477/history']) await dataApi(request(path), other);
-  assert.deepEqual([other.reads, other.catalogReads], [4, 1]);
+  for (const path of ['/api/v1/catalog', '/api/v1/status', '/api/v1/clubs', '/api/v1/teams/55477/history', '/api/v1/teams']) await dataApi(request(path), other);
+  assert.deepEqual([other.reads, other.catalogReads], [5, 1]);
 });
 
 test('cache policy: a closed 304 carries the one-day policy (renewing the stored copy), an active 304 no-cache', async () => {
@@ -394,4 +395,19 @@ test('direct visitor access to /archive and /data is blocked', async () => {
       }
     }
   }
+});
+
+test('#114: the team directory has its own route kind, not the season index kind', async () => {
+  assert.deepEqual(resolveResource('/api/v1/teams'), { kind: 'directory' });
+  assert.equal(assetPath(resolveResource('/api/v1/teams')), '/archive/directory.json');
+  assert.equal(resolveResource('/api/v1/seasons/2026-27/teams').kind, 'teams');
+  for (const path of ['/api/v1/teams/', '/api/v1/teams/directory', '/api/v1/teams.json']) assert.equal(resolveResource(path).status, 404, path);
+  // No catalog read for it: cachePolicy treats only event kinds and the season index specially.
+  resetCatalogMemo();
+  let catalogReads = 0;
+  const counting = { ASSETS: { fetch(req) { if (new URL(req.url).pathname === '/data/sources.json') catalogReads++; return env.ASSETS.fetch(req); } } };
+  const response = await dataApi(request('/api/v1/teams'), counting);
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('cache-control'), 'no-cache');
+  assert.equal(catalogReads, 0);
 });

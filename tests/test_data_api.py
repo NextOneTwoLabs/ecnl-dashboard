@@ -136,6 +136,10 @@ class ApiTests(unittest.TestCase):
             self.assertEqual((status, body), (200, (ROOT / 'archive/clubs.json').read_bytes()))
             self.assertEqual(headers['Cache-Control'], 'no-cache')
             count += 1
+            status, headers, body = self.request('/api/v1/teams')   # #114, the team directory
+            self.assertEqual((status, body), (200, (ROOT / 'archive/directory.json').read_bytes()))
+            self.assertEqual(headers['Cache-Control'], 'no-cache')
+            count += 1
             for file in (ROOT / 'archive/history').glob('*.json'):   # #107
                 status, headers, body = self.request(f'/api/v1/teams/{file.stem}/history')
                 self.assertEqual((status, body), (200, file.read_bytes()), file.name)

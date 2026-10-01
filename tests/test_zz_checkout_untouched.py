@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import ecnl_api as api
 
 WATCHED = [os.path.join(api.ARCHIVE_DIR, "history"), os.path.join(api.ARCHIVE_DIR, "teams"),
-           api.REFRESH_STATE_PATH, api.CLUBS_PATH]
+           api.REFRESH_STATE_PATH, api.CLUBS_PATH, os.path.join(api.ARCHIVE_DIR, "directory.json")]
 
 
 def snapshot():

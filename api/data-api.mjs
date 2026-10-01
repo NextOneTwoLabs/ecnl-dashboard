@@ -9,6 +9,9 @@ const routes = [
   [/^\/api\/v1\/seasons\/([^/]+)\/teams$/, 'teams', ['season']],
   [/^\/api\/v1\/clubs$/, 'clubs', []],
   [/^\/api\/v1\/teams\/([^/]+)\/history$/, 'history', ['team']],
+  // #114: every team in one file (the team directory). Its own kind, never 'teams' (the
+  // season index), so cachePolicy leaves it no-cache and the counts tell the two apart.
+  [/^\/api\/v1\/teams$/, 'directory', []],
 ];
 
 // IDs are canonical positive decimals; a season is "YYYY-YY" with consecutive years.

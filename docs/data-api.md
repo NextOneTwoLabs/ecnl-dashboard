@@ -23,8 +23,9 @@ lock.
 | `/api/v1/seasons/{season}/teams` | Team index for one season (derived; see below): `public/archive/teams/{season}.json` |
 | `/api/v1/clubs` | Club places, every season (derived; see below): `public/archive/clubs.json` |
 | `/api/v1/teams/{teamId}/history` | One team's squad history across every season and event (derived; see below): `public/archive/history/{teamId}.json` |
+| `/api/v1/teams` | The team directory: every team (club and age group) in one file, for team search (derived; see below): `public/archive/directory.json` |
 
-Apart from the team index, the club places and the team histories, success bodies are the original JSON bytes. Existing
+Apart from the team index, the club places, the team histories and the team directory, success bodies are the original JSON bytes. Existing
 envelopes (`data` where present), field names/casing, array order, null values,
 IDs, empty groups, and reconstructed match metadata (`source`, `reconstructed`,
 negative match IDs) are preserved. No wrapping, merging, sorting, or date
@@ -363,6 +364,66 @@ use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a min
   be versioned (for example a build id in the URL or a `closed` list published with the
   data), never a bare long `max-age`. It costs one request per History opened.
 
+### Team directory (`/api/v1/teams`)
+
+Also **derived** (#114): every team in one file, for the page's team search. A team is one
+club and age group followed across seasons, which is one #107 squad, exactly as
+`team_history.build()` links it, so the directory has one row per squad. It lists only teams
+with a conference row, i.e. with a team page: a team seen only at a national event or a
+showcase (an RL or guest team) is not listed (#97 decision 4; #114 owner decision).
+`team_directory.py` builds it from the same in-memory squads as the history files, with no
+upstream requests and no second build.
+
+```json
+{"schema":1,"seasons":["2020-21",…,"2026-27"],"confs":["Southwest",…,"NorCal",…],
+"divs":[[0,"GU14",14,[2007]],…],"events":[[0,"n","Playoffs",2118],…],"tiers":["Champions League",…],
+"clubs":[…,[294,"MVLA","https://…","Los Altos, CA"],…],"squads":[
+…
+{"c":56,"b":[2011],"s":[[3,55477,"MVLA ECNL G11",7,33,1,10],…,[6,55477,"MVLA ECNL G2010/11",7,36,3,12]],"e":[[3,6,0,"Group 4/4"],…,[5,10,0,"Round of 16"],[5,11,13,""],[5,12,11,""]],"best":2},
+…]}
+```
+
+- `schema` is `1`, with the same bump rule as the team index. **One squad per line**, so a
+  refresh diff shows only the teams that changed.
+- Shared tables, which the rows index into: `seasons` (sorted), `confs`, `divs` (`[season,
+  division, u, birthYears]`, from the catalog's `ageGroups`), `events` (national events and
+  showcases: `[season, "n" or "s", stage, eventId]`), `tiers` (the catalog's tier labels) and
+  `clubs` (`[clubID, clubName, logo, "City, ST"]`: the logo URL as the team index carries it,
+  and the place as `/api/v1/clubs` gives it, empty when there is none and always for club 7).
+- A squad: `c` its club; `b` its birth years (#107 `birthYears`); `s` its conference seasons,
+  oldest first, as `[season, teamID, name, conf, div, rank, of]`; optional `e`, its
+  post-season entries then its showcases, as `[season, event, tier, outcome]` (`outcome` is
+  `Champion`, `Final`, the last round reached, `Group n/m`, or empty, and always empty for a
+  showcase); `best` (the #107 index into `e` of the best Champions League finish); `t` (the
+  number of titles); `m` and `mp`, the #107 possible continuations and predecessors as squad
+  indexes, both ways.
+- **Privacy.** Team-level public data only: every value is also served by the team indexes,
+  the history files, `/api/v1/clubs` or the catalog. The tests hold the key allow-list.
+- **Size.** About 405 KB raw, 74 KB gzipped, for 2020-21 to 2026-27, growing about 60 KB a
+  season; a test fails above 600 KB (or 120 KB gzipped), about three seasons out, when the
+  format should be revisited rather than the limit raised.
+
+**When it changes.** `archive.py` rebuilds it **last** in every path that can change what it
+holds, and writes it only when its bytes change:
+
+- **A crawl and `--refresh`** (including a run with nothing due): after the histories, the club
+  places (the refresh's sweep) and the catalog's birth-year anchor (a crawl), from the squads
+  of that run's history build. If the history build failed, the directory is left as it was.
+- **`--team-history`**: with the histories. **`--clubs`**: only its place column can change,
+  so that column is updated in place.
+- **`--dry-run`** writes nothing. **`--team-history --check`** (CI) also fails when the
+  committed file differs from a fresh build.
+- A failure is reported, fails the run and leaves the old file; it never changes
+  `refresh-state.json` (`historyAsOf` belongs to the histories).
+- The write is atomic: the new bytes go to `directory.json.tmp`, then replace the file.
+
+**Caching and cost.** `no-cache` with a validator, like the histories and the club places: it
+changes with the active season, and its route has its own kind (`directory`), so the
+closed-season policy (#82) never applies to it and no catalog read is made for it. The page
+reads it once per page load, when team search is first opened; searching costs no further
+request. After a data refresh that changed a team, the next load downloads it again (about
+74 KB); otherwise it revalidates with a 304.
+
 ## HTTP behavior
 
 - GET returns one JSON object; HEAD has equivalent status/headers without a body.
@@ -393,7 +454,7 @@ use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a min
 | Answer (200 or 304) | `Cache-Control` |
 | --- | --- |
 | `hierarchy`, `standings` and `schedule` of an event whose catalog season is earlier than `refresh.activeSeason`; `seasons/{s}/teams` with `s` earlier than it | `private, max-age=86400, stale-while-revalidate=86400` |
-| the active season; a future one (registered before the rollover); an event the catalog doesn't list; `catalog`, `status`, `clubs`, `teams/{id}/history` | `no-cache`, as before |
+| the active season; a future one (registered before the rollover); an event the catalog doesn't list; `catalog`, `status`, `clubs`, `teams/{id}/history`, `teams` (the directory, #114) | `no-cache`, as before |
 | every error, 429 and other refusal | `no-store`, as before |
 
 - **Closed** means earlier than the catalog's `refresh.activeSeason` (a string compare of two
@@ -777,7 +838,9 @@ characters. The API sends no CORS headers, so a key only works from servers, scr
 agents, not from another site's page.
 
 **Limits.** 120 requests per 60 s per key (`RL_KEY`), and every keyed request also counts
-toward the per-IP ceiling (`RL_IP`, 3,000 per 60 s). That is 2 requests a second: a full
+toward the per-IP ceiling (`RL_IP`, 3,000 per 60 s). To find a team, start from
+`/api/v1/teams` (the team directory, one request for every team) rather than walking the
+season indexes and histories. That is 2 requests a second: a full
 copy of every resource takes about 11 minutes. Over a limit: 429 with `Retry-After: 60`.
 
 **Answers.** Every answer to a keyed request says `X-ECNL-Session: key`. Refusals (400, 401,

@@ -724,14 +724,17 @@ def document(tid, squads):
     return {"schema": SCHEMA, "teamID": tid, "squads": squads}
 
 
-def plan(sources=None, links_path=None, out_dir=None):
+def plan(sources=None, links_path=None, out_dir=None, keep=None):
     """Build everything in memory and compare it with the files on disk byte for byte, line
     endings normalised (a CRLF checkout is not a change; a reformatted file is). Returns
     (changes {path: bytes}, stale [path], total, errors). Raises if nothing could be built, or
     if the build would remove more than a few files (a season's index missing, not teams TGS
-    dropped)."""
+    dropped). A `keep` dict receives the squads, so the team directory (#114) is built from this
+    same build instead of a second one."""
     out_dir = out_dir or history_dir()
     squads, _stats, _rows, errors = build(sources, links_path)
+    if keep is not None:
+        keep["squads"] = squads
     files = by_team(squads)
     if not files:
         raise ValueError("no team-seasons found; is the team index built? (python archive.py --team-index --all)")
@@ -775,7 +778,7 @@ class PartialWrite(OSError):
     """Some history files were replaced and could not be put back."""
 
 
-def write_history(sources=None, dry_run=False, links_path=None, out_dir=None):
+def write_history(sources=None, dry_run=False, links_path=None, out_dir=None, keep=None):
     """Rebuild every history file; write the changed ones and remove those of ids no longer in
     any conference table. Returns (written, removed, total, errors).
 
@@ -786,7 +789,7 @@ def write_history(sources=None, dry_run=False, links_path=None, out_dir=None):
     memory) before it raises. Only if that restore itself fails does it raise PartialWrite,
     naming the files, so the log never says "left as they were" when they were not."""
     out_dir = out_dir or history_dir()
-    changes, stale, total, errors = plan(sources, links_path, out_dir)
+    changes, stale, total, errors = plan(sources, links_path, out_dir, keep)
     if dry_run:
         return len(changes), len(stale), total, errors
     os.makedirs(out_dir, exist_ok=True)
@@ -838,10 +841,10 @@ def write_history(sources=None, dry_run=False, links_path=None, out_dir=None):
     return len(changes), len(stale), total, errors
 
 
-def check_history(sources=None, links_path=None, out_dir=None):
+def check_history(sources=None, links_path=None, out_dir=None, keep=None):
     """The drift check: ids whose committed file differs from a fresh build (missing, changed or
     stale), and the team-links.json problems. Writes nothing."""
-    changes, stale, _total, errors = plan(sources, links_path, out_dir)
+    changes, stale, _total, errors = plan(sources, links_path, out_dir, keep)
     return sorted(os.path.basename(p) for p in list(changes) + stale), errors
 
 
