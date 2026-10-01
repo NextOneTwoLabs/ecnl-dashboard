@@ -62,7 +62,7 @@ test('page brackets and the Python port agree on every national team', async (t)
         const reached = (b, id) => b.rounds.filter(r => r.games.some(e => e.game.hometeamID === id || e.game.awayteamID === id)).map(r => r.name).slice(-1)[0] || null;
         for (const id of [...new Set(games.flatMap(g => [g.hometeamID, g.awayteamID]).filter(Boolean))]) {
           const name = (games.find(g => g.hometeamID === id) || {}).homeTeam || (games.find(g => g.awayteamID === id) || {}).awayTeam;
-          const js = [main ? reached(main, id) : null, !!(br && br.champion && br.champion === name),
+          const js = [main ? reached(main, id) : null, !!(br && br.champion && br.champion === name && br.championID === id),
             cup && reached(cup, id) ? `${cup.name}: ${reached(cup, id)}` : null];
           n++;
           if (JSON.stringify(js) !== JSON.stringify(py[`${ev.eventId}/${f.flightID}/${id}`])) bad.push([ev.eventId, f.flightID, id, name, js, py[`${ev.eventId}/${f.flightID}/${id}`]]);
