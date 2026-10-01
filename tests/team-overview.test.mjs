@@ -17,8 +17,10 @@ const block = (head, last = head, close = '\n    }\n') => {
   return html.slice(start, end);
 };
 // historyYears … historyOutcome (the real words for the best-finish tile), the "One TGS id"
-// notes, the chart and the renderer itself.
+// notes, the chart and the renderer itself, with the form-chip helpers (#128).
 const CODE = [
+  block('    function shortTeamName('), block('    function displayName('),
+  block('    // #128: form chips that show their game.', 'function chipGames('),
   block('    function historyYears(', 'function historyOutcome('),
   block('    function historySplitNotes('), block('    function historyChartSvg('),
   block('    function renderTeamHistory('),
@@ -48,7 +50,7 @@ function render(doc) {
   const stubs = {
     document: { getElementById: el, createElement: () => node() },
     previewTeam: null, refreshState: {}, SOURCES: { refresh: { activeSeason: '2026-27' } }, SEASONS: { '2026-27': {} },
-    seasonLabel: label, ordinal: n => `${n}th`, esc: s => String(s ?? ''), shortTeamName: n => n, clubPlaceText: () => '',
+    seasonLabel: label, ordinal: n => `${n}th`, esc: s => String(s ?? ''), clubPlaceText: () => '', resultFor: () => null,
     historyCrumb() {}, getAgeLabel: d => d,
     pageHref: r => `#team=${r.teamID}&season=${r.season}`, confHref: r => `#season=${r.season}`, getStandingsUrl: () => '#tgs',
     getSchedulesUrl: () => '#tgs', NATIONAL_EVENTS: {}, formatDateRange: (a, b) => `${a}–${b}`, formatObservedDate: d => d,
@@ -196,7 +198,7 @@ test('#127: the chart and each row\'s form chips stay oldest to newest', { skip 
   assert.deepEqual(ticks, r.sq.seasons.map(x => x.season.slice(2)));
   for (const h of r.rows) {
     const row = r.sq.seasons.find(x => label(x.season) === r.seasonOf(h));
-    assert.equal([...h.matchAll(/form-chip inline [wdl]" aria-hidden="true">([WDL])</g)].map(m => m[1]).join(''), row.form);
+    assert.equal([...h.matchAll(/class="form-chip inline ([wdl])"[^>]*>([WDL])</g)].map(m => m[2]).join(''), row.form);   // #128: buttons or spans
     assert.match(h, /results, oldest first/);
   }
   assert.match(r.seasonsPanel.html, /each row's form is ours, from TGS's scores, and reads oldest to newest\./);
