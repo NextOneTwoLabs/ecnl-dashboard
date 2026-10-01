@@ -467,12 +467,14 @@ class CliTests(unittest.TestCase):
 
     def test_force_and_crawl_never_request_the_placeholder_club(self):
         """#108: `--clubs --all --force` and the crawl hook, each in its own sandbox, through the
-        real club_ids() with club 7 in every season's index."""
+        real club_ids() with club 7 in every season's index. The crawl fetches only clubs missing
+        from the file, so for it 7 starts missing and must stay missing."""
         for argv in (["--clubs", "--all", "--force"], ["--season", "2025-26"]):
             with self.subTest(argv=argv), Sandbox(index=[7, 1425]) as sb:
-                sb.seed({"7": None})
+                seed = {"7": None} if argv[0] == "--clubs" else {}     # the crawl: 7 missing from the file
+                sb.seed(seed)
                 self.assertEqual(self.main(*argv, raws=el_paso, real_ids=True), (0, [1425]))
-                self.assertEqual(sb.clubs(), {"7": None, "1425": {"city": "El Paso", "state": "TX"}})
+                self.assertEqual(sb.clubs(), dict(seed, **{"1425": {"city": "El Paso", "state": "TX"}}))
 
 
 class PlaceholderClubTests(unittest.TestCase):

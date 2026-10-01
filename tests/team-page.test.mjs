@@ -35,9 +35,9 @@ test('#108: the History header uses the same rule, with no inline club-7 check o
   assert.ok(!/clubID\s*!==?\s*7\b/.test(html), 'a second club-7 rule outside clubPlaceText');
 });
 
-const page = new Function([block('    function bracketName('), block('    function gameWinner('), block('    function knockoutGames('),
+const page = new Function([block('    function tierLabel('), block('    function bracketName('), block('    function gameWinner('), block('    function knockoutGames('),
   block('    function buildBrackets('), block('    function postseasonOutcome('),
-  'return { knockoutGames, buildBrackets, postseasonOutcome };'].join('\n'))();
+  'return { tierLabel, knockoutGames, buildBrackets, postseasonOutcome };'].join('\n'))();
 const json = p => { try { return JSON.parse(readFileSync(new URL(p, root), 'utf8')); } catch { return null; } };
 
 function* flights() {
@@ -50,7 +50,7 @@ function* flights() {
         const games = json(`archive/api/Event/get-schedules-by-flight/${ev.eventId}/${f.flightID}/0.json`)?.data || [];
         const st = json(`archive/api/Event/get-standings-by-div-and-flight/${d.divisionID}/${f.flightID}/${ev.eventId}.json`)?.data;
         const blocks = (Array.isArray(st) ? st : st ? [st] : []).filter(b => b && (b.teamStandings || []).length);
-        const tier = (ev.tierLabels || {})[f.flightName] || f.flightName;
+        const tier = page.tierLabel(ev, f.flightName);
         const ko = page.knockoutGames(games, blocks, ((ev.dataGaps || {})[f.flightID] || {}).omitFromBracket || []);
         yield { season, f, games, tier, index, brackets: ko.length ? page.buildBrackets(ko, f.flightName, tier) : null };
       }
