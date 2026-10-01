@@ -1,5 +1,5 @@
 {"schema":1,"teamID":130285,"squads":[
 {"clubID":22,"clubName":"NCFC Youth","birthYears":[2009,2010],"seasons":[
-{"season":"2026-27","teamID":130285,"name":"NCFC Youth NC Courage ECNL G2009/10","clubID":22,"clubName":"NCFC Youth","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/NCFC_Logo_TGS.png","conference":"Mid-Atlantic","eventID":4263,"divisionID":22411,"division":"GU17","flightID":40555,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":6,"of":11,"gp":1,"w":0,"d":1,"l":0,"pts":1,"gf":2,"ga":2,"gd":0,"ppg":1.0,"form":"D","games":10,"played":1,"inProgress":true,"regroup":true,"link":"start"}
+{"season":"2026-27","teamID":130285,"name":"NCFC Youth NC Courage ECNL G2009/10","clubID":22,"clubName":"NCFC Youth","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/NCFC_Logo_TGS.png","conference":"Mid-Atlantic","eventID":4263,"divisionID":22411,"division":"GU17","flightID":40555,"flightName":"ECNL","u":17,"birthYears":[2009,2010],"rank":6,"of":11,"gp":1,"w":0,"d":1,"l":0,"pts":1,"gf":2,"ga":2,"gd":0,"ppg":1.0,"form":"D","games":10,"played":1,"inProgress":true,"regroup":true,"link":"start","last":[{"date":"2026-09-19","home":false,"opp":"Beach FC (VA) ECNL G2009/10","oppID":135521,"gf":2,"ga":2}]}
 ],"postseason":[],"showcases":[]}
 ]}

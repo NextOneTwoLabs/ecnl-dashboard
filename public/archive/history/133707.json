@@ -1,6 +1,6 @@
 {"schema":1,"teamID":133707,"squads":[
 {"clubID":82,"clubName":"LAFC So Cal","birthYears":[2008,2009],"seasons":[
-{"season":"2026-27","teamID":133707,"name":"LAFC So Cal ECNL G2008/09","clubID":82,"clubName":"LAFC So Cal","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/LAFC_SC_8__06-18-2025T22:03:51.850.png","conference":"Southwest","eventID":4271,"divisionID":22460,"division":"GU18/19","flightID":40604,"flightName":"ECNL","u":18,"birthYears":[2008,2009],"rank":7,"of":17,"gp":2,"w":1,"d":0,"l":1,"pts":3,"gf":4,"ga":4,"gd":0,"ppg":1.5,"form":"LW","games":16,"played":2,"inProgress":true,"regroup":true,"link":"start"}
+{"season":"2026-27","teamID":133707,"name":"LAFC So Cal ECNL G2008/09","clubID":82,"clubName":"LAFC So Cal","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/LAFC_SC_8__06-18-2025T22:03:51.850.png","conference":"Southwest","eventID":4271,"divisionID":22460,"division":"GU18/19","flightID":40604,"flightName":"ECNL","u":18,"birthYears":[2008,2009],"rank":7,"of":17,"gp":2,"w":1,"d":0,"l":1,"pts":3,"gf":4,"ga":4,"gd":0,"ppg":1.5,"form":"LW","games":16,"played":2,"inProgress":true,"regroup":true,"link":"start","last":[{"date":"2026-09-12","home":false,"opp":"Beach Futbol Club (CA) ECNL G2008/09","oppID":131920,"gf":1,"ga":2},{"date":"2026-09-27","home":true,"opp":"Eagles SC ECNL G2008/09","oppID":6122,"gf":3,"ga":2}]}
 ],"postseason":[],"showcases":[],"maybePrev":[
 {"season":"2025-26","teamID":59866,"name":"LAFC So Cal ECNL G09","division":"G2009","conference":"Southwest"}
 ]}
