@@ -61,8 +61,10 @@ function page() {
   const window = { location, addEventListener: (t, f) => { listeners[t] = f; } };
   const history = { replaceState: (_s, _t, h) => { location.hash = h; } };
   const store = {};
-  // Counts are calls; the hierarchy is memoised per event as the page's own is (standings are
-  // memoised in the page too, schedules are not). hold[id] and hooks.locate hold an answer back.
+  // Counts are calls. The stub memoises the hierarchy per event for the whole test, while the
+  // page empties its eventHierarchy on changeSeason and openTeamInContext, so after a season
+  // change a browser can make one more hierarchy request than counted here. The page memoises
+  // standings too, and not schedules. hold[id] and hooks.locate hold an answer back.
   const calls = { hierarchy: 0, standings: 0, schedule: 0, ageTabs: 0 };
   const hooks = {}, memo = {}, hold = {};
   const stubs = {
@@ -81,7 +83,8 @@ function page() {
     clearTeamFilter() {}, loadClubPlaces: async () => {}, favoriteInDivision: () => false, clubPlaces: null,
     defaultSelection: () => null, renderConferenceView: () => { el('standingsContainer').innerHTML = 'TABLE'; },
     isMissing: () => false, retryText: e => String(e), closeSidebarIfMobile() {},
-    openFavoritesTab: () => hooks.openFavorites(), loadPlayoffsPanel: async () => {}, loadShowcasesPanel: async () => {},
+    openFavoritesTab: () => hooks.openFavorites(), loadPlayoffsPanel: async () => { el('standingsContainer').innerHTML = 'PLAYOFFS'; el('contentTitle').textContent = 'Playoffs'; },
+    loadShowcasesPanel: async () => {},
     // The team page's own collaborators (loadTeamSummary).
     sameTeam: () => true, showTeamViewTabs() {}, buildFavoritesList() {},
     resolveFavorite: async () => (hooks.locate ? hooks.locate.promise : true),
@@ -102,9 +105,10 @@ function page() {
   const cold = async () => { api.setSeason('2026-27'); await api.rebuildAll(); await flush(); };
   const shown = () => el('standingsContainer').innerHTML;
   const title = () => el('contentTitle').textContent;
+  const heading = () => [el('contentTitle').textContent, el('contentSubtitle').textContent];
   const saved = () => JSON.parse(store['ecnl-dash-v2-state'] || 'null');
   const since = () => { const before = { ...calls }; return () => Object.fromEntries(Object.keys(calls).map(k => [k, calls[k] - before[k]])); };
-  return { ...api, hooks, hold, calls, location, flush, fire, cold, shown, title, saved, since };
+  return { ...api, hooks, hold, calls, location, flush, fire, cold, shown, title, heading, saved, since };
 }
 const VALID_2026 = { season: '2026-27', age: 'GU18/19', conf: 'Mid-Atlantic', ages: 'GU18/19,GU17' };
 const VALID_2025 = { season: '2025-26', age: 'G2008/2007', conf: 'Mid-Atlantic', ages: 'G2008/2007,G2009' };
@@ -199,6 +203,7 @@ test('#102: back in a season whose age groups were cached, the sidebar counts as
   await p.cold();
   await p.changeSeason('2025-26');
   await p.changeSeason('2026-27');                    // 2026-27's age groups come from the cache
+  // (hierarchy: 0 below holds for the stub's memo; the point of each check is ageTabs.)
   assert.deepEqual(p.state(), VALID_2026);
   p.switchTab('playoffs');
   const d = p.since();
@@ -217,23 +222,35 @@ test('#102: back in a season whose age groups were cached, the sidebar counts as
   assert.deepEqual(d2(), { hierarchy: 0, standings: 1, schedule: 1, ageTabs: 1 });
 });
 
-test('#102: a slow team page does not paint over Conferences after ‹ Back', async () => {
-  const p = page();
-  await p.cold();
-  p.hold[TEAM.eventID] = deferred();                  // the team's hierarchy answers late
-  p.toggleMyTeams();
-  await p.flush();
-  p.closeMyTeams();
-  await p.flush();
-  assert.equal(p.shown(), 'TABLE');
-  assert.deepEqual(p.state(), VALID_2025);             // the season had moved before Back
-  const title = p.title();
-  p.hold[TEAM.eventID].resolve();
-  await p.flush();
-  assert.equal(p.shown(), 'TABLE', 'the team page did not paint over Conferences');
-  assert.equal(p.title(), title);
-  assert.equal(p.location.hash, HASH_2025);
-});
+// Every way out of a slow team page cancels it: ‹ Back to either top tab, the Conferences tab
+// (or "/", which calls the same switchTab), and a conference link (hashchange).
+const EXITS = {
+  '‹ Back to Conferences': async p => { p.closeMyTeams(); },
+  '‹ Back to Playoffs': async p => { p.closeMyTeams(); },
+  'the Conferences tab': async p => { p.switchTab('conferences'); },
+  'a conference link': async p => { await p.fire(HASH_2025); },
+};
+for (const [exit, leave] of Object.entries(EXITS)) {
+  test(`#102: a slow team page does not paint over the page after ${exit}`, async () => {
+    const p = page();
+    await p.cold();
+    const playoffs = exit.endsWith('Playoffs');
+    if (playoffs) p.switchTab('playoffs');             // where ‹ Back goes
+    p.hold[TEAM.eventID] = deferred();                  // the team's hierarchy answers late
+    p.toggleMyTeams();
+    await p.flush();
+    await leave(p);
+    await p.flush();
+    const shown = p.shown(), title = p.title();
+    assert.equal(shown, playoffs ? 'PLAYOFFS' : 'TABLE');
+    if (!playoffs) assert.deepEqual(p.state(), VALID_2025);   // the season had moved before leaving
+    p.hold[TEAM.eventID].resolve();
+    await p.flush();
+    assert.equal(p.shown(), shown, 'the team page did not paint over it');
+    assert.equal(p.title(), title);
+    if (!playoffs) assert.equal(p.location.hash, HASH_2025);
+  });
+}
 
 test('#102: leaving while the team is still being located keeps the season and the view', async () => {
   const p = page();
@@ -259,6 +276,7 @@ test('#102: a team page that fails after ‹ Back shows no error over Conference
   await p.flush();
   p.closeMyTeams();
   await p.flush();
+  const before = p.heading();
   const error = console.error;
   console.error = () => {};
   try {
@@ -266,5 +284,6 @@ test('#102: a team page that fails after ‹ Back shows no error over Conference
     await p.flush();
   } finally { console.error = error; }
   assert.equal(p.shown(), 'TABLE');
+  assert.deepEqual(p.heading(), before, "the title and subtitle are still the conference view's");
   assert.equal(p.location.hash, HASH_2025);
 });
