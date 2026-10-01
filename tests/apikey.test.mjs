@@ -10,6 +10,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { gate, mint, COOKIE } from '../api/session.mjs';
 import { checkKey, hashKey, sameDigest, looseDecode, keyInUrl, clearKeyCache, KEY, HELP_URL } from '../api/apikey.mjs';
+import { resetCatalogMemo } from '../api/data-api.mjs';
 import worker from '../worker.js';
 
 const SECRET = 's'.repeat(40);
@@ -254,6 +255,26 @@ test('worker end to end: keyed data, 401 JSON never HTML, no key material anywhe
   const all = seen.join('\n') + JSON.stringify(e.API_EVENTS.points) + JSON.stringify([...e.RL_KEY.counts.keys(), ...e.RL_IP.counts.keys()]);
   assert.ok(!all.includes(secret), 'the secret part appears nowhere');
   assert.ok(!all.includes(good.record.hash), 'nor its hash');
+});
+
+test('#82: a keyed answer for a closed season keeps the private one-day lifetime; the active season and refusals do not', async () => {
+  resetCatalogMemo();
+  const { env, good } = await setup();
+  const seasons = { async fetch(r) {
+    const p = new URL(r.url).pathname;
+    if (p === '/data/sources.json') return new Response('{"refresh":{"activeSeason":"2026-27"},"seasons":{"2026-27":{},"2024-25":{}}}', { headers: { 'content-type': 'application/json' } });
+    if (p === '/archive/teams/2024-25.json' || p === '/archive/teams/2026-27.json') return new Response('{"schema":1}', { headers: { 'content-type': 'application/json', etag: '"t"' } });
+    return assets.fetch(r);
+  } };
+  const e = { ...env, ASSETS: seasons };
+  for (const [path, headers, status, cc] of [
+    ['/api/v1/seasons/2024-25/teams', bearer(good.key), 200, 'private, max-age=86400, stale-while-revalidate=86400'],
+    ['/api/v1/seasons/2026-27/teams', bearer(good.key), 200, 'no-cache'],
+    ['/api/v1/seasons/2024-25/teams', bearer(flip(good.key)), 401, 'no-store'],
+  ]) {
+    const r = await worker.fetch(req(path, headers), e);
+    assert.deepEqual([r.status, r.headers.get('x-ecnl-session'), r.headers.get('cache-control'), r.headers.get('set-cookie')], [status, 'key', cc, null], path);
+  }
 });
 
 // ---- The Reviewer's cases (R-A to R-I), against the fixes ----

@@ -4,6 +4,9 @@ Sessions are off here (#90): every v1 response says X-ECNL-Session: off, no cook
 and no rate limit applies, which is how the Worker behaves without SESSION_SECRET. No API key
 is checked (#93): an Authorization header, or a key in the URL, changes nothing here. Status
 codes match the Worker's, except that the Worker can also answer 429, and 400, 401 or 503 for keys.
+Cache-Control matches the Worker's with sessions off (#82, cache_policy): a closed season's event
+routes and team index are kept by the browser for a day, so use DevTools "Disable cache" or a hard
+reload to see a local data change there at once.
 """
 import hashlib
 import json
@@ -45,6 +48,81 @@ def resolve_resource(path):
     return 404, None
 
 
+# #82: the twin of cachePolicy in api/data-api.mjs. A closed season's event routes and team index
+# (a season earlier than the catalog's refresh.activeSeason) may be kept by the browser for a day;
+# everything else is no-cache. Sessions are off here, which is the Worker's `off` case, so the
+# long header is sent as is. tests/cache-policy.json holds the cases both suites run.
+CLOSED_CACHE = "private, max-age=86400, stale-while-revalidate=86400"
+EVENT_ROUTE = re.compile(r"/api/v1/events/([^/]+)/(?:hierarchy|divisions/[^/]+/flights/[^/]+/standings|flights/[^/]+/schedule)")
+TEAMS_ROUTE = re.compile(r"/api/v1/seasons/([^/]+)/teams")
+EVENT_LISTS = ("conferences", "national", "showcases")
+_catalog_memo = None   # ((catalog path, mtime_ns, size), facts); only a usable catalog is kept
+
+
+def _event_key(value):
+    """A catalog event id as the Worker reads it: a positive safe integer (an integral float is the
+    same number in JavaScript) or a canonical decimal string; anything else is no id."""
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, float) and value.is_integer():
+        value = int(value)
+    if isinstance(value, int):
+        return str(value) if 0 < value <= 2 ** 53 - 1 else None
+    return value if isinstance(value, str) and valid_id(value) else None
+
+
+def season_facts(catalog):
+    """(activeSeason, {eventId: season}), or None for a catalog that can't be trusted: no valid
+    activeSeason (a strict YYYY-YY string) or no seasons object. Seasons with a malformed key are
+    skipped; an id listed in two seasons takes the later one. Mirrors seasonFacts in the Worker."""
+    refresh = catalog.get("refresh") if isinstance(catalog, dict) else None
+    active = refresh.get("activeSeason") if isinstance(refresh, dict) else None
+    if not (isinstance(active, str) and valid_season(active) and isinstance(catalog.get("seasons"), dict)):
+        return None
+    events = {}
+    for season, entry in catalog["seasons"].items():
+        if not (valid_season(season) and isinstance(entry, dict)):
+            continue
+        for kind in EVENT_LISTS:
+            group = entry.get(kind)
+            for event in group if isinstance(group, list) else group.values() if isinstance(group, dict) else ():
+                key = _event_key(event.get("eventId")) if isinstance(event, dict) else None
+                if key and events.get(key, "") < season:
+                    events[key] = season
+    return active, events
+
+
+def _reject_constant(name):
+    raise ValueError(f"{name} is not JSON")   # as JSON.parse in the Worker: no NaN or Infinity
+
+
+def cache_policy(path, root):
+    """The Cache-Control for a 200 or 304 on `path`. Fails safe, as the Worker does: any fault,
+    or a catalog that can't be trusted, gives no-cache."""
+    global _catalog_memo
+    event, teams = EVENT_ROUTE.fullmatch(path), TEAMS_ROUTE.fullmatch(path)
+    if not (event or teams):
+        return "no-cache"
+    try:
+        source = Path(root) / "data/sources.json"
+        stat = source.stat()
+        stamp = (str(source), stat.st_mtime_ns, stat.st_size)
+        memo = _catalog_memo
+        if memo and memo[0] == stamp:
+            facts = memo[1]
+        else:
+            facts = season_facts(json.loads(source.read_bytes(), parse_constant=_reject_constant))
+            if facts:
+                _catalog_memo = (stamp, facts)
+        if not facts:
+            return "no-cache"
+        active, events = facts
+        season = events.get(event[1]) if event else teams[1]
+        return CLOSED_CACHE if season and season < active else "no-cache"
+    except Exception:   # fail safe: the data is still served, only without a lifetime
+        return "no-cache"
+
+
 def serve(handler, path, root):
     status, asset = resolve_resource(path)
     if status == 200 and handler.command not in ("GET", "HEAD"):
@@ -59,7 +137,7 @@ def serve(handler, path, root):
                 import os
                 modified = os.fstat(source.fileno()).st_mtime
             etag = '"' + hashlib.sha256(raw).hexdigest() + '"'
-            headers.update({"Cache-Control": "no-cache", "ETag": etag, "Last-Modified": formatdate(modified, usegmt=True)})
+            headers.update({"Cache-Control": cache_policy(path, root), "ETag": etag, "Last-Modified": formatdate(modified, usegmt=True)})
             condition = handler.headers.get("If-None-Match")
             if condition is not None:
                 if any(tag.strip().removeprefix("W/") in ("*", etag) for tag in condition.split(",")):

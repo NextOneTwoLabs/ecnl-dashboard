@@ -52,7 +52,11 @@ export default {
         const response = await dataApi(request, env);
         try { return decorate(response, verdict); } catch (err) {
           sessionFault(request, env, err);
-          try { response.headers.set('x-ecnl-session', 'error'); } catch {}
+          try {
+            response.headers.set('x-ecnl-session', 'error');
+            // As decorate (#82): an "error" answer never keeps a closed season's lifetime.
+            if (/max-age=0*[1-9]/.test(response.headers.get('cache-control') || '')) response.headers.set('cache-control', 'no-cache');
+          } catch {}
           return response;
         }
       }

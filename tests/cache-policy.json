@@ -1,0 +1,102 @@
+{
+  "_comment": [
+    "#82: the Cache-Control of a served answer (200, and 304), per route. Read by tests/data-api.test.mjs",
+    "(the Worker) and tests/test_data_api.py (the local server), so both answer alike by construction.",
+    "`archive`: [path, expected] or [path, expected, method] against the committed archive and catalog;",
+    "`closed` stands for the header below. `catalogs`: each case serves `catalog` with one change (and",
+    "stub data for every path) and lists the paths it expects closed; every other path is no-cache, and",
+    "every path is still a 200 with its data. A catalog that can't be trusted closes nothing."
+  ],
+  "closed": "private, max-age=86400, stale-while-revalidate=86400",
+  "archive": [
+    ["/api/v1/events/3157/hierarchy", "closed"],
+    ["/api/v1/events/3157/divisions/14179/flights/24009/standings", "closed"],
+    ["/api/v1/events/3157/flights/24009/schedule", "closed"],
+    ["/api/v1/events/3928/hierarchy", "closed"],
+    ["/api/v1/events/2040/hierarchy", "closed"],
+    ["/api/v1/events/3865/hierarchy", "closed"],
+    ["/api/v1/events/3975/flights/34425/schedule", "closed"],
+    ["/api/v1/events/4041/hierarchy", "closed"],
+    ["/api/v1/events/4041/flights/34643/schedule", "closed"],
+    ["/api/v1/seasons/2020-21/teams", "closed"],
+    ["/api/v1/seasons/2024-25/teams", "closed"],
+    ["/api/v1/seasons/2025-26/teams", "closed"],
+    ["/api/v1/events/4263/hierarchy", "no-cache"],
+    ["/api/v1/events/4263/divisions/22407/flights/40551/standings", "no-cache"],
+    ["/api/v1/events/4263/flights/40551/schedule", "no-cache"],
+    ["/api/v1/seasons/2026-27/teams", "no-cache"],
+    ["/api/v1/catalog", "no-cache"],
+    ["/api/v1/status", "no-cache"],
+    ["/api/v1/clubs", "no-cache"],
+    ["/api/v1/teams/35271/history", "no-cache"],
+    ["/api/v1/teams/55477/history", "no-cache"],
+    ["/api/v1/events/999999999/hierarchy", "no-store"],
+    ["/api/v1/seasons/2030-31/teams", "no-store"],
+    ["/api/v1/events/0/hierarchy", "no-store"],
+    ["/api/v1/seasons/2026-99/teams", "no-store"],
+    ["/api/v1/events/3157/hierarchy", "no-store", "POST"]
+  ],
+  "catalogs": {
+    "catalog": {
+      "refresh": { "activeSeason": "2026-27" },
+      "seasons": {
+        "2027-28": { "conferences": { "Registered early": { "eventId": 5001 } } },
+        "2026-27": { "conferences": { "Active": { "eventId": 4263 } }, "national": {} },
+        "2025-26": { "conferences": { "Closed": { "eventId": 3928 } }, "showcases": { "Showcase": { "eventId": 4041 } } },
+        "2024-25": { "conferences": { "Mid-Atlantic": { "eventId": 3157 } }, "national": { "Finals": { "eventId": "3975" } } }
+      }
+    },
+    "paths": [
+      "/api/v1/events/3157/hierarchy",
+      "/api/v1/events/3975/flights/34425/schedule",
+      "/api/v1/events/3928/divisions/1/flights/2/standings",
+      "/api/v1/events/4041/hierarchy",
+      "/api/v1/events/4263/hierarchy",
+      "/api/v1/events/5001/hierarchy",
+      "/api/v1/events/7777/hierarchy",
+      "/api/v1/seasons/2024-25/teams",
+      "/api/v1/seasons/2025-26/teams",
+      "/api/v1/seasons/2026-27/teams",
+      "/api/v1/seasons/2027-28/teams",
+      "/api/v1/clubs",
+      "/api/v1/status"
+    ],
+    "cases": [
+      { "name": "as published", "closed": [
+        "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/events/3928/divisions/1/flights/2/standings",
+        "/api/v1/events/4041/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams"] },
+      { "name": "rollover: activeSeason 2027-28", "activeSeason": "2027-28", "closed": [
+        "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/events/3928/divisions/1/flights/2/standings",
+        "/api/v1/events/4041/hierarchy", "/api/v1/events/4263/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams",
+        "/api/v1/seasons/2026-27/teams"] },
+      { "name": "padded activeSeason (trailing space)", "activeSeason": "2026-27 ", "closed": [] },
+      { "name": "padded activeSeason (leading space)", "activeSeason": " 2026-27", "closed": [] },
+      { "name": "malformed activeSeason", "activeSeason": "zzz", "closed": [] },
+      { "name": "activeSeason whose years don't follow", "activeSeason": "2026-99", "closed": [] },
+      { "name": "numeric activeSeason", "activeSeason": 2026, "closed": [] },
+      { "name": "null activeSeason", "activeSeason": null, "closed": [] },
+      { "name": "no refresh", "without": "refresh", "closed": [] },
+      { "name": "no seasons", "without": "seasons", "closed": [] },
+      { "name": "broken JSON", "raw": "{\"refresh\": {\"activeSeason\": \"2026-27\"", "closed": [] },
+      { "name": "NaN in the JSON", "raw": "{\"refresh\": {\"activeSeason\": \"2026-27\"}, \"seasons\": {}, \"x\": NaN}", "closed": [] },
+      { "name": "JSON null", "raw": "null", "closed": [] },
+      { "name": "a JSON array", "raw": "[]", "closed": [] },
+      { "name": "an HTML page (SPA fallback)", "raw": "<!doctype html><html>fallback</html>", "html": true, "closed": [] },
+      { "name": "missing", "missing": true, "closed": [] },
+      { "name": "numeric, string and padded event ids", "seasons": {
+        "2026-27": { "conferences": { "Active": { "eventId": 4263 } } },
+        "2024-25": {
+          "conferences": { "String": { "eventId": "3157" }, "Padded": { "eventId": " 4041" }, "Zero-padded": { "eventId": "03928" } },
+          "national": [{ "eventId": 3975.0 }],
+          "showcases": { "Boolean": { "eventId": true }, "Negative": { "eventId": -5001 }, "Null": null }
+        },
+        "2025-26 ": { "conferences": { "Padded season key": { "eventId": 7777 } } }
+      }, "closed": [
+        "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams"] },
+      { "name": "an event listed in an active and a closed season", "seasons": {
+        "2026-27": { "conferences": { "Active": { "eventId": 4263 } } },
+        "2024-25": { "conferences": { "Mid-Atlantic": { "eventId": 3157 }, "Also active": { "eventId": "4263" } } }
+      }, "closed": ["/api/v1/events/3157/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams"] }
+    ]
+  }
+}

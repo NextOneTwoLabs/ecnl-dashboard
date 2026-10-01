@@ -1,8 +1,12 @@
+import copy
 import hashlib
 import http.client
 import json
 from pathlib import Path
+import re
+import shutil
 import sys
+import tempfile
 import threading
 import unittest
 from unittest.mock import patch
@@ -97,26 +101,36 @@ class ApiTests(unittest.TestCase):
         count = 0
         import re
         patterns = [
-            (r'get-event-schedule-or-standings/(\d+)\.json', lambda m: f'/api/v1/events/{m[1]}/hierarchy'),
-            (r'get-standings-by-div-and-flight/(\d+)/(\d+)/(\d+)\.json', lambda m: f'/api/v1/events/{m[3]}/divisions/{m[1]}/flights/{m[2]}/standings'),
-            (r'get-schedules-by-flight/(\d+)/(\d+)/0\.json', lambda m: f'/api/v1/events/{m[1]}/flights/{m[2]}/schedule'),
+            (r'get-event-schedule-or-standings/(\d+)\.json', lambda m: (f'/api/v1/events/{m[1]}/hierarchy', m[1])),
+            (r'get-standings-by-div-and-flight/(\d+)/(\d+)/(\d+)\.json', lambda m: (f'/api/v1/events/{m[3]}/divisions/{m[1]}/flights/{m[2]}/standings', m[3])),
+            (r'get-schedules-by-flight/(\d+)/(\d+)/0\.json', lambda m: (f'/api/v1/events/{m[1]}/flights/{m[2]}/schedule', m[1])),
         ]
+        # #82: the policy each resource should get, derived here from the catalog on its own terms
+        # (a season earlier than refresh.activeSeason), not by the code under test.
+        catalog = json.loads((ROOT / 'data/sources.json').read_bytes())
+        active = catalog['refresh']['activeSeason']
+        event_season = {str(e['eventId']): season for season, s in catalog['seasons'].items()
+                        for kind in ('conferences', 'national', 'showcases') for e in (s.get(kind) or {}).values()}
+        expected = lambda season: data_api.CLOSED_CACHE if season and season < active else 'no-cache'
+        tally = {}
         base = ROOT / 'archive/api/Event'
         with patch.object(proxy_server.ProxyHandler, 'log_message'):
             for file in base.rglob('*.json'):
                 for pattern, endpoint in patterns:
                     match = re.fullmatch(pattern, file.relative_to(base).as_posix())
                     if not match: continue
-                    status, headers, body = self.request(endpoint(match))
+                    path, event = endpoint(match)
+                    status, headers, body = self.request(path)
                     self.assertEqual(status, 200)
+                    self.assertEqual(headers['Cache-Control'], expected(event_season.get(event)), path)
                     self.assertEqual(body, file.read_bytes())
-                    self.assertEqual(headers['Cache-Control'], 'no-cache')
+                    tally[headers['Cache-Control']] = tally.get(headers['Cache-Control'], 0) + 1
                     count += 1
             for file in (ROOT / 'archive/teams').glob('*.json'):
                 status, headers, body = self.request(f'/api/v1/seasons/{file.stem}/teams')
                 self.assertEqual(status, 200, file.name)
+                self.assertEqual(headers['Cache-Control'], expected(file.stem), file.name)
                 self.assertEqual(body, file.read_bytes())
-                self.assertEqual(headers['Cache-Control'], 'no-cache')
                 count += 1
             status, headers, body = self.request('/api/v1/clubs')
             self.assertEqual((status, body), (200, (ROOT / 'archive/clubs.json').read_bytes()))
@@ -125,9 +139,97 @@ class ApiTests(unittest.TestCase):
             for file in (ROOT / 'archive/history').glob('*.json'):   # #107
                 status, headers, body = self.request(f'/api/v1/teams/{file.stem}/history')
                 self.assertEqual((status, body), (200, file.read_bytes()), file.name)
+                self.assertEqual(headers['Cache-Control'], 'no-cache', file.name)
                 count += 1
         self.assertGreater(count, 1200)
-        print(f'Python archive parity: {count} resources')
+        self.assertGreater(tally.get(data_api.CLOSED_CACHE, 0), 1000)
+        print(f'Python archive parity: {count} resources ({tally.get(data_api.CLOSED_CACHE, 0)} closed event resources)')
+
+    # #82: tests/cache-policy.json, shared with tests/data-api.test.mjs.
+    POLICY = json.loads((Path(__file__).parent / 'cache-policy.json').read_bytes())
+
+    def test_cache_policy_archive_rows(self):
+        closed = self.POLICY['closed']
+        self.assertEqual(data_api.CLOSED_CACHE, closed)
+        rows = 0
+        with patch.object(proxy_server.ProxyHandler, 'log_message'):
+            for path, expected, *method in self.POLICY['archive']:
+                method = method[0] if method else 'GET'
+                history = re.fullmatch(r'/api/v1/teams/(\d+)/history', path)
+                if history and not (ROOT / f'archive/history/{history[1]}.json').exists():
+                    print(f'skipped (no history data): {path}')
+                    continue
+                policy = closed if expected == 'closed' else expected
+                status, headers, _ = self.request(path, method)
+                self.assertEqual(headers['Cache-Control'], policy, (method, path))
+                self.assertEqual(status == 200, expected != 'no-store', (method, path, status))
+                self.assertNotIn('Vary', headers)
+                if status == 200:
+                    # A 304 carries the same policy, so a revalidation renews the stored copy.
+                    for verb in ('GET', 'HEAD'):
+                        again, conditional, body = self.request(path, verb, {'If-None-Match': headers['ETag']})
+                        self.assertEqual((again, conditional['Cache-Control'], body), (304, policy, b''), (verb, path))
+                rows += 1
+        self.assertGreaterEqual(rows, 24)
+
+    def _case_root(self, case, paths):
+        """A throwaway root holding the case's catalog (as tests/data-api.test.mjs builds it) and
+        a stub file for every path."""
+        root = Path(tempfile.mkdtemp(prefix='cache-policy-'))
+        self.addCleanup(shutil.rmtree, root, ignore_errors=True)
+        (root / 'data').mkdir()
+        if not case.get('missing'):
+            if 'raw' in case:
+                text = case['raw']
+            else:
+                catalog = copy.deepcopy(self.POLICY['catalogs']['catalog'])
+                if 'activeSeason' in case: catalog['refresh']['activeSeason'] = case['activeSeason']
+                if 'without' in case: del catalog[case['without']]
+                if 'seasons' in case: catalog['seasons'] = case['seasons']
+                text = json.dumps(catalog)
+            (root / 'data/sources.json').write_text(text, encoding='utf-8')
+        for path in paths:
+            status, asset = data_api.resolve_resource(path)
+            self.assertEqual(status, 200, path)
+            (root / asset).parent.mkdir(parents=True, exist_ok=True)
+            (root / asset).write_text(json.dumps({'stub': '/' + asset}, separators=(',', ':')), encoding='utf-8')
+        return root
+
+    def test_cache_policy_catalog_cases(self):
+        # Rollover, and catalogs that can't be trusted (broken, malformed, numeric, padded): the
+        # same answers as the Worker, every path still served.
+        paths, closed = self.POLICY['catalogs']['paths'], self.POLICY['closed']
+        with patch.object(proxy_server.ProxyHandler, 'log_message'):
+            for case in self.POLICY['catalogs']['cases']:
+                root = self._case_root(case, paths)
+                with patch.object(proxy_server, 'SERVE_DIR', str(root)):
+                    for path in paths:
+                        for method in ('GET', 'HEAD'):
+                            status, headers, body = self.request(path, method)
+                            want = closed if path in case['closed'] else 'no-cache'
+                            self.assertEqual((status, headers['Cache-Control']), (200, want), (case['name'], method, path))
+                            stub = json.dumps({'stub': '/' + data_api.resolve_resource(path)[1]}, separators=(',', ':')).encode()
+                            self.assertEqual(body, b'' if method == 'HEAD' else stub, (case['name'], path))
+        print(f"Python cache policy: {len(self.POLICY['catalogs']['cases'])} catalog cases x {len(paths)} paths")
+
+    def test_cache_policy_follows_catalog_changes(self):
+        # The catalog is re-read when it changes on disk; an unusable one is never kept.
+        paths = ['/api/v1/seasons/2024-25/teams']
+        root = self._case_root({}, paths)
+        source = root / 'data/sources.json'
+        good = source.read_bytes()
+        self.assertEqual(data_api.cache_policy(paths[0], root), self.POLICY['closed'])
+        source.write_text('{', encoding='utf-8')
+        self.assertEqual(data_api.cache_policy(paths[0], root), 'no-cache')
+        # (A different size: two writes within one clock tick can share an mtime.)
+        source.write_bytes(good.replace(b'"2026-27"', b'"2023-24" ', 1))
+        self.assertEqual(data_api.cache_policy(paths[0], root), 'no-cache', 'a rollback of activeSeason is seen at once')
+        source.write_bytes(good)
+        self.assertEqual(data_api.cache_policy(paths[0], root), self.POLICY['closed'])
+        source.unlink()
+        self.assertEqual(data_api.cache_policy(paths[0], root), 'no-cache')
+        for path in ('/api/v1/catalog', '/api/v1/status', '/api/v1/clubs', '/api/v1/teams/55477/history'):
+            self.assertEqual(data_api.cache_policy(path, root), 'no-cache')
 
     def test_conditionals_and_errors(self):
         path = '/api/v1/catalog'
