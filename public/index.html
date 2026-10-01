@@ -3926,7 +3926,7 @@
     // team page asks only for the schedules its team is in. Only a resolved "no index" (404,
     // unknown schema, ?live=1) falls back to scanning the team's age group in each showcase;
     // a refused index rejects, and nothing is scanned (#92, M2a).
-    async function showcaseFlightsForTeam(season, teamID, divisionName) {
+    async function showcaseFlightsForTeam(season, teamID, divisionName, live = () => true) {
       const events = Object.entries(SHOWCASES[season] || {});
       if (!events.length || !teamID) return [];
       const byId = new Map(events.map(([name, evt]) => [evt.eventId, { name, evt }]));
@@ -3941,6 +3941,7 @@
       } else {
         for (const [name, evt] of events) {
           const h = await getEventHierarchy(evt.eventId);
+          if (!live()) return [];
           const nds = (h && h.girlsDivAndFlightList) || [];
           const nd = nds.find(d => d.divisionName === divisionName)
             || nds.find(d => getAgeLabel(d.divisionName, season) === getAgeLabel(divisionName, season));
@@ -3956,9 +3957,10 @@
     // scored games), or with the error that stopped that schedule (#92, M2b: the page shows
     // "couldn't load", never a silent gap that reads as "didn't attend"). A 404 schedule is
     // skipped. A refused team index rejects (M2a).
-    async function teamShowcaseSections(season, teamID, divisionName) {
+    async function teamShowcaseSections(season, teamID, divisionName, live = () => true) {
       const out = [];
-      for (const sc of await showcaseFlightsForTeam(season, teamID, divisionName)) {
+      for (const sc of await showcaseFlightsForTeam(season, teamID, divisionName, live)) {
+        if (!live()) break;   // #120: the team page was left
         let sched;
         try { sched = await getSchedule(sc.evt.eventId, sc.flightID); }
         catch (error) {
@@ -4429,6 +4431,7 @@
         if (teamView === 'history') { await loadTeamHistory(rec, ctx.season, token); return; }   // #107
 
         const hierarchy = await getEventHierarchy(rec.eventID);
+        if (token !== teamToken) return;   // #120: the page was left while it loaded; ask for nothing more
         const division = (hierarchy.girlsDivAndFlightList || []).find(d => d.divisionID === rec.divisionID);
         const flight = ((division && division.flightList) || []).find(f => f.flightID === rec.flightID);
         const divisionName = (division && division.divisionName) || rec.divisionName || '';
@@ -4494,7 +4497,7 @@
         // toward the conference table above. A refusal shows "try again" in place (#92).
         let showcaseSections = [];
         let warned = !!gamesError;
-        try { showcaseSections = await teamShowcaseSections(ctx.season, teamID, divisionName); }
+        try { showcaseSections = await teamShowcaseSections(ctx.season, teamID, divisionName, () => token === teamToken); }
         catch (e) {
           if (!warned) stack.appendChild(loadWarning(e, () => loadTeamSummary(rec)));
           warned = true;
@@ -4518,9 +4521,11 @@
 
         // Post-season, if the team appears in a national event of this season
         for (const [stage, evt] of Object.entries(NATIONAL_EVENTS[ctx.season] || {})) {
+          if (token !== teamToken) return;
           if (!evt.eventId || evt.eventId === rec.eventID) continue;
           try {
             const nh = await getEventHierarchy(evt.eventId);
+            if (token !== teamToken) return;
             // 2021-22 names national divisions "U13" where its conferences say "GU13"
             const nds = nh.girlsDivAndFlightList || [];
             const nd = nds.find(d => d.divisionName === divisionName)
@@ -4529,11 +4534,13 @@
             if (!nd) continue;
             for (const f of (nd.flightList || [])) {
               const sched = await getSchedule(evt.eventId, f.flightID).catch(() => []);
+              if (token !== teamToken) return;
               const ours = sched.filter(g => g.hometeamID === teamID || g.awayteamID === teamID);
               if (!ours.length) continue;
               const tier = tierLabel(evt, f.flightName);
               // Fetch everything first so the section appears in one piece.
               const blocks = await getStandingsBlocks(nd.divisionID, f.flightID, evt.eventId).catch(() => []);
+              if (token !== teamToken) return;
               const bracketGames = knockoutGames(sched, blocks, (((evt.dataGaps || {})[f.flightID] || {}).omitFromBracket) || []);
               const brackets = bracketGames.length ? buildBrackets(bracketGames, f.flightName, tier) : null;
               const outcome = postseasonOutcome(brackets, teamID, rec.name, tier);
@@ -4556,6 +4563,7 @@
         container.innerHTML = `<div class="error-message"><strong>Couldn't load this team.</strong><br><small>${esc(retryText(err))}</small></div>`;
       }
 
+      if (token !== teamToken) return;   // #120: a page left while it loaded saves nothing
       saveState();
       pushHash();
     }
