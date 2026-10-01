@@ -93,6 +93,7 @@ function page({ national = true } = {}) {
   };
   const api = new Function(...Object.keys(stubs), CODE + `
     currentSeason = '2025-26';
+    teamView = 'season';   // the team page's tables (#122 opens a team on its Overview by default)
     SHOWCASES = { '2025-26': { 'Fall showcase': { eventId: 501, startDate: '2025-10-01' }, 'Spring showcase': { eventId: 502, startDate: '2026-03-01' } } };
     return { switchTab, selectStage, selectPlayoffTier, loadTeamSummary, changeSeason, loadPlayoffFlight, playoffTier: () => currentPlayoffTier,
       setView: v => { currentView = v; }, setPlayoffAge: v => { currentPlayoffAgeGroup = v; }, playoffAge: () => currentPlayoffAgeGroup };`)(...Object.values(stubs));
