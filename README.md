@@ -62,6 +62,11 @@ The Python server runs with sessions off: no cookie, no rate limits, and every
 `/api/v1` answer says `X-ECNL-Session: off`, as the Worker does without its secret. It
 checks no API keys: an `Authorization` header changes nothing locally.
 
+It sends the Worker's caching headers too (#82): a past season's tables and team index
+are kept by your browser for a day. After changing local data, use DevTools "Disable
+cache" (Network tab) or a hard reload (Ctrl+Shift+R, Cmd+Shift+R on a Mac) to see it. See
+"Browser caching of closed seasons" in [docs/data-api.md](docs/data-api.md).
+
 Open the address printed by the server. A plain static HTTP server or opening
 `public/index.html` directly cannot serve `/api/v1` and no longer supports the
 full default application.

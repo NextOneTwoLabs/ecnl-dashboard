@@ -289,3 +289,47 @@ test('renewal (S2): a HEAD / that fails (5xx or network) does not count, so rene
     assert.equal(p.heads(), 2, `renews again a minute later (${head})`);
   }
 });
+
+// #82, M2 option (a), accepted by the owner: a closed season's answers are kept by the browser for
+// a day with the X-ECNL-Session they were stored with, and the page can't tell a stored copy from a
+// fresh one. A stored "ok" replayed after a "none" refusal looks like the session came back: the
+// refusal is forgotten, so the next search asks once more; in a tab that blocks cookies, renewal is
+// re-enabled (still at most one HEAD / a minute). Bounded by clicks, never a loop. A stored "none"
+// can't happen: the Worker sends every answer but ok, off and key no-cache (decorate).
+test('#82: a cached "ok" replayed after a "none" refusal forgets it: one more request per replayed view, never a loop', async () => {
+  const HIER = /\/events\/\d+\/hierarchy$/;
+  const p = page(route([[INDEX, { status: 429, session: 'none' }], [HIER, { status: 200, session: 'ok', body: hierarchy }]]), { head: new TypeError('offline') });
+  const indexCalls = () => p.apiCalls().filter(c => INDEX.test(c)).length;
+  await assert.rejects(p.getTeamIndex(SEASON));     // the renewal it sends fails
+  await settle();
+  p.clock.t += 1000;
+  for (let i = 0; i < 20; i++) await assert.rejects(p.getTeamIndex(SEASON));
+  assert.equal(indexCalls(), 1, 'remembered while the session is not back');
+  // A closed view served from the browser cache: its stored "ok", whatever the server says now.
+  await p.fetchJSON('events/110/hierarchy');
+  p.clock.t += 1;
+  for (let i = 0; i < 20; i++) await assert.rejects(p.getTeamIndex(SEASON));
+  assert.equal(indexCalls(), 2, 'the replay forgets the refusal: one more request, then remembered again');
+  p.clock.t += 1000;
+  await p.fetchJSON('events/111/hierarchy');
+  p.clock.t += 1;
+  for (let i = 0; i < 20; i++) await assert.rejects(p.getTeamIndex(SEASON));
+  assert.equal(indexCalls(), 3, 'one more per replayed view, never more');
+  assert.equal(p.heads(), 1, 'and no extra renewal within the minute');
+});
+
+test('#82: a cached "ok" in a tab that blocks cookies re-enables renewal, still at most one HEAD / a minute', async () => {
+  const p = page(() => ok);
+  p.noteSession(answer('none'), p.clock.t);          // the renewal lands, but the cookie is dropped
+  await settle();
+  p.clock.t += 10;
+  p.noteSession(answer('none'), p.clock.t);          // sent after it landed: cookies are blocked
+  p.clock.t += 120000;
+  p.noteSession(answer('none'), p.clock.t);
+  assert.equal(p.heads(), 1, 'renewal stopped');
+  p.noteSession(answer('ok'), p.clock.t);            // a stored "ok" replayed from the browser cache
+  p.noteSession(answer('none'), p.clock.t);
+  assert.equal(p.heads(), 2, 'one more renewal');
+  for (let i = 0; i < 10; i++) { p.noteSession(answer('ok'), p.clock.t); p.noteSession(answer('none'), p.clock.t); }
+  assert.equal(p.heads(), 2, 'still at most once a minute');
+});

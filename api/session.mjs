@@ -236,9 +236,16 @@ export function sessionFault(request, env, err) {
   return { session: 'error' };
 }
 
+// #82: a copy the browser keeps replays its X-ECNL-Session to the page's noteSession for as
+// long as it is used. Only these answers may keep a lifetime (a closed season's one day); any
+// other (`none`, `error`, `renewed`) is sent no-cache, so a stored "none" never triggers a
+// renewal or the cookies-blocked verdict (#92). A cookie always makes it private, no-cache.
+const KEEPS_LIFETIME = ['ok', 'off', 'key'];
+
 export function decorate(response, { session, cookie }) {
   const headers = new Headers(response.headers);
   if (session) headers.set('x-ecnl-session', session);
+  if (!KEEPS_LIFETIME.includes(session) && /max-age=0*[1-9]/.test(headers.get('cache-control') || '')) headers.set('cache-control', 'no-cache');
   if (cookie) {
     headers.append('set-cookie', cookie);
     if (!/no-store/.test(headers.get('cache-control') || '')) headers.set('cache-control', 'private, no-cache');

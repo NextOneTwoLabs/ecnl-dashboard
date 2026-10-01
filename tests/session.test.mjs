@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { mint, verify, readCookie, setCookie, ipKey, gate, decorate, COOKIE, TTL, RENEW_AFTER, COOKIE_MAX_AGE } from '../api/session.mjs';
+import { resetCatalogMemo } from '../api/data-api.mjs';
 import worker from '../worker.js';
 
 const SECRET = 'a'.repeat(32) + '-test-secret';
@@ -254,6 +255,83 @@ test('worker: an API renewal sets the cookie; R10 an API error keeps no-store', 
   assert.ok(cookieOf(missing));
   assert.equal(missing.headers.get('cache-control'), 'no-store');
   assert.equal(decorate(new Response('{}', { status: 404, headers: { 'cache-control': 'no-store' } }), { session: 'renewed', cookie: '__Host-ecnl_s=x' }).headers.get('cache-control'), 'no-store');
+});
+
+// #82: a catalog with a closed (2024-25) and an active (2026-27) season, and their team indexes.
+const CLOSED = 'private, max-age=86400, stale-while-revalidate=86400';
+const seasonAssets = { async fetch(r) {
+  const p = new URL(r.url).pathname;
+  if (p === '/data/sources.json') {
+    return new Response('{"refresh":{"activeSeason":"2026-27"},"seasons":{"2026-27":{},"2024-25":{"conferences":{"A":{"eventId":3157}}}}}', { headers: { 'content-type': 'application/json' } });
+  }
+  if (p === '/archive/teams/2024-25.json' || p === '/archive/teams/2026-27.json') {
+    const headers = { 'content-type': 'application/json', etag: '"t"' };
+    if (r.headers.get('if-none-match') === '"t"') return new Response(null, { status: 304, headers });
+    return new Response(r.method === 'HEAD' ? null : '{"schema":1}', { headers });
+  }
+  return assets.fetch(r);
+} };
+
+test('#82 decorate: only ok, off and key keep a closed lifetime; none, error and renewed are no-cache; never Vary', () => {
+  const closed = () => new Response('{}', { headers: { 'content-type': 'application/json', 'cache-control': CLOSED, etag: '"t"' } });
+  for (const session of ['ok', 'off', 'key']) assert.equal(decorate(closed(), { session, cookie: null }).headers.get('cache-control'), CLOSED, session);
+  for (const session of ['none', 'error', 'renewed', undefined]) assert.equal(decorate(closed(), { session, cookie: null }).headers.get('cache-control'), 'no-cache', String(session));
+  const renewed = decorate(closed(), { session: 'renewed', cookie: '__Host-ecnl_s=x' });
+  assert.equal(renewed.headers.get('cache-control'), 'private, no-cache', 'a response that sets a cookie stays private, no-cache');
+  assert.equal(decorate(closed(), { session: 'ok', cookie: '__Host-ecnl_s=x' }).headers.get('cache-control'), 'private, no-cache');
+  for (const session of ['ok', 'none', 'renewed']) {
+    const d = decorate(closed(), { session, cookie: null });
+    assert.equal(d.headers.get('vary'), null);
+    assert.equal(d.headers.get('etag'), '"t"');
+    for (const cc of ['no-cache', 'no-store']) assert.equal(decorate(new Response('{}', { headers: { 'cache-control': cc } }), { session, cookie: null }).headers.get('cache-control'), cc);
+  }
+});
+
+test('#82 worker: a closed season is kept a day on ok and off; none, renewed, a 429 and a gate fault never are', async () => {
+  resetCatalogMemo();
+  const env = { ASSETS: seasonAssets, SESSION_SECRET: SECRET, ...limiters(), API_EVENTS: sink() };
+  const token = await mint(SECRET);
+  const withCookie = { cookie: `${COOKIE}=${token}` };
+  for (const method of ['GET', 'HEAD']) {
+    const r = await worker.fetch(req('/api/v1/seasons/2024-25/teams', withCookie, method), env);
+    assert.deepEqual([r.status, r.headers.get('x-ecnl-session'), r.headers.get('cache-control'), r.headers.get('etag')], [200, 'ok', CLOSED, '"t"'], method);
+    assert.equal(r.headers.get('vary'), null);
+    const revalidated = await worker.fetch(req('/api/v1/seasons/2024-25/teams', { ...withCookie, 'if-none-match': '"t"' }, method), env);
+    assert.deepEqual([revalidated.status, revalidated.headers.get('cache-control')], [304, CLOSED], 'a 304 renews the lifetime');
+    const active = await worker.fetch(req('/api/v1/seasons/2026-27/teams', withCookie, method), env);
+    assert.deepEqual([active.status, active.headers.get('cache-control')], [200, 'no-cache']);
+  }
+  const none = await worker.fetch(req('/api/v1/seasons/2024-25/teams'), env);
+  assert.deepEqual([none.status, none.headers.get('x-ecnl-session'), none.headers.get('cache-control')], [200, 'none', 'no-cache']);
+  const old = await mint(SECRET, Date.now() - 2 * 3600 * 1000);
+  const renewed = await worker.fetch(req('/api/v1/seasons/2024-25/teams', { cookie: `${COOKIE}=${old}` }), env);
+  assert.deepEqual([renewed.headers.get('x-ecnl-session'), renewed.headers.get('cache-control')], ['renewed', 'private, no-cache']);
+  assert.ok(cookieOf(renewed));
+  const off = await worker.fetch(req('/api/v1/seasons/2024-25/teams'), { ASSETS: seasonAssets });
+  assert.deepEqual([off.headers.get('x-ecnl-session'), off.headers.get('cache-control')], ['off', CLOSED]);
+  const limited = await worker.fetch(req('/api/v1/seasons/2024-25/teams', withCookie), { ...env, RL_SESSION: limiter(0) });
+  assert.deepEqual([limited.status, limited.headers.get('cache-control')], [429, 'no-store']);
+  const boom = { async limit() { throw new Error('limiter down'); } };
+  const { result: faulted } = await quietly(() => worker.fetch(req('/api/v1/seasons/2024-25/teams', withCookie), { ...env, RL_SESSION: boom, RL_ANON: boom, RL_IP: boom }));
+  assert.deepEqual([faulted.status, faulted.headers.get('x-ecnl-session'), faulted.headers.get('cache-control')], [200, 'error', 'no-cache']);
+});
+
+test('#82 worker: a fault in decorate serves the data as "error" with no-cache, never a closed lifetime', async () => {
+  resetCatalogMemo();
+  const env = { ASSETS: seasonAssets, SESSION_SECRET: SECRET, ...limiters(), API_EVENTS: sink() };
+  const cookie = `${COOKIE}=${await mint(SECRET)}`;
+  const set = Headers.prototype.set;
+  // decorate's first step on an "ok" answer; nothing else sets this header to "ok".
+  Headers.prototype.set = function (name, value) {
+    if (String(name).toLowerCase() === 'x-ecnl-session' && value === 'ok') throw new Error('decorate fault');
+    return set.call(this, name, value);
+  };
+  let out;
+  try { out = await quietly(() => worker.fetch(req('/api/v1/seasons/2024-25/teams', { cookie }), env)); } finally { Headers.prototype.set = set; }
+  const { result: r, logged } = out;
+  assert.deepEqual([r.status, r.headers.get('x-ecnl-session'), r.headers.get('cache-control'), await r.text()], [200, 'error', 'no-cache', '{"schema":1}']);
+  assert.deepEqual(logged.map(args => args[0]), ['session']);
+  assert.deepEqual(env.API_EVENTS.points.map(p => p.blobs.slice(0, 2)), [['gate-error', 'teams']]);
 });
 
 test('R2 a throwing writeDataPoint never changes a response', async () => {

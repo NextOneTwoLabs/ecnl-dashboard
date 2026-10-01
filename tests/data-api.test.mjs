@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { resolveResource, dataApi } from '../api/data-api.mjs';
+import { resolveResource, dataApi, CLOSED_CACHE, resetCatalogMemo } from '../api/data-api.mjs';
 import { assetPath } from '../api/archive-reader.mjs';
 import worker from '../worker.js';
 
@@ -34,45 +34,164 @@ test('shared route cases, methods, HEAD and JSON failures', async () => {
   }
 });
 
-test('each archived resource is returned byte-for-byte by one asset read', async () => {
-  let count = 0;
+// #82: the policy each archived resource should get, derived here from the catalog on its own
+// terms (a season earlier than refresh.activeSeason), not by the code under test.
+const catalog = JSON.parse(await readFile(new URL('data/sources.json', root)));
+const ACTIVE = catalog.refresh.activeSeason;
+const eventSeason = {};
+for (const [season, s] of Object.entries(catalog.seasons)) {
+  for (const kind of ['conferences', 'national', 'showcases']) for (const e of Object.values(s[kind] || {})) eventSeason[e.eventId] = season;
+}
+const expectedPolicy = season => season && season < ACTIVE ? CLOSED_CACHE : 'no-cache';
+
+test('each archived resource is returned byte-for-byte with its cache policy: one asset read each, plus the catalog once', async () => {
+  resetCatalogMemo();
+  let reads = 0, catalogReads = 0, count = 0;
+  const counted = { ASSETS: { fetch(req) { reads++; if (new URL(req.url).pathname === '/data/sources.json') catalogReads++; return env.ASSETS.fetch(req); } } };
+  const tally = {};
+  const check = async (endpoint, file, policy) => {
+    const response = await dataApi(request(endpoint), counted);
+    assert.equal(response.status, 200, endpoint);
+    assert.equal(response.headers.get('cache-control'), policy, endpoint);
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()), await readFile(file), endpoint);
+    tally[policy] = (tally[policy] || 0) + 1;
+    count++;
+  };
   for (const file of await readdir(new URL('archive/api/Event/', root), { recursive: true })) {
     const path = file.replaceAll('\\', '/');
-    let match, endpoint;
-    if ((match = /^get-event-schedule-or-standings\/(\d+)\.json$/.exec(path))) endpoint = `/api/v1/events/${match[1]}/hierarchy`;
-    if ((match = /^get-standings-by-div-and-flight\/(\d+)\/(\d+)\/(\d+)\.json$/.exec(path))) endpoint = `/api/v1/events/${match[3]}/divisions/${match[1]}/flights/${match[2]}/standings`;
-    if ((match = /^get-schedules-by-flight\/(\d+)\/(\d+)\/0\.json$/.exec(path))) endpoint = `/api/v1/events/${match[1]}/flights/${match[2]}/schedule`;
+    let match, endpoint, event;
+    if ((match = /^get-event-schedule-or-standings\/(\d+)\.json$/.exec(path))) [endpoint, event] = [`/api/v1/events/${match[1]}/hierarchy`, match[1]];
+    if ((match = /^get-standings-by-div-and-flight\/(\d+)\/(\d+)\/(\d+)\.json$/.exec(path))) [endpoint, event] = [`/api/v1/events/${match[3]}/divisions/${match[1]}/flights/${match[2]}/standings`, match[3]];
+    if ((match = /^get-schedules-by-flight\/(\d+)\/(\d+)\/0\.json$/.exec(path))) [endpoint, event] = [`/api/v1/events/${match[1]}/flights/${match[2]}/schedule`, match[1]];
     if (!endpoint) continue;
-    let reads = 0;
-    const response = await dataApi(request(endpoint), { ASSETS: { fetch(req) { reads++; return env.ASSETS.fetch(req); } } });
-    assert.equal(response.status, 200, endpoint);
-    assert.deepEqual(Buffer.from(await response.arrayBuffer()), await readFile(new URL('archive/api/Event/' + path, root)));
-    assert.equal(reads, 1);
-    assert.equal(response.headers.get('cache-control'), 'no-cache');
-    count++;
+    await check(endpoint, new URL('archive/api/Event/' + path, root), expectedPolicy(eventSeason[event]));
   }
   for (const file of await readdir(new URL('archive/teams/', root))) {
     const match = /^(\d{4}-\d{2})\.json$/.exec(file);
-    if (!match) continue;
-    let reads = 0;
-    const response = await dataApi(request(`/api/v1/seasons/${match[1]}/teams`), { ASSETS: { fetch(req) { reads++; return env.ASSETS.fetch(req); } } });
-    assert.equal(response.status, 200, file);
-    assert.deepEqual(Buffer.from(await response.arrayBuffer()), await readFile(new URL('archive/teams/' + file, root)));
-    assert.equal(reads, 1);
-    assert.equal(response.headers.get('cache-control'), 'no-cache');
-    count++;
+    if (match) await check(`/api/v1/seasons/${match[1]}/teams`, new URL('archive/teams/' + file, root), expectedPolicy(match[1]));
   }
-  {
-    let reads = 0;
-    const response = await dataApi(request('/api/v1/clubs'), { ASSETS: { fetch(req) { reads++; return env.ASSETS.fetch(req); } } });
-    assert.equal(response.status, 200, '/api/v1/clubs');
-    assert.deepEqual(Buffer.from(await response.arrayBuffer()), await readFile(new URL('archive/clubs.json', root)));
-    assert.equal(reads, 1);
-    assert.equal(response.headers.get('cache-control'), 'no-cache');
-    count++;
+  await check('/api/v1/clubs', new URL('archive/clubs.json', root), 'no-cache');
+  for (const file of existsSync(new URL('archive/history/', root)) ? await readdir(new URL('archive/history/', root)) : []) {
+    const match = /^(\d+)\.json$/.exec(file);
+    if (match) await check(`/api/v1/teams/${match[1]}/history`, new URL('archive/history/' + file, root), 'no-cache');
   }
   assert.ok(count > 1200, `only ${count} resources checked`);
-  console.log(`Archive parity: ${count} resources`);
+  assert.ok(tally[CLOSED_CACHE] > 1000, 'most event resources are closed');
+  assert.equal(catalogReads, 1, 'the catalog is read once per isolate');
+  assert.equal(reads, count + 1, 'one asset read per resource, plus the catalog once');
+  console.log(`Archive parity: ${count} resources (${tally[CLOSED_CACHE]} closed, ${tally['no-cache']} no-cache), ${reads} asset reads`);
+});
+
+// #82: tests/cache-policy.json, shared with tests/test_data_api.py.
+const policyCases = JSON.parse(await readFile(new URL('./cache-policy.json', import.meta.url)));
+const policyOf = expected => expected === 'closed' ? policyCases.closed : expected;
+
+test('cache policy: the shared archive rows, directly and through the Worker with sessions off', async () => {
+  assert.equal(CLOSED_CACHE, policyCases.closed);
+  let rows = 0;
+  for (const [path, expected, method = 'GET'] of policyCases.archive) {
+    const history = /^\/api\/v1\/teams\/(\d+)\/history$/.exec(path);
+    if (history && !existsSync(new URL(`archive/history/${history[1]}.json`, root))) { console.log(`skipped (no history data): ${path}`); continue; }
+    for (const [label, fetchIt] of [['dataApi', r => dataApi(r, env)], ['worker (off)', r => worker.fetch(r, env)]]) {
+      resetCatalogMemo();
+      const response = await fetchIt(request(path, { method }));
+      assert.equal(response.headers.get('cache-control'), policyOf(expected), `${label} ${method} ${path}`);
+      assert.equal(response.status === 200, expected !== 'no-store', `${label} ${method} ${path}: ${response.status}`);
+      assert.equal(response.headers.get('vary'), null);
+      if (response.status === 200) assert.ok(response.headers.get('etag'), `${label} ${path}: the ETag is kept`);
+    }
+    rows++;
+  }
+  assert.ok(rows >= 24);
+});
+
+// A stand-in for ASSETS that serves `text` as the catalog (or a 404, or HTML) and stub data elsewhere.
+function catalogEnv({ text, missing = false, html = false } = {}) {
+  const env = { reads: 0, catalogReads: 0, ASSETS: { async fetch(req) {
+    env.reads++;
+    const path = new URL(req.url).pathname;
+    if (path === '/data/sources.json') {
+      env.catalogReads++;
+      assert.equal(req.method, 'GET', 'the catalog read is a GET');
+      assert.equal(req.headers.get('if-none-match'), null, 'the catalog read carries no validator');
+      if (missing) return new Response('<html>missing</html>', { status: 404, headers: { 'content-type': 'text/html' } });
+      return new Response(text, { headers: { 'content-type': html ? 'text/html' : 'application/json', etag: '"catalog"' } });
+    }
+    if (req.headers.get('if-none-match') === '"stub"') return new Response(null, { status: 304, headers: { etag: '"stub"' } });
+    return new Response(req.method === 'HEAD' ? null : JSON.stringify({ stub: path }), { headers: { 'content-type': 'application/json', etag: '"stub"' } });
+  } } };
+  return env;
+}
+// The case's catalog text: the shared catalog with one change, as tests/test_data_api.py builds it.
+function caseCatalog(c) {
+  if ('raw' in c) return c.raw;
+  const cat = structuredClone(policyCases.catalogs.catalog);
+  if ('activeSeason' in c) cat.refresh.activeSeason = c.activeSeason;
+  if (c.without) delete cat[c.without];
+  if (c.seasons) cat.seasons = c.seasons;
+  return JSON.stringify(cat);
+}
+
+test('cache policy: the shared catalog cases (rollover; broken, malformed, numeric, padded) fail safe with the data served', async () => {
+  const { paths, cases } = policyCases.catalogs;
+  for (const c of cases) {
+    resetCatalogMemo();
+    const env = catalogEnv({ text: caseCatalog(c), missing: c.missing, html: c.html });
+    for (const path of paths) {
+      for (const method of ['GET', 'HEAD']) {
+        const response = await dataApi(request(path, { method }), env);
+        assert.equal(response.status, 200, `${c.name}: ${method} ${path}`);
+        assert.equal(response.headers.get('cache-control'), c.closed.includes(path) ? policyCases.closed : 'no-cache', `${c.name}: ${method} ${path}`);
+        assert.equal(await response.text(), method === 'HEAD' ? '' : JSON.stringify({ stub: assetPath(resolveResource(path)) }), `${c.name}: ${path} body`);
+      }
+    }
+  }
+  console.log(`Cache policy: ${cases.length} catalog cases x ${paths.length} paths`);
+});
+
+test('cache policy: the catalog is read once per isolate (N + 1 reads); a failed read is not kept', async () => {
+  const closed = '/api/v1/seasons/2024-25/teams';
+  resetCatalogMemo();
+  const good = catalogEnv({ text: caseCatalog({}) });
+  for (let i = 0; i < 5; i++) assert.equal((await dataApi(request(closed), good)).headers.get('cache-control'), CLOSED_CACHE);
+  assert.deepEqual([good.reads, good.catalogReads], [6, 1], '5 answers, 6 reads');
+  // Each kind of failed read gives no-cache, with the data, and is not kept.
+  resetCatalogMemo();
+  for (const failing of [{ ASSETS: { fetch: req => new URL(req.url).pathname === '/data/sources.json' ? Promise.reject(new Error('fixture fault')) : good.ASSETS.fetch(req) } },
+    catalogEnv({ text: '{' }), catalogEnv({ missing: true }), catalogEnv({ text: caseCatalog({ activeSeason: 'zzz' }) })]) {
+    const response = await dataApi(request(closed), failing);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('cache-control'), 'no-cache');
+  }
+  const retry = catalogEnv({ text: caseCatalog({}) });
+  assert.equal((await dataApi(request(closed), retry)).headers.get('cache-control'), CLOSED_CACHE, 'the next request reads again');
+  assert.equal(retry.catalogReads, 1);
+  // Once read, the isolate keeps it: a Worker version's assets never change.
+  const later = catalogEnv({ missing: true });
+  assert.equal((await dataApi(request(closed), later)).headers.get('cache-control'), CLOSED_CACHE);
+  assert.equal(later.catalogReads, 0);
+  // Routes that are never closed make their one read and nothing more (the catalog route's
+  // one read is the catalog itself).
+  resetCatalogMemo();
+  const other = catalogEnv({ text: caseCatalog({}) });
+  for (const path of ['/api/v1/catalog', '/api/v1/status', '/api/v1/clubs', '/api/v1/teams/55477/history']) await dataApi(request(path), other);
+  assert.deepEqual([other.reads, other.catalogReads], [4, 1]);
+});
+
+test('cache policy: a closed 304 carries the one-day policy (renewing the stored copy), an active 304 no-cache', async () => {
+  for (const [path, policy] of [['/api/v1/seasons/2024-25/teams', CLOSED_CACHE], ['/api/v1/events/3157/flights/24009/schedule', CLOSED_CACHE],
+    ['/api/v1/seasons/2026-27/teams', 'no-cache'], ['/api/v1/events/4263/hierarchy', 'no-cache']]) {
+    for (const method of ['GET', 'HEAD']) {
+      resetCatalogMemo();
+      const assets = catalogEnv({ text: caseCatalog({}) });
+      const response = await dataApi(request(path, { method, headers: { 'if-none-match': '"stub"' } }), assets);
+      assert.equal(response.status, 304, `${method} ${path}`);
+      assert.equal(response.headers.get('cache-control'), policy, `${method} ${path}`);
+      assert.equal(response.headers.get('etag'), '"stub"');
+      assert.equal(await response.text(), '');
+      assert.equal(assets.catalogReads, 1, 'the catalog was read, not the fail-safe path');
+    }
+  }
 });
 
 test('conditional validators forwarded; 304 and HEAD have no body', async () => {
@@ -95,7 +214,10 @@ test('conditional validators forwarded; 304 and HEAD have no body', async () => 
 
 test('team index: validators forwarded to its asset path; 304 and HEAD have no body', async () => {
   for (const method of ['GET', 'HEAD']) {
+    resetCatalogMemo();
+    // #82: the catalog is served too, so the policy comes from it, not from the fail-safe path.
     const response = await dataApi(request('/api/v1/seasons/2026-27/teams', { method, headers: { 'if-none-match': '"fixture"' } }), { ASSETS: { fetch(req) {
+      if (new URL(req.url).pathname === '/data/sources.json') return env.ASSETS.fetch(req);
       assert.equal(req.method, method);
       assert.equal(new URL(req.url).pathname, '/archive/teams/2026-27.json');
       assert.equal(req.headers.get('if-none-match'), '"fixture"');
@@ -183,6 +305,8 @@ test('shared route cases through the Worker: no cookie and a forged cookie chang
         assert.match(response.headers.get('content-type'), /application\/json/);
         assert.equal(response.headers.get('x-ecnl-session'), 'none');
         assert.equal(response.headers.get('set-cookie'), null);
+        // #82: a "none" answer is never kept with a lifetime, closed season or not.
+        assert.doesNotMatch(response.headers.get('cache-control') || '', /max-age/, `${method} ${path}`);
         if (method === 'HEAD') assert.equal(await response.text(), '');
       }
     }
