@@ -4848,15 +4848,23 @@
           ` This page follows the squad born ${esc(years)} that played in ${esc(seasonLabel(here.season))}. Also: ` +
           others.map(q => { const r0 = mineIn(q)[0] || q.seasons[0]; return `<a href="${pageHref(r0, true)}">born ${esc(historyYears(q.birthYears))} (${esc(seasonLabel(r0.season))})</a>`; }).join(', ') + '.');
       }
-      if (sq.maybePrev && sq.maybePrev.length) {
-        const rg = rows[0].regroup;
-        add('hist-maybe', `<strong>Earlier seasons not confirmed</strong>${rg
-          ? `In ${esc(seasonLabel(rows[0].season))} ECNL regrouped ages by school year, and TGS gave this team a new id or kept the id in its age group, so we can't tell which earlier team it continues.`
-          : `TGS gave this team a new id, and more than one earlier team could be its predecessor.`} Possibly: ` +
-          sq.maybePrev.map(refLink).join(' or ') + '.');
+      // #127: what happened after the newest season sits above the table (newest first) ...
+      if (sq.maybe && sq.maybe.length) {
+        const rg = sq.maybe.some(p => p.season === '2026-27') && last.season !== '2026-27';
+        const contested = sq.maybe.filter(p => p.alsoClaimedBy && p.alsoClaimedBy.length);
+        add('hist-maybe', `<strong>What happened next is not confirmed</strong>${rg
+          ? `From ${esc(seasonLabel(sq.maybe[0].season))} ECNL groups ages by school year. TGS gave this club's teams new ids, or kept each id in its age group, so we can't tell which team continues this one.`
+          : contested.length
+            // M5: offered, not linked, because another earlier team could claim the same team.
+            ? `TGS gave the next season's team a new id, and another earlier team could claim it too: ${contested.map(p =>
+              `${esc(p.name)} could also continue ${p.alsoClaimedBy.map(x => `<a href="${pageHref(x, true)}">${esc(x.name)}</a> (${esc(seasonLabel(x.season))})`).join(' or ')}`).join('; ')}.`
+            : `TGS gave the next season's teams new ids, and more than one could continue this one.`} Possibly: ` +
+          sq.maybe.map(refLink).join(' or ') + '.');
       }
 
-      // Season by season: a table on a wide panel, one card per season on a narrow one.
+      // Season by season, newest first (#127): a table on a wide panel, one card per season on a
+      // narrow one. Rows are built oldest first (the "moved from" badge reads the season before),
+      // then reversed. The chart and each row's form stay oldest to newest, left to right.
       const posHtml = r => `<span class="hist-pos${r.rank === 1 && !r.inProgress ? ' first' : ''}">${r.rank}${r.merged ? '†' : ''}<span class="stat-of"> / ${r.of}</span></span>`;
       const RESULT = { W: 'win', D: 'draw', L: 'loss' };
       const formHtml = r => r.form ? `<span class="hist-form"><span class="sr-only">Last ${r.form.length} results, oldest first: ${esc([...r.form].map(x => RESULT[x] || x).join(', '))}.</span>${[...r.form].map(x => `<span class="form-chip inline ${x.toLowerCase()}" aria-hidden="true">${x}</span>`).join('')}</span>` : '';
@@ -4882,34 +4890,29 @@
       const tableRows = rows.map((r, i) => { const b = badges(r, i); return `<tr class="${r.inProgress ? 'hist-live' : ''}">
           <td><div class="hist-season">${esc(seasonLabel(r.season))}</div><div class="hist-name">${esc(r.name)} · ${esc(age(r))}</div>${b ? `<div class="hist-badges">${b}</div>` : ''}${links(r)}</td>
           <td>${conf(r)}</td><td class="num">${posHtml(r)}</td><td class="num">${r.gp ?? '—'}</td><td class="num">${r.w}-${r.d}-${r.l}</td>
-          <td class="num">${r.gf ?? '—'}–${r.ga ?? '—'}</td><td class="num">${signed(r.gd)}</td><td class="num"><b>${r.pts ?? '—'}</b></td><td>${formHtml(r)}</td></tr>`; }).join('');
+          <td class="num">${r.gf ?? '—'}–${r.ga ?? '—'}</td><td class="num">${signed(r.gd)}</td><td class="num"><b>${r.pts ?? '—'}</b></td><td>${formHtml(r)}</td></tr>`; }).reverse().join('');
       const cards = rows.map((r, i) => { const b = badges(r, i); return `<div class="hist-card${r.inProgress ? ' hist-live' : ''}">
           <div class="hist-card-top"><span class="hist-season">${esc(seasonLabel(r.season))}</span>${posHtml(r)}</div>
           <div class="hist-card-line">${conf(r)} · ${esc(age(r))} · ${esc(r.name)}</div>${b ? `<div class="hist-badges">${b}</div>` : ''}
           <div class="hist-card-stats"><span><b>${r.pts ?? '—'}</b> pts</span><span>${r.gp ?? '—'} GP</span><span>${r.w}-${r.d}-${r.l}</span><span>${r.gf ?? '—'}–${r.ga ?? '—'} (${signed(r.gd)})</span>${formHtml(r)}</div>
-          ${links(r)}</div>`; }).join('');
+          ${links(r)}</div>`; }).reverse().join('');
       const legend = [...used].map(k => { const [cls, label, , meaning] = BADGES[k]; return `<span><span class="hist-badge ${cls}">${esc(label)}</span>${esc(meaning)}</span>`; }).join('');
       add('flight-panel', `<div class="flight-header"><div class="flight-title">Season by season</div><span class="flight-team-count">Conference tables</span></div>
-        <div class="hist-table-wrap"><table class="hist-table"><caption class="sr-only">Season by season, conference tables</caption>
+        <div class="hist-table-wrap"><table class="hist-table"><caption class="sr-only">Season by season, conference tables, newest first</caption>
           <thead><tr><th scope="col">Season</th><th scope="col">Conference</th><th scope="col" class="num" title="Position in the conference table">Pos</th><th scope="col" class="num" title="Games played">GP</th>
             <th scope="col" class="num">W-D-L</th><th scope="col" class="num">Goals</th><th scope="col" class="num" title="Goal difference">GD</th><th scope="col" class="num">Pts</th><th scope="col">Form</th></tr></thead>
           <tbody>${tableRows}</tbody></table></div>
         <div class="hist-cards">${cards}</div>
         ${legend ? `<div class="hist-legend"><span class="sr-only">What the labels mean:</span>${legend}</div>` : ''}
-        <div class="hist-note">Pos is the team's place in its conference table in TGS's published order${rows.some(r => r.merged) ? `, except where marked †: one of the 11 tables (2020-21 to 2022-23) TGS published in two blocks, which we merge by points per game` : ''}.
-          GP, W-D-L, goals and points are TGS's standings; form is ours, from TGS's scores (oldest first).${live ? ` "In progress" is as of ${esc(st.updatedAt ? formatObservedDate(st.updatedAt) : 'the last refresh')}.` : ''}</div>`);
-
-      if (sq.maybe && sq.maybe.length) {
-        const rg = sq.maybe.some(p => p.season === '2026-27') && last.season !== '2026-27';
-        const contested = sq.maybe.filter(p => p.alsoClaimedBy && p.alsoClaimedBy.length);
-        add('hist-maybe', `<strong>What happened next is not confirmed</strong>${rg
-          ? `From ${esc(seasonLabel(sq.maybe[0].season))} ECNL groups ages by school year. TGS gave this club's teams new ids, or kept each id in its age group, so we can't tell which team continues this one.`
-          : contested.length
-            // M5: offered, not linked, because another earlier team could claim the same team.
-            ? `TGS gave the next season's team a new id, and another earlier team could claim it too: ${contested.map(p =>
-              `${esc(p.name)} could also continue ${p.alsoClaimedBy.map(x => `<a href="${pageHref(x, true)}">${esc(x.name)}</a> (${esc(seasonLabel(x.season))})`).join(' or ')}`).join('; ')}.`
-            : `TGS gave the next season's teams new ids, and more than one could continue this one.`} Possibly: ` +
-          sq.maybe.map(refLink).join(' or ') + '.');
+        <div class="hist-note">Newest season first. Pos is the team's place in its conference table in TGS's published order${rows.some(r => r.merged) ? `, except where marked †: one of the 11 tables (2020-21 to 2022-23) TGS published in two blocks, which we merge by points per game` : ''}.
+          GP, W-D-L, goals and points are TGS's standings; each row's form is ours, from TGS's scores, and reads oldest to newest.${live ? ` "In progress" is as of ${esc(st.updatedAt ? formatObservedDate(st.updatedAt) : 'the last refresh')}.` : ''}</div>`);
+      // ... and what came before the oldest season, below it.
+      if (sq.maybePrev && sq.maybePrev.length) {
+        const rg = rows[0].regroup;
+        add('hist-maybe', `<strong>Earlier seasons not confirmed</strong>${rg
+          ? `In ${esc(seasonLabel(rows[0].season))} ECNL regrouped ages by school year, and TGS gave this team a new id or kept the id in its age group, so we can't tell which earlier team it continues.`
+          : `TGS gave this team a new id, and more than one earlier team could be its predecessor.`} Possibly: ` +
+          sq.maybePrev.map(refLink).join(' or ') + '.');
       }
 
       const eventPanel = (title, count, items, note) => add('flight-panel',
@@ -4917,7 +4920,7 @@
         (note ? `<div class="hist-note">${note}</div>` : ''));
       const natStage = e => Object.keys(NATIONAL_EVENTS[e.season] || {}).find(k => NATIONAL_EVENTS[e.season][k].eventId === e.eventID) || e.stage;
       eventPanel('Playoffs and Finals', posts.length ? `${posts.length} appearance${posts.length === 1 ? '' : 's'}` : 'None yet', posts.length
-        ? posts.map(e => {
+        ? posts.slice().reverse().map(e => {
           const o = historyOutcome(e);
           const href = `#tab=playoffs&season=${encodeURIComponent(e.season)}&stage=${encodeURIComponent(natStage(e))}&age=${encodeURIComponent(e.division)}&tier=${encodeURIComponent(e.flightID)}`;
           const notes = [e.cup, e.reconstructed ? 'reconstructed from ECNL recaps' : '',
@@ -4932,7 +4935,7 @@
         posts.length ? "W-D-L and goals are ours, from TGS's scores; a shoot-out win counts as a win (W) and a shoot-out loss as a loss (L). Rounds and titles are worked out from the bracket, as on the Playoffs page." : '');
 
       const shows = sq.showcases || [];
-      if (shows.length) eventPanel('Showcases', `${shows.length} attended`, shows.map(e => {
+      if (shows.length) eventPanel('Showcases', `${shows.length} attended`, shows.slice().reverse().map(e => {
         const href = `#tab=showcases&season=${encodeURIComponent(e.season)}&event=${encodeURIComponent(e.eventID)}&age=${encodeURIComponent(e.division)}&flight=${encodeURIComponent(e.flightID)}`;
         return `<div class="hist-event"><div class="hist-event-when">${esc(seasonLabel(e.season))}</div>
           <div class="hist-event-what">${esc(e.stage)}<div class="hist-event-sub">${esc([formatDateRange(e.startDate, e.endDate), e.location].filter(Boolean).join(' · '))}</div></div>

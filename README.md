@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -422,7 +422,8 @@ overview →", "Current season page →"). Overview follows one *squad*, a group
 every archived season: "MVLA · born 2011", with its place and seasons, totals (ours, from
 TGS's standings), the best Champions League finish and any titles, one row or card per
 conference season, every Playoffs and Finals appearance and every showcase, each linked to
-its table, bracket or results and to TGS. Another team always opens on Overview, except
+its table, bracket or results and to TGS. The lists run newest first (#127); the finishing-position
+chart and each row's form still read oldest to newest, left to right. Another team always opens on Overview, except
 under `?live=1` (no history route) and for a team with no history file (one seen only at
 events, or new before the next history build): those open on the season tab, with no
 Overview tab.
