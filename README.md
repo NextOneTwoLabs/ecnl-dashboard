@@ -17,7 +17,7 @@ upstream API or website ever goes away.
 - **Playoffs & Finals** — National post-season per age group and competition (Champions League, North American Cup, Showcase Cup, Showcase Games): knockout brackets drawn as trees, cup and consolation brackets, group tables where a group stage exists, round-tagged schedules, and a format note per competition
 - **Showcases** — ECNL showcase weekends (2025-26: San Diego Fall and Phoenix Spring) per age group: a Results table (TGS's order, no positions) and the Games, with conference teams linked to their team pages
 - **★ My Teams** — Follow any team (the ★ My Teams button at the foot of the sidebar opens the list); each favorite opens a summary page: the glance panel, the full table with the team highlighted, the team's own fixtures and results, its showcase games, and its post-season games when it played any
-- **Team history** — A team page's **This season | History** tabs: one squad (e.g. MVLA, girls born 2011) across every archived season, with its conference finishes, Playoffs and Finals, showcases and totals; see [Team history](#team-history)
+- **Team overview** — A team page opens on **Overview** (tabs **Overview | Current season**, or e.g. **Overview | 2024–25 season**): one squad (e.g. MVLA, girls born 2011) across every archived season, with its conference finishes, Playoffs and Finals, showcases and totals; see [Team history](#team-history)
 - **Team search** — One bar in the header, on every tab, finds any team since 2020-21 (one club and age group) by name, club, place ("California", "Dallas", "SC"), birth year, age group or conference ("MVLA 2011", "U15 NorCal"); a ranked list, each team with a one-line description, opens its team page (Shift+Enter: its History); see [Team search](#team-search)
 - **Age group navigation** — Tabs populated from the API; keyboard arrow-key navigation, `/` to search
 - **Dark mode**, and **deep links** (season, age group, conference, view, selected team and match filter in the URL hash)
@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -389,8 +389,9 @@ One search bar sits in the header, after "ECNL Girls", on every tab, on My Teams
 pages (#114); `/` focuses it from anywhere. On a phone it is the header's search icon, which opens
 a full-screen dialog. A result is a **team**: one club and age group followed across seasons (a
 #107 squad), shown as "MVLA · born 2011" with one line about it (age group and conference, place,
-seasons, a standout result). Enter opens its team page, in the season the query names (otherwise
-its latest); Shift+Enter its History; Ctrl/Cmd-click or middle-click a new tab.
+seasons, a standout result). Enter opens its team page on Overview, or, when the query names a
+season ("MVLA 2011 2024-25"), on that season's tab; Shift+Enter opens the season tab;
+Ctrl/Cmd-click or middle-click a new tab.
 
 - **What it matches.** Team and club names (exact, prefix, one typo, initials such as "UFA"),
   birth years ("2011", "G11", "G2011"), two-year bands ("G2010/11"), age groups ("U15", in the
@@ -410,13 +411,16 @@ its latest); Shift+Enter its History; Ctrl/Cmd-click or middle-click a new tab.
 
 ## Team history
 
-A team page has two tabs, **This season** (as before) and **History**
-(`#tab=teams&season=2026-27&team=55477&view=history`), and every Team at a glance card links
-to it ("Season-by-season history →"). History follows one *squad*, a group of players, across
+A team page has two tabs, **Overview** (#107's history, the default since #114) and the
+season's own tab, **Current season** in the active season and e.g. **2024–25 season** before
+it (its table and games). A team link without a view opens Overview
+(`#tab=teams&season=2026-27&team=55477`); `&view=season` opens the season tab, and the #107
+links with `&view=history` still open Overview. Every Team at a glance card links to both ("Team
+overview →", "Current season page →"). Overview follows one *squad*, a group of players, across
 every archived season: "MVLA · born 2011", with its place and seasons, totals (ours, from
 TGS's standings), the best Champions League finish and any titles, one row or card per
 conference season, every Playoffs and Finals appearance and every showcase, each linked to
-its table, bracket or results and to TGS. History is not kept when you open another team.
+its table, bracket or results and to TGS. Another team always opens on Overview.
 
 - **Linking.** `team_history.py` links a team-season to the next by the same TGS id (with a
   birth-year check), else by name, else by club, never guessing when two teams could claim
@@ -434,7 +438,7 @@ its table, bracket or results and to TGS. History is not kept when you open anot
   data changes, a build fails, or a past season is corrected:
   [When the data changes](docs/data-api.md#when-the-data-changes).
 - **Not in this phase:** RL, guest and showcase-only teams (no conference table, so no
-  history and no link), following a squad in My Teams, and History links in search results.
+  history and no link), and following a squad in My Teams. (Team search, #114, now opens Overview.)
 
 ## Feedback
 

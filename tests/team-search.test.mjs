@@ -47,7 +47,9 @@ test('"MVLA 2011": the MVLA team(s) born 2011, linked to the team page in their 
   assert.deepEqual(keys(r.results), want);
   const l = last(squads.get(r.results[0].key));
   assert.equal(r.results[0].href, `#tab=teams&season=${l.season}&team=${l.teamID}&name=${encodeURIComponent(l.name)}`);
-  assert.equal(r.results[0].historyHref, r.results[0].href + '&view=history');
+  // #114 owner decision: Enter opens the Overview (no view); Shift+Enter that season's tab.
+  assert.equal(r.results[0].overviewHref, r.results[0].href);
+  assert.equal(r.results[0].seasonHref, r.results[0].href + '&view=season');
   for (const q of ['MVLA G11', 'mvla g2011', 'MVLA 2011G']) assert.deepEqual(keys(run(q).results), want, q);
 });
 
@@ -72,13 +74,16 @@ test('"U15 NorCal", "U15 NorCal 2024-25", "G2010/11 NorCal": one table each, in 
     assert.deepEqual(keys(r.results), want, q);
     assert.deepEqual(r.results.map(x => x.rank), r.results.map(x => x.rank).sort((a, b) => a - b), q);
   }
-  assert.ok(run('U15 NorCal 2024-25').results.every(x => x.href.includes('season=2024-25')));
+  // D2: a query that names a season opens that season's tab.
+  assert.ok(run('U15 NorCal 2024-25').results.every(x => x.href.includes('season=2024-25') && x.href.endsWith('&view=season')));
+  assert.ok(run('U15 NorCal').results.every(x => !x.href.includes('view=')), 'no season named: Overview');
 });
 
 test('"MVLA 2011 2024-25": a team in a named season opens that season', () => {
   const r = run('MVLA 2011 2024-25');
   assert.deepEqual(keys(r.results), keysWhere(sq => named(sq, /\bmvla\b/i) && sq.birthYears.includes(2011) && sq.seasons.some(s => s.season === '2024-25')));
-  assert.ok(r.results.every(x => x.href.includes('season=2024-25')));
+  assert.ok(r.results.every(x => x.href.includes('season=2024-25') && x.href.endsWith('&view=season')));
+  assert.ok(r.results.every(x => x.overviewHref.startsWith('#tab=teams&season=') && !x.overviewHref.includes('view=')));
 });
 
 test('"Slamers" (typo) finds every Slammers team; "UFA 2004" a club by its initials', () => {

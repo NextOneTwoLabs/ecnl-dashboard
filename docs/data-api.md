@@ -190,7 +190,7 @@ retried at most once a minute. `?live=1` never requests it.
 Also **derived** (#107): `team_history.py` builds one file per TGS team id that appears in
 any conference table, from the archive alone (team indexes, conference standings and
 schedules, national schedules and standings, showcase schedules; no upstream requests).
-The team page's **History** tab reads it with one request. `teamId` is validated like every
+The team page's **Overview** tab (the default view since #114; it was called History) reads it with one request. `teamId` is validated like every
 id (`01`, `0`, `-1`, `abc` get 400); an id with no file (a team seen only at a national event
 or a showcase, such as an RL team) gets a JSON 404.
 
@@ -290,17 +290,17 @@ What the page does with the history answer (#92), as with the team index:
 
 | History answer | The page | Remembered |
 | --- | --- | --- |
-| 200 with a known schema | the History tab | for the session |
-| 404, or an unknown schema | "No season-by-season history for this team"; the glance-card link is hidden for that id | for the session |
-| any other 4xx (429, 400, 401, 403, …) | "The history couldn't load." with "Try again" | for a minute (a `none` 429 until the session is back, if sooner) |
+| 200 with a known schema | the Overview tab | for the session |
+| 404, or an unknown schema | "No overview for this team"; the glance-card link is hidden for that id | for the session |
+| any other 4xx (429, 400, 401, 403, …) | "The overview couldn't load." with "Try again" | for a minute (a `none` 429 until the session is back, if sooner) |
 | a 5xx, a network error or bad JSON | the same | no: "Try again" asks once more |
 
-There is never a fallback request. **Request cost:** a cold shared History link costs 4
-`/api/v1` requests (catalog, status, history, clubs); History from a team page already open,
-or from a glance card, costs 1. The "Season-by-season history" link on every Team at a glance
+There is never a fallback request. **Request cost:** a cold shared team link (Overview, the
+default since #114) costs 4 `/api/v1` requests (catalog, status, history, clubs); Overview from a
+team page already open, or from a glance card, costs 1. The "Team overview" link on every Team at a glance
 card sends nothing until it is opened; every conference team has a file (a test checks it),
 and the link is hidden under `?live=1` and for an id the route answered 404 for. On Workers
-Free that is one Worker request per History opened; a script walking all 1,906 files would
+Free that is one Worker request per Overview opened; a script walking all 1,906 files would
 use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a minute.
 
 #### When the data changes
@@ -326,8 +326,8 @@ use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a min
   history files are NEW and some OLD`, naming them. The season data is still committed (it
   matters most), the log says `Team history: FAILED: …` and the run exits 1 (the workflow's
   last step fails). `refresh-state.json` keeps `historyAsOf`, the `updatedAt` of the data
-  the history files were last built from; while it differs from `updatedAt`, the History tab
-  says "History as of Sep 30, 2026, 7:55 PM UTC" (the date and time in UTC). A build that
+  the history files were last built from; while it differs from `updatedAt`, the Overview tab
+  says "Overview as of Sep 30, 2026, 7:55 PM UTC" (the date and time in UTC). A build that
   would delete more than 20 files or 5 % of them, whichever is larger, refuses, as a missing
   season index would look like that. The next refresh tries again.
 - **Drift check.** CI's `contract` job runs `python archive.py --team-history --check`,
@@ -362,7 +362,7 @@ use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a min
   and the rest change when the builder, `reconstruct.py`, `team-links.json` or a closed
   re-crawl does, so a lifetime would show stale results. Any longer caching of history must
   be versioned (for example a build id in the URL or a `closed` list published with the
-  data), never a bare long `max-age`. It costs one request per History opened.
+  data), never a bare long `max-age`. It costs one request per Overview opened.
 
 ### Team directory (`/api/v1/teams`)
 

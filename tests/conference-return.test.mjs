@@ -91,10 +91,19 @@ function page() {
     eventContext: id => ({ season: seasonOf(id), name: 'Midwest', kind: 'conference' }),
     computeTeamSummary: () => ({ mine: [], form: [], next: null }), getStandingsUrl: () => '', glancePanelHtml: () => '',
     loadWarning: () => node(), renderStandingsTable: () => node(), renderScheduleTable: () => node(), failedFlightPanel: () => node(),
-    shortTeamName: n => n, teamShowcaseSections: async () => [], NATIONAL_EVENTS: {}, loadTeamHistory: async () => {},
+    shortTeamName: n => n, teamShowcaseSections: async () => [], NATIONAL_EVENTS: {},
+    // #114: a team page opens on Overview (loadTeamHistory). Like the real one, it saves the state
+    // and the address once its answer is in, unless the page moved on (its token).
+    loadTeamHistory: async (_rec, _season, token) => { await null; api.afterHistory(token); },
   };
-  const api = new Function(...Object.keys(stubs), CODE + `
+  let api;
+  api = new Function(...Object.keys(stubs), CODE + `
     return { switchTab, closeMyTeams, toggleMyTeams, changeSeason, rebuildAll, selectAgeGroup, loadTeamSummary,
+      afterHistory: token => { if (token === teamToken) { saveState(); pushHash(); } },
+      // The season tab for the followed team (as &view=season would), so a test can take the
+      // path that locates the team and reads its tables.
+      seasonTab: () => { teamView = 'season'; teamViewFor = { id: ${TEAM.teamID}, name: ${JSON.stringify(TEAM.name)} }; },
+      view: () => teamView,
       setSeason: s => { currentSeason = s; },
       state: () => ({ season: currentSeason, age: currentAgeGroup, conf: currentConference, ages: AGE_GROUPS.join() }) };`)(...Object.values(stubs));
   // My Teams shows the followed team.
@@ -122,8 +131,10 @@ test('#102: Back to Conferences from a team in another season shows a valid view
   p.toggleMyTeams();
   await p.flush();
   assert.equal(p.title(), 'Followed team');
+  assert.equal(p.view(), 'history', 'My Teams opens the team on Overview (#114)');
   assert.equal(p.state().season, '2025-26', "the team page takes the team's season");
   assert.match(p.location.hash, /^#tab=teams&season=2025-26/);
+  assert.doesNotMatch(p.location.hash, /view=/, 'Overview is the default: no view in the address');
   const d = p.since();
   p.closeMyTeams();
   await p.flush();
@@ -255,6 +266,7 @@ for (const [exit, leave] of Object.entries(EXITS)) {
 test('#102: leaving while the team is still being located keeps the season and the view', async () => {
   const p = page();
   await p.cold();
+  p.seasonTab();                                       // Overview needs no locating (#114)
   p.hooks.locate = deferred();
   p.toggleMyTeams();
   await p.flush();
@@ -271,6 +283,7 @@ test('#102: leaving while the team is still being located keeps the season and t
 test('#102: a team page that fails after ‹ Back shows no error over Conferences', async () => {
   const p = page();
   await p.cold();
+  p.seasonTab();                                       // the season tab reads the event's tables (#114)
   p.hold[TEAM.eventID] = deferred();
   p.toggleMyTeams();
   await p.flush();
@@ -286,4 +299,20 @@ test('#102: a team page that fails after ‹ Back shows no error over Conference
   assert.equal(p.shown(), 'TABLE');
   assert.deepEqual(p.heading(), before, "the title and subtitle are still the conference view's");
   assert.equal(p.location.hash, HASH_2025);
+});
+
+test('#102 with #114: on the season tab, Back to Conferences still shows that season, once', async () => {
+  const p = page();
+  await p.cold();
+  p.seasonTab();
+  p.toggleMyTeams();
+  await p.flush();
+  assert.match(p.location.hash, /^#tab=teams&season=2025-26.*&view=season$/);
+  const d = p.since();
+  p.closeMyTeams();
+  await p.flush();
+  assert.equal(p.shown(), 'TABLE');
+  assert.deepEqual(p.state(), VALID_2025);
+  assert.equal(p.location.hash, HASH_2025);
+  assert.deepEqual(d(), { hierarchy: 1, standings: 1, schedule: 1, ageTabs: 1 });
 });

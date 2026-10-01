@@ -1920,7 +1920,7 @@
       white-space: nowrap;
     }
 
-    /* ===== #107: team history (the team page's History tab) ===== */
+    /* ===== #107: team history (the team page's Overview tab, #114) ===== */
     .hist-stack { container-type: inline-size; }
     .hist-tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
     .hist-tile { padding: 14px 16px; border-right: 1px solid var(--border-light); min-width: 0; }
@@ -2128,8 +2128,8 @@
     <div class="us-status" id="usearchStatus"></div>
     <div class="us-tipsbox" id="usearchTips" hidden><p>Type a team or club name, a place, a birth year or an age group. For example:</p></div>
     <ul class="us-list" id="usearchList" role="listbox" aria-label="Teams"></ul>
-    <div class="us-actions" id="usearchActions" hidden><span id="usearchActive"></span><a id="usearchOpen" href="#">Team page</a><a id="usearchHist" href="#">History</a></div>
-    <div class="us-foot"><span class="us-keys"><kbd>↑</kbd> <kbd>↓</kbd> move · <kbd>Enter</kbd> team page · <kbd>Shift</kbd>+<kbd>Enter</kbd> history · <kbd>Esc</kbd> close</span><span>Every ECNL Girls team since 2020-21</span></div>
+    <div class="us-actions" id="usearchActions" hidden><span id="usearchActive"></span><a id="usearchOpen" href="#">Overview</a><a id="usearchHist" href="#">Current season</a></div>
+    <div class="us-foot"><span class="us-keys"><kbd>↑</kbd> <kbd>↓</kbd> move · <kbd>Enter</kbd> open · <kbd>Shift</kbd>+<kbd>Enter</kbd> season · <kbd>Esc</kbd> close</span><span>Every ECNL Girls team since 2020-21</span></div>
     <div class="us-sr" id="usearchLive" role="status" aria-live="polite"></div>
   </div>
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -2420,8 +2420,10 @@
     let showMoreStats = false;
     let currentFlightData = [];       // [{ flight, standings, games }] for the loaded conference + age group
     let previewTeam = null;           // a #tab=teams deep link to a team that isn't a favourite
-    let teamView = 'season';          // #107: a team page shows 'season' (as before) or 'history'
-    let teamViewFor = null;           // the team teamView belongs to: another team starts on 'season' (S11)
+    // #107/#114: a team page shows 'history' (the Overview tab, the default: owner decision
+    // 2026-10-01) or 'season' (that season's table and games). Code names stay as in #107.
+    let teamView = 'history';
+    let teamViewFor = null;           // the team teamView belongs to: another team starts on Overview (S11)
     let teamToken = 0;                // drops a team page load that was superseded
     // Playoffs state
     let currentPlayoffStage = null;      // a key of the season's `national` map, e.g. "Playoffs & Finals"
@@ -2835,7 +2837,7 @@
         : currentTab === 'favorites'
         ? `#tab=teams&season=${e(currentSeason)}` +
           (fav && fav.teamID ? `&team=${e(fav.teamID)}` : '') + (fav ? `&name=${e(fav.name)}` : '') +
-          (teamView === 'history' ? '&view=history' : '')
+          (teamView === 'season' ? '&view=season' : '')   // no view: Overview
         : `#season=${e(currentSeason)}&age=${e(currentAgeGroup)}&conf=${e(currentConference)}${view}` +
           (selectedTeamID ? `&team=${e(selectedTeamID)}` : '') +
           (scheduleFilter !== 'upcoming' ? `&sched=${e(scheduleFilter)}` : '');
@@ -2855,8 +2857,9 @@
         const name = p.get('name') || null;
         let rec = [...favoriteMeta.values()].find(r => (teamID && r.teamID === teamID) || (name && r.name === name));
         previewTeam = null;
-        // #107: History only for the team this link names (S11).
-        teamView = p.get('view') === 'history' ? 'history' : 'season';
+        // #114: Overview unless the link asks for the season tab (&view=season); &view=history
+        // (the #107 links) and &view=overview mean Overview. Only for the team it names (S11).
+        teamView = p.get('view') === 'season' ? 'season' : 'history';
         teamViewFor = { id: teamID, name };
         if (!rec && (teamID || name)) {
           // Not one of this browser's favourites: show it anyway, resolved from
@@ -4404,7 +4407,7 @@
     // the team's own games, and its post-season games when it played any.
     async function loadTeamSummary(rec) {
       const container = document.getElementById('standingsContainer');
-      if (!sameTeam(teamViewFor, rec)) teamView = 'season';   // #107 S11
+      if (!sameTeam(teamViewFor, rec)) teamView = 'history';   // #107 S11: another team opens on Overview
       teamViewFor = { id: rec.teamID, name: rec.name };
       const token = ++teamToken;
       showTeamViewTabs();
@@ -4435,6 +4438,7 @@
         if (ctx.season !== currentSeason) {
           currentSeason = ctx.season;
           syncSeasonUI();
+          showTeamViewTabs();   // the season tab's label names the team's season
         }
         if (teamView === 'history') { await loadTeamHistory(rec, ctx.season, token); return; }   // #107
 
@@ -4611,13 +4615,18 @@
       return !!(a && rec && ((a.id && rec.teamID && String(a.id) === String(rec.teamID)) || (a.name && a.name === rec.name)));
     }
 
-    // The team page's view tabs: This season | History.
+    // The team page's view tabs (#114, owner decision): Overview | <season>, Overview first. The
+    // season tab reads "Current season" in the active season, otherwise "2024–25 season".
+    function teamSeasonTabLabel(season) {
+      const active = SOURCES && SOURCES.refresh && SOURCES.refresh.activeSeason;
+      return season === active ? 'Current season' : `${seasonLabel(season)} season`;
+    }
     function showTeamViewTabs() {
       document.getElementById('viewTabs').style.display = '';
-      const s = document.getElementById('viewTabStandings'), c = document.getElementById('viewTabSchedule');
-      s.textContent = 'This season'; c.textContent = 'History';
+      const o = document.getElementById('viewTabStandings'), s = document.getElementById('viewTabSchedule');
+      o.textContent = 'Overview'; s.textContent = teamSeasonTabLabel(currentSeason);
+      o.classList.toggle('active', teamView === 'history'); o.setAttribute('aria-selected', String(teamView === 'history'));
       s.classList.toggle('active', teamView !== 'history'); s.setAttribute('aria-selected', String(teamView !== 'history'));
-      c.classList.toggle('active', teamView === 'history'); c.setAttribute('aria-selected', String(teamView === 'history'));
     }
 
     function selectTeamView(v) {
@@ -4703,21 +4712,21 @@
       </svg>`;
     }
 
-    // The History breadcrumb: season › [My Teams ›] the team's name › History. A cold link
+    // The Overview breadcrumb: season › [My Teams ›] the team's name › Overview. A cold link
     // without &name= has only a placeholder ("Team 55477") until the file names the team.
     function historyCrumb(rec, season, name) {
       const real = name || (/^Team \d+$/.test(rec.name || '') ? '' : rec.name);
       document.getElementById('breadcrumb').innerHTML =
         `<span>${esc(season)}</span><span class="breadcrumb-sep">›</span>` +
         (currentFavorite ? `<span>My Teams</span><span class="breadcrumb-sep">›</span>` : '') +
-        (real ? `<span>${esc(real)}</span><span class="breadcrumb-sep">›</span>` : '') + `<span class="breadcrumb-current">History</span>`;
-      if (!real) document.getElementById('contentTitle').textContent = 'Team history';
+        (real ? `<span>${esc(real)}</span><span class="breadcrumb-sep">›</span>` : '') + `<span class="breadcrumb-current">Overview</span>`;
+      if (!real) document.getElementById('contentTitle').textContent = 'Team overview';
     }
 
     async function loadTeamHistory(rec, season, token) {
       const container = document.getElementById('standingsContainer');
       historyCrumb(rec, season);
-      document.getElementById('contentSubtitle').textContent = 'Loading its history…';
+      document.getElementById('contentSubtitle').textContent = 'Loading its overview…';
       container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading the history…</div></div>`;
       let data;
       try { [data] = await Promise.all([getTeamHistory(rec.teamID), loadClubPlaces()]); }
@@ -4725,7 +4734,7 @@
         if (token !== teamToken) return;
         document.getElementById('contentSubtitle').textContent = '';
         const box = loadWarning(e, () => loadTeamSummary(rec));
-        box.querySelector('strong').textContent = "The history couldn't load.";   // S5
+        box.querySelector('strong').textContent = "The overview couldn't load.";   // S5
         container.innerHTML = '';
         container.appendChild(box);
         saveState(); pushHash();
@@ -4734,7 +4743,7 @@
       if (token !== teamToken) return;
       if (!data || !data.squads.length) {
         document.getElementById('contentSubtitle').textContent = '';
-        container.innerHTML = `<div class="error-message"><strong>No season-by-season history for this team.</strong><br><small>Only teams in an ECNL conference table have one.</small></div>`;
+        container.innerHTML = `<div class="error-message"><strong>No overview for this team.</strong><br><small>Only teams in an ECNL conference table have one.</small></div>`;
         saveState(); pushHash();
         return;
       }
@@ -4784,7 +4793,7 @@
       // Built from older data than the page shows (a failed rebuild; docs/data-api.md).
       const st = refreshState || {};
       if (st.historyAsOf && st.updatedAt && st.historyAsOf !== st.updatedAt) {
-        add('hist-stale', `History as of ${esc(historyStamp(st.historyAsOf))}: results since then aren't in it yet.`);
+        add('hist-stale', `Overview as of ${esc(historyStamp(st.historyAsOf))}: results since then aren't in it yet.`);
       }
 
       // Totals: ours, summed from TGS's standings rows; first places count finished seasons (M2).
@@ -4933,7 +4942,8 @@
         <div class="glance-actions"><a class="glance-link" href="${pageHref(last)}">${esc(seasonLabel(last.season))} team page →</a></div>`;
     }
     const confHref = r => `#season=${encodeURIComponent(r.season)}&age=${encodeURIComponent(r.division)}&conf=${encodeURIComponent(r.conference)}&team=${encodeURIComponent(r.teamID)}`;
-    const pageHref = (r, history) => `#tab=teams&season=${encodeURIComponent(r.season)}&team=${encodeURIComponent(r.teamID)}&name=${encodeURIComponent(r.name)}${history ? '&view=history' : ''}`;
+    // A team page link: its Overview (history), or that season's tab (&view=season, #114).
+    const pageHref = (r, history) => `#tab=teams&season=${encodeURIComponent(r.season)}&team=${encodeURIComponent(r.teamID)}&name=${encodeURIComponent(r.name)}${history ? '' : '&view=season'}`;
 
     // ========== STANDINGS RENDERING ==========
     // One column config drives every standings table: the conference tables,
@@ -4965,7 +4975,7 @@
     // name (S3), marked "no team page" only when the season's index was read (M2c).
     COL.scTeam = { label: 'Team', sort: 'name', render: t => {
       const page = showcaseTeamPage(t.teamID, showcaseLinkable, showcaseAliases);
-      if (page) return `<a class="sc-team-link" href="#tab=teams&season=${encodeURIComponent(currentSeason)}&team=${encodeURIComponent(page)}&name=${encodeURIComponent(t.name)}" title="Team page: its conference table and every game">${teamCellHtml(t)}</a>`;
+      if (page) return `<a class="sc-team-link" href="#tab=teams&season=${encodeURIComponent(currentSeason)}&team=${encodeURIComponent(page)}&name=${encodeURIComponent(t.name)}" title="Team page">${teamCellHtml(t)}</a>`;
       const logo = t.clublogo ? `<img class="team-logo" src="${esc(t.clublogo)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
       return `<div class="team-cell">${logo}<span class="team-name" title="${esc(t.name)}">${esc(t.name)}</span>` +
         (page === false ? `<span class="sc-muted" title="Not in this season's ECNL conference standings (ECNL RL, Pre-ECNL or a guest team)">no team page</span>` : '') + '</div>';
@@ -5252,7 +5262,7 @@
     }
 
     function selectView(view) {
-      if (currentTab === 'favorites') { selectTeamView(view === 'schedule' ? 'history' : 'season'); return; }   // #107
+      if (currentTab === 'favorites') { selectTeamView(view === 'standings' ? 'history' : 'season'); return; }   // #114: Overview first
       if (view === currentView) return;
       currentView = view;
       const s = document.getElementById('viewTabStandings');
@@ -5581,13 +5591,13 @@
         lastHtml = `<div class="glance-last">Last: <span class="form-chip inline ${r.toLowerCase()}">${r}</span> ${score} ${esc(opponentText(g, team.teamID))}</div>`;
       }
       const link = ctx.link && ctx.season
-        ? `<div class="glance-actions"><a class="glance-link" href="#tab=teams&season=${encodeURIComponent(ctx.season)}&team=${encodeURIComponent(team.teamID)}&name=${encodeURIComponent(team.name)}">Full team page →</a></div>`
+        ? `<div class="glance-actions"><a class="glance-link" href="#tab=teams&season=${encodeURIComponent(ctx.season)}&team=${encodeURIComponent(team.teamID)}&name=${encodeURIComponent(team.name)}&view=season">${esc(teamSeasonTabLabel(ctx.season))} page →</a></div>`
         : '';
       // #107: every conference team has a history file (tests/test_team_history.py); the link
       // is left out where there is none: ?live=1 (no route), or an id the route answered 404 for.
       const histSeason = ctx.season || currentSeason;
       const histLink = historyAvailable(team.teamID)
-        ? `<div class="glance-actions"><a class="glance-link" href="#tab=teams&season=${encodeURIComponent(histSeason)}&team=${encodeURIComponent(team.teamID)}&name=${encodeURIComponent(team.name)}&view=history">Season-by-season history →</a></div>`
+        ? `<div class="glance-actions"><a class="glance-link" href="#tab=teams&season=${encodeURIComponent(histSeason)}&team=${encodeURIComponent(team.teamID)}&name=${encodeURIComponent(team.name)}">Team overview →</a></div>`
         : '';
 
       return `
@@ -5970,8 +5980,11 @@
             first: d.rows[0].season, last: latest.season, nSeasons: d.rows.length, current: latest.season === db.active,
             latestAge: ageText(latest.u, latest.div), latestConf: latest.conf,
           };
-          r.href = teamHref(r.season, r.teamID, r.anchorName);
-          r.historyHref = teamHref(latest.season, latest.teamID, latest.name) + '&view=history';
+          // Enter opens the team's Overview; a query that names a season opens that season's tab
+          // (D2), as does Shift+Enter or the action bar's season link.
+          r.overviewHref = teamHref(latest.season, latest.teamID, latest.name);
+          r.seasonHref = teamHref(r.season, r.teamID, r.anchorName) + '&view=season';
+          r.href = p.season ? r.seasonHref : r.overviewHref;
           out.push(r);
         }
         // Ties (D-P4): club, then team line, then oldest age group; a table query by its table.
@@ -6157,7 +6170,7 @@
           : `<span class="us-initials">${esc(ini)}</span>`;
         const tok = r.distinct ? ` <span class="us-tok">· ${esc(r.distinct)}</span>` : '';
         const pill = r.continuesAs ? '<span class="us-pill cont">May continue</span>' : r.current ? '' : `<span class="us-pill past">Ended ${esc(r.last)}</span>`;
-        const where = r.season === r.last ? 'Team page' : `${esc(r.season)} page`;
+        const where = res.query.season ? esc(usSeasonText(r.season)) : 'Overview';
         return `<li role="option" class="us-row${r.continuesAs ? ' us-cont' : ''}" id="us-opt-${i}" aria-selected="false" data-i="${i}">` +
           `<span class="us-rank" aria-hidden="true">${label}</span>${logo}<div class="us-text"><div class="us-name">${mark(r.title)} · born ${esc(TEAM_SEARCH.bornText(r.born))}${tok}${pill}</div>` +
           `<div class="us-meta" title="${esc(r.desc)}">${esc(r.desc)}</div></div><div class="us-act" aria-hidden="true">${where} ›</div></li>`;
@@ -6210,14 +6223,17 @@
       // copy link and middle-click all work on them.
       document.getElementById('usearchActive').textContent = `${r.title} · born ${TEAM_SEARCH.bornText(r.born)}`;
       const o = document.getElementById('usearchOpen'), hl = document.getElementById('usearchHist');
-      o.href = r.href; o.textContent = r.season === r.last ? 'Team page' : `${r.season} team page`;
-      hl.href = r.historyHref;
+      o.href = r.overviewHref;
+      hl.href = r.seasonHref; hl.textContent = usSeasonText(r.season);
       document.getElementById('usearchActions').hidden = false;
     }
-    function usGo(i, history) {
+    // "Current season" or "2024–25 season", as the team page's own tab reads.
+    const usSeasonText = s => teamSeasonTabLabel(s);
+    // `to`: 'season' (Shift+Enter, the season link), 'overview' (the Overview link), else the row's own link.
+    function usGo(i, to) {
       const r = usItems[i];
       if (!r) return;
-      const target = history ? r.historyHref : r.href;
+      const target = to === 'season' ? r.seasonHref : to === 'overview' ? r.overviewHref : r.href;
       usClose(true);
       if (usInput) usInput.blur();
       closeSidebarIfMobile();
@@ -6233,7 +6249,7 @@
         if (!usItems.length) return;
         const n = usItems.length;
         usSetActive(((usActiveIdx < 0 ? -1 : usActiveIdx) + (e.key === 'ArrowDown' ? 1 : -1) + n) % n);
-      } else if (e.key === 'Enter') { e.preventDefault(); if (usActiveIdx >= 0) usGo(usActiveIdx, e.shiftKey); }
+      } else if (e.key === 'Enter') { e.preventDefault(); if (usActiveIdx >= 0) usGo(usActiveIdx, e.shiftKey ? 'season' : null); }
       else if (e.key === 'Escape') {
         e.preventDefault();
         if (!pop.hidden && e.target.value) { e.target.value = ''; usRun(''); } else { usClose(); e.target.blur(); }
@@ -6249,7 +6265,7 @@
         const li = e.target.closest('.us-row'); if (!li) return;
         const r = usItems[+li.dataset.i];
         if (e.ctrlKey || e.metaKey) { window.open(r.href, '_blank', 'noopener'); return; }   // a row is an option, not a link
-        usGo(+li.dataset.i, e.shiftKey);
+        usGo(+li.dataset.i, e.shiftKey ? 'season' : null);
       });
       list.addEventListener('auxclick', e => {
         const li = e.target.closest('.us-row');
@@ -6257,7 +6273,7 @@
       });
       ['usearchOpen', 'usearchHist'].forEach(id => document.getElementById(id).addEventListener('click', e => {
         if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;   // the browser's own new-tab handling
-        e.preventDefault(); usGo(usActiveIdx, id === 'usearchHist');
+        e.preventDefault(); usGo(usActiveIdx, id === 'usearchHist' ? 'season' : 'overview');
       }));
       // The phone sheet is a modal dialog: Tab stays inside it.
       usPop().addEventListener('keydown', e => {
