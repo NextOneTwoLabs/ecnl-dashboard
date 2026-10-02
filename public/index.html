@@ -5760,8 +5760,12 @@
       d.close();
     }
     const CONF_FOCUSABLE = 'button, a[href], summary, [tabindex="0"]';
+    let confBlur = null;   // { el, at }: a control in the view that lost focus to nothing (SC-a)
     function confViewState() {
-      const c = document.getElementById('standingsContainer'), a = document.activeElement;
+      const c = document.getElementById('standingsContainer');
+      let a = document.activeElement;
+      // Narrowing hides the side card, and Chrome blurs its control before the change event fires.
+      if ((!a || a === document.body) && confBlur && performance.now() - confBlur.at < 500) a = confBlur.el;
       const panels = [...c.querySelectorAll('.standings-panel')].map(p => {
         const th = p.querySelector('th.sort-active');
         return { col: th ? th.dataset.col : 'rank', asc: th ? th.classList.contains('sort-asc') : true, help: !!p.querySelector('.rank-help[open]') };
@@ -5771,7 +5775,7 @@
         const tr = a.closest('tr[data-team-id]');
         if (tr) focus = { row: tr.dataset.teamId, star: a.classList.contains('star-btn') };
         else if (a.closest('#glancePanel')) focus = { row: selectedTeamID != null ? String(selectedTeamID) : null };
-        else focus = { at: [...c.querySelectorAll(CONF_FOCUSABLE)].filter(e => !e.closest('tr, #glancePanel')).indexOf(a) };
+        else focus = { at: [...c.querySelectorAll(CONF_FOCUSABLE)].filter(e => !e.closest('tr[data-team-id], #glancePanel')).indexOf(a) };
       }
       return { panels, focus };
     }
@@ -5795,11 +5799,16 @@
       if (!f) return;
       let el = null;
       if (f.row) { const tr = c.querySelector(`tr[data-team-id="${f.row}"]`); el = tr && f.star ? tr.querySelector('.star-btn') || tr : tr; }
-      else if (f.at >= 0) el = [...c.querySelectorAll(CONF_FOCUSABLE)].filter(e => !e.closest('tr, #glancePanel'))[f.at];
+      else if (f.at >= 0) el = [...c.querySelectorAll(CONF_FOCUSABLE)].filter(e => !e.closest('tr[data-team-id], #glancePanel'))[f.at];
       if (el) el.focus({ preventScroll: true });
     }
     (function wireTeamSheet() {
       if (!SHEET_OK) document.documentElement.classList.add('no-dialog');
+      document.addEventListener('focusout', e => {
+        const c = document.getElementById('standingsContainer');
+        confBlur = c && c.contains(e.target) && !e.relatedTarget ? { el: e.target, at: performance.now() } : null;
+      }, true);
+      document.addEventListener('focusin', () => { confBlur = null; }, true);
       const d = document.getElementById('teamSheet');
       if (!d) return;
       d.addEventListener('click', e => { if (e.target === d) d.close(); });   // the backdrop
