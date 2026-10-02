@@ -1157,6 +1157,47 @@
     .star-btn-label { background: var(--bg-surface); }
     .star-btn-label:hover { transform: none; border-color: var(--accent); }
     .star-btn-label.starred { text-shadow: none; border-color: var(--accent); color: var(--accent-text); }
+    /* ===== #135 P2: the conference page's context bar, name links and team sheet ===== */
+    .ctx-where b { color: var(--text-primary); font-weight: 700; }
+    .ctx-change { display: none; }
+    .team-link { color: inherit; text-decoration: none; display: inline-flex; align-items: center; min-width: 24px; min-height: 24px;
+      max-width: 100%; margin-block: -3px; }
+    .team-link:hover .team-name, .team-link:focus-visible .team-name { color: var(--accent-text); text-decoration: underline; }
+    dialog.team-sheet { position: fixed; inset: auto 0 0 0; margin: 0; width: 100%; max-width: 100%; max-height: 82vh; max-height: 82dvh;
+      padding: 0 0 env(safe-area-inset-bottom); border: 1px solid var(--border); border-bottom: 0; border-radius: 16px 16px 0 0;
+      background: var(--bg-surface); color: var(--text-primary); overflow-y: auto; overscroll-behavior: contain; }
+    dialog.team-sheet::backdrop { background: rgba(0, 0, 0, .45); }
+    @media (min-width: 600px) { dialog.team-sheet { max-width: 560px; margin: 0 auto; } }
+    .sheet-bar { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 4px 4px 4px 18px; background: var(--bg-surface); border-bottom: 1px solid var(--border-light); }
+    .sheet-bar h2 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: var(--accent-text); }
+    .sheet-close { width: 44px; height: 44px; border: 0; border-radius: 10px; background: none; color: var(--text-secondary); font-size: 20px; cursor: pointer; }
+    .sheet-close:hover { color: var(--text-primary); }
+    .sheet-close:focus-visible { outline: 2px solid var(--accent-text); outline-offset: -2px; }
+    .team-sheet .glance-head .glance-eyebrow { display: none; }   /* the sheet bar says it */
+    .team-sheet .glance-actions + .glance-actions { border-top: 0; padding-top: 0; }
+    /* Decision 4 in the card and the sheet: 24 px links and "More statistics" everywhere */
+    .glance-link { display: inline-flex; align-items: center; min-height: 24px; }
+    .glance-more summary { display: flex; align-items: center; min-height: 24px; }
+    .star-btn { min-width: 24px; min-height: 24px; }
+    .standings-table .star-btn { margin-block: -2px; }   /* the target grows, the row does not */
+    .match-team { display: inline-flex; align-items: center; min-height: 24px; }
+    /* S3: no page scroll behind an open sheet on a touch screen (the page scrolls in #standingsScroll) */
+    @media (pointer: coarse) { html.sheet-open, html.sheet-open body, html.sheet-open #standingsScroll { overflow: hidden; } }
+    @media (max-width: 768px) {
+      .ctx-where { font-size: 13.5px; }
+      .ctx-change { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; padding: 0 14px; border: 1px solid var(--border);
+        border-radius: 999px; background: var(--bg-surface); color: var(--accent-text); font: 600 13px var(--font); cursor: pointer; }
+    }
+    @media (max-width: 768px), (pointer: coarse) {
+      .rank-help summary { display: inline-flex; align-items: center; min-height: 44px; }
+      .glance-more summary { min-height: 44px; }
+      .team-sheet .glance-actions { display: flex; align-items: center; padding: 0 18px; }
+      .glance-form .form-chip { width: 44px; height: 44px; border-radius: 8px; font-size: 14px; }
+      .match-team { min-width: 44px; min-height: 44px; }
+    }
+    .rank-help summary { min-height: 24px; }
+    .hamburger { flex-shrink: 0; min-width: 24px; min-height: 24px; }
     .sr-only {
       position: absolute;
       width: 1px;
@@ -1299,8 +1340,9 @@
       .season-select, .myteams-toggle, .myteams-back {
         min-height: 44px;
       }
-      .star-btn { min-width: 40px; min-height: 40px; }
-      .th-sort { min-height: 44px; }
+      .star-btn { min-width: 44px; min-height: 44px; }
+      .th-sort { min-height: 44px; min-width: 44px; }
+      .hamburger, .theme-toggle, .header-search { min-width: 44px; min-height: 44px; }
       .standings-table td { padding: 12px 10px; }
       .match-team { padding: 4px 0; }
       .glance-panel .glance-actions { display: flex; align-items: center; padding: 0 18px; }  /* outranks the later base rule */
@@ -1486,6 +1528,8 @@
     @media (max-width: 1024px) {
       .conf-layout { grid-template-columns: 1fr; }
       .glance-panel { order: -1; position: static; }
+      /* #135 P2: no card above the conference standings; a selection opens the team sheet. */
+      html:not(.no-dialog) .conf-layout.is-conf > .glance-panel { display: none; }
     }
     .summary-stack .flight-panel { min-width: 0; flex: none; }
 
@@ -2315,6 +2359,11 @@
     </div>
   </div>
 
+  <!-- #135 P2: a selection on a phone or tablet opens the team in this modal sheet -->
+  <dialog class="team-sheet" id="teamSheet" aria-modal="true" aria-labelledby="teamSheetName teamSheetTitle">
+    <div id="teamSheetContent"></div>
+  </dialog>
+
   <script>
     // ========== DATA ==========
     // Seasons, conferences and event IDs all come from data/sources.json — the
@@ -3013,6 +3062,7 @@
       if (!hb) return;
       hb.setAttribute('aria-expanded', String(open));
       hb.title = open ? 'Hide navigation' : 'Show navigation';
+      document.querySelectorAll('.ctx-change').forEach(b => b.setAttribute('aria-expanded', String(open)));
     }
 
     function loadSidebarState() {
@@ -3063,6 +3113,7 @@
     });
 
     function switchTab(tab, { silent = false } = {}) {
+      if (typeof closeTeamSheet === 'function') closeTeamSheet('title');
       currentTab = tab;
       const isConf = tab === 'conferences';
       const isFav  = tab === 'favorites';
@@ -4145,12 +4196,16 @@
       if (inp) { inp.focus(); inp.select(); }
     }
 
+    // #135 P2: the conference page's context bar. "Change" (shown on a phone) opens the drawer,
+    // where the season, age group and conference are chosen; it mirrors the menu button's state.
     function buildBreadcrumb() {
       const al = AGE_LABELS[currentAgeGroup] || currentAgeGroup;
+      const hb = document.querySelector('.hamburger');
+      const open = hb && hb.getAttribute('aria-expanded') === 'true';
       document.getElementById('breadcrumb').innerHTML =
-        `<span>${currentSeason}</span><span class="breadcrumb-sep">›</span>` +
-        `<span>${al}</span><span class="breadcrumb-sep">›</span>` +
-        `<span class="breadcrumb-current">${currentConference}</span>`;
+        `<span class="ctx-where"><b>${esc(currentConference)}</b> · Girls ${esc(al)} · ${esc(seasonLabel(currentSeason))}</span>` +
+        `<button type="button" class="ctx-change" onclick="toggleSidebar()" aria-controls="sidebar" aria-expanded="${open ? 'true' : 'false'}"` +
+        ` aria-label="Change season, age group or conference">Change</button>`;
     }
 
     // ========== FAVORITES ==========
@@ -4200,7 +4255,7 @@
         }
       }
       saveFavorites();
-      document.querySelectorAll('#standingsContainer .star-btn').forEach(btn => {
+      document.querySelectorAll('#standingsContainer .star-btn, #teamSheet .star-btn').forEach(btn => {
         const n = btn.dataset.team, on = favorites.has(n);
         btn.classList.toggle('starred', on);
         btn.setAttribute('aria-pressed', String(on));
@@ -5076,7 +5131,13 @@
     function teamCellHtml(team, ctx = {}) {
       const logo = ctx.logo !== false && team.clublogo
         ? `<img class="team-logo" src="${esc(team.clublogo)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
-      return `<div class="team-cell">${logo}<span class="team-name" title="${esc(team.name)}">${esc(displayName(team.name, team.clubName))}</span></div>`;
+      const name = `<span class="team-name" title="${esc(team.name)}">${esc(displayName(team.name, team.clubName))}</span>`;
+      // #135 P2: on a wide screen the name opens the team's Overview (the row still selects it).
+      if (ctx.link && !isNarrow() && historyAvailable(team.teamID)) {
+        return `<div class="team-cell">${logo}<a class="team-link" href="#tab=teams&season=${encodeURIComponent(currentSeason)}` +
+          `&team=${encodeURIComponent(team.teamID)}&name=${encodeURIComponent(team.name)}">${name}</a></div>`;
+      }
+      return `<div class="team-cell">${logo}${name}</div>`;
     }
     function gdHtml(t) {
       const gd = t.goaldifferential || 0;
@@ -5126,7 +5187,9 @@
 
     // Select a team in the conference view: highlight its rows everywhere and
     // show it in the "at a glance" panel.
-    function selectTeam(teamID) {
+    // opts.user: the viewer chose it (a row or a match name), so a narrow screen opens the sheet;
+    // a load (a &team= link, a followed team) never does. opts.from: where focus returns.
+    function selectTeam(teamID, { user = false, from = null } = {}) {
       selectedTeamID = teamID || null;
       document.querySelectorAll('#standingsContainer tr[data-team-id]').forEach(tr => {
         const on = Number(tr.dataset.teamId) === selectedTeamID;
@@ -5140,6 +5203,7 @@
       if (typeof updateGlancePanel === 'function') updateGlancePanel();
       saveState();
       pushHash();
+      if (user && selectedTeamID && typeof sheetMode === 'function' && sheetMode()) openTeamSheet(from);
     }
 
     // opts: { highlightTeamID, selectable, cols, title, footnote }
@@ -5167,7 +5231,8 @@
       <tbody></tbody>
     </table>
     ${footnote ? `<div class="table-footnote">
-      <span>Order as published by TGS · PPG = points per game${selectable ? ' · Select a team for details' : ''}</span>
+      <span>Order as published by TGS · PPG = points per game${!selectable ? '' : !isNarrow() && teams.some(t => historyAvailable(t.teamID))
+        ? ' · Select a row for details · a name opens its Overview' : ' · Select a team for details'}</span>
       ${standings.strayTeams ? `<span class="table-footnote-extra">TGS lists ${standings.strayTeams} team${standings.strayTeams === 1 ? '' : 's'} outside the group; placed here by points per game.</span>` : ''}
       <details class="rank-help"><summary>How ranking works</summary>
         <p>Teams are listed in the order TGS publishes: by points per game, then goal difference. A team that has played fewer games can sit above one with more points.</p>
@@ -5181,7 +5246,7 @@
       const renderRows = list => {
         const hl = highlighted();
         tbody.innerHTML = list.map(t => standingsRowHtml(t, cols, {
-          rank: t._origRank, selectable, highlight: hl != null && t.teamID === hl,
+          rank: t._origRank, selectable, highlight: hl != null && t.teamID === hl, ctx: { link: selectable },
         })).join('');
       };
       renderRows(teams);
@@ -5214,14 +5279,14 @@
         tbody.addEventListener('click', e => {
           if (e.target.closest('.star-btn, a, button')) return;
           const tr = e.target.closest('tr[data-team-id]');
-          if (tr) selectTeam(Number(tr.dataset.teamId));
+          if (tr) selectTeam(Number(tr.dataset.teamId), { user: true, from: tr });
         });
         tbody.addEventListener('keydown', e => {
           if (e.key !== 'Enter' && e.key !== ' ') return;
           const tr = e.target.closest('tr[data-team-id]');
           if (!tr || e.target !== tr) return;
           e.preventDefault();
-          selectTeam(Number(tr.dataset.teamId));
+          selectTeam(Number(tr.dataset.teamId), { user: true, from: tr });
         });
       }
 
@@ -5372,6 +5437,7 @@
     let warnedFlightData = null;  // the load whose "couldn't load" notice was last announced (#92)
 
     async function loadCurrentView(opts = {}) {
+      if (typeof closeTeamSheet === 'function') closeTeamSheet('title');
       if (currentTab !== 'conferences') return;   // #99: e.g. rebuildAll's continuation after a tab switch
       const conf = getSeasonData().conferences[currentConference];
       if (!conf) return;
@@ -5381,7 +5447,7 @@
       document.getElementById('formatNote').style.display = 'none';
       const ageLabel = AGE_LABELS[currentAgeGroup] || currentAgeGroup;
       document.getElementById('contentTitle').textContent = `${currentConference} · ${ageLabel}`;
-      document.getElementById('contentSubtitle').textContent = `Girls · ${seasonLabel(currentSeason)}`;
+      document.getElementById('contentSubtitle').textContent = '\u00a0';   // the count follows; the bar says the rest
       document.getElementById('extLinks').innerHTML = '';
 
       clearTeamFilter();
@@ -5406,7 +5472,8 @@
         const flights = division.flightList || [];
         // A card that will show a team at once (a &team= link, or a team followed in
         // this division) loads its club place alongside the tables (#87).
-        if (selectedTeamID || favoriteInDivision(conf.eventId, division.divisionID)) loadClubPlaces();
+        const cardShown = !(typeof sheetMode === 'function' && sheetMode());   // #135 P2 (S6)
+        if (cardShown && (selectedTeamID || favoriteInDivision(conf.eventId, division.divisionID))) loadClubPlaces();
         // A 404 is "not published" and shows an empty table; any other failure is kept as
         // standingsError / gamesError and shown as "couldn't load" with a retry (#92).
         const results = await Promise.all(flights.map(async f => {
@@ -5427,7 +5494,7 @@
         selectedTeamID = defaultSelection();
         // Waits on the request started above; starts one only for a favourite saved
         // by name alone, which the division check could not place.
-        if (selectedTeamID && !clubPlaces) {
+        if (selectedTeamID && !clubPlaces && cardShown) {
           await loadClubPlaces();
           if (token !== loadToken) return;
         }
@@ -5477,8 +5544,7 @@
       const failed = currentFlightData.find(fd => fd.standingsError || fd.gamesError);
       const countKnown = !currentFlightData.some(fd => fd.standingsError);
       document.getElementById('contentSubtitle').textContent =
-        ['Girls', countKnown ? `${teamCount} teams` : '', seasonLabel(currentSeason)].filter(Boolean).join(' · ') +
-        (multi ? ` · ${flights.length} flights` : '');
+        [countKnown ? `${teamCount} teams` : '', multi ? `${flights.length} flights` : ''].filter(Boolean).join(' · ') || '\u00a0';
 
       // The original public pages remain the canonical source for what is shown.
       document.getElementById('extLinks').innerHTML = flights.map(f => {
@@ -5496,6 +5562,7 @@
       aside.className = 'glance-panel';
       aside.id = 'glancePanel';
       aside.setAttribute('aria-label', 'Team at a glance');
+      layout.classList.add('is-conf');   // #135 P2: this card gives way to the sheet at <=1024 px
       layout.append(main, aside);
       container.appendChild(layout);
       // Announced once per load (loadCurrentView sets a new currentFlightData), not on re-renders.
@@ -5596,7 +5663,14 @@
       // A team name in a match row selects that team.
       wrap.addEventListener('click', e => {
         const t = e.target.closest('.match-team[data-team-id]');
-        if (t) selectTeam(Number(t.dataset.teamId));
+        if (t) selectTeam(Number(t.dataset.teamId), { user: true, from: t });
+      });
+      // #135 P2: the names are role=button, so Enter and Space work too.
+      wrap.addEventListener('keydown', e => {
+        const t = e.target.closest('.match-team[data-team-id]');
+        if (!t || e.target !== t || (e.key !== 'Enter' && e.key !== ' ')) return;
+        e.preventDefault();
+        selectTeam(Number(t.dataset.teamId), { user: true, from: t });
       });
       return panel;
     }
@@ -5627,6 +5701,86 @@
       </div>`;
     }
 
+    // ========== TEAM SHEET (#135 P2) ==========
+    // At <=1024 px there is no side card: the viewer's own selection opens the team in a modal
+    // sheet, the side card's content in a <dialog> opened with showModal(). The page behind it is
+    // inert; focus moves to the close button; Esc, the close button or a tap on the backdrop
+    // closes it, and focus goes back to the row or match name that opened it. A load never opens
+    // it (a &team= link, a followed team), so deep links are as before. Without showModal (iOS
+    // before 15.4) html.no-dialog keeps the card above the table, as before P2.
+    const SHEET_OK = typeof HTMLDialogElement === 'function' && typeof HTMLDialogElement.prototype.showModal === 'function';
+    const SHEET_FOCUSABLE = 'a[href], button, summary, [tabindex]';
+    let sheetReturnTo = null;   // { teamID, el } or { title: true }: where focus goes on close
+    function isNarrow() { return !!(window.matchMedia && window.matchMedia('(max-width: 1024px)').matches); }
+    function sheetMode() { return SHEET_OK && isNarrow(); }
+    function teamSheetOpen() { const d = document.getElementById('teamSheet'); return !!(d && d.open); }
+    function teamSheetHtml() {
+      const hit = selectedTeamID && currentConfMeta ? findTeamInFlights(selectedTeamID) : null;
+      if (!hit) return '';
+      // Named "<team> · Team at a glance" (aria-labelledby="teamSheetName teamSheetTitle").
+      return `<div class="sheet-bar"><h2 id="teamSheetTitle">Team at a glance</h2>` +
+        `<span class="sr-only" id="teamSheetName">${esc(displayName(hit.team.name, hit.team.clubName))} ·</span>` +
+        `<button type="button" class="sheet-close" aria-label="Close" onclick="closeTeamSheet()">✕</button></div>` + glanceHtmlFor(hit);
+    }
+    function openTeamSheet(from) {
+      const d = document.getElementById('teamSheet'), body = document.getElementById('teamSheetContent');
+      const html = d && body ? teamSheetHtml() : '';
+      if (!html) return;
+      sheetReturnTo = { teamID: selectedTeamID, el: from || null };
+      body.innerHTML = html;
+      if (!d.open) d.showModal();
+      document.documentElement.classList.add('sheet-open');
+      d.querySelector('.sheet-close').focus();
+      if (!clubPlaces) loadClubPlaces().then(p => { if (p && Object.keys(p).length) refreshTeamSheet(); });
+    }
+    // The same team, redrawn (its place arrived): focus stays on the same control (S1), and an
+    // open "More statistics" stays open.
+    function refreshTeamSheet() {
+      const d = document.getElementById('teamSheet'), body = document.getElementById('teamSheetContent');
+      if (!d || !d.open || !body) return;
+      const html = teamSheetHtml();
+      if (!html) { closeTeamSheet('title'); return; }
+      const at = [...d.querySelectorAll(SHEET_FOCUSABLE)].indexOf(document.activeElement);
+      const more = !!body.querySelector('.glance-more[open]');
+      document.dispatchEvent(new Event('chiptip-hide'));
+      body.innerHTML = html;
+      if (more) { const m = body.querySelector('.glance-more'); if (m) m.open = true; }
+      if (at >= 0) { const el = [...d.querySelectorAll(SHEET_FOCUSABLE)][at] || d.querySelector('.sheet-close'); el.focus(); }
+    }
+    // to: 'origin' (the row or name that opened it), 'row' (the selected team's row, re-found:
+    // the table was redrawn) or 'title' (a new view).
+    function closeTeamSheet(to = 'origin') {
+      const d = document.getElementById('teamSheet');
+      if (!d || !d.open) return;
+      if (to === 'title') sheetReturnTo = { title: true };
+      else if (to === 'row') sheetReturnTo = { teamID: selectedTeamID, el: null };
+      d.close();
+    }
+    (function wireTeamSheet() {
+      if (!SHEET_OK) document.documentElement.classList.add('no-dialog');
+      const d = document.getElementById('teamSheet');
+      if (!d) return;
+      d.addEventListener('click', e => { if (e.target === d) d.close(); });   // the backdrop
+      d.addEventListener('close', () => {
+        const back = sheetReturnTo;
+        sheetReturnTo = null;
+        document.documentElement.classList.remove('sheet-open');
+        document.dispatchEvent(new Event('chiptip-hide'));
+        document.getElementById('teamSheetContent').innerHTML = '';
+        if (!back) return;
+        if (back.title) { document.getElementById('contentTitle').focus({ preventScroll: true }); return; }
+        const el = back.el && back.el.isConnected ? back.el
+          : document.querySelector(`#standingsContainer tr[data-team-id="${back.teamID}"]`) || document.getElementById('contentTitle');
+        el.focus();
+      });
+      // Crossing 1025 px: names become links (or text), and an open sheet gives way to the side
+      // card, with focus on the team's row (S5). Drawn from memory: no request.
+      if (window.matchMedia) window.matchMedia('(max-width: 1024px)').addEventListener('change', () => {
+        if (teamSheetOpen() && !sheetMode()) closeTeamSheet('row');
+        if (currentTab === 'conferences' && currentConfMeta) renderConferenceView();
+      });
+    })();
+
     // ========== TEAM AT A GLANCE ==========
     function updateGlancePanel() {
       const el = document.getElementById('glancePanel');
@@ -5637,9 +5791,14 @@
           <p>Select a team in the table to see its position, form and next match.</p></div>`;
         return;
       }
-      if (!clubPlaces) loadClubPlaces().then(p => { if (p && Object.keys(p).length) updateGlancePanel(); });
+      // S6: on a narrow screen this card is hidden and the sheet loads the place when it opens.
+      if (!clubPlaces && !sheetMode()) loadClubPlaces().then(p => { if (p && Object.keys(p).length) updateGlancePanel(); });
+      el.innerHTML = glanceHtmlFor(hit);
+      refreshTeamSheet();
+    }
+    function glanceHtmlFor(hit) {
       const summary = computeTeamSummary(hit.team.teamID, hit.fd.standings.teamStandings || [], hit.fd.games);
-      el.innerHTML = glancePanelHtml(hit.team, summary, {
+      return glancePanelHtml(hit.team, summary, {
         season: currentSeason, confName: currentConference, ageLabel: currentConfMeta.ageLabel,
         flightName: currentConfMeta.flights.length > 1 ? hit.fd.flight.flightName : '',
         link: true, gamesFailed: !!hit.fd.gamesError,
@@ -6858,6 +7017,8 @@
       }
       function show(chip) {
         clearTimeout(showT); clearTimeout(hideT);
+        const host = chip.closest('dialog[open]') || document.body;   // #135 P2: above a modal sheet
+        if (tip.parentNode !== host) host.appendChild(tip);
         owner = chip; tip.textContent = chip.dataset.tip; tip.hidden = false; place(chip);
       }
       function hide() { clearTimeout(showT); clearTimeout(hideT); owner = null; tip.hidden = true; }
@@ -6912,10 +7073,12 @@
       }, { capture: true, passive: true });
       window.addEventListener('resize', () => { if (!tip.hidden) hide(); });
       window.addEventListener('hashchange', hide);
+      document.addEventListener('chiptip-hide', hide);
     })();
 
     // ========== KEYBOARD NAV ==========
     document.addEventListener('keydown', (e) => {
+      if (typeof teamSheetOpen === 'function' && teamSheetOpen()) return;   // #135 P2 (M3)
       const t = e.target;
       const typing = t.closest && t.closest('input, select, textarea, [contenteditable="true"]');
       if (typing) return;
