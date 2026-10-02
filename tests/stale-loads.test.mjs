@@ -8,6 +8,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
+const ACTIVE_SEASON = JSON.parse(readFileSync(new URL('../public/data/sources.json', import.meta.url), 'utf8')).refresh.activeSeason;
 const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const block = (head, last = head, close = '\n    }\n') => {
   const start = html.indexOf('\n' + head) + 1;
@@ -86,7 +87,7 @@ function page({ national = true, history = { squads: [{}] } } = {}) {
     loadCurrentView: () => { el('standingsContainer').innerHTML = 'CONFERENCES'; el('contentTitle').textContent = 'Conferences'; },
     loadShowcasesPanel: async () => { el('standingsContainer').innerHTML = 'SHOWCASES'; el('contentTitle').textContent = 'Showcases'; },
     saveState: () => { log.saves++; }, pushHash: () => { log.hashes++; },
-    getSeasonData: () => ({ conferences: { 'Mid-Atlantic': {} } }), SOURCES: {}, openSeason: () => '2026-27', focusContentTitle() {},
+    getSeasonData: () => ({ conferences: { 'Mid-Atlantic': {} } }), SOURCES: {}, openSeason: () => ACTIVE_SEASON, focusContentTitle() {},
     esc: s => String(s), getAgeLabel: d => d, getDivisionAge: d => d, sortAgeGroups: x => x, seasonLabel: s => s,
     clearTeamFilter() {}, closeSidebarIfMobile() {}, syncSeasonUI() {}, buildFavoritesList() {}, showTeamViewTabs() {},
     sameTeam: () => true, resolveFavorite: async () => true, isMissing: e => !!e && e.status === 404, retryText: () => 'try again',

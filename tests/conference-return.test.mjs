@@ -9,6 +9,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
+const ACTIVE_SEASON = JSON.parse(readFileSync(new URL('../public/data/sources.json', import.meta.url), 'utf8')).refresh.activeSeason;
 const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 // From the line that starts `head` to the end of the function (or statement) that `last` names.
 const block = (head, last = head, close = '\n    }\n') => {
@@ -71,7 +72,7 @@ function page() {
   const calls = { hierarchy: 0, standings: 0, schedule: 0, ageTabs: 0 };
   const hooks = {}, memo = {}, hold = {};
   const stubs = {
-    document, window, location, history, SEASONS, openSeason: () => '2026-27',
+    document, window, location, history, SEASONS, openSeason: () => ACTIVE_SEASON,
     localStorage: { setItem: (k, v) => { store[k] = v; }, getItem: k => store[k] ?? null },
     getEventHierarchy: async id => {
       if (memo[id]) return memo[id];

@@ -8,6 +8,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
+const ACTIVE_SEASON = JSON.parse(readFileSync(new URL('../public/data/sources.json', import.meta.url), 'utf8')).refresh.activeSeason;
 const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const block = (head, last = head, close = '\n    }\n') => {
   const start = html.indexOf('\n' + head) + 1;
@@ -56,7 +57,7 @@ function render(doc) {
     pageHref: r => `#team=${r.teamID}&season=${r.season}`, confHref: r => `#season=${r.season}`, getStandingsUrl: () => '#tgs',
     getSchedulesUrl: () => '#tgs', NATIONAL_EVENTS: {}, formatDateRange: (a, b) => `${a}–${b}`, formatObservedDate: d => d,
     starButton: () => '', teamSeasonTabLabel: s => s, EXTERNAL_ICON: '',
-    openSeason: () => '2026-27', teamToken: 0, getSchedule: () => new Promise(() => {}), isMissing: () => false, retryText: e => String(e), 
+    openSeason: () => ACTIVE_SEASON, teamToken: 0, getSchedule: () => new Promise(() => {}), isMissing: () => false, retryText: e => String(e),
   };
   const renderTeamHistory = new Function(...Object.keys(stubs), CODE + '\nreturn renderTeamHistory;')(...Object.values(stubs));
   const sq = doc.squads[0];

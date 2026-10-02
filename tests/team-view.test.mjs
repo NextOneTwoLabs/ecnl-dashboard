@@ -8,6 +8,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
+const ACTIVE_SEASON = JSON.parse(readFileSync(new URL('../public/data/sources.json', import.meta.url), 'utf8')).refresh.activeSeason;
 const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const block = (head, last = head, close = '\n    }\n') => {
   const start = html.indexOf('\n' + head) + 1;
@@ -53,7 +54,7 @@ function page({ live = false, history = { squads: [{}] } } = {}) {
     resolveFavorite: async () => { calls.locate++; return true; },
     eventContext: id => ({ season: seasonOf(id), name: 'Mid-Atlantic', kind: 'conference' }),
     // Overview: the real loader, with its history answer stubbed (null: no file, as a 404).
-    LIVE: live, teamHistoryMissing: new Set(), historyCrumb() {}, openSeason: () => '2026-27',
+    LIVE: live, teamHistoryMissing: new Set(), historyCrumb() {}, openSeason: () => ACTIVE_SEASON,
     getTeamHistory: async id => { calls.history.push(id); return history; },
     renderTeamHistory: () => { el('standingsContainer').innerHTML = 'OVERVIEW'; },
     computeTeamSummary: () => ({ mine: [], form: [], next: null }), getStandingsUrl: () => '', glancePanelHtml: () => '',

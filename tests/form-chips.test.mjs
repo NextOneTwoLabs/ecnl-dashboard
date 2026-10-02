@@ -10,6 +10,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
 process.env.TZ = 'America/Los_Angeles';   // review S2: a date must not slide a day west of UTC
 
+const ACTIVE_SEASON = JSON.parse(readFileSync(new URL('../public/data/sources.json', import.meta.url), 'utf8')).refresh.activeSeason;
 const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const block = (head, last = head, close = '\n    }\n') => {
   const start = html.indexOf('\n' + head) + 1;
@@ -158,7 +159,7 @@ function overview(doc) {
     ordinal: n => `${n}th`, esc, clubPlaceText: () => '', historyCrumb() {}, getAgeLabel: d => d, resultFor: () => null,
     pageHref: () => '#', confHref: () => '#', getStandingsUrl: () => '#', getSchedulesUrl: () => '#', NATIONAL_EVENTS: {},
     formatDateRange: () => '', formatObservedDate: d => d, starButton: () => '', teamSeasonTabLabel: s => s, EXTERNAL_ICON: '',
-    openSeason: () => '2026-27', teamToken: 0, getSchedule: () => new Promise(() => {}), isMissing: () => false, retryText: e => String(e), 
+    openSeason: () => ACTIVE_SEASON, teamToken: 0, getSchedule: () => new Promise(() => {}), isMissing: () => false, retryText: e => String(e),
   };
   const render = new Function(...Object.keys(stubs), OVERVIEW + '\nreturn renderTeamHistory;')(...Object.values(stubs));
   const sq = doc.squads[0], last = sq.seasons[sq.seasons.length - 1];

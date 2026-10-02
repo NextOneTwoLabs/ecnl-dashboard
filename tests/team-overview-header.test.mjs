@@ -11,7 +11,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
 const root = new URL('../public/', import.meta.url);
-const html = readFileSync(new URL('index.html', root), 'utf8').replace(/\r\n/g, '\n');
+const html = readFileSync(process.env.ECNL_TEST_HTML || new URL('index.html', root), 'utf8').replace(/\r\n/g, '\n');
 const block = (head, last = head, close = '\n    }\n') => {
   const start = html.indexOf('\n' + head) + 1;
   const from = html.indexOf(last, start);
@@ -32,7 +32,7 @@ const OPEN = SOURCES.refresh.activeSeason;
 const CLUBS = read('archive/clubs.json');
 const HIST = new URL('archive/history/', root);
 const FILES = existsSync(HIST) ? readdirSync(HIST).filter(f => f.endsWith('.json')).map(f => JSON.parse(readFileSync(new URL(f, HIST), 'utf8'))) : [];
-const skip = !FILES.length && 'no team-history data in this checkout';
+const missingHistory = !FILES.length && 'no team-history data in this checkout';
 const scheduleFile = (e, f) => new URL(`archive/api/Event/get-schedules-by-flight/${e}/${f}/0.json`, root);
 const scheduleOf = (e, f) => existsSync(scheduleFile(e, f)) ? (JSON.parse(readFileSync(scheduleFile(e, f), 'utf8')).data || []) : null;
 const label = s => s.replace('-', '–');
@@ -53,10 +53,11 @@ const realDate = g => !g.dateUnconfirmed && day(g) >= '1900';
 // A current squad with an unplayed, dated game ahead in its schedule; an archived squad; a link
 // whose season is older than its squad's newest row; a squad that has played no games.
 const CUR = FILES.find(d => d.squads.length === 1 && (r => r.season === OPEN && r.inProgress && r.gp > 0 && Array.isArray(r.last) && r.form && r.last.length === r.form.length
-  && (scheduleOf(r.eventID, r.flightID) || []).filter(g => (g.hometeamID === r.teamID || g.awayteamID === r.teamID) && unplayed(g) && realDate(g)).length >= 3)(newest(d, linkSeason(d))));
+  && new Set((scheduleOf(r.eventID, r.flightID) || []).filter(g => (g.hometeamID === r.teamID || g.awayteamID === r.teamID) && unplayed(g) && realDate(g)).map(day)).size >= 2)(newest(d, linkSeason(d))));
 const OLD = FILES.find(d => d.squads.length === 1 && (r => r.season < OPEN && d.squads[0].seasons.length >= 3)(newest(d, linkSeason(d))));
 const OLDER = FILES.find(d => d.squads.length === 1 && newest(d, OPEN).season === OPEN && mineIn(d.squads[0], d.teamID).some(r => r.season < OPEN));
 const GP0 = FILES.find(d => d.squads.length === 1 && (r => r.season === OPEN && r.gp === 0)(newest(d, OPEN)));
+const skip = missingHistory || (!CUR && 'no current-season squad with dated pending fixtures in committed archive');
 
 // ---------- a small fake DOM (as tests/conference-sheet.test.mjs) ----------
 function makeDom() {
@@ -167,6 +168,7 @@ const SIDEBAR = [
   block('    async function loadAgeGroupsForSeason('), block('    function selectAgeGroup('), block('    function selectConference('),
   block('    function starButton(', 'function recordFromButton('), block('    function toggleFavorite('), block('    function openFavoritesTab('),
   block('    function historyCrumb('), block('    async function loadTeamSummary('),
+  block('    async function loadTeamHistory('), line('    const teamHistoryMissing'),
   block('    // ========== LANDING (#135 P1a)', 'async function renderTeamsIndex('),
 ].join('\n');
 
@@ -220,7 +222,7 @@ function page({ today = '2026-10-02', holdSchedule = null, schedule = null, favo
 const glanceHtml = (p, el) => el ? el.innerHTML : '';
 const panelsOf = c => c.querySelector('.hist-stack').kids.map(k => k.className);
 
-test('H1: the identity header: the squad and its birth years, then its newest name, age group, conference and place (every file)', { skip }, () => {
+test('H1: the identity header: the squad and its birth years, then its newest name, age group, conference and place (every file)', { skip: missingHistory }, () => {
   const p = page();
   p.setPlaces();   // as loadTeamHistory loads them before it renders
   for (const doc of FILES) {
@@ -235,7 +237,7 @@ test('H1: the identity header: the squad and its birth years, then its newest na
   }
 });
 
-test('H2: the scope line, and a next-match slot only for the open season (every file)', { skip }, () => {
+test('H2: the scope line, and a next-match slot only for the open season (every file)', { skip: missingHistory }, () => {
   const p = page();
   for (const doc of FILES) {
     const season = linkSeason(doc), r = newest(doc, season);
@@ -248,7 +250,7 @@ test('H2: the scope line, and a next-match slot only for the open season (every 
   }
 });
 
-test('H3: the glance figures are the newest row of the squad, even when the link names an older season; 0 games: no position', { skip }, () => {
+test('H3: the glance figures are the newest row of the squad, even when the link names an older season; 0 games: no position', { skip: skip || (!(OLDER && GP0) && 'archive has no older-link or zero-games fixture') }, () => {
   assert.ok(CUR && OLDER && GP0, 'fixtures (precondition)');
   const p = page();
   for (const [doc, season] of [[CUR, linkSeason(CUR)], [OLDER, mineIn(OLDER.squads[0], OLDER.teamID).find(r => r.season < OPEN).season]]) {
@@ -301,6 +303,13 @@ test('H4: #64: the next match is dated today or later; past unplayed games are "
   assert.equal(p.nextFixture([g0], true).next, g0);
   assert.equal(p.nextFixture([g0], true).unreported, 0);
   assert.equal(p.nextFixture([tbd, ahead[0]], true).next, tbd, 'after the last date, the TBD leg');
+  const before = page({ today: days[0] });
+  assert.equal(before.nextFixture([tbd, g0, ahead[0]], true).next, ahead[0], 'dated future fixture outranks TBD');
+  const sentinel = page({ today: after, schedule: () => ({ data: [g0] }) });
+  const sentinelView = sentinel.render(CUR, linkSeason(CUR));
+  await sentinel.flush();
+  assert.match(sentinelView.slot.innerHTML, /Date TBD/);
+  assert.doesNotMatch(sentinelView.slot.innerHTML, /10:00 AM|Date TBD · /);
   const s0 = p.computeTeamSummary(r.teamID, [], [g0], 5, true);
   const card0 = p.glancePanelHtml({ teamID: r.teamID, name: r.name }, s0, {});
   assert.match(card0, /Date TBD<\/div>/);
@@ -323,12 +332,18 @@ test('H5: a next match that answers after the page moved on writes nothing into 
 
 test('H6: a refused schedule says "try again" with a Try again that asks once; a 404 says no fixtures', { skip }, async () => {
   let n = 0;
-  const p = page({ schedule: () => { n++; throw Object.assign(new Error('429'), { status: 429 }); } });
+  const nextGames = scheduleOf(CUR_ROW.eventID, CUR_ROW.flightID);
+  const p = page({ schedule: () => { if (++n === 1) throw Object.assign(new Error('429'), { status: 429 }); return { data: nextGames }; } });
   const o = p.render(CUR, linkSeason(CUR));
   await p.flush();
   assert.match(o.slot.innerHTML, /try again/i);
   assert.match(o.slot.innerHTML, /<button type="button" class="ov-retry/);
   assert.equal(n, 1);
+  o.slot.querySelector('.ov-retry').onclick();
+  await p.flush();
+  assert.equal(n, 2, 'retry asks exactly once');
+  assert.doesNotMatch(o.slot.innerHTML, /try again/i);
+  assert.match(o.slot.innerHTML, /ov-next/);
   const q = page({ schedule: () => { throw Object.assign(new Error('404'), { status: 404 }); } });
   const o2 = q.render(CUR, linkSeason(CUR));
   await q.flush();
@@ -377,6 +392,13 @@ test('H9: the actions: the season tab, the standings and the newest event, each 
       assert.ok(hrefs[2][0].startsWith(ev.po ? `#tab=playoffs&season=${ev.e.season}` : `#tab=showcases&season=${ev.e.season}&event=${ev.e.eventID}`));
       if (!ev.po) assert.equal(hrefs[2][1], esc(`${ev.e.stage} ${label(ev.e.season)}: results`), 'the showcase is named (S5)');
     } else assert.equal(hrefs.length, 2);
+    for (const [i, [href]] of hrefs.entries()) {
+      const q = sidebar(); q.setAges(r.season); q.location.hash = href; q.loadFromHash();
+      assert.equal(q.season(), i < 2 ? r.season : evs.at(-1).e.season);
+      if (i === 0) { assert.equal(q.tab(), 'favorites'); assert.equal(q.view(), 'season'); assert.equal(q.preview().teamID, r.teamID); }
+      if (i === 1) { assert.equal(q.tab(), 'conferences'); assert.equal(q.conf(), r.conference); assert.equal(q.age(), r.division); }
+      if (i === 2) assert.equal(q.tab(), evs.at(-1).po ? 'playoffs' : 'showcases');
+    }
   }
 });
 
@@ -393,7 +415,7 @@ test('H12: requests: a current squad asks for its schedule once; an archived squ
 });
 
 // ---------- the sidebar, routing and Follow ----------
-function sidebar({ follow = [] } = {}) {
+function sidebar({ follow = [], historyLoad = null, games = [], summaryApi = null, hierarchy = null } = {}) {
   const dom = makeDom();
   const { document } = dom;
   const store = {}, calls = [], spy = { openFav: 0, built: [], standings: 0, teamSummary: [], history: [] };
@@ -401,7 +423,7 @@ function sidebar({ follow = [] } = {}) {
   const stubs = {
     document, location, window: { location, addEventListener() {} }, history: { replaceState: (_s, _t, h) => { location.hash = h; }, pushState() {} },
     localStorage: { setItem: (k, v) => { store[k] = v; }, getItem: k => store[k] ?? null }, SOURCES, SEASONS, esc, LIVE: false,
-    getEventHierarchy: async () => { calls.push('hierarchy'); return { girlsDivAndFlightList: [] }; },
+    getEventHierarchy: async () => { calls.push('hierarchy'); return hierarchy || { girlsDivAndFlightList: [] }; },
     getAgeLabel: d => d, sortAgeGroups: x => x, closeSidebarIfMobile() {}, closeTeamSheet() {},
     buildAgeGroupTabs: () => spy.built.push(['ages', AGE()]), buildConferenceList: () => spy.built.push(['confs', CONF()]),
     loadCurrentView: () => {}, rebuildAll: async () => {}, loadPlayoffsPanel: async () => {}, loadShowcasesPanel: async () => {},
@@ -410,10 +432,12 @@ function sidebar({ follow = [] } = {}) {
     teamToken0: 0, overviewAvailable: () => true, showTeamViewTabs() {}, clearTeamFilter() {}, syncSeasonUI() {},
     resolveFavorite: async () => true, loadStandings: () => { spy.standings++; },
     eventContext: e => { for (const [s, v] of Object.entries(SEASONS)) for (const [n, c] of Object.entries(v.conferences)) if (String(c.eventId) === String(e)) return { season: s, name: n, kind: 'conference' }; return null; },
-    loadTeamHistory: (rec) => { spy.history.push(rec.name); }, sameTeam: () => true,
-    getStandings: async () => ({ teamStandings: [] }), getSchedule: async () => [], loadClubPlaces: async () => {},
-    computeTeamSummary: () => ({ mine: [], form: [], next: null }), glancePanelHtml: () => '', getStandingsUrl: () => '', openSeason: () => OPEN,
-    renderStandingsTable: () => new dom.El('div'), renderScheduleTable: () => new dom.El('div'), loadWarning: () => new dom.El('div'), failedFlightPanel: () => new dom.El('div'),
+    getTeamHistory: async id => { spy.history.push(id); return historyLoad ? await historyLoad(id) : { squads: [{}] }; },
+    renderTeamHistory() {}, sameTeam: () => true,
+    getStandings: async () => ({ teamStandings: [] }), getSchedule: async () => games, loadClubPlaces: async () => {},
+    computeTeamSummary: (...a) => summaryApi ? summaryApi.computeTeamSummary(...a) : ({ mine: [], form: [], next: null }),
+    glancePanelHtml: (...a) => summaryApi ? summaryApi.glancePanelHtml(...a) : '', getStandingsUrl: () => '', openSeason: () => OPEN,
+    renderStandingsTable: () => new dom.El('div'), renderScheduleTable: () => new dom.El('div'), loadWarning: () => { const e = new dom.El('div'); e.innerHTML = '<strong>Error</strong>'; return e; }, failedFlightPanel: () => new dom.El('div'),
     shortTeamName: n => n, teamShowcaseSections: async () => [], NATIONAL_EVENTS: {}, isMissing: () => false, retryText: e => String(e),
     getDivisionAge: d => d, updateMyTeamsCount() {}, favoriteLabel: () => '', resumeLabel: () => '', savedPlace: () => null,
   };
@@ -421,6 +445,7 @@ function sidebar({ follow = [] } = {}) {
   const api = new Function(...Object.keys(stubs), SIDEBAR + `
     return { switchTab, toggleMyTeams, toggleFavorite, starButton, saveState, loadSavedState, loadFromHash, pushHash, selectConference, selectAgeGroup,
       showTeamInSidebar, openFavoritesTab, loadTeamSummary, showLanding, tabChrome,
+      previewChrome,
       ages: () => AGE_GROUPS, age: () => currentAgeGroup, conf: () => currentConference, season: () => currentSeason, setSeason: s => { currentSeason = s; },
       tab: () => currentTab, preview: () => previewTeam, setPreview: r => { previewTeam = r; }, fav: () => currentFavorite, favs: () => favorites, token: () => teamToken, view: () => teamView,
       setAges: (s) => { ageGroupsSeason = s; AGE_GROUPS = Object.keys(SEASONS[s].ageGroups); seasonAgeGroups[s] = AGE_GROUPS; } };`)(...Object.values(stubs));
@@ -438,6 +463,98 @@ function sidebar({ follow = [] } = {}) {
 }
 const CUR_ROW = CUR && newest(CUR, linkSeason(CUR));
 const OLD_ROW = OLD && newest(OLD, linkSeason(OLD));
+
+// Independent of fixture dates and season rollover: two valid catalog destinations.
+const CONTEXTS = Object.entries(SEASONS[OPEN].conferences).slice(0, 2).map(([conference, c], i) => ({
+  name: `Context team ${i + 1}`, teamID: 900001 + i, eventID: c.eventId,
+  season: OPEN, conference, division: Object.keys(SEASONS[OPEN].ageGroups)[i],
+}));
+const followContext = (p, r) => p.toggleFavorite({ dataset: { team: r.name, teamId: String(r.teamID),
+  event: String(r.eventID), divName: r.division } });
+
+test('R143: Unfollow during a second team pending/refused history uses its own saved and navigation context', async () => {
+  for (const view of ['', '&view=season']) {
+    const held = deferred();
+    const [a, b] = CONTEXTS;
+    const p = sidebar({ historyLoad: async id => { if (id === b.teamID) { await held.promise; throw Object.assign(new Error('refused'), { status: 503 }); } return { squads: [{}] }; } });
+    p.setAges(OPEN);
+    followContext(p, a); followContext(p, b);
+    await p.open(a);
+    await p.showTeamInSidebar(a.season, a.conference, a.division);
+    // Season view waits on hierarchy instead; the cached-context bug is the same load boundary.
+    await p.open(b);
+    if (view) await p.open(b, view);
+    assert.match(p.el('breadcrumb').innerHTML, /My Teams/);
+    p.toggleFavorite(b.name);
+    await p.flush();
+    assert.equal(p.conf(), b.conference, 'highlight is B conference, never A');
+    assert.equal(p.age(), b.division, 'highlight is B age, never A');
+    assert.doesNotMatch(p.el('breadcrumb').innerHTML, /My Teams/);
+    const saved = JSON.parse(p.store['ecnl-dash-v2-state']);
+    assert.deepEqual([saved.conference, saved.ageGroup], [b.conference, b.division]);
+    held.resolve();
+    await p.flush();
+    p.switchTab('conferences', { silent: true });
+    assert.deepEqual([p.conf(), p.age()], [b.conference, b.division], 'Conferences destination remains B after refusal');
+  }
+});
+
+test('R143: selected preview tab is the single keyboard tab stop', async () => {
+  const p = sidebar(); p.setAges(OPEN);
+  p.switchTab('playoffs', { silent: true });
+  await p.open(CONTEXTS[0]);
+  assert.equal(p.el('tabConferences').tabIndex, 0);
+  assert.equal(p.el('tabPlayoffs').tabIndex, -1);
+});
+
+test('R143: unknown second-team context withholds old highlight, saved place and navigation destination', async () => {
+  const p = sidebar(); p.setAges(OPEN);
+  const [a, b] = CONTEXTS;
+  followContext(p, a);
+  p.toggleFavorite({ dataset: { team: b.name, teamId: String(b.teamID) } });
+  await p.open(a); await p.showTeamInSidebar(a.season, a.conference, a.division);
+  await p.open(b);
+  p.toggleFavorite(b.name); await p.flush();
+  assert.equal(p.chrome().conf, 'none');
+  const saved = JSON.parse(p.store['ecnl-dash-v2-state']);
+  assert.deepEqual([saved.conference, saved.ageGroup], [null, null]);
+  p.switchTab('conferences', { silent: true });
+  assert.equal(p.age(), null, 'unknown context opens the index, not A table');
+});
+
+test('R143: an awaited age catalog for a departed team cannot apply its sidebar place', async () => {
+  const p = sidebar(); const [a, b] = CONTEXTS;
+  await p.open(b);
+  p.setAges(Object.keys(SEASONS).find(s => s !== OPEN));
+  const before = p.conf();
+  const held = p.showTeamInSidebar(b.season, b.conference, b.division);
+  p.setPreview(a);
+  await held;
+  assert.equal(p.conf(), before, 'departed team did not set conference after await');
+});
+
+test('H4 callers: closed conference card and actual season page suppress next match and unreported totals', () => {
+  const closed = Object.keys(SEASONS).find(s => s !== OPEN);
+  const [conf, c] = Object.entries(SEASONS[closed].conferences)[0];
+  const division = Object.keys(SEASONS[closed].ageGroups)[0];
+  const team = { teamID: 900099, name: 'Closed team', eventID: c.eventId, divisionName: division };
+  const games = [{ hometeamID: team.teamID, awayteamID: 1, gameDate: '2099-10-20', homeTeam: team.name, awayTeam: 'Other' },
+    { hometeamID: team.teamID, awayteamID: 1, gameDate: '2000-01-01', homeTeam: team.name, awayTeam: 'Other' }];
+  const real = page();
+  const glanceHtmlFor = new Function('computeTeamSummary', 'glancePanelHtml', 'currentSeason', 'openSeason', 'currentConference', 'currentConfMeta',
+    block('    function glanceHtmlFor(') + '\nreturn glanceHtmlFor;')(real.computeTeamSummary, real.glancePanelHtml, closed, () => OPEN, conf, { ageLabel: division, flights: [] });
+  const card = glanceHtmlFor({ team, fd: { standings: { teamStandings: [] }, games } });
+  assert.doesNotMatch(card, /Other|not reported/);
+  return (async () => {
+    const p = sidebar({ games, summaryApi: real });
+    p.el('titleActions').innerHTML = '<button>Old Follow</button>'; p.el('titleActions').hidden = false;
+    await p.open({ ...team, season: closed }, '&view=season');
+    assert.ok(p.el('standingsContainer').querySelector('.conf-layout'), 'real season page rendered successfully');
+    assert.doesNotMatch(p.el('standingsContainer').querySelector('.glance-panel').innerHTML, /Other|not reported/);
+    assert.equal(p.el('titleActions').innerHTML, '');
+    assert.equal(p.el('titleActions').hidden, true);
+  })();
+});
 
 test('H10: an unfollowed team sits under Conferences: that panel and tab, My Teams not expanded; a followed team keeps My Teams', { skip }, async () => {
   const p = sidebar();
@@ -503,6 +620,10 @@ test('H10 (M4): leaving clears the preview; My Teams opens from a preview; My Te
   assert.equal(p.tab(), 'conferences');
   assert.equal(p.preview(), null);
   assert.ok(p.spy.standings >= 1);
+  await p.open(CUR_ROW);
+  p.selectAgeGroup(CUR_ROW.division);
+  assert.equal(p.tab(), 'conferences');
+  assert.equal(p.preview(), null, 'choosing an age leaves team preview');
 });
 
 test('H7 (M5, re-review M1): Unfollow on the page keeps it, as a preview, with Conferences\' sidebar and no "My Teams" crumb', { skip }, async () => {
@@ -526,6 +647,8 @@ test('H7 (M5, re-review M1): Unfollow on the page keeps it, as a preview, with C
     assert.equal(p.spy.history.length, opens, 'openFavoritesTab not called: no reload of the page');
     assert.deepEqual([p.chrome().fav, p.chrome().conf, p.chrome().expanded, p.chrome().confTab], ['none', '', 'false', 'true'], `${followedFirst ? 'followed' : 'preview'}: Conferences' chrome`);
     assert.doesNotMatch(p.el('breadcrumb').innerHTML, /My Teams/);
+    assert.equal(p.conf(), CUR_ROW.conference);
+    assert.equal(p.age(), CUR_ROW.division);
     assert.equal(btn().getAttribute('aria-pressed'), 'false');
   }
 });
@@ -549,6 +672,7 @@ test('H11: the Follow slot is emptied by every tab switch (Overview → Playoffs
   assert.match(css, /\.hist-links a \{ min-height: 44px; min-width: 44px; \}/);
   assert.match(css, /\.hist-form \.form-chip\.inline \{ width: 44px; min-width: 44px; height: 44px;/);
   assert.match(css, /\.ov-glance \.form-chip \{ width: 44px; min-width: 44px; height: 44px;/);
+  assert.match(css, /\.ov-action, \.ov-linked summary, \.ov-retry \{ min-height: 44px; \}/);
   assert.match(html, /<div class="title-row"><h1 class="content-title" id="contentTitle" tabindex="-1">Select a conference<\/h1><div class="title-actions" id="titleActions" hidden><\/div><\/div>/);
 });
 

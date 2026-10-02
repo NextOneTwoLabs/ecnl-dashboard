@@ -2601,6 +2601,7 @@
     let showMoreStats = false;
     let currentFlightData = [];       // [{ flight, standings, games }] for the loaded conference + age group
     let previewTeam = null;           // a #tab=teams deep link to a team that isn't a favourite
+    let teamSidebarFor = null;        // current team page's validated [season, conference, division]
     // #107/#114: a team page shows 'history' (the Overview tab, the default: owner decision
     // 2026-10-01) or 'season' (that season's table and games). Code names stay as in #107.
     let teamView = 'history';
@@ -2940,8 +2941,8 @@
       if (landingOpen || (teamsIndex && currentTab === 'conferences')) return;
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          season: currentSeason, ageGroup: currentAgeGroup,
-          conference: currentConference, view: currentView,
+          season: currentSeason, ageGroup: currentTab === 'favorites' && previewTeam && !teamSidebarFor ? null : currentAgeGroup,
+          conference: currentTab === 'favorites' && previewTeam && !teamSidebarFor ? null : currentConference, view: currentView,
           tab: currentTab, stage: currentPlayoffStage,
           playoffAgeGroup: currentPlayoffAgeGroup, tier: currentPlayoffTier,
           favorite: currentFavorite, showcase: currentShowcase, showcaseAge: currentShowcaseAge,
@@ -3213,7 +3214,7 @@
         const on = name === tab || (preview && name === 'conferences');
         b.classList.toggle('active', on);
         b.setAttribute('aria-selected', String(on));
-        b.tabIndex = name === lastTopTab ? 0 : -1;
+        b.tabIndex = on || (mine && name === lastTopTab) ? 0 : -1;
       });
       const mt = document.getElementById('myTeamsToggle');
       if (mt) mt.setAttribute('aria-expanded', String(mine));
@@ -3258,6 +3259,10 @@
 
     function switchTab(tab, { silent = false } = {}) {
       leaveLanding();
+      if (tab === 'conferences' && currentTab === 'favorites' && previewTeam && !teamSidebarFor) {
+        teamsIndex = true;
+        currentAgeGroup = null;   // unknown team context opens the index, never a previous team's table
+      }
       if (typeof closeTeamSheet === 'function') closeTeamSheet('title');
       const ta = document.getElementById('titleActions');   // #135 P3: the Overview's Follow is its own
       if (ta) { ta.hidden = true; ta.innerHTML = ''; }
@@ -3295,14 +3300,15 @@
     // #135 P3: a team the visitor doesn't follow sits under Conferences. Its sidebar shows the team's
     // season, conference and age group (the season's age groups come from the catalog: no request),
     // so the Conferences tab then opens the team's table, and that is the place saved.
-    let teamSidebarFor = null;   // the team page's [season, conference, division], for an Unfollow on it
     async function showTeamInSidebar(season, conference, division) {
       teamSidebarFor = [season, conference, division];
       if (currentTab !== 'favorites' || !previewTeam || favorites.has(previewTeam.name)) return;
+      const forTeam = previewTeam;
       if (season !== currentSeason || !SEASONS[season] || !SEASONS[season].conferences[conference]) return;
       if (ageGroupsSeason !== season) await loadAgeGroupsForSeason();
-      if (currentTab !== 'favorites' || season !== currentSeason || !AGE_GROUPS.includes(division)) return;
+      if (currentTab !== 'favorites' || previewTeam !== forTeam || season !== currentSeason || !AGE_GROUPS.includes(division)) return;
       currentConference = conference; currentAgeGroup = division;
+      document.getElementById('conferencesPanel').style.display = '';
       buildAgeGroupTabs(); buildConferenceList();
       saveState();   // S3: the place saved is this season's, not the season before
     }
@@ -3311,6 +3317,7 @@
     function previewChrome() {
       if (!tabChrome('favorites')) return;
       if (teamSidebarFor) showTeamInSidebar(...teamSidebarFor);
+      else document.getElementById('conferencesPanel').style.display = 'none';
       const rec = previewTeam;
       if (teamView === 'history') historyCrumb(rec, currentSeason, rec.name);
       else document.getElementById('breadcrumb').innerHTML =
@@ -4703,6 +4710,15 @@
     // The My Teams summary: rank + stat strip + full table (team highlighted),
     // the team's own games, and its post-season games when it played any.
     async function loadTeamSummary(rec) {
+      teamSidebarFor = null;
+      // A followed record already carries its table. Establish this team's destination before
+      // history can wait or fail; a previous team's sidebar must never be inherited.
+      const sidebarCtx = eventContext(rec.eventID);
+      const sidebarDivision = rec.divisionName || rec.division;
+      if (sidebarCtx && SEASONS[sidebarCtx.season]?.conferences?.[sidebarCtx.name] && SEASONS[sidebarCtx.season]?.ageGroups?.[sidebarDivision]) {
+        teamSidebarFor = [sidebarCtx.season, sidebarCtx.name, sidebarDivision];
+      }
+      if (currentTab === 'favorites' && previewTeam && !teamSidebarFor) document.getElementById('conferencesPanel').style.display = 'none';
       const container = document.getElementById('standingsContainer');
       if (!sameTeam(teamViewFor, rec)) teamView = 'history';   // #107 S11: another team opens on Overview
       // ... where it has one: never in live mode (no history route), nor for an id with no history
@@ -4742,6 +4758,7 @@
           syncSeasonUI();
           showTeamViewTabs();   // the season tab's label names the team's season
         }
+        if (teamSidebarFor) showTeamInSidebar(...teamSidebarFor);
         if (teamView === 'history') { await loadTeamHistory(rec, ctx.season, token); return; }   // #107
 
         const hierarchy = await getEventHierarchy(rec.eventID);
