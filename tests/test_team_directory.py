@@ -7,6 +7,9 @@
     the place column equals clubs.json, never for club 7; the key allow-list; the size budget.
 (c) Writing: unchanged bytes are not rewritten; a failed write leaves the old file; --dry-run
     writes nothing; --clubs updates the places in place.
+(e) Club families (#133, public/data/club-families.json): every entry validated; a bad entry is
+    left out and reported while the directory is still written; the drift check sees a change to
+    the file, and fails on a bad entry.
 (d) The pipeline (#114 M3): the refresh builds the directory last, after the club places, from
     its own history build; a directory failure fails the run but keeps the histories and
     historyAsOf; the drift check (--team-history --check) covers the directory.
@@ -109,7 +112,7 @@ class Committed(unittest.TestCase):
 
     def test_no_event_only_teams(self):
         """#97 decision 4 and #114 D3: only teams with a conference row, i.e. a team page."""
-        self.assertEqual(set(self.doc), {"schema", "seasons", "confs", "divs", "events", "tiers", "clubs", "squads"})
+        self.assertEqual(set(self.doc), {"schema", "seasons", "confs", "divs", "events", "tiers", "clubs", "families", "squads"})
         # A squad is in the file of each id it used, so the history files list some twice.
         distinct = {(sq["seasons"][0]["season"], sq["seasons"][0]["teamID"]) for sq in self.history}
         self.assertEqual(len(self.doc["squads"]), len(distinct))
@@ -123,7 +126,10 @@ class Committed(unittest.TestCase):
             for e in sq.get("e", []):
                 self.assertEqual(len(e), 4)
         for c in self.doc["clubs"]:
-            self.assertEqual(len(c), 4)          # id, name, logo URL (as in the team indexes), "City, ST"
+            # id, name, logo URL (as in the team indexes), "City, ST", and (#133) a family index
+            self.assertIn(len(c), (4, 5))
+            if len(c) == 5:
+                self.assertIn(c[4], range(len(self.doc["families"])))
         text = re.sub(r'"https://[^"]*"', '""', self.data.decode("utf-8"))
         self.assertIsNone(re.search(r"[\w.+-]+@[\w-]+\.[\w.]+", text), "an email address")
         self.assertIsNone(re.search(r"\(?\b\d{3}\)?[ .-]\d{3}[ .-]\d{4}\b", text), "a phone number")
@@ -137,7 +143,7 @@ class Committed(unittest.TestCase):
 
     def test_places_equal_clubs_json_and_club_7_has_none(self):
         places = api.read_json_file(api.CLUBS_PATH)["clubs"]
-        for cid, _name, _logo, place in self.doc["clubs"]:
+        for cid, place in ((c[0], c[3]) for c in self.doc["clubs"]):
             p = places.get(str(cid))
             want = f"{p['city']}, {p['state']}" if p and cid != td.NO_CLUB else ""
             self.assertEqual(place, want, cid)
@@ -322,6 +328,23 @@ class Pipeline(unittest.TestCase):
             self.assertEqual(archive.cmd_team_history(self.sources, check=True), 1)
             self.assertIn("Team directory check: public/archive/directory.json differs", out.getvalue())
 
+    def test_the_drift_check_fails_on_a_bad_family_entry(self):
+        """M4: the file as committed plus one bad entry: the directory still equals a fresh build
+        (the entry is left out), and the check fails, naming the entry."""
+        bad = load(td.families_path())
+        bad["families"] = bad["families"] + [{"name": "Bad", "main": 78, "clubIDs": [78], "evidence": "x"}]
+        fam = os.path.join(self.tmp, "club-families.json")
+        Path(fam).write_text(json.dumps(bad), encoding="utf-8")
+        with contextlib.ExitStack() as stack:
+            for p in self.paths():
+                stack.enter_context(p)
+            stack.enter_context(patch.object(td, "FAMILIES_PATH", fam))
+            out = stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+            Path(self.directory).write_bytes(fresh())
+            self.assertEqual(archive.cmd_team_history(self.sources, check=True), 1)
+            self.assertIn("club-families.json families[1]", out.getvalue())
+            self.assertIn("Team directory check: directory.json equals a fresh build", out.getvalue())
+
     # ---- SC1 (#118 review): each path that writes the directory, run in the sandbox ----
     def test_clubs_updates_the_directory_places_in_place(self):
         Path(self.directory).write_bytes(fresh())
@@ -382,6 +405,117 @@ class Pipeline(unittest.TestCase):
             name = f.split("(", 1)[0]
             self.assertGreater(f.rfind("update_team_directory("), f.rfind("update_team_history(sources"), name)
 
+
+
+class Families(unittest.TestCase):
+    """#133: club families, from public/data/club-families.json (hand-reviewed, like team-links)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.sources = api.load_sources()
+        cls.doc = json.loads(fresh())
+        cls.known = {c[0] for c in cls.doc["clubs"]}
+        cls.file = load(td.families_path())
+
+    def test_the_committed_file_is_valid_and_lands_in_the_directory(self):
+        entries, problems = td.load_families()
+        fams, errors = td.validate_families(entries, self.known)
+        self.assertEqual((problems, errors), ([], []))
+        self.assertEqual(self.doc["families"], [[n, m] for n, m, _ in fams])
+        for fi, (_n, _m, ids) in enumerate(fams):
+            self.assertEqual(sorted(c[0] for c in self.doc["clubs"] if len(c) == 5 and c[4] == fi), sorted(ids))
+        self.assertEqual(sum(len(c) == 5 for c in self.doc["clubs"]), sum(len(ids) for *_, ids in fams))
+        for e in self.file["families"]:
+            self.assertEqual(set(e), td.FAMILY_KEYS)
+            self.assertTrue(e["evidence"].strip())
+
+    def test_pda_is_one_family_with_its_main_club(self):
+        pda = next(e for e in self.file["families"] if e["name"] == "PDA")
+        self.assertEqual(sorted(pda["clubIDs"]), [78, 2357, 2628, 3313])
+        self.assertIn(pda["main"], pda["clubIDs"])
+        self.assertIn(["PDA", pda["main"]], self.doc["families"])
+
+    def test_a_bad_entry_is_skipped_and_reported_and_the_good_ones_kept(self):
+        a, b, c, d = sorted(i for i in self.known if i != td.NO_CLUB)[:4]
+        good = {"name": "Fixture", "main": a, "clubIDs": [a, b], "evidence": "fixture"}
+        clean = {"name": "Clean", "main": c, "clubIDs": [c, d], "evidence": "fixture"}
+        fams, errors = td.validate_families([good, clean], self.known)
+        self.assertEqual((fams, errors), ([("Fixture", a, [a, b]), ("Clean", c, [c, d])], []), "the control passes")
+        # Each case is `clean` with exactly one defect, so only its own check can catch it.
+        bad = {
+            "unknown key": ({**clean, "note": "x"}, "unknown key"),
+            "club 7": ({**clean, "clubIDs": [td.NO_CLUB, d], "main": d}, "club 7"),
+            "a float id": ({**clean, "clubIDs": [float(c), d]}, "integer"),
+            "a string id": ({**clean, "clubIDs": [str(c), d]}, "integer"),
+            "a boolean id": ({**clean, "clubIDs": [True, d], "main": d}, "integer"),
+            "one id": ({**clean, "clubIDs": [c]}, "integer"),
+            "a repeated id": ({**clean, "clubIDs": [c, c]}, "integer"),
+            "an id not in the directory": ({**clean, "clubIDs": [c, 10 ** 9]}, "not in the directory"),
+            "an id another family holds": ({**clean, "clubIDs": [c, a]}, "already in"),
+            "main not among its ids": ({**clean, "main": a}, "main"),
+            "main not an integer": ({**clean, "main": float(c)}, "main"),
+            "no evidence": ({**clean, "evidence": " "}, "evidence"),
+            "a name used twice": ({**clean, "name": "Fixture"}, "already used"),
+            "no name": ({**clean, "name": ""}, "no name"),
+            "not an object": (["Fixture"], "not an object"),
+        }
+        for why, (entry, says) in bad.items():
+            fams, errors = td.validate_families([good, entry], self.known)
+            self.assertEqual(fams, [("Fixture", a, [a, b])], why)
+            self.assertEqual(len(errors), 1, why)
+            self.assertIn("skipped", errors[0], why)
+            self.assertIn(says, errors[0], why)
+
+    def test_a_missing_or_unreadable_file(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.assertEqual(td.load_families(os.path.join(d, "none.json")), ([], []))
+            for body in ("{", '{"schema": 2, "families": []}', '[]', '{"schema": 1, "families": {}}'):
+                Path(d, "f.json").write_text(body, encoding="utf-8")
+                entries, problems = td.load_families(os.path.join(d, "f.json"))
+                self.assertEqual(entries, [])
+                self.assertEqual(len(problems), 1, body)
+
+    def test_a_bad_file_never_blocks_the_directory(self):
+        """M4: the bad entry is left out and reported; the directory is still written, with the
+        good families; the drift check fails on the error."""
+        with tempfile.TemporaryDirectory() as d:
+            bad = dict(self.file, families=self.file["families"] + [{"name": "Bad", "main": 7, "clubIDs": [7, 78], "evidence": "x"}])
+            Path(d, "f.json").write_text(json.dumps(bad), encoding="utf-8")
+            path = os.path.join(d, "directory.json")
+            with patch.object(td, "FAMILIES_PATH", os.path.join(d, "f.json")):
+                errors = []
+                self.assertTrue(td.write_directory(self.sources, built(), path=path, errors=errors))
+                self.assertEqual(len(errors), 1)
+                self.assertEqual(Path(path).read_bytes(), fresh(), "the good families, as committed")
+                errors = []
+                self.assertFalse(td.check_directory(self.sources, built(), path=path, errors=errors))
+                self.assertEqual(len(errors), 1)
+
+    def test_the_drift_check_sees_a_change_to_the_families_file(self):
+        with tempfile.TemporaryDirectory() as d:
+            Path(d, "f.json").write_text(json.dumps(dict(self.file, families=[])), encoding="utf-8")
+            path = os.path.join(d, "directory.json")
+            Path(path).write_bytes(fresh())
+            with patch.object(td, "FAMILIES_PATH", os.path.join(d, "f.json")):
+                self.assertTrue(td.check_directory(self.sources, built(), path=path))
+                doc = td.build(self.sources, built())
+            self.assertEqual(doc["families"], [])
+            self.assertTrue(all(len(c) == 4 for c in doc["clubs"]))
+
+    def test_the_refresh_reports_a_bad_entry_and_still_writes(self):
+        stats = archive.Stats()
+        with tempfile.TemporaryDirectory() as d:
+            bad = dict(self.file, families=self.file["families"] + [{"name": "Bad", "main": 78, "clubIDs": [78], "evidence": "x"}])
+            Path(d, "f.json").write_text(json.dumps(bad), encoding="utf-8")
+            path = os.path.join(d, "directory.json")
+            real = td.write_directory
+            with patch.object(td, "FAMILIES_PATH", os.path.join(d, "f.json")), \
+                    patch.object(td, "write_directory", side_effect=lambda *a, **k: real(*a, **{**k, "path": path})), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                archive.update_team_directory(self.sources, stats, built())
+            self.assertTrue(stats.failed)
+            self.assertTrue(any("club-families.json" in e for e in stats.errors))
+            self.assertEqual(Path(path).read_bytes(), fresh())
 
 if __name__ == "__main__":
     unittest.main()
