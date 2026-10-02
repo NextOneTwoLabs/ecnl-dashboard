@@ -2167,6 +2167,64 @@
       .us-actions a { min-height: 32px; }
       .us-foot .us-keys { display: none; }
     }
+
+    /* ===== #135 P1a: the landing page and the Teams index ===== */
+    .landing { flex: 1; overflow-y: auto; }
+    .landing[hidden] { display: none; }
+    /* No sidebar, menu button or table behind the landing page, at any width */
+    body.route-landing .content-header, body.route-landing #standingsScroll, body.route-landing .sidebar,
+    body.route-landing .hamburger, body.route-landing .sidebar-overlay { display: none; }
+    .section-label[aria-current="page"] { color: var(--text-primary); }
+    .land-hero { background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 26px 28px 22px; }
+    .land-hero h1 { font-size: 28px; font-weight: 800; letter-spacing: -.5px; line-height: 1.15; }
+    .land-hero p { margin-top: 6px; color: var(--text-secondary); font-size: 15px; }
+    .land-body { padding: 28px; }
+    .land-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 420px)); gap: 22px; }
+    .land-card { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 28px 30px; min-height: 230px; text-decoration: none;
+      background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-primary); box-shadow: var(--shadow-sm); }
+    .land-card:hover { border-color: var(--accent); box-shadow: var(--shadow-md); }
+    .land-icon { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 14px; background: var(--accent-surface); color: var(--accent-text); margin-bottom: 14px; }
+    .land-icon svg { width: 30px; height: 30px; }
+    .land-card h2 { font-size: 26px; font-weight: 700; letter-spacing: -.3px; }
+    .land-desc { font-size: 17px; color: var(--text-secondary); line-height: 1.5; }
+    .land-count { margin-top: auto; padding-top: 12px; font-size: 14px; color: var(--text-secondary); }
+    .land-count b { color: var(--text-primary); font-weight: 600; }
+    .land-back { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; }
+    .land-back .lbl { font: 600 12px var(--font); color: var(--text-secondary); margin-right: 4px; }
+    .land-pill { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 12px; text-decoration: none; cursor: pointer;
+      background: var(--accent-surface); color: var(--accent-text); font: 700 14px var(--font); border: 1px solid transparent; }
+    .land-pill.fav { background: var(--bg-surface); border-color: var(--border); color: var(--text-primary); font-weight: 600; }
+    .land-pill small { color: var(--text-secondary); font-weight: 500; }
+    .land-search { display: none; }
+    .land-foot { margin-top: 26px; font-size: 12px; color: var(--text-secondary); }
+    @media (max-width: 768px) {
+      .land-hero { padding: 18px 16px 16px; } .land-hero h1 { font-size: 22px; } .land-hero p { font-size: 14px; }
+      .land-body { padding: 14px 16px 24px; }
+      .land-cards { grid-template-columns: 1fr; gap: 12px; }
+      .land-card { min-height: 0; padding: 18px; flex-direction: row; flex-wrap: wrap; align-items: center; column-gap: 14px; row-gap: 4px; }
+      .land-icon { width: 48px; height: 48px; margin: 0; } .land-icon svg { width: 24px; height: 24px; }
+      .land-card h2 { font-size: 20px; }
+      .land-desc, .land-count { flex-basis: 100%; font-size: 14px; }
+      .land-search { display: flex; width: 100%; min-height: 48px; align-items: center; gap: 10px; padding: 0 14px; margin-top: 14px; border: 1px solid var(--border);
+        border-radius: 12px; background: var(--bg-surface-alt); color: var(--text-secondary); font: 500 15px var(--font); cursor: text; }
+      .land-search svg { width: 18px; height: 18px; }
+      .land-back { flex-wrap: nowrap; overflow-x: auto; margin: 12px -16px 0; padding: 0 16px 2px; scrollbar-width: none; }
+      .land-back .lbl { display: none; } .land-pill { flex: none; min-height: 44px; }
+    }
+    .tix { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; max-width: 860px; }
+    .tix table { width: 100%; border-collapse: collapse; }
+    .tix thead th { font: 700 11px var(--font); text-transform: uppercase; letter-spacing: .05em; color: var(--text-secondary); padding: 10px 6px; text-align: center; border-bottom: 1px solid var(--border); }
+    .tix thead th small { display: block; font-weight: 500; text-transform: none; letter-spacing: 0; }
+    .tix thead th:first-child { text-align: left; padding-left: 16px; }
+    .tix tbody th { font: 600 14px var(--font); text-align: left; padding-left: 16px; border-bottom: 1px solid var(--border-light); }
+    .tix td { border-bottom: 1px solid var(--border-light); padding: 4px; text-align: center; }
+    .tix a { display: inline-grid; place-items: center; min-width: 44px; min-height: 36px; border-radius: 8px; color: var(--accent-text); font: 600 13px var(--font); text-decoration: none; }
+    .tix a:hover { background: var(--accent-surface); }
+    @media (max-width: 768px), (pointer: coarse) { .tix a { min-height: 44px; } }
+    @media (max-width: 768px) { .tix thead th small { display: none; } .tix tbody th, .tix thead th:first-child { padding-left: 10px; font-size: 13px; }
+      .tix a { min-width: 38px; font-size: 12px; } .tix td { padding: 0 1px; } }
+    /* On the index the sidebar offers the season only: the table is chosen in the grid */
+    #conferencesPanel.on-index { display: none !important; }
   </style>
 </head>
 
@@ -2333,6 +2391,7 @@
     </div>
 
     <div class="main">
+      <section class="landing" id="landing" hidden aria-labelledby="landTitle"></section>
       <div class="content-header">
         <div class="content-header-row">
           <div class="content-header-main">
@@ -2489,6 +2548,8 @@
 
     // Dynamic age groups — populated from API
     let AGE_GROUPS = [];  // populated dynamically
+    let landingOpen = false;   // #135 P1a: the landing page is on screen; it saves nothing and writes no hash
+    let teamsIndex = false;    // #135 P1a: Conferences shows its index (#season=X alone, or no table chosen since the landing page)
     let AGE_LABELS = {};  // populated dynamically
     let ageGroupsSeason = null;  // #102: the season AGE_GROUPS and the Conferences sidebar were built for
 
@@ -2847,6 +2908,9 @@
 
     // ========== STORAGE ==========
     function saveState() {
+      // #135 P1a: neither the landing page nor the Teams index is a place to resume (the index only
+      // while Conferences shows it: on another tab the flag is a memory of where Conferences was).
+      if (landingOpen || (teamsIndex && currentTab === 'conferences')) return;
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
           season: currentSeason, ageGroup: currentAgeGroup,
@@ -2854,7 +2918,10 @@
           tab: currentTab, stage: currentPlayoffStage,
           playoffAgeGroup: currentPlayoffAgeGroup, tier: currentPlayoffTier,
           favorite: currentFavorite, showcase: currentShowcase, showcaseAge: currentShowcaseAge,
-          team: selectedTeamID, sched: scheduleFilter, moreStats: showMoreStats
+          team: selectedTeamID, sched: scheduleFilter, moreStats: showMoreStats,
+          // #135 P1a: the team page on screen (followed or not), as pushHash names it
+          teamPage: currentTab !== 'favorites' ? null : (r => r && r.name ? { teamID: r.teamID ?? null, name: r.name, view: teamView } : null)(
+            currentFavorite ? favoriteMeta.get(currentFavorite) || { name: currentFavorite } : previewTeam)
         }));
       } catch (e) { }
     }
@@ -2873,6 +2940,17 @@
           if (s.showcaseAge) currentShowcaseAge = s.showcaseAge;
           if (s.tab === 'favorites' && favorites.size) currentTab = 'favorites';
           if (s.favorite && favorites.has(s.favorite)) currentFavorite = s.favorite;
+          // #135 P1a: a saved team page, followed or not, comes back as a #tab=teams link would open it.
+          const tp = s.teamPage;
+          if (s.tab === 'favorites' && tp && typeof tp.name === 'string' && tp.name) {
+            const id = Number(tp.teamID) || null;
+            const rec = [...favoriteMeta.values()].find(r => (id && r.teamID === id) || r.name === tp.name);
+            currentTab = 'favorites';
+            currentFavorite = rec ? rec.name : null;
+            previewTeam = rec ? null : { name: tp.name, teamID: id || undefined };
+            teamView = tp.view === 'season' ? 'season' : 'history';
+            teamViewFor = { id, name: tp.name };
+          }
           if (s.stage) currentPlayoffStage = s.stage;              // validated in buildStageTabs
           if (s.playoffAgeGroup) currentPlayoffAgeGroup = s.playoffAgeGroup;
           if (s.tier) currentPlayoffTier = Number(s.tier) || null;
@@ -2915,6 +2993,7 @@
 
     // ========== URL HASH ==========
     function pushHash() {
+      if (landingOpen) return;   // #135 P1a: the landing page is the empty hash
       const e = encodeURIComponent;
       const view = currentView !== 'standings' ? `&view=${e(currentView)}` : '';
       const fav = currentFavorite ? favoriteMeta.get(currentFavorite) : previewTeam;
@@ -2933,6 +3012,7 @@
         ? `#tab=teams&season=${e(currentSeason)}` +
           (fav && fav.teamID ? `&team=${e(fav.teamID)}` : '') + (fav ? `&name=${e(fav.name)}` : '') +
           (teamView === 'season' ? '&view=season' : '')   // no view: Overview
+        : teamsIndex ? `#season=${e(currentSeason)}`   // #135 P1a: the Teams index
         : `#season=${e(currentSeason)}&age=${e(currentAgeGroup)}&conf=${e(currentConference)}${view}` +
           (selectedTeamID ? `&team=${e(selectedTeamID)}` : '') +
           (scheduleFilter !== 'upcoming' ? `&sched=${e(scheduleFilter)}` : '');
@@ -2948,6 +3028,7 @@
       if (p.get('view') === 'schedule' || p.get('view') === 'standings') { currentView = p.get('view'); changed = true; }
       if (p.get('tab') === 'teams' || p.get('tab') === 'myteams') {   // myteams: an alias (#97 addendum)
         currentTab = 'favorites';
+        teamsIndex = false;   // #135 P1a: a team link leaves the Teams index
         const teamID = Number(p.get('team')) || null;
         const name = p.get('name') || null;
         let rec = [...favoriteMeta.values()].find(r => (teamID && r.teamID === teamID) || (name && r.name === name));
@@ -2987,6 +3068,7 @@
       if (p.get('team')) { selectedTeamID = Number(p.get('team')) || null; changed = true; } // validated once the tables load
       if (['upcoming', 'results', 'all'].includes(p.get('sched'))) { scheduleFilter = p.get('sched'); changed = true; }
       if (!changed) return false;   // an unknown-only hash such as #foo stays a no-op
+      teamsIndex = !p.has('age') && !p.has('conf') && !p.has('team');   // #135 P1a: #season=X alone is the Teams index
       // A link describes the whole view: what it omits is the default, not what
       // this browser showed last (same-document navigation reuses live state).
       // A null age group / conference is repaired to the first one by rebuildAll.
@@ -2999,10 +3081,14 @@
     }
 
     window.addEventListener('hashchange', () => {
+      if (!location.hash) { showLanding({ focus: true }); return; }   // #135 P1a: an empty hash is the landing page
+      const handOff = landingOpen || (teamsIndex && currentTab === 'conferences');   // S1: focus follows the new view
       if (!loadFromHash()) return;
+      leaveLanding();
       syncSeasonUI();
       if (currentTab === 'playoffs' || currentTab === 'favorites' || currentTab === 'showcases') switchTab(currentTab);
       else { switchTab('conferences', { silent: true }); rebuildAll(); }
+      if (handOff) focusContentTitle();
     });
 
     // ========== THEME ==========
@@ -3114,6 +3200,7 @@
     });
 
     function switchTab(tab, { silent = false } = {}) {
+      leaveLanding();
       if (typeof closeTeamSheet === 'function') closeTeamSheet('title');
       currentTab = tab;
       const isConf = tab === 'conferences';
@@ -3152,7 +3239,11 @@
       // #102: the season can move on behind the Conferences sidebar (a team page in another
       // season, the season picker on Playoffs or Showcases, a #tab= link). Then rebuild it for
       // that season as a deep link does: the conference and age group stay if they exist there.
-      if (isConf && !silent) {
+      // #135 P1a: Conferences with no table chosen yet (the index, or a page entered from the landing
+      // page) shows the Teams index, never a blank pane or a silent default.
+      if (isConf && !silent && (teamsIndex || (!currentAgeGroup && ageGroupsSeason === currentSeason))) { teamsIndex = true; renderTeamsIndex(); }
+      else if (isConf && !silent) {
+        indexChrome(false);
         if (ageGroupsSeason !== currentSeason) rebuildAll();
         else if (currentAgeGroup) loadCurrentView();
       }
@@ -4178,14 +4269,11 @@
       if (!link || link.host !== location.host) return true;   // let the browser navigate
       e.preventDefault();
       usClose(true);
-      currentConference = Object.keys(getSeasonData().conferences)[0];
-      currentAgeGroup = AGE_GROUPS[0] || null;
-      currentView = 'standings';
-      scheduleFilter = 'upcoming';
-      selectedTeamID = null;
-      switchTab('conferences', { silent: true });
       closeSidebarIfMobile();
-      rebuildAll();
+      // #135 P1a: the landing page, as one history entry (none when it is already on screen). The
+      // entry is marked, so a reload or Forward shows the landing page, not the saved place (S2).
+      if (!landingOpen) history.pushState({ landing: 1 }, '', location.pathname + location.search);
+      showLanding({ focus: true });
       return false;
     }
 
@@ -6041,6 +6129,8 @@
     }
 
     async function rebuildAll() {
+      if (teamsIndex && currentTab === 'conferences') { await renderTeamsIndex(); return; }   // #135 P1a
+      indexChrome(false);
       await loadAgeGroupsForSeason();
       // Validate currentAgeGroup against available groups
       if (!currentAgeGroup || !AGE_GROUPS.includes(currentAgeGroup)) {
@@ -7142,6 +7232,7 @@
         e.preventDefault(); focusTeamSearch(); return;
       }
       if (e.key === 'Escape' && document.getElementById('sidebar').classList.contains('open')) { toggleSidebar(); return; }
+      if (landingOpen || (teamsIndex && currentTab === 'conferences')) return;   // #135 P1a: no table here to browse
       // Enter/Space activates focusable list items that aren't native buttons.
       if ((e.key === 'Enter' || e.key === ' ') && t.matches && t.matches('li[tabindex]')) { e.preventDefault(); t.click(); return; }
       // Arrow shortcuts browse conferences only, and never steal keys from a focused control.
@@ -7212,8 +7303,163 @@
       });
     }
 
+
+    // ========== LANDING (#135 P1a) ==========
+    // The landing page (a bare URL with no saved place, "ECNL Girls", or Back to an empty hash), the
+    // routes out of it, and the Teams index (#season=X alone). The landing page and the index save
+    // nothing; leaving the landing page adds one history entry (its links, Continue, a search result).
+    const LANDING_HEADING = 'ECNL Girls team and event.';
+    const LANDING_LINE = 'Conference standings, team histories since 2020–21, and Playoffs & Finals and showcase results.';
+    const LAND_ICON = {
+      teams: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>',
+      events: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>',
+      search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg>',
+    };
+    // The saved place, when it names a season the catalog still has (anything else is no place).
+    function savedPlace() {
+      try {
+        const s = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return s && typeof s === 'object' && !Array.isArray(s) && SEASONS[s.season] ? s : null;
+      } catch (e) { return null; }
+    }
+    // INIT's defaults. A cold load and Continue both start here, so Continue is a true cold resume
+    // whatever the page showed before (M2).
+    function resetView() {
+      currentTab = 'conferences'; currentView = 'standings';
+      currentSeason = Object.keys(SEASONS)[0];
+      currentAgeGroup = null;
+      currentConference = Object.keys(getSeasonData().conferences || {})[0] || null;
+      selectedTeamID = null; scheduleFilter = 'upcoming'; showMoreStats = false;
+      previewTeam = null; teamView = 'history'; teamViewFor = null; currentFavorite = null;
+      currentPlayoffStage = null; currentPlayoffAgeGroup = null; currentPlayoffTier = null;
+      currentShowcase = null; currentShowcaseAge = null; currentShowcaseFlight = null;
+      teamsIndex = false;
+    }
+    // The view the globals name, as INIT opens it (a deep link, a saved place, Continue).
+    async function resumeView() {
+      syncSeasonUI();
+      if (currentTab === 'playoffs' || currentTab === 'favorites' || currentTab === 'showcases') {
+        // Build the conference sidebar so switching back is instant, but land on the saved tab.
+        await loadAgeGroupsForSeason();
+        if (!currentAgeGroup || !AGE_GROUPS.includes(currentAgeGroup)) currentAgeGroup = AGE_GROUPS[0] || null;
+        if (!getSeasonData().conferences[currentConference]) currentConference = Object.keys(getSeasonData().conferences)[0];
+        buildAgeGroupTabs();
+        buildConferenceList();
+        switchTab(currentTab);
+      } else {
+        await rebuildAll();
+      }
+    }
+    // Continue: the saved place, exactly as a cold load of a bare URL resumes it, as one new history
+    // entry (pushed first; the view then writes its hash into it, as every view does).
+    async function continueSaved() {
+      history.pushState(null, '', location.pathname + location.search);
+      leaveLanding();
+      resetView();
+      loadSavedState();
+      await resumeView();
+      focusContentTitle();
+    }
+    // What Continue opens, in words; '' when there is nothing to continue. Mirrors loadSavedState.
+    function resumeLabel(s) {
+      if (!s) return '';
+      const season = seasonLabel(s.season);
+      if (s.tab === 'playoffs') return `Playoffs & Finals · ${season}`;
+      if (s.tab === 'showcases') {
+        const hit = Object.entries(SHOWCASES[s.season] || {}).find(([, e]) => e.eventId === Number(s.showcase));
+        return `${hit ? hit[0] : 'Showcases'} · ${season}`;
+      }
+      const tp = s.teamPage;
+      if (s.tab === 'favorites' && tp && typeof tp.name === 'string' && tp.name) {   // a team page, followed or not
+        const rec = [...favoriteMeta.values()].find(r => (tp.teamID && r.teamID === Number(tp.teamID)) || r.name === tp.name) || { name: tp.name };
+        return `${displayName(rec.name, rec.clubName)} · ${favorites.has(rec.name) ? 'My Teams' : season}`;
+      }
+      if (s.tab === 'favorites' && favorites.size) {
+        const name = s.favorite && favorites.has(s.favorite) ? s.favorite : sortedFavorites()[0].name;
+        const rec = favoriteMeta.get(name) || { name };
+        return `${displayName(rec.name, rec.clubName)} · My Teams`;
+      }
+      const conf = SEASONS[s.season].conferences[s.conference] ? s.conference : '';
+      const age = s.ageGroup && (SEASONS[s.season].ageGroups || {})[s.ageGroup] ? getAgeLabel(s.ageGroup, s.season) : '';
+      return [conf || 'Teams', age, season].filter(Boolean).join(' · ');
+    }
+    function leaveLanding() {
+      if (!landingOpen) return;
+      landingOpen = false;
+      document.body.classList.remove('route-landing');
+      document.getElementById('landing').hidden = true;
+      document.querySelector('.section-label').removeAttribute('aria-current');
+    }
+    function showLanding({ focus = false } = {}) {
+      if (typeof closeTeamSheet === 'function') closeTeamSheet('title');
+      // Whatever was loading belongs to a view that is gone (#99/#102/#120): drop its answers.
+      loadToken++; teamToken++; playoffToken++; playoffFlightToken++; showcaseToken++;
+      landingOpen = true;
+      teamsIndex = true;   // Conferences opened from here (after the Events card) is the index, not a default table
+      document.body.classList.add('route-landing');
+      document.querySelector('.section-label').setAttribute('aria-current', 'page');
+      const el = document.getElementById('landing');
+      el.hidden = false;
+      const s0 = Object.keys(SEASONS)[0], e = encodeURIComponent;
+      const evOf = s => ({ po: Object.keys((SEASONS[s] || {}).national || {}), sc: Object.keys((SEASONS[s] || {}).showcases || {}) });
+      const evSeason = Object.keys(SEASONS).find(s => evOf(s).po.length || evOf(s).sc.length);
+      const ev = evSeason ? evOf(evSeason) : { po: [], sc: [] }, now = evOf(s0);
+      const evText = [ev.po.length ? 'Playoffs & Finals' : '', ev.sc.length ? `${ev.sc.length} showcase${ev.sc.length === 1 ? '' : 's'}` : ''].filter(Boolean).join(', ');
+      const n = SEASONS[s0].teamCount;
+      const teamsCount = `<b>${Object.keys(SEASONS[s0].conferences || {}).length} conferences</b>` +
+        (Number.isInteger(n) ? ` · ${n.toLocaleString('en-US')} teams in ${esc(seasonLabel(s0))}` : '');
+      const eventsCount = evSeason ? `<b>${esc(seasonLabel(evSeason))}:</b> ${esc(evText)}${now.po.length || now.sc.length || evSeason === s0 ? '' : ` · ${esc(seasonLabel(s0))}: none yet`}` : 'None archived yet';
+      const label = resumeLabel(savedPlace());
+      const favs = sortedFavorites().slice(0, 3).map(r => {
+        const c = r.eventID ? eventContext(r.eventID) : null;
+        const sub = c ? favoriteLabel(r).replace(/^\d{4}-\d{2} · /, '') : '';   // S4: an old name-only favourite has no place yet
+        return `<a class="land-pill fav" href="#tab=teams&season=${e((c && c.season) || s0)}${r.teamID ? `&team=${e(r.teamID)}` : ''}&name=${e(r.name)}">★ ${esc(displayName(r.name, r.clubName))}${sub ? ` <small>${esc(sub)}</small>` : ''}</a>`;
+      }).join('');
+      const back = label || favs ? `<div class="land-back"><span class="lbl">Welcome back</span>${label ? `<button type="button" class="land-pill" onclick="continueSaved()">Continue: ${esc(label)} →</button>` : ''}${favs}</div>` : '';
+      const card = (id, href, icon, title, desc, count) => `<a class="land-card" href="${href}" aria-labelledby="land${id}T" aria-describedby="land${id}D land${id}C">` +
+        `<span class="land-icon">${LAND_ICON[icon]}</span><h2 id="land${id}T">${title}</h2><span class="land-desc" id="land${id}D">${desc}</span><span class="land-count" id="land${id}C">${count}</span></a>`;
+      const obs = (document.getElementById('observed') || {}).textContent || '';
+      el.innerHTML = `<div class="land-hero"><h1 id="landTitle" tabindex="-1">${esc(LANDING_HEADING)}</h1><p>${esc(LANDING_LINE)}</p>
+          <button type="button" class="land-search" onclick="focusTeamSearch()">${LAND_ICON.search}<span>Search teams, clubs, places…</span></button>${back}</div>
+        <div class="land-body"><div class="land-cards">
+          ${card('Teams', `#season=${e(s0)}`, 'teams', 'Teams', 'Conference standings, matches and every team’s history since 2020–21.', teamsCount)}
+          ${card('Events', `#tab=playoffs&season=${e(s0)}`, 'events', 'Events', 'Playoffs &amp; Finals brackets and showcase results.', eventsCount)}
+        </div><div class="land-foot">${esc(obs)}${obs ? ' · ' : ''}Results from TGS, linked from every table · refreshed on match days, not live</div></div>`;
+      if (focus) document.getElementById('landTitle').focus({ preventScroll: true });
+    }
+    // The index hides the sidebar's age groups and conferences: the grid chooses the table.
+    function indexChrome(on) {
+      const panel = document.getElementById('conferencesPanel');
+      if (panel) panel.classList.toggle('on-index', !!on);
+    }
+    // #season=X alone: every conference x age group of the season, one link per table, no default.
+    // The catalog's ageGroups name them, so this needs no request.
+    async function renderTeamsIndex() {
+      const token = ++loadToken;
+      currentAgeGroup = null;
+      await loadAgeGroupsForSeason();
+      if (token !== loadToken || currentTab !== 'conferences' || !teamsIndex) return;
+      buildAgeGroupTabs(); buildConferenceList();
+      indexChrome(true);
+      document.getElementById('viewTabs').style.display = 'none';
+      document.getElementById('formatNote').style.display = 'none';
+      document.getElementById('breadcrumb').innerHTML = `<span class="ctx-where"><b>Teams</b> · ${esc(seasonLabel(currentSeason))}</span>` +
+        `<button type="button" class="ctx-change" onclick="toggleSidebar()" aria-controls="sidebar" aria-label="Change season">Change</button>`;
+      const n = getSeasonData().teamCount, e = encodeURIComponent;
+      const confs = Object.keys(getSeasonData().conferences);
+      document.getElementById('contentTitle').textContent = 'Choose a conference and age group';
+      document.getElementById('contentSubtitle').textContent = `${confs.length} conferences · ${AGE_GROUPS.length} age groups` +
+        (Number.isInteger(n) ? ` · ${n.toLocaleString('en-US')} teams` : '');
+      document.getElementById('extLinks').innerHTML = '';
+      document.getElementById('standingsContainer').innerHTML = `<div class="tix"><table><caption class="sr-only">Conference tables by age group, ${esc(seasonLabel(currentSeason))}</caption>` +
+        `<thead><tr><th scope="col">Conference</th>${AGE_GROUPS.map(ag => `<th scope="col">${esc(AGE_LABELS[ag] || ag)}${birthYearLabel(ag) ? `<small>${esc(birthYearLabel(ag))}</small>` : ''}</th>`).join('')}</tr></thead>` +
+        `<tbody>${confs.map(c => `<tr><th scope="row">${esc(c)}</th>${AGE_GROUPS.map(ag =>
+          `<td><a href="#season=${e(currentSeason)}&age=${e(ag)}&conf=${e(c)}" aria-label="${esc(c)} ${esc(AGE_LABELS[ag] || ag)}">${esc(AGE_LABELS[ag] || ag)}</a></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      pushHash();
+    }
+
     // ========== INIT ==========
-    (async () => {
+    async function initPage() {
       loadTheme();
       loadSidebarState();
       loadFavorites();
@@ -7233,20 +7479,21 @@
         return;
       }
 
-      if (!loadFromHash()) loadSavedState();
-      syncSeasonUI();
-      if (currentTab === 'playoffs' || currentTab === 'favorites' || currentTab === 'showcases') {
-        // Build the conference sidebar so switching back is instant, but land on the saved tab.
-        await loadAgeGroupsForSeason();
-        if (!currentAgeGroup || !AGE_GROUPS.includes(currentAgeGroup)) currentAgeGroup = AGE_GROUPS[0] || null;
-        if (!getSeasonData().conferences[currentConference]) currentConference = Object.keys(getSeasonData().conferences)[0];
-        buildAgeGroupTabs();
-        buildConferenceList();
-        switchTab(currentTab);
-      } else {
-        await rebuildAll();
-      }
-    })();
+      // #135 P1a (variant A): a bare URL is the landing page unless this browser has a saved place;
+      // the landing page loads nothing more (3 Worker requests: /, the catalog and the status).
+      resetView();
+      const place = savedPlace();
+      const landingEntry = !!(history.state && history.state.landing);   // S2: a reload of the landing page
+      // The landing entry is marked, so a later reload of it (after Back) shows it again, and an
+      // unusable hash on a first visit (S3) is dropped: the landing page is the empty hash.
+      const landing = () => { history.replaceState({ landing: 1 }, '', location.pathname + location.search); showLanding(); };
+      if (!location.hash && (!place || landingEntry)) { landing(); return; }
+      if (loadFromHash()) { await resumeView(); return; }
+      if (!place) { landing(); return; }
+      loadSavedState();
+      await resumeView();
+    }
+    initPage();
   </script>
 </body>
 
