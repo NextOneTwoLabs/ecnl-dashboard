@@ -52,11 +52,14 @@ function page({ sheet = false } = {}) {
     location, HashChangeEvent: class {}, esc, isPhone: () => sheet, currentSeason: ACTIVE,
     teamSeasonTabLabel: s => (s === ACTIVE ? 'Current season' : `${s.replace('-', '–')} season`),
     closeSidebarIfMobile() {}, retryText: e => String(e), getTeamDirectory: async () => DIR,
+    NO_CLUB: 7,   // the page's own constant (club 7, No Club Selection)
   };
   const api = new Function(...Object.keys(stubs), ENGINE_SRC + PAGE_SRC + `
     usDb = TEAM_SEARCH.prepare(${'arguments'}[${Object.keys(stubs).length}]);
     usInput = document.getElementById('usearchInput');
-    return { TEAM_SEARCH, usRun, usKey, usViewOf, usGroups, db: () => usDb,
+    return { TEAM_SEARCH, usRun, usKey, usViewOf, usGroups, usNarrowHint, usHoverCell, usHoverCancel, US_HOVER_MS, db: () => usDb,
+      // Draw a view built by the test (a synthetic list), as usRun does for its own.
+      draw: (res, view, q) => { usView = Object.assign(view, { res, q, open: new Set(), nav: false, sheet: false }); usRenderView(res, q); },
       state: () => ({ usItems, usPos, usView, usActiveIdx }) };`)(...Object.values(stubs), DIR);
   const key = (k, extra = {}) => { const e = { key: k, shiftKey: false, preventDefault() {}, target: el('usearchInput'), ...extra }; api.usKey(e); return e; };
   const list = () => el('usearchList')._html;
@@ -74,9 +77,12 @@ const words = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLo
   .map(w => ({ mount: 'mt', saint: 'st' })[w] || w);
 const clubRow = new Map(DIR.clubs.map(c => [c[0], c]));
 const placeOf = id => { const p = (clubRow.get(id) || [])[3] || ''; const at = p.lastIndexOf(', '); return at > 0 ? { city: p.slice(0, at), state: p.slice(at + 2) } : null; };
-const STATES = { CA: 'California', TX: 'Texas', FL: 'Florida', NJ: 'New Jersey', NY: 'New York', SC: 'South Carolina', CO: 'Colorado', AZ: 'Arizona',
-  VA: 'Virginia', WA: 'Washington', OH: 'Ohio', MI: 'Michigan', GA: 'Georgia', IL: 'Illinois', PA: 'Pennsylvania', NC: 'North Carolina', MD: 'Maryland',
-  LA: 'Louisiana', DE: 'Delaware', OK: 'Oklahoma', UT: 'Utah', OR: 'Oregon', TN: 'Tennessee', MO: 'Missouri', KS: 'Kansas', MN: 'Minnesota', CT: 'Connecticut' };
+const STATES = { AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California', CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware',
+  DC: 'District of Columbia', FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky',
+  LA: 'Louisiana', ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri', MT: 'Montana',
+  NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota',
+  OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee',
+  TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia', WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming' };
 const cities = [...new Set(DIR.clubs.map(c => placeOf(c[0])).filter(Boolean).map(p => p.city))];
 const placeQueries = [...Object.values(STATES), ...Object.keys(STATES), ...cities];
 const memo = new Map();
@@ -93,6 +99,16 @@ test('#133 families: every club of a family is one group, shown as its main club
     assert.equal(g.length, 1, `${f.name}: one group`);
     assert.equal(g[0].name, f.name);
     assert.equal(g[0].club.id, f.main, 'the main club stands for the family');
+    const row = clubRow.get(f.main);
+    assert.equal(g[0].club.logo, row[2]);
+    assert.equal(g[0].club.place, row[3], "the main club's place, from the file's main id");
+    // Not by result order: the main club is not the first result's club for at least one search.
+    const first = search(f.name).results.find(r => members.has(r.club.id));
+    const other = [...members].find(id => id !== f.main);
+    const swapped = { ...search(f.name) };
+    swapped.results = [...swapped.results].sort((a, b) => (b.club.id === other) - (a.club.id === other));
+    const g2 = P.usViewOf(swapped, db, false).groups.find(x => x.teams.some(r => members.has(r.club.id)));
+    assert.equal(g2.club.id, f.main, `still the main club when ${other}'s team comes first (first was ${first.club.id})`);
     assert.ok(g[0].teams.every(r => members.has(r.club.id)));
     assert.deepEqual(new Set(g[0].teams.map(r => r.club.id)).size > 1, true, 'several TGS ids joined (precondition)');
   }
@@ -110,6 +126,8 @@ test('#133 B: chips oldest first, today\'s age groups; ended teams per line; may
       assert.equal(r.slot.replace(/ Composite$/, ''), `U${last.u}`);
     }
     for (const r of L.ended) assert.ok(!r.current);
+    const ends = L.ended.map(r => r.last);
+    assert.deepEqual(ends, [...ends].sort().reverse(), `${L.title}: ended teams most recent first`);
   }
   // Folding: every squad that may continue is drawn under no club, and sits in each successor's list.
   const fold = find('a name search with folded "may continue" squads', [...FAMILIES.map(f => f.name), ...DIR.clubs.map(c => words(c[1])[0])],
@@ -121,6 +139,9 @@ test('#133 B: chips oldest first, today\'s age groups; ended teams per line; may
   }
   const g = fold.v.groups.find(x => x.may);
   assert.equal(g.nAll, g.teams.length + g.may, 'counts include the folded squads (S6)');
+  P.usRun(fold.q);
+  assert.ok(P.list().includes(`${g.may} may continue`), 'the header says so');
+  assert.ok(P.list().includes(`${g.nAll} team${g.nAll === 1 ? '' : 's'}</span>`), 'the pill');
 });
 
 test('#133 owner decision 6: lines with no team playing are one "Earlier lines" row per club', () => {
@@ -159,6 +180,19 @@ test('#133 owner decision 6: lines with no team playing are one "Earlier lines" 
   assert.ok(P.list().includes(`aria-label="${esc(`${label}: ${cg.earlier.ended.length} ended team${cg.earlier.ended.length === 1 ? '' : 's'}, collapsed`)}"`), c.q);
 });
 
+test('#133 owner ruling: a single line with no team playing keeps its own name (SC1)', () => {
+  const hit = find('a club with current lines and exactly one ended-only line', DIR.clubs.map(c => c[1]),
+    s => s.v.mode === 'B' && s.v.groups.some(g => g.lines.length && g.earlier && g.earlier.lines.length === 1));
+  const g = hit.v.groups.find(x => x.lines.length && x.earlier && x.earlier.lines.length === 1);
+  assert.equal(g.earlier.title, g.earlier.lines[0]);
+  assert.equal(g.earlier.merged, false);
+  P.usRun(hit.q);
+  const n = g.earlier.ended.length;
+  assert.ok(P.list().includes(`aria-label="${esc(`${g.earlier.title}: ${n} ended team${n === 1 ? '' : 's'}, collapsed`)}"`));
+  assert.ok(P.list().includes(`role="rowheader">${esc(g.earlier.title)}</span>`) || P.list().includes(`role="rowheader"><mark>`), 'the row is titled with the line');
+  assert.ok(!new RegExp(`Earlier lines \\(${g.earlier.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\)`).test(P.list()));
+});
+
 test('#133 rule 7: the clubs only based in the place sit in "Other clubs based in …"; every other club comes first', () => {
   let both = 0;
   for (const q of placeQueries) {
@@ -191,6 +225,10 @@ test('#133 rule 7: the clubs only based in the place sit in "Other clubs based i
   const v2 = P.usViewOf(res2, db, false);
   assert.ok(v2.named.some(g => g.club.id === g0.club.id), 'not based there: the first section');
   assert.ok(!v2.based.some(g => g.club.id === g0.club.id), 'never under "Other clubs based in …"');
+  P.draw(res2, v2, bc.q);
+  assert.ok(P.list().includes('>Clubs and teams named “'), 'a club not named for the place: "Clubs and teams named"');
+  P.usRun(bc.q);
+  if (bc.v.named.allNamed) assert.ok(P.list().includes('>Clubs named “'));
 });
 
 test('#133 rules 2-6, found by scanning: flat, the name fallback, the ended fallback', () => {
@@ -201,12 +239,26 @@ test('#133 rules 2-6, found by scanning: flat, the name fallback, the ended fall
   assert.equal(table.v.mode, 'flat');
   const ageAtPlace = find('a place with an age group and more than 3 teams', Object.values(STATES).map(x => `${x} U15`), s => s.res.total > 3 && s.res.query.u);
   assert.equal(ageAtPlace.v.mode, 'flat');
+  const nameAge = find('a name with an age group, more than 3 teams, a club with 2', DIR.clubs.flatMap(c => words(c[1]).slice(0, 1)).flatMap(w => [`${w} U15`, `${w} U13`]),
+    s => s.res.total > 3 && s.res.query.u && s.res.query.text.length && s.v.groups.some(g => g.teams.length > 1));
+  assert.equal(nameAge.v.mode, 'flat', 'a name with an age group: one team per line, so flat (SC4)');
+  const four = find('a name search of exactly 4 teams with a club of 2+', DIR.clubs.flatMap(c => [words(c[1]).join(' '), ...[2008, 2009, 2010, 2011, 2012, 2013].map(y => `${words(c[1])[0]} ${y}`)]),
+    s => s.res.total === 4 && s.res.query.text.length && !s.res.query.u && !s.res.query.band && s.v.groups.some(g => g.teams.length > 1));
+  assert.notEqual(four.v.mode, 'flat', 'the boundary: 4 teams are grouped');
   const nameFallback = find('a code that fell back to team names, with a club of 2+ teams', Object.keys(STATES),
     s => s.res.note && s.res.note.kind === 'name' && s.res.total > 3 && s.v.groups.some(g => g.teams.length > 1));
   assert.equal(nameFallback.v.mode, 'B', 'a name match: B, never a grid (M1)');
   const ended = find('a place whose teams have all ended, with a club of 2+ teams', cities,
     s => s.res.note && s.res.note.kind === 'ended' && s.res.total > 3 && s.v.groups.some(g => g.teams.length > 1));
   assert.equal(ended.v.mode, 'B', 'by birth year, never a one-column grid (M1)');
+  // SC2: nothing playing, so the ended chips start unfolded and Enter opens a team.
+  P.usRun(ended.q);
+  const st = P.state();
+  assert.ok(st.usItems.filter(Boolean).length === ended.res.total - ended.res.results.filter(r => r.continuesAs && r.continuesAs.length).length, 'every team is a cell');
+  const r0 = st.usItems[st.usActiveIdx];
+  assert.ok(r0, 'the first cell is a team, not a toggle');
+  P.key('Enter');
+  assert.equal(P.location.hash, r0.href);
   const years = [2008, 2009, 2010, 2011, 2012, 2013, 2014];
   const one = find('a search where every club has one team (and more than 3 teams, no age group)',
     [...Object.values(STATES), ...cities].flatMap(x => years.map(y => `${x} ${y}`)),
@@ -231,8 +283,18 @@ test('#133 M2: a query naming a season labels chips by that season, and Enter op
   P.usRun(hit.q);
   const st = P.state(), r = st.usItems[st.usActiveIdx];
   assert.ok(r && /&view=season$/.test(r.href) && r.href.includes(encodeURIComponent(season)), 'r.href is the season tab (D2)');
+  const label = `${season.replace('-', '–')} season`;
+  const names = [...P.list().matchAll(/role="gridcell" class="us-cell [^"]*" id="[^"]+" data-i="\d+" aria-selected="[a-z]+" aria-label="([^"]+)"/g)].map(m => m[1]);
+  assert.ok(names.length && names.every(n => n.endsWith(`, ${label}`)), 'every cell says where Enter goes');
   P.key('Enter');
   assert.equal(P.location.hash, r.href, 'Enter goes through usGo with r.href');
+  // Shift+Enter opens the season tab of a team in a search that names no season.
+  const plain = find('a B view with no season named', FAMILIES.map(f => f.name), s => s.v.mode === 'B' && !s.res.query.season);
+  P.usRun(plain.q);
+  const st2 = P.state(), r2 = st2.usItems[st2.usActiveIdx];
+  P.key('Enter', { shiftKey: true });
+  assert.equal(P.location.hash, r2.seasonHref);
+  assert.notEqual(r2.seasonHref, r2.href);
 });
 
 test('#133 keys: Left and Right are the text caret\'s until Down or Up; then they move along the row', () => {
@@ -254,6 +316,36 @@ test('#133 keys: Left and Right are the text caret\'s until Down or Up; then the
   assert.equal(P.state().usPos[a2].row, row, 'along the same row');
   P.key('Home');
   assert.equal(P.state().usPos[P.state().usActiveIdx].col, Math.min(...P.state().usPos.filter(x => x.row === row).map(x => x.col)));
+  // Down keeps the nearest column: from the third cell of a row whose next row has 3+ cells too.
+  const rowsOf = () => [...new Set(P.state().usPos.map(x => x.row))].sort((a, b) => a - b);
+  const width = r => P.state().usPos.filter(x => x.row === r).length;
+  const pair = rowsOf().findIndex((r, k, rs) => k + 1 < rs.length && width(r) >= 3 && width(rs[k + 1]) >= 3);
+  assert.ok(pair >= 0, 'two wide rows in a row (precondition)');
+  for (let n = 0; n < 400 && P.state().usPos[P.state().usActiveIdx].row !== rowsOf()[pair]; n++) P.key('ArrowDown');
+  P.key('Home'); P.key('ArrowRight'); P.key('ArrowRight');
+  const from = P.state().usPos[P.state().usActiveIdx];
+  P.key('ArrowDown');
+  const to = P.state().usPos[P.state().usActiveIdx];
+  const cols = P.state().usPos.filter(x => x.row === to.row).map(x => x.col);
+  assert.equal(Math.abs(to.col - from.col), Math.min(...cols.map(c => Math.abs(c - from.col))));
+});
+
+test('#133 MF1: a hover moves the active cell only after the pointer rests 250 ms; a key cancels it', async () => {
+  const hit = find('a B view with 3+ cells', FAMILIES.map(f => f.name), s => s.v.mode === 'B');
+  P.usRun(hit.q);
+  const a0 = P.state().usActiveIdx, j = P.state().usItems.findIndex((r, i) => r && i !== a0);
+  assert.equal(P.US_HOVER_MS, 250);
+  P.usHoverCell(j);
+  await new Promise(r => setTimeout(r, 100));
+  assert.equal(P.state().usActiveIdx, a0, 'crossing a cell does not move the bar');
+  await new Promise(r => setTimeout(r, 250));
+  assert.equal(P.state().usActiveIdx, j, 'resting on it does');
+  P.usHoverCell(a0); P.usHoverCancel();
+  await new Promise(r => setTimeout(r, 300));
+  assert.equal(P.state().usActiveIdx, j, 'leaving the list cancels it');
+  P.usHoverCell(a0); P.key('Shift');
+  await new Promise(r => setTimeout(r, 300));
+  assert.equal(P.state().usActiveIdx, j, 'a key cancels it');
 });
 
 test('#133 ARIA (M3): one grid; section titles and club headers are rows; C\'s header row is hidden; toggles named with their line', () => {
@@ -269,6 +361,9 @@ test('#133 ARIA (M3): one grid; section titles and club headers are rows; C\'s h
   assert.ok(!/columnheader/.test(h));
   for (const m of h.matchAll(/aria-expanded="(?:true|false)"\s+aria-label="([^"]+)"/g)) assert.match(m[1], /^.+: \d+ ended teams?, (collapsed|expanded)$/);
   for (const m of h.matchAll(/role="gridcell" class="us-cell [^"]*"[^>]*aria-label="([^"]+)"/g)) assert.match(m[1], /, (Overview|Current season|\d{4}–\d{2} season)$/);
+  // The bar: the active cell's line, age, birth years and the engine's one-liner.
+  const st = P.state(), ar = st.usItems[st.usActiveIdx];
+  assert.ok(P.el('usearchActive').textContent.startsWith(`${ar.title} · `) && P.el('usearchActive').textContent.includes(ar.desc));
   // S5: the section titles use the place's name, never a code.
   const code = find('a state code with both sections', Object.keys(STATES), s => s.v.mode === 'BC');
   P.usRun(code.q);
@@ -292,5 +387,32 @@ test('#133 S1: a broad search draws at most 30 clubs or 200 chips, and says how 
   const more = h.match(/(\d+) more clubs?, (\d+) teams?/);
   assert.ok(more, 'the "n more" line');
   assert.equal(+more[1], broad.v.groups.length - drawn);
+  const shown = broad.v.groups.slice(0, drawn);
+  const lastCells = (() => { const g = shown[shown.length - 1]; return g.teams.length + g.lines.filter(L => L.ended.length).length + (g.earlier ? 1 : 0); })();
+  assert.ok(cells <= 200 + lastCells, `the cell cap: ${cells}`);
+  assert.equal(+more[2], broad.res.total - shown.reduce((n, g) => n + g.nAll, 0), 'the teams not drawn');
   assert.equal(broad.res.total, broad.res.results.length, 'every match is searched (Infinity), only the drawing is capped');
+});
+
+test('#133 SC4: the "n more" hint asks only for what the query lacks', () => {
+  const p = (extra = {}) => ({ years: [], u: null, band: false, places: [{ label: 'California' }], codes: [], ...extra });
+  assert.equal(P.usNarrowHint(p(), true), 'Add a birth year or an age group (“California 2011”, “U15 California”).');
+  assert.equal(P.usNarrowHint(p({ u: 15 }), true), 'Add a birth year (“California 2011”).');
+  assert.equal(P.usNarrowHint(p({ years: [2011] }), true), 'Add an age group (“U15 California”).');
+  assert.equal(P.usNarrowHint(p({ years: [2011], u: 15 }), true), 'Add a club or team name.');
+  assert.equal(P.usNarrowHint(p({ u: 15 }), false), 'Add a birth year.');
+});
+
+test('#133 escaping: club, family and line names are text, never markup', () => {
+  const hit = find('a B view whose first club has no family', DIR.clubs.map(c => words(c[1])[0]), s => s.v.mode === 'B' && !s.v.groups[0].family);
+  const docs = db.docs.filter(d => hit.v.groups[0].teams.some(r => r.doc === d));
+  const saved = docs.map(d => [d, d.title, d.club.name]);
+  for (const d of docs) { d.title = '<img src=x onerror=1>"line'; d.club.name = '<b>club</b>&'; }
+  try {
+    P.usRun(hit.q);
+    const h = P.list();
+    assert.ok(!/<img src=x/.test(h) && !/<b>club/.test(h));
+    assert.ok(h.includes('&lt;b&gt;club&lt;/b&gt;&amp;'), 'the club name, escaped');
+    assert.ok(h.includes('&lt;img src=x onerror=1&gt;&quot;line'));
+  } finally { for (const [d, t, n] of saved) { d.title = t; d.club.name = n; } }
 });

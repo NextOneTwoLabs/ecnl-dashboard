@@ -2170,7 +2170,7 @@
     <div class="us-tipsbox" id="usearchTips" hidden><p>Type a team or club name, a place, a birth year or an age group. For example:</p></div>
     <ul class="us-list" id="usearchList" role="listbox" aria-label="Teams" tabindex="-1"></ul>
     <div class="us-actions" id="usearchActions" hidden><span id="usearchActive"></span><a id="usearchOpen" href="#">Overview</a><a id="usearchHist" href="#">Current season</a><a id="usearchPrev" href="#" hidden>Earlier team</a></div>
-    <div class="us-foot"><span class="us-keys"><kbd>↑</kbd> <kbd>↓</kbd> move · <kbd>Enter</kbd> open · <kbd>Shift</kbd>+<kbd>Enter</kbd> season · <kbd>Esc</kbd> close</span><span>Every ECNL Girls team since 2020-21</span></div>
+    <div class="us-foot"><span class="us-keys"><kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> move · <kbd>Enter</kbd> open · <kbd>Shift</kbd>+<kbd>Enter</kbd> season · <kbd>Esc</kbd> close</span><span>Every ECNL Girls team since 2020-21</span></div>
     <div class="us-sr" id="usearchLive" role="status" aria-live="polite"></div>
   </div>
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -6286,11 +6286,14 @@
     }
     const US_TIPS = ['MVLA 2011', 'Sting 2012', 'California', 'U15 NorCal', 'Dallas 2012'];
     function usRun(q) {
+      usHoverCancel();
       usItems = []; usActiveIdx = -1;
       const tips = document.getElementById('usearchTips');
       if (q.trim().length < 2) {
         usView = null; usPos = [];
-        usShowStatus('Every ECNL Girls team since 2020-21: one row per club and age group.');
+        document.getElementById('usearchList').setAttribute('role', 'listbox');
+        if (usInput) usInput.setAttribute('aria-haspopup', 'listbox');
+        usShowStatus('Every ECNL Girls team since 2020-21, by club and age group.');
         if (!tips.querySelector('button')) tips.insertAdjacentHTML('beforeend', US_TIPS.map(t =>
           `<button type="button" class="us-chip" onmousedown="event.preventDefault()" onclick="usFill(this.textContent)">${esc(t)}</button>`).join(''));
         tips.hidden = false;
@@ -6304,7 +6307,11 @@
       const view = usViewOf(all, usDb, usSheet());
       usView = null; usPos = [];
       if (view.mode !== 'flat' && view.mode !== 'empty') {
-        usView = Object.assign(view, { res: all, q, open: new Set(), nav: false, sheet: usSheet() });
+        const open = new Set();
+        if (view.groups.every(g => !g.nLive)) {   // SC2: chips to open, not toggles to unfold
+          for (const g of view.groups) { if (g.earlier) open.add(`${g.key}|earlier`); for (const L of g.lines) open.add(`${g.key}|${L.title}|ended`); }
+        }
+        usView = Object.assign(view, { res: all, q, open, nav: false, sheet: usSheet() });
         usRenderView(all, q);
         const n = all.total, c = view.groups.length;
         usShowStatus(usStatus(all, all.query).replace(/^<strong>/, `<strong>${c} club${c === 1 ? '' : 's'} · `));
@@ -6343,8 +6350,7 @@
       };
       let h = res.results.map(row).join('');
       const placed = p.places.length || p.codes.some(c => c.strict);
-      if (res.total > res.results.length) h += `<li role="presentation" class="us-more">${res.total - res.results.length} more. Add a birth year or an age group` +
-        (placed ? ` (“${esc(usPlaceWord(p))} 2011”, “U15 ${esc(usPlaceWord(p))}”)` : '') + '.</li>';
+      if (res.total > res.results.length) h += `<li role="presentation" class="us-more">${res.total - res.results.length} more. ${usNarrowHint(p, placed)}</li>`;
       if (!h) h = `<li role="presentation" class="us-more">${usEmptyText(q, p, res)}</li>`;
       usList(h);
       const n = res.total;
@@ -6353,6 +6359,14 @@
       if (usItems.length) usSetActive(0);
     }
     const usPlaceWord = p => (p.places[0] ? p.places[0].label : (p.codes.find(c => c.strict) || {}).code || '');
+    // "Add a birth year or an age group (…)", without what the query already has (#133 SC4).
+    function usNarrowHint(p, placed) {
+      const year = !p.years.length, age = !(p.u || p.band);
+      if (!year && !age) return 'Add a club or team name.';
+      const w = esc(usPlaceWord(p));
+      const eg = placed ? [year ? `“${w} 2011”` : '', age ? `“U15 ${w}”` : ''].filter(Boolean).join(', ') : '';
+      return `Add ${year && age ? 'a birth year or an age group' : year ? 'a birth year' : 'an age group'}${eg ? ` (${eg})` : ''}.`;
+    }
     function usEmptyText(q, p, res) {
       if (res && res.note && res.note.kind === 'name') return `No teams based in ${esc(res.note.label)}, and no team has “${esc(res.note.code)}” in its name.`;
       if (!p.text.length && !p.places.length && !p.codes.length && !p.conf) return 'Add a team or club name, or a place. For example “MVLA 2011” or “California”.';
@@ -6377,12 +6391,12 @@
       return bits.map((b, i) => (i ? esc(b) : b)).join(' · ');
     }
     const currentSeasonActive = () => (usDb ? usDb.active : currentSeason);
-    function usSetActive(i) {
+    function usSetActive(i, hover) {
       const prev = document.getElementById(`us-opt-${usActiveIdx}`);
       if (prev) prev.setAttribute('aria-selected', 'false');
       usActiveIdx = i;
       const el = document.getElementById(`us-opt-${i}`), r = usItems[i];
-      if (usView && el) return usSetActiveCell(i, el, r);
+      if (usView && el) return usSetActiveCell(i, el, r, hover);
       if (!el || !r) return;
       el.setAttribute('aria-selected', 'true');
       el.scrollIntoView({ block: 'nearest' });
@@ -6399,9 +6413,9 @@
     }
     // #133: a cell's team (or an "ended" toggle) in the action bar: its line, age and birth years,
     // the engine's one-liner, and the squads that may continue as it, with a link to the first.
-    function usSetActiveCell(i, el, r) {
+    function usSetActiveCell(i, el, r, hover) {
       el.setAttribute('aria-selected', 'true');
-      el.scrollIntoView({ block: 'nearest' });
+      if (!hover) el.scrollIntoView({ block: 'nearest' });   // N5: a hover never scrolls the list
       if (usInput) usInput.setAttribute('aria-activedescendant', el.id);
       const bar = document.getElementById('usearchActions'), span = document.getElementById('usearchActive');
       const prevLink = document.getElementById('usearchPrev');
@@ -6438,23 +6452,25 @@
     // Every match is grouped (the engine is asked for all of them), and a view is chosen from the
     // engine's own reading of the query, in this order (review M1):
     //   1. no match: today's text;  2. 3 teams or fewer;  3. a table query (age group or band and a
-    //   conference);  4. a place with an age group or band;  5. every club with one team: today's
-    //   flat rows (2-5);  6. the engine's name fallback ("LA") or ended fallback (a place whose teams
+    //   conference);  4. a name or a place with an age group or band (one team per line: chips add
+    //   nothing);  5. every club with one team: today's flat rows (2-5);  6. the engine's name fallback ("LA") or ended fallback (a place whose teams
     //   have all ended): B;  7. a place on its own: clubs named for the place, or matched by a team
     //   name, or based elsewhere, as B ("Clubs named ..."), then the clubs only based there, as C
     //   ("Other clubs based in ..."), either section left out when empty;  8. anything else: B;
     //   9. on the phone sheet, C is drawn as B's cards.
     // A group is a club: a reviewed family (#133 club-families.json), else the TGS club id; club 7's
     // teams by team line. #107 "may continue" squads fold into their successors (a gold dot, and a
-    // line in the action bar). A team line's ended teams are one "+n ended" chip; the lines with no
-    // team playing are one "Earlier lines" row per club (owner decision 6).
+    // line in the action bar). A team line's ended teams are one "+n ended" chip; two or more lines
+    // with no team playing are one "Earlier lines" row per club, and a single such line keeps its
+    // own name (owner decision 6, as ruled). When no team in the list is playing (the engine's
+    // ended fallback), the ended chips start unfolded, so Enter opens a team (SC2).
     const US_MAX_CLUBS = 30, US_MAX_CELLS = 200;   // S1: drawn at most; every match is still counted
     let usView = null, usPos = [];
     function usGroups(res, db) {
       const results = res.results, pinned = !!(res.query.season || res.query.u);
       const folded = new Set();
       for (const r of results) r.mayFrom = [];
-      for (const r of results) if (r.continuesAs && r.continuesAs.length) { folded.add(r); r.continuesAs.forEach(s => s.mayFrom.push(r)); }
+      for (const r of results) if (r.continuesAs && r.continuesAs.length) { folded.add(r); r.continuesAs.forEach(s => s.mayFrom && s.mayFrom.push(r)); }
       const groups = new Map();
       for (const r of results) {
         if (folded.has(r)) continue;
@@ -6464,7 +6480,7 @@
         r.slot = pinned ? r.age : r.latestAge;
         r.slotU = (pinned ? anchor.u : r.doc.rows.at(-1).u) || 0;
         const f = r.club.family;
-        const k = f ? `f:${f.name}` : r.club.id === 7 || r.club.id == null ? `t:${r.title}` : `c:${r.club.id}`;
+        const k = f ? `f:${f.name}` : r.club.id === NO_CLUB || r.club.id == null ? `t:${r.title}` : `c:${r.club.id}`;
         if (!groups.has(k)) groups.set(k, { key: k, name: f ? f.name : k[0] === 't' ? r.title : r.club.name, family: f, teams: [] });
         groups.get(k).teams.push(r);
       }
@@ -6499,7 +6515,7 @@
       const tableQuery = !p.text.length && !p.places.length && !p.codes.length && !!p.conf && !!(p.u || p.band);
       const place = !p.text.length && (p.places.length > 0 || p.codes.some(c => c.strict)) && p.codes.every(c => c.strict);
       let mode;
-      if (res.total <= 3 || tableQuery || (place && (p.u || p.band)) || G.groups.every(g => g.teams.length === 1)) mode = 'flat';
+      if (res.total <= 3 || tableQuery || p.u || p.band || G.groups.every(g => g.teams.length === 1)) mode = 'flat';
       else if (res.note) mode = 'B';                    // the engine's name or ended fallback
       else if (!place) mode = 'B';
       let named = [], based = [];
@@ -6603,7 +6619,8 @@
               h += toggle(key, L.title, L.ended.length, L.live.length, r0, 'us-agechip ended');
               if (v.open.has(key)) h += endedChips(L.title, L.ended, r0, L.live.length + 1, false);
             }
-            out.push(`<li role="row" class="us-chipline"><span class="us-lname" role="rowheader">${mark(L.title)}</span>${h}</li>`);
+            const same = g.lines.length === 1 && !g.earlier && L.title === g.name;
+            out.push(`<li role="row" class="us-chipline"><span class="${same ? 'us-sr' : 'us-lname'}" role="rowheader">${mark(L.title)}</span>${h}</li>`);
           }
           if (g.earlier) {
             const E = g.earlier, r0 = row++, key = `${g.key}|earlier`;
@@ -6680,8 +6697,7 @@
       if (restGroups > 0) {
         const restTeams = res.total - shown.reduce((n, g) => n + g.nAll, 0);
         const placed = p.places.length || p.codes.some(c => c.strict);
-        out.push(`<li role="row" class="us-more"><span role="rowheader">${restGroups} more club${restGroups === 1 ? '' : 's'}, ${restTeams} team${restTeams === 1 ? '' : 's'}. Add a birth year or an age group` +
-          (placed ? ` (“${esc(usPlaceWord(p))} 2011”, “U15 ${esc(usPlaceWord(p))}”)` : '') + '.</span></li>');
+        out.push(`<li role="row" class="us-more"><span role="rowheader">${restGroups} more club${restGroups === 1 ? '' : 's'}, ${restTeams} team${restTeams === 1 ? '' : 's'}. ${usNarrowHint(p, placed)}</span></li>`);
       }
       usList(out.join(''));
       let start = keepKey ? usPos.findIndex(x => x.key === keepKey) : -1;
@@ -6689,6 +6705,16 @@
       if (start < 0) start = 0;
       if (usItems.length) usSetActive(start);
     }
+    // MF1 (review of #134): a hover moves the active cell, and so the action bar, only once the
+    // pointer has rested 250 ms on a cell. A mouse crossing chips on its way to the bar's links
+    // leaves the bar on the chip it was reading.
+    const US_HOVER_MS = 250;
+    let usHoverT = 0;
+    function usHoverCell(i) {
+      clearTimeout(usHoverT);
+      if (usView && i !== usActiveIdx) usHoverT = setTimeout(() => { if (usView && usItems.length > i) usSetActive(i, true); }, US_HOVER_MS);
+    }
+    function usHoverCancel() { clearTimeout(usHoverT); }
     function usToggle(i) {
       const pos = usPos[i];
       if (!usView || !pos || !pos.toggle) return false;
@@ -6701,6 +6727,7 @@
     // are the text caret's; a hover moves the active cell without taking them, S2); Enter opens the
     // team through usGo (r.href) or opens and closes an "ended" chip.
     function usKeyView(e) {
+      usHoverCancel();   // a key wins over a pending hover
       if (!usView || !usItems.length || usActiveIdx < 0) return false;
       const at = usPos[usActiveIdx];
       const pick = (pred, score) => { let best = -1, bs = Infinity; usPos.forEach((x, i) => { if (pred(x)) { const s = score(x); if (s < bs) { bs = s; best = i; } } }); return best; };
@@ -6761,12 +6788,13 @@
         const li = e.target.closest('.us-row, .us-cell');
         if (li && e.button === 1 && usItems[+li.dataset.i]) window.open(usItems[+li.dataset.i].href, '_blank', 'noopener');
       });
-      // #133: a hover moves the active cell (and the action bar), not the keys (S2).
+      // #133: a hover moves the active cell (and the action bar) after a rest, never the keys (S2, MF1).
       list.addEventListener('pointerover', e => {
         if (!usView || e.pointerType === 'touch') return;
         const el = e.target.closest('.us-cell');
-        if (el && +el.dataset.i !== usActiveIdx) usSetActive(+el.dataset.i);
+        if (el) usHoverCell(+el.dataset.i); else usHoverCancel();
       });
+      list.addEventListener('pointerleave', usHoverCancel);
       document.getElementById('usearchPrev').addEventListener('click', e => {
         if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault(); usGoTo(e.currentTarget.getAttribute('href'));

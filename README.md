@@ -409,17 +409,20 @@ Ctrl/Cmd-click or middle-click a new tab.
   - **A name search** ("pda", "MVLA", "Sting") shows each club (logo, place, counts, its best
     Champions League finish) with a row of **age chips** per team line, oldest first ("U18" …
     "U13"; the season's own age groups when the query names a season), a "+n ended" chip for that
-    line's ended teams, and one "Earlier lines" row for the lines with no team playing. A gold dot
-    marks a team that a squad of the season before may continue (#107); the bar under the list
-    shows the active or hovered chip's one-line description, and those squads, with a link.
+    line's ended teams. Two or more lines with no team playing are one "Earlier lines" row; a
+    single such line keeps its own name ("PDA South"). A gold dot marks a team that a squad of the
+    season before may continue (#107); the bar under the list shows the active chip's one-line
+    description, and those squads, with a link. A hover moves the bar once the pointer rests on a
+    chip (250 ms), so a mouse crossing chips on its way to the bar's links leaves it in place.
   - **A place search** ("california", "Dallas", "SC") lists first the clubs named for the place
     (or matched by a team's name, or based elsewhere), as chips, then the other clubs based
     there as an **age grid**: one column per age group, aligned across clubs. On a phone the grid
     is drawn as the same chips. A code counts by its state's name ("SC" is South Carolina, never
     the "SC" of a club's name). A code that fell back to team names, and a place whose teams have
-    all ended, show chips.
-  - **Today's list stays** for 3 teams or fewer, an age group with a conference ("U15 NorCal"), a
-    place with an age group, and a search where every club has one team.
+    all ended, show chips (all ended: unfolded, so Enter opens a team).
+  - **Today's list stays** for 3 teams or fewer, any search with an age group or band ("U15
+    NorCal", "fc U15", "california U15": one team per line), and a search where every club has
+    one team.
   - TGS lists some clubs under several ids (PDA under four): a reviewed list,
     `public/data/club-families.json`, shows them as one club (see docs/data-api.md).
   - Keys: ↑/↓ move between rows; after that ←/→ (and Home/End) move along a row; Enter opens the

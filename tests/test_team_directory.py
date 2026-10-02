@@ -328,6 +328,23 @@ class Pipeline(unittest.TestCase):
             self.assertEqual(archive.cmd_team_history(self.sources, check=True), 1)
             self.assertIn("Team directory check: public/archive/directory.json differs", out.getvalue())
 
+    def test_the_drift_check_fails_on_a_bad_family_entry(self):
+        """M4: the file as committed plus one bad entry: the directory still equals a fresh build
+        (the entry is left out), and the check fails, naming the entry."""
+        bad = load(td.families_path())
+        bad["families"] = bad["families"] + [{"name": "Bad", "main": 78, "clubIDs": [78], "evidence": "x"}]
+        fam = os.path.join(self.tmp, "club-families.json")
+        Path(fam).write_text(json.dumps(bad), encoding="utf-8")
+        with contextlib.ExitStack() as stack:
+            for p in self.paths():
+                stack.enter_context(p)
+            stack.enter_context(patch.object(td, "FAMILIES_PATH", fam))
+            out = stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+            Path(self.directory).write_bytes(fresh())
+            self.assertEqual(archive.cmd_team_history(self.sources, check=True), 1)
+            self.assertIn("club-families.json families[1]", out.getvalue())
+            self.assertIn("Team directory check: directory.json equals a fresh build", out.getvalue())
+
     # ---- SC1 (#118 review): each path that writes the directory, run in the sandbox ----
     def test_clubs_updates_the_directory_places_in_place(self):
         Path(self.directory).write_bytes(fresh())
@@ -388,9 +405,6 @@ class Pipeline(unittest.TestCase):
             name = f.split("(", 1)[0]
             self.assertGreater(f.rfind("update_team_directory("), f.rfind("update_team_history(sources"), name)
 
-
-if __name__ == "__main__":
-    unittest.main()
 
 
 class Families(unittest.TestCase):
@@ -502,3 +516,6 @@ class Families(unittest.TestCase):
             self.assertTrue(stats.failed)
             self.assertTrue(any("club-families.json" in e for e in stats.errors))
             self.assertEqual(Path(path).read_bytes(), fresh())
+
+if __name__ == "__main__":
+    unittest.main()
