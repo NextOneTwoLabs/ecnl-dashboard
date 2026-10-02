@@ -422,29 +422,35 @@ class Families(unittest.TestCase):
         self.assertIn(["PDA", pda["main"]], self.doc["families"])
 
     def test_a_bad_entry_is_skipped_and_reported_and_the_good_ones_kept(self):
-        ok = {"name": "Fixture", "main": 0, "clubIDs": [0, 0], "evidence": "fixture"}
-        a, b, c = sorted(i for i in self.known if i != td.NO_CLUB)[:3]
-        good = {**ok, "main": a, "clubIDs": [a, b]}
+        a, b, c, d = sorted(i for i in self.known if i != td.NO_CLUB)[:4]
+        good = {"name": "Fixture", "main": a, "clubIDs": [a, b], "evidence": "fixture"}
+        clean = {"name": "Clean", "main": c, "clubIDs": [c, d], "evidence": "fixture"}
+        fams, errors = td.validate_families([good, clean], self.known)
+        self.assertEqual((fams, errors), ([("Fixture", a, [a, b]), ("Clean", c, [c, d])], []), "the control passes")
+        # Each case is `clean` with exactly one defect, so only its own check can catch it.
         bad = {
-            "unknown key": {**good, "name": "K", "clubIDs": [c, a], "main": c, "note": "x"},
-            "club 7": {**good, "name": "Seven", "clubIDs": [td.NO_CLUB, c], "main": c},
-            "a string id": {**good, "name": "Str", "clubIDs": [str(c), b], "main": b},
-            "a boolean id": {**good, "name": "Bool", "clubIDs": [True, c], "main": c},
-            "one id": {**good, "name": "One", "clubIDs": [c], "main": c},
-            "a repeated id": {**good, "name": "Rep", "clubIDs": [c, c], "main": c},
-            "an id not in the directory": {**good, "name": "Gone", "clubIDs": [c, 10 ** 9], "main": c},
-            "an id another family holds": {**good, "name": "Taken", "clubIDs": [c, a], "main": c},
-            "main not among its ids": {**good, "name": "Main", "clubIDs": [c, b], "main": a},
-            "no evidence": {**good, "name": "Ev", "clubIDs": [c, b], "main": c, "evidence": " "},
-            "a name used twice": {**good, "clubIDs": [c, b], "main": c},
-            "no name": {**good, "name": "", "clubIDs": [c, b], "main": c},
-            "not an object": ["Fixture"],
+            "unknown key": ({**clean, "note": "x"}, "unknown key"),
+            "club 7": ({**clean, "clubIDs": [td.NO_CLUB, d], "main": d}, "club 7"),
+            "a float id": ({**clean, "clubIDs": [float(c), d]}, "integer"),
+            "a string id": ({**clean, "clubIDs": [str(c), d]}, "integer"),
+            "a boolean id": ({**clean, "clubIDs": [True, d], "main": d}, "integer"),
+            "one id": ({**clean, "clubIDs": [c]}, "integer"),
+            "a repeated id": ({**clean, "clubIDs": [c, c]}, "integer"),
+            "an id not in the directory": ({**clean, "clubIDs": [c, 10 ** 9]}, "not in the directory"),
+            "an id another family holds": ({**clean, "clubIDs": [c, a]}, "already in"),
+            "main not among its ids": ({**clean, "main": a}, "main"),
+            "main not an integer": ({**clean, "main": float(c)}, "main"),
+            "no evidence": ({**clean, "evidence": " "}, "evidence"),
+            "a name used twice": ({**clean, "name": "Fixture"}, "already used"),
+            "no name": ({**clean, "name": ""}, "no name"),
+            "not an object": (["Fixture"], "not an object"),
         }
-        for why, entry in bad.items():
+        for why, (entry, says) in bad.items():
             fams, errors = td.validate_families([good, entry], self.known)
             self.assertEqual(fams, [("Fixture", a, [a, b])], why)
             self.assertEqual(len(errors), 1, why)
             self.assertIn("skipped", errors[0], why)
+            self.assertIn(says, errors[0], why)
 
     def test_a_missing_or_unreadable_file(self):
         with tempfile.TemporaryDirectory() as d:

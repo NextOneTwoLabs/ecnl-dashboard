@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -405,6 +405,26 @@ Ctrl/Cmd-click or middle-click a new tab.
   age group for earlier teams. A place whose teams have all ended lists them all, and says so.
   A two-letter code for a state with no club ("LA") lists the teams with that word in their name,
   and says so.
+- **By club (#133).** The list comes one club at a time.
+  - **A name search** ("pda", "MVLA", "Sting") shows each club (logo, place, counts, its best
+    Champions League finish) with a row of **age chips** per team line, oldest first ("U18" …
+    "U13"; the season's own age groups when the query names a season), a "+n ended" chip for that
+    line's ended teams, and one "Earlier lines" row for the lines with no team playing. A gold dot
+    marks a team that a squad of the season before may continue (#107); the bar under the list
+    shows the active or hovered chip's one-line description, and those squads, with a link.
+  - **A place search** ("california", "Dallas", "SC") lists first the clubs named for the place
+    (or matched by a team's name, or based elsewhere), as chips, then the other clubs based
+    there as an **age grid**: one column per age group, aligned across clubs. On a phone the grid
+    is drawn as the same chips. A code counts by its state's name ("SC" is South Carolina, never
+    the "SC" of a club's name). A code that fell back to team names, and a place whose teams have
+    all ended, show chips.
+  - **Today's list stays** for 3 teams or fewer, an age group with a conference ("U15 NorCal"), a
+    place with an age group, and a search where every club has one team.
+  - TGS lists some clubs under several ids (PDA under four): a reviewed list,
+    `public/data/club-families.json`, shows them as one club (see docs/data-api.md).
+  - Keys: ↑/↓ move between rows; after that ←/→ (and Home/End) move along a row; Enter opens the
+    team (or opens and closes an "ended" chip), Shift+Enter its season tab. At most 30 clubs are
+    drawn, with a line saying how many more; every match is counted.
 - **Cost.** It reads the team directory (`/api/v1/teams`, about 74 KB gzipped) once per page
   load, on the first focus, and nothing per keystroke. A refusal shows "try again" and is
   remembered as the team index's is (#92); `?live=1` has no team search.

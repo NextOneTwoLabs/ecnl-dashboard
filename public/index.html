@@ -2052,12 +2052,58 @@
     .us-actions { display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-top: 1px solid var(--border-light); font-size: 13px; }
     .us-actions[hidden] { display: none; }
     .us-actions span { color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+    .us-actions a[hidden] { display: none; }
+    /* #133 S7: the active team's line may take two lines (B's only description). */
+    .us-actions span.us-two { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.35; }
     .us-actions a { display: inline-flex; align-items: center; min-height: 28px; padding: 0 8px; color: var(--accent-text); font-weight: 600;
       text-decoration: none; border-radius: 6px; }
     .us-actions a:hover, .us-actions a:focus-visible { background: var(--accent-surface); }
     .us-foot { display: flex; justify-content: space-between; gap: 12px; padding: 8px 14px; border-top: 1px solid var(--border-light);
       font-size: 11.5px; color: var(--text-secondary); background: var(--bg-surface-alt); }
     .us-foot kbd { font: 600 10.5px var(--font); border: 1px solid var(--border); border-radius: 4px; padding: 0 4px; background: var(--bg-surface); }
+    /* #133: the dropdown by club. B: a header per club, a row of age chips per team line; C: an
+       age grid, one column per age group, aligned across clubs. */
+    .us-section { padding: 10px 14px 4px; font: 700 11px var(--font); letter-spacing: .04em; text-transform: uppercase; color: var(--text-secondary); }
+    .us-section + .us-clubhead, .us-section + .us-ghead { border-top: 0; }
+    .us-list .us-section:not(:first-child) { border-top: 1px solid var(--border-light); margin-top: 4px; }
+    .us-clubhead { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 10px; align-items: center; padding: 9px 14px 3px; }
+    .us-clubhead .us-text, .us-gclub .us-text, .us-gclubcell .us-text { display: block; min-width: 0; }
+    .us-clubhead .us-name, .us-clubhead .us-meta, .us-gclub .us-name, .us-gclub .us-meta, .us-gclubcell .us-name, .us-gclubcell .us-meta { display: block; }
+    .us-count { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; font: 600 11px var(--font); color: var(--text-secondary);
+      background: var(--bg-surface-alt); border: 1px solid var(--border-light); vertical-align: 1px; white-space: nowrap; }
+    .us-chipline { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 3px 14px 7px 56px; }
+    .us-lname { font: 600 12.5px var(--font); color: var(--text-primary); min-width: 86px; margin-right: 2px; }
+    .us-sublabel { font-size: 11.5px; color: var(--text-secondary); margin: 0 0 0 4px; }
+    .us-agechip { position: relative; display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 26px; padding: 0 7px; border-radius: 6px;
+      border: 1px solid var(--border); background: var(--bg-surface); font: 600 12px var(--font); color: var(--text-primary); cursor: pointer; }
+    .us-agechip.ended { color: var(--text-secondary); border-style: dashed; font-weight: 500; }
+    .us-agechip.may::after, .us-gcell.may::after { content: ''; position: absolute; top: -3px; right: -3px; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+    .us-cell[aria-selected="true"] { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
+    .us-ghead, .us-gline { display: grid; grid-template-columns: minmax(0, 1fr) repeat(var(--cols), 38px) 52px; align-items: center; gap: 2px; padding: 2px 14px; }
+    .us-ghead { position: sticky; top: 0; z-index: 1; background: var(--bg-surface); border-bottom: 1px solid var(--border-light); font: 700 11px var(--font);
+      color: var(--text-secondary); padding-top: 6px; padding-bottom: 6px; }
+    .us-ghead span { text-align: center; }
+    .us-ghead span:first-child { text-align: left; }
+    .us-gclub { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; align-items: center; padding: 8px 14px 2px; }
+    .us-gone { padding-top: 6px; padding-bottom: 6px; border-top: 1px solid var(--border-light); }
+    .us-gclubcell { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; align-items: center; min-width: 0; }
+    .us-gclub .us-logo, .us-gclub .us-initials, .us-gclubcell .us-logo, .us-gclubcell .us-initials { width: 24px; height: 24px; border-radius: 6px; font-size: 9px; }
+    .us-gclubcell .us-name, .us-gclub .us-name { font-size: 13px; }
+    .us-gclubcell .us-meta, .us-gclub .us-meta { font-size: 11.5px; }
+    .us-gline .us-lname { font-weight: 500; padding-left: 32px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .us-gcell { position: relative; height: 24px; display: grid; place-items: center; border-radius: 5px; font: 600 11px var(--font); cursor: pointer;
+      color: var(--accent-text); background: var(--accent-surface); }
+    .us-gcell.none { background: none; cursor: default; color: var(--border); }
+    .us-gcell.ended { background: none; border: 1px dashed var(--border); color: var(--text-secondary); font-weight: 500; }
+    .us-gended { padding-left: 46px; }
+    @media (max-width: 768px) {
+      .us-chipline { padding-left: 12px; }
+      .us-lname { min-width: 100%; }
+      .us-clubhead { padding: 10px 12px 3px; }
+      .us-clubhead .us-meta { white-space: normal; }
+      .us-actions { flex-wrap: wrap; row-gap: 4px; }
+      .us-actions span.us-two { flex-basis: 100%; }
+    }
     .us-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     .header-search { display: none; }
     @media (max-width: 768px) {
@@ -2123,7 +2169,7 @@
     <div class="us-status" id="usearchStatus"></div>
     <div class="us-tipsbox" id="usearchTips" hidden><p>Type a team or club name, a place, a birth year or an age group. For example:</p></div>
     <ul class="us-list" id="usearchList" role="listbox" aria-label="Teams" tabindex="-1"></ul>
-    <div class="us-actions" id="usearchActions" hidden><span id="usearchActive"></span><a id="usearchOpen" href="#">Overview</a><a id="usearchHist" href="#">Current season</a></div>
+    <div class="us-actions" id="usearchActions" hidden><span id="usearchActive"></span><a id="usearchOpen" href="#">Overview</a><a id="usearchHist" href="#">Current season</a><a id="usearchPrev" href="#" hidden>Earlier team</a></div>
     <div class="us-foot"><span class="us-keys"><kbd>↑</kbd> <kbd>↓</kbd> move · <kbd>Enter</kbd> open · <kbd>Shift</kbd>+<kbd>Enter</kbd> season · <kbd>Esc</kbd> close</span><span>Every ECNL Girls team since 2020-21</span></div>
     <div class="us-sr" id="usearchLive" role="status" aria-live="polite"></div>
   </div>
@@ -5886,10 +5932,13 @@
         const ev = index.events.map(([s, kind, stage, eventID]) => ({ season: seasons[s], kind: kind === 'n' ? 'national' : 'showcase', stage, eventID }));
         const div = index.divs.map(([s, name, u, years]) => ({ season: seasons[s], name, u, years }));
         const club = c => {
-          const [id, name, logo, place] = index.clubs[c];
+          const [id, name, logo, place, fam] = index.clubs[c];
           const at = id === NO_CLUB ? -1 : (place || '').lastIndexOf(', ');   // a city never holds a comma (clubs.json rule)
+          // #133: a reviewed family (club-families.json): several TGS ids shown as one club.
+          const f = fam != null && index.families && index.families[fam];
           return { id, name, logo, place: at > 0 ? place : '', city: at > 0 ? placeWords(place.slice(0, at)).join(' ') : '',
-            cityLabel: at > 0 ? place.slice(0, at) : '', state: at > 0 ? place.slice(at + 2) : '' };
+            cityLabel: at > 0 ? place.slice(0, at) : '', state: at > 0 ? place.slice(at + 2) : '',
+            family: f ? { name: f[0], main: f[1] } : null };
         };
         const docs = index.squads.map(sq => {
           const c = club(sq.c);
@@ -6145,7 +6194,17 @@
         }
         return bits.join(' · ');
       }
-      return { prepare, search, parseQuery, bornText, teamTitle };
+      // #133: a club's best Champions League finish over its teams, for its header.
+      function clubStandout(docs) {
+        let best = null;
+        for (const d of docs) for (const e of d.events) {
+          if (!e.outcome || !/champions league/i.test(e.tier)) continue;
+          const k = (DEPTH[e.outcome] || 1) * 10000 + +e.season.slice(0, 4);
+          if (!best || k > best.k) best = { e, k };
+        }
+        return !best ? '' : best.e.outcome === 'Champion' ? `\u{1F3C6} ${finish(best.e)}` : `best ${finish(best.e)}`;
+      }
+      return { prepare, search, parseQuery, bornText, teamTitle, clubStandout, placeWords };
     })();
 
     // The team directory: one request per page load, on the first focus of the bar, never on page
@@ -6230,6 +6289,7 @@
       usItems = []; usActiveIdx = -1;
       const tips = document.getElementById('usearchTips');
       if (q.trim().length < 2) {
+        usView = null; usPos = [];
         usShowStatus('Every ECNL Girls team since 2020-21: one row per club and age group.');
         if (!tips.querySelector('button')) tips.insertAdjacentHTML('beforeend', US_TIPS.map(t =>
           `<button type="button" class="us-chip" onmousedown="event.preventDefault()" onclick="usFill(this.textContent)">${esc(t)}</button>`).join(''));
@@ -6239,7 +6299,23 @@
         return;
       }
       tips.hidden = true;
-      const res = TEAM_SEARCH.search(usDb, q, { season: currentSeason, limit: 60 });
+      // #133: every match is grouped and counted; today's flat list draws its first 60, as before.
+      const all = TEAM_SEARCH.search(usDb, q, { season: currentSeason, limit: Infinity });
+      const view = usViewOf(all, usDb, usSheet());
+      usView = null; usPos = [];
+      if (view.mode !== 'flat' && view.mode !== 'empty') {
+        usView = Object.assign(view, { res: all, q, open: new Set(), nav: false, sheet: usSheet() });
+        usRenderView(all, q);
+        const n = all.total, c = view.groups.length;
+        usShowStatus(usStatus(all, all.query).replace(/^<strong>/, `<strong>${c} club${c === 1 ? '' : 's'} · `));
+        document.getElementById('usearchLive').textContent = `${c} club${c === 1 ? '' : 's'}, ${n} team${n === 1 ? '' : 's'}. ` +
+          'Use the up and down arrows to move between rows, then left and right along a row.';
+        return;
+      }
+      const list = document.getElementById('usearchList');
+      list.setAttribute('role', 'listbox'); list.setAttribute('aria-label', 'Teams');
+      if (usInput) usInput.setAttribute('aria-haspopup', 'listbox');
+      const res = { ...all, results: all.results.slice(0, 60) };
       const p = res.query;
       const marks = p.text.map(w => w.replace(/[^a-z0-9]/g, '')).filter(Boolean);
       const re = marks.length ? new RegExp(`\\b(${marks.join('|')})`, 'gi') : null;
@@ -6306,6 +6382,7 @@
       if (prev) prev.setAttribute('aria-selected', 'false');
       usActiveIdx = i;
       const el = document.getElementById(`us-opt-${i}`), r = usItems[i];
+      if (usView && el) return usSetActiveCell(i, el, r);
       if (!el || !r) return;
       el.setAttribute('aria-selected', 'true');
       el.scrollIntoView({ block: 'nearest' });
@@ -6313,10 +6390,32 @@
       // The active row's real links sit outside the listbox (an option holds no link): new tab,
       // copy link and middle-click all work on them.
       document.getElementById('usearchActive').textContent = `${r.title} · born ${TEAM_SEARCH.bornText(r.born)}`;
+      document.getElementById('usearchActive').className = '';
+      document.getElementById('usearchPrev').hidden = true;
       const o = document.getElementById('usearchOpen'), hl = document.getElementById('usearchHist');
       o.href = r.overviewHref;
       hl.href = r.seasonHref; hl.textContent = usSeasonText(r.season);
       document.getElementById('usearchActions').hidden = false;
+    }
+    // #133: a cell's team (or an "ended" toggle) in the action bar: its line, age and birth years,
+    // the engine's one-liner, and the squads that may continue as it, with a link to the first.
+    function usSetActiveCell(i, el, r) {
+      el.setAttribute('aria-selected', 'true');
+      el.scrollIntoView({ block: 'nearest' });
+      if (usInput) usInput.setAttribute('aria-activedescendant', el.id);
+      const bar = document.getElementById('usearchActions'), span = document.getElementById('usearchActive');
+      const prevLink = document.getElementById('usearchPrev');
+      if (!r) { bar.hidden = true; return; }
+      const may = r.mayFrom && r.mayFrom.length
+        ? ` · May continue here: ${r.mayFrom.map(x => `${x.last} team, born ${TEAM_SEARCH.bornText(x.born)}`).join('; ')}` : '';
+      span.className = 'us-two';
+      span.textContent = `${r.title} · ${r.live ? r.slot : `ended ${r.last}`} · born ${TEAM_SEARCH.bornText(r.born)} — ${r.desc}${may}`;
+      const o = document.getElementById('usearchOpen'), hl = document.getElementById('usearchHist');
+      o.href = r.overviewHref;
+      hl.href = r.seasonHref; hl.textContent = usSeasonText(r.season);
+      prevLink.hidden = !may;
+      if (may) prevLink.href = r.mayFrom[0].overviewHref;
+      bar.hidden = false;
     }
     // "Current season" or "2024–25 season", as the team page's own tab reads.
     const usSeasonText = s => teamSeasonTabLabel(s);
@@ -6324,7 +6423,9 @@
     function usGo(i, to) {
       const r = usItems[i];
       if (!r) return;
-      const target = to === 'season' ? r.seasonHref : to === 'overview' ? r.overviewHref : r.href;
+      usGoTo(to === 'season' ? r.seasonHref : to === 'overview' ? r.overviewHref : r.href);
+    }
+    function usGoTo(target) {
       usClose(true);
       if (usInput) usInput.blur();
       closeSidebarIfMobile();
@@ -6332,8 +6433,304 @@
       else location.hash = target;
     }
     function usFill(t) { usInput.value = t; usRun(t); usInput.focus(); }
+
+    // ===== #133: the results by club =====
+    // Every match is grouped (the engine is asked for all of them), and a view is chosen from the
+    // engine's own reading of the query, in this order (review M1):
+    //   1. no match: today's text;  2. 3 teams or fewer;  3. a table query (age group or band and a
+    //   conference);  4. a place with an age group or band;  5. every club with one team: today's
+    //   flat rows (2-5);  6. the engine's name fallback ("LA") or ended fallback (a place whose teams
+    //   have all ended): B;  7. a place on its own: clubs named for the place, or matched by a team
+    //   name, or based elsewhere, as B ("Clubs named ..."), then the clubs only based there, as C
+    //   ("Other clubs based in ..."), either section left out when empty;  8. anything else: B;
+    //   9. on the phone sheet, C is drawn as B's cards.
+    // A group is a club: a reviewed family (#133 club-families.json), else the TGS club id; club 7's
+    // teams by team line. #107 "may continue" squads fold into their successors (a gold dot, and a
+    // line in the action bar). A team line's ended teams are one "+n ended" chip; the lines with no
+    // team playing are one "Earlier lines" row per club (owner decision 6).
+    const US_MAX_CLUBS = 30, US_MAX_CELLS = 200;   // S1: drawn at most; every match is still counted
+    let usView = null, usPos = [];
+    function usGroups(res, db) {
+      const results = res.results, pinned = !!(res.query.season || res.query.u);
+      const folded = new Set();
+      for (const r of results) r.mayFrom = [];
+      for (const r of results) if (r.continuesAs && r.continuesAs.length) { folded.add(r); r.continuesAs.forEach(s => s.mayFrom.push(r)); }
+      const groups = new Map();
+      for (const r of results) {
+        if (folded.has(r)) continue;
+        // A chip's age: that season's when the query names a season or an age group, else today's.
+        const anchor = r.doc.rows.find(x => x.season === r.season && x.teamID === r.teamID) || r.doc.rows.at(-1);
+        r.live = pinned || r.current;
+        r.slot = pinned ? r.age : r.latestAge;
+        r.slotU = (pinned ? anchor.u : r.doc.rows.at(-1).u) || 0;
+        const f = r.club.family;
+        const k = f ? `f:${f.name}` : r.club.id === 7 || r.club.id == null ? `t:${r.title}` : `c:${r.club.id}`;
+        if (!groups.has(k)) groups.set(k, { key: k, name: f ? f.name : k[0] === 't' ? r.title : r.club.name, family: f, teams: [] });
+        groups.get(k).teams.push(r);
+      }
+      const byAge = (a, b) => (a.born[0] || 0) - (b.born[0] || 0) || b.slotU - a.slotU || a.title.localeCompare(b.title);
+      const byEnd = (a, b) => b.last.localeCompare(a.last) || byAge(a, b);
+      const out = [...groups.values()];
+      for (const g of out) {
+        const main = g.family && (g.teams.find(r => r.club.id === g.family.main) || db.docs.find(d => d.club.id === g.family.main));
+        g.club = main ? main.club : g.teams[0].club;
+        g.places = new Set(g.teams.map(r => r.club.place).filter(Boolean)).size;
+        const lines = new Map();
+        for (const r of g.teams) { if (!lines.has(r.title)) lines.set(r.title, []); lines.get(r.title).push(r); }
+        const all = [...lines].map(([title, ts]) => ({ title, live: ts.filter(r => r.live).sort(byAge), ended: ts.filter(r => !r.live).sort(byEnd) }));
+        g.lines = all.filter(L => L.live.length).sort((a, b) => b.live.length - a.live.length || a.title.localeCompare(b.title));
+        const old = all.filter(L => !L.live.length);
+        g.earlier = !old.length ? null : {
+          title: old.length === 1 ? old[0].title : 'Earlier lines', lines: old.map(L => L.title),
+          ended: old.flatMap(L => L.ended).sort(byEnd), merged: old.length > 1 };
+        g.may = new Set(g.teams.flatMap(r => r.mayFrom)).size;
+        g.nLive = g.teams.filter(r => r.live).length;
+        g.nEnded = g.teams.length - g.nLive;
+        g.nAll = g.teams.length + g.may;
+        g.standout = TEAM_SEARCH.clubStandout(g.teams.map(r => r.doc));
+      }
+      return { groups: out, folded, pinned };
+    }
+    // The view for these results: { mode: 'flat' | 'B' | 'C' | 'BC', groups, named, based }.
+    function usViewOf(res, db, sheet) {
+      const p = res.query;
+      if (!res.total) return { mode: 'empty', groups: [], named: [], based: [] };
+      const G = usGroups(res, db);
+      const tableQuery = !p.text.length && !p.places.length && !p.codes.length && !!p.conf && !!(p.u || p.band);
+      const place = !p.text.length && (p.places.length > 0 || p.codes.some(c => c.strict)) && p.codes.every(c => c.strict);
+      let mode;
+      if (res.total <= 3 || tableQuery || (place && (p.u || p.band)) || G.groups.every(g => g.teams.length === 1)) mode = 'flat';
+      else if (res.note) mode = 'B';                    // the engine's name or ended fallback
+      else if (!place) mode = 'B';
+      let named = [], based = [];
+      if (!mode) {
+        // Owner ruling: a club name first. A code counts by its state's name ("SC": South Carolina,
+        // never the "SC" of "... SC"). Named: a live team's name words (the engine's own, with the
+        // club's name) or the family's name hold every word of the place.
+        const phrases = [...p.places.map(x => x.words), ...p.codes.map(c => TEAM_SEARCH.placeWords(c.label))].filter(w => w.length);
+        const isNamed = g => phrases.some(ph => g.teams.some(r => r.live && ph.every(w => r.doc.latest.has(w)))
+          || ph.every(w => TEAM_SEARCH.placeWords(g.name).includes(w)));
+        const isBased = g => g.teams.some(r => p.places.some(x => (x.type === 'state' ? r.club.state === x.value : r.club.city === x.value))
+          || p.codes.some(c => c.strict && r.club.state === c.code));
+        for (const g of G.groups) (isBased(g) && !isNamed(g) ? based : named).push(g);
+        if (!based.length) mode = 'B';
+        else if (!named.length) mode = 'C';
+        else mode = 'BC';
+        named.allNamed = named.every(isNamed);
+      }
+      if (sheet && (mode === 'C' || mode === 'BC')) mode = mode === 'C' ? 'B' : 'BB';   // the phone: cards
+      return { mode, groups: G.groups, named, based, pinned: G.pinned, place: [...p.places.map(x => x.label), ...p.codes.map(c => c.label)].join(' or ') };
+    }
+
+    // The grouped list (B, C, or both). usItems[i] is the team (so usGo opens r.href: Overview, or
+    // the season tab when the query names a season, #122 D2), or null for an "ended" toggle;
+    // usPos[i] holds its row, column, and toggle key.
+    function usRenderView(res, q, keepKey) {
+      const v = usView, p = res.query, list = document.getElementById('usearchList');
+      usItems = []; usPos = []; usActiveIdx = -1;
+      list.setAttribute('role', 'grid');
+      list.setAttribute('aria-label', 'Teams by club');
+      if (usInput) usInput.setAttribute('aria-haspopup', 'grid');
+      const marks = p.text.map(w => w.replace(/[^a-z0-9]/g, '')).filter(Boolean);
+      const re = marks.length ? new RegExp(`\\b(${marks.join('|')})`, 'gi') : null;
+      const mark = s => {
+        if (!re) return esc(s);
+        let out = '', at = 0;
+        s.replace(re, (m, _g, i) => { out += esc(s.slice(at, i)) + '<mark>' + esc(m) + '</mark>'; at = i + m.length; return m; });
+        return out + esc(s.slice(at));
+      };
+      const where = p.season ? null : 'Overview';
+      const born = r => TEAM_SEARCH.bornText(r.born);
+      const nameOf = (line, r) => `${line}, ${r.live ? r.slot : `ended ${r.last}`}, born ${born(r)}` +
+        (r.mayFrom && r.mayFrom.length ? `, ${r.mayFrom.length} earlier team${r.mayFrom.length === 1 ? '' : 's'} may continue here` : '') +
+        `, ${r.desc}, ${where || usSeasonText(r.season)}`;
+      let row = 0, cells = 0;
+      const out = [];
+      const cell = (r, line, cls, label, col, r0, tag = 'span') => {
+        const i = usItems.push(r) - 1; usPos.push({ row: r0, col, key: r.key });
+        cells++;
+        return `<${tag} role="gridcell" class="us-cell ${cls}${r.mayFrom && r.mayFrom.length ? ' may' : ''}" id="us-opt-${i}" data-i="${i}" aria-selected="false" aria-label="${esc(nameOf(line, r))}">${esc(label)}</${tag}>`;
+      };
+      const toggle = (key, line, n, col, r0, cls) => {
+        const open = v.open.has(key);
+        const i = usItems.push(null) - 1; usPos.push({ row: r0, col, key, toggle: true });
+        cells++;
+        return `<span role="gridcell" class="us-cell ${cls}" id="us-opt-${i}" data-i="${i}" aria-selected="false" aria-expanded="${open}"` +
+          ` aria-label="${esc(`${line}: ${n} ended team${n === 1 ? '' : 's'}, ${open ? 'expanded' : 'collapsed'}`)}">${open ? '−' : '+'}${n} ended</span>`;
+      };
+      const meta = g => {
+        const bits = [];
+        if (g.club.place) bits.push(g.club.place + (g.places > 1 ? ` +${g.places - 1} place${g.places > 2 ? 's' : ''}` : ''));
+        if (g.lines.length > 1) bits.push(`${g.lines.length} team lines`);
+        if (v.pinned) bits.push(`${g.teams.length} team${g.teams.length === 1 ? '' : 's'}${p.season ? ` in ${p.season}` : ''}`);
+        else {
+          bits.push(g.nLive ? `${g.nLive} current` : 'no current team');
+          if (g.nEnded) bits.push(`${g.nEnded} ended`);
+        }
+        if (g.may) bits.push(`${g.may} may continue`);   // S6: so the pill's count adds up
+        if (g.standout) bits.push(g.standout);
+        return bits.join(' · ');
+      };
+      const logo = g => {
+        const ini = String(g.name).split(/\s+/).filter(w => /^[A-Za-z]/.test(w)).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+        return g.club.logo
+          ? `<img class="us-logo" src="${esc(g.club.logo)}" alt="" loading="lazy" onerror="this.outerHTML='<span class=&quot;us-initials&quot;>${esc(ini)}</span>'">`
+          : `<span class="us-initials">${esc(ini)}</span>`;
+      };
+      const head = g => `${logo(g)}<span class="us-text" role="rowheader"><span class="us-name">${mark(g.name)}<span class="us-count">${g.nAll} team${g.nAll === 1 ? '' : 's'}</span></span>` +
+        `<span class="us-meta">${esc(meta(g))}</span></span>`;
+      // The ended chips of a line (or of the earlier lines, each chip under its own line's name).
+      const endedChips = (line, list2, r0, start, labelled) => {
+        let last = null;
+        // Two ended teams of one line with the same birth years: the season each ended tells them apart.
+        const seen = new Map();
+        list2.forEach(r => { const k = `${r.title}|${born(r)}`; seen.set(k, (seen.get(k) || 0) + 1); });
+        const label = r => born(r) + (seen.get(`${r.title}|${born(r)}`) > 1 ? ` ’${r.last.slice(-2)}` : '');
+        return list2.map((r, k) => {
+          const sub = labelled && r.title !== last ? `<span class="us-sublabel" aria-hidden="true">${mark(r.title)}</span>` : '';
+          last = r.title;
+          return sub + cell(r, labelled ? r.title : line, 'us-agechip ended', label(r), start + k, r0);
+        }).join('');
+      };
+      const renderB = groups => {
+        for (const g of groups) {
+          out.push(`<li role="row" class="us-clubhead">${head(g)}</li>`);
+          for (const L of g.lines) {
+            const r0 = row++;
+            let h = L.live.map((r, k) => cell(r, L.title, 'us-agechip', r.slot, k, r0)).join('');
+            if (L.ended.length) {
+              const key = `${g.key}|${L.title}|ended`;
+              h += toggle(key, L.title, L.ended.length, L.live.length, r0, 'us-agechip ended');
+              if (v.open.has(key)) h += endedChips(L.title, L.ended, r0, L.live.length + 1, false);
+            }
+            out.push(`<li role="row" class="us-chipline"><span class="us-lname" role="rowheader">${mark(L.title)}</span>${h}</li>`);
+          }
+          if (g.earlier) {
+            const E = g.earlier, r0 = row++, key = `${g.key}|earlier`;
+            let h = toggle(key, E.merged ? `Earlier lines (${E.lines.join(', ')})` : E.title, E.ended.length, 0, r0, 'us-agechip ended');
+            if (v.open.has(key)) h += endedChips(E.title, E.ended, r0, 1, E.merged);
+            out.push(`<li role="row" class="us-chipline"><span class="us-lname" role="rowheader">${mark(E.title)}</span>${h}</li>`);
+          }
+          if (out.length && (++v.drawn >= US_MAX_CLUBS || cells >= US_MAX_CELLS)) return groups.indexOf(g) + 1;
+        }
+        return groups.length;
+      };
+      const renderC = groups => {
+        const ages = [...new Map(groups.flatMap(g => g.teams).filter(r => r.live).map(r => [r.slot, r.slotU])).entries()]
+          .sort((a, b) => b[1] - a[1]).map(a => a[0]);
+        list.style.setProperty('--cols', ages.length);
+        // M3: a visual header only; every cell's name holds its line and age.
+        out.push(`<li class="us-ghead" aria-hidden="true"><span>Club · team line</span>${ages.map(a => `<span>${esc(a)}</span>`).join('')}<span>Ended</span></li>`);
+        const lineCells = (g, L, r0) => {
+          const h = ages.map((a, col) => {
+            const r = L.live.find(x => x.slot === a);
+            return r ? cell(r, L.title, 'us-gcell', String(r.born[0]).slice(-2) + (r.born[1] ? '/' + String(r.born[1]).slice(-2) : ''), col, r0)
+              : `<span class="us-gcell none" aria-hidden="true">·</span>`;
+          }).join('');
+          if (!L.ended.length) return h + `<span class="us-gcell none" aria-hidden="true"></span>`;
+          const key = `${g.key}|${L.title}|ended`;
+          return h + toggle(key, L.title, L.ended.length, ages.length, r0, 'us-gcell ended');
+        };
+        const unfolded = (g, L, merged) => {
+          const key = merged ? `${g.key}|earlier` : `${g.key}|${L.title}|ended`;
+          if (!v.open.has(key)) return;
+          const r0 = row++;
+          out.push(`<li role="row" class="us-chipline us-gended"><span class="us-sublabel" role="rowheader">Ended:</span>${endedChips(L.title, L.ended, r0, 0, merged)}</li>`);
+        };
+        for (const g of groups) {
+          const rows = [...g.lines];
+          if (g.earlier) rows.push({ title: g.earlier.title, live: [], ended: g.earlier.ended, earlier: g.earlier });
+          const cellsOf = (L, r0) => (L.earlier
+            ? ages.map(() => `<span class="us-gcell none" aria-hidden="true">·</span>`).join('') +
+              toggle(`${g.key}|earlier`, L.earlier.merged ? `Earlier lines (${L.earlier.lines.join(', ')})` : L.title, L.ended.length, ages.length, r0, 'us-gcell ended')
+            : lineCells(g, L, r0));
+          if (rows.length === 1) {
+            const r0 = row++;
+            out.push(`<li role="row" class="us-gline us-gone"><span class="us-gclubcell">${head(g)}</span>${cellsOf(rows[0], r0)}</li>`);
+            unfolded(g, rows[0], !!(rows[0].earlier && rows[0].earlier.merged));
+          } else {
+            out.push(`<li role="row" class="us-gclub">${head(g)}</li>`);
+            for (const L of rows) {
+              const r0 = row++;
+              out.push(`<li role="row" class="us-gline"><span class="us-lname" role="rowheader">${mark(L.title)}</span>${cellsOf(L, r0)}</li>`);
+              unfolded(g, L, !!(L.earlier && L.earlier.merged));
+            }
+          }
+          if (++v.drawn >= US_MAX_CLUBS || cells >= US_MAX_CELLS) return groups.indexOf(g) + 1;
+        }
+        return groups.length;
+      };
+      const section = t => out.push(`<li role="row" class="us-section"><span role="rowheader">${esc(t)}</span></li>`);
+      v.drawn = 0;
+      let shown = [];
+      if (v.mode === 'B' || v.mode === 'C') {
+        const n = (v.mode === 'B' ? renderB : renderC)(v.groups);
+        shown = v.groups.slice(0, n);
+      } else {   // BC, or BB on the phone: the clubs named for the place first, then those only based there
+        section(v.named.allNamed ? `Clubs named “${v.place}”` : `Clubs and teams named “${v.place}”`);
+        const n1 = renderB(v.named);
+        shown = v.named.slice(0, n1);
+        if (n1 === v.named.length && v.drawn < US_MAX_CLUBS && cells < US_MAX_CELLS) {
+          section(`Other clubs based in ${v.place}`);
+          const n2 = (v.mode === 'BC' ? renderC : renderB)(v.based);
+          shown = shown.concat(v.based.slice(0, n2));
+        }
+      }
+      const restGroups = v.groups.length - shown.length;
+      if (restGroups > 0) {
+        const restTeams = res.total - shown.reduce((n, g) => n + g.nAll, 0);
+        const placed = p.places.length || p.codes.some(c => c.strict);
+        out.push(`<li role="row" class="us-more"><span role="rowheader">${restGroups} more club${restGroups === 1 ? '' : 's'}, ${restTeams} team${restTeams === 1 ? '' : 's'}. Add a birth year or an age group` +
+          (placed ? ` (“${esc(usPlaceWord(p))} 2011”, “U15 ${esc(usPlaceWord(p))}”)` : '') + '.</span></li>');
+      }
+      usList(out.join(''));
+      let start = keepKey ? usPos.findIndex(x => x.key === keepKey) : -1;
+      if (start < 0) start = usItems.findIndex(Boolean);
+      if (start < 0) start = 0;
+      if (usItems.length) usSetActive(start);
+    }
+    function usToggle(i) {
+      const pos = usPos[i];
+      if (!usView || !pos || !pos.toggle) return false;
+      if (usView.open.has(pos.key)) usView.open.delete(pos.key); else usView.open.add(pos.key);
+      usRenderView(usView.res, usView.q, pos.key);
+      return true;
+    }
+    // Up and Down move between rows (keeping the nearest column); Left and Right, Home and End move
+    // along a row, but only once the viewer has moved into the list with Up or Down (until then they
+    // are the text caret's; a hover moves the active cell without taking them, S2); Enter opens the
+    // team through usGo (r.href) or opens and closes an "ended" chip.
+    function usKeyView(e) {
+      if (!usView || !usItems.length || usActiveIdx < 0) return false;
+      const at = usPos[usActiveIdx];
+      const pick = (pred, score) => { let best = -1, bs = Infinity; usPos.forEach((x, i) => { if (pred(x)) { const s = score(x); if (s < bs) { bs = s; best = i; } } }); return best; };
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        usView.nav = true;
+        const rows = [...new Set(usPos.map(x => x.row))].sort((a, b) => a - b);
+        const k = rows.indexOf(at.row), to = rows[(k + (e.key === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length];
+        usSetActive(pick(x => x.row === to, x => Math.abs(x.col - at.col)));
+        return true;
+      }
+      if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) {
+        if (!usView.nav) return false;
+        const same = usPos.map((x, i) => [x, i]).filter(([x]) => x.row === at.row).sort((a, b) => a[0].col - b[0].col).map(x => x[1]);
+        const k = same.indexOf(usActiveIdx);
+        const j = e.key === 'Home' ? 0 : e.key === 'End' ? same.length - 1 : k + (e.key === 'ArrowRight' ? 1 : -1);
+        e.preventDefault();
+        if (j >= 0 && j < same.length) usSetActive(same[j]);
+        return true;
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (!usToggle(usActiveIdx)) usGo(usActiveIdx, e.shiftKey ? 'season' : null);
+        return true;
+      }
+      return false;
+    }
     function usKey(e) {
       const pop = usPop();
+      if (usView && !pop.hidden && usKeyView(e)) return;   // #133: rows and cells
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         if (pop.hidden) { usOpen(e.target); return; }
         e.preventDefault();
@@ -6351,16 +6748,28 @@
     }
     (function usWire() {
       const list = document.getElementById('usearchList');
-      list.addEventListener('mousedown', e => { if (e.target.closest('.us-row')) e.preventDefault(); });
+      list.addEventListener('mousedown', e => { if (e.target.closest('.us-row, .us-cell')) e.preventDefault(); });
       list.addEventListener('click', e => {
-        const li = e.target.closest('.us-row'); if (!li) return;
+        const li = e.target.closest('.us-row, .us-cell'); if (!li) return;
+        if (usView && usToggle(+li.dataset.i)) return;   // #133: an "ended" chip opens and closes
         const r = usItems[+li.dataset.i];
+        if (!r) return;
         if (e.ctrlKey || e.metaKey) { window.open(r.href, '_blank', 'noopener'); return; }   // a row is an option, not a link
         usGo(+li.dataset.i, e.shiftKey ? 'season' : null);
       });
       list.addEventListener('auxclick', e => {
-        const li = e.target.closest('.us-row');
-        if (li && e.button === 1) window.open(usItems[+li.dataset.i].href, '_blank', 'noopener');
+        const li = e.target.closest('.us-row, .us-cell');
+        if (li && e.button === 1 && usItems[+li.dataset.i]) window.open(usItems[+li.dataset.i].href, '_blank', 'noopener');
+      });
+      // #133: a hover moves the active cell (and the action bar), not the keys (S2).
+      list.addEventListener('pointerover', e => {
+        if (!usView || e.pointerType === 'touch') return;
+        const el = e.target.closest('.us-cell');
+        if (el && +el.dataset.i !== usActiveIdx) usSetActive(+el.dataset.i);
+      });
+      document.getElementById('usearchPrev').addEventListener('click', e => {
+        if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault(); usGoTo(e.currentTarget.getAttribute('href'));
       });
       ['usearchOpen', 'usearchHist'].forEach(id => document.getElementById(id).addEventListener('click', e => {
         if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;   // the browser's own new-tab handling
@@ -6388,7 +6797,11 @@
           if (!usSheet() && !usPop().contains(document.activeElement) && document.activeElement !== inp) usClose();
         }, 150));
       });
-      window.addEventListener('resize', () => { if (!usPop().hidden) usPlace(); });
+      window.addEventListener('resize', () => {
+        if (usPop().hidden) return;
+        usPlace();
+        if (usView && usView.sheet !== usSheet() && usInput) usRun(usInput.value);   // S9: the phone's cards, or back
+      });
     })();
 
     // #128: the form chips' tooltip, one for the page. Hover (mouse or pen) shows it after a short
