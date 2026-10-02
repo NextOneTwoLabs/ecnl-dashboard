@@ -443,13 +443,111 @@ def update_age_groups(sources, season_key, divisions, div_team_names):
     return changes
 
 
-def save_sources(sources):
-    """Rewrite data/sources.json, preserving key order. Reformats to 2-space indent."""
+def save_sources(sources, team_counts=None):
+    """Rewrite data/sources.json, preserving key order. Reformats to 2-space indent.
+
+    With team_counts ({season: n}, #135 P1a) only those seasons' "teamCount" lines change: the
+    file is hand-formatted, and a full rewrite would reformat it. This is the one writer of the
+    registry, so a test that patches save_sources guards every write to it."""
+    if team_counts:
+        with open(api.SOURCES_PATH, "rb") as f:
+            raw = f.read().decode("utf-8")
+        nl = "\r\n" if "\r\n" in raw else "\n"
+        text = raw.replace("\r\n", "\n")
+        for season, n in team_counts.items():
+            text = set_team_count_line(text, season, n)
+        tmp = api.SOURCES_PATH + ".tmp"
+        with open(tmp, "wb") as f:
+            f.write(text.replace("\n", nl).encode("utf-8"))
+        os.replace(tmp, api.SOURCES_PATH)
+        return
     tmp = api.SOURCES_PATH + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(sources, f, indent=2, ensure_ascii=False)
         f.write("\n")
     os.replace(tmp, api.SOURCES_PATH)
+
+
+# ---------- the catalog's team count (#135 P1a) ----------
+#
+# seasons.<season>.teamCount is the number of distinct teams in the season's conference tables:
+# the distinct teamIDs of its team index (archive/teams/<season>.json). The landing page shows
+# it ("774 teams in 2026-27") from the catalog it already loads, at no extra request. It is
+# written beside the index by update_team_index (the refresh, a conference crawl and --team-index;
+# never by write_team_index itself), and checked by --team-history --check.
+
+def set_team_count_line(text, season, n):
+    """`text` (sources.json, LF) with the season's `"teamCount": n,` line inserted or replaced
+    right after its "startYear" line; every other byte unchanged. Raises ValueError when the
+    season has no "startYear" first line to anchor on."""
+    m = re.search(r'\n    "' + re.escape(season) + r'": \{\n      "startYear": \d+,\n(      "teamCount": \d+,\n)?', text)
+    if not m:
+        raise ValueError(f'{season}: no "startYear" line to put "teamCount" after in sources.json')
+    # The season's block ends at its closing brace (4 spaces in). A second "teamCount" in it (one
+    # moved by a full rewrite, say) would make readers take the stale one: refuse, never add a twin.
+    close = re.compile(r'\n    \}').search(text, m.end())
+    if '"teamCount"' in text[m.end():close.start() if close else len(text)]:
+        raise ValueError(f'{season}: a "teamCount" line that is not the second key; remove it, then run '
+                         f'python archive.py --team-index --all')
+    end = m.end() - len(m.group(1) or "")
+    return text[:end] + f'      "teamCount": {int(n)},\n' + text[m.end():]
+
+
+def team_count(season):
+    """The distinct teamIDs of the season's committed team index, or None without one (or with
+    no conference team: a count of 0 would only say "0 teams")."""
+    index = api.read_json_file(api.team_index_path(season))
+    if not index:
+        return None
+    return len({t.get("teamID") for t in index.get("teams") or [] if t.get("teamID") is not None}) or None
+
+
+def team_count_drift(sources):
+    """[(season, catalog value, index value)] for every season whose teamCount is not its index's."""
+    out = []
+    for season, entry in (sources.get("seasons") or {}).items():
+        want = team_count(season)
+        if entry.get("teamCount") != want:
+            out.append((season, entry.get("teamCount"), want))
+    return out
+
+
+def put_team_count(entry, n):
+    """Set entry["teamCount"] as the key right after "startYear", where the line edit puts it, so a
+    later full save_sources() writes it there too (else the next line edit would add a twin). The
+    dict is changed in place, keeping every other key's order."""
+    items = [(k, v) for k, v in entry.items() if k != "teamCount"]
+    entry.clear()
+    for k, v in items:
+        entry[k] = v
+        if k == "startYear":
+            entry["teamCount"] = n
+    if "teamCount" not in entry:
+        entry["teamCount"] = n
+
+
+def sync_team_counts(sources, seasons, stats):
+    """Bring the registry the caller loaded (`sources`) in line with the seasons' indexes, through
+    save_sources. Never raises (like update_team_index): a failure is reported through stats.fail.
+    Returns True when it wrote, False when nothing changed, None on a failure."""
+    try:
+        changed = {}
+        for s in seasons:
+            entry = (sources.get("seasons") or {}).get(s)
+            n = team_count(s)
+            if entry is not None and n is not None and entry.get("teamCount") != n:
+                changed[s] = n
+        if not changed:
+            return False
+        save_sources(sources, team_counts=changed)
+        for s, n in changed.items():
+            put_team_count(sources["seasons"][s], n)
+        print(f"Team count written: {', '.join(f'{s} {n}' for s, n in changed.items())}.")
+        return True
+    except Exception as e:  # noqa: BLE001 — must never escape into the refresh
+        stats.fail(f"team count: {e} (fix, then run: python archive.py --team-index --all)")
+        print(f"Team count: FAILED: {e}")
+        return None
 
 
 # ---------- match-day driven refresh ----------
@@ -823,10 +921,15 @@ def write_team_index(sources, season):
     return True, len(index["teams"])
 
 
-def update_team_index(sources, season, stats):
+def update_team_index(sources, season, stats, count=True):
     """write_team_index for the crawl and refresh paths. Any failure is reported
     through stats.fail and never raises, so it cannot stop refresh-state.json from
-    being written (a missing state write would repeat the day's full sweep)."""
+    being written (a missing state write would repeat the day's full sweep).
+
+    Then (count, #135 P1a) the catalog's teamCount for the season follows the index, into the
+    registry the caller loaded, through save_sources: the refresh, a conference crawl and
+    --team-index. A showcase crawl changes no conference row and passes count=False, as does a
+    crawl run with --no-update-sources."""
     try:
         written, n = write_team_index(sources, season)
     except Exception as e:  # noqa: BLE001 — must never escape into the refresh
@@ -835,6 +938,8 @@ def update_team_index(sources, season, stats):
         print(f"Team index {season}: FAILED: {e}")
         return None
     print(f"Team index {season}: {n} teams, {'written' if written else 'unchanged'}.")
+    if count:
+        sync_team_counts(sources, [season], stats)
     return written
 
 
@@ -960,7 +1065,16 @@ def cmd_team_history(sources, dry_run=False, check=False):
                   "Run: python archive.py --team-history, then commit public/archive/directory.json")
         else:
             print("Team directory check: directory.json equals a fresh build of the archive.")
-        return 1 if diff or errors or stale_directory else 0
+        # #135 P1a: the catalog's teamCount equals its season's committed team index.
+        drift = team_count_drift(sources)
+        if drift:
+            print("Team count check: " + "; ".join(f"{s} has {have} in sources.json, {want} in its team index"
+                                                  for s, have, want in drift) +
+                  ". Run: python archive.py --team-index --all, then commit public/data/sources.json"
+                  " (a season with no index, or none of its teams, keeps no teamCount: remove its line)")
+        else:
+            print("Team count check: every season's teamCount equals its team index.")
+        return 1 if diff or errors or stale_directory or drift else 0
     stats = Stats()
     squads = update_team_history(sources, stats, dry_run=dry_run)
     update_team_directory(sources, stats, squads, dry_run=dry_run)
@@ -1461,7 +1575,7 @@ def cmd_refresh(sources, args):
 
     # The team index follows the standings and hierarchies just written (#81). Local
     # work only, after the state write and unable to raise, so it can never stop the
-    # state (and lastSweepDate) from being saved.
+    # state (and lastSweepDate) from being saved. The catalog's teamCount follows it (#135 P1a).
     update_team_index(sources, season, stats)
 
     # Team histories (#107) follow the index: every history file whose seasons, results or
@@ -1670,7 +1784,8 @@ def main():
     if not args.dry_run and not args.national and not args.showcases:
         for s in sorted({s for s, kind, _n, _e in api.iter_events(sources, season, args.conference)
                          if kind == "conference"}):
-            update_team_index(sources, s, stats)
+            # The catalog's teamCount follows the index (#135 P1a), unless the registry is not to be written.
+            update_team_index(sources, s, stats, count=not args.no_update_sources)
             # Then the season's clubs with no place yet (#87); usually none.
             fetch_new_club_places([s], stats, s)
     # A showcase crawl rebuilds the index for its showcase rows (#97), and never runs the
@@ -1678,7 +1793,7 @@ def main():
     if not args.dry_run and args.showcases:
         for s in sorted({s for s, kind, _n, _e in api.iter_events(sources, season)
                          if kind == "showcase"}):
-            update_team_index(sources, s, stats)
+            update_team_index(sources, s, stats, count=False)   # no conference row changes (#135 P1a)
     # Any crawl (conference, national or showcase) can change a team's history (#107).
     squads = None
     if not args.dry_run:

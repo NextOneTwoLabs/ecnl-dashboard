@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -363,6 +363,19 @@ The sidebar has three tabs, **Conferences | 🏆 Playoffs | Showcases**. My Team
 number of followed teams). It opens the My Teams list in place of the tab panels, with
 "‹ Back to <last tab>"; Back, the button again, or any tab closes it. While it is open no
 tab is selected. It is not reachable while the desktop sidebar is collapsed, as before.
+
+A bare address (`/`, no hash) is the **landing page** for a browser with no saved place: two
+cards, **Teams** and **Events**, with the header search (#135 P1a). It loads only the page, the
+catalog and the status (3 Worker requests) and saves nothing. With a saved place, a bare address
+resumes it as before. **ECNL Girls** always opens the landing page, which then offers
+"Continue: …" (the saved place, as a fresh load would resume it) and the followed teams. An
+empty hash, from Back, is the landing page; leaving it adds one history entry. An unusable hash
+(`#foo`, an unknown season) in a browser with no saved place is the landing page too.
+
+`#season=2026-27` alone is the **Teams index**: every conference × age group of the season, one
+link per table, with no default conference. It needs no request beyond the catalog and saves
+nothing. The landing page's Teams card opens it; its Events card opens
+`#tab=playoffs&season=<newest>`.
 
 `#tab=teams&season=2026-27&team=<teamID>` deep-links to a team's summary even in a
 browser where it isn't a favorite (it is shown, not added to the list). `#tab=myteams…`

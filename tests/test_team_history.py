@@ -578,6 +578,8 @@ class Refresh(unittest.TestCase):
         shutil.copy(api.REFRESH_STATE_PATH, self.state)
         self.index = os.path.join(self.tmp, f"{self.ACTIVE}.json")
         shutil.copy(api.team_index_path(self.ACTIVE), self.index)
+        self.catalog = os.path.join(self.tmp, "sources.json")   # #135 P1a: the refresh writes teamCount
+        shutil.copy(api.SOURCES_PATH, self.catalog)
 
     def snapshot(self):
         return {n: Path(self.hist, n).read_bytes() for n in sorted(os.listdir(self.hist))}
@@ -601,6 +603,7 @@ class Refresh(unittest.TestCase):
             patch.object(api, "team_index_path", side_effect=lambda s: self.index if s == self.ACTIVE else index_path(s)),
             patch.object(api, "ARCHIVE_DIR", self.tmp),
             patch.object(api, "REFRESH_STATE_PATH", self.state),
+            patch.object(api, "SOURCES_PATH", self.catalog),
             patch.object(api, "MATCH_DAYS_PATH", os.path.join(self.tmp, "match-days.json")),
             patch.object(th, "HISTORY_DIR", self.hist),
             patch.object(archive, "DELAY", 0),
