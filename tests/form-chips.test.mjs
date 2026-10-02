@@ -10,6 +10,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
 process.env.TZ = 'America/Los_Angeles';   // review S2: a date must not slide a day west of UTC
 
+const ACTIVE_SEASON = JSON.parse(readFileSync(new URL('../public/data/sources.json', import.meta.url), 'utf8')).refresh.activeSeason;
 const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const block = (head, last = head, close = '\n    }\n') => {
   const start = html.indexOf('\n' + head) + 1;
@@ -22,7 +23,7 @@ const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g,
 const CHIPS = [
   block('    function shortTeamName('), block('    function displayName('),
   block('    function gameWinner('), block('    function resultFor('),
-  block('    function isPlayed(', 'function isPlayed(', '\n'), block('    function sortGames('), block('    function computeTeamSummary('),
+  block('    function isPlayed(', 'function isPlayed(', '\n'), block('    function sortGames('), block('    function todayKey('), block('    // #64: the next match', 'function computeTeamSummary('),
   block('    // #128: form chips that show their game.', 'function chipGames('),
 ].join('\n');
 const page = new Function('esc', CHIPS + '\nreturn { chipText, chipDate, formChipsHtml, chipGames, computeTeamSummary };')(esc);
@@ -149,7 +150,8 @@ const OVERVIEW = [
 function overview(doc) {
   const els = new Map();
   const node = () => ({ style: {}, className: '', innerHTML: '', textContent: '', children: [], attrs: {},
-    setAttribute(k, v) { this.attrs[k] = v; }, append(...c) { this.children.push(...c); }, appendChild(c) { this.children.push(c); } });
+    setAttribute(k, v) { this.attrs[k] = v; }, append(...c) { this.children.push(...c); }, appendChild(c) { this.children.push(c); },
+    querySelector: () => ({ innerHTML: '' }) });
   const el = k => { if (!els.has(k)) els.set(k, node()); return els.get(k); };
   const stubs = {
     document: { getElementById: el, createElement: () => node() }, previewTeam: null, refreshState: {},
@@ -157,6 +159,7 @@ function overview(doc) {
     ordinal: n => `${n}th`, esc, clubPlaceText: () => '', historyCrumb() {}, getAgeLabel: d => d, resultFor: () => null,
     pageHref: () => '#', confHref: () => '#', getStandingsUrl: () => '#', getSchedulesUrl: () => '#', NATIONAL_EVENTS: {},
     formatDateRange: () => '', formatObservedDate: d => d, starButton: () => '', teamSeasonTabLabel: s => s, EXTERNAL_ICON: '',
+    openSeason: () => ACTIVE_SEASON, teamToken: 0, getSchedule: () => new Promise(() => {}), isMissing: () => false, retryText: e => String(e),
   };
   const render = new Function(...Object.keys(stubs), OVERVIEW + '\nreturn renderTeamHistory;')(...Object.values(stubs));
   const sq = doc.squads[0], last = sq.seasons[sq.seasons.length - 1];

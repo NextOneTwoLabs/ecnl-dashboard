@@ -8,6 +8,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
+const ACTIVE_SEASON = JSON.parse(readFileSync(new URL('../public/data/sources.json', import.meta.url), 'utf8')).refresh.activeSeason;
 const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const block = (head, last = head, close = '\n    }\n') => {
   const start = html.indexOf('\n' + head) + 1;
@@ -45,7 +46,8 @@ function pick(what, pred) {
 function render(doc) {
   const els = new Map();
   const node = () => ({ style: {}, className: '', innerHTML: '', textContent: '', children: [], attrs: {},
-    setAttribute(k, v) { this.attrs[k] = v; }, append(...c) { this.children.push(...c); }, appendChild(c) { this.children.push(c); } });
+    setAttribute(k, v) { this.attrs[k] = v; }, append(...c) { this.children.push(...c); }, appendChild(c) { this.children.push(c); },
+    querySelector: () => ({ innerHTML: '' }) });
   const el = k => { if (!els.has(k)) els.set(k, node()); return els.get(k); };
   const stubs = {
     document: { getElementById: el, createElement: () => node() },
@@ -55,6 +57,7 @@ function render(doc) {
     pageHref: r => `#team=${r.teamID}&season=${r.season}`, confHref: r => `#season=${r.season}`, getStandingsUrl: () => '#tgs',
     getSchedulesUrl: () => '#tgs', NATIONAL_EVENTS: {}, formatDateRange: (a, b) => `${a}–${b}`, formatObservedDate: d => d,
     starButton: () => '', teamSeasonTabLabel: s => s, EXTERNAL_ICON: '',
+    openSeason: () => ACTIVE_SEASON, teamToken: 0, getSchedule: () => new Promise(() => {}), isMissing: () => false, retryText: e => String(e),
   };
   const renderTeamHistory = new Function(...Object.keys(stubs), CODE + '\nreturn renderTeamHistory;')(...Object.values(stubs));
   const sq = doc.squads[0];
