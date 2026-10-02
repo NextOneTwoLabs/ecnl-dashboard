@@ -63,6 +63,7 @@
       --gold: #d97706;
       --gold-glow: rgba(217, 119, 6, 0.14);
       --star-color: #d97706;
+      --star-idle: #6b7280;          /* the unfollowed ☆: 4.8:1 on white, 3:1 or more on every row (#136) */
       --row-hover: #f3f5f8;
       --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05);
       --shadow-md: 0 4px 12px rgba(17, 24, 39, 0.08);
@@ -90,6 +91,7 @@
       --gold: #fbbf24;
       --gold-glow: rgba(251, 191, 36, 0.14);
       --star-color: #fbbf24;
+      --star-idle: #8b93a2;          /* the unfollowed ☆: 5.6:1 on the surface, 3:1 or more on every row (#136) */
       --row-hover: #1f242e;
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -1067,13 +1069,13 @@
       cursor: pointer;
       font-size: 16px;
       padding: 2px 4px;
-      opacity: 0.3;
+      color: var(--star-idle);   /* #136: a token, full opacity; tests/star-contrast.test.mjs holds it to 3:1 */
       transition: all var(--transition-fast);
       line-height: 1;
     }
 
     .star-btn:hover {
-      opacity: 0.8;
+      color: var(--text-primary);
       transform: scale(1.2);
     }
 
@@ -2134,7 +2136,7 @@
       </button>
       <a class="wordmark" href="https://www.nextonetwo.com/"><img src="/favicon.svg?v=2" alt="" width="32" height="32">next<span class="accent">one</span>two</a>
       <div class="header-divider"></div>
-      <a class="section-label" href="https://ecnl.nextonetwo.com/" onclick="return goHome(event)">ECNL Girls</a>
+      <a class="section-label" href="/" onclick="return goHome(event)">ECNL Girls</a>
     </div>
     <!-- #114: one team search for every tab (by name, club, place, birth year, age group, conference). -->
     <div class="usearch-slot" id="usearchSlot">
