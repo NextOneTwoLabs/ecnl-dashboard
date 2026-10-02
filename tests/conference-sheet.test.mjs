@@ -274,9 +274,12 @@ function page({ narrow = true, dialog = true, live = false, follow = null } = {}
       const layout = new El('div', { class: 'conf-layout is-conf' }), aside = new El('aside', { id: 'glancePanel', class: 'glance-panel' });
       const panel = new El('div', { class: 'flight-panel standings-panel' });
       c.append(layout); layout.append(panel, aside);
-      panel.innerHTML = '<th data-col="rank" class="sortable sort-active sort-asc"><button type="button" class="th-sort">#</button></th>' +
-        '<th data-col="standingpoints" class="sortable"><button type="button" class="th-sort">Pts</button></th>' +
-        '<details class="rank-help"><summary>How ranking works</summary></details>';
+      // The sort headers in their header row, as in the page's <thead> (review MF3), then the footnote.
+      const head = new El('tr'), foot = new El('div', { class: 'table-footnote' });
+      panel.append(head, foot);
+      head.innerHTML = '<th data-col="rank" class="sortable sort-active sort-asc"><button type="button" class="th-sort">#</button></th>' +
+        '<th data-col="standingpoints" class="sortable"><button type="button" class="th-sort">Pts</button></th>';
+      foot.innerHTML = '<details class="rank-help"><summary>How ranking works</summary></details>';
       for (const th of panel.querySelectorAll('th[data-col]')) {
         th.click = () => {
           render.sorts++;
@@ -645,6 +648,33 @@ test('T14 (SC1): crossing 1025 px keeps the sort, an open "How ranking works", a
   p.dom.setNarrow(true);
   await p.flush();
   assert.equal(p.render.sorts, sorts);
+});
+
+test('T14b (SC-a): focus in the side card, blurred as the window narrows, comes back on the team\'s row', { skip }, async () => {
+  const p = page({ narrow: false });
+  await p.open();
+  p.choose(TEAM.teamID);
+  await p.flush();
+  const star = p.el('glancePanel').querySelector('.star-btn');
+  star.focus();
+  // Chrome hides the card and blurs its control before the media query's change event.
+  for (const f of p.dom.docOn.focusout || []) f({ target: star, relatedTarget: null });
+  p.dom.body.focus();
+  p.dom.setNarrow(true);
+  await p.flush();
+  assert.equal(p.active(), p.row(TEAM.teamID), 'focus is on the team\'s row, not <body>');
+  // Focus that moved on after the blur is not undone: here it went to the title, then to <body>
+  // without a focusout (its element went away), and the window narrows.
+  const q = page({ narrow: false });
+  await q.open();
+  const other = q.row(FIX.teams[0].teamID);
+  other.focus();
+  for (const f of q.dom.docOn.focusout || []) f({ target: other, relatedTarget: null });
+  for (const f of q.dom.docOn.focusin || []) f({ target: q.el('contentTitle') });
+  q.dom.body.focus();
+  q.dom.setNarrow(true);
+  await q.flush();
+  assert.equal(q.active(), q.dom.body, 'the old row does not take focus back');
 });
 
 test('M3: while the sheet is open the page\'s shortcuts do nothing (ArrowDown would change the conference)', { skip }, async () => {
