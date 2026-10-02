@@ -86,7 +86,7 @@ function page({ national = true, history = { squads: [{}] } } = {}) {
     loadCurrentView: () => { el('standingsContainer').innerHTML = 'CONFERENCES'; el('contentTitle').textContent = 'Conferences'; },
     loadShowcasesPanel: async () => { el('standingsContainer').innerHTML = 'SHOWCASES'; el('contentTitle').textContent = 'Showcases'; },
     saveState: () => { log.saves++; }, pushHash: () => { log.hashes++; },
-    getSeasonData: () => ({ conferences: { 'Mid-Atlantic': {} } }), SOURCES: {}, focusContentTitle() {},
+    getSeasonData: () => ({ conferences: { 'Mid-Atlantic': {} } }), SOURCES: {}, openSeason: () => '2026-27', focusContentTitle() {},
     esc: s => String(s), getAgeLabel: d => d, getDivisionAge: d => d, sortAgeGroups: x => x, seasonLabel: s => s,
     clearTeamFilter() {}, closeSidebarIfMobile() {}, syncSeasonUI() {}, buildFavoritesList() {}, showTeamViewTabs() {},
     sameTeam: () => true, resolveFavorite: async () => true, isMissing: e => !!e && e.status === 404, retryText: () => 'try again',

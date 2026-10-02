@@ -53,7 +53,7 @@ function page({ live = false, history = { squads: [{}] } } = {}) {
     resolveFavorite: async () => { calls.locate++; return true; },
     eventContext: id => ({ season: seasonOf(id), name: 'Mid-Atlantic', kind: 'conference' }),
     // Overview: the real loader, with its history answer stubbed (null: no file, as a 404).
-    LIVE: live, teamHistoryMissing: new Set(), historyCrumb() {},
+    LIVE: live, teamHistoryMissing: new Set(), historyCrumb() {}, openSeason: () => '2026-27',
     getTeamHistory: async id => { calls.history.push(id); return history; },
     renderTeamHistory: () => { el('standingsContainer').innerHTML = 'OVERVIEW'; },
     computeTeamSummary: () => ({ mine: [], form: [], next: null }), getStandingsUrl: () => '', glancePanelHtml: () => '',

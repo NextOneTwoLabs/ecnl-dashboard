@@ -45,7 +45,8 @@ function pick(what, pred) {
 function render(doc) {
   const els = new Map();
   const node = () => ({ style: {}, className: '', innerHTML: '', textContent: '', children: [], attrs: {},
-    setAttribute(k, v) { this.attrs[k] = v; }, append(...c) { this.children.push(...c); }, appendChild(c) { this.children.push(c); } });
+    setAttribute(k, v) { this.attrs[k] = v; }, append(...c) { this.children.push(...c); }, appendChild(c) { this.children.push(c); },
+    querySelector: () => ({ innerHTML: '' }) });
   const el = k => { if (!els.has(k)) els.set(k, node()); return els.get(k); };
   const stubs = {
     document: { getElementById: el, createElement: () => node() },
@@ -55,6 +56,7 @@ function render(doc) {
     pageHref: r => `#team=${r.teamID}&season=${r.season}`, confHref: r => `#season=${r.season}`, getStandingsUrl: () => '#tgs',
     getSchedulesUrl: () => '#tgs', NATIONAL_EVENTS: {}, formatDateRange: (a, b) => `${a}–${b}`, formatObservedDate: d => d,
     starButton: () => '', teamSeasonTabLabel: s => s, EXTERNAL_ICON: '',
+    openSeason: () => '2026-27', teamToken: 0, getSchedule: () => new Promise(() => {}), isMissing: () => false, retryText: e => String(e), 
   };
   const renderTeamHistory = new Function(...Object.keys(stubs), CODE + '\nreturn renderTeamHistory;')(...Object.values(stubs));
   const sq = doc.squads[0];
