@@ -914,12 +914,17 @@ def update_team_directory(sources, stats, squads, dry_run=False):
     if not isinstance(squads, list):
         print("Team directory: not rebuilt (no team history build in this run); left as it was.")
         return None
+    errors = []
     try:
-        changed = team_directory.write_directory(sources, squads, dry_run=dry_run)
+        changed = team_directory.write_directory(sources, squads, dry_run=dry_run, errors=errors)
     except Exception as e:  # noqa: BLE001 (must never escape into the refresh)
         stats.fail(f"team directory: {e} [{type(e).__name__}] (fix, then run: python archive.py --team-history)")
         print(f"Team directory: FAILED: {e}. The directory was left as it was.")
         return None
+    # #133: a bad club-families.json entry is left out and reported; the directory is still written.
+    for err in errors:
+        stats.fail(f"team directory: {err} (fix public/data/club-families.json)")
+        print(f"Team directory: {err}")
     state = ("would change" if dry_run else "written") if changed else "unchanged"
     print(f"Team directory: {len(squads)} teams, {state}.")
     return changed
@@ -935,12 +940,16 @@ def cmd_team_history(sources, dry_run=False, check=False):
         keep = {}
         try:
             diff, errors = team_history.check_history(sources, keep=keep)
-            stale_directory = team_directory.check_directory(sources, keep["squads"])
+            family_errors = []
+            stale_directory = team_directory.check_directory(sources, keep["squads"], errors=family_errors)
         except Exception as e:  # noqa: BLE001
             print(f"Team history check: FAILED: {e}")
             return 1
         for err in errors:
             print(f"  - team-links.json: {err}")
+        for err in family_errors:
+            print(f"  - {err}")
+        errors = errors + family_errors
         if diff:
             print(f"Team history check: {len(diff)} file(s) differ from a fresh build of the archive, e.g. "
                   f"{', '.join(diff[:8])}. Run: python archive.py --team-history, then commit public/archive/history/")

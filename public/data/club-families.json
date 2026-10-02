@@ -1,0 +1,12 @@
+{
+  "_comment": "Hand-reviewed club families for the team search (#133; docs/data-api.md, 'Team directory'). TGS lists some clubs under several club ids; a family shows them as one club in the search dropdown. An entry is {\"name\": shown name, \"main\": the club id whose logo and place stand for the family, \"clubIDs\": [two or more TGS club ids], \"evidence\": why they are one club}. Declared by the SWE with evidence and approved by the Reviewer and the owner in a PR, like team-links.json; never from a visitor's request alone. team_directory.py validates every entry on every build (known integer ids, never club 7, an id in one family only, main among the ids, no other keys); an entry that fails is left out and reported (the run fails, the directory is still written).",
+  "schema": 1,
+  "families": [
+    {
+      "name": "PDA",
+      "main": 2357,
+      "clubIDs": [2357, 3313, 2628, 78],
+      "evidence": "Owner-approved for #133 (2026-10-01). TGS lists PDA under four club ids, all in New Jersey, and every team of each is named 'PDA ...': 2357 'PDA Blue (North)', Somerset (teams 'PDA Blue'); 3313 'PDA White (Shore)', Hamilton (teams 'PDA White'); 2628 'PDA South', Westampton (teams 'PDA South'); 78 'Players Development Academy', Somerset (the earlier id of the 'PDA White' teams). Main 2357: PDA's Somerset home, the place of the earlier academy id too; 2357 and 3313 tie on current teams (6 each)."
+    }
+  ]
+}

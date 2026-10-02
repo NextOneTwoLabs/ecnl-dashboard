@@ -20,10 +20,77 @@ import ecnl_api as api
 
 SCHEMA = 1
 NO_CLUB = 7            # TGS's placeholder club "No Club Selection": never placed (#108)
+FAMILIES_PATH = None   # public/data/club-families.json (#133)
+FAMILY_KEYS = {"name", "main", "clubIDs", "evidence"}
 
 
 def directory_path():
     return os.path.join(api.ARCHIVE_DIR, "directory.json")
+
+
+def families_path():
+    return FAMILIES_PATH or os.path.join(api.PUBLIC_DIR, "data", "club-families.json")
+
+
+def load_families(path=None):
+    """#133: the reviewed club families, as (entries, errors). A missing file is no families; an
+    unreadable or malformed one is no families and one error (the directory is still written)."""
+    path = path or families_path()
+    if not os.path.exists(path):
+        return [], []
+    try:
+        with open(path, encoding="utf-8") as f:
+            doc = json.load(f)
+    except (OSError, ValueError) as e:
+        return [], [f"club-families.json: unreadable ({e}); no family applied"]
+    if not isinstance(doc, dict) or doc.get("schema") != 1 or not isinstance(doc.get("families"), list):
+        return [], ["club-families.json: not {\"schema\": 1, \"families\": [...]}; no family applied"]
+    return doc["families"], []
+
+
+def validate_families(entries, known):
+    """#133: the families that pass, as [(name, main, [ids])], and an error per entry dropped. Like
+    team-links.json, a bad entry is skipped and reported, never fatal: the directory is still
+    written, and the drift check (--team-history --check) fails on the error. An entry is
+    {"name", "main", "clubIDs", "evidence"} and nothing else: a non-empty name used once, two or
+    more distinct integer TGS club ids in the directory (never club 7, never an id another family
+    already holds), a main id among them (its logo and place stand for the family), evidence."""
+    out, errors, taken, names = [], [], {}, set()
+    for i, e in enumerate(entries):
+        label = f"club-families.json families[{i}]"
+        if not isinstance(e, dict):
+            errors.append(f"{label}: not an object; skipped")
+            continue
+        label += f" {e.get('name')!r}"
+        ids = e.get("clubIDs")
+        why = None
+        if set(e) - FAMILY_KEYS:
+            why = f"unknown key(s) {sorted(set(e) - FAMILY_KEYS)}"
+        elif not isinstance(e.get("name"), str) or not e["name"].strip():
+            why = "no name"
+        elif e["name"].strip() in names:
+            why = "a name already used"
+        elif not isinstance(e.get("evidence"), str) or not e["evidence"].strip():
+            why = "no evidence"
+        elif not isinstance(ids, list) or len(ids) < 2 or any(type(x) is not int for x in ids) or len(set(ids)) != len(ids):
+            why = "clubIDs must be two or more distinct integer ids"
+        elif NO_CLUB in ids:
+            why = f"club {NO_CLUB} (No Club Selection) can't be in a family"
+        elif any(x not in known for x in ids):
+            why = f"club id(s) {[x for x in ids if x not in known]} not in the directory"
+        elif any(x in taken for x in ids):
+            why = f"club id(s) {[x for x in ids if x in taken]} already in {taken[[x for x in ids if x in taken][0]]!r}"
+        elif type(e.get("main")) is not int or e["main"] not in ids:
+            why = "main must be one of its clubIDs"
+        if why:
+            errors.append(f"{label}: {why}; skipped")
+            continue
+        name = e["name"].strip()
+        names.add(name)
+        for x in ids:
+            taken[x] = name
+        out.append((name, e["main"], list(ids)))
+    return out, errors
 
 
 def outcome(e):
@@ -41,18 +108,26 @@ def outcome(e):
     return ""
 
 
-def build(sources, squads, places=None):
+def build(sources, squads, places=None, families=None, errors=None):
     """The directory for `squads` (team_history.build()'s list, in its order).
 
     {"schema":1, "seasons":[...], "confs":[name], "divs":[[season, division, u, birthYears]],
-     "events":[[season, "n"|"s", stage, eventId]], "tiers":[label], "clubs":[[id, name, logo, "City, ST"]],
+     "events":[[season, "n"|"s", stage, eventId]], "tiers":[label],
+     "clubs":[[id, name, logo, "City, ST"(, family)]], "families":[[name, mainClubID]],
      "squads":[{"c":club, "b":birthYears, "s":[[season, teamID, name, conf, div, rank, of]],
                 "e":[[season, event, tier, outcome]], "best", "t", "m", "mp"}]}
     Indexes point into the shared tables. `e` lists post-season entries first (so the #107
     `best` index points into it), then showcases (outcome ""). `t` is the number of titles; `m`
-    and `mp` are the #107 "possible continuation" links as squad indexes, both ways."""
+    and `mp` are the #107 "possible continuation" links as squad indexes, both ways. A club in a
+    reviewed family (#133, public/data/club-families.json, read here so the drift check sees a
+    change to it) has a 5th element, its index in `families`; `families` is [name, main club].
+    `families` (entries) defaults to the file's; problems are appended to `errors`."""
     if places is None:
         places = (api.read_json_file(api.CLUBS_PATH) or {}).get("clubs") or {}
+    if families is None:
+        families, problems = load_families()
+        if errors is not None:
+            errors.extend(problems)
     seasons = sorted(sources["seasons"])
     si = {s: i for i, s in enumerate(seasons)}
     tables = {"confs": [], "divs": [], "events": [], "tiers": [], "clubs": []}
@@ -111,7 +186,13 @@ def build(sources, squads, places=None):
         if sq.get("maybePrev"):
             item["mp"] = sorted({start[(m["season"], m["teamID"])] for m in sq["maybePrev"]})
         out.append(item)
-    return {"schema": SCHEMA, "seasons": seasons, **tables, "squads": out}
+    fams, problems = validate_families(families, set(ix["clubs"]))
+    if errors is not None:
+        errors.extend(problems)
+    for fi, (_name, _main, ids) in enumerate(fams):
+        for cid in ids:
+            tables["clubs"][ix["clubs"][cid]].append(fi)
+    return {"schema": SCHEMA, "seasons": seasons, **tables, "families": [[n, m] for n, m, _ids in fams], "squads": out}
 
 
 def dump(doc):
@@ -122,8 +203,8 @@ def dump(doc):
     return (head + ',"squads":[\n' + ",\n".join(j(x) for x in doc["squads"]) + "\n]}\n").encode("utf-8")
 
 
-def file_bytes(sources, squads, places=None):
-    return dump(build(sources, squads, places))
+def file_bytes(sources, squads, places=None, errors=None):
+    return dump(build(sources, squads, places, errors=errors))
 
 
 def _on_disk(path):
@@ -135,14 +216,15 @@ def _on_disk(path):
         return None
 
 
-def write_directory(sources, squads, dry_run=False, path=None):
+def write_directory(sources, squads, dry_run=False, path=None, errors=None):
     """Write the directory if it differs from a fresh build. Returns True when it changed (or,
     with dry_run, would change). Atomic: the new bytes go to <path>.tmp, then os.replace; a
-    failure removes the .tmp file, leaves the old file as it was, and raises."""
+    failure removes the .tmp file, leaves the old file as it was, and raises. A bad family entry
+    is not a failure: it is left out, the rest is written, and it is appended to `errors`."""
     path = path or directory_path()
     if not squads:
         raise ValueError("no squads to list; is the team history built?")
-    data = file_bytes(sources, squads)
+    data = file_bytes(sources, squads, errors=errors)
     if _on_disk(path) == data:
         return False
     if dry_run:
@@ -196,6 +278,7 @@ def refresh_places(places=None, path=None):
     return True
 
 
-def check_directory(sources, squads, path=None):
-    """The drift check: True when the committed file differs from a fresh build. Writes nothing."""
-    return _on_disk(path or directory_path()) != file_bytes(sources, squads)
+def check_directory(sources, squads, path=None, errors=None):
+    """The drift check: True when the committed file differs from a fresh build (club-families.json
+    included). Writes nothing. Family problems are appended to `errors`."""
+    return _on_disk(path or directory_path()) != file_bytes(sources, squads, errors=errors)

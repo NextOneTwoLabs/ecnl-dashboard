@@ -388,7 +388,8 @@ upstream requests and no second build.
 ```json
 {"schema":1,"seasons":["2020-21",…,"2026-27"],"confs":["Southwest",…,"NorCal",…],
 "divs":[[0,"GU14",14,[2007]],…],"events":[[0,"n","Playoffs",2118],…],"tiers":["Champions League",…],
-"clubs":[…,[294,"MVLA","https://…","Los Altos, CA"],…],"squads":[
+"clubs":[…,[294,"MVLA","https://…","Los Altos, CA"],…,[2357,"PDA Blue (North)","https://…","Somerset, NJ",0],…],
+"families":[["PDA",2357]],"squads":[
 …
 {"c":56,"b":[2011],"s":[[3,55477,"MVLA ECNL G11",7,33,1,10],…,[6,55477,"MVLA ECNL G2010/11",7,36,3,12]],"e":[[3,6,0,"Group 4/4"],…,[5,10,0,"Round of 16"],[5,11,13,""],[5,12,11,""]],"best":2},
 …]}
@@ -401,6 +402,17 @@ upstream requests and no second build.
   showcases: `[season, "n" or "s", stage, eventId]`), `tiers` (the catalog's tier labels) and
   `clubs` (`[clubID, clubName, logo, "City, ST"]`: the logo URL as the team index carries it,
   and the place as `/api/v1/clubs` gives it, empty when there is none and always for club 7).
+- **Club families (#133).** `families` is `[[name, mainClubID]]`, and a club in a family has a
+  5th element, its index there. They come from `public/data/club-families.json`, a hand-reviewed
+  file like `team-links.json`: TGS lists some clubs under several ids (PDA under four), and the
+  search shows a family as one club, with its main club's logo and place. Each entry is
+  `{"name", "main", "clubIDs", "evidence"}`, declared with evidence and approved in a PR.
+  `team_directory.py` reads the file inside its build (so the drift check sees a change to it)
+  and validates every entry: no other keys, a non-empty name used once, evidence, two or more
+  distinct integer club ids that are in the directory, never club 7, never an id another family
+  holds, and `main` among them. An entry that fails is **left out and reported**: the run fails,
+  the directory is still written with the other families, and `--team-history --check` fails
+  until it is fixed. A missing file is no families. The page needs no other request.
 - A squad: `c` its club; `b` its birth years (#107 `birthYears`); `s` its conference seasons,
   oldest first, as `[season, teamID, name, conf, div, rank, of]`; optional `e`, its
   post-season entries then its showcases, as `[season, event, tier, outcome]` (`outcome` is
@@ -409,7 +421,8 @@ upstream requests and no second build.
   number of titles); `m` and `mp`, the #107 possible continuations and predecessors as squad
   indexes, both ways.
 - **Privacy.** Team-level public data only: every value is also served by the team indexes,
-  the history files, `/api/v1/clubs` or the catalog. The tests hold the key allow-list.
+  the history files, `/api/v1/clubs` or the catalog, except a family's name, which comes from the
+  reviewed `club-families.json`. The tests hold the key allow-list.
 - **Size.** About 405 KB raw, 74 KB gzipped, for 2020-21 to 2026-27, growing about 60 KB a
   season; a test fails above 600 KB (or 120 KB gzipped), about three seasons out, when the
   format should be revisited rather than the limit raised.
