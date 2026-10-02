@@ -547,8 +547,9 @@ test('H4 callers: closed conference card and actual season page suppress next ma
   assert.doesNotMatch(card, /Other|not reported/);
   return (async () => {
     const p = sidebar({ games, summaryApi: real });
-    p.el('titleActions').innerHTML = '<button>Old Follow</button>'; p.el('titleActions').hidden = false;
     await p.open({ ...team, season: closed }, '&view=season');
+    p.el('titleActions').innerHTML = '<button>Old Follow</button>'; p.el('titleActions').hidden = false;
+    await p.loadTeamSummary(team);   // direct Overview -> season load: no switchTab may clear it first
     assert.ok(p.el('standingsContainer').querySelector('.conf-layout'), 'real season page rendered successfully');
     assert.doesNotMatch(p.el('standingsContainer').querySelector('.glance-panel').innerHTML, /Other|not reported/);
     assert.equal(p.el('titleActions').innerHTML, '');
