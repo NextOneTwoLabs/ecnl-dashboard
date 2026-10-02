@@ -15,7 +15,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import ecnl_api as api
 
 WATCHED = [os.path.join(api.ARCHIVE_DIR, "history"), os.path.join(api.ARCHIVE_DIR, "teams"),
-           api.REFRESH_STATE_PATH, api.CLUBS_PATH, os.path.join(api.ARCHIVE_DIR, "directory.json")]
+           api.REFRESH_STATE_PATH, api.CLUBS_PATH, os.path.join(api.ARCHIVE_DIR, "directory.json"),
+           api.SOURCES_PATH]   # #135 P1a: the refresh now writes the catalog's teamCount
 
 
 def snapshot():
