@@ -22,7 +22,7 @@ const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g,
 const CHIPS = [
   block('    function shortTeamName('), block('    function displayName('),
   block('    function gameWinner('), block('    function resultFor('),
-  block('    function isPlayed(', 'function isPlayed(', '\n'), block('    function sortGames('), block('    function computeTeamSummary('),
+  block('    function isPlayed(', 'function isPlayed(', '\n'), block('    function sortGames('), block('    function todayKey('), block('    // #64: the next match', 'function computeTeamSummary('),
   block('    // #128: form chips that show their game.', 'function chipGames('),
 ].join('\n');
 const page = new Function('esc', CHIPS + '\nreturn { chipText, chipDate, formChipsHtml, chipGames, computeTeamSummary };')(esc);
@@ -149,7 +149,8 @@ const OVERVIEW = [
 function overview(doc) {
   const els = new Map();
   const node = () => ({ style: {}, className: '', innerHTML: '', textContent: '', children: [], attrs: {},
-    setAttribute(k, v) { this.attrs[k] = v; }, append(...c) { this.children.push(...c); }, appendChild(c) { this.children.push(c); } });
+    setAttribute(k, v) { this.attrs[k] = v; }, append(...c) { this.children.push(...c); }, appendChild(c) { this.children.push(c); },
+    querySelector: () => ({ innerHTML: '' }) });
   const el = k => { if (!els.has(k)) els.set(k, node()); return els.get(k); };
   const stubs = {
     document: { getElementById: el, createElement: () => node() }, previewTeam: null, refreshState: {},
@@ -157,6 +158,7 @@ function overview(doc) {
     ordinal: n => `${n}th`, esc, clubPlaceText: () => '', historyCrumb() {}, getAgeLabel: d => d, resultFor: () => null,
     pageHref: () => '#', confHref: () => '#', getStandingsUrl: () => '#', getSchedulesUrl: () => '#', NATIONAL_EVENTS: {},
     formatDateRange: () => '', formatObservedDate: d => d, starButton: () => '', teamSeasonTabLabel: s => s, EXTERNAL_ICON: '',
+    openSeason: () => '2026-27', teamToken: 0, getSchedule: () => new Promise(() => {}), isMissing: () => false, retryText: e => String(e), 
   };
   const render = new Function(...Object.keys(stubs), OVERVIEW + '\nreturn renderTeamHistory;')(...Object.values(stubs));
   const sq = doc.squads[0], last = sq.seasons[sq.seasons.length - 1];

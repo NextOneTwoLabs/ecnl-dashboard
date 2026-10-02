@@ -71,7 +71,7 @@ function page() {
   const calls = { hierarchy: 0, standings: 0, schedule: 0, ageTabs: 0 };
   const hooks = {}, memo = {}, hold = {};
   const stubs = {
-    document, window, location, history, SEASONS,
+    document, window, location, history, SEASONS, openSeason: () => '2026-27',
     localStorage: { setItem: (k, v) => { store[k] = v; }, getItem: k => store[k] ?? null },
     getEventHierarchy: async id => {
       if (memo[id]) return memo[id];

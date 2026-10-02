@@ -42,7 +42,7 @@ const CODE = [
   block('    function shortTeamName('), block('    function displayName('),
   block('    function gameWinner('), block('    function resultFor('),
   line('    function gameDateKey('), line('    function isPlayed('), block('    function sortGames('),
-  block('    function computeTeamSummary('), block('    function formatGameDate('), block('    function opponentText('),
+  block('    function todayKey('), block('    // #64: the next match', 'function computeTeamSummary('), block('    function formatGameDate('), block('    function opponentText('),
   block('    // #128: form chips that show their game.', 'function chipGames('),
   block('    function starButton(', 'function recordFromButton('), block('    function toggleFavorite('),
   line('    const teamHistoryMissing = new Set();'), block('    function historyAvailable('), block('    function teamSeasonTabLabel('),
