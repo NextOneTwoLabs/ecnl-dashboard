@@ -27,6 +27,7 @@
   "seasons": {
     "2026-27": {
       "startYear": 2026,
+      "teamCount": 774,
       "_note": "Divisions are named by age this season (GU13 … GU18/19), as in 2021-22, rather than by birth year.",
       "conferences": {
         "Mid-Atlantic": {
@@ -124,6 +125,7 @@
     },
     "2025-26": {
       "startYear": 2025,
+      "teamCount": 762,
       "conferences": {
         "Mid-Atlantic": {
           "eventId": 3925,
@@ -258,6 +260,7 @@
     },
     "2024-25": {
       "startYear": 2024,
+      "teamCount": 774,
       "conferences": {
         "Mid-Atlantic": {
           "eventId": 3157,
@@ -401,6 +404,7 @@
     },
     "2023-24": {
       "startYear": 2023,
+      "teamCount": 762,
       "conferences": {
         "Mid-Atlantic": {
           "eventId": 2839,
@@ -507,6 +511,7 @@
     },
     "2022-23": {
       "startYear": 2022,
+      "teamCount": 762,
       "conferences": {
         "Mid-Atlantic": {
           "eventId": 2523,
@@ -613,6 +618,7 @@
     },
     "2021-22": {
       "startYear": 2021,
+      "teamCount": 726,
       "_note": "No NorCal conference this season.",
       "conferences": {
         "Mid-Atlantic": {
@@ -727,6 +733,7 @@
     },
     "2020-21": {
       "startYear": 2020,
+      "teamCount": 730,
       "_note": "No NorCal conference this season. The first season Bay Area clubs competed in ECNL: they played in the Northwest conference, whose divisions were split into Bay Area, Mountain and Pacific flights. Six conferences also ran a GU18/U19 Composite division beside GU18/U19. COVID season: many conference games were never played.",
       "conferences": {
         "Mid-Atlantic": {
