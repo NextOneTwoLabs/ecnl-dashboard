@@ -52,6 +52,14 @@ display name, and the map is the event's kind:
 | `national` | a national (Playoffs/Finals) event | `eventId`, `eventName`, `location`, `startDate`, `endDate`; optional `tierLabels`, `tierNotes`, `defaultTier`, `dataGaps`, `reconstructed` |
 | `showcases` (#97, optional) | a showcase weekend | `eventId`, `eventName`, `location` (`"City, ST"`), `startDate`, `endDate` (ISO); optional `tierLabels`, `tierNotes`, `dataGaps`, `teamAliases` (`{"<showcase teamID>": <conference teamID>}`, declared by hand after review) and `teamAliasesNote` |
 
+A season may also carry `teamCount` (#135 P1a), right after `startYear`: the number of distinct
+teams in its conference tables, that is the distinct `teamID`s of its team index
+(`/api/v1/seasons/{season}/teams`; a team listed in two tables counts once, as two 2025–26
+teams are). The landing page shows it from the catalog it already loads. `archive.py` writes it
+whenever it builds a season's index (the refresh, a conference crawl, `--team-index`), as a
+one-line edit of the hand-formatted file, and `archive.py --team-history --check` (CI) fails
+when it differs from the committed index. A reader that does not know it ignores it.
+
 A showcase's data is read through the same event routes as any other event
 (`/api/v1/events/{eventId}/hierarchy`, `…/standings`, `…/schedule`); there is no new route.
 Its standings rows are a results list: TGS gives most rows `rank` 1 and some 2, so the

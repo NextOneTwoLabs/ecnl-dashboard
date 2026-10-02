@@ -219,6 +219,8 @@ class Pipeline(unittest.TestCase):
         self.directory = os.path.join(self.tmp, "directory.json")
         self.index = os.path.join(self.tmp, f"{self.ACTIVE}.json")
         shutil.copy(api.team_index_path(self.ACTIVE), self.index)
+        self.catalog = os.path.join(self.tmp, "sources.json")   # #135 P1a: the refresh writes teamCount
+        shutil.copy(api.SOURCES_PATH, self.catalog)
 
     def paths(self):
         index_path = api.team_index_path
@@ -226,6 +228,7 @@ class Pipeline(unittest.TestCase):
             patch.object(api, "ARCHIVE_DIR", self.tmp),
             patch.object(api, "REFRESH_STATE_PATH", self.state),
             patch.object(api, "CLUBS_PATH", self.clubs),
+            patch.object(api, "SOURCES_PATH", self.catalog),
             patch.object(api, "MATCH_DAYS_PATH", os.path.join(self.tmp, "match-days.json")),
             patch.object(api, "team_index_path", side_effect=lambda s: self.index if s == self.ACTIVE else index_path(s)),
             patch.object(th, "HISTORY_DIR", os.path.join(self.tmp, "history")),
