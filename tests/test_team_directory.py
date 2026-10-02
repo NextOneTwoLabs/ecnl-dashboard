@@ -320,6 +320,37 @@ class Pipeline(unittest.TestCase):
             self.assertEqual(archive.cmd_team_history(self.sources, dry_run=True), 0)
         self.assertFalse(os.path.exists(self.directory))
 
+    def stale_count(self):
+        """The temporary catalog (and the registry in memory) with a stale count for the active season."""
+        text = Path(self.catalog).read_bytes().decode("utf-8")
+        nl = "\r\n" if "\r\n" in text else "\n"
+        lf = archive.set_team_count_line(text.replace("\r\n", "\n"), self.ACTIVE, 1)
+        Path(self.catalog).write_bytes(lf.replace("\n", nl).encode("utf-8"))
+        self.sources["seasons"][self.ACTIVE]["teamCount"] = 1
+        return len({t["teamID"] for t in load(self.index)["teams"]})
+
+    def test_the_refresh_syncs_the_catalog_team_count(self):
+        # #135 P1a (PR #142 SC1, R23): the sweep's index step brings teamCount back in line.
+        want = self.stale_count()
+        code, out = self.refresh(more=[(archive, "refresh_club_places", lambda *a: None)])
+        self.assertEqual(code, 0, out)
+        self.assertEqual(load(self.catalog)["seasons"][self.ACTIVE]["teamCount"], want)
+        self.assertEqual(self.sources["seasons"][self.ACTIVE]["teamCount"], want)
+        self.assertEqual(list(self.sources["seasons"][self.ACTIVE])[:2], ["startYear", "teamCount"])
+
+    def test_a_refresh_with_nothing_due_syncs_it_too(self):
+        # #135 P1a (PR #142 SC1, R30): the no-sweep path heals a stale count as it heals the index.
+        want = self.stale_count()
+        with contextlib.ExitStack() as stack:
+            for p in self.paths():
+                stack.enter_context(p)
+            stack.enter_context(patch.object(archive, "fetch_json", side_effect=AssertionError("nothing due, yet fetched")))
+            out = stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+            args = argparse.Namespace(date="2026-08-20", at_hour=0, sweep=False, dry_run=False, force=True)
+            self.assertEqual(archive.cmd_refresh(self.sources, args), 0, out.getvalue())
+        self.assertIn("Non-match day", out.getvalue())
+        self.assertEqual(load(self.catalog)["seasons"][self.ACTIVE]["teamCount"], want)
+
     def test_the_drift_check_covers_the_directory(self):
         with contextlib.ExitStack() as stack:
             for p in self.paths():

@@ -483,16 +483,23 @@ def set_team_count_line(text, season, n):
     m = re.search(r'\n    "' + re.escape(season) + r'": \{\n      "startYear": \d+,\n(      "teamCount": \d+,\n)?', text)
     if not m:
         raise ValueError(f'{season}: no "startYear" line to put "teamCount" after in sources.json')
+    # The season's block ends at its closing brace (4 spaces in). A second "teamCount" in it (one
+    # moved by a full rewrite, say) would make readers take the stale one: refuse, never add a twin.
+    close = re.compile(r'\n    \}').search(text, m.end())
+    if '"teamCount"' in text[m.end():close.start() if close else len(text)]:
+        raise ValueError(f'{season}: a "teamCount" line that is not the second key; remove it, then run '
+                         f'python archive.py --team-index --all')
     end = m.end() - len(m.group(1) or "")
     return text[:end] + f'      "teamCount": {int(n)},\n' + text[m.end():]
 
 
 def team_count(season):
-    """The distinct teamIDs of the season's committed team index, or None without one."""
+    """The distinct teamIDs of the season's committed team index, or None without one (or with
+    no conference team: a count of 0 would only say "0 teams")."""
     index = api.read_json_file(api.team_index_path(season))
     if not index:
         return None
-    return len({t.get("teamID") for t in index.get("teams") or [] if t.get("teamID") is not None})
+    return len({t.get("teamID") for t in index.get("teams") or [] if t.get("teamID") is not None}) or None
 
 
 def team_count_drift(sources):
@@ -503,6 +510,20 @@ def team_count_drift(sources):
         if entry.get("teamCount") != want:
             out.append((season, entry.get("teamCount"), want))
     return out
+
+
+def put_team_count(entry, n):
+    """Set entry["teamCount"] as the key right after "startYear", where the line edit puts it, so a
+    later full save_sources() writes it there too (else the next line edit would add a twin). The
+    dict is changed in place, keeping every other key's order."""
+    items = [(k, v) for k, v in entry.items() if k != "teamCount"]
+    entry.clear()
+    for k, v in items:
+        entry[k] = v
+        if k == "startYear":
+            entry["teamCount"] = n
+    if "teamCount" not in entry:
+        entry["teamCount"] = n
 
 
 def sync_team_counts(sources, seasons, stats):
@@ -520,7 +541,7 @@ def sync_team_counts(sources, seasons, stats):
             return False
         save_sources(sources, team_counts=changed)
         for s, n in changed.items():
-            sources["seasons"][s]["teamCount"] = n
+            put_team_count(sources["seasons"][s], n)
         print(f"Team count written: {', '.join(f'{s} {n}' for s, n in changed.items())}.")
         return True
     except Exception as e:  # noqa: BLE001 — must never escape into the refresh
@@ -1049,7 +1070,8 @@ def cmd_team_history(sources, dry_run=False, check=False):
         if drift:
             print("Team count check: " + "; ".join(f"{s} has {have} in sources.json, {want} in its team index"
                                                   for s, have, want in drift) +
-                  ". Run: python archive.py --team-index --all, then commit public/data/sources.json")
+                  ". Run: python archive.py --team-index --all, then commit public/data/sources.json"
+                  " (a season with no index, or none of its teams, keeps no teamCount: remove its line)")
         else:
             print("Team count check: every season's teamCount equals its team index.")
         return 1 if diff or errors or stale_directory or drift else 0

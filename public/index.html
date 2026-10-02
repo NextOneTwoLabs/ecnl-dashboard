@@ -2221,8 +2221,9 @@
     .tix a { display: inline-grid; place-items: center; min-width: 44px; min-height: 36px; border-radius: 8px; color: var(--accent-text); font: 600 13px var(--font); text-decoration: none; }
     .tix a:hover { background: var(--accent-surface); }
     @media (max-width: 768px), (pointer: coarse) { .tix a { min-height: 44px; } }
-    @media (max-width: 768px) { .tix thead th small { display: none; } .tix tbody th, .tix thead th:first-child { padding-left: 10px; font-size: 13px; }
-      .tix a { min-width: 38px; font-size: 12px; } .tix td { padding: 0 1px; } }
+    @media (max-width: 768px) { .tix thead th small { display: none; } .tix tbody th, .tix thead th:first-child { padding-left: 10px; font-size: 13px; } }
+    /* Six age columns fit a phone only below 44 px wide: 38 x 44, 9 px apart (WCAG 2.5.8) */
+    @media (max-width: 480px) { .tix a { min-width: 38px; font-size: 12px; } .tix td { padding: 0 1px; } }
     /* On the index the sidebar offers the season only: the table is chosen in the grid */
     #conferencesPanel.on-index { display: none !important; }
   </style>
@@ -7395,7 +7396,10 @@
       // Whatever was loading belongs to a view that is gone (#99/#102/#120): drop its answers.
       loadToken++; teamToken++; playoffToken++; playoffFlightToken++; showcaseToken++;
       landingOpen = true;
-      teamsIndex = true;   // Conferences opened from here (after the Events card) is the index, not a default table
+      // Conferences opened from here (after the Events card) is the index only when no table was
+      // chosen in this page; a chosen or resumed table stays the visitor's (S10, PR #142 MF2).
+      teamsIndex = teamsIndex || !currentAgeGroup;
+      closeSidebarIfMobile();   // SC3: the drawer never stays open behind the landing page
       document.body.classList.add('route-landing');
       document.querySelector('.section-label').setAttribute('aria-current', 'page');
       const el = document.getElementById('landing');
@@ -7407,7 +7411,7 @@
       const evText = [ev.po.length ? 'Playoffs & Finals' : '', ev.sc.length ? `${ev.sc.length} showcase${ev.sc.length === 1 ? '' : 's'}` : ''].filter(Boolean).join(', ');
       const n = SEASONS[s0].teamCount;
       const teamsCount = `<b>${Object.keys(SEASONS[s0].conferences || {}).length} conferences</b>` +
-        (Number.isInteger(n) ? ` · ${n.toLocaleString('en-US')} teams in ${esc(seasonLabel(s0))}` : '');
+        (Number.isInteger(n) && n > 0 ? ` · ${n.toLocaleString('en-US')} teams in ${esc(seasonLabel(s0))}` : '');
       const eventsCount = evSeason ? `<b>${esc(seasonLabel(evSeason))}:</b> ${esc(evText)}${now.po.length || now.sc.length || evSeason === s0 ? '' : ` · ${esc(seasonLabel(s0))}: none yet`}` : 'None archived yet';
       const label = resumeLabel(savedPlace());
       const favs = sortedFavorites().slice(0, 3).map(r => {
@@ -7449,7 +7453,7 @@
       const confs = Object.keys(getSeasonData().conferences);
       document.getElementById('contentTitle').textContent = 'Choose a conference and age group';
       document.getElementById('contentSubtitle').textContent = `${confs.length} conferences · ${AGE_GROUPS.length} age groups` +
-        (Number.isInteger(n) ? ` · ${n.toLocaleString('en-US')} teams` : '');
+        (Number.isInteger(n) && n > 0 ? ` · ${n.toLocaleString('en-US')} teams` : '');
       document.getElementById('extLinks').innerHTML = '';
       document.getElementById('standingsContainer').innerHTML = `<div class="tix"><table><caption class="sr-only">Conference tables by age group, ${esc(seasonLabel(currentSeason))}</caption>` +
         `<thead><tr><th scope="col">Conference</th>${AGE_GROUPS.map(ag => `<th scope="col">${esc(AGE_LABELS[ag] || ag)}${birthYearLabel(ag) ? `<small>${esc(birthYearLabel(ag))}</small>` : ''}</th>`).join('')}</tr></thead>` +

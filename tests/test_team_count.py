@@ -154,13 +154,27 @@ class Sync(unittest.TestCase):
         self.assertNotIn("teamCount", self.sources["seasons"][self.SEASON])
 
     def test_unpatched_the_writer_refuses_a_registry_the_file_does_not_hold(self):
-        # A fixture registry run through the real writer: the real file has no such season, so the
-        # write fails (reported), and the real file is untouched (checked in tearDown).
+        # A fixture registry run through the real writer, pointed at a temporary copy of the real
+        # catalog (never the checkout, PR #142 SC2): the copy has no such season, so the write
+        # fails (reported), and the copy is byte for byte as it was.
         self.write_index([1, 2])
+        copy_path = os.path.join(self.tmp, "sources.json")
+        shutil.copy(api.SOURCES_PATH, copy_path)
+        before = sha(copy_path)
         stats = archive.Stats()
-        with self.paths(), contextlib.redirect_stdout(io.StringIO()):
+        with self.paths(), patch.object(api, "SOURCES_PATH", copy_path), contextlib.redirect_stdout(io.StringIO()):
             self.assertIsNone(archive.sync_team_counts(self.sources, [self.SEASON], stats))
         self.assertEqual(stats.failed, 1)
+        self.assertEqual(sha(copy_path), before)
+
+    def test_an_index_with_no_team_gives_no_count(self):
+        # PR #142 SC4: "0 teams in 2027-28" says nothing; a showcase-only index keeps no count.
+        self.write_index([])
+        stats = archive.Stats()
+        with self.paths(), patch.object(archive, "save_sources") as save:
+            self.assertIsNone(archive.team_count(self.SEASON))
+            self.assertFalse(archive.sync_team_counts(self.sources, [self.SEASON], stats))
+        save.assert_not_called()
 
     def test_only_update_team_index_syncs_and_count_false_does_not(self):
         built = {"schema": 1, "season": self.SEASON, "teams": [{"teamID": 5}, {"teamID": 6}]}
@@ -190,6 +204,74 @@ class Sync(unittest.TestCase):
         src = Path(archive.__file__).read_text(encoding="utf-8")
         self.assertIn("update_team_index(sources, s, stats, count=not args.no_update_sources)", src)
         self.assertIn("update_team_index(sources, s, stats, count=False)", src)
+
+
+class NewSeason(unittest.TestCase):
+    """PR #142 MF1: a new season's first count, a full rewrite of the file (a crawl's birth-year
+    anchor), then a later count: one teamCount line, the second key, the new value."""
+    SEASON = "2027-28"
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
+        self.catalog = os.path.join(self.tmp, "sources.json")
+        self.index = os.path.join(self.tmp, f"{self.SEASON}.json")
+        # The season as a hand edit adds it: first in "seasons", with startYear first and no count.
+        text = raw_catalog().replace("\r\n", "\n")
+        anchor = '  "seasons": {\n'
+        new = (anchor + f'    "{self.SEASON}": {{\n      "startYear": 2027,\n      "conferences": {{\n'
+               '        "Midwest": {\n          "eventId": 9999\n        }\n      }\n    },\n')
+        self.assertEqual(text.count(anchor), 1)
+        with open(self.catalog, "wb") as f:
+            f.write(text.replace(anchor, new).replace("\n", "\r\n").encode("utf-8"))
+        real = api.team_index_path
+        self.stack = contextlib.ExitStack()
+        self.addCleanup(self.stack.close)
+        self.stack.enter_context(patch.object(api, "SOURCES_PATH", self.catalog))
+        self.stack.enter_context(patch.object(api, "team_index_path", side_effect=lambda s: self.index if s == self.SEASON else real(s)))
+        self.stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+        self.sources = api.load_sources(self.catalog)
+
+    def write_index(self, n):
+        with open(self.index, "w", encoding="utf-8") as f:
+            json.dump({"schema": 1, "season": self.SEASON, "teams": [{"teamID": i} for i in range(n)]}, f)
+
+    def lines(self):
+        with open(self.catalog, "rb") as f:
+            text = f.read().decode("utf-8").replace("\r\n", "\n")
+        block = text[text.index(f'    "{self.SEASON}": {{'):]
+        block = block[:block.index("\n    }")]
+        return [l for l in block.splitlines() if '"teamCount"' in l], json.loads(text)["seasons"][self.SEASON]
+
+    def test_sync_full_save_sync_keeps_one_count_second(self):
+        stats = archive.Stats()
+        self.write_index(500)
+        self.assertTrue(archive.sync_team_counts(self.sources, [self.SEASON], stats))
+        self.assertEqual(list(self.sources["seasons"][self.SEASON])[:2], ["startYear", "teamCount"], "second in memory too")
+        archive.save_sources(self.sources)                     # the crawl's full rewrite
+        self.write_index(510)
+        self.assertTrue(archive.sync_team_counts(self.sources, [self.SEASON], stats))
+        lines, season = self.lines()
+        self.assertEqual(lines, ['      "teamCount": 510,'])
+        self.assertEqual(list(season)[:2], ["startYear", "teamCount"])
+        self.assertEqual(season["teamCount"], 510)
+        self.assertFalse(archive.sync_team_counts(self.sources, [self.SEASON], stats), "in line: nothing to write")
+        self.assertEqual(stats.failed, 0)
+
+    def test_a_twin_is_refused_not_added(self):
+        text = raw_catalog().replace("\r\n", "\n")
+        season = next(iter(api.load_sources()["seasons"]))
+        twin = text.replace(f'    "{season}": {{\n      "startYear": ', f'    "{season}": {{\n      "x": 1,\n      "startYear": ', 1)
+        with self.assertRaises(ValueError):                    # startYear is no longer first
+            archive.set_team_count_line(twin, season, 5)
+        start = text.index(f'    "{season}": {{')
+        end = text.index("\n    }", start)
+        moved = text[:end] + ',\n      "teamCount": 3' + text[end:]
+        moved = moved.replace(f'    "{season}": {{\n      "startYear": ', f'    "{season}": {{\n      "startYear": ', 1)
+        lines = [l for l in moved.splitlines() if l.startswith('      "teamCount": ')]
+        self.assertGreaterEqual(len(lines), 1)
+        with self.assertRaises(ValueError):                    # a count that is not the second key
+            archive.set_team_count_line(moved, season, 5)
 
 
 class DriftCheck(unittest.TestCase):

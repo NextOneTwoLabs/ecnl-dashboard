@@ -63,8 +63,8 @@ const deferred = () => { let resolve; const promise = new Promise(y => { resolve
 
 // A page. `saved`: the saved place; `favs`: followed records; `hash`, `search`, `state`: the address
 // and the history entry it opens on; `seasons`: a catalog other than the real one.
-function page({ saved = null, favs = null, hash = '', search = '', state = null, seasons = CATALOG.seasons } = {}) {
-  const T = { loads: [], hold: {}, focused: null, sheetClosed: 0, searchFocus: 0, titleFocus: 0, picks: [], clicks: [], history: [], writes: [] };
+function page({ saved = null, favs = null, hash = '', search = '', state = null, seasons = CATALOG.seasons, escape = s => String(s) } = {}) {
+  const T = { loads: [], hold: {}, focused: null, sheetClosed: 0, searchFocus: 0, titleFocus: 0, picks: [], clicks: [], history: [], writes: [], drawerClosed: 0 };
   const els = new Map();
   const node = id => {
     const cls = new Set(), attrs = {};
@@ -97,11 +97,11 @@ function page({ saved = null, favs = null, hash = '', search = '', state = null,
   const stubs = {
     T, document, window: { location, addEventListener: (t, f) => { listeners[t] = f; } }, location, history, localStorage,
     SEASONS: seasons, SOURCES: { seasons }, NATIONAL_EVENTS: {}, LIVE: false,
-    getAgeLabel: d => d, birthYearLabel: () => '', seasonLabel: s => s, esc: s => String(s), displayName: n => n, sortAgeGroups: x => x,
+    getAgeLabel: d => d, birthYearLabel: () => '', seasonLabel: s => s, esc: escape, displayName: n => n, sortAgeGroups: x => x,
     getEventHierarchy: async () => { throw new Error('no hierarchy request on these routes'); },
     buildAgeGroupTabs() {}, buildConferenceList() {}, buildFavoritesList() {}, updateMyTeamsCount() {},
     loadTheme() {}, loadSidebarState() {}, purgeLegacyCache() {}, loadSources: async () => {}, loadRefreshState: async () => {}, setObserved() {},
-    usClose() {}, closeSidebarIfMobile() {}, toggleSidebar() {}, focusTeamSearch: () => { T.searchFocus++; },
+    usClose() {}, closeSidebarIfMobile: () => { T.drawerClosed++; }, toggleSidebar() {}, focusTeamSearch: () => { T.searchFocus++; },
     closeTeamSheet: () => { T.sheetClosed++; }, focusContentTitle: () => el('contentTitle').focus(),
     selectAgeGroup: a => T.picks.push('age:' + a), selectConference: c => T.picks.push('conf:' + c), retryText: () => 'try again',
     isPhone: () => false,
@@ -113,7 +113,7 @@ function page({ saved = null, favs = null, hash = '', search = '', state = null,
         team: selectedTeamID, sched: scheduleFilter, more: showMoreStats, fav: currentFavorite, preview: previewTeam && previewTeam.name,
         teamView, stage: currentPlayoffStage, pAge: currentPlayoffAgeGroup, tier: currentPlayoffTier,
         showcase: currentShowcase, sAge: currentShowcaseAge, flight: currentShowcaseFlight }),
-      flags: () => ({ landingOpen, teamsIndex }), ages: () => AGE_GROUPS.slice() };`)(...Object.values(stubs));
+      flags: () => ({ landingOpen, teamsIndex }), ages: () => AGE_GROUPS.slice(), usGoTo: h => { location.hash = h; } };`)(...Object.values(stubs));
   const p = {
     ...api, T, store, el, history, location,
     init: async () => { await api.initPage(); await flush(); },
@@ -463,4 +463,99 @@ test('#135 P1a: a team page that is not followed is saved and comes back as itse
   await p.home();
   await p.continueSaved(); await flush();
   assert.equal(p.location.hash, cold.location.hash);
+});
+
+// ---------- PR #142 review: MF2, SC1, SC3, SC4
+
+const NORCAL = `#season=${S0}&age=${encodeURIComponent(AGE)}&conf=${encodeURIComponent(CONF)}`;
+test('#135 P1a (PR #142 MF2): a table chosen in this page survives the landing page: ECNL Girls → Events card → Conferences', async () => {
+  const p = page({ hash: NORCAL });
+  await p.init();
+  await p.home();
+  await p.fire(`#tab=playoffs&season=${S0}`);             // the Events card
+  p.switchTab('conferences'); await flush();
+  assert.equal(p.shown(), `TABLE ${CONF} ${AGE}`);
+  assert.equal(p.flags().teamsIndex, false);
+});
+
+test('#135 P1a (PR #142 MF2): NorCal → Playoffs → ECNL Girls → Back → Conferences is NorCal again', async () => {
+  const p = page({ hash: NORCAL });
+  await p.init();
+  p.switchTab('playoffs'); await flush();
+  await p.home();
+  await p.back(`#tab=playoffs&season=${S0}`);             // Back to the Playoffs entry
+  p.switchTab('conferences'); await flush();
+  assert.equal(p.shown(), `TABLE ${CONF} ${AGE}`);
+});
+
+test('#135 P1a (PR #142 MF2): with no table chosen, Conferences after the landing page is still the index (new visitor, and index → Playoffs → ECNL Girls → Back)', async () => {
+  const p = page({ hash: `#season=${S0}` });
+  await p.init();
+  p.switchTab('playoffs'); await flush();
+  await p.home();
+  await p.back(`#tab=playoffs&season=${S0}`);
+  p.switchTab('conferences'); await flush();
+  assert.ok(p.shown().includes('class="tix"'));
+});
+
+test('#135 P1a (PR #142 R7): on a landing page reached from a table the arrow keys write and load nothing', async () => {
+  const p = page({ hash: NORCAL });
+  await p.init();
+  await p.home();
+  assert.equal(p.flags().teamsIndex, false, 'only landingOpen guards here');
+  const loads = p.T.loads.length, writes = p.T.writes.length;
+  for (const k of ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']) p.key(k);
+  await flush();
+  assert.deepEqual([p.T.picks, p.T.loads.length, p.T.writes.length], [[], loads, writes]);
+});
+
+test('#135 P1a (PR #142 SC3): the landing page closes the phone drawer', async () => {
+  const p = page({ hash: NORCAL });
+  await p.init();
+  const before = p.T.drawerClosed;
+  await p.back('');
+  assert.ok(p.T.drawerClosed > before);
+});
+
+test('#135 P1a (PR #142 R3, R4): names on the landing page are escaped (Continue label, followed-team pills)', async () => {
+  const realEsc = new Function(block('    function esc(') + '\nreturn esc;')();
+  const evil = '<img src=x onerror=alert(1)>';
+  const p = page({ saved: { season: S0, tab: 'favorites', teamPage: { teamID: 55477, name: evil, view: 'history' } },
+    favs: [{ name: evil + ' 2', teamID: 1, eventID: FOLLOWED.eventID }], state: { landing: 1 }, escape: realEsc });
+  await p.init();
+  assert.ok(!p.landingHtml().includes('<img src=x'));
+  assert.ok(p.landingHtml().includes('Continue: &lt;img src=x onerror=alert(1)&gt;'));
+  assert.ok(p.landingHtml().includes('★ &lt;img src=x onerror=alert(1)&gt; 2'));
+});
+
+test('#135 P1a (PR #142 R6, R11, R17, R20): the index shows its caption and named cells; leaving it shows the sidebar lists, and aria-current leaves ECNL Girls', async () => {
+  const p = page();
+  await p.init();
+  assert.equal(p.el('sectionLabel').getAttribute('aria-current'), 'page');
+  await p.fire(`#season=${S0}`);
+  assert.equal(p.el('sectionLabel').getAttribute('aria-current'), null, 'R11');
+  assert.ok(p.shown().includes(`<caption class="sr-only">Conference tables by age group, ${S0}</caption>`), 'R20');
+  assert.ok(p.shown().includes(`aria-label="${CONF} ${AGE}"`), 'R17');
+  assert.ok(p.el('conferencesPanel').classList.contains('on-index'));
+  await p.fire(NORCAL);
+  assert.ok(!p.el('conferencesPanel').classList.contains('on-index'), 'R6: the sidebar lists come back');
+});
+
+test('#135 P1a (PR #142 R13): index → a search result → Conferences tab is the index, not a blank pane', async () => {
+  const p = page({ hash: `#season=${S0}` });
+  await p.init();
+  await p.fire(`#tab=teams&season=${S0}&team=33438&name=${encodeURIComponent('MVLA ECNL G2008/09')}`);
+  assert.equal(p.flags().teamsIndex, false);
+  p.switchTab('conferences'); await flush();
+  assert.ok(p.shown().includes('class="tix"'));
+});
+
+test('#135 P1a (PR #142 SC4): a teamCount of 0 shows no count', async () => {
+  const zero = JSON.parse(JSON.stringify(CATALOG.seasons));
+  zero[S0].teamCount = 0;
+  const p = page({ seasons: zero });
+  await p.init();
+  assert.ok(!/teams in/.test(p.landingHtml()));
+  await p.fire(`#season=${S0}`);
+  assert.ok(!/ teams$/.test(p.el('contentSubtitle').textContent));
 });
