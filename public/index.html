@@ -1199,6 +1199,32 @@
     }
     .hamburger { flex-shrink: 0; min-width: 24px; min-height: 24px; }
     @media (max-width: 339px) { .wordmark { font-size: 0; min-width: 44px; justify-content: center; } .header .wordmark img { margin-right: 0; } }
+    /* ===== #135 P3: the Overview header ===== */
+    .title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; }
+    .title-actions[hidden] { display: none; }
+    .ov-glance { padding: 16px 20px 18px; }
+    .ov-scope { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--accent-text); }
+    .ov-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px 18px; margin-top: 12px; }
+    .ov-next-opp { font-size: 15px; font-weight: 700; margin-top: 2px; }
+    .ov-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-light); }
+    .ov-action { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px;
+      font-size: 13px; font-weight: 600; color: var(--accent-text); text-decoration: none; background: var(--bg-surface); }
+    .ov-action:hover { border-color: var(--accent-text); }
+    .ov-action.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
+    .ov-retry { margin-top: 6px; min-height: 24px; }
+    .ov-linked summary { display: flex; align-items: center; min-height: 24px; padding: 10px 18px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--accent-text); border-top: 1px solid var(--border-light); }
+    .hist-links a { display: inline-flex; align-items: center; justify-content: center; min-height: 24px; min-width: 24px; }
+    .hist-form .form-chip.inline { width: 24px; height: 24px; font-size: 11px; }
+    @media (max-width: 760px) { .ov-stats { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 1024px) { .conf-layout.ov-layout > .glance-panel { order: 1; position: static; } }
+    @media (max-width: 768px), (pointer: coarse) {
+      .ov-action, .ov-linked summary, .ov-retry { min-height: 44px; }
+      .hist-links a { min-height: 44px; min-width: 44px; }
+      .ov-glance .form-chip { width: 44px; min-width: 44px; height: 44px; border-radius: 8px; font-size: 14px; }
+      .hist-form .form-chip.inline { width: 44px; min-width: 44px; height: 44px; font-size: 14px; }
+    }
+    /* M6 (Q4): on touch the per-season cards, never the wide table, so 44 px chips don't scroll it */
+    @media (pointer: coarse) { .hist-stack .hist-table-wrap { display: none; } .hist-stack .hist-cards { display: block; } }
     .sr-only {
       position: absolute;
       width: 1px;
@@ -2396,7 +2422,7 @@
         <div class="content-header-row">
           <div class="content-header-main">
             <div class="breadcrumb" id="breadcrumb"></div>
-            <h1 class="content-title" id="contentTitle" tabindex="-1">Select a conference</h1>
+            <div class="title-row"><h1 class="content-title" id="contentTitle" tabindex="-1">Select a conference</h1><div class="title-actions" id="titleActions" hidden></div></div>
             <div class="content-subtitle" id="contentSubtitle">Choose an age group and conference from the sidebar</div>
           </div>
           <div class="content-header-right">
@@ -3167,9 +3193,39 @@
     const TOP_TAB_LABELS = { conferences: 'Conferences', playoffs: 'Playoffs', showcases: 'Showcases' };
     let lastTopTab = 'conferences';   // where My Teams' Back goes
 
+    // The sidebar's panels, the tablist and My Teams' toggle for `tab`. A tablist of three; My Teams
+    // sits outside it. With My Teams open no tab is selected, and the last one keeps tabindex 0 so the
+    // tablist stays reachable. #135 P3: a team page for a team this browser doesn't follow (a preview)
+    // is not My Teams: it sits under Conferences (that panel and that tab; My Teams not expanded).
+    // Returns whether the page is a preview.
+    function tabChrome(tab) {
+      const isFav = tab === 'favorites';
+      const preview = isFav && !!previewTeam && !favorites.has(previewTeam.name), mine = isFav && !preview;
+      document.getElementById('sidebarSeason').style.display    = mine ? 'none' : '';
+      document.getElementById('showcasesPanel').style.display   = tab === 'showcases' ? 'flex' : 'none';
+      document.getElementById('conferencesPanel').style.display = tab === 'conferences' || preview ? '' : 'none';
+      document.getElementById('favoritesPanel').style.display   = mine ? 'flex' : 'none';
+      document.getElementById('playoffsPanel').style.display    = tab === 'playoffs' ? 'flex' : 'none';
+      if (preview && typeof indexChrome === 'function') indexChrome(false);   // a preview reached from the Teams index (#142)
+      TOP_TABS.forEach(([id, name]) => {
+        const b = document.getElementById(id);
+        const on = name === tab || (preview && name === 'conferences');
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', String(on));
+        b.tabIndex = name === lastTopTab ? 0 : -1;
+      });
+      const mt = document.getElementById('myTeamsToggle');
+      if (mt) mt.setAttribute('aria-expanded', String(mine));
+      const back = document.getElementById('myTeamsBackLabel');
+      if (back) back.textContent = TOP_TAB_LABELS[lastTopTab];
+      return preview;
+    }
+
     // The footer's My Teams button opens and closes the My Teams panel.
     function toggleMyTeams() {
-      if (currentTab === 'favorites') { closeMyTeams(); return; }
+      const preview = currentTab === 'favorites' && !!previewTeam && !favorites.has(previewTeam.name);
+      if (currentTab === 'favorites' && !preview) { closeMyTeams(); return; }
+      previewTeam = null;   // #135 P3: from a preview, the button opens My Teams
       switchTab('favorites');
       const b = document.getElementById('myTeamsBack');
       if (b) b.focus({ preventScroll: true });
@@ -3202,33 +3258,19 @@
     function switchTab(tab, { silent = false } = {}) {
       leaveLanding();
       if (typeof closeTeamSheet === 'function') closeTeamSheet('title');
+      const ta = document.getElementById('titleActions');   // #135 P3: the Overview's Follow is its own
+      if (ta) { ta.hidden = true; ta.innerHTML = ''; }
       currentTab = tab;
       const isConf = tab === 'conferences';
       const isFav  = tab === 'favorites';
       const isPO   = tab === 'playoffs';
       const isSC   = tab === 'showcases';
-      document.getElementById('sidebarSeason').style.display    = isFav  ? 'none' : '';
-      document.getElementById('showcasesPanel').style.display   = isSC   ? 'flex' : 'none';
-      document.getElementById('conferencesPanel').style.display = isConf ? '' : 'none';
-      document.getElementById('favoritesPanel').style.display   = isFav  ? 'flex' : 'none';
-      document.getElementById('playoffsPanel').style.display    = isPO   ? 'flex' : 'none';
+      if (!isFav) previewTeam = null;   // #135 P3: leaving the team page leaves its preview
       // #102: leaving My Teams cancels a team page still loading, which would otherwise paint
       // over this tab (and could move the season) when its requests answer.
       if (!isFav) { lastTopTab = tab; teamToken++; }
       playoffToken++; loadToken++;   // #99: a Playoffs or Conferences load still in flight, whichever tab this is
-      // A tablist of three; My Teams sits outside it. With My Teams open no tab is
-      // selected, and the last one keeps tabindex 0 so the tablist stays reachable.
-      TOP_TABS.forEach(([id, name]) => {
-        const b = document.getElementById(id);
-        const on = name === tab;
-        b.classList.toggle('active', on);
-        b.setAttribute('aria-selected', String(on));
-        b.tabIndex = name === lastTopTab ? 0 : -1;
-      });
-      const mt = document.getElementById('myTeamsToggle');
-      if (mt) mt.setAttribute('aria-expanded', String(isFav));
-      const back = document.getElementById('myTeamsBackLabel');
-      if (back) back.textContent = TOP_TAB_LABELS[lastTopTab];
+      tabChrome(tab);
       // The arrow shortcuts only work on Conferences, so only advertise them there.
       document.querySelectorAll('.shortcut-hint .hint-conf').forEach(el => { el.hidden = !isConf; });
       if (isFav) openFavoritesTab();
@@ -3247,6 +3289,31 @@
         if (ageGroupsSeason !== currentSeason) rebuildAll();
         else if (currentAgeGroup) loadCurrentView();
       }
+    }
+
+    // #135 P3: a team the visitor doesn't follow sits under Conferences. Its sidebar shows the team's
+    // season, conference and age group (the season's age groups come from the catalog: no request),
+    // so the Conferences tab then opens the team's table, and that is the place saved.
+    let teamSidebarFor = null;   // the team page's [season, conference, division], for an Unfollow on it
+    async function showTeamInSidebar(season, conference, division) {
+      teamSidebarFor = [season, conference, division];
+      if (currentTab !== 'favorites' || !previewTeam || favorites.has(previewTeam.name)) return;
+      if (season !== currentSeason || !SEASONS[season] || !SEASONS[season].conferences[conference]) return;
+      if (ageGroupsSeason !== season) await loadAgeGroupsForSeason();
+      if (currentTab !== 'favorites' || season !== currentSeason || !AGE_GROUPS.includes(division)) return;
+      currentConference = conference; currentAgeGroup = division;
+      buildAgeGroupTabs(); buildConferenceList();
+      saveState();   // S3: the place saved is this season's, not the season before
+    }
+    // Re-review M1: a team unfollowed on its own page becomes a preview where it stands: the sidebar,
+    // the tab and the breadcrumb follow, with no reload.
+    function previewChrome() {
+      if (!tabChrome('favorites')) return;
+      if (teamSidebarFor) showTeamInSidebar(...teamSidebarFor);
+      const rec = previewTeam;
+      if (teamView === 'history') historyCrumb(rec, currentSeason, rec.name);
+      else document.getElementById('breadcrumb').innerHTML =
+        `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">${esc(rec.name)}</span>`;
     }
 
     // ========== PLAYOFFS & FINALS ==========
@@ -4331,10 +4398,14 @@
       const rec = typeof arg === 'string' ? (favoriteMeta.get(arg) || { name: arg }) : recordFromButton(arg);
       const name = rec.name;
       if (!name) return;
+      let becamePreview = false;
       if (favorites.has(name)) {
+        const onScreen = currentTab === 'favorites' && (currentFavorite === name || (previewTeam && previewTeam.name === name));
+        const meta = favoriteMeta.get(name) || rec;
         favorites.delete(name);
         favoriteMeta.delete(name);
         if (currentFavorite === name) currentFavorite = null;
+        if (onScreen) { previewTeam = { ...meta }; becamePreview = true; }   // #135 P3 (M5): the page stays, a preview of the same team
       } else {
         favorites.add(name);
         favoriteMeta.set(name, rec);
@@ -4344,7 +4415,7 @@
         }
       }
       saveFavorites();
-      document.querySelectorAll('#standingsContainer .star-btn, #teamSheet .star-btn').forEach(btn => {
+      document.querySelectorAll('#standingsContainer .star-btn, #teamSheet .star-btn, #titleActions .star-btn').forEach(btn => {
         const n = btn.dataset.team, on = favorites.has(n);
         btn.classList.toggle('starred', on);
         btn.setAttribute('aria-pressed', String(on));
@@ -4354,7 +4425,11 @@
       });
       if (currentTab === 'favorites') {
         buildFavoritesList();
-        if (!currentFavorite) openFavoritesTab();
+        if (!currentFavorite && !previewTeam) openFavoritesTab();
+        else {
+          if (becamePreview && typeof previewChrome === 'function') previewChrome();
+          saveState(); pushHash();
+        }
       }
     }
 
@@ -4428,6 +4503,7 @@
       }
       if (!favorites.size) {
         currentFavorite = null;
+        teamToken++;   // #135 P3 (M4): a team page still loading must not paint over this
         document.getElementById('breadcrumb').innerHTML =
           `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">My Teams</span>`;
         document.getElementById('contentTitle').textContent = 'My Teams';
@@ -4514,15 +4590,31 @@
 
     // Everything the glance panel and the My Teams summary derive for one team:
     // its standings row and position, its own games, last-5 form and next game.
-    function computeTeamSummary(teamID, teams, games, formLen = 5) {
+    // #64: the next match is a game not yet played, from the open season, dated today or later; a
+    // leg with no date (TBD, or TGS's 0001-01-01) comes after the dated ones. An unplayed game dated
+    // before today is a result not reported, counted only in the open season. Dates compare as text,
+    // in the visitor's local date (todayKey), never through new Date('YYYY-MM-DD').
+    function openSeason() { return (SOURCES && SOURCES.refresh && SOURCES.refresh.activeSeason) || Object.keys(SEASONS)[0]; }
+    function nextFixture(mine, open = true) {
+      const today = todayKey();
+      const tbd = g => g.dateUnconfirmed || !((g.gameDate || '').slice(0, 10) >= '1900');
+      const pending = (mine || []).filter(g => !isPlayed(g));
+      if (!open) return { next: null, unreported: 0 };
+      return {
+        next: pending.find(g => !tbd(g) && g.gameDate.slice(0, 10) >= today) || pending.find(tbd) || null,
+        unreported: pending.filter(g => !tbd(g) && g.gameDate.slice(0, 10) < today).length,
+      };
+    }
+
+    function computeTeamSummary(teamID, teams, games, formLen = 5, open = true) {
       const idx = teams.findIndex(t => t.teamID === teamID);
       const row = idx >= 0 ? teams[idx] : null;
       const mine = sortGames((games || []).filter(g => g.hometeamID === teamID || g.awayteamID === teamID));
       const played = mine.filter(isPlayed);
       const form = played.slice(-formLen).map(g => resultFor(g, teamID));   // oldest -> latest
-      const next = mine.find(g => !isPlayed(g)) || null;
+      const { next, unreported } = nextFixture(mine, open);   // #64
       const last = played.length ? played[played.length - 1] : null;
-      return { row, position: idx >= 0 ? idx + 1 : null, total: teams.length, mine, played, form, next, last };
+      return { row, position: idx >= 0 ? idx + 1 : null, total: teams.length, mine, played, form, next, unreported, last };
     }
 
     // Copy a standings row's identity into a favourite/preview record.
@@ -4617,12 +4709,14 @@
       if (teamView === 'history' && !overviewAvailable(rec)) teamView = 'season';
       teamViewFor = { id: rec.teamID, name: rec.name };
       const token = ++teamToken;
+      const ta = document.getElementById('titleActions');
+      if (ta) { ta.hidden = true; ta.innerHTML = ''; }
       showTeamViewTabs();
       document.getElementById('formatNote').style.display = 'none';
       document.getElementById('extLinks').innerHTML = '';
       document.getElementById('breadcrumb').innerHTML =
-        `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span><span>My Teams</span>` +
-        `<span class="breadcrumb-sep">›</span><span class="breadcrumb-current">${esc(rec.name || 'Team')}</span>`;
+        `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span>` +
+        (currentFavorite ? `<span>My Teams</span><span class="breadcrumb-sep">›</span>` : '') + `<span class="breadcrumb-current">${esc(rec.name || 'Team')}</span>`;
       document.getElementById('contentTitle').textContent = rec.name || 'Team';
       document.getElementById('contentSubtitle').textContent = 'Locating team…';
       clearTeamFilter();
@@ -4656,6 +4750,7 @@
         const divisionName = (division && division.divisionName) || rec.divisionName || '';
         const flightName = (flight && flight.flightName) || '';
         const ageLabel = divisionName ? getAgeLabel(divisionName, ctx.season) : '';
+        if (typeof showTeamInSidebar === 'function') showTeamInSidebar(ctx.season, ctx.name, divisionName);   // M3: the season tab too (and ?live=1)
 
         let gamesError = null;
         const [standings, games] = await Promise.all([
@@ -4670,12 +4765,13 @@
         const row = idx >= 0 ? teams[idx] : null;
         const teamID = row ? row.teamID : rec.teamID;
 
-        const { mine, form, next } = computeTeamSummary(teamID, teams, games);
+        const isOpen = ctx.season === openSeason();   // #64 (S2: one helper)
+        const { mine, form, next } = computeTeamSummary(teamID, teams, games, 5, isOpen);
 
         // Header
         document.getElementById('breadcrumb').innerHTML =
-          `<span>${esc(ctx.season)}</span><span class="breadcrumb-sep">›</span><span>My Teams</span>` +
-          `<span class="breadcrumb-sep">›</span><span class="breadcrumb-current">${esc(rec.name)}</span>`;
+          `<span>${esc(ctx.season)}</span><span class="breadcrumb-sep">›</span>` +
+          (currentFavorite ? `<span>My Teams</span><span class="breadcrumb-sep">›</span>` : '') + `<span class="breadcrumb-current">${esc(rec.name)}</span>`;
         const logo = rec.logo || (row && row.clublogo);
         document.getElementById('contentTitle').innerHTML =
           (logo ? `<img class="team-title-logo" src="${esc(logo)}" alt="" onerror="this.style.display='none'">` : '') + esc(rec.name);
@@ -4687,7 +4783,7 @@
 
         // Same layout as the conference view: tables on the left, the team's
         // "at a glance" panel on the right.
-        const summary = computeTeamSummary(teamID, teams, games);
+        const summary = computeTeamSummary(teamID, teams, games, 5, isOpen);
         container.innerHTML = '';
         const layout = document.createElement('div');
         layout.className = 'conf-layout';
@@ -4984,7 +5080,7 @@
       const rows = sq.seasons, last = rows[rows.length - 1];
       const here = mineIn(sq).find(r => r.season === season) || mineIn(sq).slice(-1)[0] || last;
       if (previewTeam === rec && /^Team \d+$/.test(rec.name || '')) rec.name = here.name;   // a link without &name=
-      const open = (SOURCES && SOURCES.refresh && SOURCES.refresh.activeSeason) || Object.keys(SEASONS)[0];
+      const open = openSeason();   // S2
       const ended = last.season !== open;
       const short = shortTeamName(last.name) || last.clubName;
       const place = clubPlaceText(sq.clubID);
@@ -4994,19 +5090,23 @@
 
       historyCrumb(rec, season, here.name);
       document.getElementById('contentTitle').innerHTML = logo + esc(`${short} · born ${years}`);
-      document.getElementById('contentSubtitle').textContent = [place,
-        `${rows.length} season${rows.length === 1 ? '' : 's'} in ECNL (${span})`,
-        ended ? `Last seen ${seasonLabel(last.season)}` : `now ${last.name}`].filter(Boolean).join(' · ');
+      // P3: the identity row: the squad's newest name, age group, conference and place, and Follow.
+      document.getElementById('contentSubtitle').textContent = (ended ? `Last seen ${seasonLabel(last.season)}: ` : '') +
+        [last.name, getAgeLabel(last.division, last.season), last.conference, place].filter(Boolean).join(' · ');
+      const followRec = { name: last.name, teamID: last.teamID, clubID: last.clubID, clubName: last.clubName, eventID: last.eventID, divisionID: last.divisionID, division: last.division, flightID: last.flightID, clublogo: last.logo };
+      const ta = document.getElementById('titleActions');
+      if (ta) { ta.innerHTML = starButton(followRec, { label: true }); ta.hidden = false; }
+      if (typeof showTeamInSidebar === 'function') showTeamInSidebar(season, here.conference, here.division);   // M2/M3
       document.getElementById('extLinks').innerHTML =
         `<a class="open-external" href="${getStandingsUrl(last.eventID, last.flightID)}" target="_blank" rel="noopener">${EXTERNAL_ICON} ${ended ? 'Last' : 'Latest'} table on TGS</a>`;
 
       const layout = document.createElement('div');
-      layout.className = 'conf-layout';
+      layout.className = 'conf-layout ov-layout';   // M1: a string, as every harness's fake DOM has it
       const stack = document.createElement('div');
       stack.className = 'conf-main summary-stack hist-stack';
       const aside = document.createElement('aside');
       aside.className = 'glance-panel';
-      aside.setAttribute('aria-label', 'Squad at a glance');
+      aside.setAttribute('aria-label', 'Finishing positions and how the seasons are linked');
       layout.append(stack, aside);
       container.innerHTML = '';
       container.appendChild(layout);
@@ -5018,6 +5118,57 @@
         add('hist-stale', `Overview as of ${esc(historyStamp(st.historyAsOf))}: results since then aren't in it yet.`);
       }
 
+      // P3: at a glance, scoped to the squad's newest season. Its numbers are that season's row
+      // (the same as the table below); the next match comes only from the open season (#64, through
+      // nextFixture), from its schedule (+1 request), and only while this page is current (teamToken).
+      {
+        const r = last, ppg = r.ppg != null ? r.ppg : (r.gp ? r.pts / r.gp : 0);
+        const lg = r.form && Array.isArray(r.last) && r.last.length === r.form.length ? r.last.map((g, i) => ({ ...g, r: r.form[i] })) : null;
+        const chips = lg ? `<div class="form-chips" role="group" aria-label="Last ${r.form.length} results, oldest first">${formChipsHtml(lg, false)}</div>`
+          : r.form ? `<div class="form-chips">${[...r.form].map(x => `<span class="form-chip ${x.toLowerCase()}">${x}</span>`).join('')}</div>` : '<div class="stat-sub">No games played yet</div>';
+        const scope = !ended ? `${seasonLabel(r.season)} · ${r.inProgress ? `in progress, ${r.played} of ${r.games} games` : 'final'}`
+          : `Latest recorded season: ${seasonLabel(r.season)} (final)`;
+        const evs = [...(sq.postseason || []).map(e => ({ e, po: true })), ...(sq.showcases || []).map(e => ({ e, po: false }))]
+          .sort((a, b) => a.e.season.localeCompare(b.e.season) || (a.po - b.po));
+        const ev = evs.length ? evs[evs.length - 1] : null;
+        const evHref = !ev ? '' : ev.po
+          ? `#tab=playoffs&season=${encodeURIComponent(ev.e.season)}&stage=${encodeURIComponent(Object.keys(NATIONAL_EVENTS[ev.e.season] || {}).find(k => NATIONAL_EVENTS[ev.e.season][k].eventId === ev.e.eventID) || ev.e.stage)}&age=${encodeURIComponent(ev.e.division)}&tier=${encodeURIComponent(ev.e.flightID)}`
+          : `#tab=showcases&season=${encodeURIComponent(ev.e.season)}&event=${encodeURIComponent(ev.e.eventID)}&age=${encodeURIComponent(ev.e.division)}&flight=${encodeURIComponent(ev.e.flightID)}`;
+        const evText = !ev ? '' : ev.po ? `${ev.e.stage} ${seasonLabel(ev.e.season)}: ${historyOutcome(ev.e).short}` : `${ev.e.stage} ${seasonLabel(ev.e.season)}: results`;
+        const pos = r.gp ? `<div class="stat-value">${r.rank}<span class="stat-of"> / ${r.of}</span></div>` : '<div class="stat-value">—</div>';   // S1
+        const card = add('flight-panel ov-glance', `<div class="ov-scope">${esc(scope)}</div>
+          <div class="ov-stats">
+            <div class="ov-stat"><div class="stat-label">Position</div>${pos}
+              <div class="stat-sub">${r.gp ? '' : 'No games yet · '}${esc(r.conference)} · ${esc(getAgeLabel(r.division, r.season))}</div></div>
+            <div class="ov-stat"><div class="stat-label">Record</div><div class="stat-value">${r.w}-${r.d}-${r.l}</div>
+              <div class="stat-sub">${r.pts} pts · ${r.gp} GP · ${ppg.toFixed(2)} PPG</div></div>
+            <div class="ov-stat glance-form"><div class="stat-label">Recent form</div>${chips}<div class="stat-sub">Oldest → latest</div></div>
+            ${ended ? '' : '<div class="ov-stat"><div class="stat-label">Next match</div><div class="ov-next-body"><div class="stat-sub">Loading…</div></div></div>'}
+          </div>
+          <div class="ov-actions">
+            <a class="ov-action primary" href="${pageHref(r)}">Open ${esc(seasonLabel(r.season))} season</a>
+            <a class="ov-action" href="${confHref(r)}">${esc(r.conference)} ${esc(getAgeLabel(r.division, r.season))} standings${ended ? ` (${esc(seasonLabel(r.season))})` : ''}</a>
+            ${ev ? `<a class="ov-action" href="${evHref}">${esc(evText)}</a>` : ''}
+          </div>`);
+        if (!ended) {
+          const token = teamToken, tid = r.teamID, slot = card.querySelector('.ov-next-body');
+          const fill = () => getSchedule(r.eventID, r.flightID).then(games => {
+            if (token !== teamToken) return;
+            const mine = sortGames(games.filter(g => g.hometeamID === tid || g.awayteamID === tid));
+            const { next, unreported } = nextFixture(mine, true);
+            slot.innerHTML = (next ? `<div class="ov-next-opp">${esc(opponentText(next, tid))}</div><div class="stat-sub">${esc(formatGameDate(next.gameDate))}${next.gameTimeText && !next.dateUnconfirmed && (next.gameDate || '') >= '1900' ? ` · ${esc(next.gameTimeText)}` : ''}</div>`
+              : `<div class="stat-sub">${mine.some(g => !isPlayed(g)) ? 'No upcoming match' : mine.length ? 'Season complete' : 'No fixtures published yet'}</div>`) +
+              (unreported ? `<div class="stat-sub">${unreported} result${unreported === 1 ? '' : 's'} not reported yet</div>` : '');
+          }).catch(e => {
+            if (token !== teamToken) return;
+            if (isMissing(e)) { slot.innerHTML = '<div class="stat-sub">No fixtures published yet</div>'; return; }
+            slot.innerHTML = `<div class="stat-sub">${esc(retryText(e))}</div><button type="button" class="ov-retry more-stats-btn">Try again</button>`;
+            slot.querySelector('.ov-retry').onclick = () => { slot.innerHTML = '<div class="stat-sub">Loading…</div>'; fill(); };
+          });
+          fill();
+        }
+      }
+
       // Totals: ours, summed from TGS's standings rows; first places count finished seasons (M2).
       const live = rows.some(r => r.inProgress);
       const sum = k => rows.reduce((a, r) => a + (r[k] || 0), 0);
@@ -5027,7 +5178,7 @@
       const bestOut = best ? historyOutcome(best) : null;
       const gd = sum('gf') - sum('ga');
       const titles = (sq.titles || []).map(i => posts[i]).filter(Boolean);
-      add('flight-panel', `<div class="hist-tiles">
+      add('flight-panel', `<div class="flight-header"><div class="flight-title">All seasons</div><span class="flight-team-count">Conference games only</span></div><div class="hist-tiles">
         <div class="hist-tile"><div class="stat-label">Seasons</div><div class="stat-value">${rows.length}</div>
           <div class="stat-sub">${esc(span)}</div></div>
         <div class="hist-tile"><div class="stat-label">First-place finishes</div><div class="stat-value">${firsts.length}</div>
@@ -5157,22 +5308,15 @@
       const how = [...new Set(rows.slice(1).map(r => r.link))];
       const linkedBy = !how.length ? '—' : how.every(h => h === 'id') ? 'TGS team id' : how.map(h => ({ id: 'id', name: 'name', club: 'club', manual: 'review' })[h]).join(', ');
       aside.innerHTML = `
-        <div class="glance-head">
-          <div class="glance-eyebrow">Squad at a glance</div>
-          <div class="glance-name">${last.logo ? `<img class="team-logo" src="${esc(last.logo)}" alt="" onerror="this.style.display='none'">` : ''}<span title="${esc(last.name)}">${esc(short)}</span></div>
-          <div class="glance-meta">Girls born ${esc(years)}${place ? ` · ${esc(place)}` : ''}</div>
-          <div class="glance-meta">${ended ? `Last seen ${esc(seasonLabel(last.season))}` : 'Now'}: ${esc(last.conference)} · ${esc(getAgeLabel(last.division, last.season))}</div>
-          <div class="glance-follow">${starButton({ name: last.name, teamID: last.teamID, clubID: last.clubID, clubName: last.clubName, eventID: last.eventID, divisionID: last.divisionID, division: last.division, flightID: last.flightID, clublogo: last.logo }, { label: true })}</div>
-        </div>
         <div class="hist-chart"><div class="stat-label">Conference finishing position</div>${historyChartSvg(rows)}
           <div class="hist-chart-key">1st at the top.${live ? ' A hollow dot: season in progress.' : ''}</div></div>
-        <dl class="glance-dl" style="padding-top:12px">
-          <dt>Linked by</dt><dd>${esc(linkedBy)}</dd>
-          <dt>Names used</dt><dd>${new Set(rows.map(r => r.name)).size}</dd>
-          <dt>Conferences</dt><dd>${esc([...new Set(rows.map(r => r.conference))].join(', '))}</dd>
-          <dt>Showcases</dt><dd>${shows.length}</dd>
-        </dl>
-        <div class="glance-actions"><a class="glance-link" href="${pageHref(last)}">${esc(teamSeasonTabLabel(last.season))} page →</a></div>`;
+        <details class="ov-linked"><summary>How these seasons are linked</summary>
+          <dl class="glance-dl">
+            <dt>Linked by</dt><dd>${esc(linkedBy)}</dd>
+            <dt>Names used</dt><dd>${new Set(rows.map(r => r.name)).size}</dd>
+            <dt>Conferences</dt><dd>${esc([...new Set(rows.map(r => r.conference))].join(', '))}</dd>
+            <dt>Showcases</dt><dd>${shows.length}</dd>
+          </dl></details>`;
     }
     const confHref = r => `#season=${encodeURIComponent(r.season)}&age=${encodeURIComponent(r.division)}&conf=${encodeURIComponent(r.conference)}&team=${encodeURIComponent(r.teamID)}`;
     // A team page link: its Overview (history), or that season's tab (&view=season, #114).
@@ -5936,7 +6080,8 @@
       refreshTeamSheet();
     }
     function glanceHtmlFor(hit) {
-      const summary = computeTeamSummary(hit.team.teamID, hit.fd.standings.teamStandings || [], hit.fd.games);
+      const summary = computeTeamSummary(hit.team.teamID, hit.fd.standings.teamStandings || [], hit.fd.games, 5,
+        currentSeason === openSeason());
       return glancePanelHtml(hit.team, summary, {
         season: currentSeason, confName: currentConference, ageLabel: currentConfMeta.ageLabel,
         flightName: currentConfMeta.flights.length > 1 ? hit.fd.flight.flightName : '',
@@ -6005,11 +6150,12 @@
       if (s.next) {
         const where = [s.next.complex, s.next.venue].filter(Boolean).join(' · ');
         nextHtml = `<div class="glance-next-opp">${esc(opponentText(s.next, team.teamID))}</div>` +
-          `<div class="glance-next-when">${esc(formatGameDate(s.next.gameDate))}${s.next.gameTimeText && !s.next.dateUnconfirmed ? ` · ${esc(s.next.gameTimeText)}` : ''}</div>` +
+          `<div class="glance-next-when">${esc(formatGameDate(s.next.gameDate))}${s.next.gameTimeText && !s.next.dateUnconfirmed && (s.next.gameDate || '') >= '1900' ? ` · ${esc(s.next.gameTimeText)}` : ''}</div>` +
           (where ? `<div class="glance-next-where">${esc(where)}</div>` : '');
       } else {
-        nextHtml = `<div class="glance-next-opp muted">${ctx.gamesFailed ? "Couldn't load the fixtures" : s.mine.length ? 'Season complete' : 'No fixtures published yet'}</div>`;
+        nextHtml = `<div class="glance-next-opp muted">${ctx.gamesFailed ? "Couldn't load the fixtures" : s.mine.some(g => !isPlayed(g)) ? 'No upcoming match' : s.mine.length ? 'Season complete' : 'No fixtures published yet'}</div>`;
       }
+      if (s.unreported) nextHtml += `<div class="glance-next-where">${s.unreported} result${s.unreported === 1 ? '' : 's'} not reported yet</div>`;   // #64
       let lastHtml = '';
       if (s.last) {
         const g = s.last, home = g.hometeamID === team.teamID;
@@ -6080,6 +6226,7 @@
 
     // ========== SELECTORS ==========
     function selectAgeGroup(ag) {
+      if (currentTab !== 'conferences') { previewTeam = null; switchTab('conferences', { silent: true }); }   // P3: from a team page
       currentAgeGroup = ag;
       selectedTeamID = null;
       buildAgeGroupTabs();
@@ -6088,6 +6235,7 @@
     }
 
     function selectConference(name) {
+      if (currentTab !== 'conferences') { previewTeam = null; switchTab('conferences', { silent: true }); }   // P3: from a team page
       currentConference = name;
       selectedTeamID = null;
       buildConferenceList();
@@ -7394,6 +7542,9 @@
       if (typeof closeTeamSheet === 'function') closeTeamSheet('title');
       // Whatever was loading belongs to a view that is gone (#99/#102/#120): drop its answers.
       loadToken++; teamToken++; playoffToken++; playoffFlightToken++; showcaseToken++;
+      const ta = document.getElementById('titleActions');   // #135 P3: no Follow, no preview behind the landing page
+      if (ta) { ta.hidden = true; ta.innerHTML = ''; }
+      previewTeam = null;
       landingOpen = true;
       teamsIndex = true;   // Conferences opened from here (after the Events card) is the index, not a default table
       document.body.classList.add('route-landing');
