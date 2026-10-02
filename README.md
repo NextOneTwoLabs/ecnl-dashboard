@@ -10,7 +10,7 @@ upstream API or website ever goes away.
 
 - **Conference Standings** — All 10 ECNL conferences across 7 seasons (2020-21 through 2026-27), per-flight tables
 - **Matches** — Date-grouped match cards per conference: kickoff, both teams, score, venue. Opens on upcoming matches, with Results (newest first) and Full season (scrolled to the next match day) a click away
-- **Team at a glance** — Click any team in a standings table: position, points, recent form, next match, last result and more statistics in a side panel, with a Follow button and a link to the full team page
+- **Team at a glance** — Click any team in a standings table: position, points, recent form, next match, last result and more statistics in a side panel (at 1024 px and narrower, a sheet opened by a tap), with a Follow button and a link to the full team page
 - **Archived data API** — a thin Worker serves collected JSON through a stable `/api/v1` contract; the Python server supports offline local browsing
 - **Self-refreshing** — a scheduled job updates the data on match days and keeps the fixture calendar current
 - **CSV exports** — Human-readable standings and schedule tables under `export/`, openable in Excel
@@ -369,7 +369,8 @@ browser where it isn't a favorite (it is shown, not added to the list). `#tab=my
 is accepted too and rewritten to `#tab=teams…`.
 
 A conference view is `#season=2026-27&age=GU16&conf=NorCal`, optionally with
-`&view=schedule`, `&team=<teamID>` (the team shown in the glance panel) and
+`&view=schedule`, `&team=<teamID>` (the team shown in the glance panel; on a
+phone or tablet the row is highlighted and no sheet opens) and
 `&sched=results` or `&sched=all` (the match filter; upcoming is the default).
 
 Playoffs is `#tab=playoffs&season=2026-27`, with `&stage=`, `&age=` and `&tier=`

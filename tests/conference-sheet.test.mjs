@@ -54,6 +54,7 @@ const CODE = [
   block('    function updateGlancePanel(', 'function glanceHtmlFor('),
   block('    function glancePanelHtml('),
   between('    // ========== KEYBOARD NAV ==========', "    document.getElementById('ageGroupTabs')"),
+  block('    function matchTeamKey('),
 ].join('\n');
 const CHIP_TIPS = between('    (function chipTips() {', '    // ========== KEYBOARD NAV ==========');
 
@@ -238,7 +239,7 @@ function page({ narrow = true, dialog = true, live = false, follow = null } = {}
   const dom = makeDom({ dialog, narrow });
   const { El, document } = dom;
   const el = id => document.getElementById(id);
-  const calls = [], hold = {}, render = { n: 0 }, conf = { selected: [] };
+  const calls = [], hold = {}, render = { n: 0, sorts: 0 }, conf = { selected: [] };
   const answer = path => {
     let m;
     if ((m = path.match(/^events\/(\d+)\/hierarchy$/))) return hierarchyFile(m[1]);
@@ -263,13 +264,27 @@ function page({ narrow = true, dialog = true, live = false, follow = null } = {}
     clearTeamFilter() {}, updateViewTabsUI() {}, saveFavorites() {}, buildFavoritesList() {}, openFavoritesTab() {},
     selectAgeGroup: a => conf.selected.push(['age', a]), selectConference: c => conf.selected.push(['conf', c]),
     focusTeamSearch: () => conf.selected.push(['search']), toggleSidebar() {}, isPhone: () => narrow,
-    // The conference view: one row per team (with its follow star and name) and the side card.
+    // The conference view: a table panel (its sort headers, sorting as the page's thead handler
+    // does: a new column starts descending, except # and Team; the same column flips; and "How
+    // ranking works"), one row per team (with its follow star and name), and the side card.
     renderConferenceView: () => {
       render.n++;
       const c = el('standingsContainer');
       c.innerHTML = '';
       const layout = new El('div', { class: 'conf-layout is-conf' }), aside = new El('aside', { id: 'glancePanel', class: 'glance-panel' });
-      c.append(layout); layout.append(aside);
+      const panel = new El('div', { class: 'flight-panel standings-panel' });
+      c.append(layout); layout.append(panel, aside);
+      panel.innerHTML = '<th data-col="rank" class="sortable sort-active sort-asc"><button type="button" class="th-sort">#</button></th>' +
+        '<th data-col="standingpoints" class="sortable"><button type="button" class="th-sort">Pts</button></th>' +
+        '<details class="rank-help"><summary>How ranking works</summary></details>';
+      for (const th of panel.querySelectorAll('th[data-col]')) {
+        th.click = () => {
+          render.sorts++;
+          const asc = th.classList.contains('sort-active') ? !th.classList.contains('sort-asc') : th.dataset.col === 'rank';
+          for (const o of panel.querySelectorAll('th[data-col]')) { o.classList.remove('sort-active'); o.classList.remove('sort-asc'); }
+          th.classList.add('sort-active'); th.classList.toggle('sort-asc', asc);
+        };
+      }
       for (const fd of api.flights()) for (const t of fd.standings.teamStandings || []) {
         const tr = new El('tr', { 'data-team-id': String(t.teamID), tabindex: '0', class: t.teamID === api.selected() ? 'team-row team-row-highlight' : 'team-row' });
         layout.append(tr);
@@ -282,8 +297,8 @@ function page({ narrow = true, dialog = true, live = false, follow = null } = {}
     if (${JSON.stringify(follow)}) favorites.add(${JSON.stringify(follow)});
     return { loadFromHash, loadCurrentView, selectTeam, switchTab: t => { closeTeamSheet('title'); currentTab = t; },
       starButton, teamCellHtml, updateGlancePanel, toggleFavorite, buildBreadcrumb, setSidebarToggle, closeTeamSheet,
-      sheetMode, flights: () => currentFlightData, selected: () => selectedTeamID, favorites: () => favorites,
-      setSeason: s => { currentSeason = s; } };`)(...Object.values(stubs));
+      sheetMode, matchTeamKey, flights: () => currentFlightData, selected: () => selectedTeamID, favorites: () => favorites,
+      setSeason: s => { currentSeason = s; }, setConference: c => { currentConference = c; } };`)(...Object.values(stubs));
   const flush = async () => { for (let i = 0; i < 30; i++) await new Promise(r => setTimeout(r, 0)); };
   const row = id => document.querySelector(`#standingsContainer tr[data-team-id="${id}"]`);
   // Cold, from a conference link, as the page's INIT reads one.
@@ -332,11 +347,16 @@ test('T2: a load never opens the sheet: a &team= link, a followed team, a select
 test('T3: closing returns focus to what opened it (found again if the table was redrawn); the team stays selected', { skip }, async () => {
   const p = page({ narrow: true });
   await p.open();
+  const hides = [];
+  p.dom.document.addEventListener('chiptip-hide', () => hides.push(1));
   for (const [how, close] of [['Close', () => p.closeTeamSheet()], ['the backdrop', () => p.sheet.fire('click', { target: p.sheet })], ['Esc', () => p.sheet.close()]]) {
     p.choose(TEAM.teamID);
+    await p.flush();
     assert.equal(p.sheet.open, true);
+    const n = hides.length;
     close();
     await p.flush();
+    assert.equal(hides.length, n + 1, `${how}: an open #128 tooltip is hidden`);
     assert.equal(p.sheet.open, false, how);
     assert.equal(p.active(), p.row(TEAM.teamID), `${how}: focus is back on the row`);
     assert.equal(p.selected(), TEAM.teamID);
@@ -398,11 +418,16 @@ test('T6: the club place arriving redraws the sheet, focus staying on the same c
     await p.open();
     p.choose(TEAM.teamID);
     assert.doesNotMatch(sheetHtml(p), /glance-place/, 'no place yet');
+    const hides = [];
+    p.dom.document.addEventListener('chiptip-hide', () => hides.push(what));
+    p.sheet.querySelector('.glance-more').open = true;
     const before = pick(p.sheet);
     before.focus();
     p.hold.clubs.resolve();
     await p.flush();
     assert.equal(p.sheet.open, true);
+    assert.equal(p.sheet.querySelector('.glance-more').open, true, '"More statistics" stays open (S1)');
+    assert.equal(hides.length, 1, 'the redraw hides an open #128 tooltip');
     if (placeOf(TEAM)) assert.match(sheetHtml(p), new RegExp(`glance-place[^>]*>${re(esc(placeOf(TEAM)))}<`));
     assert.notEqual(pick(p.sheet), before, 'redrawn');
     assert.equal(p.active(), pick(p.sheet), `focus stays on ${what}`);
@@ -468,9 +493,29 @@ test('T9: rows and match names select with { user: true } (click, Enter, Space);
   const rows = block('    function renderStandingsTable(');
   assert.equal((rows.match(/selectTeam\(Number\(tr\.dataset\.teamId\), \{ user: true, from: tr \}\)/g) || []).length, 2, 'row click and key');
   const matches = block('    function renderMatchCards(');
-  assert.equal((matches.match(/selectTeam\(Number\(t\.dataset\.teamId\), \{ user: true, from: t \}\)/g) || []).length, 2, 'name click and key');
-  assert.match(matches, /wrap\.addEventListener\('keydown'/);
+  assert.equal((matches.match(/selectTeam\(Number\(t\.dataset\.teamId\), \{ user: true, from: t \}\)/g) || []).length, 1, 'name click');
+  assert.match(matches, /wrap\.addEventListener\('keydown', matchTeamKey\);/, 'name keys');
+  assert.match(block('    function matchTeamKey('), /selectTeam\(Number\(t\.dataset\.teamId\), \{ user: true, from: t \}\)/);
   assert.doesNotMatch(block('    async function loadCurrentView('), /user: true/);
+});
+
+test('T9b (R28): a match name acts on Enter and Space only; Tab passes through and opens nothing', { skip }, async () => {
+  const p = page({ narrow: true });
+  await p.open();
+  const name = new p.dom.El('span', { class: 'match-team', 'data-team-id': String(TEAM.teamID), role: 'button', tabindex: '0' });
+  p.el('standingsContainer').append(name);
+  const press = key => { let prevented = false; p.matchTeamKey({ key, target: name, preventDefault: () => { prevented = true; } }); return prevented; };
+  for (const key of ['Tab', 'ArrowDown', 'a', 'Escape']) {
+    assert.equal(press(key), false, `${key} is not taken`);
+    assert.equal(p.sheet.open, false, `${key} opens nothing`);
+  }
+  for (const key of ['Enter', ' ']) {
+    name.focus();
+    assert.equal(press(key), true);
+    assert.equal(p.sheet.open, true, `${JSON.stringify(key)} opens the sheet`);
+    p.closeTeamSheet(); await p.flush();
+    assert.equal(p.active(), name, 'and focus comes back to the name');
+  }
 });
 
 test('T10: requests: a narrow &team= link reads no club places (S6); the sheet reads them once', { skip }, async () => {
@@ -508,6 +553,20 @@ test('T11: CSS and markup: only the conference card hides, targets per decision 
   assert.match(css, /\.glance-form \.form-chip \{ width: 44px; height: 44px;/);
   assert.match(css, /\.match-team \{ min-width: 44px; min-height: 44px; \}/);
   assert.match(css, /\.star-btn \{[^}]*color: var\(--star-idle\);/, "#137's colour is untouched");
+  // MF1: "How ranking works" is 24 px, and 44 px on touch: the 24 px rule must come first.
+  const r24 = css.indexOf('\n    .rank-help summary { min-height: 24px; }');
+  const r44 = css.indexOf('.rank-help summary { display: inline-flex; align-items: center; min-height: 44px; }');
+  assert.ok(r24 > 0 && r44 > r24, 'the 24 px rule is above the touch rule');
+  assert.equal(css.slice(r44).search(/\.rank-help summary \{[^}]*min-height: 24px/), -1, 'nothing after the touch rule takes it back to 24');
+  assert.ok(css.lastIndexOf('@media (max-width: 768px), (pointer: coarse) {', r44) > r24, 'the 44 px rule is in a touch block after it');
+  // MF2: below 340 px the wordmark keeps its mark and drops its text (owner: the mark on small phones).
+  assert.match(css, /@media \(max-width: 339px\) \{ \.wordmark \{ font-size: 0; min-width: 44px; justify-content: center; \} \.header \.wordmark img \{ margin-right: 0; \} \}/);
+  // S3, the table star's margin (rows keep their height), and Change only on a phone.
+  assert.match(css, /@media \(pointer: coarse\) \{ html\.sheet-open, html\.sheet-open body, html\.sheet-open #standingsScroll \{ overflow: hidden; \} \}/);
+  assert.match(css, /\.standings-table \.star-btn \{ margin-block: -2px; \}/);
+  assert.match(css, /\n    \.ctx-change \{ display: none; \}/);
+  const pill = css.indexOf('.ctx-change { display: inline-flex;');
+  assert.ok(pill > 0 && css.lastIndexOf('@media (max-width: 768px) {', pill) > css.lastIndexOf('\n    }\n', pill), 'the pill shows only inside the <=768 px rule');
   const dialog = html.match(/<dialog class="team-sheet" id="teamSheet"[^>]*>/);
   assert.ok(dialog && html.indexOf(dialog[0]) < html.indexOf('\n  <script>\n'), 'the sheet is in the page before the script that wires it');
   assert.match(dialog[0], /aria-modal="true"/);
@@ -530,6 +589,62 @@ test('T12 (M2): the context bar is #breadcrumb\'s content, so no other tab keeps
   // Q3: on the conference page the subtitle keeps the count; the bar says the rest.
   const view = block('    function renderConferenceView(');
   assert.match(view, /\[countKnown \? `\$\{teamCount\} teams` : '', multi \? `\$\{flights\.length\} flights` : ''\]/);
+  // The bar goes because every other view rewrites #breadcrumb, its empty states included.
+  for (const fn of ['    async function loadPlayoffsPanel(', '    async function loadShowcasesPanel(']) {
+    const body = block(fn), early = body.slice(0, body.indexOf('\n        return;\n'));
+    assert.match(early, /getElementById\('breadcrumb'\)\.innerHTML =/, `${fn.trim()}: its empty state writes #breadcrumb`);
+  }
+  // S8: the footnote says what a click does.
+  assert.ok(block('    function renderStandingsTable(').includes("' · Select a row for details · a name opens its Overview' : ' · Select a team for details'"));
+});
+
+test('T13: names are escaped in the bar, the link and the sheet\'s label, and encoded in the href', { skip }, async () => {
+  const p = page({ narrow: true });
+  await p.open();
+  const hostile = 'A & <b>"C"</b>';
+  p.setConference(hostile);
+  p.buildBreadcrumb();
+  assert.ok(p.el('breadcrumb').innerHTML.startsWith(`<span class="ctx-where"><b>${esc(hostile)}</b> · `));
+  const t = { ...TEAM, name: `${hostile} ECNL G10` };
+  const wide = page({ narrow: false });
+  const cell = wide.teamCellHtml(t, { link: true });
+  assert.ok(cell.includes(`&name=${encodeURIComponent(t.name)}">`), 'the href is encoded');
+  assert.ok(cell.includes(`>${esc(hostile)}</span></a>`), 'the text is escaped');
+  p.setConference(FIX.conf);
+  p.flights()[0].standings.teamStandings[5].name = t.name;
+  p.choose(TEAM.teamID);
+  assert.ok(sheetHtml(p).includes(`id="teamSheetName">${esc(hostile)} ·</span>`), 'the sheet\'s label is escaped');
+});
+
+test('T14 (SC1): crossing 1025 px keeps the sort, an open "How ranking works", and focus', { skip }, async () => {
+  for (const start of [false, true]) {
+    const p = page({ narrow: start });
+    await p.open();
+    const ths = () => p.el('standingsContainer').querySelectorAll('th[data-col]');
+    ths()[1].click();   // Pts, descending
+    p.el('standingsContainer').querySelector('.rank-help').open = true;
+    p.row(TEAM.teamID).querySelector('.star-btn').focus();
+    p.dom.setNarrow(!start);
+    await p.flush();
+    const [rank, pts] = ths();
+    assert.deepEqual([rank.classList.contains('sort-active'), pts.classList.contains('sort-active'), pts.classList.contains('sort-asc')], [false, true, false], 'Pts, descending');
+    assert.equal(p.el('standingsContainer').querySelector('.rank-help').open, true);
+    assert.equal(p.active(), p.row(TEAM.teamID).querySelector('.star-btn'), 'focus on the same star');
+    // Focus on a sort button, and the same column flipped to ascending.
+    pts.click();
+    p.el('standingsContainer').querySelectorAll('.th-sort')[1].focus();
+    p.dom.setNarrow(start);
+    await p.flush();
+    assert.equal(ths()[1].classList.contains('sort-asc'), true, 'Pts, ascending');
+    assert.equal(p.active(), p.el('standingsContainer').querySelectorAll('.th-sort')[1]);
+  }
+  // The default order needs no click.
+  const p = page({ narrow: false });
+  await p.open();
+  const sorts = p.render.sorts;
+  p.dom.setNarrow(true);
+  await p.flush();
+  assert.equal(p.render.sorts, sorts);
 });
 
 test('M3: while the sheet is open the page\'s shortcuts do nothing (ArrowDown would change the conference)', { skip }, async () => {

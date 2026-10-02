@@ -1182,6 +1182,7 @@
     .star-btn { min-width: 24px; min-height: 24px; }
     .standings-table .star-btn { margin-block: -2px; }   /* the target grows, the row does not */
     .match-team { display: inline-flex; align-items: center; min-height: 24px; }
+    .rank-help summary { min-height: 24px; }   /* 44 on touch, below: this line must stay above that block */
     /* S3: no page scroll behind an open sheet on a touch screen (the page scrolls in #standingsScroll) */
     @media (pointer: coarse) { html.sheet-open, html.sheet-open body, html.sheet-open #standingsScroll { overflow: hidden; } }
     @media (max-width: 768px) {
@@ -1196,8 +1197,8 @@
       .glance-form .form-chip { width: 44px; height: 44px; border-radius: 8px; font-size: 14px; }
       .match-team { min-width: 44px; min-height: 44px; }
     }
-    .rank-help summary { min-height: 24px; }
     .hamburger { flex-shrink: 0; min-width: 24px; min-height: 24px; }
+    @media (max-width: 339px) { .wordmark { font-size: 0; min-width: 44px; justify-content: center; } .header .wordmark img { margin-right: 0; } }
     .sr-only {
       position: absolute;
       width: 1px;
@@ -5610,6 +5611,14 @@
     // Upcoming: games without a result, soonest first (an unscored past game is
     // tagged "Result pending" rather than hidden). Results: played, newest first.
     // Full season: everything, scrolled to the next match day.
+    // #135 P2: a match name is role=button: Enter and Space choose it; every other key (Tab) passes.
+    function matchTeamKey(e) {
+      const t = e.target.closest && e.target.closest('.match-team[data-team-id]');
+      if (!t || e.target !== t || (e.key !== 'Enter' && e.key !== ' ')) return;
+      e.preventDefault();
+      selectTeam(Number(t.dataset.teamId), { user: true, from: t });
+    }
+
     function renderMatchCards(games, { title = 'Matches', filter = 'upcoming', rowTag = null } = {}) {
       const today = todayKey();
       const all = sortGames(games || []);
@@ -5665,13 +5674,7 @@
         const t = e.target.closest('.match-team[data-team-id]');
         if (t) selectTeam(Number(t.dataset.teamId), { user: true, from: t });
       });
-      // #135 P2: the names are role=button, so Enter and Space work too.
-      wrap.addEventListener('keydown', e => {
-        const t = e.target.closest('.match-team[data-team-id]');
-        if (!t || e.target !== t || (e.key !== 'Enter' && e.key !== ' ')) return;
-        e.preventDefault();
-        selectTeam(Number(t.dataset.teamId), { user: true, from: t });
-      });
+      wrap.addEventListener('keydown', matchTeamKey);   // #135 P2: Enter and Space too
       return panel;
     }
 
@@ -5756,6 +5759,45 @@
       else if (to === 'row') sheetReturnTo = { teamID: selectedTeamID, el: null };
       d.close();
     }
+    const CONF_FOCUSABLE = 'button, a[href], summary, [tabindex="0"]';
+    function confViewState() {
+      const c = document.getElementById('standingsContainer'), a = document.activeElement;
+      const panels = [...c.querySelectorAll('.standings-panel')].map(p => {
+        const th = p.querySelector('th.sort-active');
+        return { col: th ? th.dataset.col : 'rank', asc: th ? th.classList.contains('sort-asc') : true, help: !!p.querySelector('.rank-help[open]') };
+      });
+      let focus = null;
+      if (a && a !== c && c.contains(a)) {
+        const tr = a.closest('tr[data-team-id]');
+        if (tr) focus = { row: tr.dataset.teamId, star: a.classList.contains('star-btn') };
+        else if (a.closest('#glancePanel')) focus = { row: selectedTeamID != null ? String(selectedTeamID) : null };
+        else focus = { at: [...c.querySelectorAll(CONF_FOCUSABLE)].filter(e => !e.closest('tr, #glancePanel')).indexOf(a) };
+      }
+      return { panels, focus };
+    }
+    function restoreConfViewState(kept) {
+      const c = document.getElementById('standingsContainer');
+      const panels = [...c.querySelectorAll('.standings-panel')];
+      kept.panels.forEach((was, i) => {
+        const p = panels[i];
+        if (!p) return;
+        for (let k = 0; k < 2; k++) {   // the sort header's own click: at most twice (key, then direction)
+          const now = p.querySelector('th.sort-active');
+          if (now ? now.dataset.col === was.col && now.classList.contains('sort-asc') === was.asc : was.col === 'rank' && was.asc) break;
+          const th = p.querySelector(`th[data-col="${was.col}"]`);
+          if (!th) break;
+          th.click();
+        }
+        const help = p.querySelector('.rank-help');
+        if (help && was.help) help.open = true;
+      });
+      const f = kept.focus;
+      if (!f) return;
+      let el = null;
+      if (f.row) { const tr = c.querySelector(`tr[data-team-id="${f.row}"]`); el = tr && f.star ? tr.querySelector('.star-btn') || tr : tr; }
+      else if (f.at >= 0) el = [...c.querySelectorAll(CONF_FOCUSABLE)].filter(e => !e.closest('tr, #glancePanel'))[f.at];
+      if (el) el.focus({ preventScroll: true });
+    }
     (function wireTeamSheet() {
       if (!SHEET_OK) document.documentElement.classList.add('no-dialog');
       const d = document.getElementById('teamSheet');
@@ -5777,7 +5819,7 @@
       // card, with focus on the team's row (S5). Drawn from memory: no request.
       if (window.matchMedia) window.matchMedia('(max-width: 1024px)').addEventListener('change', () => {
         if (teamSheetOpen() && !sheetMode()) closeTeamSheet('row');
-        if (currentTab === 'conferences' && currentConfMeta) renderConferenceView();
+        if (currentTab === 'conferences' && currentConfMeta) { const kept = confViewState(); renderConferenceView(); restoreConfViewState(kept); }
       });
     })();
 
