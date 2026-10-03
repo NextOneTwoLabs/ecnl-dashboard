@@ -1,9 +1,9 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,VDA ECNL G2008/09,Virginia Development Academy,59474,3,3,0,0,9,3.0,12,1,11
-2,Richmond United ECNL G2008/09,Richmond United,133819,2,2,0,0,6,3.0,10,0,10
+1,Richmond United ECNL G2008/09,Richmond United,133819,3,3,0,0,9,3.0,12,0,12
+2,VDA ECNL G2008/09,Virginia Development Academy,59474,3,3,0,0,9,3.0,12,1,11
 3,NCFC Youth NC Courage ECNL G2008/09,NCFC Youth,130284,1,1,0,0,3,3.0,2,0,2
 4,Arlington Soccer Association ECNL G2008/09,Arlington Soccer Association,134235,3,1,1,1,4,1.33,2,1,1
-5,Beach FC (VA) ECNL G2008/09,Beach FC,135522,3,1,1,1,4,1.33,2,2,0
+5,Beach FC (VA) ECNL G2008/09,Beach FC,135522,4,1,2,1,4,1.0,2,4,-2
 6,NCFC Youth ECNL G2008/09,NCFC Youth,59930,4,1,2,1,4,1.0,6,7,-1
 7,NC Fusion ECNL G2008/09,NC Fusion,13888,3,0,2,1,1,0.33,4,19,-15
 8,Charlotte SA ECNL G2008/09,Charlotte Soccer Academy,131443,0,0,0,0,0,0.0,0,0,0

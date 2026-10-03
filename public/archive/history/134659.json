@@ -1,6 +1,6 @@
 {"schema":1,"teamID":134659,"squads":[
 {"clubID":2181,"clubName":"Wilmington Hammerheads","birthYears":[2011,2012],"seasons":[
-{"season":"2026-27","teamID":134659,"name":"Wilmington Hammerheads ECNL G2011/12","clubID":2181,"clubName":"Wilmington Hammerheads","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/New_Logo_07-22-2024T19:22:58.638.png","conference":"Mid-Atlantic","eventID":4263,"divisionID":22409,"division":"GU15","flightID":40553,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":9,"of":11,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":10,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+{"season":"2026-27","teamID":134659,"name":"Wilmington Hammerheads ECNL G2011/12","clubID":2181,"clubName":"Wilmington Hammerheads","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/ClubImages/Logos/New_Logo_07-22-2024T19:22:58.638.png","conference":"Mid-Atlantic","eventID":4263,"divisionID":22409,"division":"GU15","flightID":40553,"flightName":"ECNL","u":15,"birthYears":[2011,2012],"rank":8,"of":11,"gp":0,"w":0,"d":0,"l":0,"pts":0,"gf":0,"ga":0,"gd":0,"ppg":0.0,"form":"","games":10,"played":0,"inProgress":true,"regroup":true,"link":"start"}
 ],"postseason":[],"showcases":[],"maybePrev":[
 {"season":"2025-26","teamID":78045,"name":"Wilmington Hammerheads ECNL G11","division":"G2011","conference":"Mid-Atlantic"},
 {"season":"2025-26","teamID":89644,"name":"Wilmington Hammerheads ECNL G12","division":"G2012","conference":"Mid-Atlantic"}
