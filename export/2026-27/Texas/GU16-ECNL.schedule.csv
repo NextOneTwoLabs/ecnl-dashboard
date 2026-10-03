@@ -29,10 +29,10 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-27,01:00 PM,Group Play,FC Dallas Youth ECNL G2010/11,6,2,West Side Alliance ECNL G2010/11,Toyota Soccer Center,Field 17,On Time,1073579
 2026-10-03,09:00 AM,Group Play,Dallas Texans ECNL G2010/11,0,1,Colorado Storm ECNL G2010/11,Beacon Park,field 5,On Time,1073591
 2026-10-03,11:00 AM,Group Play,Lonestar ATX Red ECNL G2010/11,3,0,Colorado Rush ECNL G2010/11,Burger Activity Center,Stadium Field 1,On Time,1073519
-2026-10-03,01:00 PM,Group Play,SOLAR SC ECNL G2010/11,,,Real Colorado National ECNL G2010/11,Carroll Senior High School,Field 1,On Time,1073597
-2026-10-03,01:00 PM,Group Play,DKSC ECNL G2010/11,,,Albion Hurricanes FC ECNL G2010/11,Clark East Field,Field 1,On Time,1073627
-2026-10-03,01:00 PM,Group Play,Sting Black ECNL G2010/11,,,Challenge SC ECNL G2010/11,Coppell Middle School North,Turf Field,On Time,1073633
-2026-10-03,02:00 PM,Group Play,FC Westlake ECNL G2010/11,,,Real Colorado Athletico ECNL G2010/11,Ann Richards School,Field 1,On Time,1073525
+2026-10-03,01:00 PM,Group Play,SOLAR SC ECNL G2010/11,1,1,Real Colorado National ECNL G2010/11,Carroll Senior High School,Field 1,On Time,1073597
+2026-10-03,01:00 PM,Group Play,DKSC ECNL G2010/11,0,1,Albion Hurricanes FC ECNL G2010/11,Clark East Field,Field 1,On Time,1073627
+2026-10-03,01:00 PM,Group Play,Sting Black ECNL G2010/11,2,1,Challenge SC ECNL G2010/11,Coppell Middle School North,Turf Field,On Time,1073633
+2026-10-03,02:00 PM,Group Play,FC Westlake ECNL G2010/11,5,0,Real Colorado Athletico ECNL G2010/11,Ann Richards School,Field 1,On Time,1073525
 2026-10-04,09:00 AM,Group Play,SOLAR SC ECNL G2010/11,,,Colorado Storm ECNL G2010/11,Carroll Senior High School,Field 1,On Time,1073603
 2026-10-04,09:00 AM,Group Play,Dallas Texans ECNL G2010/11,,,Real Colorado National ECNL G2010/11,Beacon Park,field 5,On Time,1073609
 2026-10-04,11:00 AM,Group Play,Lonestar ATX Red ECNL G2010/11,,,Real Colorado Athletico ECNL G2010/11,Burger Activity Center,Stadium Field 1,On Time,1073573

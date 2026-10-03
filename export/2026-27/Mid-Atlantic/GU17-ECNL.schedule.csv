@@ -10,10 +10,10 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-27,08:30 AM,Group Play,Fairfax Virginia Union ECNL G2009/10,7,0,NCFC Youth ECNL G2009/10,WT Woodson High School,Aux Turf,On Time,1121250
 2026-09-27,09:00 AM,Group Play,VDA ECNL G2009/10,3,2,South Carolina Surf ECNL G2009/10,Ali Krieger Sports Complex (AKSC),Field 8,On Time,1121258
 2026-09-27,11:00 AM,Group Play,Richmond United ECNL G2009/10,3,0,NC Fusion ECNL G2009/10,Striker Park,Field 3,On Time,1121254
-2026-10-03,01:30 PM,Group Play,VDA ECNL G2009/10,,,Charlotte SA ECNL G2009/10,Long Park,Field 5,On Time,1121270
-2026-10-03,02:00 PM,Group Play,Beach FC (VA) ECNL G2009/10,,,Richmond United ECNL G2009/10,Hampton Roads Soccer Complex,Field 17,On Time,1121266
-2026-10-03,03:00 PM,Group Play,Arlington Soccer Association ECNL G2009/10,,,Wilmington Hammerheads ECNL G2009/10,Long Bridge Park,Boeing #4,On Time,1121262
-2026-10-03,03:00 PM,Group Play,Fairfax Virginia Union ECNL G2009/10,,,NCFC Youth NC Courage ECNL G2009/10,James W Robinson HS,Upper Turf,On Time,1121274
+2026-10-03,01:30 PM,Group Play,VDA ECNL G2009/10,0,2,Charlotte SA ECNL G2009/10,Long Park,Field 5,On Time,1121270
+2026-10-03,02:00 PM,Group Play,Beach FC (VA) ECNL G2009/10,0,4,Richmond United ECNL G2009/10,Hampton Roads Soccer Complex,Field 17,On Time,1121266
+2026-10-03,03:00 PM,Group Play,Arlington Soccer Association ECNL G2009/10,4,1,Wilmington Hammerheads ECNL G2009/10,Long Bridge Park,Boeing #4,On Time,1121262
+2026-10-03,03:00 PM,Group Play,Fairfax Virginia Union ECNL G2009/10,3,2,NCFC Youth NC Courage ECNL G2009/10,James W Robinson HS,Upper Turf,On Time,1121274
 2026-10-04,11:00 AM,Group Play,Richmond United ECNL G2009/10,,,Charlotte SA ECNL G2009/10,Striker Park,Field 2,On Time,1121286
 2026-10-04,12:30 PM,Group Play,Fairfax Virginia Union ECNL G2009/10,,,Wilmington Hammerheads ECNL G2009/10,James W Robinson HS,Upper Turf,On Time,1121290
 2026-10-04,01:00 PM,Group Play,Arlington Soccer Association ECNL G2009/10,,,NCFC Youth NC Courage ECNL G2009/10,Long Bridge Park,Boeing #4,On Time,1121278
