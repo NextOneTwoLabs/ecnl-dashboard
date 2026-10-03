@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const root = new URL('../public/', import.meta.url);
-const html = readFileSync(new URL('index.html', root), 'utf8').replace(/\r\n/g, '\n');
+const html = readFileSync(process.env.ECNL_TEST_HTML || new URL('index.html', root), 'utf8').replace(/\r\n/g, '\n');
 const slice = (from, to) => {
   const a = html.indexOf(from), b = html.indexOf(to, a);
   assert.ok(a > 0 && b > a, `${from.trim()} … ${to.trim()} in index.html`);
@@ -22,13 +22,15 @@ const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
 const DIR = read('archive/directory.json');
 const FAMILIES = read('data/club-families.json').families;
 const ACTIVE = read('data/sources.json').refresh.activeSeason;
+const CATALOG = read('data/sources.json');
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 // ---------- a fake DOM: elements by id; list cells are found in the list's HTML ----------
-function page({ sheet = false } = {}) {
+function page({ sheet = false, catalog = null, season = ACTIVE, wire = false } = {}) {
   const els = new Map();
   const node = id => ({
-    id, hidden: false, value: '', textContent: '', className: '', _html: '', attrs: {}, style: { setProperty() {} }, selectionStart: 0,
+    id, hidden: false, value: '', textContent: '', className: '', _html: '', attrs: {}, style: { setProperty() {} }, selectionStart: 0, on: {},
+    addEventListener(k, f) { this.on[k] = f; },
     get innerHTML() { return this._html; }, set innerHTML(h) { this._html = h; },
     setAttribute(k, v) { this.attrs[k] = String(v); }, getAttribute(k) { return this.attrs[k] ?? null; }, removeAttribute(k) { delete this.attrs[k]; },
     querySelector: () => null, insertAdjacentHTML() {}, scrollIntoView() {}, focus() {}, blur() {},
@@ -48,8 +50,8 @@ function page({ sheet = false } = {}) {
   };
   const location = { hash: '' };
   const stubs = {
-    document: { getElementById }, window: { location, innerWidth: sheet ? 390 : 1400, innerHeight: 900, dispatchEvent() {} },
-    location, HashChangeEvent: class {}, esc, isPhone: () => sheet, currentSeason: ACTIVE,
+    document: { getElementById, addEventListener() {} }, window: { location, innerWidth: sheet ? 390 : 1400, innerHeight: 900, dispatchEvent() {}, addEventListener() {}, open() {} },
+    location, HashChangeEvent: class {}, esc, isPhone: () => sheet, currentSeason: season, SOURCES: catalog,
     teamSeasonTabLabel: s => (s === ACTIVE ? 'Current season' : `${s.replace('-', '–')} season`),
     closeSidebarIfMobile() {}, retryText: e => String(e), getTeamDirectory: async () => DIR,
     NO_CLUB: 7,   // the page's own constant (club 7, No Club Selection)
@@ -57,6 +59,7 @@ function page({ sheet = false } = {}) {
   const api = new Function(...Object.keys(stubs), ENGINE_SRC + PAGE_SRC + `
     usDb = TEAM_SEARCH.prepare(${'arguments'}[${Object.keys(stubs).length}]);
     usInput = document.getElementById('usearchInput');
+    ${wire ? slice('    (function usWire() {', '\n    // #128: the form chips\' tooltip') : ''}
     return { TEAM_SEARCH, usRun, usKey, usViewOf, usGroups, usNarrowHint, usHoverCell, usHoverCancel, US_HOVER_MS, db: () => usDb,
       // Draw a view built by the test (a synthetic list), as usRun does for its own.
       draw: (res, view, q) => { usView = Object.assign(view, { res, q, open: new Set(), nav: false, sheet: false }); usRenderView(res, q); },
@@ -65,9 +68,111 @@ function page({ sheet = false } = {}) {
   const list = () => el('usearchList')._html;
   // Each search starts with the popover open, as typing in the bar does (a test may have left it).
   const usRun = q => { el('usearchPop').hidden = false; api.usRun(q); };
-  return { ...api, usRun, el, location, key, list };
+  const click = (i, extra = {}) => el('usearchList').on.click({ target: { closest: () => ({ dataset: { i: String(i) } }) }, shiftKey: false, ...extra });
+  return { ...api, usRun, el, location, key, list, click };
 }
 const P = page();
+
+test('#146: U15 NorCal first result is conference standings; Enter and Shift+Enter use its canonical route', () => {
+  for (const shiftKey of [false, true]) {
+    const p = page({ catalog: CATALOG }); p.usRun('U15 NorCal');
+    const first = p.state().usItems[0];
+    assert.equal(first.href, `#season=${ACTIVE}&age=GU15&conf=NorCal&view=standings`);
+    assert.equal(first.kind, 'competition', 'real result is a competition, not a team');
+    assert.match(p.list(), /Competitions/);
+    assert.equal(p.el('usearchHist').hidden, true);
+    assert.equal(p.el('usearchOpen').textContent, 'Open standings');
+    p.key('Enter', { shiftKey }); assert.equal(p.location.hash, first.href);
+  }
+});
+
+test('#146: desktop click and mobile touch use the competition destination, then team selection restores actions', () => {
+  for (const sheet of [false, true]) {
+    const p = page({ sheet, catalog: CATALOG, wire: true }); p.usRun('U15 NorCal');
+    const first = p.state().usItems[0];
+    p.click(0); assert.equal(p.location.hash, `#season=${ACTIVE}&age=GU15&conf=NorCal&view=standings`);
+    p.usRun('U15 NorCal'); p.key('ArrowDown');
+    assert.notEqual(p.state().usItems[p.state().usActiveIdx].kind, 'competition');
+    assert.equal(p.el('usearchHist').hidden, false);
+    assert.equal(p.el('usearchOpen').textContent, 'Overview');
+  }
+});
+
+test('#146: Enter routes the first result to conference standings rather than a team page', () => {
+  const p = page({ catalog: CATALOG }); p.usRun('U15 NorCal'); p.key('Enter');
+  assert.equal(p.location.hash, `#season=${ACTIVE}&age=GU15&conf=NorCal&view=standings`);
+});
+test('#146: conference aliases, selected/explicit seasons and ambiguous birth years use actual divisions', () => {
+  for (const q of ['NorCal GU15', 'U15 Northern California', 'U15 NorCal standings']) {
+    const p = page({ catalog: CATALOG }); p.usRun(q);
+    assert.equal(p.state().usItems[0].href, '#season=2026-27&age=GU15&conf=NorCal&view=standings');
+  }
+  for (const [season, age] of [['2025-26','G2011'],['2024-25','G2010'],['2023-24','G2009'],['2022-23','G2008']]) {
+    const p = page({ catalog: CATALOG }); p.usRun(`U15 NorCal ${season}`);
+    assert.equal(p.state().usItems[0]?.href, `#season=${season}&age=${age}&conf=NorCal&view=standings`, season);
+  }
+  const selected = page({ catalog: CATALOG, season: '2024-25' }); selected.usRun('U15 NorCal');
+  assert.equal(selected.state().usItems[0].href, '#season=2024-25&age=G2010&conf=NorCal&view=standings');
+  const p = page({ catalog: CATALOG }); p.usRun('2011 NorCal');
+  assert.deepEqual(p.state().usItems.filter(r => r.kind === 'competition').map(r => r.href), [
+    '#season=2026-27&age=GU16&conf=NorCal&view=standings', '#season=2026-27&age=GU15&conf=NorCal&view=standings']);
+  for (const q of ['U12 NorCal','NorCal','U15 NorCal 2030-31','U15 NorCal 2021-22']) {
+    p.usRun(q); assert.equal(p.state().usItems.filter(r => r.kind === 'competition').length, 0, q);
+  }
+});
+test('#146: registered events are season labeled with generic age/tier destinations, never invented', () => {
+  const p = page({ catalog: CATALOG });
+  for (const [q, href] of [
+    ['playoffs 2025-26','#tab=playoffs&season=2025-26&stage=Playoffs%20%26%20Finals'],
+    ['U18 playoffs 2025-26','#tab=playoffs&season=2025-26&stage=Playoffs%20%26%20Finals'],
+    ['U15 Champions League playoffs 2025-26','#tab=playoffs&season=2025-26&stage=Playoffs%20%26%20Finals'],
+    ['San Diego Fall 2025-26','#tab=showcases&season=2025-26&event=4041'],
+    ['U15 Phoenix Spring 2025-26','#tab=showcases&season=2025-26&event=4133']]) {
+    p.usRun(q); const r = p.state().usItems[0]; assert.equal(r.href, href, q);
+    assert.ok(!/[&?](age|tier|flight)=/.test(r.href));
+    if (/U\d/.test(q)) assert.match(r.desc, /Choose age group/);
+  }
+  p.usRun('San Diego Fall'); assert.equal(p.state().usItems[0].season, '2025-26');
+  for (const q of ['playoffs 2026-27','San Diego Fall 2026-27','Imaginary Cup']) {
+    p.usRun(q); assert.equal(p.state().usItems.filter(r => r.kind === 'competition').length, 0, q);
+  }
+});
+test('#146: team/place queries preserve existing results, groups and navigation', () => {
+  for (const q of ['MVLA','San Diego Surf','San Diego','CA']) {
+    const a = page(), b = page({ catalog: CATALOG }); a.usRun(q); b.usRun(q);
+    assert.deepEqual(b.state().usItems.map(r => r?.href), a.state().usItems.map(r => r?.href), q);
+    assert.equal(b.list(), a.list(), q);
+    b.key('ArrowDown'); b.key('ArrowRight');
+    assert.equal(b.el('usearchOpen').textContent, 'Overview');
+  }
+});
+test('#146 review: combined U18/19 division retains its label', () => {
+  const p = page({ catalog: CATALOG }); p.usRun('U18/19 NorCal');
+  assert.match(p.state().usItems[0].title, /U18\/19 standings/);
+  assert.equal(p.state().usItems[0].href, '#season=2026-27&age=GU18%2F19&conf=NorCal&view=standings');
+});
+test('#146 review: competition sections in a mixed club grid are rows, and team actions restore', () => {
+  const catalog = structuredClone(CATALOG);
+  catalog.seasons[ACTIVE].showcases = { MVLA: { eventId: 99999, eventName: 'MVLA' } };
+  const p = page({ catalog }); p.usRun('MVLA');
+  assert.equal(p.el('usearchList').getAttribute('role'), 'grid');
+  assert.match(p.list(), /role="row" class="us-section"><span role="rowheader">Competitions/);
+  assert.match(p.list(), /role="row" class="us-section"><span role="rowheader">Teams/);
+  assert.equal(p.state().usItems[0].kind, 'competition');
+  p.key('ArrowDown'); p.key('ArrowRight');
+  assert.notEqual(p.state().usItems[p.state().usActiveIdx]?.kind, 'competition');
+  assert.equal(p.el('usearchOpen').textContent, 'Overview');
+  p.key('ArrowUp'); assert.equal(p.state().usActiveIdx, 0);
+  assert.equal(p.el('usearchOpen').textContent, 'Open event');
+});
+test('#146 review: capped competition results disclose omitted matches and how to refine', () => {
+  const catalog = structuredClone(CATALOG);
+  catalog.seasons[ACTIVE].showcases = Object.fromEntries(Array.from({ length: 9 }, (_, i) => [`Test Cup ${i}`, { eventId: 99000 + i }]));
+  const p = page({ catalog }); p.usRun('Test Cup');
+  assert.equal(p.state().usItems.filter(r => r.kind === 'competition').length, 6);
+  assert.match(p.list(), /3 more competitions/);
+  assert.match(p.list(), /Add a season or more of the event name/);
+});
 const E = P.TEAM_SEARCH, db = P.db();
 const search = q => E.search(db, q, { season: ACTIVE, limit: Infinity });
 const view = (q, sheet = false) => P.usViewOf(search(q), db, sheet);

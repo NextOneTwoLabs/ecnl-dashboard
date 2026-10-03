@@ -2252,6 +2252,11 @@
     @media (max-width: 480px) { .tix a { min-width: 38px; font-size: 12px; } .tix td { padding: 0 1px; } }
     /* On the index the sidebar offers the season only: the table is chosen in the grid */
     #conferencesPanel.on-index { display: none !important; }
+    .us-competition .us-cell { width: 100%; }
+    .us-row.us-competition, .us-competition > .us-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+    .us-competition .us-meta { display: block; }
+    .us-competition { min-height: 64px; }
+    @media (pointer: coarse), (max-width: 768px) { .us-actions a { min-height: 44px; display: inline-flex; align-items: center; } }
   </style>
 </head>
 
@@ -2275,14 +2280,14 @@
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg>
             <input class="usearch-input" id="usearchInput" type="text" role="combobox" aria-autocomplete="list"
               aria-expanded="false" aria-controls="usearchList" aria-haspopup="listbox" autocomplete="off" spellcheck="false"
-              placeholder="Search teams, clubs, places…" aria-label="Search teams: by name, club, place, birth year, age group or conference">
+              placeholder="Search teams or competitions…" aria-label="Search teams and competitions by name, age group, conference or season">
             <kbd class="usearch-kbd" aria-hidden="true">/</kbd>
           </div>
         </div>
     </div>
     <div class="header-right">
       <span class="season-label" id="seasonLabel"></span>
-      <button class="header-search" id="headerSearch" type="button" aria-label="Search teams" aria-haspopup="dialog" onclick="usOpenSheet()"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg></button>
+      <button class="header-search" id="headerSearch" type="button" aria-label="Search teams and competitions" aria-haspopup="dialog" onclick="usOpenSheet()"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg></button>
       <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Switch to dark mode">🌙</button>
     </div>
   </div>
@@ -2293,8 +2298,8 @@
     <div class="us-sheet-head">
       <div class="usearch-box"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg>
         <input class="usearch-input" id="usearchSheetInput" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false"
-          aria-controls="usearchList" aria-haspopup="listbox" autocomplete="off" spellcheck="false" placeholder="Search teams, clubs, places…"
-          aria-label="Search teams: by name, club, place, birth year, age group or conference">
+          aria-controls="usearchList" aria-haspopup="listbox" autocomplete="off" spellcheck="false" placeholder="Search teams or competitions…"
+          aria-label="Search teams and competitions by name, age group, conference or season">
       </div>
       <button type="button" class="us-cancel" onclick="usClose(true)">Cancel</button>
     </div>
@@ -2302,7 +2307,7 @@
     <div class="us-tipsbox" id="usearchTips" hidden><p>Type a team or club name, a place, a birth year or an age group. For example:</p></div>
     <ul class="us-list" id="usearchList" role="listbox" aria-label="Teams" tabindex="-1"></ul>
     <div class="us-actions" id="usearchActions" hidden><span id="usearchActive"></span><a id="usearchOpen" href="#">Overview</a><a id="usearchHist" href="#">Current season</a><a id="usearchPrev" href="#" hidden>Earlier team</a></div>
-    <div class="us-foot"><span class="us-keys"><kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> move · <kbd>Enter</kbd> open · <kbd>Shift</kbd>+<kbd>Enter</kbd> season · <kbd>Esc</kbd> close</span><span>Every ECNL Girls team since 2020-21</span></div>
+    <div class="us-foot"><span class="us-keys"><kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> move · <kbd>Enter</kbd> open · <kbd>Shift</kbd>+<kbd>Enter</kbd> season · <kbd>Esc</kbd> close</span><span>Teams since 2020-21 · registered competitions</span></div>
     <div class="us-sr" id="usearchLive" role="status" aria-live="polite"></div>
   </div>
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -6701,7 +6706,94 @@
       return entry.p;
     }
 
-    let usDb = null, usItems = [], usActiveIdx = -1, usInput = null, usTimer = null;
+    let usDb = null, usItems = [], usCompetitions = [], usActiveIdx = -1, usInput = null, usTimer = null;
+    // #146: registered destinations alongside teams. No fetch or inference of event flight IDs.
+    function usCompetitionSearch(q, db, registry, selectedSeason) {
+      if (!registry || !registry.seasons || !db) return [];
+      const text = String(q || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[–—]/g, '-');
+      const raw = text.split(/[\s,;]+/).filter(Boolean);
+      const explicit = raw.find(t => /^(?:20)?\d{2}-(?:20)?\d{2}$/.test(t));
+      const parsed = TEAM_SEARCH.parseQuery(text, db);
+      if (explicit && !parsed.season) return [];   // never substitute today's season for an unknown one
+      const season = parsed.season || selectedSeason || registry.refresh?.activeSeason;
+      const entry = registry.seasons[season];
+      if (!entry) return [];
+      const e = encodeURIComponent, rows = [];
+      const bounded = () => Object.assign(rows.slice(0, 6), { omitted: Math.max(0, rows.length - 6) });
+      const intent = new Set(['standings', 'standing', 'conference', 'conferences']);
+      if (parsed.conf && (parsed.u || parsed.years.length) && !parsed.places.length && !parsed.codes.length
+          && parsed.text.every(t => intent.has(t)) && entry.conferences?.[parsed.conf]) {
+        const divisions = new Map();
+        for (const d of db.docs) for (const r of d.rows) {
+          if (r.season !== season || r.conf !== parsed.conf || !entry.ageGroups?.[r.div]) continue;
+          if (parsed.u && r.u !== parsed.u) continue;
+          if (parsed.band ? !(r.years.length === 2 && parsed.years.every(y => r.years.includes(y)))
+            : parsed.years.length && !parsed.years.some(y => r.years.includes(y))) continue;
+          divisions.set(r.div, r);
+        }
+        for (const r of [...divisions.values()].sort((a,b) => b.u - a.u || a.div.localeCompare(b.div))) {
+          rows.push({ kind: 'competition', key: `conference/${season}/${parsed.conf}/${r.div}`, season,
+            title: `${parsed.conf} · Girls U${r.u === 18 && r.div.includes('/') ? '18/19' : r.u}${/composite/i.test(r.div) ? ' Composite' : ''} standings`,
+            desc: `${season.replace('-', '–')} · Conference standings`, action: 'Open standings',
+            href: `#season=${e(season)}&age=${e(r.div)}&conf=${e(parsed.conf)}&view=standings` });
+        }
+        return bounded();
+      }
+      // All remaining meaningful words must describe the event; a team word such as "Surf"
+      // cannot disappear just because its city also names a showcase. Ages are not asserted here.
+      const noise = new Set(['ecnl','girls','girl','the','and','event','events','results','result','brackets','bracket']);
+      const tokens = raw.filter(t => t !== explicit && !/^g?u-?\d{1,2}(?:\/u?\d{1,2})?s?$/.test(t)
+        && !/^[gb]?((?:19|20)\d{2}|\d{2})(?:\/(?:20)?\d{2})?[gb]?$/.test(t))
+        .flatMap(t => t.split(/[^a-z0-9]+/)).filter(t => t && !noise.has(t));
+      if (!tokens.length || (!parsed.text.length && (parsed.places.length || parsed.codes.length))) return []; // place-only queries keep their team groups
+      for (const [se, v] of Object.entries(registry.seasons)) {
+        if (parsed.season && se !== parsed.season) continue;
+        for (const [type, list] of [['playoffs', v.national], ['showcases', v.showcases]]) {
+          for (const [name, event] of Object.entries(list || {})) {
+            const tierNames = [...Object.keys(event.tierNotes || {}), ...Object.values(event.tierLabels || {})];
+            const eventWords = new Set(`${name} ${event.eventName || ''} ${event.location || ''} ${tierNames.join(' ')} ${type === 'showcases' ? 'showcase showcases' : /playoffs?/i.test(name) ? 'playoff playoffs' : ''} ${type === 'playoffs' && /finals?/i.test(name) ? 'final finals' : ''}`
+              .toLowerCase().split(/[^a-z0-9]+/).filter(Boolean));
+            if (!tokens.every(t => eventWords.has(t))) continue;
+            const tierWords = new Set(tierNames.join(' ').toLowerCase().split(/[^a-z0-9]+/));
+            const choose = parsed.u || parsed.years.length || tokens.some(t => tierWords.has(t) && !['showcase','showcases'].includes(t));
+            rows.push({ kind: 'competition', key: `${type}/${se}/${event.eventId}`, season: se, title: name,
+              desc: `${se.replace('-', '–')} · ${type === 'showcases' ? 'Showcase results' : 'Playoff brackets & results'}${choose ? ' · Choose age group on the event page' : ''}`,
+              action: 'Open event', href: type === 'showcases' ? `#tab=showcases&season=${e(se)}&event=${e(event.eventId)}`
+                : `#tab=playoffs&season=${e(se)}&stage=${e(name)}` });
+          }
+        }
+      }
+      rows.sort((a,b) => Number(b.season === season) - Number(a.season === season)
+        || b.season.localeCompare(a.season) || a.title.localeCompare(b.title));
+      return bounded();
+    }
+    function usCompetitionRows(grid = false) {
+      if (!usCompetitions.length) return '';
+      const section = t => grid ? `<li role="row" class="us-section"><span role="rowheader">${esc(t)}</span></li>`
+        : `<li role="presentation" class="us-section">${esc(t)}</li>`;
+      let h = section('Competitions');
+      for (const r of usCompetitions) {
+        const i = usItems.push(r) - 1;
+        if (grid) usPos.push({ row: i, col: 0, key: r.key });
+        const contents = `<span class="us-text"><span class="us-name">${esc(r.title)}</span><span class="us-meta">${esc(r.desc)}</span></span><span class="us-act" aria-hidden="true">${r.action === 'Open standings' ? 'Standings' : 'Event'} ›</span>`;
+        h += grid ? `<li role="row" class="us-competition"><span role="gridcell" class="us-cell us-row" id="us-opt-${i}" data-i="${i}" aria-selected="false">${contents}</span></li>`
+          : `<li role="option" class="us-row us-competition" id="us-opt-${i}" data-i="${i}" aria-selected="false">${contents}</li>`;
+      }
+      if (usCompetitions.omitted) {
+        const hint = `${usCompetitions.omitted} more competitions. Add a season or more of the event name.`;
+        h += grid ? `<li role="row" class="us-more"><span role="rowheader">${esc(hint)}</span></li>`
+          : `<li role="presentation" class="us-more">${esc(hint)}</li>`;
+      }
+      return h + section('Teams');
+    }
+    function usCompetitionActions(r) {
+      document.getElementById('usearchActive').textContent = `${r.title} · ${r.season.replace('-', '–')}`;
+      document.getElementById('usearchActive').className = '';
+      const o = document.getElementById('usearchOpen'); o.href = r.href; o.textContent = r.action;
+      document.getElementById('usearchHist').hidden = true; document.getElementById('usearchHist').href = '#';
+      document.getElementById('usearchPrev').hidden = true; document.getElementById('usearchPrev').href = '#';
+      document.getElementById('usearchActions').hidden = false;
+    }
     function usLoad() {
       if (usDb) return Promise.resolve(usDb);
       return getTeamDirectory().then(d => {
@@ -6715,7 +6807,7 @@
     const usSheet = () => isPhone();
     function usPlace() {
       const pop = usPop();
-      if (usSheet()) { pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-modal', 'true'); pop.setAttribute('aria-label', 'Search teams'); return; }
+      if (usSheet()) { pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-modal', 'true'); pop.setAttribute('aria-label', 'Search teams and competitions'); return; }
       pop.removeAttribute('role'); pop.removeAttribute('aria-modal'); pop.removeAttribute('aria-label');
       const r = document.getElementById('usearchInput').getBoundingClientRect();
       const width = Math.min(640, window.innerWidth - 32);
@@ -6755,13 +6847,13 @@
     const US_TIPS = ['MVLA 2011', 'Sting 2012', 'California', 'U15 NorCal', 'Dallas 2012'];
     function usRun(q) {
       usHoverCancel();
-      usItems = []; usActiveIdx = -1;
+      usItems = []; usCompetitions = []; usActiveIdx = -1;
       const tips = document.getElementById('usearchTips');
       if (q.trim().length < 2) {
         usView = null; usPos = [];
         document.getElementById('usearchList').setAttribute('role', 'listbox');
         if (usInput) usInput.setAttribute('aria-haspopup', 'listbox');
-        usShowStatus('Every ECNL Girls team since 2020-21, by club and age group.');
+        usShowStatus('Teams since 2020-21 and registered competitions. Try U15 NorCal or San Diego Fall.');
         if (!tips.querySelector('button')) tips.insertAdjacentHTML('beforeend', US_TIPS.map(t =>
           `<button type="button" class="us-chip" onmousedown="event.preventDefault()" onclick="usFill(this.textContent)">${esc(t)}</button>`).join(''));
         tips.hidden = false;
@@ -6772,6 +6864,7 @@
       tips.hidden = true;
       // #133: every match is grouped and counted; today's flat list draws its first 60, as before.
       const all = TEAM_SEARCH.search(usDb, q, { season: currentSeason, limit: Infinity });
+      usCompetitions = usCompetitionSearch(q, usDb, typeof SOURCES !== 'undefined' ? SOURCES : null, currentSeason);
       const view = usViewOf(all, usDb, usSheet());
       usView = null; usPos = [];
       if (view.mode !== 'flat' && view.mode !== 'empty') {
@@ -6782,13 +6875,13 @@
         usView = Object.assign(view, { res: all, q, open, nav: false, sheet: usSheet() });
         usRenderView(all, q);
         const n = all.total, c = view.groups.length;
-        usShowStatus(usStatus(all, all.query).replace(/^<strong>/, `<strong>${c} club${c === 1 ? '' : 's'} · `));
-        document.getElementById('usearchLive').textContent = `${c} club${c === 1 ? '' : 's'}, ${n} team${n === 1 ? '' : 's'}. ` +
+        usShowStatus((usCompetitions.length ? `<strong>${usCompetitions.length} competition${usCompetitions.length === 1 ? '' : 's'}</strong> · ` : '') + usStatus(all, all.query).replace(/^<strong>/, `<strong>${c} club${c === 1 ? '' : 's'} · `));
+        document.getElementById('usearchLive').textContent = `${usCompetitions.length ? usCompetitions.length + ' competitions, ' : ''}${c} club${c === 1 ? '' : 's'}, ${n} team${n === 1 ? '' : 's'}. ` +
           'Use the up and down arrows to move between rows, then left and right along a row.';
         return;
       }
       const list = document.getElementById('usearchList');
-      list.setAttribute('role', 'listbox'); list.setAttribute('aria-label', 'Teams');
+      list.setAttribute('role', 'listbox'); list.setAttribute('aria-label', usCompetitions.length ? 'Competitions and teams' : 'Teams');
       if (usInput) usInput.setAttribute('aria-haspopup', 'listbox');
       const res = { ...all, results: all.results.slice(0, 60) };
       const p = res.query;
@@ -6816,14 +6909,14 @@
           `<span class="us-rank" aria-hidden="true">${label}</span>${logo}<div class="us-text"><div class="us-name">${mark(r.title)} · born ${esc(TEAM_SEARCH.bornText(r.born))}${tok}${pill}</div>` +
           `<div class="us-meta" title="${esc(r.desc)}">${esc(r.desc)}</div></div><div class="us-act" aria-hidden="true">${where} ›</div></li>`;
       };
-      let h = res.results.map(row).join('');
+      let h = usCompetitionRows() + res.results.map(row).join('');
       const placed = p.places.length || p.codes.some(c => c.strict);
       if (res.total > res.results.length) h += `<li role="presentation" class="us-more">${res.total - res.results.length} more. ${usNarrowHint(p, placed)}</li>`;
       if (!h) h = `<li role="presentation" class="us-more">${usEmptyText(q, p, res)}</li>`;
       usList(h);
       const n = res.total;
-      usShowStatus(n ? usStatus(res, p) : 'No teams');
-      document.getElementById('usearchLive').textContent = n ? `${n} team${n === 1 ? '' : 's'}. Use the up and down arrows to choose.` : 'No teams found.';
+      usShowStatus((usCompetitions.length ? `<strong>${usCompetitions.length} competition${usCompetitions.length === 1 ? '' : 's'}</strong> · ` : '') + (n ? usStatus(res, p) : 'No teams'));
+      document.getElementById('usearchLive').textContent = usCompetitions.length || n ? `${usCompetitions.length ? usCompetitions.length + ' competitions, ' : ''}${n} team${n === 1 ? '' : 's'}. Use the up and down arrows to choose.` : 'No teams found.';
       if (usItems.length) usSetActive(0);
     }
     const usPlaceWord = p => (p.places[0] ? p.places[0].label : (p.codes.find(c => c.strict) || {}).code || '');
@@ -6869,6 +6962,9 @@
       el.setAttribute('aria-selected', 'true');
       el.scrollIntoView({ block: 'nearest' });
       if (usInput) usInput.setAttribute('aria-activedescendant', el.id);
+      if (r.kind === 'competition') { usCompetitionActions(r); return; }
+      document.getElementById('usearchHist').hidden = false;
+      document.getElementById('usearchOpen').textContent = 'Overview';
       // The active row's real links sit outside the listbox (an option holds no link): new tab,
       // copy link and middle-click all work on them.
       document.getElementById('usearchActive').textContent = `${r.title} · born ${TEAM_SEARCH.bornText(r.born)}`;
@@ -6888,6 +6984,9 @@
       const bar = document.getElementById('usearchActions'), span = document.getElementById('usearchActive');
       const prevLink = document.getElementById('usearchPrev');
       if (!r) { bar.hidden = true; return; }
+      if (r.kind === 'competition') { usCompetitionActions(r); return; }
+      document.getElementById('usearchHist').hidden = false;
+      document.getElementById('usearchOpen').textContent = 'Overview';
       const may = r.mayFrom && r.mayFrom.length
         ? ` · May continue here: ${r.mayFrom.map(x => `${x.last} team, born ${TEAM_SEARCH.bornText(x.born)}`).join('; ')}` : '';
       span.className = 'us-two';
@@ -6905,7 +7004,7 @@
     function usGo(i, to) {
       const r = usItems[i];
       if (!r) return;
-      usGoTo(to === 'season' ? r.seasonHref : to === 'overview' ? r.overviewHref : r.href);
+      usGoTo(r.kind === 'competition' ? r.href : to === 'season' ? r.seasonHref : to === 'overview' ? r.overviewHref : r.href);
     }
     function usGoTo(target) {
       usClose(true);
@@ -7013,7 +7112,7 @@
       const v = usView, p = res.query, list = document.getElementById('usearchList');
       usItems = []; usPos = []; usActiveIdx = -1;
       list.setAttribute('role', 'grid');
-      list.setAttribute('aria-label', 'Teams by club');
+      list.setAttribute('aria-label', usCompetitions.length ? 'Competitions and teams by club' : 'Teams by club');
       if (usInput) usInput.setAttribute('aria-haspopup', 'grid');
       const marks = p.text.map(w => w.replace(/[^a-z0-9]/g, '')).filter(Boolean);
       const re = marks.length ? new RegExp(`\\b(${marks.join('|')})`, 'gi') : null;
@@ -7028,8 +7127,8 @@
       const nameOf = (line, r) => `${line}, ${r.live ? r.slot : `ended ${r.last}`}, born ${born(r)}` +
         (r.mayFrom && r.mayFrom.length ? `, ${r.mayFrom.length} earlier team${r.mayFrom.length === 1 ? '' : 's'} may continue here` : '') +
         `, ${r.desc}, ${where || usSeasonText(r.season)}`;
-      let row = 0, cells = 0;
-      const out = [];
+      let row = usCompetitions.length, cells = 0;
+      const out = [usCompetitionRows(true)];
       const cell = (r, line, cls, label, col, r0, tag = 'span') => {
         const i = usItems.push(r) - 1; usPos.push({ row: r0, col, key: r.key });
         cells++;
