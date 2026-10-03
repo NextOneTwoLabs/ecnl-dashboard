@@ -6719,6 +6719,7 @@
       const entry = registry.seasons[season];
       if (!entry) return [];
       const e = encodeURIComponent, rows = [];
+      const bounded = () => Object.assign(rows.slice(0, 6), { omitted: Math.max(0, rows.length - 6) });
       const intent = new Set(['standings', 'standing', 'conference', 'conferences']);
       if (parsed.conf && (parsed.u || parsed.years.length) && !parsed.places.length && !parsed.codes.length
           && parsed.text.every(t => intent.has(t)) && entry.conferences?.[parsed.conf]) {
@@ -6732,11 +6733,11 @@
         }
         for (const r of [...divisions.values()].sort((a,b) => b.u - a.u || a.div.localeCompare(b.div))) {
           rows.push({ kind: 'competition', key: `conference/${season}/${parsed.conf}/${r.div}`, season,
-            title: `${parsed.conf} · Girls U${r.u}${/composite/i.test(r.div) ? ' Composite' : ''} standings`,
+            title: `${parsed.conf} · Girls U${r.u === 18 && r.div.includes('/') ? '18/19' : r.u}${/composite/i.test(r.div) ? ' Composite' : ''} standings`,
             desc: `${season.replace('-', '–')} · Conference standings`, action: 'Open standings',
             href: `#season=${e(season)}&age=${e(r.div)}&conf=${e(parsed.conf)}&view=standings` });
         }
-        return rows.slice(0, 6);
+        return bounded();
       }
       // All remaining meaningful words must describe the event; a team word such as "Surf"
       // cannot disappear just because its city also names a showcase. Ages are not asserted here.
@@ -6762,12 +6763,15 @@
           }
         }
       }
-      return rows.sort((a,b) => Number(b.season === season) - Number(a.season === season)
-        || b.season.localeCompare(a.season) || a.title.localeCompare(b.title)).slice(0, 6);
+      rows.sort((a,b) => Number(b.season === season) - Number(a.season === season)
+        || b.season.localeCompare(a.season) || a.title.localeCompare(b.title));
+      return bounded();
     }
     function usCompetitionRows(grid = false) {
       if (!usCompetitions.length) return '';
-      let h = `<li role="presentation" class="us-section">Competitions</li>`;
+      const section = t => grid ? `<li role="row" class="us-section"><span role="rowheader">${esc(t)}</span></li>`
+        : `<li role="presentation" class="us-section">${esc(t)}</li>`;
+      let h = section('Competitions');
       for (const r of usCompetitions) {
         const i = usItems.push(r) - 1;
         if (grid) usPos.push({ row: i, col: 0, key: r.key });
@@ -6775,7 +6779,12 @@
         h += grid ? `<li role="row" class="us-competition"><span role="gridcell" class="us-cell us-row" id="us-opt-${i}" data-i="${i}" aria-selected="false">${contents}</span></li>`
           : `<li role="option" class="us-row us-competition" id="us-opt-${i}" data-i="${i}" aria-selected="false">${contents}</li>`;
       }
-      return h + `<li role="presentation" class="us-section">Teams</li>`;
+      if (usCompetitions.omitted) {
+        const hint = `${usCompetitions.omitted} more competitions. Add a season or more of the event name.`;
+        h += grid ? `<li role="row" class="us-more"><span role="rowheader">${esc(hint)}</span></li>`
+          : `<li role="presentation" class="us-more">${esc(hint)}</li>`;
+      }
+      return h + section('Teams');
     }
     function usCompetitionActions(r) {
       document.getElementById('usearchActive').textContent = `${r.title} · ${r.season.replace('-', '–')}`;

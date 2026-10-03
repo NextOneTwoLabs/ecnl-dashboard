@@ -146,6 +146,33 @@ test('#146: team/place queries preserve existing results, groups and navigation'
     assert.equal(b.el('usearchOpen').textContent, 'Overview');
   }
 });
+test('#146 review: combined U18/19 division retains its label', () => {
+  const p = page({ catalog: CATALOG }); p.usRun('U18/19 NorCal');
+  assert.match(p.state().usItems[0].title, /U18\/19 standings/);
+  assert.equal(p.state().usItems[0].href, '#season=2026-27&age=GU18%2F19&conf=NorCal&view=standings');
+});
+test('#146 review: competition sections in a mixed club grid are rows, and team actions restore', () => {
+  const catalog = structuredClone(CATALOG);
+  catalog.seasons[ACTIVE].showcases = { MVLA: { eventId: 99999, eventName: 'MVLA' } };
+  const p = page({ catalog }); p.usRun('MVLA');
+  assert.equal(p.el('usearchList').getAttribute('role'), 'grid');
+  assert.match(p.list(), /role="row" class="us-section"><span role="rowheader">Competitions/);
+  assert.match(p.list(), /role="row" class="us-section"><span role="rowheader">Teams/);
+  assert.equal(p.state().usItems[0].kind, 'competition');
+  p.key('ArrowDown'); p.key('ArrowRight');
+  assert.notEqual(p.state().usItems[p.state().usActiveIdx]?.kind, 'competition');
+  assert.equal(p.el('usearchOpen').textContent, 'Overview');
+  p.key('ArrowUp'); assert.equal(p.state().usActiveIdx, 0);
+  assert.equal(p.el('usearchOpen').textContent, 'Open event');
+});
+test('#146 review: capped competition results disclose omitted matches and how to refine', () => {
+  const catalog = structuredClone(CATALOG);
+  catalog.seasons[ACTIVE].showcases = Object.fromEntries(Array.from({ length: 9 }, (_, i) => [`Test Cup ${i}`, { eventId: 99000 + i }]));
+  const p = page({ catalog }); p.usRun('Test Cup');
+  assert.equal(p.state().usItems.filter(r => r.kind === 'competition').length, 6);
+  assert.match(p.list(), /3 more competitions/);
+  assert.match(p.list(), /Add a season or more of the event name/);
+});
 const E = P.TEAM_SEARCH, db = P.db();
 const search = q => E.search(db, q, { season: ACTIVE, limit: Infinity });
 const view = (q, sheet = false) => P.usViewOf(search(q), db, sheet);
