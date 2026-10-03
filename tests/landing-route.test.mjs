@@ -559,3 +559,20 @@ test('#135 P1a (PR #142 SC4): a teamCount of 0 shows no count', async () => {
   await p.fire(`#season=${S0}`);
   assert.ok(!/ teams$/.test(p.el('contentSubtitle').textContent));
 });
+
+test('#146: competition search standings hash clears team filter and playoff context through the real router', async () => {
+  for (const start of [
+    '#tab=teams&season=2026-27&team=95449&name=Bay%20Area%20Surf',
+    '#tab=playoffs&season=2025-26&stage=Playoffs%20%26%20Finals&age=G2011&tier=CL&team=95449'
+  ]) {
+    const p = page({ hash: start }); await p.init();
+    await p.fire('#season=2026-27&age=GU15&conf=NorCal&view=standings');
+    const s = p.state();
+    assert.equal(s.tab, 'conferences'); assert.equal(s.view, 'standings');
+    assert.equal(s.season, '2026-27'); assert.equal(s.age, 'GU15'); assert.equal(s.conf, 'NorCal');
+    assert.equal(s.team, null);
+    assert.match(p.shown(), /TABLE NorCal GU15/);
+    assert.equal(p.saved().selectedTeamID, undefined);
+    assert.ok(!p.location.hash.includes('team='));
+  }
+});
