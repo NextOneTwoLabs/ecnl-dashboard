@@ -6,11 +6,11 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 5,DKSC ECNL G2013/14,DKSC,131839,2,1,0,1,4,2.0,4,1,3
 6,Sting Black ECNL G2013/14,Sting Soccer Club,111690,2,1,0,1,4,2.0,2,0,2
 7,Challenge SC ECNL G2013/14,Challenge SC,129343,4,2,1,1,7,1.75,9,6,3
-8,Colorado Storm ECNL G2013/14,Colorado Storm,132370,8,4,4,0,12,1.5,14,13,1
-9,Lonestar ATX Red ECNL G2013/14,Lonestar ATX,132704,5,2,3,0,6,1.2,6,14,-8
-10,OK Energy FC ECNL G2013/14,Oklahoma Energy FC,94445,4,1,2,1,4,1.0,8,7,1
-11,Albion Hurricanes FC ECNL G2013/14,Albion Hurricanes FC,69768,4,1,2,1,4,1.0,4,5,-1
-12,SOLAR SC ECNL G2013/14,Solar SC,69973,2,0,1,1,1,0.5,2,4,-2
+8,SOLAR SC ECNL G2013/14,Solar SC,69973,3,1,1,1,4,1.33,5,4,1
+9,Colorado Storm ECNL G2013/14,Colorado Storm,132370,9,4,5,0,12,1.33,14,16,-2
+10,Lonestar ATX Red ECNL G2013/14,Lonestar ATX,132704,5,2,3,0,6,1.2,6,14,-8
+11,OK Energy FC ECNL G2013/14,Oklahoma Energy FC,94445,4,1,2,1,4,1.0,8,7,1
+12,Albion Hurricanes FC ECNL G2013/14,Albion Hurricanes FC,69768,4,1,2,1,4,1.0,4,5,-1
 13,Colorado Rush ECNL G2013/14,Colorado Rush,132180,5,0,3,2,2,0.4,4,9,-5
 14,Dallas Texans ECNL G2013/14,Dallas Texans,134490,4,0,4,0,0,0.0,1,9,-8
 15,Real Colorado Athletico ECNL G2013/14,Real Colorado,127617,4,0,4,0,0,0.0,2,14,-12

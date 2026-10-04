@@ -4,8 +4,8 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 3,Alabama FC ECNL G2013/14,Alabama FC,131379,6,5,1,0,15,2.5,17,6,11
 4,Florida Premier FC ECNL G2013/14,Florida Premier FC,113740,6,4,1,1,13,2.17,12,8,4
 5,Concorde Fire Platinum ECNL G2013/14,Concorde Fire ,133392,6,4,1,1,13,2.17,17,4,13
-6,Florida Kraze Krush ECNL G2013/14,Florida Kraze Krush,34961,7,4,2,1,13,1.86,17,8,9
-7,Seminole United ECNL G2013/14,Seminole United,132964,7,4,2,1,13,1.86,14,7,7
+6,Seminole United ECNL G2013/14,Seminole United,132964,8,5,2,1,16,2.0,16,7,9
+7,Florida Kraze Krush ECNL G2013/14,Florida Kraze Krush,34961,7,4,2,1,13,1.86,17,8,9
 8,CESA Liberty ECNL G2013/14,Carolina Elite Soccer Academy,106034,6,3,2,1,10,1.67,9,9,0
 9,Atlanta Fire United ECNL G2013/14,Atlanta Fire United,127664,6,3,3,0,9,1.5,10,6,4
 10,Athletic Club Florida ECNL G2013/14,Athletic Club Florida,132224,6,2,2,2,8,1.33,13,10,3
@@ -14,4 +14,4 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 13,Team Boca ECNL G2013/14,Team Boca,132000,6,1,4,1,4,0.67,5,17,-12
 14,Sporting SA JAX ECNL G2013/14,Sporting SA,113642,7,1,5,1,4,0.57,6,11,-5
 15,Tampa Bay United ECNL G2013/14,Tampa Bay United,112272,6,0,6,0,0,0.0,4,15,-11
-16,Jacksonville FC ECNL G2013/14,Jacksonville FC,114707,7,0,7,0,0,0.0,1,33,-32
+16,Jacksonville FC ECNL G2013/14,Jacksonville FC,114707,8,0,8,0,0,0.0,1,35,-34
