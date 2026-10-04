@@ -1,17 +1,17 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,Sting Black ECNL G2009/10,Sting Soccer Club,48667,3,3,0,0,9,3.0,11,3,8
-2,SOLAR SC ECNL G2009/10,Solar SC,66050,2,2,0,0,6,3.0,4,0,4
-3,Real Colorado National ECNL G2009/10,Real Colorado,69251,8,7,1,0,21,2.63,18,5,13
-4,Colorado Storm ECNL G2009/10,Colorado Storm,69485,8,6,0,2,20,2.5,18,7,11
+2,Colorado Storm ECNL G2009/10,Colorado Storm,69485,9,6,0,3,21,2.33,19,8,11
+3,Real Colorado National ECNL G2009/10,Real Colorado,69251,9,7,2,0,21,2.33,18,7,11
+4,SOLAR SC ECNL G2009/10,Solar SC,66050,3,2,0,1,7,2.33,5,1,4
 5,Albion Hurricanes FC ECNL G2009/10,Albion Hurricanes FC,59340,5,3,1,1,10,2.0,12,6,6
 6,Lonestar ATX Red ECNL G2009/10,Lonestar ATX,132697,5,3,2,0,9,1.8,7,5,2
-7,FC Westlake ECNL G2009/10,FC Westlake ,131276,5,2,2,1,7,1.4,6,7,-1
-8,FC Dallas Youth ECNL G2009/10,FC Dallas Youth,46266,4,1,1,2,5,1.25,10,7,3
-9,Challenge SC ECNL G2009/10,Challenge SC,129339,5,2,3,0,6,1.2,12,10,2
-10,Sting Royal ECNL G2009/10,Sting Soccer Club,68974,5,2,3,0,6,1.2,9,7,2
-11,Dallas Texans ECNL G2009/10,Dallas Texans,134485,3,1,2,0,3,1.0,5,10,-5
+7,FC Westlake ECNL G2009/10,FC Westlake ,131276,6,3,2,1,10,1.67,8,7,1
+8,Dallas Texans ECNL G2009/10,Dallas Texans,134485,4,2,2,0,6,1.5,7,10,-3
+9,FC Dallas Youth ECNL G2009/10,FC Dallas Youth,46266,4,1,1,2,5,1.25,10,7,3
+10,Challenge SC ECNL G2009/10,Challenge SC,129339,5,2,3,0,6,1.2,12,10,2
+11,Sting Royal ECNL G2009/10,Sting Soccer Club,68974,5,2,3,0,6,1.2,9,7,2
 12,OK Energy FC ECNL G2009/10,Oklahoma Energy FC,61013,4,0,3,1,1,0.25,3,9,-6
 13,West Side Alliance ECNL G2009/10,West Side Alliance SC,110467,4,0,3,1,1,0.25,1,14,-13
 14,DKSC ECNL G2009/10,DKSC,68923,3,0,3,0,0,0.0,3,10,-7
-15,Colorado Rush ECNL G2009/10,Colorado Rush,94985,4,0,4,0,0,0.0,2,10,-8
+15,Colorado Rush ECNL G2009/10,Colorado Rush,94985,5,0,5,0,0,0.0,2,12,-10
 16,Real Colorado Athletico ECNL G2009/10,Real Colorado,69250,4,0,4,0,0,0.0,1,12,-11

@@ -50,8 +50,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-03,09:00 AM,Group Play,Eclipse Select Soccer Club ECNL G2010/11,7,0,FC Wisconsin ECNL G2010/11,Redmond Recreational Complex - Turf Field,Turf,On Time,1067870
 2026-10-03,09:00 AM,Group Play,Sporting Iowa ECNL G2010/11,0,4,Missouri Rush ECNL G2010/11,Olathe District Activity Center,Soccer Stadium,On Time,1067882
 2026-10-03,03:00 PM,Group Play,Kansas City Athletics ECNL G2010/11,,,Gretna Elite Academy ECNL G2010/11,KC Current Training Facility,Field 8,On Time,1067878
-2026-10-04,09:00 AM,Group Play,Kansas City Athletics ECNL G2010/11,,,Sporting Iowa ECNL G2010/11,KC Current Training Facility,Field 8,On Time,1067886
-2026-10-04,11:00 AM,Group Play,Gretna Elite Academy ECNL G2010/11,,,Missouri Rush ECNL G2010/11,KC Current Training Facility,Field 1,On Time,1067890
+2026-10-04,09:00 AM,Group Play,Kansas City Athletics ECNL G2010/11,4,1,Sporting Iowa ECNL G2010/11,KC Current Training Facility,Field 8,On Time,1067886
+2026-10-04,11:00 AM,Group Play,Gretna Elite Academy ECNL G2010/11,1,0,Missouri Rush ECNL G2010/11,KC Current Training Facility,Field 1,On Time,1067890
 2026-10-04,11:45 AM,Group Play,Chicago Inter ECNL G2010/11,,,Rockford Raptors FC ECNL G2010/11,Chicago Inter Complex,Field 1,On Time,1067874
 2026-10-10,08:00 AM,Group Play,Eclipse Select Soccer Club ECNL G2010/11,,,Nationals SC ECNL G2010/11,Redmond Recreational Complex - Turf Field,Turf,On Time,1067894
 2026-10-10,08:00 AM,Group Play,Michigan Hawks Magic ECNL G2010/11,,,Sporting Iowa ECNL G2010/11,St. Joe's Sports Dome,St. Joe's Dome,On Time,1067910

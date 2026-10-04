@@ -22,8 +22,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-27,10:45 AM,Group Play,FC Wisconsin ECNL G2012/13,0,2,St. Louis Scott Gallagher Green ECNL G2012/13,FC Wisconsin Soccer Park,Field 2 - Hegarty Field,On Time,1083734
 2026-10-03,09:00 AM,Group Play,Chicago Inter ECNL G2012/13,0,3,Michigan Hawks ECNL G2012/13,Chicago Inter Complex,Field 2,On Time,1083740
 2026-10-03,01:45 PM,Group Play,FC Wisconsin ECNL G2012/13,0,1,Michigan Hawks Magic ECNL G2012/13,University School Milwaukee,Stadium,On Time,1083742
-2026-10-04,09:00 AM,Group Play,Chicago Inter ECNL G2012/13,,,Michigan Hawks Magic ECNL G2012/13,Chicago Inter Complex,Field 2,On Time,1083752
-2026-10-04,11:45 AM,Group Play,FC Wisconsin ECNL G2012/13,,,Michigan Hawks ECNL G2012/13,University School Milwaukee,Stadium,On Time,1083754
+2026-10-04,09:00 AM,Group Play,Chicago Inter ECNL G2012/13,1,1,Michigan Hawks Magic ECNL G2012/13,Chicago Inter Complex,Field 2,On Time,1083752
+2026-10-04,11:45 AM,Group Play,FC Wisconsin ECNL G2012/13,0,5,Michigan Hawks ECNL G2012/13,University School Milwaukee,Stadium,On Time,1083754
 2026-10-10,TBD,Group Play,Eclipse Select Soccer Club ECNL G2012/13,,,FC Wisconsin ECNL G2012/13,,,On Time,1083760
 2026-10-10,06:00 PM,Group Play,Michigan Hawks Magic ECNL G2012/13,,,Nationals SC ECNL G2012/13,St. Joe's Sports Dome,St. Joe's Dome,On Time,1083762
 2026-10-17,TBD,Group Play,Rockford Raptors FC ECNL G2012/13,,,Michigan Hawks Magic ECNL G2012/13,,,On Time,1083776
