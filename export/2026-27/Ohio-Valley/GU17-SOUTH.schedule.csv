@@ -9,8 +9,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-02-13,11:00 AM,Group Play,Tennessee SC ECNL G2009/10,,,Racing Louisville Academy ECNL G2009/10,Bethesda Sports Park,Field 2,On Time,1132891
 2027-02-13,01:30 PM,Group Play,Ohio Elite SA ECNL G2009/10,,,Indy Eleven ECNL G2009/10,Seven Hills School,Lower Field,On Time,1132879
 2027-02-21,12:00 PM,Group Play,Tennessee SC ECNL G2009/10,,,FC Pride Elite ECNL G2009/10,Bethesda Sports Park,Field 1,On Time,1133143
-2027-02-27,TBD,Group Play,Tennessee SC ECNL G2009/10,,,Cleveland Force SC ECNL G2009/10,,,On Time,1132897
 2027-02-27,TBD,Group Play,FC Alliance TN ECNL G2009/10,,,Internationals SC ECNL G2009/2010,,,On Time,1132900
+2027-02-27,12:00 PM,Group Play,Tennessee SC ECNL G2009/10,,,Cleveland Force SC ECNL G2009/10,Richard Siegel Soccer Complex,Field 1,On Time,1132897
 2027-02-28,TBD,Group Play,Tennessee SC ECNL G2009/10,,,Internationals SC ECNL G2009/2010,,,On Time,1132903
 2027-02-28,TBD,Group Play,FC Alliance TN ECNL G2009/10,,,Cleveland Force SC ECNL G2009/10,,,On Time,1132906
 2027-03-06,09:00 AM,Group Play,Racing Louisville Academy ECNL G2009/10,,,FC Alliance TN ECNL G2009/10,Lynn Family Sports Vision & Training Facility,Field 1,On Time,1132918
@@ -33,8 +33,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-04-11,11:00 AM,Group Play,Racing Louisville Academy ECNL G2009/10,,,Ohio Elite SA ECNL G2009/10,Lynn Family Sports Vision & Training Facility,Field 2,On Time,1132870
 2027-04-24,TBD,Group Play,Indy Eleven ECNL G2009/10,,,Cleveland Force SC ECNL G2009/10,,,On Time,1133041
 2027-04-24,10:45 AM,Group Play,FC Pride Elite ECNL G2009/10,,,Internationals SC ECNL G2009/2010,FC Pride Performance Center,Field 1,On Time,1133044
-2027-04-25,TBD,Group Play,FC Pride Elite ECNL G2009/10,,,Cleveland Force SC ECNL G2009/10,,,On Time,1133059
 2027-04-25,TBD,Group Play,Indy Eleven ECNL G2009/10,,,Internationals SC ECNL G2009/2010,,,On Time,1133062
+2027-04-25,10:45 AM,Group Play,FC Pride Elite ECNL G2009/10,,,Cleveland Force SC ECNL G2009/10,FC Pride Performance Center,Field 1,On Time,1133059
 2027-05-01,TBD,Group Play,FC Alliance TN ECNL G2009/10,,,Tennessee SC ECNL G2009/10,,,On Time,1133092
 2027-05-01,11:00 AM,Group Play,Racing Louisville Academy ECNL G2009/10,,,Indy Eleven ECNL G2009/10,Lynn Family Sports Vision & Training Facility,Field 2,On Time,1133089
 2027-05-01,01:30 PM,Group Play,Ohio Elite SA ECNL G2009/10,,,FC Pride Elite ECNL G2009/10,Ohio Elite Training Center,Field 9,On Time,1133086
