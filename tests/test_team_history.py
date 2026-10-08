@@ -355,7 +355,12 @@ class Built(unittest.TestCase):
         self.assertEqual(sq["birthYears"], [2011])
         self.assertEqual([(r["season"], r["teamID"], r["link"]) for r in sq["seasons"]],
                          [("2023-24", 55477, "start"), ("2024-25", 55477, "id"), ("2025-26", 55477, "id"), ("2026-27", 55477, "id")])
-        self.assertEqual([(r["rank"], r["of"]) for r in sq["seasons"]], [(1, 10), (3, 10), (1, 11), (3, 12)])
+        # #151: only completed seasons have a final rank; the in-progress one moves with every refresh.
+        self.assertEqual([(r["rank"], r["of"]) for r in sq["seasons"] if not r.get("inProgress")], [(1, 10), (3, 10), (1, 11)])
+        (live,) = [r for r in sq["seasons"] if r.get("inProgress")]
+        self.assertEqual(live["season"], "2026-27")
+        self.assertEqual(live["of"], 12)
+        self.assertTrue(1 <= live["rank"] <= live["of"], live["rank"])
         done = [r for r in sq["seasons"] if not r.get("inProgress")]
         self.assertEqual([sum(r[k] for r in done) for k in ("gp", "w", "d", "l", "gf", "ga")], [56, 47, 4, 5, 197, 29])
         self.assertEqual([(e["season"], e["reached"], e["group"] and e["group"]["pos"], e.get("fromTable", False)) for e in sq["postseason"]],
