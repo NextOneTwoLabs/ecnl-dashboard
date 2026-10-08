@@ -1,7 +1,7 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,San Diego Surf ECNL G2010/11,San Diego Surf Soccer Club,132460,2,2,0,0,6,3.0,8,0,8
-2,Slammers FC HB Koge ECNL G2010/11,Slammers FC,133598,3,3,0,0,9,3.0,10,3,7
-3,Phoenix Rising FC ECNL G2010/11,Phoenix Rising FC,62249,2,2,0,0,6,3.0,4,0,4
+1,Phoenix Rising FC ECNL G2010/11,Phoenix Rising FC,62249,3,3,0,0,9,3.0,11,0,11
+2,San Diego Surf ECNL G2010/11,San Diego Surf Soccer Club,132460,2,2,0,0,6,3.0,8,0,8
+3,Slammers FC HB Koge ECNL G2010/11,Slammers FC,133598,3,3,0,0,9,3.0,10,3,7
 4,SLAMMERS FC ECNL G2010/11,Slammers FC,61426,4,3,0,1,10,2.5,11,1,10
 5,Legends FC (CA) ECNL G2010/11,Legends FC (CA),133024,3,2,1,0,6,2.0,5,6,-1
 6,Beach Futbol Club (CA) ECNL G2010/11,Beach Futbol Club,131922,3,1,0,2,5,1.67,5,3,2
@@ -13,6 +13,6 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 12,LV Heat Surf ECNL G2010/11,LV Heat Surf SC ,48247,5,2,3,0,6,1.2,7,9,-2
 13,Pateadores Soccer Club ECNL G2010/11,Pateadores Soccer Club,130974,3,0,2,1,1,0.33,1,7,-6
 14,Utah Royals FC-AZ ECNL G2010/11,Utah Royals FC - AZ,77350,4,0,3,1,1,0.25,0,9,-9
-15,Arizona Arsenal ECNL G2010/11,Arizona Arsenal Soccer Club,134383,2,0,2,0,0,0.0,1,6,-5
-16,Rebels SC ECNL G2010/11,Rebels Soccer Club,81798,2,0,2,0,0,0.0,1,7,-6
+15,Rebels SC ECNL G2010/11,Rebels Soccer Club,81798,2,0,2,0,0,0.0,1,7,-6
+16,Arizona Arsenal ECNL G2010/11,Arizona Arsenal Soccer Club,134383,3,0,3,0,0,0.0,1,13,-12
 17,Sporting California USA ECNL G2010/11,Sporting California USA,134089,3,0,3,0,0,0.0,2,15,-13
