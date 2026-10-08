@@ -363,10 +363,14 @@ class Built(unittest.TestCase):
         self.assertTrue(1 <= live["rank"] <= live["of"], live["rank"])
         done = [r for r in sq["seasons"] if not r.get("inProgress")]
         self.assertEqual([sum(r[k] for r in done) for k in ("gp", "w", "d", "l", "gf", "ga")], [56, 47, 4, 5, 197, 29])
-        self.assertEqual([(e["season"], e["reached"], e["group"] and e["group"]["pos"], e.get("fromTable", False)) for e in sq["postseason"]],
+        # Postseason and showcases of the in-progress season can still appear; pin completed seasons only.
+        post = [e for e in sq["postseason"] if e["season"] != live["season"]]
+        self.assertEqual([(e["season"], e["reached"], e["group"] and e["group"]["pos"], e.get("fromTable", False)) for e in post],
                          [("2023-24", None, 4, False), ("2024-25", None, 3, True), ("2025-26", "Round of 16", None, False)])
-        self.assertEqual([e["stage"] for e in sq["showcases"]], ["San Diego Fall", "Phoenix Spring"])
-        self.assertEqual(sq["postseason"][sq["best"]]["reached"], "Round of 16")
+        self.assertEqual([e["stage"] for e in sq["showcases"] if e["season"] != live["season"]], ["San Diego Fall", "Phoenix Spring"])
+        best = sq["postseason"][sq["best"]]
+        if best["season"] != live["season"]:   # a live-season entry may legitimately outrank 2025-26
+            self.assertEqual(best["reached"], "Round of 16")
 
     def test_a_reused_id_keeps_its_squads_apart(self):
         # CESA's GU13 id: the 2008s in 2020-21, the 2009s from 2021-22, and in 2026-27 the
