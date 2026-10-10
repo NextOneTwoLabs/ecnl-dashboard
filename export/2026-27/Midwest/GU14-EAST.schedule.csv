@@ -24,7 +24,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-03,01:45 PM,Group Play,FC Wisconsin ECNL G2012/13,0,1,Michigan Hawks Magic ECNL G2012/13,University School Milwaukee,Stadium,On Time,1083742
 2026-10-04,09:00 AM,Group Play,Chicago Inter ECNL G2012/13,1,1,Michigan Hawks Magic ECNL G2012/13,Chicago Inter Complex,Field 2,On Time,1083752
 2026-10-04,11:45 AM,Group Play,FC Wisconsin ECNL G2012/13,0,5,Michigan Hawks ECNL G2012/13,University School Milwaukee,Stadium,On Time,1083754
-2026-10-10,TBD,Group Play,Eclipse Select Soccer Club ECNL G2012/13,,,FC Wisconsin ECNL G2012/13,,,On Time,1083760
 2026-10-10,08:00 PM,Group Play,Michigan Hawks Magic ECNL G2012/13,,,Nationals SC ECNL G2012/13,St. Joe's Sports Dome,St. Joe's Dome,On Time,1083762
 2026-10-17,12:00 PM,Group Play,Eclipse Select Soccer Club ECNL G2012/13,,,Michigan Hawks ECNL G2012/13,Lewis University,Field 2,On Time,1083772
 2026-10-17,01:00 PM,Group Play,Rockford Raptors FC ECNL G2012/13,,,Michigan Hawks Magic ECNL G2012/13,Mercyhealth Sportscore Two,Field - TBA (11v11),On Time,1083776
@@ -42,7 +41,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-07,09:00 AM,Group Play,Liverpool FC MI ECNL G2012/13,,,FC Wisconsin ECNL G2012/13,Oakland University Upper Fields,North,On Time,1083832
 2026-11-07,03:30 PM,Group Play,Nationals SC ECNL G2012/13,,,Rockford Raptors FC ECNL G2012/13,Oakland University Upper Fields,North field,On Time,1083834
 2026-11-08,09:00 AM,Group Play,Liverpool FC MI ECNL G2012/13,,,Rockford Raptors FC ECNL G2012/13,Avondale High School,Stadium,On Time,1083840
-2026-11-08,02:30 PM,Group Play,Nationals SC ECNL G2012/13,,,FC Wisconsin ECNL G2012/13,Oakland University Upper Fields,North field,On Time,1083838
+2026-11-08,10:30 AM,Group Play,Nationals SC ECNL G2012/13,,,FC Wisconsin ECNL G2012/13,Oakland University Upper Fields,Stadium,On Time,1083838
 2026-11-14,01:00 PM,Group Play,Liverpool FC MI ECNL G2012/13,,,MN Thunder Academy ECNL G2012/13,Avondale High School,Auxiliary,On Time,1083842
 2026-11-15,08:00 AM,Group Play,Nationals SC ECNL G2012/13,,,MN Thunder Academy ECNL G2012/13,Michigan Stars Sports Complex,Field 1,On Time,1083844
 2026-11-21,TBD,Group Play,Eclipse Select Soccer Club ECNL G2012/13,,,MN Thunder Academy ECNL G2012/13,,,On Time,1083846
@@ -72,6 +71,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-05-01,TBD,Group Play,Eclipse Select Soccer Club ECNL G2012/13,,,Liverpool FC MI ECNL G2012/13,,,On Time,1083964
 2027-05-01,TBD,Group Play,Rockford Raptors FC ECNL G2012/13,,,Chicago Inter ECNL G2012/13,,,On Time,1083966
 2027-05-01,TBD,Group Play,Nationals SC ECNL G2012/13,,,Michigan Hawks ECNL G2012/13,,,On Time,1083968
+2027-05-03,07:30 PM,Group Play,Eclipse Select Soccer Club ECNL G2012/13,,,FC Wisconsin ECNL G2012/13,Oak Brook Park District,Turf,On Time,1083760
 2027-05-08,10:00 AM,Group Play,Michigan Hawks ECNL G2012/13,,,Eclipse Select Soccer Club ECNL G2012/13,St. Joe's Sports Dome,St. Joe's Dome,On Time,1083984
 2027-05-08,10:00 AM,Group Play,Michigan Hawks Magic ECNL G2012/13,,,Rockford Raptors FC ECNL G2012/13,Jaycee Park,Jaycee Turf,On Time,1083986
 2027-05-09,10:00 AM,Group Play,Michigan Hawks Magic ECNL G2012/13,,,Eclipse Select Soccer Club ECNL G2012/13,Jaycee Park,Jaycee Turf,On Time,1083992
