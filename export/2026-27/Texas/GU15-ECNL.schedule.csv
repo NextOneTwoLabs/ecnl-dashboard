@@ -48,8 +48,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-17,01:00 PM,Group Play,Dallas Texans ECNL G2011/12,,,Lonestar ATX Red ECNL G2011/12,Beacon Park,field 4,On Time,1073694
 2026-10-17,01:00 PM,Group Play,SOLAR SC ECNL G2011/12,,,FC Westlake ECNL G2011/12,OAK GROVE ,Field 1,On Time,1073700
 2026-10-17,01:30 PM,Group Play,Real Colorado National ECNL G2011/12,,,DKSC ECNL G2011/12,Real Colorado Soccer Complex,RCSC 1,On Time,1073676
-2026-10-18,TBD,Group Play,Colorado Rush ECNL G2011/12,,,Real Colorado Athletico ECNL G2011/12,,,On Time,1073718
 2026-10-18,09:00 AM,Group Play,Colorado Storm ECNL G2011/12,,,DKSC ECNL G2011/12,Centennial Stadium Field Complex,Field 2,On Time,1073706
+2026-10-18,09:00 AM,Group Play,Colorado Rush ECNL G2011/12,,,Real Colorado Athletico ECNL G2011/12,Addenbrooke Classical,Field 1,On Time,1073718
 2026-10-18,11:00 AM,Group Play,Albion Hurricanes FC ECNL G2011/12,,,West Side Alliance ECNL G2011/12,Campbell Road Sports Park,Field 2,On Time,1073724
 2026-10-18,11:00 AM,Group Play,Challenge SC ECNL G2011/12,,,OK Energy FC ECNL G2011/12,Burroughs Park,Field 4,On Time,1073730
 2026-10-18,11:00 AM,Group Play,FC Dallas Youth ECNL G2011/12,,,Sting Royal ECNL G2011/12,Toyota Soccer Center,Field 10,On Time,1073748
@@ -57,7 +57,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-18,01:00 PM,Group Play,SOLAR SC ECNL G2011/12,,,Lonestar ATX Red ECNL G2011/12,OAK GROVE ,Field 1,On Time,1073742
 2026-10-18,01:30 PM,Group Play,Real Colorado National ECNL G2011/12,,,Sting Black ECNL G2011/12,Real Colorado Soccer Complex,RCSC 1,On Time,1073712
 2026-10-21,05:30 PM,Group Play,Real Colorado National ECNL G2011/12,,,Real Colorado Athletico ECNL G2011/12,Highland Heritage Regional Park,HHRP West,On Time,1073490
-2026-10-24,TBD,Group Play,Colorado Rush ECNL G2011/12,,,Sting Royal ECNL G2011/12,,,On Time,1073754
+2026-10-24,09:00 AM,Group Play,Colorado Rush ECNL G2011/12,,,Sting Royal ECNL G2011/12,Denver Christian School,Field 1,On Time,1073754
 2026-10-24,11:00 AM,Group Play,West Side Alliance ECNL G2011/12,,,DKSC ECNL G2011/12,RiverCity Parks,Field 9,On Time,1073778
 2026-10-24,01:00 PM,Group Play,Lonestar ATX Red ECNL G2011/12,,,FC Westlake ECNL G2011/12,Burger Activity Center,Field 2,On Time,1073766
 2026-10-24,01:00 PM,Group Play,OK Energy FC ECNL G2011/12,,,Sting Black ECNL G2011/12,Edmond Soccer Club,ESC 5,On Time,1073772

@@ -1,6 +1,7 @@
 date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
 2026-11-21,12:00 PM,Group Play,Pittsburgh Riverhounds ECNL G2008/09,,,Tennessee SC ECNL G2008/09,Montour Junction Sports Complex,Field 1,On Time,1073393
 2026-11-21,02:30 PM,Group Play,WNY Flash ECNL G2008/09,,,FC Alliance TN ECNL G2008/09,Flash Fields,Field A,On Time,1073392
+2026-11-21,04:30 PM,Group Play,Ohio Elite SA ECNL G2008/09,,,Racing Louisville Academy ECNL G2008/09,Seven Hills School,Lower Field,On Time,1073340
 2026-11-22,02:00 PM,Group Play,Pittsburgh Riverhounds ECNL G2008/09,,,FC Alliance TN ECNL G2008/09,Highmark Stadium,Field 1,On Time,1073387
 2026-11-22,02:30 PM,Group Play,WNY Flash ECNL G2008/09,,,Tennessee SC ECNL G2008/09,Flash Fields,Field A,On Time,1073386
 2026-12-12,TBD,Group Play,Ohio Premier ECNL G2008/09,,,GTFC Impact ECNL G2008/09,,,On Time,1073339
@@ -43,7 +44,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-04-11,TBD,Group Play,Cleveland Force SC ECNL G2008/09,,,Ohio Premier ECNL G2008/09,,,On Time,1073375
 2027-04-11,TBD,Group Play,Indy Eleven ECNL G2008/09,,,FC Alliance TN ECNL G2008/09,,,On Time,1073376
 2027-04-11,09:00 AM,Group Play,FC Pride Elite ECNL G2008/09,,,Tennessee SC ECNL G2008/09,FC Pride Performance Center,Field 1,On Time,1073377
-2027-04-11,01:00 PM,Group Play,Racing Louisville Academy ECNL G2008/09,,,Ohio Elite SA ECNL G2008/09,Lynn Family Sports Vision & Training Facility,Field 1,On Time,1073340
 2027-04-17,TBD,Group Play,Cleveland Force SC ECNL G2008/09,,,Racing Louisville Academy ECNL G2008/09,,,On Time,1073378
 2027-04-17,01:30 PM,Group Play,WNY Flash ECNL G2008/09,,,Indy Eleven ECNL G2008/09,Flash Fields,Field A,On Time,1073380
 2027-04-17,02:00 PM,Group Play,Pittsburgh Riverhounds ECNL G2008/09,,,FC Pride Elite ECNL G2008/09,Montour Junction Sports Complex,Field 1,On Time,1073381
