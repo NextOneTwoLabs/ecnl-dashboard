@@ -1,5 +1,5 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,SOLAR SC ECNL G2011/12,Solar SC,59566,3,3,0,0,9,3.0,15,0,15
+1,SOLAR SC ECNL G2011/12,Solar SC,59566,4,4,0,0,12,3.0,18,0,18
 2,FC Westlake ECNL G2011/12,FC Westlake ,131273,6,5,0,1,16,2.67,22,6,16
 3,Lonestar ATX Red ECNL G2011/12,Lonestar ATX,132702,6,5,0,1,16,2.67,20,5,15
 4,Sting Royal ECNL G2011/12,Sting Soccer Club,59609,5,4,1,0,12,2.4,13,6,7
@@ -11,7 +11,7 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 10,Colorado Storm ECNL G2011/12,Colorado Storm,71847,9,4,5,0,12,1.33,8,9,-1
 11,OK Energy FC ECNL G2011/12,Oklahoma Energy FC,94440,4,1,2,1,4,1.0,9,8,1
 12,Albion Hurricanes FC ECNL G2011/12,Albion Hurricanes FC,81918,6,2,4,0,6,1.0,8,9,-1
-13,Dallas Texans ECNL G2011/12,Dallas Texans,134488,4,0,3,1,1,0.25,0,4,-4
+13,Dallas Texans ECNL G2011/12,Dallas Texans,134488,5,0,4,1,1,0.2,0,7,-7
 14,West Side Alliance ECNL G2011/12,West Side Alliance SC,111175,4,0,4,0,0,0.0,1,15,-14
 15,Real Colorado Athletico ECNL G2011/12,Real Colorado,95110,5,0,5,0,0,0.0,2,19,-17
 16,Colorado Rush ECNL G2011/12,Colorado Rush,95047,5,0,5,0,0,0.0,1,18,-17
