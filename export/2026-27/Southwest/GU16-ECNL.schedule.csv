@@ -26,7 +26,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-03,11:00 AM,Group Play,Utah Royals FC-AZ ECNL G2010/11,0,3,LAFC So Cal ECNL G2010/11,Bell Road Sports Complex,Field 15,On Time,1085507
 2026-10-03,01:00 PM,Group Play,Beach Futbol Club (CA) ECNL G2010/11,,,Legends FC (CA) ECNL G2010/11,El Camino College,Athletic Field,On Time,1085471
 2026-10-03,02:00 PM,Group Play,Eagles SC ECNL G2010/11,,,Sporting California USA ECNL G2010/11,Pleasant Valley Fields,Field 14,On Time,1085477
-2026-10-03,02:15 PM,Group Play,Slammers FC HB Koge ECNL G2010/11,,,San Diego Surf ECNL G2010/11,Saddleback College,Turf Field,On Time,1085501
 2026-10-04,10:00 AM,Group Play,Phoenix Rising FC ECNL G2010/11,2,0,LAFC So Cal ECNL G2010/11,PRFC Youth Soccer Facility,Field 2,On Time,1085513
 2026-10-04,12:30 PM,Group Play,LV Heat Surf ECNL G2010/11,0,3,SLAMMERS FC ECNL G2010/11,Heritage Park Sports Complex,Field 6,On Time,1085663
 2026-10-07,06:00 PM,Group Play,Arizona Arsenal ECNL G2010/11,0,7,Phoenix Rising FC ECNL G2010/11,Arizona Athletic Grounds,Field 9,On Time,1085351
@@ -86,6 +85,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-03-21,TBD,Group Play,So Cal Blues ECNL G2010/11,,,LA Breakers FC ECNL G2010/11,,,On Time,1085843
 2027-03-21,TBD,Group Play,Sporting California USA ECNL G2010/11,,,Utah Royals FC-AZ ECNL G2010/11,,,On Time,1085849
 2027-03-21,11:00 AM,Group Play,San Diego Surf ECNL G2010/11,,,Beach Futbol Club (CA) ECNL G2010/11,Surf Sports Park,Field 2,On Time,1085831
+2027-03-28,02:15 PM,Group Play,Slammers FC HB Koge ECNL G2010/11,,,San Diego Surf ECNL G2010/11,Saddleback College,Turf Field,On Time,1085501
 2027-04-10,TBD,Group Play,Beach Futbol Club (CA) ECNL G2010/11,,,Phoenix Rising FC ECNL G2010/11,,,On Time,1085855
 2027-04-10,TBD,Group Play,LV Heat Surf ECNL G2010/11,,,LAFC So Cal ECNL G2010/11,,,On Time,1085867
 2027-04-10,TBD,Group Play,Rebels SC ECNL G2010/11,,,So Cal Blues ECNL G2010/11,,,On Time,1085873
