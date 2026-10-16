@@ -7,16 +7,16 @@
       "placeGeoid": "0618506",
       "placeName": "Del Mar",
       "state": "CA",
-      "evidence": "Surf Sports Park (complexes at 92014) is at the Del Mar Fairgrounds, in the City of Del Mar; the 2022-23 Playoffs (event 2719) were held there, listed at \"Del Mar, CA\". Owner decision D2 and PR 1's P02/P08 treat it as Del Mar, nearby for San Diego. ZCTA 92014 also covers a larger part of the City of San Diego (Carmel Valley, Torrey Pines), so the land-area rule is expected to give San Diego. To be verified against the downloaded table: kept only if the area rule does not already give Del Mar."
+      "evidence": "Surf Sports Park (complexes at 92014) is at the Del Mar Fairgrounds, in the City of Del Mar; the 2022-23 Playoffs (event 2719) were held there, listed at \"Del Mar, CA\". Owner decision D2 and PR 1's P02/P08 treat it as Del Mar, nearby for San Diego. In the census table the land-area rule gives 92014 to San Diego (0666000), because the zip also covers a larger part of the City of San Diego; Del Mar (0618506) is the census place of that name in San Diego County."
     }
   ],
   "aliases": [
     {
-      "city": "Louisville",
-      "state": "KY",
-      "placeGeoid": "2148006",
-      "placeName": "Louisville/Jefferson County",
-      "evidence": "The 2020 census place for Louisville, KY is the consolidated \"Louisville/Jefferson County metro government (balance)\"; clubs 3408 (Racing Louisville Academy) and 3475 (LouCity / Racing Youth Academy) are listed at \"Louisville, KY\". GEOID and stripped name to be verified against the downloaded table."
+      "city": "Liburn",
+      "state": "GA",
+      "placeGeoid": "1346356",
+      "placeName": "Lilburn",
+      "evidence": "TGS lists club 56 (Gwinnett Soccer Academy) at \"Liburn, GA\", a misspelling of Lilburn. Its main home field is at zip 30047 (205 home games in the archive), which the census table gives to the place Lilburn (1346356), Gwinnett County."
     }
   ]
 }

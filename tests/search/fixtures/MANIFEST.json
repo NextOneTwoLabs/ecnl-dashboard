@@ -57,16 +57,16 @@
         "sha256": "73f40f6c55f17501142f2a05792f6a9744473811e32b931693c30595ed4561a2"
       },
       "places.json": {
-        "bytes": 105235,
-        "sha256": "5f8d512b930795c98330a6c155ca2cfd3cf00c1526c9d8a9b90a3e6c4e2652d3"
+        "bytes": 140036,
+        "sha256": "c979d88ee345f136d1b0ffa5f57590e303b54bb25edb986123563dd861c1a104"
       }
     },
     "inputs": {
-      "city-counties.json": "fee3c65ca94eadf697005140f39ad083482c0816335143300ef2854bb01c5d91",
+      "city-counties.json": "3b6183d8011767e8ef56797b1b97bae1ff7e876d25e7e1cda7312a7458e48ea0",
       "field-aliases.json": "dcb26eeee161671293c0bae526887a0a96939f5114f2ef01ed62c1c94956ab93",
       "zip-fixes.json": "b8a01f81482ed8c1669ad050b1ae6764e342c34f97140557c2ff3be8852ccfea",
-      "zip-place-fixes.json": "5c5d019d71c01f9d13cfabf2cc359f96cb623810fe3f7ab42c586d4f36dd7240",
-      "zip-places.json": null
+      "zip-place-fixes.json": "14bb74232da170ee9c143bf9b8a8fd55872acea725a348d61e3e7c6e595206f5",
+      "zip-places.json": "12a63a2254f29064f6c47bc512ae498f99c5ab260fdfea0d19b0448210c7f235"
     },
     "logos": "dropped from core.json teams (#117); directoryBuild is recomputed over the stripped directory"
   }

@@ -64,6 +64,18 @@ class Rules(unittest.TestCase):
         self.assertEqual(c["51159"], ["Richmond County", "VA"])
         self.assertEqual(p["5167000"][2], "51760", "Richmond, VA is in its own county-equivalent, not Richmond County")
 
+    def test_the_2020_files_own_forms(self):
+        """Found in the real 2020 file: more place-type words, places with none, the Island Areas."""
+        for full, name in (("Copperton metro township", "Copperton"), ("Lexington-Fayette urban county", "Lexington-Fayette"),
+                           ("Cusseta-Chattahoochee County unified government", "Cusseta-Chattahoochee County"),
+                           ("Echols County consolidated government", "Echols County"), ("Ranson corporation", "Ranson"),
+                           ("Lynchburg, Moore County metropolitan government", "Lynchburg, Moore County"),
+                           ("Carson City", "Carson City"), ("Princeton", "Princeton")):
+            self.assertEqual(cp.strip_place_name(full), name)
+        with self.assertRaises(cp.CensusError):
+            cp.strip_place_name("Trenton")          # a name with no suffix that is not on the list
+        self.assertEqual([cp.state_of(g) for g in ("60010", "66010", "69100", "74300", "78010")], ["AS", "GU", "MP", "UM", "VI"])
+
     def test_state_from_fips(self):
         self.assertEqual({v[1] for v in self.doc["counties"].values()}, {"CA", "IN", "KY", "MA", "VA", "PR"})
 

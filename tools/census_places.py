@@ -45,7 +45,9 @@ MAX_BYTES = 200 * 1024 * 1024
 PLACE_COLUMNS = ("GEOID_ZCTA5_20", "GEOID_PLACE_20", "NAMELSAD_PLACE_20", "CLASSFP_PLACE_20", "AREALAND_PART")
 COUNTY_COLUMNS = ("GEOID_ZCTA5_20", "GEOID_COUNTY_20", "NAMELSAD_COUNTY_20", "AREALAND_PART")
 
-# State FIPS -> USPS code: the 50 states, DC and Puerto Rico (the ZCTA files cover no other area).
+# State FIPS -> USPS code: the 50 states, DC, Puerto Rico, and the Island Areas, whose county-equivalents
+# the 2020 county file lists in rows with no ZCTA (American Samoa 60, Guam 66, Northern Mariana Islands 69,
+# U.S. Minor Outlying Islands 74, U.S. Virgin Islands 78).
 FIPS = {
     "01": "AL", "02": "AK", "04": "AZ", "05": "AR", "06": "CA", "08": "CO", "09": "CT", "10": "DE", "11": "DC",
     "12": "FL", "13": "GA", "15": "HI", "16": "ID", "17": "IL", "18": "IN", "19": "IA", "20": "KS", "21": "KY",
@@ -53,6 +55,7 @@ FIPS = {
     "31": "NE", "32": "NV", "33": "NH", "34": "NJ", "35": "NM", "36": "NY", "37": "NC", "38": "ND", "39": "OH",
     "40": "OK", "41": "OR", "42": "PA", "44": "RI", "45": "SC", "46": "SD", "47": "TN", "48": "TX", "49": "UT",
     "50": "VT", "51": "VA", "53": "WA", "54": "WV", "55": "WI", "56": "WY", "72": "PR",
+    "60": "AS", "66": "GU", "69": "MP", "74": "UM", "78": "VI",
 }
 # Place-type suffixes of NAMELSAD, longest first so "city and borough" wins over "borough".
 SUFFIXES = sorted([
@@ -60,7 +63,15 @@ SUFFIXES = sorted([
     " consolidated government (balance)", " city (balance)", " town (balance)", " (balance)",
     " city and borough", " zona urbana", " comunidad", " municipality", " borough", " village",
     " city", " town", " CDP",
+    # found in the 2020 file (#159): Utah's metro townships, consolidated governments without
+    # "(balance)", Lexington-Fayette, and West Virginia's corporations
+    " metro township", " unified government", " consolidated government", " metropolitan government",
+    " urban county", " corporation",
 ], key=len, reverse=True)
+# Census places whose 2020 NAMELSAD carries no place-type word at all (the whole name is the name).
+# Any other name without a known suffix still fails the tool.
+NO_SUFFIX = frozenset({"Macon-Bibb County", "Anaconda-Deer Lodge County", "Hartsville/Trousdale County",
+                       "Carson City", "Princeton"})
 Q1A_STATES = ("CT", "MA", "ME", "NH", "RI", "VT", "NJ", "NY", "PA")
 
 
@@ -69,6 +80,8 @@ class CensusError(Exception):
 
 
 def strip_place_name(namelsad):
+    if namelsad in NO_SUFFIX:
+        return namelsad
     for s in SUFFIXES:
         if namelsad.endswith(s) and len(namelsad) > len(s):
             return namelsad[: -len(s)]

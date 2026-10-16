@@ -236,10 +236,12 @@ class Committed(unittest.TestCase):
     def test_the_reviewed_seeds(self):
         fixes = load(DATA / "zip-place-fixes.json")
         self.assertEqual([f["zip"] for f in fixes["fixes"]], ["92014"])
-        self.assertEqual([(a["city"], a["state"]) for a in fixes["aliases"]], [("Louisville", "KY")])
+        self.assertEqual([(a["city"], a["state"]) for a in fixes["aliases"]], [("Liburn", "GA")])
         cities = {(c["city"], c["state"]): c["countyGeoid"] for c in load(DATA / "city-counties.json")["cities"]}
         self.assertEqual(cities[("Woodland Hills", "CA")], "06037")
-        self.assertEqual(cities[("Fairfax", "VA")], "51059", "owner decision Q-E: Fairfax County")
+        # Fairfax, VA needs no entry: its census place already computes to Fairfax County (Q-E is
+        # pinned by RealTable.test_owner_decisions_fairfax_and_louisville); an entry would be redundant.
+        self.assertNotIn(("Fairfax", "VA"), cities)
         for doc, keys in ((fixes["fixes"], si.PLACE_FIX_KEYS), (fixes["aliases"], si.PLACE_ALIAS_KEYS),
                           (load(DATA / "city-counties.json")["cities"], si.CITY_COUNTY_KEYS)):
             for e in doc:
@@ -247,7 +249,6 @@ class Committed(unittest.TestCase):
                 self.assertTrue(e["evidence"].strip())
 
 
-@unittest.skipUnless(TABLE.exists(), "public/data/zip-places.json is not committed yet (the census download waits for the owner's OK)")
 class RealTable(unittest.TestCase):
     """The committed census table: provably the tool's output (MF1), and the judged facts."""
 
@@ -264,7 +265,12 @@ class RealTable(unittest.TestCase):
         for f in s["files"].values():
             self.assertRegex(f["sha256"], r"^[0-9a-f]{64}$")
             self.assertGreater(f["rows"], 30000)
-        self.assertTrue(33000 <= s["counts"]["zips"] <= 34500)
+        self.assertEqual(s["counts"]["zips"], 33791, "the 2020 ZCTAs, Puerto Rico included")
+        self.assertEqual(s["counts"]["counties"], 3234, "3,143 for the states and DC, 78 for Puerto Rico, 13 for the Island Areas")
+        self.assertEqual(s["counts"]["places"], 32188)
+        self.assertEqual({n: f["sha256"] for n, f in s["files"].items()}, {
+            "tab20_zcta520_place20_natl.txt": "698a5dad71ed419411677d0ffd8ecd9331067f59c472cdd239b92c12f698285d",
+            "tab20_zcta520_county20_natl.txt": "3ed41278d637dc249e0323306f68be8a6c234e3090f4de88ef328dee71aeaaaf"})
 
     def test_every_reference_resolves(self):
         t = self.table
@@ -351,7 +357,11 @@ class RealTable(unittest.TestCase):
     def test_owner_decisions_fairfax_and_louisville(self):
         self.assertEqual(self.club(357)[1:], ("Fairfax County", "51059"), "Q-E")
         for cid in (3408, 3475):
-            self.assertEqual(self.club(cid)[1], "Jefferson County", cid)
+            self.assertEqual(self.club(cid)[:2], ("Louisville", "Jefferson County"), cid)
+        self.assertEqual(self.club(56)[:2], ("Lilburn", "Gwinnett County"), "the Liburn alias")
+
+    def test_the_92014_fix_is_needed(self):
+        self.assertEqual(self.table["zips"]["92014"][0], "0666000", "the area rule gives San Diego; the fix gives Del Mar")
 
 
 if __name__ == "__main__":
