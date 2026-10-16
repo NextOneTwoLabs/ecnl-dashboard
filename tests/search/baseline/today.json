@@ -1,0 +1,2665 @@
+{
+  "header": {
+    "context": {
+      "now": "2026-10-15T22:10:33Z",
+      "selectedSeason": "2026-27",
+      "timeZone": "America/Los_Angeles"
+    },
+    "engine": "today",
+    "engineSha": "1a54fe54edcd6407d9225f19413d38a937a589d7920d0e329b0deb6e9c7f1fe0",
+    "manifestSha": "bf97b66bfedefa2606496e9963bceef3daa36a2d449d4e6f7e6f2c27ad9aa504",
+    "queriesSha": "7c89ae768abafa252cd2fe38d27012e357e1ade2e4d00be4d0c541d7fb6f9df3",
+    "recordedBy": "node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today"
+  },
+  "perQuery": {
+    "C01": {
+      "capReached": null,
+      "checks": {
+        "exact": "fail",
+        "mustNever": null,
+        "mustShow": "fail",
+        "order": null,
+        "sections": "fail",
+        "useful": "fail"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": {
+        "events": "fail"
+      },
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [
+        "conference:2026-27/Southwest"
+      ],
+      "rows": {},
+      "rr": {
+        "events": 0
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "C02": {
+      "capReached": null,
+      "checks": {
+        "exact": "fail",
+        "mustNever": null,
+        "mustShow": "fail",
+        "order": null,
+        "sections": "fail",
+        "useful": "fail"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": {
+        "events": "fail"
+      },
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [
+        "conference:2026-27/NorCal"
+      ],
+      "rows": {},
+      "rr": {
+        "events": 0
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "C03": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "pass",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 9
+      },
+      "enter": "team:2021-22/59334",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2021-22/59334",
+          "team:2021-22/59336",
+          "team:2021-22/59338",
+          "team:2022-23/59338",
+          "team:2023-24/71849",
+          "team:2024-25/59332"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams"
+        ]
+      },
+      "status": "pass",
+      "wrongDestinations": []
+    },
+    "C04": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "pass",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 7
+      },
+      "enter": "team:2020-21/46755",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2020-21/46755",
+          "team:2020-21/35172",
+          "team:2020-21/19484",
+          "team:2020-21/19373",
+          "team:2020-21/19374",
+          "team:2020-21/19375"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams"
+        ]
+      },
+      "status": "pass",
+      "wrongDestinations": []
+    },
+    "C05": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "fail",
+        "order": null,
+        "sections": "fail",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 60
+      },
+      "enter": "team:2026-27/39582",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [
+        "conference:2026-27/Texas"
+      ],
+      "rows": {
+        "teams": [
+          "team:2026-27/39582",
+          "team:2026-27/59340",
+          "team:2026-27/40463",
+          "team:2026-27/81918",
+          "team:2026-27/71431",
+          "team:2026-27/69768"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "C06": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "events": 1,
+        "teams": 16
+      },
+      "enter": "conference:2026-27/Texas/GU15",
+      "exact": {
+        "events": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "conference:2026-27/Texas/GU15"
+        ],
+        "teams": [
+          "team:2024-25/59566",
+          "team:2026-27/131273",
+          "team:2026-27/132702",
+          "team:2024-25/59609",
+          "team:2026-27/129341",
+          "team:2024-25/94652"
+        ]
+      },
+      "rr": {
+        "events": 1
+      },
+      "sections": {
+        "actual": [
+          "events",
+          "teams"
+        ],
+        "expected": [
+          "events",
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "C07": {
+      "capReached": null,
+      "checks": {
+        "exact": "fail",
+        "mustNever": null,
+        "mustShow": "fail",
+        "order": null,
+        "sections": "fail",
+        "useful": "fail"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": {
+        "events": "fail"
+      },
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [
+        "conference:2023-24/Northwest"
+      ],
+      "rows": {},
+      "rr": {
+        "events": 0
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "E01": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "events": 1,
+        "teams": 12
+      },
+      "enter": "conference:2026-27/NorCal/GU15",
+      "exact": {
+        "events": "pass",
+        "teams": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "conference:2026-27/NorCal/GU15"
+        ],
+        "teams": [
+          "team:2024-25/95449",
+          "team:2024-25/55325",
+          "team:2024-25/29444",
+          "team:2025-26/113580",
+          "team:2024-25/68030",
+          "team:2024-25/84677"
+        ]
+      },
+      "rr": {
+        "events": 1,
+        "teams": 1
+      },
+      "sections": {
+        "actual": [
+          "events",
+          "teams"
+        ],
+        "expected": [
+          "events",
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "E02": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "events": 1,
+        "teams": 10
+      },
+      "enter": "conference:2024-25/NorCal/G2010",
+      "exact": {
+        "events": "pass",
+        "teams": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "conference:2024-25/NorCal/G2010"
+        ],
+        "teams": [
+          "team:2022-23/33633",
+          "team:2022-23/69036",
+          "team:2022-23/18712",
+          "team:2022-23/62271",
+          "team:2022-23/32669",
+          "team:2022-23/68832"
+        ]
+      },
+      "rr": {
+        "events": 1,
+        "teams": 1
+      },
+      "sections": {
+        "actual": [
+          "events",
+          "teams"
+        ],
+        "expected": [
+          "events",
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "E03": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "events": 1
+      },
+      "enter": "event:2025-26/4251",
+      "exact": {
+        "events": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "event:2025-26/4251"
+        ]
+      },
+      "rr": {
+        "events": 1
+      },
+      "sections": {
+        "actual": [
+          "events"
+        ],
+        "expected": [
+          "events",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "E04": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "pass",
+        "useful": "pass"
+      },
+      "counts": {
+        "events": 1
+      },
+      "enter": "event:2025-26/4041",
+      "exact": {
+        "events": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "event:2025-26/4041"
+        ]
+      },
+      "rr": {
+        "events": 1
+      },
+      "sections": {
+        "actual": [
+          "events"
+        ],
+        "expected": [
+          "events"
+        ]
+      },
+      "status": "pass",
+      "wrongDestinations": []
+    },
+    "E05": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "pass",
+        "useful": "pass"
+      },
+      "counts": {
+        "events": 1
+      },
+      "enter": "event:2025-26/4133",
+      "exact": {
+        "events": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "event:2025-26/4133"
+        ]
+      },
+      "rr": {
+        "events": 1
+      },
+      "sections": {
+        "actual": [
+          "events"
+        ],
+        "expected": [
+          "events"
+        ]
+      },
+      "status": "pass",
+      "wrongDestinations": []
+    },
+    "E06": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": "fail",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "events": 6
+      },
+      "enter": "event:2025-26/4251",
+      "exact": {
+        "events": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [
+        "event:2024-25/3865 (1 row)",
+        "event:2023-24/3064 (1 row)",
+        "event:2022-23/2719 (1 row)",
+        "event:2021-22/2436 (1 row)",
+        "event:2020-21/2118 (1 row)"
+      ],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "event:2025-26/4251",
+          "event:2024-25/3865",
+          "event:2023-24/3064",
+          "event:2022-23/2719",
+          "event:2021-22/2436",
+          "event:2020-21/2118"
+        ]
+      },
+      "rr": {
+        "events": 1
+      },
+      "sections": {
+        "actual": [
+          "events"
+        ],
+        "expected": [
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "E07": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "fail",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "fail"
+      },
+      "counts": {
+        "events": 6
+      },
+      "enter": "event:2025-26/4251",
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [
+        "event:2025-26/4251 (1 row)",
+        "event:2022-23/2720 (1 row)",
+        "event:2021-22/2437 (1 row)",
+        "event:2020-21/2289 (1 row)"
+      ],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "event:2025-26/4251",
+          "event:2024-25/3975",
+          "event:2023-24/3238",
+          "event:2022-23/2720",
+          "event:2021-22/2437",
+          "event:2020-21/2289"
+        ]
+      },
+      "rr": {
+        "events": 0.5
+      },
+      "sections": {
+        "actual": [
+          "events"
+        ],
+        "expected": [
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "E08": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "fail",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "events": 3
+      },
+      "enter": "event:2025-26/4133",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [
+        "event:2025-26/4251 (1 row)"
+      ],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "event:2025-26/4133",
+          "event:2025-26/4251",
+          "event:2025-26/4041"
+        ]
+      },
+      "rr": {
+        "events": 1
+      },
+      "sections": {
+        "actual": [
+          "events"
+        ],
+        "expected": [
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "F01": {
+      "capReached": null,
+      "checks": {
+        "exact": "unsupported",
+        "mustNever": "unsupported",
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": {
+        "games": "unsupported"
+      },
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "F02": {
+      "capReached": null,
+      "checks": {
+        "exact": "unsupported",
+        "mustNever": "unsupported",
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": {
+        "games": "unsupported"
+      },
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "F03": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "F04": {
+      "capReached": null,
+      "checks": {
+        "exact": "unsupported",
+        "mustNever": "unsupported",
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": {
+        "games": "unsupported"
+      },
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "F05": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "unsupported",
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "H01": {
+      "capReached": null,
+      "checks": {
+        "exact": "unsupported",
+        "mustNever": null,
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": {
+        "games": "unsupported"
+      },
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H02": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H03": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H04": {
+      "capReached": null,
+      "checks": {
+        "exact": "unsupported",
+        "mustNever": null,
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": {
+        "games": "unsupported"
+      },
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H05": {
+      "capReached": null,
+      "checks": {
+        "exact": "unsupported",
+        "mustNever": null,
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": {
+        "games": "unsupported"
+      },
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H06": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H07": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "N01": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": null,
+        "order": null,
+        "sections": "pass",
+        "useful": "pass"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
+      "sections": {
+        "actual": [],
+        "expected": []
+      },
+      "status": "pass",
+      "wrongDestinations": []
+    },
+    "N02": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": null,
+        "order": null,
+        "sections": "pass",
+        "useful": "pass"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
+      "sections": {
+        "actual": [],
+        "expected": []
+      },
+      "status": "pass",
+      "wrongDestinations": []
+    },
+    "N03": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": null,
+        "order": null,
+        "sections": "pass",
+        "useful": "pass"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
+      "sections": {
+        "actual": [],
+        "expected": []
+      },
+      "status": "pass",
+      "wrongDestinations": []
+    },
+    "N04": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": null,
+        "order": null,
+        "sections": "pass",
+        "useful": "pass"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
+      "sections": {
+        "actual": [],
+        "expected": []
+      },
+      "status": "pass",
+      "wrongDestinations": []
+    },
+    "N05": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": null,
+        "order": null,
+        "sections": "pass",
+        "useful": "pass"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
+      "sections": {
+        "actual": [],
+        "expected": []
+      },
+      "status": "pass",
+      "wrongDestinations": []
+    },
+    "P01": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "fail"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
+      "sections": {
+        "actual": [],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "P02": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "fail",
+        "order": "pass",
+        "sections": "fail",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 12
+      },
+      "enter": "team:2026-27/132458",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [
+        "event:2025-26/4041"
+      ],
+      "rows": {
+        "teams": [
+          "team:2026-27/132458",
+          "team:2026-27/132459",
+          "team:2026-27/132460",
+          "team:2026-27/132461",
+          "team:2026-27/132462",
+          "team:2026-27/132463"
+        ]
+      },
+      "rr": {
+        "teams": 1
+      },
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "P03": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "pass"
+      },
+      "counts": {
+        "events": 3
+      },
+      "enter": "event:2025-26/4251",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "event:2025-26/4251",
+          "event:2023-24/3064",
+          "event:2021-22/2436"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "events"
+        ],
+        "expected": [
+          "events",
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "P04": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": "fail",
+        "mustShow": "unsupported",
+        "order": "pass",
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 12
+      },
+      "enter": "team:2021-22/55512",
+      "exact": {
+        "teams": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [
+        "club:1760 (6 rows)"
+      ],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2021-22/55512",
+          "team:2022-23/68845",
+          "team:2023-24/82166",
+          "team:2024-25/84686",
+          "team:2025-26/79075",
+          "team:2026-27/133854"
+        ]
+      },
+      "rr": {
+        "teams": 1
+      },
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "P05": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": "pass",
+        "mustShow": "unsupported",
+        "order": "pass",
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 6
+      },
+      "enter": "team:2021-22/55512",
+      "exact": {
+        "teams": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2021-22/55512",
+          "team:2022-23/68845",
+          "team:2023-24/82166",
+          "team:2024-25/84686",
+          "team:2025-26/79075",
+          "team:2026-27/133854"
+        ]
+      },
+      "rr": {
+        "teams": 1
+      },
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "P06": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "fail",
+        "useful": "fail"
+      },
+      "counts": {
+        "events": 5,
+        "teams": 6
+      },
+      "enter": "event:2024-25/3975",
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "event:2024-25/3975",
+          "event:2023-24/3238",
+          "event:2022-23/2720",
+          "event:2021-22/2437",
+          "event:2020-21/2289"
+        ],
+        "teams": [
+          "team:2026-27/133819",
+          "team:2026-27/133820",
+          "team:2026-27/133821",
+          "team:2026-27/133822",
+          "team:2026-27/133823",
+          "team:2026-27/133824"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "events",
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "P07": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "fail",
+        "order": null,
+        "sections": "fail",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 18
+      },
+      "enter": "team:2021-22/59771",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [
+        "club:3716 [within=8]",
+        "event:2025-26/4133 [within=6]"
+      ],
+      "rows": {
+        "teams": [
+          "team:2021-22/59771",
+          "team:2022-23/68888",
+          "team:2023-24/62249",
+          "team:2024-25/81125",
+          "team:2025-26/99201",
+          "team:2026-27/121185"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "P08": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": "unsupported",
+        "order": "pass",
+        "sections": "fail",
+        "useful": "fail"
+      },
+      "counts": {
+        "events": 2,
+        "teams": 6
+      },
+      "enter": "event:2025-26/4041",
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "events": [
+          "event:2025-26/4041",
+          "event:2022-23/2719"
+        ],
+        "teams": [
+          "team:2026-27/131727",
+          "team:2026-27/131719",
+          "team:2026-27/131715",
+          "team:2026-27/131712",
+          "team:2026-27/131709",
+          "team:2026-27/131706"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "events",
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "events",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "T01": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 1
+      },
+      "enter": "team:2023-24/55477",
+      "exact": {
+        "teams": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2023-24/55477"
+        ]
+      },
+      "rr": {
+        "teams": 1
+      },
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "T02": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 12
+      },
+      "enter": "team:2021-22/42498",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2021-22/42498",
+          "team:2022-23/64956",
+          "team:2023-24/61426",
+          "team:2024-25/89212",
+          "team:2025-26/100497",
+          "team:2026-27/107988"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "T03": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": "pass",
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 8
+      },
+      "enter": "team:2021-22/59553",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2021-22/59553",
+          "team:2022-23/48667",
+          "team:2023-24/80765",
+          "team:2024-25/94686",
+          "team:2025-26/82159",
+          "team:2026-27/111690"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "T04": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 2
+      },
+      "enter": "team:2024-25/94686",
+      "exact": {
+        "teams": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2024-25/94686",
+          "team:2024-25/59609"
+        ]
+      },
+      "rr": {
+        "teams": 1
+      },
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "T05": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 6
+      },
+      "enter": "team:2026-27/45834",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2026-27/45834",
+          "team:2026-27/59536",
+          "team:2023-24/78164",
+          "team:2024-25/81903",
+          "team:2025-26/105642",
+          "team:2026-27/120529"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "T06": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 6
+      },
+      "enter": "team:2021-22/33438",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2021-22/33438",
+          "team:2022-23/33633",
+          "team:2023-24/55477",
+          "team:2024-25/55325",
+          "team:2025-26/84876",
+          "team:2026-27/97182"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "T07": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 4
+      },
+      "enter": "team:2025-26/112295",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2025-26/112295",
+          "team:2026-27/133392",
+          "team:2025-26/112296",
+          "team:2026-27/133400"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "T08": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 3
+      },
+      "enter": "team:2026-27/128086",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2026-27/128086",
+          "team:2021-22/13678",
+          "team:2026-27/128084"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "T09": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 1
+      },
+      "enter": "team:2023-24/55477",
+      "exact": {
+        "teams": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2023-24/55477"
+        ]
+      },
+      "rr": {
+        "teams": 1
+      },
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "W01": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "unsupported",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 6
+      },
+      "enter": "team:2026-27/132458",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2026-27/132458",
+          "team:2026-27/132459",
+          "team:2026-27/132460",
+          "team:2026-27/132461",
+          "team:2026-27/132462",
+          "team:2026-27/132463"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "W02": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "unsupported",
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "pass",
+        "useful": "pass"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
+      "sections": {
+        "actual": [],
+        "expected": []
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "W03": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 6
+      },
+      "enter": "team:2021-22/59771",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2021-22/59771",
+          "team:2022-23/68888",
+          "team:2023-24/62249",
+          "team:2024-25/81125",
+          "team:2025-26/99201",
+          "team:2026-27/121185"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "W04": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "pass",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 6
+      },
+      "enter": "team:2026-27/131727",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2026-27/131727",
+          "team:2026-27/131719",
+          "team:2026-27/131715",
+          "team:2026-27/131712",
+          "team:2026-27/131709",
+          "team:2026-27/131706"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "W05": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 1
+      },
+      "enter": "team:2023-24/74987",
+      "exact": {
+        "teams": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2023-24/74987"
+        ]
+      },
+      "rr": {
+        "teams": 1
+      },
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "Y01": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 12
+      },
+      "enter": "team:2021-22/42498",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2021-22/42498",
+          "team:2022-23/64956",
+          "team:2023-24/61426",
+          "team:2024-25/89212",
+          "team:2025-26/100497",
+          "team:2026-27/107988"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "Y02": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 6
+      },
+      "enter": "team:2021-22/33438",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2021-22/33438",
+          "team:2022-23/33633",
+          "team:2023-24/55477",
+          "team:2024-25/55325",
+          "team:2025-26/84876",
+          "team:2026-27/97182"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "Y03": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "unsupported",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 6
+      },
+      "enter": "team:2026-27/132458",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2026-27/132458",
+          "team:2026-27/132459",
+          "team:2026-27/132460",
+          "team:2026-27/132461",
+          "team:2026-27/132462",
+          "team:2026-27/132463"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "Y04": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "fail",
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 54
+      },
+      "enter": "team:2022-23/69035",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [
+        "club:1689 (6 rows)",
+        "club:91 (6 rows)"
+      ],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2022-23/69035",
+          "team:2022-23/69036",
+          "team:2023-24/74987",
+          "team:2024-25/95449",
+          "team:2025-26/115151",
+          "team:2026-27/135939"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "Y05": {
+      "capReached": null,
+      "checks": {
+        "exact": "pass",
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 1
+      },
+      "enter": "team:2023-24/31529",
+      "exact": {
+        "teams": "pass"
+      },
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2023-24/31529"
+        ]
+      },
+      "rr": {
+        "teams": 1
+      },
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    },
+    "Y06": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "pass",
+        "order": null,
+        "sections": "unsupported",
+        "useful": "pass"
+      },
+      "counts": {
+        "teams": 6
+      },
+      "enter": "team:2026-27/130900",
+      "exact": null,
+      "firstUseful": 1,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {
+        "teams": [
+          "team:2026-27/130900",
+          "team:2026-27/130975",
+          "team:2026-27/130974",
+          "team:2026-27/130972",
+          "team:2026-27/126748",
+          "team:2026-27/126631"
+        ]
+      },
+      "rr": {},
+      "sections": {
+        "actual": [
+          "teams"
+        ],
+        "expected": [
+          "teams",
+          "games"
+        ]
+      },
+      "status": "unsupported",
+      "wrongDestinations": []
+    }
+  },
+  "summary": {
+    "groups": {
+      "cities": {
+        "capReached": null,
+        "fail": 7,
+        "firstUseful": 5,
+        "firstUsefulRate": 0.625,
+        "mrr": {
+          "events": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "games": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "teams": {
+            "all": 1,
+            "judged": 3,
+            "supported": 3,
+            "supportedOnly": 1
+          }
+        },
+        "mustNeverHits": 1,
+        "mustShowMissing": 3,
+        "pass": 0,
+        "queries": 8,
+        "sectionsAgree": 0,
+        "sectionsAgreeRate": 0,
+        "sectionsAgreeRateSupported": 0,
+        "sectionsAgreeSupported": 0,
+        "sectionsSupported": 6,
+        "unsupported": 1,
+        "wrongDestinations": 0
+      },
+      "collisions": {
+        "capReached": null,
+        "fail": 4,
+        "firstUseful": 4,
+        "firstUsefulRate": 0.5714,
+        "mrr": {
+          "events": {
+            "all": 0.25,
+            "judged": 4,
+            "supported": 4,
+            "supportedOnly": 0.25
+          },
+          "games": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "teams": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          }
+        },
+        "mustNeverHits": 0,
+        "mustShowMissing": 4,
+        "pass": 2,
+        "queries": 7,
+        "sectionsAgree": 2,
+        "sectionsAgreeRate": 0.2857,
+        "sectionsAgreeRateSupported": 0.3333,
+        "sectionsAgreeSupported": 2,
+        "sectionsSupported": 6,
+        "unsupported": 1,
+        "wrongDestinations": 0
+      },
+      "events": {
+        "capReached": null,
+        "fail": 3,
+        "firstUseful": 7,
+        "firstUsefulRate": 0.875,
+        "mrr": {
+          "events": {
+            "all": 0.9375,
+            "judged": 8,
+            "supported": 8,
+            "supportedOnly": 0.9375
+          },
+          "games": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "teams": {
+            "all": 1,
+            "judged": 2,
+            "supported": 2,
+            "supportedOnly": 1
+          }
+        },
+        "mustNeverHits": 10,
+        "mustShowMissing": 0,
+        "pass": 2,
+        "queries": 8,
+        "sectionsAgree": 2,
+        "sectionsAgreeRate": 0.25,
+        "sectionsAgreeRateSupported": 1,
+        "sectionsAgreeSupported": 2,
+        "sectionsSupported": 2,
+        "unsupported": 3,
+        "wrongDestinations": 0
+      },
+      "fields": {
+        "capReached": null,
+        "fail": 0,
+        "firstUseful": 0,
+        "firstUsefulRate": 0,
+        "mrr": {
+          "events": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "games": {
+            "all": 0,
+            "judged": 3,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "teams": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          }
+        },
+        "mustNeverHits": 0,
+        "mustShowMissing": 0,
+        "pass": 0,
+        "queries": 5,
+        "sectionsAgree": 0,
+        "sectionsAgreeRate": 0,
+        "sectionsAgreeRateSupported": null,
+        "sectionsAgreeSupported": 0,
+        "sectionsSupported": 0,
+        "unsupported": 5,
+        "wrongDestinations": 0
+      },
+      "games-h2h": {
+        "capReached": null,
+        "fail": 7,
+        "firstUseful": 0,
+        "firstUsefulRate": 0,
+        "mrr": {
+          "events": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "games": {
+            "all": 0,
+            "judged": 6,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "teams": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          }
+        },
+        "mustNeverHits": 0,
+        "mustShowMissing": 0,
+        "pass": 0,
+        "queries": 7,
+        "sectionsAgree": 0,
+        "sectionsAgreeRate": 0,
+        "sectionsAgreeRateSupported": 0,
+        "sectionsAgreeSupported": 0,
+        "sectionsSupported": 7,
+        "unsupported": 0,
+        "wrongDestinations": 0
+      },
+      "not-ignored": {
+        "capReached": null,
+        "fail": 0,
+        "firstUseful": 5,
+        "firstUsefulRate": 1,
+        "mrr": {
+          "events": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "games": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "teams": {
+            "all": 1,
+            "judged": 1,
+            "supported": 1,
+            "supportedOnly": 1
+          }
+        },
+        "mustNeverHits": 0,
+        "mustShowMissing": 0,
+        "pass": 0,
+        "queries": 5,
+        "sectionsAgree": 1,
+        "sectionsAgreeRate": 0.2,
+        "sectionsAgreeRateSupported": 1,
+        "sectionsAgreeSupported": 1,
+        "sectionsSupported": 1,
+        "unsupported": 5,
+        "wrongDestinations": 0
+      },
+      "nothing": {
+        "capReached": null,
+        "fail": 0,
+        "firstUseful": 5,
+        "firstUsefulRate": 1,
+        "mrr": {
+          "events": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "games": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "teams": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          }
+        },
+        "mustNeverHits": 0,
+        "mustShowMissing": 0,
+        "pass": 5,
+        "queries": 5,
+        "sectionsAgree": 5,
+        "sectionsAgreeRate": 1,
+        "sectionsAgreeRateSupported": 1,
+        "sectionsAgreeSupported": 5,
+        "sectionsSupported": 5,
+        "unsupported": 0,
+        "wrongDestinations": 0
+      },
+      "team-names": {
+        "capReached": null,
+        "fail": 0,
+        "firstUseful": 9,
+        "firstUsefulRate": 1,
+        "mrr": {
+          "events": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "games": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "teams": {
+            "all": 1,
+            "judged": 3,
+            "supported": 3,
+            "supportedOnly": 1
+          }
+        },
+        "mustNeverHits": 0,
+        "mustShowMissing": 0,
+        "pass": 0,
+        "queries": 9,
+        "sectionsAgree": 0,
+        "sectionsAgreeRate": 0,
+        "sectionsAgreeRateSupported": null,
+        "sectionsAgreeSupported": 0,
+        "sectionsSupported": 0,
+        "unsupported": 9,
+        "wrongDestinations": 0
+      },
+      "typos": {
+        "capReached": null,
+        "fail": 1,
+        "firstUseful": 6,
+        "firstUsefulRate": 1,
+        "mrr": {
+          "events": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "games": {
+            "all": null,
+            "judged": 0,
+            "supported": 0,
+            "supportedOnly": null
+          },
+          "teams": {
+            "all": 1,
+            "judged": 1,
+            "supported": 1,
+            "supportedOnly": 1
+          }
+        },
+        "mustNeverHits": 2,
+        "mustShowMissing": 0,
+        "pass": 0,
+        "queries": 6,
+        "sectionsAgree": 0,
+        "sectionsAgreeRate": 0,
+        "sectionsAgreeRateSupported": null,
+        "sectionsAgreeSupported": 0,
+        "sectionsSupported": 0,
+        "unsupported": 5,
+        "wrongDestinations": 0
+      }
+    },
+    "overall": {
+      "capReached": null,
+      "fail": 22,
+      "firstUseful": 41,
+      "firstUsefulRate": 0.6833,
+      "mrr": {
+        "events": {
+          "all": 0.7083,
+          "judged": 12,
+          "supported": 12,
+          "supportedOnly": 0.7083
+        },
+        "games": {
+          "all": 0,
+          "judged": 9,
+          "supported": 0,
+          "supportedOnly": null
+        },
+        "teams": {
+          "all": 1,
+          "judged": 10,
+          "supported": 10,
+          "supportedOnly": 1
+        }
+      },
+      "mustNeverHits": 13,
+      "mustShowMissing": 7,
+      "pass": 9,
+      "queries": 60,
+      "sectionsAgree": 10,
+      "sectionsAgreeRate": 0.1667,
+      "sectionsAgreeRateSupported": 0.3704,
+      "sectionsAgreeSupported": 10,
+      "sectionsSupported": 27,
+      "unsupported": 29,
+      "wrongDestinations": 0
+    }
+  }
+}

@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -447,6 +447,35 @@ Ctrl/Cmd-click or middle-click a new tab.
   remembered as the team index's is (#92); `?live=1` has no team search.
 - The Playoffs and Showcases tabs keep their own "Filter this table" box, which highlights teams
   in the table on screen.
+
+### Judged search queries
+
+`tests/search/` holds about 60 judged queries in nine groups (#149 phase 1, #156): what each
+must show, must never show, the expected section order (teams, events, games), and, on frozen
+or closed-season data only, the expected top results. Judgements are facts from the archive and
+the owner's decisions (D1–D13, listed in `queries.json`), never the engine's output.
+`tests/search-judged.test.mjs` runs them on frozen fixtures against a vendored copy of today's
+search and compares the outcome with the recorded baseline, `tests/search/baseline/today.json`.
+Queries today's search cannot answer (games, fields, head to head, nearby and partial labels)
+are recorded as `unsupported`; judgements it gets wrong are recorded as `fail`. Neither fails CI.
+Later engines are measured against that baseline on the same queries.
+
+- **Any change to today's search** (the `TEAM_SEARCH` block or the page's code from
+  `let usDb` to `(function usWire` in `public/index.html`) re-vendors and re-records in the
+  same PR, and explains the baseline diff:
+  `node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --vendor --record today`.
+  When a later PR removes that code on purpose, it sets `retired: { pr, reason }` in
+  `tests/search/fixtures/MANIFEST.json`. A missing marker never skips the check silently.
+- **A query change** re-records too (`--record today`); the baseline header holds the query
+  file's checksum.
+- **Re-freezing** (rare, its own reviewed PR):
+  `node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --freeze --commit <sha> --record today`.
+  It copies the committed directory and catalog (club logos dropped, #117), and the cited
+  closed-season games and fields from the schedule files, as LF text. It reads files only:
+  no git, no network. Checksums are over LF text, so a CRLF checkout passes.
+- The clock and time zone are injected (`context` in `queries.json`); a canary engine proves
+  it. Closed-season facts the queries cite are compared with the live archive on every run,
+  never squad grouping or club details, so a data refresh cannot break CI (#151).
 
 ## Team history
 

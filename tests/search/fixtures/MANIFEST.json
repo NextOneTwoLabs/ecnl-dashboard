@@ -1,0 +1,23 @@
+{
+  "activeSeason": "2026-27",
+  "commit": "1c4c32686e49a3592ab116d26d37cc620caf7b46",
+  "engineSha": "1a54fe54edcd6407d9225f19413d38a937a589d7920d0e329b0deb6e9c7f1fe0",
+  "files": {
+    "directory.json": {
+      "bytes": 386780,
+      "sha256": "b1fa5eead19a08974b10404d080226ebc8caf7f4461e946514b7bbeb8453cebd"
+    },
+    "games-judged.json": {
+      "bytes": 75791,
+      "sha256": "ca12e36020c5de37aac353b2dcc7f3150ea44096fee216a693ec67a0aaf32c79"
+    },
+    "sources.json": {
+      "bytes": 32902,
+      "sha256": "1886a376b2e1aec21e29bb595bbaa9bc2750ca302b5a6bf8ab5ddb4ecaaaf505"
+    }
+  },
+  "logos": "dropped from directory.json (#117)",
+  "refreshUpdatedAt": "2026-10-15T22:10:33Z",
+  "retired": null,
+  "schema": 1
+}

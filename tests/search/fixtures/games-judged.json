@@ -1,0 +1,3624 @@
+{
+  "about": "The closed-season games and the fields the judged queries cite (#156). Trimmed: no logos. Fields are a normalised name plus zip (D6).",
+  "fields": [
+    {
+      "complexIDs": [
+        2302,
+        5901,
+        8833
+      ],
+      "name": "60 Acres Park",
+      "numberGames": {},
+      "numbers": {
+        "1": 81,
+        "2": 76,
+        "3": 68,
+        "4": 73,
+        "5": 75,
+        "7": 80,
+        "8": 78,
+        "9": 84,
+        "10": 82,
+        "11": 77,
+        "12": 79,
+        "13": 83,
+        "14": 78,
+        "15": 81,
+        "16": 76,
+        "17": 67,
+        "18": 41,
+        "19": 77,
+        "20": 72,
+        "21": 76,
+        "22": 69,
+        "24": 68
+      },
+      "seasons": {
+        "2021-22": 603,
+        "2023-24": 570,
+        "2025-26": 468
+      },
+      "zip": "98052"
+    },
+    {
+      "complexIDs": [
+        80,
+        422,
+        1018,
+        2555,
+        2838,
+        3069,
+        3075,
+        3416,
+        4559,
+        6698,
+        7083,
+        7319
+      ],
+      "name": "Great Park",
+      "numberGames": {
+        "15": [
+          209779,
+          210325,
+          210329,
+          275491,
+          275502,
+          275513,
+          275516,
+          275524,
+          275527,
+          275535,
+          275538,
+          275560,
+          275570,
+          275577,
+          275578,
+          275580,
+          275587,
+          275588,
+          275597,
+          275598,
+          275599,
+          275607,
+          275608,
+          275609,
+          364587,
+          364745,
+          364747,
+          364788,
+          364860,
+          364946,
+          364948,
+          364989,
+          365061,
+          365147,
+          365149,
+          365190,
+          365262,
+          365348,
+          365350,
+          365391,
+          365549,
+          365551,
+          365592,
+          365664,
+          365750,
+          365752,
+          539339,
+          539343,
+          539347,
+          539609,
+          539613,
+          539617,
+          656985,
+          656986,
+          657040,
+          657042,
+          657044
+        ]
+      },
+      "numbers": {
+        "4": 57,
+        "5": 9,
+        "6": 21,
+        "7": 44,
+        "8": 102,
+        "9": 96,
+        "10": 49,
+        "11": 29,
+        "12": 3,
+        "13": 8,
+        "14": 3,
+        "15": 57,
+        "16": 28,
+        "17": 77,
+        "18": 40,
+        "19": 14,
+        "20": 6,
+        "21": 2,
+        "22": 10,
+        "23": 2,
+        "24": 6
+      },
+      "seasons": {
+        "2020-21": 92,
+        "2021-22": 174,
+        "2022-23": 112,
+        "2023-24": 68,
+        "2024-25": 84,
+        "2025-26": 84,
+        "2026-27": 49
+      },
+      "zip": "92618"
+    },
+    {
+      "complexIDs": [
+        451,
+        2820,
+        2824,
+        2829,
+        2831,
+        3731,
+        4746
+      ],
+      "name": "Surf Sports Park",
+      "numberGames": {},
+      "numbers": {
+        "1": 109,
+        "2": 114,
+        "3": 74,
+        "4": 81,
+        "5": 65,
+        "6": 67,
+        "7": 41,
+        "8": 57,
+        "9": 69,
+        "10": 63,
+        "11": 99,
+        "12": 99,
+        "13": 58,
+        "14": 41,
+        "15": 53,
+        "16": 55,
+        "17": 50,
+        "18": 46
+      },
+      "seasons": {
+        "2020-21": 78,
+        "2021-22": 66,
+        "2022-23": 617,
+        "2023-24": 55,
+        "2024-25": 462,
+        "2025-26": 33,
+        "2026-27": 48
+      },
+      "zip": "92014"
+    }
+  ],
+  "games": [
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "LAFC Slammers ECNL GU14",
+        "teamID": 8995
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2021-03-14T13:00:00",
+      "division": "GU14",
+      "eventID": 2034,
+      "flightID": 8854,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL GU14",
+        "teamID": 35189
+      },
+      "matchID": 209429,
+      "path": "2034/8854/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        0
+      ],
+      "season": "2020-21",
+      "type": "Bracket",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL GU14",
+        "teamID": 35189
+      },
+      "complex": "West Creek Soccer Complex",
+      "complexID": 149,
+      "date": "2021-07-17T11:30:00",
+      "division": "GU14",
+      "eventID": 2289,
+      "flightID": 12354,
+      "home": {
+        "clubID": 1656,
+        "name": "LAFC Slammers ECNL GU14",
+        "teamID": 8995
+      },
+      "matchID": 247630,
+      "path": "2289/12354/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        1
+      ],
+      "season": "2020-21",
+      "type": "Bracket",
+      "venue": "Field #04",
+      "zip": "23238"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL GU15",
+        "teamID": 35189
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2022-04-09T15:30:00",
+      "division": "GU15",
+      "eventID": 2368,
+      "flightID": 12820,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL GU15",
+        "teamID": 8995
+      },
+      "matchID": 275583,
+      "path": "2368/12820/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        0
+      ],
+      "season": "2021-22",
+      "type": "Bracket",
+      "venue": "Field 10",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL GU15",
+        "teamID": 8995
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2022-05-14T11:00:00",
+      "division": "GU15",
+      "eventID": 2368,
+      "flightID": 12820,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL GU15",
+        "teamID": 35189
+      },
+      "matchID": 275656,
+      "path": "2368/12820/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        3
+      ],
+      "season": "2021-22",
+      "type": "Bracket",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G07",
+        "teamID": 35189
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2022-09-11T10:30:00",
+      "division": "G2007",
+      "eventID": 2525,
+      "flightID": 16254,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G07",
+        "teamID": 8995
+      },
+      "matchID": 365075,
+      "path": "2525/16254/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        0
+      ],
+      "season": "2022-23",
+      "type": "Bracket",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G07",
+        "teamID": 8995
+      },
+      "complex": "OC Great Park",
+      "complexID": 80,
+      "date": "2023-04-22T14:00:00",
+      "division": "G2007",
+      "eventID": 2525,
+      "flightID": 16254,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G07",
+        "teamID": 35189
+      },
+      "matchID": 365136,
+      "path": "2525/16254/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        7
+      ],
+      "season": "2022-23",
+      "type": "Bracket",
+      "venue": "Field 18",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 69,
+        "name": "Mustang SC ECNL G11",
+        "teamID": 31529
+      },
+      "complex": "Crittenden",
+      "complexID": 34,
+      "date": "2024-05-04T11:00:00",
+      "division": "G2011",
+      "eventID": 2854,
+      "flightID": 19926,
+      "home": {
+        "clubID": 294,
+        "name": "MVLA ECNL G11",
+        "teamID": 55477
+      },
+      "matchID": 482871,
+      "path": "2854/19926/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 1",
+      "zip": "94043"
+    },
+    {
+      "away": {
+        "clubID": 294,
+        "name": "MVLA ECNL G11",
+        "teamID": 55477
+      },
+      "complex": "Provident Field @ MSC",
+      "complexID": 27,
+      "date": "2023-10-28T09:00:00",
+      "division": "G2011",
+      "eventID": 2854,
+      "flightID": 19926,
+      "home": {
+        "clubID": 69,
+        "name": "Mustang SC ECNL G11",
+        "teamID": 31529
+      },
+      "matchID": 483171,
+      "path": "2854/19926/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Lower",
+      "zip": "94506"
+    },
+    {
+      "away": {
+        "clubID": 82,
+        "name": "LAFC So Cal ECNL G09",
+        "teamID": 59866
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-10-28T13:00:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19795,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G09",
+        "teamID": 42498
+      },
+      "matchID": 538645,
+      "path": "2837/19795/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 82,
+        "name": "LAFC So Cal ECNL G10",
+        "teamID": 65560
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-10-28T09:45:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19797,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G10",
+        "teamID": 64956
+      },
+      "matchID": 538648,
+      "path": "2837/19797/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 82,
+        "name": "LAFC So Cal ECNL G11",
+        "teamID": 82136
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-10-28T11:30:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19799,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G11",
+        "teamID": 61426
+      },
+      "matchID": 538651,
+      "path": "2837/19799/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        4,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G09",
+        "teamID": 60035
+      },
+      "complex": "Golden West College",
+      "complexID": 55,
+      "date": "2024-04-27T13:45:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19795,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G09",
+        "teamID": 42498
+      },
+      "matchID": 538789,
+      "path": "2837/19795/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        2
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 1",
+      "zip": "92647"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G10",
+        "teamID": 69520
+      },
+      "complex": "Golden West College",
+      "complexID": 55,
+      "date": "2024-04-27T15:30:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19797,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G10",
+        "teamID": 64956
+      },
+      "matchID": 538794,
+      "path": "2837/19797/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 1",
+      "zip": "92647"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G11",
+        "teamID": 82132
+      },
+      "complex": "Golden West College",
+      "complexID": 55,
+      "date": "2024-04-27T17:15:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19799,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G11",
+        "teamID": 61426
+      },
+      "matchID": 538799,
+      "path": "2837/19799/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        5
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 1",
+      "zip": "92647"
+    },
+    {
+      "away": {
+        "clubID": 82,
+        "name": "LAFC So Cal ECNL G06/05",
+        "teamID": 45889
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-10-28T16:45:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19794,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G06/05",
+        "teamID": 9292
+      },
+      "matchID": 538975,
+      "path": "2837/19794/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        2
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 82,
+        "name": "LAFC So Cal ECNL G07",
+        "teamID": 45888
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-10-28T14:45:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19796,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G07",
+        "teamID": 18022
+      },
+      "matchID": 538978,
+      "path": "2837/19796/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 82,
+        "name": "LAFC So Cal ECNL G08",
+        "teamID": 45887
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-10-28T08:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19798,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G08",
+        "teamID": 9288
+      },
+      "matchID": 538981,
+      "path": "2837/19798/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        5,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 61,
+        "name": "Legends FC ECNL G06/05",
+        "teamID": 4624
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2024-05-16T19:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19794,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G06/05",
+        "teamID": 9292
+      },
+      "matchID": 539045,
+      "path": "2837/19794/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 22",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G06/05",
+        "teamID": 13344
+      },
+      "complex": "Golden West College",
+      "complexID": 55,
+      "date": "2024-04-27T08:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19794,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G06/05",
+        "teamID": 9292
+      },
+      "matchID": 539119,
+      "path": "2837/19794/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 1",
+      "zip": "92647"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G07",
+        "teamID": 35189
+      },
+      "complex": "Golden West College",
+      "complexID": 55,
+      "date": "2024-04-27T10:00:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19796,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G07",
+        "teamID": 18022
+      },
+      "matchID": 539124,
+      "path": "2837/19796/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 1",
+      "zip": "92647"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G08",
+        "teamID": 29588
+      },
+      "complex": "Golden West College",
+      "complexID": 55,
+      "date": "2024-04-27T12:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19798,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G08",
+        "teamID": 9288
+      },
+      "matchID": 539129,
+      "path": "2837/19798/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 1",
+      "zip": "92647"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G09",
+        "teamID": 54921
+      },
+      "complex": "Saddleback College",
+      "complexID": 5542,
+      "date": "2023-11-19T11:45:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G09",
+        "teamID": 60035
+      },
+      "matchID": 539201,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        2
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G10",
+        "teamID": 64905
+      },
+      "complex": "Saddleback College",
+      "complexID": 5542,
+      "date": "2023-11-19T15:30:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G10",
+        "teamID": 69520
+      },
+      "matchID": 539203,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        3
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G11",
+        "teamID": 64493
+      },
+      "complex": "Saddleback College",
+      "complexID": 5542,
+      "date": "2023-11-19T17:15:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G11",
+        "teamID": 82132
+      },
+      "matchID": 539205,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G09",
+        "teamID": 42498
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-30T13:45:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G09",
+        "teamID": 54921
+      },
+      "matchID": 539248,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 13,
+        "name": "Sporting California USA ECNL G09",
+        "teamID": 59459
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-09-30T10:00:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G09",
+        "teamID": 68893
+      },
+      "matchID": 539249,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G10",
+        "teamID": 64956
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-30T15:30:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G10",
+        "teamID": 64905
+      },
+      "matchID": 539251,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 13,
+        "name": "Sporting California USA ECNL G10",
+        "teamID": 69733
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-09-30T12:00:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G10",
+        "teamID": 68892
+      },
+      "matchID": 539252,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G11",
+        "teamID": 61426
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-30T17:15:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G11",
+        "teamID": 64493
+      },
+      "matchID": 539254,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 13,
+        "name": "Sporting California USA ECNL G11",
+        "teamID": 65758
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-09-30T08:00:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G11",
+        "teamID": 75387
+      },
+      "matchID": 539255,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G09",
+        "teamID": 53810
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-01T13:45:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G09",
+        "teamID": 68893
+      },
+      "matchID": 539257,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 10",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G10",
+        "teamID": 64321
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-01T15:30:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G10",
+        "teamID": 68892
+      },
+      "matchID": 539260,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 10",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G11",
+        "teamID": 79944
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-01T17:15:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G11",
+        "teamID": 75387
+      },
+      "matchID": 539263,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        5,
+        2
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 10",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G09",
+        "teamID": 53810
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-21T13:15:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G09",
+        "teamID": 60035
+      },
+      "matchID": 539288,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G10",
+        "teamID": 64321
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-21T11:30:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G10",
+        "teamID": 69520
+      },
+      "matchID": 539290,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        2
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G11",
+        "teamID": 79944
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-21T08:00:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G11",
+        "teamID": 82132
+      },
+      "matchID": 539292,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        11,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G09",
+        "teamID": 54921
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-28T10:00:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G09",
+        "teamID": 68893
+      },
+      "matchID": 539297,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        2
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 61,
+        "name": "Legends FC ECNL G09",
+        "teamID": 10361
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-28T15:30:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G09",
+        "teamID": 60035
+      },
+      "matchID": 539300,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G10",
+        "teamID": 64905
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-28T12:00:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G10",
+        "teamID": 68892
+      },
+      "matchID": 539302,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        4
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 61,
+        "name": "Legends FC ECNL G10",
+        "teamID": 65115
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-28T17:15:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G10",
+        "teamID": 69520
+      },
+      "matchID": 539305,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        4
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G11",
+        "teamID": 64493
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-28T08:00:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G11",
+        "teamID": 75387
+      },
+      "matchID": 539307,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 61,
+        "name": "Legends FC ECNL G11",
+        "teamID": 24716
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-28T13:45:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G11",
+        "teamID": 82132
+      },
+      "matchID": 539310,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G09",
+        "teamID": 60035
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-09T10:00:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G09",
+        "teamID": 54921
+      },
+      "matchID": 539339,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 15",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G10",
+        "teamID": 69520
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-09T17:30:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G10",
+        "teamID": 64905
+      },
+      "matchID": 539343,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 15",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G11",
+        "teamID": 82132
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-09T15:30:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G11",
+        "teamID": 64493
+      },
+      "matchID": 539347,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 15",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 82,
+        "name": "LAFC So Cal ECNL G10",
+        "teamID": 65560
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2024-05-09T19:00:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G10",
+        "teamID": 64905
+      },
+      "matchID": 539372,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 22",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 300,
+        "name": "Rebels SC ECNL G09",
+        "teamID": 26385
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-20T11:00:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G09",
+        "teamID": 68893
+      },
+      "matchID": 539405,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 300,
+        "name": "Rebels SC ECNL G10",
+        "teamID": 21001
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-20T13:00:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G10",
+        "teamID": 68892
+      },
+      "matchID": 539407,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        2
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 300,
+        "name": "Rebels SC ECNL G11",
+        "teamID": 81798
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-20T13:00:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G11",
+        "teamID": 75387
+      },
+      "matchID": 539409,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 592,
+        "name": "Arizona Arsenal ECNL G09",
+        "teamID": 58586
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-21T11:00:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G09",
+        "teamID": 68893
+      },
+      "matchID": 539411,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 592,
+        "name": "Arizona Arsenal ECNL G10",
+        "teamID": 65042
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-21T13:00:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G10",
+        "teamID": 68892
+      },
+      "matchID": 539413,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 592,
+        "name": "Arizona Arsenal ECNL G11",
+        "teamID": 77284
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-21T13:00:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G11",
+        "teamID": 75387
+      },
+      "matchID": 539415,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1141,
+        "name": "Phoenix Rising ECNL G09",
+        "teamID": 59771
+      },
+      "complex": "OC Great Park",
+      "complexID": 80,
+      "date": "2024-04-28T08:00:00",
+      "division": "G2009",
+      "eventID": 2837,
+      "flightID": 19636,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G09",
+        "teamID": 60035
+      },
+      "matchID": 539423,
+      "path": "2837/19636/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 16",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1141,
+        "name": "Phoenix Rising ECNL G10",
+        "teamID": 68888
+      },
+      "complex": "OC Great Park",
+      "complexID": 80,
+      "date": "2024-04-28T10:00:00",
+      "division": "G2010",
+      "eventID": 2837,
+      "flightID": 19637,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G10",
+        "teamID": 69520
+      },
+      "matchID": 539425,
+      "path": "2837/19637/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        3
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 18",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1141,
+        "name": "Phoenix Rising ECNL G11",
+        "teamID": 62249
+      },
+      "complex": "OC Great Park",
+      "complexID": 80,
+      "date": "2024-04-28T12:00:00",
+      "division": "G2011",
+      "eventID": 2837,
+      "flightID": 19640,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G11",
+        "teamID": 82132
+      },
+      "matchID": 539427,
+      "path": "2837/19640/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        6,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 18",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G06/05",
+        "teamID": 17118
+      },
+      "complex": "Saddleback College",
+      "complexID": 5542,
+      "date": "2023-11-19T09:45:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G06/05",
+        "teamID": 13344
+      },
+      "matchID": 539471,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G07",
+        "teamID": 8995
+      },
+      "complex": "Saddleback College",
+      "complexID": 5542,
+      "date": "2023-11-19T13:30:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G07",
+        "teamID": 35189
+      },
+      "matchID": 539473,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        5
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G08",
+        "teamID": 29720
+      },
+      "complex": "Saddleback College",
+      "complexID": 5542,
+      "date": "2023-11-19T08:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G08",
+        "teamID": 29588
+      },
+      "matchID": 539475,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G06/05",
+        "teamID": 9292
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-30T08:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G06/05",
+        "teamID": 17118
+      },
+      "matchID": 539518,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        2
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 13,
+        "name": "Sporting California USA ECNL G06",
+        "teamID": 20440
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-09-30T12:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G06/05",
+        "teamID": 68897
+      },
+      "matchID": 539519,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        4,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G07",
+        "teamID": 18022
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-30T11:45:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G07",
+        "teamID": 8995
+      },
+      "matchID": 539521,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 13,
+        "name": "Sporting California USA ECNL G07",
+        "teamID": 21540
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-09-30T10:00:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G07",
+        "teamID": 68895
+      },
+      "matchID": 539522,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G08",
+        "teamID": 9288
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-30T10:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G08",
+        "teamID": 29720
+      },
+      "matchID": 539524,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 6",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 13,
+        "name": "Sporting California USA ECNL G08",
+        "teamID": 28062
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-09-30T08:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G08",
+        "teamID": 68894
+      },
+      "matchID": 539525,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G06/05",
+        "teamID": 9899
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-01T08:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G06/05",
+        "teamID": 68897
+      },
+      "matchID": 539527,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        5,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 10",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G07",
+        "teamID": 35180
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-01T10:00:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G07",
+        "teamID": 68895
+      },
+      "matchID": 539530,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        2
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 10",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G08",
+        "teamID": 46835
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-01T12:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G08",
+        "teamID": 68894
+      },
+      "matchID": 539533,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 10",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G06/05",
+        "teamID": 9899
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-21T17:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G06/05",
+        "teamID": 13344
+      },
+      "matchID": 539558,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G07",
+        "teamID": 35180
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-21T15:00:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G07",
+        "teamID": 35189
+      },
+      "matchID": 539560,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 39,
+        "name": "Del Mar Sharks ECNL G08",
+        "teamID": 46835
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-21T09:30:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G08",
+        "teamID": 29588
+      },
+      "matchID": 539562,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G06/05",
+        "teamID": 17118
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-28T10:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G06/05",
+        "teamID": 68897
+      },
+      "matchID": 539567,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 61,
+        "name": "Legends FC ECNL G06/05",
+        "teamID": 4624
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-28T08:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G06/05",
+        "teamID": 13344
+      },
+      "matchID": 539570,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        5
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G07",
+        "teamID": 8995
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-28T08:00:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G07",
+        "teamID": 68895
+      },
+      "matchID": 539572,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        4
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 61,
+        "name": "Legends FC ECNL G07",
+        "teamID": 28540
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-28T10:00:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G07",
+        "teamID": 35189
+      },
+      "matchID": 539575,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        4
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G08",
+        "teamID": 29720
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2023-10-28T12:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G08",
+        "teamID": 68894
+      },
+      "matchID": 539577,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        4
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 61,
+        "name": "Legends FC ECNL G08",
+        "teamID": 8362
+      },
+      "complex": "OC Great Park",
+      "complexID": 2838,
+      "date": "2023-10-28T12:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G08",
+        "teamID": 29588
+      },
+      "matchID": 539580,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 4",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G06/05",
+        "teamID": 13344
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-09T08:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G06/05",
+        "teamID": 17118
+      },
+      "matchID": 539609,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        5,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 15",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G07",
+        "teamID": 35189
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-09T11:30:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G07",
+        "teamID": 8995
+      },
+      "matchID": 539613,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 15",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G08",
+        "teamID": 29588
+      },
+      "complex": "Orange County Great Park",
+      "complexID": 1018,
+      "date": "2023-09-09T13:30:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G08",
+        "teamID": 29720
+      },
+      "matchID": 539617,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 15",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 300,
+        "name": "Rebels SC ECNL G06/05",
+        "teamID": 35184
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-20T09:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G06/05",
+        "teamID": 68897
+      },
+      "matchID": 539675,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        4
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 300,
+        "name": "Rebels SC ECNL G07",
+        "teamID": 9867
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-20T11:00:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G07",
+        "teamID": 68895
+      },
+      "matchID": 539677,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        4,
+        5
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 300,
+        "name": "Rebels SC ECNL G08",
+        "teamID": 19029
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-20T09:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G08",
+        "teamID": 68894
+      },
+      "matchID": 539679,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 592,
+        "name": "Arizona Arsenal ECNL G06/05",
+        "teamID": 20434
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-21T11:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G06/05",
+        "teamID": 68897
+      },
+      "matchID": 539681,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 592,
+        "name": "Arizona Arsenal ECNL G07",
+        "teamID": 33451
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-21T09:00:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G07",
+        "teamID": 68895
+      },
+      "matchID": 539683,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 9",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 592,
+        "name": "Arizona Arsenal ECNL G08",
+        "teamID": 45882
+      },
+      "complex": "Great Park",
+      "complexID": 2555,
+      "date": "2024-04-21T09:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G08",
+        "teamID": 68894
+      },
+      "matchID": 539685,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 8",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1141,
+        "name": "Phoenix Rising ECNL G06/05",
+        "teamID": 20445
+      },
+      "complex": "OC Great Park",
+      "complexID": 80,
+      "date": "2024-04-28T08:00:00",
+      "division": "G2006/2005",
+      "eventID": 2837,
+      "flightID": 19635,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G06/05",
+        "teamID": 13344
+      },
+      "matchID": 539693,
+      "path": "2837/19635/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        4,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 18",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1141,
+        "name": "Phoenix Rising ECNL G07",
+        "teamID": 35183
+      },
+      "complex": "OC Great Park",
+      "complexID": 80,
+      "date": "2024-04-28T12:30:00",
+      "division": "G2007",
+      "eventID": 2837,
+      "flightID": 19638,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G07",
+        "teamID": 35189
+      },
+      "matchID": 539695,
+      "path": "2837/19638/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        1
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 16",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 1141,
+        "name": "Phoenix Rising ECNL G08",
+        "teamID": 45886
+      },
+      "complex": "OC Great Park",
+      "complexID": 80,
+      "date": "2024-04-28T10:00:00",
+      "division": "G2008",
+      "eventID": 2837,
+      "flightID": 19639,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G08",
+        "teamID": 29588
+      },
+      "matchID": 539697,
+      "path": "2837/19639/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2023-24",
+      "type": "Group Play",
+      "venue": "Field 16",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G08",
+        "teamID": 29588
+      },
+      "complex": "West Creek Complex",
+      "complexID": 4744,
+      "date": "2024-07-11T10:00:00",
+      "division": "G2008",
+      "eventID": 3238,
+      "flightID": 25235,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G08",
+        "teamID": 29720
+      },
+      "matchID": 635435,
+      "path": "3238/25235/0.json",
+      "pk": [
+        5,
+        3
+      ],
+      "score": [
+        2,
+        2
+      ],
+      "season": "2023-24",
+      "type": "Bracket",
+      "venue": "Field #03",
+      "zip": "23238"
+    },
+    {
+      "away": {
+        "clubID": 69,
+        "name": "Mustang SC ECNL G11",
+        "teamID": 31529
+      },
+      "complex": "Graham Middle School",
+      "complexID": 23,
+      "date": "2024-10-19T10:45:00",
+      "division": "G2011",
+      "eventID": 3161,
+      "flightID": 24101,
+      "home": {
+        "clubID": 294,
+        "name": "MVLA ECNL G11",
+        "teamID": 55477
+      },
+      "matchID": 644820,
+      "path": "3161/24101/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        2
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Turf",
+      "zip": "94040"
+    },
+    {
+      "away": {
+        "clubID": 294,
+        "name": "MVLA ECNL G11",
+        "teamID": 55477
+      },
+      "complex": "Provident Field @ MSC",
+      "complexID": 27,
+      "date": "2025-04-26T13:00:00",
+      "division": "G2011",
+      "eventID": 3161,
+      "flightID": 24101,
+      "home": {
+        "clubID": 69,
+        "name": "Mustang SC ECNL G11",
+        "teamID": 31529
+      },
+      "matchID": 644874,
+      "path": "3161/24101/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Lower",
+      "zip": "94506"
+    },
+    {
+      "away": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G07/06",
+        "teamID": 8995
+      },
+      "complex": "OC Great Park",
+      "complexID": 80,
+      "date": "2024-11-02T12:30:00",
+      "division": "G2007/2006",
+      "eventID": 3165,
+      "flightID": 24128,
+      "home": {
+        "clubID": 98,
+        "name": "So Cal Blues ECNL G07/06",
+        "teamID": 35189
+      },
+      "matchID": 656937,
+      "path": "3165/24128/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        3
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Field 17",
+      "zip": "92618"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G07/06",
+        "teamID": 89862
+      },
+      "complex": "Saddleback College",
+      "complexID": 4070,
+      "date": "2024-11-17T15:30:00",
+      "division": "G2007/2006",
+      "eventID": 3165,
+      "flightID": 24128,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G07/06",
+        "teamID": 8995
+      },
+      "matchID": 657141,
+      "path": "3165/24128/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        8,
+        0
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Turf Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G08",
+        "teamID": 68894
+      },
+      "complex": "Saddleback College",
+      "complexID": 4070,
+      "date": "2024-11-17T10:15:00",
+      "division": "G2008",
+      "eventID": 3165,
+      "flightID": 24130,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G08",
+        "teamID": 29720
+      },
+      "matchID": 657142,
+      "path": "3165/24130/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        5,
+        0
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Turf Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G09",
+        "teamID": 68893
+      },
+      "complex": "Saddleback College",
+      "complexID": 4070,
+      "date": "2024-11-17T08:30:00",
+      "division": "G2009",
+      "eventID": 3165,
+      "flightID": 24133,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G09",
+        "teamID": 54921
+      },
+      "matchID": 657143,
+      "path": "3165/24133/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        0
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Turf Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G10",
+        "teamID": 68892
+      },
+      "complex": "Saddleback College",
+      "complexID": 4070,
+      "date": "2024-11-17T17:30:00",
+      "division": "G2010",
+      "eventID": 3165,
+      "flightID": 24129,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G10",
+        "teamID": 64905
+      },
+      "matchID": 657144,
+      "path": "3165/24129/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Turf Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G11",
+        "teamID": 75387
+      },
+      "complex": "Saddleback College",
+      "complexID": 4070,
+      "date": "2024-11-17T13:45:00",
+      "division": "G2011",
+      "eventID": 3165,
+      "flightID": 24131,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G11",
+        "teamID": 64493
+      },
+      "matchID": 657145,
+      "path": "3165/24131/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        6,
+        0
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Turf Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G12",
+        "teamID": 53888
+      },
+      "complex": "Saddleback College",
+      "complexID": 4070,
+      "date": "2024-11-17T12:15:00",
+      "division": "G2012",
+      "eventID": 3165,
+      "flightID": 24132,
+      "home": {
+        "clubID": 1656,
+        "name": "Slammers FC HB Koge ECNL G12",
+        "teamID": 85791
+      },
+      "matchID": 657146,
+      "path": "3165/24132/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        7,
+        0
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Turf Field",
+      "zip": "92692"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G07/06",
+        "teamID": 89862
+      },
+      "complex": "Silver Lakes Sports Complex (Norco)",
+      "complexID": 4088,
+      "date": "2024-10-26T15:15:00",
+      "division": "G2007/2006",
+      "eventID": 3165,
+      "flightID": 24128,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G07/06",
+        "teamID": 18022
+      },
+      "matchID": 657171,
+      "path": "3165/24128/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        5,
+        1
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Field 17",
+      "zip": "92860"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G08",
+        "teamID": 68894
+      },
+      "complex": "Silver Lakes Sports Complex (Norco)",
+      "complexID": 4088,
+      "date": "2024-10-26T09:45:00",
+      "division": "G2008",
+      "eventID": 3165,
+      "flightID": 24130,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G08",
+        "teamID": 9288
+      },
+      "matchID": 657172,
+      "path": "3165/24130/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        4,
+        0
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Field 16",
+      "zip": "92860"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G09",
+        "teamID": 68893
+      },
+      "complex": "Silver Lakes Sports Complex (Norco)",
+      "complexID": 4088,
+      "date": "2024-10-26T08:00:00",
+      "division": "G2009",
+      "eventID": 3165,
+      "flightID": 24133,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G09",
+        "teamID": 42498
+      },
+      "matchID": 657173,
+      "path": "3165/24133/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        2
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Field 16",
+      "zip": "92860"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G10",
+        "teamID": 68892
+      },
+      "complex": "Silver Lakes Sports Complex (Norco)",
+      "complexID": 4088,
+      "date": "2024-10-26T11:45:00",
+      "division": "G2010",
+      "eventID": 3165,
+      "flightID": 24129,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G10",
+        "teamID": 64956
+      },
+      "matchID": 657174,
+      "path": "3165/24129/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        3
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Field 16",
+      "zip": "92860"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G11",
+        "teamID": 75387
+      },
+      "complex": "Silver Lakes Sports Complex (Norco)",
+      "complexID": 4088,
+      "date": "2024-10-26T13:30:00",
+      "division": "G2011",
+      "eventID": 3165,
+      "flightID": 24131,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G11",
+        "teamID": 61426
+      },
+      "matchID": 657175,
+      "path": "3165/24131/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Field 16",
+      "zip": "92860"
+    },
+    {
+      "away": {
+        "clubID": 186,
+        "name": "Pateadores ECNL G12",
+        "teamID": 53888
+      },
+      "complex": "Silver Lakes Sports Complex (Norco)",
+      "complexID": 4088,
+      "date": "2024-10-26T15:15:00",
+      "division": "G2012",
+      "eventID": 3165,
+      "flightID": 24132,
+      "home": {
+        "clubID": 96,
+        "name": "SLAMMERS FC ECNL G12",
+        "teamID": 89212
+      },
+      "matchID": 657176,
+      "path": "3165/24132/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        4,
+        1
+      ],
+      "season": "2024-25",
+      "type": "Group Play",
+      "venue": "Field 16",
+      "zip": "92860"
+    },
+    {
+      "away": {
+        "clubID": 294,
+        "name": "MVLA ECNL G11",
+        "teamID": 55477
+      },
+      "complex": "Provident Field @ MSC",
+      "complexID": 27,
+      "date": "2026-05-03T13:00:00",
+      "division": "G2011",
+      "eventID": 3929,
+      "flightID": 32896,
+      "home": {
+        "clubID": 69,
+        "name": "Mustang SC ECNL G11",
+        "teamID": 31529
+      },
+      "matchID": 818929,
+      "path": "3929/32896/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        0,
+        1
+      ],
+      "season": "2025-26",
+      "type": "Group Play",
+      "venue": "Lower",
+      "zip": "94506"
+    },
+    {
+      "away": {
+        "clubID": 69,
+        "name": "Mustang SC ECNL G11",
+        "teamID": 31529
+      },
+      "complex": "Foothill College",
+      "complexID": 1375,
+      "date": "2025-09-06T15:00:00",
+      "division": "G2011",
+      "eventID": 3929,
+      "flightID": 32896,
+      "home": {
+        "clubID": 294,
+        "name": "MVLA ECNL G11",
+        "teamID": 55477
+      },
+      "matchID": 818941,
+      "path": "3929/32896/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        3,
+        4
+      ],
+      "season": "2025-26",
+      "type": "Group Play",
+      "venue": "Top Hill Soccer Field",
+      "zip": "94022"
+    },
+    {
+      "away": {
+        "clubID": 69,
+        "name": "Mustang SC ECNL G11",
+        "teamID": 31529
+      },
+      "complex": "60 Acres Park",
+      "complexID": 8833,
+      "date": "2026-07-12T12:00:00",
+      "division": "G2011",
+      "eventID": 4251,
+      "flightID": 39386,
+      "home": {
+        "clubID": 294,
+        "name": "MVLA ECNL G10/11",
+        "teamID": 55477
+      },
+      "matchID": 1047251,
+      "path": "4251/39386/0.json",
+      "pk": [
+        null,
+        null
+      ],
+      "score": [
+        2,
+        2
+      ],
+      "season": "2025-26",
+      "type": "Bracket",
+      "venue": "Field #05",
+      "zip": "98052"
+    }
+  ]
+}
