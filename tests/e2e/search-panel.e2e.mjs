@@ -168,7 +168,29 @@ test('phone: the sheet opens from the header button, traps Tab, Cancel returns f
   await ctx.close();
 });
 
-test('version: a search.mjs with another SEARCH_API shows the reload note, and nothing is fetched or searched', async () => {
+test('action bar: a team that two earlier teams may continue is named whole, never clipped, at 1280 and 390 (MF1 of the review of #166)', async () => {
+  for (const [w, h, phone] of [[1280, 800, false], [390, 844, true]]) {
+    const { ctx } = await context(phone ? { viewport: { width: w, height: h }, isMobile: true, hasTouch: true } : { viewport: { width: w, height: h } });
+    const page = await ctx.newPage();
+    await page.goto(BASE + '/'); await page.waitForTimeout(500);
+    if (phone) await page.locator('#headerSearch').click(); else await page.keyboard.press('/');
+    await ready(page);
+    await page.keyboard.type('Slammers');
+    await page.waitForSelector('#usearchList [role=gridcell]');
+    let text = '';
+    for (let i = 0; i < 40 && !/born 2010$/.test(text); i++) {   // down, then right: HB Koge U17 has two earlier teams
+      await page.keyboard.press(i % 2 ? 'ArrowRight' : 'ArrowDown');
+      text = await page.locator('#usearchActive').textContent();
+    }
+    assert.match(text, /May continue here: 2025-26 team, born 2009; 2025-26 team, born 2010$/, `${w}: ${text}`);
+    const m = await page.evaluate(() => { const e = document.getElementById('usearchActive'), c = getComputedStyle(e); return { clipped: e.scrollHeight > e.clientHeight + 1, clamp: c.webkitLineClamp, overflow: c.overflow, h: e.getBoundingClientRect().height, lineH: parseFloat(c.lineHeight) }; });
+    assert.ok(!m.clipped && m.clamp === 'none', `${w}: ${JSON.stringify(m)}`);
+    assert.ok(m.h >= m.lineH * 2 - 1, `${w}: the long label takes the lines it needs: ${JSON.stringify(m)}`);
+    await ctx.close();
+  }
+});
+
+test('version: a search.mjs with another SEARCH_API shows the reload note, and nothing is searched (the 2 data files are still fetched)', async () => {
   const { ctx, log } = await context({ viewport: { width: 1280, height: 800 } });
   await ctx.route('**/search/search.mjs', async route => {
     const body = (await (await route.fetch()).text()).replace('export const SEARCH_API = 2', 'export const SEARCH_API = 999');

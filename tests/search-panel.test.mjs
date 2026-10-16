@@ -365,6 +365,12 @@ test('Q2, DOM cap: 8 clubs and 6 events at first; "Show all" grows a section in 
   const m1 = f.cells().findIndex(c => c.kind === 'more');
   assert.match(f.cells()[m1].text, /^Show all 578 teams · 51 clubs$/);
   f.sxActivate(m1);
+  // MF2 (review of #166): the first new cell is active, not the "Show 1 more club" cell at the bottom
+  const rowsFc = slateOf('fc').sections[0].rows, keyOf = r => (r.family ? `f:${r.family.name}` : r.clubID === 7 ? `t:${r.line}` : `c:${r.clubID}`);
+  const ninth = [...new Set(rowsFc.filter(r => !( !r.current && r.continuesAs.some(k => rowsFc.find(x => x.key === k && x.current)))).map(keyOf))][8];
+  assert.equal(f.state().sxActive, m1, 'the active cell is where the "more" cell was');
+  assert.equal(keyOf(f.activeCell().team), ninth, "the 9th club's first cell");
+  assert.notEqual(f.activeCell().kind, 'more');
   const m2 = f.cells().findIndex(c => c.kind === 'more');
   assert.equal(f.cells()[m2].text, 'Show 1 more club · 1 left');
   f.sxActivate(m2);
@@ -401,6 +407,36 @@ test('R2, R3: ended teams fold into "+n ended"; a predecessor folds into its liv
   assert.equal(bar.prev.hidden, false);
   assert.equal(bar.prev.href, p.cells()[target].team.sxMay[0].overviewHref);
   assert.match(bar.cls, /us-two/);
+});
+
+test('MF1 (review of #166): a team that two earlier teams may continue names both in the bar, and the label is never clamped', async () => {
+  const p = page(); await p.run('Slammers');
+  for (let k = 0; k < 40 && !(p.activeCell().team && (p.activeCell().team.sxMay || []).length === 2); k++) { p.key('ArrowDown'); p.key('ArrowRight'); }
+  const c = p.activeCell();
+  assert.equal(c.team.sxMay.length, 2, 'precondition: a cell with two predecessors');
+  const b = p.bar();
+  assert.equal((b.text.match(/\d{4}-\d{2} team, born \d{4}/g) || []).length, 2, b.text);
+  assert.match(b.text, /May continue here: 2025-26 team, born 2009; 2025-26 team, born 2010$/);
+  assert.match(b.cls, /us-two/);
+  assert.ok(html.includes('.usearch-pop.sx .us-actions span.us-two { display: block; -webkit-line-clamp: unset; overflow: visible;'), 'no line clamp in the new panel');
+});
+
+test('R3 fallback: a slate whose enter is a team folded into its successor opens on the successor', async () => {
+  const real = slateOf('pateadors'), rows = real.sections[0].rows;
+  const pred = rows.find(r => !r.current && r.continuesAs.some(k => rows.find(x => x.key === k && x.current)));
+  assert.ok(pred, 'precondition: an ended team that may continue as a listed live team');
+  const mod = { ...S, search: () => ({ ...real, best: null, enter: pred }) };
+  const p = page({ mod }); await p.run('pateadors');
+  assert.ok(p.activeCell() && p.activeCell().team && pred.continuesAs.includes(p.activeCell().team.key), 'the successor is active');
+  assert.ok(!p.cells().some(c => c.team && c.team.key === pred.key), 'the folded team has no cell of its own');
+});
+
+test('closing the panel clears aria-activedescendant, and expanded', async () => {
+  const p = page(); await p.run('Surf');
+  assert.ok(p.input.getAttribute('aria-activedescendant'));
+  p.sxClose();
+  assert.equal(p.input.getAttribute('aria-activedescendant'), null);
+  assert.equal(p.input.getAttribute('aria-expanded'), 'false');
 });
 
 test('R2, R4: a team named by a season never folds; the slate\'s enter is always a visible cell, its fold opens', async () => {

@@ -2292,6 +2292,8 @@
       .sx-clubhead { padding: 10px 12px 2px; }
       .sx-grp > .sx-chips { grid-column: 1 / -1; }
     }
+    /* the action bar's label is never cut: it takes the lines it needs (a team that two earlier teams may continue names both) */
+    .usearch-pop.sx .us-actions span.us-two { display: block; -webkit-line-clamp: unset; overflow: visible; white-space: normal; line-height: 1.35; }
     .sx-was { font: 500 11.5px var(--font); color: var(--text-secondary); margin-left: 4px; }   /* the earlier name that matched */
 
     /* ===== #135 P1a: the landing page and the Teams index ===== */
@@ -7512,6 +7514,7 @@
     // if so, so no task of ours runs long enough to delay a keystroke (Reviewer point 1). An error
     // from the generator arrives on its first step, and is thrown from here.
     async function sxDrive(gen, { now = () => performance.now(), yieldNow = sxYield, budget = SX_TASK_MS, onStep = () => { } } = {}) {
+      await yieldNow();   // the cap's clock starts after a yield, whatever the browser did with the end of the fetch
       let taskStart = now(), slowest = 0;
       for (;;) {
         if (now() - taskStart + slowest > budget) { await yieldNow(); taskStart = now(); }
@@ -7885,8 +7888,9 @@
       sxShow(body);
       sxView = { q, slate, cells: built.cells, state, nav: keep ? nav : false };
       let at = -1;
-      if (keep) at = sxView.cells.findIndex(c => c.kind === keep.kind && (keep.key ? c.key === keep.key : c.section === keep.section));
-      if (at < 0 && keep && keep.firstNew != null) at = keep.firstNew;
+      // a "show more" step keeps the viewer's place: the first new cell, even when another "more" cell follows it
+      if (keep && keep.kind === 'more' && keep.firstNew != null) at = keep.firstNew;
+      else if (keep) at = sxView.cells.findIndex(c => c.kind === keep.kind && (keep.key ? c.key === keep.key : c.section === keep.section));
       if (at < 0) at = sxEnterCell();
       if (at >= 0) sxSetActive(at, { noScroll: true });
     }

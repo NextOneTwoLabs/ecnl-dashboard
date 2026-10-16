@@ -550,7 +550,7 @@ draws them since #165 (below).
     and `localeCompare` follows the visitor's locale.
   - Rows carry what the page draws, so it never parses `why`: on a team row `family`, `line`,
     `seasonTyped`, `continuesAs` and `mayFrom` (#107 squad keys), `place`, `last`, `matched`
-    (`[{ term, cls, field }]`), `namedPlace` and `nearbyOf`; on an event row `ekind`, `matched`,
+    (`[{ term, cls, field }]`), `namedPlace`, `nearbyOf` and `was` (the earlier name that matched); on an event row `ekind`, `matched`,
     `namedPlace` and `nearbyOf`; and an age-less conference row's `hrefs` holds every age group's
     table link (#148), `href` the first.
   - `stats.sortCompares` counts the comparator calls of the two result sorts.

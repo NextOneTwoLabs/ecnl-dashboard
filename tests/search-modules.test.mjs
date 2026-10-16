@@ -381,7 +381,7 @@ test('slate: every link of every row of the judged queries opens a real page', (
 // keystroke's counters are weighed in estimated nanoseconds (weights fitted on the PR's machine,
 // Intel Xeon 2.10 GHz, Node 22: a least-squares fit of the time per keystroke against the counters).
 // #165 refit: sortCompares (the comparator calls of the two sorts) joins rowsSorted, because a sort costs
-// comparisons, not rows (the worst keystroke, `so`, sorts 506 rows in about 5,100 comparisons). Fitted on the
+// comparisons, not rows (the worst keystroke, `so`, sorts 506 rows in 3,697 counted comparisons). Fitted on the
 // committed fixture, 15 repeats of every keystroke, trimmed mean, three fits averaged.
 const WEIGHTS = { base: 28000, termsVisited: 55, osaCells: 210, postingsVisited: 125, docsScored: 620, rowsSorted: 1150, sortCompares: 160 };
 const cost = s => WEIGHTS.base + Object.entries(s).reduce((n, [k, v]) => n + WEIGHTS[k] * v, 0);
