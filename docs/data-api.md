@@ -519,7 +519,7 @@ for places (#159) `zip-places.json` (the census table), `zip-place-fixes.json` a
   apart from team data, which grows about 10 KB gzipped a season; core keeps about four seasons of
   headroom under its 120 KiB budget).
 
-**`places.json`** (#159; about 102 KB raw and 23 KB gzipped before the census table, budget 60 KiB):
+**`places.json`** (#159; about 137 KB raw and 36 KB gzipped, budget 60 KiB; 502 places, 205 counties, 944 fields):
 
 ```json
 {"schema":1
@@ -543,7 +543,7 @@ for places (#159) `zip-places.json` (the census table), `zip-place-fixes.json` a
 ,"Great Park@92618":["Orange County Great Park",["2020-21",…,"2026-27"],[4,5,…,24],"0636770","06059"]
 ,…}}
 ```
-(GEOIDs illustrative until the census table is committed.)
+(Real lines: Del Mar is 0618506, San Diego 0666000, Redmond 5357535, Irvine 0636770.)
 
 - `counties` and `places` are keyed by census GEOID (county 5 digits, place 7): a county is
   `[name, ST]` with its legal name as published ("Richmond city" is Virginia's independent city,
@@ -574,7 +574,8 @@ for places (#159) `zip-places.json` (the census table), `zip-place-fixes.json` a
   own checksum and a content checksum, which CI recomputes, so the table changes only through the
   tool. Rules: zip -> place by the largest land overlap above 0, ties to the lowest GEOID; zip ->
   county from the county file the same way; place -> county by the summed land of its zip parts;
-  a zip outside every place has a county and no city.
+  a zip outside every place has a county and no city. The 2020 table holds 33,791 zips (4,991 with
+  no place), 32,188 places and 3,234 counties (the states, DC, Puerto Rico and the Island Areas).
 - **Limits:** in New England, NJ, NY and PA many towns are county subdivisions, not census places,
   so some zips there have no city (the build report lists them; the county still works). A place
   in several counties gets the one with the largest share (Dallas, Houston, Atlanta and others).

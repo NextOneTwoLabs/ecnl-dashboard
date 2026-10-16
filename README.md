@@ -514,7 +514,7 @@ Nothing visitors see uses them yet. The format is in `docs/data-api.md`, "Search
     node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --search <scratch>/search-fixture
   ```
 - **Sizes** (gzipped, measured with `node tools/search_index_size.mjs`): about 73 KB for core (schema
-  2 since #159), about 23 KB for places before the census table, about 69 KB for the 2026-27
+  2 since #159), about 36 KB for places, about 69 KB for the 2026-27
   games, about 566 KB for every season's games. A test fails above 120 KiB (core), 60 KiB
   (places), 100 KiB (the active games file) and 800 KiB (all games files).
 
