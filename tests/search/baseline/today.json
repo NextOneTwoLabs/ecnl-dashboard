@@ -8,7 +8,7 @@
     "engine": "today",
     "engineSha": "1a54fe54edcd6407d9225f19413d38a937a589d7920d0e329b0deb6e9c7f1fe0",
     "manifestSha": "bf97b66bfedefa2606496e9963bceef3daa36a2d449d4e6f7e6f2c27ad9aa504",
-    "queriesSha": "d0d82498c7abd6bd245aca97dd2a5f5f46ba9be85214fbcc8e5b1452730fa55a",
+    "queriesSha": "7c89ae768abafa252cd2fe38d27012e357e1ade2e4d00be4d0c541d7fb6f9df3",
     "recordedBy": "node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today"
   },
   "perQuery": {
@@ -616,7 +616,7 @@
       "capReached": null,
       "checks": {
         "exact": null,
-        "mustNever": null,
+        "mustNever": "fail",
         "mustShow": "pass",
         "order": null,
         "sections": "unsupported",
@@ -628,7 +628,9 @@
       "enter": "event:2025-26/4133",
       "exact": null,
       "firstUseful": 1,
-      "mustNeverHits": [],
+      "mustNeverHits": [
+        "event:2025-26/4251 (1 row)"
+      ],
       "mustShowMissing": [],
       "rows": {
         "events": [
@@ -649,7 +651,7 @@
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "fail",
       "wrongDestinations": []
     },
     "F01": {
@@ -1220,14 +1222,14 @@
         "mustShow": "unsupported",
         "order": null,
         "sections": "fail",
-        "useful": "fail"
+        "useful": "pass"
       },
       "counts": {
         "events": 3
       },
       "enter": "event:2025-26/4251",
       "exact": null,
-      "firstUseful": 0,
+      "firstUseful": 1,
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
@@ -1243,9 +1245,9 @@
           "events"
         ],
         "expected": [
-          "teams",
           "events",
-          "games"
+          "games",
+          "teams"
         ]
       },
       "status": "fail",
@@ -2291,8 +2293,8 @@
       "cities": {
         "capReached": null,
         "fail": 7,
-        "firstUseful": 4,
-        "firstUsefulRate": 0.5,
+        "firstUseful": 5,
+        "firstUsefulRate": 0.625,
         "mrr": {
           "events": {
             "all": null,
@@ -2364,7 +2366,7 @@
       },
       "events": {
         "capReached": null,
-        "fail": 2,
+        "fail": 3,
         "firstUseful": 7,
         "firstUsefulRate": 0.875,
         "mrr": {
@@ -2387,7 +2389,7 @@
             "supportedOnly": 1
           }
         },
-        "mustNeverHits": 9,
+        "mustNeverHits": 10,
         "mustShowMissing": 0,
         "pass": 2,
         "queries": 8,
@@ -2396,7 +2398,7 @@
         "sectionsAgreeRateSupported": 1,
         "sectionsAgreeSupported": 2,
         "sectionsSupported": 2,
-        "unsupported": 4,
+        "unsupported": 3,
         "wrongDestinations": 0
       },
       "fields": {
@@ -2624,9 +2626,9 @@
     },
     "overall": {
       "capReached": null,
-      "fail": 21,
-      "firstUseful": 40,
-      "firstUsefulRate": 0.6667,
+      "fail": 22,
+      "firstUseful": 41,
+      "firstUsefulRate": 0.6833,
       "mrr": {
         "events": {
           "all": 0.7083,
@@ -2647,7 +2649,7 @@
           "supportedOnly": 1
         }
       },
-      "mustNeverHits": 12,
+      "mustNeverHits": 13,
       "mustShowMissing": 7,
       "pass": 9,
       "queries": 60,
@@ -2656,7 +2658,7 @@
       "sectionsAgreeRateSupported": 0.3704,
       "sectionsAgreeSupported": 10,
       "sectionsSupported": 27,
-      "unsupported": 30,
+      "unsupported": 29,
       "wrongDestinations": 0
     }
   }

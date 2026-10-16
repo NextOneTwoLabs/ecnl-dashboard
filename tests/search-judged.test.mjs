@@ -64,6 +64,7 @@ test('queries.json: the schema check catches what it must', () => {
   const live = bad.queries.find(q => q.stability === 'live'); live.top = { teams: [] }; live.exact = true;   // exact on a live query
   const t01 = bad.queries.find(q => q.q === 'MVLA 2011');
   t01.mustNever = [{ team: { season: '2024-25', teamID: 55325 } }];                     // D11: G2011/12 covers 2011 in 2026-27
+  t01.q = 'MVLA 2011G';                                                                  // the 2011G form is a birth year too (nit 6)
   bad.queries.find(q => q.id === 'N05').mustShow = [{ gizmo: 1 }];                     // unknown ref kind
   const errs = checkSchema(bad, ix).join('\n');
   assert.match(errs, /duplicate id/);
@@ -118,7 +119,8 @@ test('MF6: the clock canary sees the frozen time and time zone, never the machin
   assert.equal(c.tz, doc.context.timeZone);
   // 2026-10-15T22:10:33Z is 15:10:33 on Thursday 15 October in Los Angeles (PDT, UTC-7).
   assert.deepEqual([c.y, c.m, c.day, c.wd, c.h, c.min, c.offset], [2026, 9, 15, 4, 15, 10, 420]);
-  assert.equal(c.local, '10/15/2026, 3:10:33 PM');
+  // Some ICU versions put U+202F (narrow no-break space) before AM/PM (nit 5).
+  assert.equal(c.local.replace(/\u202f/g, ' '), '10/15/2026, 3:10:33 PM');
   // Without the frozen clock the canary reads the machine: the test can fail.
   const real = canaryRun(doc.context, { frozen: false });
   assert.notEqual(real.now, c.now, 'an unfrozen canary sees the machine clock');

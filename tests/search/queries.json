@@ -5,14 +5,14 @@
   "groups": ["team-names", "typos", "events", "collisions", "not-ignored", "cities", "fields", "games-h2h", "nothing"],
   "decisions": {
     "D1": "San Diego shows the San Diego Fall showcase in Events, as a whole-word name match; order Teams, Events, Games.",
-    "D2": "Owner, changed 2026-10-16: a city search also covers the rest of its county. City results first, then the rest of the county labelled nearby.",
+    "D2": "Owner, changed 2026-10-16: a city search also covers the rest of its county. City results first, then the rest of the county labelled nearby. Across sections too (owner, PR #157): a section with results in the named city itself comes before a section holding only nearby results; otherwise the place order Teams, Events, Games holds. A name match (Legends FC - Del Mar for Del Mar, San Diego Fall for San Diego) is a direct result, never nearby.",
     "D3": "LA = Los Angeles plus the whole word LA in names. LA Breakers required and first; La Roca FC never; LAFC So Cal neither required nor forbidden (LA and Los Angeles); Louisiana dropped.",
     "D4": "Partial-only queries (Surf Cup): Surf teams labelled partial match plus a no-match note; never San Diego Fall, never a Surf Sports Park field row.",
     "D5": "Clubs vs clubs with a season: one pairing row per age group in which they met; Slammers = clubs 96 and 1656; Blues = club 98.",
     "D6": "A field is a normalised name plus zip, with aliases. Great Park @ 92618 = 12 complex IDs; 60 Acres = 60 Acres Park @ 98052; Great Park field 15 shows only Field 15 games; Field 08 = Field 8.",
     "D6a": "Complex 3069 Orange County Great Park Sports Park is the same field as Great Park @ 92618.",
     "D7": "Useful for a broad name (Slammers): any current team of Slammers FC (96).",
-    "D8": "Richmond: Richmond United (a name match) first, then the Finals held in Richmond VA; nothing for Richmond CA.",
+    "D8": "Richmond: Richmond United (a name match) first, then the Finals held in Richmond VA; nothing for Richmond CA. D8 overrides D2 (owner, PR #157): Richmond means Richmond VA only, and Contra Costa County clubs are never nearby for it.",
     "D9": "Today's search is vendored into tests/search/engines/today.js, compared with index.html, retired explicitly.",
     "D10": "One sub-issue per PR, closed by that PR; #149 is referenced as Part of #149 only.",
     "D11": "A birth year also matches a 2026-27 two-year division whose squad was born the other year: ranked lower, never forbidden.",
@@ -403,6 +403,7 @@
       "stability": "closed",
       "sections": ["events", "games"],
       "mustShow": [{"event": {"season": "2025-26", "eventID": 4041}}, {"event": {"season": "2025-26", "eventID": 4133}}],
+      "mustNever": [{"event": {"season": "2025-26", "eventID": 4251}}],
       "top": {"events": [{"event": {"season": "2025-26", "eventID": 4041}}, {"event": {"season": "2025-26", "eventID": 4133}}]},
       "useful": [{"event": {"season": "2025-26", "eventID": 4041}}, {"event": {"season": "2025-26", "eventID": 4133}}]
     },
@@ -544,7 +545,7 @@
       "q": "Surf Cup",
       "stability": "frozen",
       "sections": [],
-      "mustShow": [{"club": {"clubID": 87}, "partial": true}, {"club": {"clubID": 3986}, "partial": true}],
+      "mustShow": [{"club": {"clubID": 87}, "current": true, "partial": true}, {"club": {"clubID": 3986}, "current": true, "partial": true}],
       "mustNever": [{"event": {"season": "2025-26", "eventID": 4041}}, {"field": {"name": "Surf Sports Park", "zip": "92014"}}],
       "useful": [
         {"empty": {"reason": "no-full-match"}},
@@ -634,7 +635,7 @@
       "group": "cities",
       "q": "Redmond",
       "stability": "frozen",
-      "sections": ["teams", "events", "games"],
+      "sections": ["events", "games", "teams"],
       "place": {"city": "Redmond", "county": "King County, WA"},
       "mustShow": [
         {"club": {"clubID": 398}, "current": true, "nearby": true},
@@ -643,17 +644,17 @@
         {"club": {"clubID": 1643}, "current": true, "nearby": true},
         {"event": {"season": "2021-22", "eventID": 2436}},
         {"event": {"season": "2023-24", "eventID": 3064}},
-        {"event": {"season": "2025-26", "eventID": 4251}}
+        {"event": {"season": "2025-26", "eventID": 4251}},
+        {"field": {"name": "60 Acres Park", "zip": "98052"}}
       ],
       "mustNever": [{"club": {"clubID": 112}}],
       "useful": [
-        {"club": {"clubID": 398}, "current": true},
-        {"club": {"clubID": 3476}, "current": true},
-        {"club": {"clubID": 2331}, "current": true},
-        {"club": {"clubID": 1643}, "current": true}
+        {"event": {"season": "2021-22", "eventID": 2436}},
+        {"event": {"season": "2023-24", "eventID": 3064}},
+        {"event": {"season": "2025-26", "eventID": 4251}}
       ],
       "decision": ["D2"],
-      "note": "No club is based in Redmond; King County clubs are nearby. Washington Premier (Puyallup, Pierce County) is not. Playoffs held in Redmond (60 Acres)."
+      "note": "D2 across sections: the events held in Redmond and the 60 Acres Park field row (Redmond, 98052; no 2026-27 games, so a coverage note) are in the city itself and come first; Teams holds only nearby King County clubs and comes last. Washington Premier (Puyallup, Pierce County) never shows."
     },
     {
       "id": "P04",
@@ -720,7 +721,7 @@
       "mustNever": [{"club": {"clubID": 69}}],
       "useful": [{"club": {"clubID": 417}, "current": true}],
       "decision": ["D8"],
-      "note": "Richmond United is a name match (based in Glen Allen, VA); the Finals held in Richmond, VA follow. Nothing for Richmond, CA (Mustang SC, Contra Costa County, is never shown)."
+      "note": "Richmond United is a name match (based in Glen Allen, VA); the Finals held in Richmond, VA follow. D8 overrides D2 here: Richmond means Richmond VA only, so Contra Costa County clubs are never nearby and Mustang SC (Danville) never shows."
     },
     {
       "id": "P07",

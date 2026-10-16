@@ -185,7 +185,8 @@ export function checkSchema(doc, ix) {
       for (const r of refs) if (KIND_SECTION[refKind(r)] !== s) err(id, `top.${s} holds a ${refKind(r)} ref`);
     }
     // D11: a birth year never forbids a squad whose 2026-27 two-year division also covers that year.
-    const years = (q.q.match(/\b(?:g)?(20\d{2})\b/gi) || []).map(y => +y.replace(/\D/g, '')).filter(y => y >= 2002 && y <= 2014);
+    // "2011", "G2011" and "2011G" (nit 6)
+    const years = (q.q.match(/\b(?:g)?(20\d{2})(?:g)?\b/gi) || []).map(y => +y.replace(/\D/g, '')).filter(y => y >= 2002 && y <= 2014);
     for (const y of years) for (const ref of q.mustNever || []) {
       for (const sq of squadsOfRef(ref, ix)) {
         const row = sq.rows.find(r => r.season === ix.active);
