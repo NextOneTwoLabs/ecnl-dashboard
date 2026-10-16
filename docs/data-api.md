@@ -561,8 +561,11 @@ for places (#159) `zip-places.json` (the census table), `zip-place-fixes.json` a
   - a club or event city's place: a `zip-place-fixes.json` alias, else the one census place of that
     normalised name in its state (a single incorporated place wins over CDPs of the same name),
     else none; two or more and no single winner: none, reported, never a pick;
-  - its county: a `city-counties.json` entry (which may override a census place's computed county,
-    as for Fairfax, VA, owner decision Q-E), else the place's computed county, else none, reported;
+  - its county: a `city-counties.json` entry (which may override a census place's computed county;
+    today it holds Woodland Hills and 7 club towns that are not census places, and no override), else
+    the place's computed county, else none, reported. Owner decision Q-E (Fairfax, VA is Fairfax
+    County) is met by the computed county of the census place Fairfax (5126496, class C7), 51059,
+    pinned by a test; an override would come back only if a new table changed that;
   - a field zip's city: a `zip-place-fixes.json` fix (92014 is Del Mar), else the census area rule;
   - a field zip's county: the census county file's rule, always;
   - names on both sides: NFKC, lower case, `.` and apostrophes dropped, other punctuation a space,

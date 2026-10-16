@@ -529,9 +529,17 @@ Bureau, 2020 Census ZCTA to Place and ZCTA to County Relationship Files; public 
   `docs/data-api.md`, "Search data". The table records the files' checksums, sizes and row counts,
   the tool's own checksum and a content checksum; `tests/test_search_places.py` recomputes them,
   so a hand edit fails CI. Corrections go in the reviewed files instead, each entry with evidence:
-  `public/data/zip-place-fixes.json` (a zip's city; a city's census place, for consolidated names
-  such as Louisville) and `public/data/city-counties.json` (a city's county, whether or not it is a
-  census place, such as Woodland Hills and Fairfax, VA).
+  - `public/data/zip-place-fixes.json`: `fixes` set a zip's city (92014 is Del Mar, where the
+    land-area rule gives San Diego); `aliases` name the census place of a club city whose spelling
+    differs (one today: Liburn, GA, TGS's spelling, is the census place Lilburn).
+  - `public/data/city-counties.json`: a club or event city's county. It may also override a census
+    place's computed county, but no entry does today: it holds Woodland Hills (a district of Los
+    Angeles, not a census place) and 7 club towns that are county subdivisions or unincorporated
+    (Westampton NJ, Elma NY, Lancaster MA, St Johns FL, Greenbrae CA, Farmington CT, Bethany CT),
+    each backed by the club's main home field being in its own town's zip.
+  - Owner decision Q-E (Fairfax, VA is Fairfax County) needs no entry: the census place Fairfax
+    (5126496, class C7) already computes to Fairfax County (51059), and a test pins it. An entry
+    would be redundant, which the build rejects; it comes back only if a new table changed that.
 - **The download is a network request** (not to TGS), made only with the owner's OK at the time, to
   exactly these two URLs, into a new empty directory outside the checkout (untrusted data):
 
