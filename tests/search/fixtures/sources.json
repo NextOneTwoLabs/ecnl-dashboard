@@ -1,0 +1,901 @@
+{
+  "_comment": "Source registry for the ECNL Girls dashboard. Single source of truth for which TGS/AthleteOne event IDs back each season+conference. Read by ecnl-dashboard.html at startup and by archive.py. Add a season by adding a key under `seasons`, then run: python archive.py --verify --season <key>",
+  "updated": "2026-08-27",
+  "apiBase": "https://api.athleteone.com/api",
+  "endpoints": {
+    "hierarchy": "Event/get-event-schedule-or-standings/{eventId}",
+    "standings": "Event/get-standings-by-div-and-flight/{divisionId}/{flightId}/{eventId}",
+    "schedule": "Event/get-schedules-by-flight/{eventId}/{flightId}/0",
+    "brackets": "Event/get-flight-brackets-by-flight/{eventId}/{flightId}",
+    "eventDetails": "Event/get-event-details-by-eventID/{eventId}"
+  },
+  "refresh": {
+    "_comment": "Drives `archive.py --refresh`. Only activeSeason is ever fetched; past seasons are final. everyHours documents intent (match-day refreshes every 30 minutes during game hours; min interval 20 minutes) - the cron in .github/workflows/refresh.yml is the real schedule, so keep them in sync.",
+    "activeSeason": "2026-27",
+    "matchDay": { "everyHours": 0.5, "lookbackDays": 2, "timezonePaddingDays": 1 },
+    "sweep": { "daily": true, "atUtcHour": 6 },
+    "pending": { "maxPendingAgeDays": 21 },
+    "minIntervalMinutes": 20
+  },
+
+  "publicUrlTemplates": {
+    "_comment": "Original public website links, preserved alongside the archived data. TGS is migrating to app.athleteone.com; change the host here in one place if public.totalglobalsports.com retires.",
+    "standings": "https://public.totalglobalsports.com/public/event/{eventId}/standings/{flightId}",
+    "schedules": "https://public.totalglobalsports.com/public/event/{eventId}/schedules/{flightId}",
+    "eventHome": "https://public.totalglobalsports.com/public/event/{eventId}/schedules-standings"
+  },
+  "seasons": {
+    "2026-27": {
+      "startYear": 2026,
+      "teamCount": 774,
+      "_note": "Divisions are named by age this season (GU13 … GU18/19), as in 2021-22, rather than by birth year.",
+      "conferences": {
+        "Mid-Atlantic": {
+          "eventId": 4263,
+          "eventName": "ECNL Girls Mid-Atlantic 2026-27"
+        },
+        "Midwest": {
+          "eventId": 4264,
+          "eventName": "ECNL Girls Midwest 2026-27"
+        },
+        "New England": {
+          "eventId": 4265,
+          "eventName": "ECNL Girls New England 2026-27"
+        },
+        "North Atlantic": {
+          "eventId": 4266,
+          "eventName": "ECNL Girls North Atlantic 2026-27"
+        },
+        "NorCal": {
+          "eventId": 4267,
+          "eventName": "ECNL Girls Northern Cal 2026-27"
+        },
+        "Northwest": {
+          "eventId": 4268,
+          "eventName": "ECNL Girls Northwest 2026-27"
+        },
+        "Ohio Valley": {
+          "eventId": 4269,
+          "eventName": "ECNL Girls Ohio Valley 2026-27"
+        },
+        "Southeast": {
+          "eventId": 4270,
+          "eventName": "ECNL Girls Southeast 2026-27"
+        },
+        "Southwest": {
+          "eventId": 4271,
+          "eventName": "ECNL Girls Southwest 2026-27"
+        },
+        "Texas": {
+          "eventId": 4272,
+          "eventName": "ECNL Girls Texas 2026-27"
+        }
+      },
+      "national": {},
+      "ageGroups": {
+        "GU18/19": {
+          "u": 18,
+          "birthYears": [
+            2008,
+            2009
+          ],
+          "source": "team-names"
+        },
+        "GU17": {
+          "u": 17,
+          "birthYears": [
+            2009,
+            2010
+          ],
+          "source": "team-names"
+        },
+        "GU16": {
+          "u": 16,
+          "birthYears": [
+            2010,
+            2011
+          ],
+          "source": "team-names"
+        },
+        "GU15": {
+          "u": 15,
+          "birthYears": [
+            2011,
+            2012
+          ],
+          "source": "team-names"
+        },
+        "GU14": {
+          "u": 14,
+          "birthYears": [
+            2012,
+            2013
+          ],
+          "source": "team-names"
+        },
+        "GU13": {
+          "u": 13,
+          "birthYears": [
+            2013,
+            2014
+          ],
+          "source": "team-names"
+        }
+      }
+    },
+    "2025-26": {
+      "startYear": 2025,
+      "teamCount": 762,
+      "conferences": {
+        "Mid-Atlantic": {
+          "eventId": 3925,
+          "eventName": "ECNL Girls Mid-Atlantic 2025-26"
+        },
+        "Midwest": {
+          "eventId": 3926,
+          "eventName": "ECNL Girls Midwest 2025-26"
+        },
+        "New England": {
+          "eventId": 3927,
+          "eventName": "ECNL Girls New England 2025-26"
+        },
+        "North Atlantic": {
+          "eventId": 3928,
+          "eventName": "ECNL Girls North Atlantic 2025-26"
+        },
+        "NorCal": {
+          "eventId": 3929,
+          "eventName": "ECNL Girls Northern Cal 2025-26"
+        },
+        "Northwest": {
+          "eventId": 3930,
+          "eventName": "ECNL Girls Northwest 2025-26"
+        },
+        "Ohio Valley": {
+          "eventId": 3931,
+          "eventName": "ECNL Girls Ohio Valley 2025-26"
+        },
+        "Southeast": {
+          "eventId": 3932,
+          "eventName": "ECNL Girls Southeast 2025-26"
+        },
+        "Southwest": {
+          "eventId": 3933,
+          "eventName": "ECNL Girls Southwest 2025-26"
+        },
+        "Texas": {
+          "eventId": 3934,
+          "eventName": "ECNL Girls Texas 2025-26"
+        }
+      },
+      "national": {
+        "Playoffs & Finals": {
+          "eventId": 4251,
+          "eventName": "ECNL Girls National Playoffs and Finals",
+          "location": "Redmond, WA",
+          "startDate": "2026-07-11",
+          "endDate": "2026-07-17",
+          "tierLabels": {
+            "Friendlies": "Showcase Games"
+          },
+          "tierNotes": {
+            "Champions League": "32 teams (30 automatic qualifiers + 2 wild cards), seeded 1–32 by conference PPG; first-round opponents never share a conference. Day-one losers play the Champions League Cup. Ties go straight to PKs, except the Final: 2×10 min extra time first. 3 games guaranteed.",
+            "North American Cup": "16 teams seeded 33–48 by conference PPG. 16-team knockout with losers brackets; 3 games guaranteed.",
+            "Showcase Cup": "16 teams seeded 49–64 by conference PPG (15 automatic + wild cards from New England, Northwest, NorCal). 16-team knockout with losers brackets; 3 games guaranteed.",
+            "Friendlies": "Showcase Games: 28 U16–U17 teams selected by interest and conference PPG play three showcase games. No title at stake."
+          }
+        }
+      },
+      "showcases": {
+        "San Diego Fall": {
+          "eventId": 4041,
+          "eventName": "ECNL Girls San Diego",
+          "location": "Del Mar, CA",
+          "startDate": "2025-10-11",
+          "endDate": "2025-10-13",
+          "tierNotes": {
+            "San Diego": "A showcase, not a competition: no title was at stake. Showcase games don't count toward conference standings. The results are listed in the order TGS publishes them, which is not a ranking."
+          }
+        },
+        "Phoenix Spring": {
+          "eventId": 4133,
+          "eventName": "ECNL Phoenix - Spring",
+          "location": "Phoenix, AZ",
+          "startDate": "2026-03-27",
+          "endDate": "2026-03-29",
+          "tierNotes": {
+            "Phoenix - Spring": "A showcase, not a competition: every team played three games, and no title was at stake. Showcase games don't count toward conference standings. The results are listed in the order TGS publishes them, which is not a ranking."
+          },
+          "teamAliases": {
+            "112470": 69910
+          },
+          "teamAliasesNote": "Utah Avalanche ECNL G11 is team 112470 in this showcase's G2011 table (club 'No Club Selection') and team 69910 in the 2025-26 Northwest conference: the same name in the same age group, and the only showcase team whose exact name matches a conference team with another id. Reviewed by hand (#97)."
+        }
+      },
+      "ageGroups": {
+        "G2008/2007": {
+          "u": 18,
+          "birthYears": [
+            2007,
+            2008
+          ],
+          "source": "division-name"
+        },
+        "G2009": {
+          "u": 17,
+          "birthYears": [
+            2009
+          ],
+          "source": "division-name"
+        },
+        "G2010": {
+          "u": 16,
+          "birthYears": [
+            2010
+          ],
+          "source": "division-name"
+        },
+        "G2011": {
+          "u": 15,
+          "birthYears": [
+            2011
+          ],
+          "source": "division-name"
+        },
+        "G2012": {
+          "u": 14,
+          "birthYears": [
+            2012
+          ],
+          "source": "division-name"
+        },
+        "G2013": {
+          "u": 13,
+          "birthYears": [
+            2013
+          ],
+          "source": "division-name"
+        }
+      }
+    },
+    "2024-25": {
+      "startYear": 2024,
+      "teamCount": 774,
+      "conferences": {
+        "Mid-Atlantic": {
+          "eventId": 3157,
+          "eventName": "ECNL Girls Mid-Atlantic 2024-25"
+        },
+        "Midwest": {
+          "eventId": 3158,
+          "eventName": "ECNL Girls Midwest 2024-25"
+        },
+        "New England": {
+          "eventId": 3159,
+          "eventName": "ECNL Girls New England 2024-25"
+        },
+        "North Atlantic": {
+          "eventId": 3160,
+          "eventName": "ECNL Girls North Atlantic 2024-25"
+        },
+        "NorCal": {
+          "eventId": 3161,
+          "eventName": "ECNL Girls Northern Cal 2024-25"
+        },
+        "Northwest": {
+          "eventId": 3162,
+          "eventName": "ECNL Girls Northwest 2024-25"
+        },
+        "Ohio Valley": {
+          "eventId": 3163,
+          "eventName": "ECNL Girls Ohio Valley 2024-25"
+        },
+        "Southeast": {
+          "eventId": 3164,
+          "eventName": "ECNL Girls Southeast 2024-25"
+        },
+        "Southwest": {
+          "eventId": 3165,
+          "eventName": "ECNL Girls Southwest 2024-25"
+        },
+        "Texas": {
+          "eventId": 3166,
+          "eventName": "ECNL Girls Texas 2024-25"
+        }
+      },
+      "national": {
+        "Playoffs": {
+          "eventId": 3865,
+          "eventName": "ECNL Girls National Playoffs",
+          "dataGaps": {
+            "_comment": "Flights TGS only partly published, keyed by flight id. The dashboard shows `note` (with `sources`) above the bracket and the schedule, and drops the 'Schedule on TGS' link where `hideTgsSchedule` is true. Not a `reconstructed` block: nothing here is rebuilt, and archive.py still refreshes these paths.",
+            "32791": {
+              "flight": "G2012 (U13) Champions League",
+              "note": "TGS published this flight's group tables but not its game-by-game schedule. The group standings are TGS data; the 66 group games and the round of 16 (Jul 2) were never published, and ECNL's recaps carry no scores for this age group. The eight round-of-16 winners are known from the Finals bracket.",
+              "hideTgsSchedule": true,
+              "sources": [
+                { "label": "ECNL recap: Playoffs Day 5 (qualifiers and round-of-16 pairings)", "url": "https://theecnl.com/news/2025/7/1/ecnl-girls-national-playoffs-recap-day-5.aspx" }
+              ]
+            },
+            "32792": {
+              "flight": "G2011 (U14) Champions League",
+              "note": "TGS published this flight's group tables and its round of 16, but not its 66 group games. ECNL's recaps give scores for four Group D games (San Diego Surf's group, Days 2 and 3) and none of the other 62.",
+              "hideTgsSchedule": false,
+              "sources": [
+                { "label": "ECNL recap: Playoffs Day 2 (two Group D scores)", "url": "https://theecnl.com/news/2025/6/28/ecnl-girls-national-playoffs-recap-day-2.aspx" },
+                { "label": "ECNL recap: Playoffs Day 3 (two Group D scores)", "url": "https://theecnl.com/news/2025/6/29/ecnl-girls-national-playoffs-recap-day-3.aspx" },
+                { "label": "ECNL recap: Playoffs Day 5 (qualifiers and round-of-16 pairings)", "url": "https://theecnl.com/news/2025/7/1/ecnl-girls-national-playoffs-recap-day-5.aspx" }
+              ]
+            }
+          }
+        },
+        "Finals": {
+          "eventId": 3975,
+          "eventName": "ECNL Girls National Finals",
+          "location": "Richmond, VA",
+          "startDate": "2025-07-18",
+          "endDate": "2025-07-21",
+          "reconstructed": {
+            "_comment": "TGS removed this event's schedules after the event; the five Champions League flights below are rebuilt from ECNL's recaps by reconstruct.py (see README, 'Reconstructed data'). archive.py and proxy_server.py never overwrite these paths without --force-reconstructed.",
+            "csv": "reconstructed/2024-25-finals-3975.csv",
+            "flightIds": [34425, 34427, 34426, 34428, 34429],
+            "qualifiedFrom": 3865,
+            "champions": {
+              "G2008": "Real Colorado National",
+              "G2009": "MVLA",
+              "G2010": "Michigan Hawks",
+              "G2011": "San Diego Surf",
+              "G2012": "San Diego Surf"
+            },
+            "sources": [
+              { "label": "ECNL recap: Day 1 (quarterfinals)", "url": "https://theecnl.com/news/2025/7/18/ecnl-girls-national-finals-recap-day-1.aspx" },
+              { "label": "ECNL recap: Day 2 (semifinals)", "url": "https://theecnl.com/news/2025/7/19/ecnl-girls-national-finals-recap-day-2.aspx" },
+              { "label": "ECNL recap: Champions crowned (finals)", "url": "https://theecnl.com/news/2025/7/22/ecnl-girls-national-finals-recap-champions-crowned.aspx" }
+            ],
+            "note": "Results reconstructed from ECNL's published recaps; TGS removed this event's schedule. Kick-off times, fields and home/away sides are not published — the winner is listed first."
+          }
+        }
+      },
+      "ageGroups": {
+        "G2007/2006": {
+          "u": 18,
+          "birthYears": [
+            2006,
+            2007
+          ],
+          "source": "division-name"
+        },
+        "G2008": {
+          "u": 17,
+          "birthYears": [
+            2008
+          ],
+          "source": "division-name"
+        },
+        "G2009": {
+          "u": 16,
+          "birthYears": [
+            2009
+          ],
+          "source": "division-name"
+        },
+        "G2010": {
+          "u": 15,
+          "birthYears": [
+            2010
+          ],
+          "source": "division-name"
+        },
+        "G2011": {
+          "u": 14,
+          "birthYears": [
+            2011
+          ],
+          "source": "division-name"
+        },
+        "G2012": {
+          "u": 13,
+          "birthYears": [
+            2012
+          ],
+          "source": "division-name"
+        }
+      }
+    },
+    "2023-24": {
+      "startYear": 2023,
+      "teamCount": 762,
+      "conferences": {
+        "Mid-Atlantic": {
+          "eventId": 2839,
+          "eventName": "ECNL Girls Mid-Atlantic 2023-24"
+        },
+        "Midwest": {
+          "eventId": 2849,
+          "eventName": "ECNL Girls Midwest 2023-24"
+        },
+        "New England": {
+          "eventId": 2853,
+          "eventName": "ECNL Girls New England 2023-24"
+        },
+        "North Atlantic": {
+          "eventId": 2850,
+          "eventName": "ECNL Girls North Atlantic 2023-24"
+        },
+        "NorCal": {
+          "eventId": 2854,
+          "eventName": "ECNL Girls Northern Cal 2023-24"
+        },
+        "Northwest": {
+          "eventId": 2855,
+          "eventName": "ECNL Girls Northwest 2023-24"
+        },
+        "Ohio Valley": {
+          "eventId": 2856,
+          "eventName": "ECNL Girls Ohio Valley 2023-24"
+        },
+        "Southeast": {
+          "eventId": 2838,
+          "eventName": "ECNL Girls Southeast 2023-24"
+        },
+        "Southwest": {
+          "eventId": 2837,
+          "eventName": "ECNL Girls Southwest 2023-24"
+        },
+        "Texas": {
+          "eventId": 2857,
+          "eventName": "ECNL Girls Texas 2023-24"
+        }
+      },
+      "national": {
+        "Playoffs": {
+          "eventId": 3064,
+          "eventName": "ECNL Girls National Playoffs",
+          "location": "Redmond, WA",
+          "startDate": "2024-06-22",
+          "endDate": "2024-06-28"
+        },
+        "Finals": {
+          "eventId": 3238,
+          "eventName": "ECNL Girls National Finals",
+          "location": "Richmond, VA",
+          "startDate": "2024-07-10",
+          "endDate": "2024-07-13"
+        }
+      },
+      "ageGroups": {
+        "G2006/2005": {
+          "u": 18,
+          "birthYears": [
+            2005,
+            2006
+          ],
+          "source": "division-name"
+        },
+        "G2007": {
+          "u": 17,
+          "birthYears": [
+            2007
+          ],
+          "source": "division-name"
+        },
+        "G2008": {
+          "u": 16,
+          "birthYears": [
+            2008
+          ],
+          "source": "division-name"
+        },
+        "G2009": {
+          "u": 15,
+          "birthYears": [
+            2009
+          ],
+          "source": "division-name"
+        },
+        "G2010": {
+          "u": 14,
+          "birthYears": [
+            2010
+          ],
+          "source": "division-name"
+        },
+        "G2011": {
+          "u": 13,
+          "birthYears": [
+            2011
+          ],
+          "source": "division-name"
+        }
+      }
+    },
+    "2022-23": {
+      "startYear": 2022,
+      "teamCount": 762,
+      "conferences": {
+        "Mid-Atlantic": {
+          "eventId": 2523,
+          "eventName": "ECNL Girls Mid-Atlantic 2022-23"
+        },
+        "Midwest": {
+          "eventId": 2529,
+          "eventName": "ECNL Girls Midwest 2022-23"
+        },
+        "New England": {
+          "eventId": 2531,
+          "eventName": "ECNL Girls New England 2022-23"
+        },
+        "North Atlantic": {
+          "eventId": 2530,
+          "eventName": "ECNL Girls North Atlantic 2022-23"
+        },
+        "NorCal": {
+          "eventId": 2528,
+          "eventName": "ECNL Girls Norcal 2022-23"
+        },
+        "Northwest": {
+          "eventId": 2522,
+          "eventName": "ECNL Girls Northwest 2022-23"
+        },
+        "Ohio Valley": {
+          "eventId": 2524,
+          "eventName": "ECNL Girls Ohio Valley 2022-23"
+        },
+        "Southeast": {
+          "eventId": 2527,
+          "eventName": "ECNL Girls Southeast 2022-23"
+        },
+        "Southwest": {
+          "eventId": 2525,
+          "eventName": "ECNL Girls Southwest 2022-23"
+        },
+        "Texas": {
+          "eventId": 2526,
+          "eventName": "ECNL Girls Texas 2022-23"
+        }
+      },
+      "national": {
+        "Playoffs": {
+          "eventId": 2719,
+          "eventName": "ECNL National Playoffs",
+          "location": "Del Mar, CA",
+          "startDate": "2023-06-24",
+          "endDate": "2023-06-30"
+        },
+        "Finals": {
+          "eventId": 2720,
+          "eventName": "ECNL National Finals",
+          "location": "Richmond, VA",
+          "startDate": "2023-07-14",
+          "endDate": "2023-07-17"
+        }
+      },
+      "ageGroups": {
+        "G2005/2004": {
+          "u": 18,
+          "birthYears": [
+            2004,
+            2005
+          ],
+          "source": "division-name"
+        },
+        "G2006": {
+          "u": 17,
+          "birthYears": [
+            2006
+          ],
+          "source": "division-name"
+        },
+        "G2007": {
+          "u": 16,
+          "birthYears": [
+            2007
+          ],
+          "source": "division-name"
+        },
+        "G2008": {
+          "u": 15,
+          "birthYears": [
+            2008
+          ],
+          "source": "division-name"
+        },
+        "G2009": {
+          "u": 14,
+          "birthYears": [
+            2009
+          ],
+          "source": "division-name"
+        },
+        "G2010": {
+          "u": 13,
+          "birthYears": [
+            2010
+          ],
+          "source": "division-name"
+        }
+      }
+    },
+    "2021-22": {
+      "startYear": 2021,
+      "teamCount": 726,
+      "_note": "No NorCal conference this season.",
+      "conferences": {
+        "Mid-Atlantic": {
+          "eventId": 2366,
+          "eventName": "ECNL Girls Mid-Atlantic Conference 2021-22"
+        },
+        "Midwest": {
+          "eventId": 2369,
+          "eventName": "ECNL Girls Midwest Conference 2021-22"
+        },
+        "New England": {
+          "eventId": 2374,
+          "eventName": "ECNL Girls New England Conference 2021-22"
+        },
+        "North Atlantic": {
+          "eventId": 2373,
+          "eventName": "ECNL Girls North Atlantic Conference 2021-22"
+        },
+        "Northwest": {
+          "eventId": 2367,
+          "eventName": "ECNL Girls Northwest Conference 2021-22"
+        },
+        "Ohio Valley": {
+          "eventId": 2371,
+          "eventName": "ECNL Girls Ohio Valley Conference 2021-22"
+        },
+        "Southeast": {
+          "eventId": 2372,
+          "eventName": "ECNL Girls Southeast Conference 2021-22"
+        },
+        "Southwest": {
+          "eventId": 2368,
+          "eventName": "ECNL Girls Southwest Conference 2021-22"
+        },
+        "Texas": {
+          "eventId": 2370,
+          "eventName": "ECNL Girls Texas Conference 2021-22"
+        }
+      },
+      "national": {
+        "Playoffs": {
+          "eventId": 2436,
+          "eventName": "ECNL National Playoffs",
+          "location": "Redmond, WA",
+          "startDate": "2022-06-22",
+          "endDate": "2022-06-29",
+          "dataGaps": {
+            "_comment": "Flights TGS published with unreliable data, keyed by flight id. The dashboard shows `note` (with `sources`) above the bracket and the schedule, drops the 'Schedule on TGS' link where `hideTgsSchedule` is true, and leaves the games listed in `omitFromBracket` (match ids) out of the bracket tree. Not a `reconstructed` block: nothing here is rebuilt, and archive.py still refreshes these paths.",
+            "15399": {
+              "flight": "U15 Regional League Finals",
+              "note": "TGS's bracket for this flight is corrupt: a placeholder 'Connecticut RL GU15' stands in most quarterfinal and semifinal slots — one game reads Connecticut 0–3 Connecticut — so the rounds before the final are not reliable. The final, Beach FC 2–1 Connecticut FC, matches the published result.",
+              "hideTgsSchedule": false,
+              "sources": [
+                { "label": "New England Soccer Journal: Connecticut FC U-15 at the National Finals", "url": "https://www.soccerjournal.com/ecnl-girls-connecticut-fc-u-15s-post-strong-showing-at-national-finals/" }
+              ]
+            }
+          }
+        },
+        "Finals": {
+          "eventId": 2437,
+          "eventName": "ECNL National Finals",
+          "location": "Richmond, VA",
+          "startDate": "2022-07-08",
+          "endDate": "2022-07-11"
+        }
+      },
+      "ageGroups": {
+        "GU18/U19": {
+          "u": 18,
+          "birthYears": [
+            2003,
+            2004
+          ],
+          "source": "computed"
+        },
+        "GU17": {
+          "u": 17,
+          "birthYears": [
+            2005
+          ],
+          "source": "computed"
+        },
+        "GU16": {
+          "u": 16,
+          "birthYears": [
+            2006
+          ],
+          "source": "computed"
+        },
+        "GU15": {
+          "u": 15,
+          "birthYears": [
+            2007
+          ],
+          "source": "computed"
+        },
+        "GU14": {
+          "u": 14,
+          "birthYears": [
+            2008
+          ],
+          "source": "computed"
+        },
+        "GU13": {
+          "u": 13,
+          "birthYears": [
+            2009
+          ],
+          "source": "computed"
+        }
+      }
+    },
+    "2020-21": {
+      "startYear": 2020,
+      "teamCount": 730,
+      "_note": "No NorCal conference this season. The first season Bay Area clubs competed in ECNL: they played in the Northwest conference, whose divisions were split into Bay Area, Mountain and Pacific flights. Six conferences also ran a GU18/U19 Composite division beside GU18/U19. COVID season: many conference games were never played.",
+      "conferences": {
+        "Mid-Atlantic": {
+          "eventId": 2040,
+          "eventName": "ECNL Girls Mid-Atlantic Conference 2020-21"
+        },
+        "Midwest": {
+          "eventId": 2035,
+          "eventName": "ECNL Girls Midwest Conference 2020-21"
+        },
+        "New England": {
+          "eventId": 2051,
+          "eventName": "ECNL Girls New England Conference 2020-21"
+        },
+        "North Atlantic": {
+          "eventId": 2039,
+          "eventName": "ECNL Girls North Atlantic Conference 2020-21"
+        },
+        "Northwest": {
+          "eventId": 2033,
+          "eventName": "ECNL Girls Northwest Conference 2020-21"
+        },
+        "Ohio Valley": {
+          "eventId": 2037,
+          "eventName": "ECNL Girls Ohio Valley Conference 2020-21"
+        },
+        "Southeast": {
+          "eventId": 2038,
+          "eventName": "ECNL Girls Southeast Conference 2020-21"
+        },
+        "Southwest": {
+          "eventId": 2034,
+          "eventName": "ECNL Girls Southwest Conference 2020-21"
+        },
+        "Texas": {
+          "eventId": 2036,
+          "eventName": "ECNL Girls Texas Conference 2020-21"
+        }
+      },
+      "national": {
+        "Playoffs": {
+          "eventId": 2118,
+          "eventName": "ECNL Girls National Playoffs",
+          "location": "Lakewood Ranch, FL",
+          "startDate": "2021-06-30",
+          "endDate": "2021-07-07",
+          "tierLabels": {
+            "Composite": "U18/U19 Composite",
+            "Optional Showcase": "Showcase Games"
+          },
+          "tierNotes": {
+            "Champions League": "U14–U17: 32 teams in eight groups of four; the group winners played the quarterfinals here and the semifinals and final at the National Finals in Richmond. U13 and U18/U19: 16-team knockouts with losers brackets. Tropical Storm Elsa cut the event short: the U13 semifinals and final and the U15 quarterfinals were played at the National Finals in Richmond instead.",
+            "North American Cup": "16-team knockout with losers brackets. The U15 competition was never completed: Tropical Storm Elsa cut the event short before the semifinals.",
+            "Open Cup": "16-team knockout with losers brackets, open to ECNL and Regional League teams. The U15 competition was never completed: Tropical Storm Elsa cut the event short before the semifinals.",
+            "Showcase Cup A": "16-team knockout with losers brackets. The U15 competition was never completed: Tropical Storm Elsa cut the event short before the semifinals.",
+            "Showcase Cup B": "16-team knockout with losers brackets. The U15 competition was never completed: Tropical Storm Elsa cut the event short before the semifinals.",
+            "Composite": "8-team knockout for the U18/U19 Composite teams, with placement games.",
+            "Optional Showcase": "Showcase Games: ten U18/U19 teams played two showcase games each. No title at stake."
+          },
+          "dataGaps": {
+            "_comment": "Flights TGS published with unreliable data, keyed by flight id. The dashboard shows `note` (with `sources`) above the bracket and the schedule, drops the 'Schedule on TGS' link where `hideTgsSchedule` is true, and leaves the games listed in `omitFromBracket` (match ids) out of the bracket tree. Not a `reconstructed` block: nothing here is rebuilt, and archive.py still refreshes these paths.",
+            "11935": {
+              "flight": "U18/U19 Composite",
+              "note": "TGS's two placement rows of 3 July name the wrong teams: 'So Cal Blues 0–7 FC Stars Blue' is entered at the same kick-off as the final, and 'Sting Dallas Royal 1–1 Solar SC' repeats two teams that had already played that morning. Both are left out of the bracket. The final, So Cal Blues 2–0 Sting Dallas Royal, is TGS's row; SoccerWire names So Cal Blues as the Composite champion.",
+              "omitFromBracket": [245101, 245102],
+              "hideTgsSchedule": false,
+              "sources": [
+                { "label": "SoccerWire: first ECNL Girls champions decided (2021)", "url": "https://www.soccerwire.com/news/first-ecnl-girls-champions-decided-as-2021-national-finals-field-is-set/" }
+              ]
+            }
+          }
+        },
+        "Finals": {
+          "eventId": 2289,
+          "eventName": "ECNL Girls National Finals",
+          "location": "Richmond, VA",
+          "startDate": "2021-07-17",
+          "endDate": "2021-07-19",
+          "defaultTier": "Flight 1",
+          "tierLabels": {
+            "Flight 1": "Champions League Finals",
+            "Consolation": "Consolation Games"
+          },
+          "tierNotes": {
+            "Flight 1": "The four Champions League quarterfinal winners (U15: all eight quarterfinalists, after Tropical Storm Elsa cut the Playoffs short) played semifinals, a third-place game and the final.",
+            "Consolation": "One placement game each for the four U15 quarterfinal losers."
+          },
+          "dataGaps": {
+            "_comment": "Flights TGS published with unreliable data, keyed by flight id. The dashboard shows `note` (with `sources`) above the bracket and the schedule, drops the 'Schedule on TGS' link where `hideTgsSchedule` is true, and leaves the games listed in `omitFromBracket` (match ids) out of the bracket tree. Not a `reconstructed` block: nothing here is rebuilt, and archive.py still refreshes these paths.",
+            "12355": {
+              "flight": "GU15 Champions League Finals",
+              "note": "TGS's four quarterfinal rows of 17 July carry scores but no losing side (Solar SC 7–6, World Class FC 3–3 on penalties, San Diego Surf 2–1, and one row with no teams at all), and both semifinal rows name the wrong opponent: TGS has Solar SC 1–1 Kansas City Athletics (PK 3–4) and San Diego Surf 2–2 San Diego Surf (PK 0–3), where TopDrawerSoccer reports Kansas City Athletics beat World Class FC on penalties and San Diego Surf beat Solar SC on penalties after 2–2. The rows are shown as TGS published them. The final, Kansas City Athletics 2–1 San Diego Surf, matches the published result.",
+              "hideTgsSchedule": false,
+              "sources": [
+                { "label": "TopDrawerSoccer: 2021 ECNL National Champions crowned", "url": "https://www.topdrawersoccer.com/club-soccer-articles/2021-ecnl-national-champions-crowned_aid49650" }
+              ]
+            },
+            "12357": {
+              "flight": "GU17 Champions League Finals",
+              "note": "TGS's two semifinal rows both pair MVLA with LAFC Slammers at the same kick-off (LAFC Slammers 1–3 MVLA and MVLA 1–3 LAFC Slammers), where TopDrawerSoccer reports MVLA beat Solar SC in the semifinal — a game TGS never recorded; Solar SC and United Futbol Academy appear only in their third-place game. All three rows before the final are left out of the bracket, so the tree shows the final alone; the Schedule view still lists all four rows. The final, MVLA 1–0 LAFC Slammers, matches the published result.",
+              "omitFromBracket": [247637, 247638, 247639],
+              "hideTgsSchedule": false,
+              "sources": [
+                { "label": "TopDrawerSoccer: 2021 ECNL National Champions crowned", "url": "https://www.topdrawersoccer.com/club-soccer-articles/2021-ecnl-national-champions-crowned_aid49650" }
+              ]
+            }
+          }
+        }
+      },
+      "ageGroups": {
+        "GU18/U19": {
+          "u": 18,
+          "birthYears": [
+            2002,
+            2003
+          ],
+          "source": "computed"
+        },
+        "GU18/U19 Composite": {
+          "u": 18,
+          "birthYears": [
+            2002,
+            2003
+          ],
+          "source": "computed"
+        },
+        "GU17": {
+          "u": 17,
+          "birthYears": [
+            2004
+          ],
+          "source": "computed"
+        },
+        "GU16": {
+          "u": 16,
+          "birthYears": [
+            2005
+          ],
+          "source": "computed"
+        },
+        "GU15": {
+          "u": 15,
+          "birthYears": [
+            2006
+          ],
+          "source": "computed"
+        },
+        "GU14": {
+          "u": 14,
+          "birthYears": [
+            2007
+          ],
+          "source": "computed"
+        },
+        "GU13": {
+          "u": 13,
+          "birthYears": [
+            2008
+          ],
+          "source": "computed"
+        }
+      }
+    }
+  }
+}
