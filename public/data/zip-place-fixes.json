@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "_comment": "Reviewed corrections to the census table's places (#159, plan v2 MF2). `fixes` set a field zip's city where the land-area rule picks the wrong place; `aliases` name the census place of a club or event city whose census name differs (consolidated governments). Every placeGeoid must exist in public/data/zip-places.json with that placeName and state; a fix the area rule already gives is redundant. A bad entry is left out, reported, and fails `python archive.py --search-index --check`. Each entry carries its evidence.",
+  "_comment": "Reviewed corrections to the census table's places (#159, plan v2 MF2). `fixes` set a field zip's city where the land-area rule picks the wrong place; `aliases` name the census place of a club or event city whose census name differs (consolidated governments). Every placeGeoid must exist in public/data/zip-places.json with that placeName and state; a fix the area rule already gives is redundant. A bad entry is left out, reported, and fails `python archive.py --search-data --check`. Each entry carries its evidence.",
   "fixes": [
     {
       "zip": "92014",

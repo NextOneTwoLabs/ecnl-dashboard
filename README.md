@@ -80,14 +80,14 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-index.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python archive.py --team-history --check      # the team histories and the team directory equal a fresh build
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  python archive.py --search-index --check      # the search data files equal a fresh build (#158)
+  python archive.py --search-data --check       # the search data files equal a fresh build (#158)
 ```
 
 `tests/team-history.test.mjs` runs `python team_history.py --parity` itself, under the
@@ -478,6 +478,13 @@ Later engines are measured against that baseline on the same queries.
 - The clock and time zone are injected (`context` in `queries.json`); a canary engine proves
   it. Closed-season facts the queries cite are compared with the live archive on every run,
   never squad grouping or club details, so a data refresh cannot break CI (#151).
+- **The search modules** (`public/search/`, #163) run on the same queries against the frozen
+  search data (`fixtures/search/core.json` and `places.json`); their outcome is recorded in
+  `tests/search/baseline/modules.json`. Any change to a module re-records in the same PR and
+  explains the diff: `node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules`.
+  `tests/search-judged.test.mjs` holds them to the plan's pass criteria: first result useful
+  better than today's overall and in no group worse, 0 wrong destinations, 0 must-never hits,
+  section order agreeing on at least 90% of the queries it can judge, and no reading cap.
 
 ### Search data
 
@@ -486,13 +493,13 @@ the team directory, plus events and the shared vocabulary), `places.json` (every
 census city and county of each field, club and event) and one `games-<season>.json` per season
 (every game of every flight of every event, once). They are the prepared records the
 page's search reads through `/api/v1/search/core` and `/api/v1/search/games/{season}`; the
-**index** is the word-to-records map the browser builds from them in memory (PR 3 of #149).
+**index** is the word-to-records map the browser builds from them in memory (`public/search/`, below).
 Nothing visitors see uses them yet. The format is in `docs/data-api.md`, "Search data".
 
-- **Built by** `search_index.py`, offline, from the committed archive: `archive.py` runs it right
+- **Built by** `search_data.py`, offline, from the committed archive: `archive.py` runs it right
   after the team directory in every path that rebuilds the directory (a crawl, `--refresh`,
-  `--team-history`, `--clubs`), and `python archive.py --search-index` runs it on its own.
-  `--search-index --check` (CI) fails when a committed file differs from a fresh build.
+  `--team-history`, `--clubs`), and `python archive.py --search-data` runs it on its own.
+  `--search-data --check` (CI) fails when a committed file differs from a fresh build.
 - **Reviewed inputs**, each entry with evidence, like `club-families.json`:
   `public/data/field-aliases.json` (complex names that are one field at one zip; owner decisions
   D6, D6a, Q3) and `public/data/zip-fixes.json` (malformed zips, including known-bad ones that
@@ -501,22 +508,52 @@ Nothing visitors see uses them yet. The format is in `docs/data-api.md`, "Search
   more than one zip, and same-zip name variants (alias candidates, never merged automatically).
 - **The frozen fixture** in `tests/search/fixtures/search/` is the same build from MANIFEST's
   commit `1c4c3268`, with club logos dropped (#117). It changes only on purpose: a change to
-  `search_index.py` or to a reviewed input fails `tests/search-index.test.mjs` until the fixture is
+  `search_data.py` or to a reviewed input fails `tests/search-data.test.mjs` until the fixture is
   rebuilt in the same PR. To reproduce it byte for byte (the git step is yours; the tools read
   files only):
 
   ```bash
   git worktree add --detach <scratch>/at-1c4c3268 1c4c32686e49a3592ab116d26d37cc620caf7b46
   PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-    python search_index.py --root <scratch>/at-1c4c3268 --inputs . --fixture \
+    python search_data.py --root <scratch>/at-1c4c3268 --inputs . --fixture \
       --commit 1c4c32686e49a3592ab116d26d37cc620caf7b46 --out <scratch>/search-fixture
   HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
     node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --search <scratch>/search-fixture
   ```
-- **Sizes** (gzipped, measured with `node tools/search_index_size.mjs`): about 73 KB for core (schema
+- **Sizes** (gzipped, measured with `node tools/search_data_size.mjs`): about 73 KB for core (schema
   2 since #159), about 36 KB for places, about 69 KB for the 2026-27
   games, about 566 KB for every season's games. A test fails above 120 KiB (core), 60 KiB
   (places), 100 KiB (the active games file) and 800 KiB (all games files).
+
+### Search modules
+
+`public/search/` holds the page's search (#149 phase 1, PR 3; #163): ES modules, pure functions
+with no page globals, storage or network, and the clock and time zone passed in. Nothing visitors
+see uses them yet; PR 4a wires them into the search box.
+
+- `search.mjs`, the entry point: `buildIndex({ core, places })` builds the index from the search
+  data files (it throws `SearchDataError`, naming the file, on a schema it does not know), and
+  `search(index, query, { now, timeZone, selectedSeason })` returns the slate. `SEARCH_API` is the
+  API version: the page compares it with the version it expects and shows a coverage note rather
+  than call a changed API.
+- `reader.mjs` reads the query once and keeps every reading of an ambiguous word, up to 4 per
+  category: seasons, a bare year (two seasons, or a birth year in `core.birthYears`), birth years,
+  age groups, conferences, states, census places and counties (D2), field complexes and dates
+  (games only), kind words and name words. `vocab.mjs` holds the reviewed alias table: `la`
+  (D3) and `richmond` (D8), each with its evidence.
+- `match.mjs` expands words (exact 1.0, prefix 0.7, typo 0.4; club initials never by typo; a
+  known word never as a typo) and scores them with BM25F, one contribution per query word.
+- `teams.mjs` and `events.mjs` search squads and events (with their tier names); `slate.mjs`
+  orders the sections (the design's first-row-wins table, D2 across sections), promotes a best
+  match, shows partial matches only when nothing matches every word, and always reports games as
+  not indexed until PR 4b. `links.mjs` builds today's link formats.
+- **Serving:** they are static assets at `/search/*.mjs` (`wrangler.toml`'s `run_worker_first`
+  does not cover them), served as `text/javascript`; `proxy_server.py` pins that type locally.
+  Node tests import them directly.
+- **Cost:** `node --import ./tests/netguard/netguard.mjs --expose-gc tools/search_data_size.mjs --index`
+  measures `buildIndex`. `tests/search-modules.test.mjs` types every judged query one character
+  at a time, pins the work each keystroke does, and fails on any keystroke over 20 ms or a cold
+  build over 200 ms (each the fastest of 3, so a busy CI runner cannot fail it).
 
 ### Census places
 
@@ -569,7 +606,7 @@ Bureau, 2020 Census ZCTA to Place and ZCTA to County Relationship Files; public 
   runpy.run_path('tools/census_places.py', run_name='__main__')" \
     "$D/tab20_zcta520_place20_natl.txt" "$D/tab20_zcta520_county20_natl.txt" YYYY-MM-DD
   ```
-  Then `python archive.py --search-index`, and re-freeze the search fixture (above).
+  Then `python archive.py --search-data`, and re-freeze the search fixture (above).
 
 ## Team history
 

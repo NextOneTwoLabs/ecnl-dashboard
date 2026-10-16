@@ -14,6 +14,7 @@ import {
   HERE, ROOT, FIXTURES, FIXTURE_FILES, IMAGE, lf, sha, readLF, readJSON, stable, loadFixtures, indexOf, checkSchema, resolveProblems,
   todayAdapter, todayRow, canaryRun, makeClock, driftStatus, slicesOf, vendoredText, vendoredSlices, engineSha, runAll, baselineOf,
   evaluate, summarise, destinationProblem, seasonFacts, liveGame, GROUPS,
+  modulesAdapter, modulesRow, modulesBaselineOf, modulesSha,
 } from './search/judged.mjs';
 
 const doc = readJSON(new URL('queries.json', HERE));
@@ -274,4 +275,72 @@ test('MF5: a simulated refresh (new squads, a relink, club changes) keeps the fa
   // ...as is a closed-season game whose date moves
   const moved = m => (m === 539613 ? { ...fixtureGames.get(m), date: '2023-09-10T11:30:00' } : fixtureGames.get(m));
   assert.notDeepEqual(factsOf(fx.directory, fx.sources, moved), before);
+});
+
+// ---------- the search modules (#163, PR 3): public/search/*.mjs measured on the same set ----------
+// The pass criteria of the approved plan (v2, section 5). The modules answer teams and events only:
+// games, fields, head to head and pairings stay `unsupported` until PR 4b and PR 6.
+const MODULES = readJSON(new URL('baseline/modules.json', HERE));
+const modules = modulesAdapter(doc.context);
+const modulesRun = runAll(doc, modules, fx);
+// Queries allowed to fail a supported check, each with its reason. Empty since the owner's Q1
+// decision on #163 (C07's expected sections). A fix or a new failure both edit this list.
+const KNOWN_FAILING = {};
+
+test('#163: the modules on the fixtures equal the recorded baseline, query by query', () => {
+  const now = modulesBaselineOf(doc, modules, fx, modulesRun);
+  const hint = ' (re-record with: node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules, and explain the diff in the PR)';
+  assert.deepEqual(Object.keys(now.perQuery).sort(), Object.keys(MODULES.perQuery).sort(), 'the same queries' + hint);
+  for (const id of Object.keys(now.perQuery)) assert.deepEqual(JSON.parse(stable(now.perQuery[id])), MODULES.perQuery[id], id + hint);
+  assert.deepEqual(JSON.parse(stable(now.header)), MODULES.header, 'header (modules, fixtures, queries, context)' + hint);
+  assert.deepEqual(JSON.parse(stable(now.summary)), MODULES.summary, 'summary' + hint);
+  assert.equal(MODULES.header.modulesSha, modulesSha());
+});
+
+test('#163 pass criteria: first result useful better than today overall, and no group worse', () => {
+  const t = BASELINE.summary, m = modulesRun.summary;
+  assert.ok(m.overall.firstUseful > t.overall.firstUseful, `${m.overall.firstUseful} > ${t.overall.firstUseful}`);
+  assert.equal(m.overall.firstUseful, 48, 'the plan expects 48/60: every query the modules can answer');
+  for (const g of GROUPS) assert.ok(m.groups[g].firstUseful >= t.groups[g].firstUseful, `${g}: ${m.groups[g].firstUseful} >= ${t.groups[g].firstUseful}`);
+});
+
+test('#163 pass criteria: 0 wrong destinations, 0 must-never hits, section order, no reading cap', () => {
+  const o = modulesRun.summary.overall;
+  assert.equal(o.wrongDestinations, 0);
+  assert.equal(o.mustNeverHits, 0);
+  assert.equal(o.mustShowMissing, 0);
+  assert.ok(o.sectionsAgreeRateSupported >= 0.9, `section order ${o.sectionsAgreeSupported}/${o.sectionsSupported}`);
+  assert.equal(o.capReached, 0, 'no judged query reaches the cap of 4 readings');
+  for (const [id, r] of Object.entries(modulesRun.perQuery)) {
+    if (BASELINE.perQuery[id].checks.sections === 'pass') assert.equal(r.checks.sections, 'pass', `${id}: its section order passes today`);
+  }
+});
+
+test('#163 pass criteria: no check that passes today fails now, and only the known queries fail', () => {
+  for (const [id, r] of Object.entries(modulesRun.perQuery)) {
+    for (const [k, v] of Object.entries(BASELINE.perQuery[id].checks)) if (v === 'pass') assert.notEqual(r.checks[k], 'fail', `${id} ${k}`);
+  }
+  const failing = Object.entries(modulesRun.perQuery).filter(([, r]) => r.status === 'fail').map(([id]) => id).sort();
+  assert.deepEqual(failing, Object.keys(KNOWN_FAILING).sort());
+});
+
+test('#163: the modules adapter fails loudly on a row kind it does not know', () => {
+  assert.throws(() => modulesRow({ kind: 'mystery' }), /unknown row kind/);
+  assert.deepEqual(modulesRow({ kind: 'event', season: '2025-26', eventID: 4041, hrefs: ['#h'], nearby: true }),
+    { section: 'events', kind: 'event', season: '2025-26', eventID: 4041, hrefs: ['#h'], nearby: true });
+});
+
+test('#163 MF6: the modules give the same outcome under TZ=UTC and TZ=Pacific/Kiritimati', () => {
+  const run = () => runAll(doc, modulesAdapter(doc.context), fx).perQuery;
+  assert.deepEqual(withTZ('UTC', run), withTZ('Pacific/Kiritimati', run));
+});
+
+test('#163 Q2: refinement B (the more specific reading wins a tie) changes only C07', () => {
+  const off = modulesAdapter(doc.context, { options: { specificityTie: false } });
+  const changed = doc.queries.filter(q => {
+    const a = modules.run(q.q), b = off.run(q.q);
+    return JSON.stringify(a.sections.map(s => s.name)) !== JSON.stringify(b.sections.map(s => s.name)) || JSON.stringify(a.enter) !== JSON.stringify(b.enter);
+  }).map(q => q.id);
+  assert.deepEqual(changed, ['C07']);
+  assert.equal(evaluate(doc.queries.find(q => q.id === 'C07'), off.run('Northwest 2023-24'), off, fx, ix).firstUseful, 0, 'without it, C07 opens a team');
 });

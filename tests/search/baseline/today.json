@@ -7,8 +7,8 @@
     },
     "engine": "today",
     "engineSha": "1a54fe54edcd6407d9225f19413d38a937a589d7920d0e329b0deb6e9c7f1fe0",
-    "manifestSha": "479149ccc6ce33268b1206d45d803d6b29f6c6b3317aee0307dfb16603b55429",
-    "queriesSha": "7c89ae768abafa252cd2fe38d27012e357e1ade2e4d00be4d0c541d7fb6f9df3",
+    "manifestSha": "14d0ca0bbb0f18363ee6fe330e2759ecad18a4245babacc46cec28f26481335c",
+    "queriesSha": "2cea55dd01746ff794d7680c371a2e156cfbb88162db2b3cceb9f22ae6924a95",
     "recordedBy": "node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today"
   },
   "perQuery": {
@@ -283,6 +283,7 @@
         "actual": [],
         "expected": [
           "events",
+          "teams",
           "games"
         ]
       },

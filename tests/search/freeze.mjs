@@ -4,9 +4,10 @@
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --freeze --commit <sha>
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --vendor
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today
+//   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules   (#163)
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --search <dir>
 //
-// --search (#158) copies the search data files that `search_index.py --fixture` wrote to <dir>
+// --search (#158) copies the search data files that `search_data.py --fixture` wrote to <dir>
 // (built from another checkout's archive, at MANIFEST's commit) into fixtures/search/ as LF text,
 // refuses any logo or image, and records their LF checksums plus <dir>/PROVENANCE.json (commit,
 // builder and reviewed-input checksums) as MANIFEST.search. The README has the full command.
@@ -20,6 +21,7 @@ import { readdirSync, writeFileSync, mkdirSync, rmSync, readFileSync } from 'nod
 import {
   ROOT, HERE, FIXTURES, FIXTURE_FILES, lf, sha, readLF, readJSON, stable, refsOf, refKind, fieldName, fieldNumber, fieldKey,
   trimGame, SCHEDULES, IMAGE, slicesOf, vendoredText, vendoredSlices, engineSha, loadFixtures, todayAdapter, baselineOf,
+  modulesAdapter, modulesBaselineOf,
 } from './judged.mjs';
 
 const args = process.argv.slice(2);
@@ -122,19 +124,20 @@ if (has('--freeze')) {
 
 if (has('--record')) {
   const engine = arg('--record');
-  if (engine !== 'today') throw new Error('--record today (the only engine in PR 1)');
+  if (!['today', 'modules'].includes(engine)) throw new Error('--record today|modules');
   const doc = readJSON(QUERIES), fx = loadFixtures();
-  vendoredSlices(readLF(VENDORED));
-  const base = baselineOf(doc, todayAdapter(fx, doc.context), fx);
+  let base;
+  if (engine === 'today') { vendoredSlices(readLF(VENDORED)); base = baselineOf(doc, todayAdapter(fx, doc.context), fx); }
+  else base = modulesBaselineOf(doc, modulesAdapter(doc.context), fx);   // #163: public/search/*.mjs
   mkdirSync(new URL('baseline/', HERE), { recursive: true });
-  write(new URL('baseline/today.json', HERE), stable(base));
+  write(new URL(`baseline/${engine}.json`, HERE), stable(base));
   const o = base.summary.overall;
-  console.log(`recorded baseline/today.json: ${o.pass} pass, ${o.fail} fail, ${o.unsupported} unsupported of ${o.queries}`);
+  console.log(`recorded baseline/${engine}.json: ${o.pass} pass, ${o.fail} fail, ${o.unsupported} unsupported of ${o.queries}`);
 }
 
 if (has('--search')) {
   const dir = arg('--search');
-  if (!dir) throw new Error('--search needs <dir>, the --out of search_index.py --fixture');
+  if (!dir) throw new Error('--search needs <dir>, the --out of search_data.py --fixture');
   const from = new URL(`file://${dir.replace(/\/?$/, '/')}`);
   const prov = JSON.parse(readFileSync(new URL('PROVENANCE.json', from), 'utf8'));
   const m = readManifest();
@@ -158,6 +161,6 @@ if (has('--search')) {
 }
 
 if (!['--vendor', '--freeze', '--record', '--search'].some(has)) {
-  console.error('usage: freeze.mjs [--vendor] [--freeze --commit <sha>] [--record today] [--search <dir>]');
+  console.error('usage: freeze.mjs [--vendor] [--freeze --commit <sha>] [--record today|modules] [--search <dir>]');
   process.exit(2);
 }

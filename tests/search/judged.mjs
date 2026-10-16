@@ -8,8 +8,9 @@
 //
 // Nothing here reads the network, the machine clock or the machine time zone on behalf of an
 // engine: engines get an injected, frozen Date and Intl (makeClock).
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import * as SEARCH from '../../public/search/search.mjs';
 
 export const HERE = new URL('./', import.meta.url);
 export const ROOT = new URL('../../', import.meta.url);
@@ -346,6 +347,50 @@ export function todayRow(r) {
       current: !!r.current, hrefs: [...new Set([r.href, r.overviewHref, r.seasonHref].filter(Boolean))] };
   }
   throw new Error(`today adapter: unknown result kind ${r && r.kind}`);
+}
+
+// ---------- the search modules (#163, PR 3): public/search/*.mjs on the frozen search data ----------
+export const MODULES = new URL('public/search/', ROOT);
+export const moduleFiles = () => readdirSync(MODULES).filter(n => n.endsWith('.mjs')).sort();
+// One checksum over every module, by name and LF text: the modules baseline's header holds it.
+export const modulesSha = () => sha(moduleFiles().map(n => `${n}\n${readLF(new URL(n, MODULES))}`).join('\n'));
+export function loadSearchData(dir = new URL('search/', FIXTURES)) {
+  return { core: readJSON(new URL('core.json', dir)), places: readJSON(new URL('places.json', dir)) };
+}
+export const modulesContext = context => ({ now: Date.parse(context.now), timeZone: context.timeZone, selectedSeason: context.selectedSeason });
+// The modules as an adapter. Games are not indexed until PR 4b, so game, field, head-to-head and
+// pairing judgements stay `unsupported`; the partial and nearby labels are judged.
+export function modulesAdapter(context, { searchData = loadSearchData(), options = {} } = {}) {
+  const index = SEARCH.buildIndex(searchData);
+  const ctx = modulesContext(context);
+  return {
+    name: 'modules', index,
+    capabilities: { sections: ['teams', 'events'], kinds: ['team', 'club', 'conference', 'event'], labels: ['partial', 'nearby'] },
+    run(q) {
+      const slate = SEARCH.search(index, q, ctx, options);
+      const sections = slate.sections.map(s => ({ name: s.name, rows: s.rows.map(modulesRow) }));
+      const enter = slate.enter ? modulesRow(slate.enter) : null;
+      return { sections, enter, capReached: !!slate.capReached, slate };
+    },
+  };
+}
+// One slate row as an outcome row. Fails loudly on a kind it does not know (the twin of nit 2).
+export function modulesRow(r) {
+  const labels = { ...(r.partial ? { partial: true } : {}), ...(r.nearby ? { nearby: true } : {}) };
+  if (r && r.kind === 'team') return { section: 'teams', kind: 'team', teamRows: r.teamRows, clubID: r.clubID, born: r.born, current: !!r.current, hrefs: r.hrefs, ...labels };
+  if (r && r.kind === 'conference') return { section: 'events', kind: 'conference', season: r.season, conf: r.conf, div: r.div, hrefs: r.hrefs, ...labels };
+  if (r && r.kind === 'event') return { section: 'events', kind: 'event', season: r.season, eventID: r.eventID, hrefs: r.hrefs, ...labels };
+  throw new Error(`modules adapter: unknown row kind ${r && r.kind}`);
+}
+export function modulesBaselineOf(doc, adapter, fx, run = runAll(doc, adapter, fx)) {
+  return {
+    header: {
+      engine: 'modules', modulesSha: modulesSha(), manifestSha: sha(stable(fx.manifest)), queriesSha: sha(stable(doc)), context: doc.context,
+      recordedBy: 'node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules',
+    },
+    summary: run.summary,
+    perQuery: Object.fromEntries(Object.entries(run.perQuery).map(([id, r]) => [id, r])),
+  };
 }
 
 // The drift check on the vendored copy (MF7): compared with index.html's slices as LF text; never

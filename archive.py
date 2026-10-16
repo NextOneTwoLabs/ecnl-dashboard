@@ -43,7 +43,7 @@ Manual/bulk use:
     python archive.py --team-history          rebuild every team's history file (#107)
                                               from the archive (no API calls); with
                                               --check, write nothing and fail on drift
-    python archive.py --search-index          rebuild the search data files (#158) from the
+    python archive.py --search-data           rebuild the search data files (#158) from the
                                               archive and the committed directory (no API
                                               calls); with --check, write nothing and fail
                                               on drift
@@ -1047,17 +1047,17 @@ def update_team_directory(sources, stats, squads, dry_run=False, keep=None):
 #
 # public/archive/search/: core.json and games-<season>.json, the search data files (the prepared
 # records; the index is the word-to-records map the browser builds from them). Built by
-# search_index.py right after the team directory, from the directory document built in the same
+# search_data.py right after the team directory, from the directory document built in the same
 # run (never from a file on disk that may be stale), so core.json's directoryBuild always names
 # the directory committed with it. See docs/data-api.md, "Search data".
 
 def update_search_data(sources, stats, directory, dry_run=False):
-    """search_index.build + write for the crawl, refresh, --team-history and --clubs paths. Never
+    """search_data.build + write for the crawl, refresh, --team-history and --clubs paths. Never
     raises. With no directory (its build failed or did not run), the files are left as they were.
     A failure goes to stats.fail, so the run exits non-zero, keeps the old files and never touches
     refresh-state.json. A bad field-aliases.json or zip-fixes.json entry is left out, reported and
     fails the run; the files are still written."""
-    import search_index
+    import search_data
     if dry_run:
         print("Search data: not built (dry run).")
         return None
@@ -1065,11 +1065,11 @@ def update_search_data(sources, stats, directory, dry_run=False):
         print("Search data: not rebuilt (no team directory build in this run); left as it was.")
         return None
     try:
-        files, errors, report = search_index.build(sources=sources, directory=directory)
-        search_index.print_report(report)
-        changed = search_index.write(files)
+        files, errors, report = search_data.build(sources=sources, directory=directory)
+        search_data.print_report(report)
+        changed = search_data.write(files)
     except Exception as e:  # noqa: BLE001 (must never escape into the refresh)
-        stats.fail(f"search data: {e} [{type(e).__name__}] (fix, then run: python archive.py --search-index)")
+        stats.fail(f"search data: {e} [{type(e).__name__}] (fix, then run: python archive.py --search-data)")
         print(f"Search data: FAILED: {e}. The search data files were left as they were.")
         return None
     for err in errors:
@@ -1079,28 +1079,28 @@ def update_search_data(sources, stats, directory, dry_run=False):
     return changed
 
 
-def cmd_search_index(sources, check=False, dry_run=False):
-    """--search-index: rebuild the search data files from the archive and the committed team
+def cmd_search_data(sources, check=False, dry_run=False):
+    """--search-data: rebuild the search data files from the archive and the committed team
     directory. --check writes nothing and fails when a committed file differs from a fresh build
     (CI's drift check); --dry-run lists what would change."""
-    import search_index
+    import search_data
     try:
-        files, errors, report = search_index.build(sources=sources)
+        files, errors, report = search_data.build(sources=sources)
     except Exception as e:  # noqa: BLE001
         print(f"Search data{' check' if check else ''}: FAILED: {e} [{type(e).__name__}]")
         return 1
-    search_index.print_report(report)
+    search_data.print_report(report)
     for err in errors:
         print(f"  - {err}")
     if check:
-        diff = search_index.check(files)
+        diff = search_data.check(files)
         if diff:
             print(f"Search data check: {len(diff)} file(s) differ from a fresh build of the archive: {', '.join(diff)}. "
-                  "Run: python archive.py --search-index, then commit public/archive/search/")
+                  "Run: python archive.py --search-data, then commit public/archive/search/")
         else:
             print("Search data check: every search data file equals a fresh build of the archive.")
         return 1 if diff or errors else 0
-    changed = search_index.write(files, dry_run=dry_run)
+    changed = search_data.write(files, dry_run=dry_run)
     print(f"Search data: {len(files)} files, {len(changed)} {'would change' if dry_run else 'changed'}.")
     return 1 if errors else 0
 
@@ -1761,7 +1761,7 @@ def main():
                     help="Rebuild public/archive/history/<teamID>.json, every team's squad history "
                          "across all seasons (#107), from the archive (no API calls). Always all "
                          "seasons; --dry-run counts what would change.")
-    ap.add_argument("--search-index", action="store_true",
+    ap.add_argument("--search-data", action="store_true",
                     help="Rebuild the search data files (public/archive/search/, #158) from the archive "
                          "and the committed team directory; no API calls. With --check, write nothing "
                          "and fail on drift.")
@@ -1778,15 +1778,15 @@ def main():
         clash = [flag for flag, on in (
             ("--all", args.all), ("--national", args.national), ("--conference", args.conference),
             ("--refresh", args.refresh), ("--export", args.export),
-            ("--team-index", args.team_index), ("--team-history", args.team_history), ("--search-index", args.search_index),
+            ("--team-index", args.team_index), ("--team-history", args.team_history), ("--search-data", args.search_data),
             ("--clubs", args.clubs)) if on]
         if clash:
             ap.error(f"--event cannot be combined with {', '.join(clash)}")
         if not args.season or not args.showcases:
             ap.error("--event needs an explicit --season S and --showcases")
-    if args.check and not (args.team_history or args.search_index):
-        ap.error("--check needs --team-history or --search-index")
-    if args.team_history and args.search_index:
+    if args.check and not (args.team_history or args.search_data):
+        ap.error("--check needs --team-history or --search-data")
+    if args.team_history and args.search_data:
         ap.error("--team-history already rebuilds the search data; use one of them")
     if args.national and args.conference:
         ap.error("--national cannot be combined with --conference (the conference filter drops national events)")
@@ -1812,8 +1812,8 @@ def main():
     if args.team_history:   # every season, whatever --season or --all says: a squad spans them
         return cmd_team_history(sources, dry_run=args.dry_run, check=args.check)
 
-    if args.search_index:   # every season, from the committed directory (#158)
-        return cmd_search_index(sources, check=args.check, dry_run=args.dry_run)
+    if args.search_data:   # every season, from the committed directory (#158)
+        return cmd_search_data(sources, check=args.check, dry_run=args.dry_run)
 
     season_keys = list(sources["seasons"].keys())
     if args.all:

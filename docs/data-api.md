@@ -476,9 +476,10 @@ These formats are for this site's page, versioned by their `schema` field rather
 version: a change that renames, removes or retypes a field bumps `schema`, and the page refuses a
 schema it does not know (it shows a coverage note instead of misreading the file). Scripts may
 read them, but should expect them to change with the page. Nothing visitors see uses them before
-PR 4a of #149; PR 3 builds the index.
+PR 4a of #149; the page's search modules (`public/search/`, README "Search modules", #163) build the
+index from `core.json` and `places.json`.
 
-`search_index.py` builds them offline from the committed archive (no upstream request, no clock,
+`search_data.py` builds them offline from the committed archive (no upstream request, no clock,
 no locale): every season's hierarchies, standings and schedules, the catalog, the team
 directory, and the reviewed inputs in `public/data/`: `field-aliases.json`, `zip-fixes.json`, and
 for places (#159) `zip-places.json` (the census table), `zip-place-fixes.json` and
@@ -673,8 +674,8 @@ change, each to a `.tmp` file first, then moved into place, the games files befo
 file never depends on core, so a crash between the moves leaves a harmless pair). A failure
 removes every `.tmp` file, keeps the old files, fails the run, and never touches
 `refresh-state.json`; if the directory was not rebuilt, neither are they. `--dry-run` builds and
-writes nothing. `python archive.py --search-index` rebuilds them from the committed directory;
-`--search-index --check` (CI) fails when a committed file differs from a fresh build.
+writes nothing. `python archive.py --search-data` rebuilds them from the committed directory;
+`--search-data --check` (CI) fails when a committed file differs from a fresh build.
 
 **Pairs.** From PR 4a the page reads core and the games files, not the directory. A games file is
 independent of core (it names teams, flights and fields by id, and fields by name and zip), so a

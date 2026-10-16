@@ -1,19 +1,19 @@
 // #158: the search data files (public/archive/search/core.json and games-<season>.json), the
-// prepared records the page's search will read. The Python side (tests/test_search_index.py)
+// prepared records the page's search will read. The Python side (tests/test_search_data.py)
 // covers the build; this file covers what the browser side relies on:
 //   - undateBorrowedDates in index.html and its Python port agree on one shared fixture;
-//   - tests/search/index-format.mjs decodes every committed games file back to its source rows
+//   - tests/search/search-data-format.mjs decodes every committed games file back to its source rows
 //     (each side's own team id, name and club; flight; scores and PKs; date and time; field) (MF7);
 //   - dates: no date stays null, a day before the base decodes with floor division (MF4);
 //   - the frozen fixture: its checksums, its provenance (MF6), parity with PR 1's frozen directory,
 //     and the facts PR 1's judged queries cite;
 //   - no logo or image in any games file (MF8 option a).
-// Run under the netguard: node --import ./tests/netguard/netguard.mjs --test tests/search-index.test.mjs
+// Run under the netguard: node --import ./tests/netguard/netguard.mjs --test tests/search-data.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { decodeGames, decodeWhen, FLAGS } from './search/index-format.mjs';
+import { decodeGames, decodeWhen, FLAGS, GAMES_SCHEMA, CORE_SCHEMA, PLACES_SCHEMA } from './search/search-data-format.mjs';
 import { readJSON, readLF, sha, lf, IMAGE, FIXTURES, refsOf, refKind } from './search/judged.mjs';
 
 const ROOT = new URL('../', import.meta.url);
@@ -132,7 +132,7 @@ test('fixture: each search data file\'s LF checksum and size match MANIFEST.sear
 
 test('fixture: built by this builder from these reviewed inputs (else re-freeze; README "Search data")', () => {
   const lfSha = url => createHash('sha256').update(readFileSync(url).toString('latin1').replace(/\r\n/g, '\n'), 'latin1').digest('hex');
-  assert.equal(manifest.search.builder, lfSha(new URL('search_index.py', ROOT)), 'search_index.py changed: re-freeze the fixture');
+  assert.equal(manifest.search.builder, lfSha(new URL('search_data.py', ROOT)), 'search_data.py changed: re-freeze the fixture');
   // #159: every reviewed input, null for one not committed yet (the census table before its download).
   const inputs = ['field-aliases.json', 'zip-fixes.json', 'zip-places.json', 'zip-place-fixes.json', 'city-counties.json'];
   assert.deepEqual(Object.keys(manifest.search.inputs).sort(), [...inputs].sort());
@@ -210,4 +210,41 @@ test('places.json: every place, county and club place reference resolves (commit
     assert.equal(core.schema, 2);
     assert.equal('fields' in core, false);
   }
+});
+
+// #163: the decoder's schema constants are the builder's (CORE_SCHEMA was left at 1 by #159).
+test('search-data-format.mjs: its schema constants equal search_data.py\'s', () => {
+  const py = readLF(new URL('search_data.py', ROOT));
+  const val = name => { const m = new RegExp(`^${name} = (\\d+)`, 'm').exec(py); assert.ok(m, name); return +m[1]; };
+  assert.deepEqual([CORE_SCHEMA, PLACES_SCHEMA, GAMES_SCHEMA], [val('SCHEMA'), val('PLACES_SCHEMA'), val('GAMES_SCHEMA')]);
+  assert.equal(JSON.parse(readLF(new URL('core.json', FX))).schema, CORE_SCHEMA);
+});
+
+// #163 (owner decision 149#6207974871): "index" means only the in-memory map. The old file and flag
+// names are gone from every text file outside the archive data. The banned strings are built from
+// pieces, so this file never matches itself.
+const BANNED = [['search', '_index'], ['search', '-index'], ['index', '-format'], ['search', '_index', '_size']].map(p => p.join(''));
+function textFiles(dir, out = []) {
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const url = new URL(e.name + (e.isDirectory() ? '/' : ''), dir);
+    const rel = url.pathname.slice(ROOT.pathname.length);
+    if (e.isDirectory()) {
+      if (['.git/', 'public/archive/', 'node_modules/'].includes(rel) || e.name === '__pycache__' || e.name.startsWith('.parity-')) continue;
+      textFiles(url, out);
+    } else if (/\.(py|mjs|js|json|md|yml|yaml|toml|html|txt)$/.test(e.name)) out.push([rel, url]);
+  }
+  return out;
+}
+test('renames: no text file outside public/archive/ names the old search_data files or flag', () => {
+  const files = textFiles(ROOT);
+  assert.ok(files.length > 50 && files.some(([r]) => r === 'archive.py') && files.some(([r]) => r === '.github/workflows/api-tests.yml'), 'the walk sees the tree');
+  const hits = [];
+  for (const [rel, url] of files) {
+    const text = readFileSync(url, 'utf8');
+    for (const b of BANNED) if (text.includes(b)) hits.push(`${rel}: ${b}`);
+  }
+  assert.deepEqual(hits, []);
+  assert.ok(['python ' + BANNED[0] + '.py'].some(s => BANNED.some(b => s.includes(b))), 'the check has teeth');
+  for (const n of ['search_data.py', 'tests/test_search_data.py', 'tests/search-data.test.mjs', 'tests/search/search-data-format.mjs', 'tools/search_data_size.mjs'])
+    assert.ok(existsSync(new URL(n, ROOT)), n);
 });

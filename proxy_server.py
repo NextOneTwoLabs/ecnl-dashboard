@@ -42,6 +42,12 @@ OFFLINE = False
 class ProxyHandler(http.server.SimpleHTTPRequestHandler):
     """Serves static files from the project directory and proxies /api/* requests."""
 
+    # #163: the page's search modules (public/search/*.mjs) load as ES modules, which browsers
+    # refuse unless they are served as JavaScript. Pinned here because on Windows the registry can
+    # override mimetypes for .js and .mjs. The default map (.gz, .Z, .bz2, .xz) is kept.
+    extensions_map = {**http.server.SimpleHTTPRequestHandler.extensions_map,
+                      ".mjs": "text/javascript", ".js": "text/javascript"}
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=SERVE_DIR, **kwargs)
 
