@@ -112,7 +112,9 @@ class Committed(unittest.TestCase):
 
     def test_no_event_only_teams(self):
         """#97 decision 4 and #114 D3: only teams with a conference row, i.e. a team page."""
-        self.assertEqual(set(self.doc), {"schema", "seasons", "confs", "divs", "events", "tiers", "clubs", "families", "squads"})
+        self.assertEqual(set(self.doc), {"schema", "build", "seasons", "confs", "divs", "events", "tiers", "clubs", "families", "squads"})
+        self.assertEqual(list(self.doc)[:2], ["schema", "build"], "#158: build sits second")
+        self.assertEqual(self.doc["build"], td.build_id(self.doc), "#158: the hash of the dump without build")
         # A squad is in the file of each id it used, so the history files list some twice.
         distinct = {(sq["seasons"][0]["season"], sq["seasons"][0]["teamID"]) for sq in self.history}
         self.assertEqual(len(self.doc["squads"]), len(distinct))

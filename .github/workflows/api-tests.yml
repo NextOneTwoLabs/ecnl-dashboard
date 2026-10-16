@@ -22,7 +22,7 @@ jobs:
       # non-loopback connection, DNS lookup or fetch, and fails the run at exit.
       # tests/team-history.test.mjs runs team_history.py --parity itself (Python is set up above),
       # under the Python guard, into a temporary directory in the checkout that it removes (#107).
-      - run: node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/conference-sheet.test.mjs tests/search-judged.test.mjs
+      - run: node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/conference-sheet.test.mjs tests/search-judged.test.mjs tests/search-index.test.mjs
         env:
           HTTPS_PROXY: http://127.0.0.1:9
           HTTP_PROXY: http://127.0.0.1:9
@@ -40,6 +40,17 @@ jobs:
       # change without its history rebuild, a builder change without regenerated files, or a
       # team-links.json entry that no longer fits fails here. Writes nothing.
       - run: python archive.py --team-history --check
+        env:
+          PYTHONPATH: tests/netguard
+          HTTPS_PROXY: http://127.0.0.1:9
+          HTTP_PROXY: http://127.0.0.1:9
+          ECNL_API_BASE: https://127.0.0.1:9
+          NETGUARD_REPORT: '1'
+      # The search data files (#158; public/archive/search/) must equal a fresh build of the
+      # committed archive, team directory and reviewed inputs (field-aliases.json, zip-fixes.json).
+      # A data change without its rebuild, a builder change without regenerated files, or a bad
+      # reviewed entry fails here. Writes nothing.
+      - run: python archive.py --search-index --check
         env:
           PYTHONPATH: tests/netguard
           HTTPS_PROXY: http://127.0.0.1:9

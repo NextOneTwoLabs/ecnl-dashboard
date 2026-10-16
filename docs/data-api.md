@@ -24,8 +24,10 @@ lock.
 | `/api/v1/clubs` | Club places, every season (derived; see below): `public/archive/clubs.json` |
 | `/api/v1/teams/{teamId}/history` | One team's squad history across every season and event (derived; see below): `public/archive/history/{teamId}.json` |
 | `/api/v1/teams` | The team directory: every team (club and age group) in one file, for team search (derived; see below): `public/archive/directory.json` |
+| `/api/v1/search/core` | Search data: teams, events, fields and vocabulary, for the page's search (derived, page-internal; see below): `public/archive/search/core.json` |
+| `/api/v1/search/games/{season}` | Search data: every game of one season (derived, page-internal; see below): `public/archive/search/games-{season}.json` |
 
-Apart from the team index, the club places, the team histories and the team directory, success bodies are the original JSON bytes. Existing
+Apart from the team index, the club places, the team histories, the team directory and the search data files, success bodies are the original JSON bytes. Existing
 envelopes (`data` where present), field names/casing, array order, null values,
 IDs, empty groups, and reconstructed match metadata (`source`, `reconstructed`,
 negative match IDs) are preserved. No wrapping, merging, sorting, or date
@@ -405,6 +407,10 @@ upstream requests and no second build.
 
 - `schema` is `1`, with the same bump rule as the team index. **One squad per line**, so a
   refresh diff shows only the teams that changed.
+- `build` (#158), second in the file: the first 16 hex digits of the sha256 of the file's own
+  dump without `build`. It changes exactly when anything else in the file does (the `--clubs`
+  path recomputes it when it updates the places in place). `core.json` carries the same value as
+  `directoryBuild`, so the two can be checked to come from one build. Additive: the schema stays 1.
 - Shared tables, which the rows index into: `seasons` (sorted), `confs`, `divs` (`[season,
   division, u, birthYears]`, from the catalog's `ageGroups`), `events` (national events and
   showcases: `[season, "n" or "s", stage, eventId]`), `tiers` (the catalog's tier labels) and
@@ -460,6 +466,166 @@ follows the team index (#92): a refusal shows "try again" and is remembered for 
 available right now" for the page; a 5xx, a network error or bad JSON is asked again at the next
 focus. There is never a fallback scan, and `?live=1` has no team search.
 
+### Search data (`/api/v1/search/core`, `/api/v1/search/games/{season}`)
+
+**Derived and page-internal** (#149 phase 1, #158). The **search data files** are the prepared
+records the page's search reads: `core.json`, and one `games-{season}.json` per season. The
+**index** is the word-to-records map the browser builds from them in memory; it is never shipped.
+These formats are for this site's page, versioned by their `schema` field rather than by the API
+version: a change that renames, removes or retypes a field bumps `schema`, and the page refuses a
+schema it does not know (it shows a coverage note instead of misreading the file). Scripts may
+read them, but should expect them to change with the page. Nothing visitors see uses them before
+PR 4a of #149; PR 3 builds the index.
+
+`search_index.py` builds them offline from the committed archive (no upstream request, no clock,
+no locale): every season's hierarchies, standings and schedules, the catalog, the team
+directory, and two reviewed inputs, `public/data/field-aliases.json` and
+`public/data/zip-fixes.json`. Byte for byte the same in any process, hash seed or time zone.
+
+**`core.json`** (about 504 KB raw, 98 KB gzipped):
+
+```json
+{"schema":1
+,"build":"…","directoryBuild":"0e91dd4716b17de6","activeSeason":"2026-27","seasons":["2020-21",…]
+,"birthYears":[2002,2014]
+,"vocab":{"confAliases":{"northern california":"NorCal"},"fieldAliases":{"oc great park":"Great Park",…},"states":{"AL":"Alabama",…}}
+,"events":{
+"4041":["2025-26","s","San Diego Fall","ECNL Girls San Diego","Del Mar, CA","2025-10-11","2025-10-13",["G2011","G2012","G2013","G2014"]]
+,…}
+,"fields":{
+"Great Park@92618":["Orange County Great Park",{"2020-21":92,"2021-22":174,…},[1,2,…,15,…]]
+,…}
+,"teams":{"seasons":[…],"confs":[…],…,"squads":[
+{"b":[2011],"c":56,"s":[[3,55477,"MVLA ECNL G11",7,33,1,10],…]}
+,{…,"x":[[5,112470]]}
+]}}
+```
+
+- `build`: the hash of the file without it. `directoryBuild`: the team directory's `build`, the
+  directory this file was built from (in the same run, never a file left on disk).
+- `teams`: the team directory's content **verbatim** (its tables and squads, logos included
+  exactly as the directory carries them: MF8 option a, no new exposure, #117 unchanged), plus
+  `x` on a squad that played a showcase or national event under another team id (the catalog's
+  `teamAliases`), as `[[season, teamID]]`. Today one: 2025-26 Phoenix Spring team 112470 for
+  squad 69910.
+- `events`: every catalog event, by event id: `[season, kind ("c" conference season, "n" national,
+  "s" showcase), name (the conference or the stage), eventName, location, start, end, [divisions
+  played]]`. A conference season's dates are its first and last dated games inside the season
+  window (1 July to 31 July a year later), ignoring TGS's `0001-01-01` sentinel and undated legs;
+  a national event's or showcase's come from the catalog.
+- `fields`: one entry per field, keyed `name@zip` (a field is a normalised name plus a zip; D6):
+  `[label, {season: games}, [field numbers and other venue names]]`. The season counts tell the
+  page which seasons hold the field's games before it loads them (a coverage note).
+- `vocab`: the reviewed field aliases, the conference aliases today's search already knows, the
+  states, and `birthYears` (the catalog's range, read at build time).
+
+**`games-{season}.json`** (one game per line; 2026-27 is about 488 KB raw, 69 KB gzipped; all
+seasons together about 566 KB gzipped). From `games-2023-24.json` and `games-2026-27.json`:
+
+```json
+{"schema":1
+,"season":"2026-27"
+,"base":"2026-07-01"
+,"build":"5b646e7a7f7f8017"
+,"flights":{
+"40551":[4263,"c","GU13","ECNL"]
+,…}
+,"teams":{
+"55477":["MVLA ECNL G11",294]
+,…}
+,"alt":{
+"1153:3064":["Eagles ECNL G07",7]
+,"18443:3064":["Beach FC (CA) ECNL G10",16]
+,…}
+,"fields":{
+"1018":["Great Park","92618"]
+,…}
+,"games":[
+[1058623,2411530,40581,127576,134157,null,null,null,null,2735,"Stadium",null,[1,0]]
+,[1,2411730,40582,103936,134144,null,null,null,null,2735,"Stadium",null,[1,0]]
+,…]}
+```
+
+- **Rows** are sorted by matchID: `[matchID, when, flightID, home, away, homeScore, awayScore,
+  homePK, awayPK, complexID, number, flags, dest]`, trailing nulls dropped. The first row's
+  matchID is whole, every later one is the difference from the row before. Negative matchIDs
+  (the 35 reconstructed games) are kept.
+- `when`: days from `base` × 10000 + HHMM, local wall-clock time as TGS gives it; HHMM 9999 means
+  no kick-off time (`T00:00:00`). Decode with **floor** division (a game dated before `base`, such
+  as 2023-24's match 538653 on 2022-10-28, has a negative offset). `null` means no date: none in
+  the source, TGS's `0001-01-01` sentinel (any year before 1900, as the page reads it), or an
+  undated leg (flag 2).
+- `home` and `away`: a team id, resolved through `alt["teamID:eventID"]` first and then `teams`,
+  each `[name, clubID]`. So every side keeps the name and club of its own game: a team spelled one
+  way in conference and another at a national event keeps both (MF7). A TBD side has no id: its
+  own name (or null) is in the row instead.
+- `complexID` and `number`: the field, through `fields` (`[name, zip]`), and its number (`Field 08`
+  is 8) or other venue text. A game with no complex, or a placeholder (TBD, TBA, To Be
+  Determined), has neither.
+- `flags`: 1 typed "Bracket" by TGS; 2 an undated leg (`undateBorrowedDates`, the page's #66
+  rule, ported); 4 reconstructed, set from the source row's `reconstructed` field (all 35
+  negative-ID games carry it); 8 a friendly; 16 a Bye.
+- `dest`, what a result opens (PR 4b builds the link from it): `[1, 0]` or `[1, 1]` the
+  conference Matches view for the division with the home (0) or away (1) team selected, the first
+  side found in the division's standings (every flight of it, merged, as the page reads it);
+  `[1]` that view with no team selected (neither side is in the division's standings; the view
+  still lists the game); `[2]` the national bracket (in `knockout_games`, the page's own rule,
+  `omitFromBracket` applied); `[3]` the national Schedule view (not TBD and not in the bracket:
+  Group Play, the 2021-22 group stage typed "Bracket", and omitted games); `[4]` the showcase
+  page; `[0]` no link (a TBD side, or a flight the event's hierarchy does not list). Byes are `[2]`
+  with flag 16.
+- **Not carried**: logos, `publicNote`, `flagText`, `status` (only "On Time" or null today; the
+  game's state comes from its date and scores; any other value is reported by the build), and
+  TGS's schedule, timeslot and venue ids.
+- **Every game once.** Every catalog event's flight files are read, so a conference game TGS
+  stores in only one flight's file is still in the season (#155). A matchID in two files is kept
+  once (the copy with a score, then a time, then a venue) and reported. A key that maps to two
+  values (a complexID with two fields, a team with two names at one event, a flight in two
+  events) fails the build: nothing is picked silently.
+
+**Fields and zips** (MF5, D6, D6a, Q3, Q4). A game's zip: whitespace stripped; a ZIP+4 cut to 5
+digits; then `zip-fixes.json` (a 4-digit zip that lost its leading zero is fixed only there,
+with evidence; a known-bad value such as `7514`, a Texas park, is marked unknown); then, for a game
+with no zip, the zip of its normalised name when that name has exactly one valid zip in the
+archive. A name is NFKC, lower case, punctuation dropped, whitespace collapsed; then
+`field-aliases.json` maps it, at its zip, to a canonical field (Great Park @ 92618 is 12 complex
+ids). Game keys never depend on census data: city and county arrive in core only (#159). The build
+report (the run's output, never a file) lists rejected zips, names with more than one zip, and
+same-zip name variants, which are alias candidates for a reviewed PR and are never merged
+automatically.
+
+**How a refresh changes them** (MF2). Rows and tables are keyed by TGS's own ids, the tables hold
+one entry per line in id order, and each line begins with its comma. A refresh that changes one
+score rewrites that game's line and the `build` line; a new game adds a line; nothing else moves.
+Measured on three real refreshes of 2026-27 (`07acaae9`, `266b2039`, `44f50b02`): 16, 19 and 48
+games changed, and the diffs were +19/−17, +20/−19 and +48/−48 lines of about 7,385, with every
+closed season byte-identical.
+
+**When they change.** `archive.py` rebuilds them right after the team directory in every path
+that rebuilds it (a crawl, `--refresh` with or without work, `--team-history`, and `--clubs` when
+places change), from that run's directory document. They are written only when their bytes
+change, each to a `.tmp` file first, then moved into place, the games files before core (a games
+file never depends on core, so a crash between the moves leaves a harmless pair). A failure
+removes every `.tmp` file, keeps the old files, fails the run, and never touches
+`refresh-state.json`; if the directory was not rebuilt, neither are they. `--dry-run` builds and
+writes nothing. `python archive.py --search-index` rebuilds them from the committed directory;
+`--search-index --check` (CI) fails when a committed file differs from a fresh build.
+
+**Pairs.** From PR 4a the page reads core and the games files, not the directory. A games file is
+independent of core (it names teams, flights and fields by id, and fields by name and zip), so a
+games file from another build can lose a link, never give a wrong one. A closed season's games
+file still changes when the builder, `dest`'s rules, an alias, a zip fix or a `dataGaps` entry
+changes; a browser may then keep the old copy for up to two days (max-age plus
+stale-while-revalidate, #82). The page accepts a games schema it knows even when core's differs,
+and refuses one it does not know.
+
+**Caching and cost.** `search/core` and the active (or a future) season's games are `no-cache`
+with a validator, like the directory. A closed season's games file gets the closed-season
+lifetime (#82). They go through the same rate limits as every `/api/v1` route; nothing is served
+from `/archive`. From PR 4a, the first focus of the search box costs 2 requests (core and the
+active season's games) instead of 1, plus one per earlier season a query names (at most 6), cached
+for a day.
+
 ## HTTP behavior
 
 - GET returns one JSON object; HEAD has equivalent status/headers without a body.
@@ -489,8 +655,8 @@ focus. There is never a fallback scan, and `?live=1` has no team search.
 
 | Answer (200 or 304) | `Cache-Control` |
 | --- | --- |
-| `hierarchy`, `standings` and `schedule` of an event whose catalog season is earlier than `refresh.activeSeason`; `seasons/{s}/teams` with `s` earlier than it | `private, max-age=86400, stale-while-revalidate=86400` |
-| the active season; a future one (registered before the rollover); an event the catalog doesn't list; `catalog`, `status`, `clubs`, `teams/{id}/history`, `teams` (the directory, #114) | `no-cache`, as before |
+| `hierarchy`, `standings` and `schedule` of an event whose catalog season is earlier than `refresh.activeSeason`; `seasons/{s}/teams` and `search/games/{s}` (#158) with `s` earlier than it | `private, max-age=86400, stale-while-revalidate=86400` |
+| the active season; a future one (registered before the rollover); an event the catalog doesn't list; `catalog`, `status`, `clubs`, `teams/{id}/history`, `teams` (the directory, #114), `search/core` (#158) | `no-cache`, as before |
 | every error, 429 and other refusal | `no-store`, as before |
 
 - **Closed** means earlier than the catalog's `refresh.activeSeason` (a string compare of two

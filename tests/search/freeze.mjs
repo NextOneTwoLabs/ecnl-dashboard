@@ -4,13 +4,19 @@
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --freeze --commit <sha>
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --vendor
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today
+//   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --search <dir>
+//
+// --search (#158) copies the search data files that `search_index.py --fixture` wrote to <dir>
+// (built from another checkout's archive, at MANIFEST's commit) into fixtures/search/ as LF text,
+// refuses any logo or image, and records their LF checksums plus <dir>/PROVENANCE.json (commit,
+// builder and reviewed-input checksums) as MANIFEST.search. The README has the full command.
 //
 // --freeze copies public/archive/directory.json and public/data/sources.json (as LF text), takes
 // refresh-state.json's updatedAt, and extracts every cited closed-season game and every cited
 // field from the schedule files into games-judged.json. Club logos are dropped everywhere (#117). It fails on a cited
 // game it cannot find or one in the active season. --commit names the commit the working tree
 // holds; it is recorded, not checked. Re-freezing is a reviewed PR: re-record the baseline after.
-import { readdirSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readdirSync, writeFileSync, mkdirSync, rmSync, readFileSync } from 'node:fs';
 import {
   ROOT, HERE, FIXTURES, FIXTURE_FILES, lf, sha, readLF, readJSON, stable, refsOf, refKind, fieldName, fieldNumber, fieldKey,
   trimGame, SCHEDULES, IMAGE, slicesOf, vendoredText, vendoredSlices, engineSha, loadFixtures, todayAdapter, baselineOf,
@@ -126,7 +132,32 @@ if (has('--record')) {
   console.log(`recorded baseline/today.json: ${o.pass} pass, ${o.fail} fail, ${o.unsupported} unsupported of ${o.queries}`);
 }
 
-if (!['--vendor', '--freeze', '--record'].some(has)) {
-  console.error('usage: freeze.mjs [--vendor] [--freeze --commit <sha>] [--record today]');
+if (has('--search')) {
+  const dir = arg('--search');
+  if (!dir) throw new Error('--search needs <dir>, the --out of search_index.py --fixture');
+  const from = new URL(`file://${dir.replace(/\/?$/, '/')}`);
+  const prov = JSON.parse(readFileSync(new URL('PROVENANCE.json', from), 'utf8'));
+  const m = readManifest();
+  if (prov.commit !== m.commit) throw new Error(`the search data was built from ${prov.commit}, MANIFEST's commit is ${m.commit}`);
+  const names = readdirSync(from).filter(n => n === 'core.json' || /^games-\d{4}-\d{2}\.json$/.test(n)).sort();
+  if (!names.includes('core.json') || names.length < 2) throw new Error(`${dir}: no search data files`);
+  const out = new URL('search/', FIXTURES);
+  rmSync(out, { recursive: true, force: true });
+  mkdirSync(out, { recursive: true });
+  const files = {};
+  for (const n of names) {
+    const text = lf(readFileSync(new URL(n, from), 'utf8'));
+    if (IMAGE.test(text)) throw new Error(`${n} must hold no logos or images`);
+    write(new URL(n, out), text);
+    files[n] = { sha256: sha(text), bytes: Buffer.byteLength(text) };
+  }
+  m.search = { commit: prov.commit, builder: prov.builder, inputs: prov.inputs, files,
+    logos: 'dropped from core.json teams (#117); directoryBuild is recomputed over the stripped directory' };
+  writeManifest(m);
+  console.log(`froze ${names.length} search data files from ${prov.commit}`);
+}
+
+if (!['--vendor', '--freeze', '--record', '--search'].some(has)) {
+  console.error('usage: freeze.mjs [--vendor] [--freeze --commit <sha>] [--record today] [--search <dir>]');
   process.exit(2);
 }

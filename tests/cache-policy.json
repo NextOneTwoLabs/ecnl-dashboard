@@ -1,6 +1,6 @@
 {
   "_comment": [
-    "#82: the Cache-Control of a served answer (200, and 304), per route. Read by tests/data-api.test.mjs",
+    "#82 (and #158, the search data routes): the Cache-Control of a served answer (200, and 304), per route. Read by tests/data-api.test.mjs",
     "(the Worker) and tests/test_data_api.py (the local server), so both answer alike by construction.",
     "`archive`: [path, expected] or [path, expected, method] against the committed archive and catalog;",
     "`closed` stands for the header below. `catalogs`: each case serves `catalog` with one change (and",
@@ -21,6 +21,10 @@
     ["/api/v1/seasons/2020-21/teams", "closed"],
     ["/api/v1/seasons/2024-25/teams", "closed"],
     ["/api/v1/seasons/2025-26/teams", "closed"],
+    ["/api/v1/search/games/2020-21", "closed"],
+    ["/api/v1/search/games/2024-25", "closed"],
+    ["/api/v1/search/games/2025-26", "closed"],
+    ["/api/v1/search/games/2025-26", "closed", "HEAD"],
     ["/api/v1/events/4263/hierarchy", "no-cache"],
     ["/api/v1/events/4263/divisions/22407/flights/40551/standings", "no-cache"],
     ["/api/v1/events/4263/flights/40551/schedule", "no-cache"],
@@ -32,6 +36,12 @@
     ["/api/v1/teams/55477/history", "no-cache"],
     ["/api/v1/teams", "no-cache"],
     ["/api/v1/teams", "no-cache", "HEAD"],
+    ["/api/v1/search/games/2026-27", "no-cache"],
+    ["/api/v1/search/core", "no-cache"],
+    ["/api/v1/search/core", "no-cache", "HEAD"],
+    ["/api/v1/search/games/2030-31", "no-store"],
+    ["/api/v1/search/games/2026-28", "no-store"],
+    ["/api/v1/search/games/2025-26", "no-store", "POST"],
     ["/api/v1/events/999999999/hierarchy", "no-store"],
     ["/api/v1/seasons/2030-31/teams", "no-store"],
     ["/api/v1/events/0/hierarchy", "no-store"],
@@ -62,16 +72,22 @@
       "/api/v1/seasons/2027-28/teams",
       "/api/v1/clubs",
       "/api/v1/teams",
-      "/api/v1/status"
+      "/api/v1/status",
+      "/api/v1/search/games/2024-25",
+      "/api/v1/search/games/2025-26",
+      "/api/v1/search/games/2026-27",
+      "/api/v1/search/games/2027-28",
+      "/api/v1/search/core"
     ],
     "cases": [
       { "name": "as published", "closed": [
         "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/events/3928/divisions/1/flights/2/standings",
-        "/api/v1/events/4041/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams"] },
+        "/api/v1/events/4041/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams",
+        "/api/v1/search/games/2024-25", "/api/v1/search/games/2025-26"] },
       { "name": "rollover: activeSeason 2027-28", "activeSeason": "2027-28", "closed": [
         "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/events/3928/divisions/1/flights/2/standings",
         "/api/v1/events/4041/hierarchy", "/api/v1/events/4263/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams",
-        "/api/v1/seasons/2026-27/teams"] },
+        "/api/v1/seasons/2026-27/teams", "/api/v1/search/games/2024-25", "/api/v1/search/games/2025-26", "/api/v1/search/games/2026-27"] },
       { "name": "padded activeSeason (trailing space)", "activeSeason": "2026-27 ", "closed": [] },
       { "name": "padded activeSeason (leading space)", "activeSeason": " 2026-27", "closed": [] },
       { "name": "malformed activeSeason", "activeSeason": "zzz", "closed": [] },
@@ -95,11 +111,13 @@
         },
         "2025-26 ": { "conferences": { "Padded season key": { "eventId": 7777 } } }
       }, "closed": [
-        "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams"] },
+        "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams",
+        "/api/v1/search/games/2024-25", "/api/v1/search/games/2025-26"] },
       { "name": "an event listed in an active and a closed season", "seasons": {
         "2026-27": { "conferences": { "Active": { "eventId": 4263 } } },
         "2024-25": { "conferences": { "Mid-Atlantic": { "eventId": 3157 }, "Also active": { "eventId": "4263" } } }
-      }, "closed": ["/api/v1/events/3157/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams"] }
+      }, "closed": ["/api/v1/events/3157/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams",
+        "/api/v1/search/games/2024-25", "/api/v1/search/games/2025-26"] }
     ]
   }
 }

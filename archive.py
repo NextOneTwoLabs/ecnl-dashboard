@@ -8,6 +8,9 @@ Crawls the events listed in public/data/sources.json and writes:
   public/archive/teams/<season>.json        per-season team index (derived, #81)
   public/archive/clubs.json                 club city and state (derived, #87)
   public/archive/history/<teamID>.json      one squad across seasons and events (derived, #107)
+  public/archive/directory.json             every team in one file, for team search (derived, #114)
+  public/archive/search/core.json           search data files (derived, #158): teams, events,
+  public/archive/search/games-<season>.json   fields and vocabulary; one row per game a season
   export/<season>/<conference>/*.csv        human-readable standings & schedules
   export/<season>/showcases/<showcase>/*.csv  the same for a showcase (#97)
   public/archive/manifest.json              index tying event IDs to season/conference
@@ -39,6 +42,10 @@ Manual/bulk use:
     python archive.py --team-history          rebuild every team's history file (#107)
                                               from the archive (no API calls); with
                                               --check, write nothing and fail on drift
+    python archive.py --search-index          rebuild the search data files (#158) from the
+                                              archive and the committed directory (no API
+                                              calls); with --check, write nothing and fail
+                                              on drift
     python archive.py --clubs --all           fetch the city and state of every club
                                               with no entry yet (--force: re-check all)
 
@@ -1010,7 +1017,7 @@ def update_team_history(sources, stats, dry_run=False):
 # histories. It is rebuilt LAST in every path (after the club places and the catalog's
 # birth-year anchor, which it carries), and only from a successful history build.
 
-def update_team_directory(sources, stats, squads, dry_run=False):
+def update_team_directory(sources, stats, squads, dry_run=False, keep=None):
     """team_directory.write_directory for the crawl, refresh, --team-history and --clubs paths.
     Never raises. With no squad list (the history build failed, or a test stubbed it), the file
     is left as it was. A failure goes to stats.fail, so the run exits non-zero, and leaves the
@@ -1021,7 +1028,7 @@ def update_team_directory(sources, stats, squads, dry_run=False):
         return None
     errors = []
     try:
-        changed = team_directory.write_directory(sources, squads, dry_run=dry_run, errors=errors)
+        changed = team_directory.write_directory(sources, squads, dry_run=dry_run, errors=errors, keep=keep)
     except Exception as e:  # noqa: BLE001 (must never escape into the refresh)
         stats.fail(f"team directory: {e} [{type(e).__name__}] (fix, then run: python archive.py --team-history)")
         print(f"Team directory: FAILED: {e}. The directory was left as it was.")
@@ -1033,6 +1040,68 @@ def update_team_directory(sources, stats, squads, dry_run=False):
     state = ("would change" if dry_run else "written") if changed else "unchanged"
     print(f"Team directory: {len(squads)} teams, {state}.")
     return changed
+
+
+# ---------- search data (#158) ----------
+#
+# public/archive/search/: core.json and games-<season>.json, the search data files (the prepared
+# records; the index is the word-to-records map the browser builds from them). Built by
+# search_index.py right after the team directory, from the directory document built in the same
+# run (never from a file on disk that may be stale), so core.json's directoryBuild always names
+# the directory committed with it. See docs/data-api.md, "Search data".
+
+def update_search_data(sources, stats, directory, dry_run=False):
+    """search_index.build + write for the crawl, refresh, --team-history and --clubs paths. Never
+    raises. With no directory (its build failed or did not run), the files are left as they were.
+    A failure goes to stats.fail, so the run exits non-zero, keeps the old files and never touches
+    refresh-state.json. A bad field-aliases.json or zip-fixes.json entry is left out, reported and
+    fails the run; the files are still written."""
+    import search_index
+    if dry_run:
+        print("Search data: not built (dry run).")
+        return None
+    if not isinstance(directory, dict):
+        print("Search data: not rebuilt (no team directory build in this run); left as it was.")
+        return None
+    try:
+        files, errors, report = search_index.build(sources=sources, directory=directory)
+        search_index.print_report(report)
+        changed = search_index.write(files)
+    except Exception as e:  # noqa: BLE001 (must never escape into the refresh)
+        stats.fail(f"search data: {e} [{type(e).__name__}] (fix, then run: python archive.py --search-index)")
+        print(f"Search data: FAILED: {e}. The search data files were left as they were.")
+        return None
+    for err in errors:
+        stats.fail(f"search data: {err} (fix public/data/field-aliases.json or zip-fixes.json)")
+        print(f"Search data: {err}")
+    print(f"Search data: {len(files)} files, {len(changed)} changed.")
+    return changed
+
+
+def cmd_search_index(sources, check=False, dry_run=False):
+    """--search-index: rebuild the search data files from the archive and the committed team
+    directory. --check writes nothing and fails when a committed file differs from a fresh build
+    (CI's drift check); --dry-run lists what would change."""
+    import search_index
+    try:
+        files, errors, report = search_index.build(sources=sources)
+    except Exception as e:  # noqa: BLE001
+        print(f"Search data{' check' if check else ''}: FAILED: {e} [{type(e).__name__}]")
+        return 1
+    search_index.print_report(report)
+    for err in errors:
+        print(f"  - {err}")
+    if check:
+        diff = search_index.check(files)
+        if diff:
+            print(f"Search data check: {len(diff)} file(s) differ from a fresh build of the archive: {', '.join(diff)}. "
+                  "Run: python archive.py --search-index, then commit public/archive/search/")
+        else:
+            print("Search data check: every search data file equals a fresh build of the archive.")
+        return 1 if diff or errors else 0
+    changed = search_index.write(files, dry_run=dry_run)
+    print(f"Search data: {len(files)} files, {len(changed)} {'would change' if dry_run else 'changed'}.")
+    return 1 if errors else 0
 
 
 def cmd_team_history(sources, dry_run=False, check=False):
@@ -1077,7 +1146,9 @@ def cmd_team_history(sources, dry_run=False, check=False):
         return 1 if diff or errors or stale_directory or drift else 0
     stats = Stats()
     squads = update_team_history(sources, stats, dry_run=dry_run)
-    update_team_directory(sources, stats, squads, dry_run=dry_run)
+    directory = {}
+    update_team_directory(sources, stats, squads, dry_run=dry_run, keep=directory)
+    update_search_data(sources, stats, directory.get("doc"), dry_run=dry_run)
     for e in stats.errors:
         print(f"  - {e}")
     return 1 if stats.failed else 0
@@ -1386,6 +1457,8 @@ def cmd_clubs(sources, season, force=False, dry_run=False):
         import team_directory
         if team_directory.refresh_places():
             print("Team directory: club places updated.")
+            # #158: core.json carries the directory (and its build id), so it follows.
+            update_search_data(sources, stats, api.read_json_file(team_directory.directory_path()))
     except Exception as e:  # noqa: BLE001
         stats.fail(f"team directory: {e} (fix, then run: python archive.py --team-history)")
     for e in stats.errors:
@@ -1478,7 +1551,9 @@ def cmd_refresh(sources, args):
         stats = Stats()
         update_team_index(sources, season, stats)
         squads = update_team_history(sources, stats)
-        update_team_directory(sources, stats, squads)
+        directory = {}
+        update_team_directory(sources, stats, squads, keep=directory)
+        update_search_data(sources, stats, directory.get("doc"))     # #158, after the directory
         return 1 if stats.failed else 0
     if args.dry_run:
         for fl in sorted((f for f in flights if f["key"] in candidates),
@@ -1591,7 +1666,10 @@ def cmd_refresh(sources, args):
 
     # The team directory (#114) last, after the club places it carries, from the squads of the
     # history build above. Local work only; unable to raise; never touches historyAsOf.
-    update_team_directory(sources, stats, squads)
+    directory = {}
+    update_team_directory(sources, stats, squads, keep=directory)
+    # The search data files (#158) from that directory. Local work only; unable to raise.
+    update_search_data(sources, stats, directory.get("doc"))
 
     print(f"{stats.fetched} requests ({standings_refreshed} standings), "
           f"{stats.failed} failed, {elapsed:.0f}s. "
@@ -1682,6 +1760,10 @@ def main():
                     help="Rebuild public/archive/history/<teamID>.json, every team's squad history "
                          "across all seasons (#107), from the archive (no API calls). Always all "
                          "seasons; --dry-run counts what would change.")
+    ap.add_argument("--search-index", action="store_true",
+                    help="Rebuild the search data files (public/archive/search/, #158) from the archive "
+                         "and the committed team directory; no API calls. With --check, write nothing "
+                         "and fail on drift.")
     ap.add_argument("--check", action="store_true",
                     help="With --team-history: write nothing, and exit 1 when a committed history "
                          "file differs from a fresh build of the archive (the CI drift check).")
@@ -1695,14 +1777,16 @@ def main():
         clash = [flag for flag, on in (
             ("--all", args.all), ("--national", args.national), ("--conference", args.conference),
             ("--refresh", args.refresh), ("--export", args.export),
-            ("--team-index", args.team_index), ("--team-history", args.team_history),
+            ("--team-index", args.team_index), ("--team-history", args.team_history), ("--search-index", args.search_index),
             ("--clubs", args.clubs)) if on]
         if clash:
             ap.error(f"--event cannot be combined with {', '.join(clash)}")
         if not args.season or not args.showcases:
             ap.error("--event needs an explicit --season S and --showcases")
-    if args.check and not args.team_history:
-        ap.error("--check needs --team-history")
+    if args.check and not (args.team_history or args.search_index):
+        ap.error("--check needs --team-history or --search-index")
+    if args.team_history and args.search_index:
+        ap.error("--team-history already rebuilds the search data; use one of them")
     if args.national and args.conference:
         ap.error("--national cannot be combined with --conference (the conference filter drops national events)")
     if args.showcases and (args.conference or args.national):
@@ -1726,6 +1810,9 @@ def main():
 
     if args.team_history:   # every season, whatever --season or --all says: a squad spans them
         return cmd_team_history(sources, dry_run=args.dry_run, check=args.check)
+
+    if args.search_index:   # every season, from the committed directory (#158)
+        return cmd_search_index(sources, check=args.check, dry_run=args.dry_run)
 
     season_keys = list(sources["seasons"].keys())
     if args.all:
@@ -1807,7 +1894,9 @@ def main():
 
     # The team directory (#114) last: after the club places and the birth-year anchor above.
     if not args.dry_run:
-        update_team_directory(sources, stats, squads)
+        directory = {}
+        update_team_directory(sources, stats, squads, keep=directory)
+        update_search_data(sources, stats, directory.get("doc"))     # #158, after the directory
 
     elapsed = time.time() - started
     print(f"\nFetched {stats.fetched}, reused {stats.skipped} fresh, "

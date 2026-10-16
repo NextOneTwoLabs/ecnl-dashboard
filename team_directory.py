@@ -12,6 +12,7 @@ archive.py rebuilds it LAST in every path that can change its inputs (a crawl, -
 from a successful history build in the same run (#114 M3). See docs/data-api.md, "Team
 directory".
 """
+import hashlib
 import json
 import os
 import re
@@ -111,7 +112,7 @@ def outcome(e):
 def build(sources, squads, places=None, families=None, errors=None):
     """The directory for `squads` (team_history.build()'s list, in its order).
 
-    {"schema":1, "seasons":[...], "confs":[name], "divs":[[season, division, u, birthYears]],
+    {"schema":1, "seasons":[...], "confs":[name],   (file_bytes adds "build" second, #158) "divs":[[season, division, u, birthYears]],
      "events":[[season, "n"|"s", stage, eventId]], "tiers":[label],
      "clubs":[[id, name, logo, "City, ST"(, family)]], "families":[[name, mainClubID]],
      "squads":[{"c":club, "b":birthYears, "s":[[season, teamID, name, conf, div, rank, of]],
@@ -196,15 +197,33 @@ def build(sources, squads, places=None, families=None, errors=None):
 
 
 def dump(doc):
-    """One squad per line, so a refresh diff shows only the teams that changed."""
+    """One squad per line, so a refresh diff shows only the teams that changed. `build`, when the
+    document has one, is written second, after `schema`."""
     def j(o):
         return json.dumps(o, ensure_ascii=False, separators=(",", ":"))
-    head = j({k: v for k, v in doc.items() if k != "squads"})[:-1]
+    keys = [k for k in doc if k not in ("squads", "build")]
+    if "build" in doc:
+        keys.insert(1, "build")
+    head = j({k: doc[k] for k in keys})[:-1]
     return (head + ',"squads":[\n' + ",\n".join(j(x) for x in doc["squads"]) + "\n]}\n").encode("utf-8")
 
 
+def build_id(doc):
+    """#158 (search data): the directory's build id, the first 16 hex digits of the sha256 of its
+    dump without `build`. core.json carries the same value as `directoryBuild`, so a page that
+    loads both can tell they come from one build. Deterministic: an unchanged directory keeps it."""
+    return hashlib.sha256(dump({k: v for k, v in doc.items() if k != "build"})).hexdigest()[:16]
+
+
+def with_build(doc):
+    """The document with its `build` set (recomputed from everything else)."""
+    out = {k: v for k, v in doc.items() if k != "build"}
+    out["build"] = build_id(out)
+    return out
+
+
 def file_bytes(sources, squads, places=None, errors=None):
-    return dump(build(sources, squads, places, errors=errors))
+    return dump(with_build(build(sources, squads, places, errors=errors)))
 
 
 def _on_disk(path):
@@ -216,16 +235,20 @@ def _on_disk(path):
         return None
 
 
-def write_directory(sources, squads, dry_run=False, path=None, errors=None):
+def write_directory(sources, squads, dry_run=False, path=None, errors=None, keep=None):
     """Write the directory if it differs from a fresh build. Returns True when it changed (or,
     with dry_run, would change). Atomic: the new bytes go to <path>.tmp, then os.replace; a
     failure removes the .tmp file, leaves the old file as it was, and raises. A bad family entry
-    is not a failure: it is left out, the rest is written, and it is appended to `errors`."""
+    is not a failure: it is left out, the rest is written, and it is appended to `errors`. With
+    `keep` (a dict), keep["doc"] is the directory just built, for the search data (#158), which is
+    built from this run's directory and never from a file on disk that may be stale."""
     path = path or directory_path()
     if not squads:
         raise ValueError("no squads to list; is the team history built?")
     data = file_bytes(sources, squads, errors=errors)
     if _on_disk(path) == data:
+        if keep is not None:
+            keep["doc"] = json.loads(data)
         return False
     if dry_run:
         return True
@@ -240,6 +263,8 @@ def write_directory(sources, squads, dry_run=False, path=None, errors=None):
         except OSError:
             pass
         raise
+    if keep is not None:      # only a directory that is on disk may name the search data's pair
+        keep["doc"] = json.loads(data)
     return True
 
 
@@ -261,7 +286,7 @@ def refresh_places(places=None, path=None):
     doc = json.loads(raw)
     for c in doc["clubs"]:
         c[3] = _place_of(places, c[0])
-    data = dump(doc)
+    data = dump(with_build(doc))      # #158: the places are part of the build id
     if data == raw:
         return False
     tmp = path + ".tmp"
