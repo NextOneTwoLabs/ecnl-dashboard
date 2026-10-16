@@ -12,6 +12,11 @@ const routes = [
   // #114: every team in one file (the team directory). Its own kind, never 'teams' (the
   // season index), so cachePolicy leaves it no-cache and the counts tell the two apart.
   [/^\/api\/v1\/teams$/, 'directory', []],
+  // #158: the search data files (core.json, games-<season>.json), the prepared records the page's
+  // search reads; the index itself is built in the browser from them. Page-internal formats,
+  // versioned by their `schema` field (docs/data-api.md, "Search data").
+  [/^\/api\/v1\/search\/core$/, 'search-core', []],
+  [/^\/api\/v1\/search\/games\/([^/]+)$/, 'search-games', ['season']],
 ];
 
 // IDs are canonical positive decimals; a season is "YYYY-YY" with consecutive years.
@@ -34,10 +39,13 @@ export function resolveResource(path) {
 // #82: a closed season (earlier than the catalog's refresh.activeSeason) is never fetched by
 // the refresh again, so its event routes and its team index may be kept by the visitor's
 // browser for a day, and shown once more while a newer copy is fetched. `private`: never by a
-// shared cache. Everything else (the active season, a future or unknown one, the catalog,
-// status, clubs, history) stays no-cache. See docs/data-api.md, "HTTP behavior".
+// shared cache. A closed season's search games file (#158) likewise. Everything else (the active
+// season, a future or unknown one, the catalog, status, clubs, history, the directory, search
+// core) stays no-cache. See docs/data-api.md, "HTTP behavior".
 export const CLOSED_CACHE = 'private, max-age=86400, stale-while-revalidate=86400';
 const EVENT_KINDS = ['hierarchy', 'standings', 'schedule'];
+// Kinds keyed by a season in the path: the team index and the search games file (#158).
+const SEASON_KINDS = ['teams', 'search-games'];
 const EVENT_LISTS = ['conferences', 'national', 'showcases'];
 const isObject = value => !!value && typeof value === 'object' && !Array.isArray(value);
 // A catalog event id: a positive safe integer, or a canonical decimal string (as in a URL).
@@ -84,7 +92,7 @@ async function catalogFacts(request, env) {
 // trusted, gives no-cache, and the data is still served.
 export async function cachePolicy(request, env, resource) {
   const isEvent = EVENT_KINDS.includes(resource.kind);
-  if (!isEvent && resource.kind !== 'teams') return 'no-cache';
+  if (!isEvent && !SEASON_KINDS.includes(resource.kind)) return 'no-cache';
   try {
     const facts = await catalogFacts(request, env);
     if (!facts) return 'no-cache';

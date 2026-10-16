@@ -1,0 +1,301 @@
+{
+ "about": "Shared cases for undateBorrowedDates (public/index.html) and its Python port, search_index.undate_borrowed_dates (#158, #66). `undated` lists the matchIDs that must come back with gameDate null and dateUnconfirmed true; every other row must come back unchanged. Read by tests/search-index.test.mjs (the page's function, extracted by script) and tests/test_search_index.py.",
+ "cases": [
+  {
+   "name": "2026-27 live leg 1: FC Pride Elite v Racing Louisville G2009/10 (event 4269, flight 41862)",
+   "games": [
+    {
+     "matchID": 1133108,
+     "hometeamID": 59612,
+     "awayteamID": 133000,
+     "gameDate": "2027-05-08T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    },
+    {
+     "matchID": 1132880,
+     "hometeamID": 133000,
+     "awayteamID": 59612,
+     "gameDate": "2027-05-08T11:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": "Lynn Family Sports Vision & Training Facility",
+     "venue": "Field 4"
+    }
+   ],
+   "undated": [
+    1133108
+   ]
+  },
+  {
+   "name": "2026-27 live leg 2 (flight 41863)",
+   "games": [
+    {
+     "matchID": 1133109,
+     "hometeamID": 45765,
+     "awayteamID": 133002,
+     "gameDate": "2027-05-08T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    },
+    {
+     "matchID": 1132881,
+     "hometeamID": 133002,
+     "awayteamID": 45765,
+     "gameDate": "2027-05-08T13:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": "Lynn Family Sports Vision & Training Facility",
+     "venue": "Field 3"
+    }
+   ],
+   "undated": [
+    1133109
+   ]
+  },
+  {
+   "name": "2026-27 live leg 3 (flight 41864)",
+   "games": [
+    {
+     "matchID": 1133110,
+     "hometeamID": 45767,
+     "awayteamID": 133004,
+     "gameDate": "2027-05-08T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    },
+    {
+     "matchID": 1132882,
+     "hometeamID": 133004,
+     "awayteamID": 45767,
+     "gameDate": "2027-05-08T11:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": "Lynn Family Sports Vision & Training Facility",
+     "venue": "Field 3"
+    }
+   ],
+   "undated": [
+    1133110
+   ]
+  },
+  {
+   "name": "#66 shape: the slotted leg has only a score (no time, no venue)",
+   "games": [
+    {
+     "matchID": 1,
+     "hometeamID": 10,
+     "awayteamID": 20,
+     "gameDate": "2026-10-03T00:00:00",
+     "hometeamscore": 2,
+     "awayteamscore": 1,
+     "complex": null,
+     "venue": null
+    },
+    {
+     "matchID": 2,
+     "hometeamID": 20,
+     "awayteamID": 10,
+     "gameDate": "2026-10-03T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    }
+   ],
+   "undated": [
+    2
+   ]
+  },
+  {
+   "name": "#66 shape: the slotted leg has only a venue",
+   "games": [
+    {
+     "matchID": 1,
+     "hometeamID": 10,
+     "awayteamID": 20,
+     "gameDate": "2027-05-08T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": "Field 2"
+    },
+    {
+     "matchID": 2,
+     "hometeamID": 20,
+     "awayteamID": 10,
+     "gameDate": "2027-05-08T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    }
+   ],
+   "undated": [
+    2
+   ]
+  },
+  {
+   "name": "both legs bare: neither is slotted, nothing changes",
+   "games": [
+    {
+     "matchID": 1,
+     "hometeamID": 10,
+     "awayteamID": 20,
+     "gameDate": "2026-10-03T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    },
+    {
+     "matchID": 2,
+     "hometeamID": 20,
+     "awayteamID": 10,
+     "gameDate": "2026-10-03T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    }
+   ],
+   "undated": []
+  },
+  {
+   "name": "the bare leg has a score of its own: never changed",
+   "games": [
+    {
+     "matchID": 1,
+     "hometeamID": 10,
+     "awayteamID": 20,
+     "gameDate": "2026-10-03T10:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    },
+    {
+     "matchID": 2,
+     "hometeamID": 20,
+     "awayteamID": 10,
+     "gameDate": "2026-10-03T00:00:00",
+     "hometeamscore": 0,
+     "awayteamscore": 0,
+     "complex": null,
+     "venue": null
+    }
+   ],
+   "undated": []
+  },
+  {
+   "name": "the same pairing, not reversed: nothing changes",
+   "games": [
+    {
+     "matchID": 1,
+     "hometeamID": 10,
+     "awayteamID": 20,
+     "gameDate": "2026-10-03T10:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    },
+    {
+     "matchID": 2,
+     "hometeamID": 10,
+     "awayteamID": 20,
+     "gameDate": "2026-10-03T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    }
+   ],
+   "undated": []
+  },
+  {
+   "name": "the reversed leg is on another date: nothing changes",
+   "games": [
+    {
+     "matchID": 1,
+     "hometeamID": 10,
+     "awayteamID": 20,
+     "gameDate": "2026-10-03T10:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    },
+    {
+     "matchID": 2,
+     "hometeamID": 20,
+     "awayteamID": 10,
+     "gameDate": "2026-10-04T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    }
+   ],
+   "undated": []
+  },
+  {
+   "name": "a TBD side (null team id): nothing changes",
+   "games": [
+    {
+     "matchID": 1,
+     "hometeamID": 10,
+     "awayteamID": null,
+     "gameDate": "2026-10-03T10:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    },
+    {
+     "matchID": 2,
+     "hometeamID": null,
+     "awayteamID": 10,
+     "gameDate": "2026-10-03T00:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    }
+   ],
+   "undated": []
+  },
+  {
+   "name": "no date: nothing changes",
+   "games": [
+    {
+     "matchID": 1,
+     "hometeamID": 10,
+     "awayteamID": 20,
+     "gameDate": "2026-10-03T10:00:00",
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    },
+    {
+     "matchID": 2,
+     "hometeamID": 20,
+     "awayteamID": 10,
+     "gameDate": null,
+     "hometeamscore": null,
+     "awayteamscore": null,
+     "complex": null,
+     "venue": null
+    }
+   ],
+   "undated": []
+  }
+ ]
+}

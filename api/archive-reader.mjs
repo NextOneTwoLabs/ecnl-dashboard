@@ -11,6 +11,8 @@ export function assetPath(resource) {
     case 'clubs': return '/archive/clubs.json';
     case 'history': return `/archive/history/${team}.json`;
     case 'directory': return '/archive/directory.json';
+    case 'search-core': return '/archive/search/core.json';
+    case 'search-games': return `/archive/search/games-${season}.json`;
     default: throw new Error('Unknown resource');
   }
 }

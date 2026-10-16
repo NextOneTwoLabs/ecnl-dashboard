@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "_comment": "Reviewed field aliases for the search data files (#158, owner decision Q3; D6, D6a). A field is a name plus a zip: each entry merges the complex names listed in `aliases` (in search_index.norm_name form) at that zip into one field called `name`, shown as `label`. Aliases apply only at their zip. search_index.py validates every entry; a bad one is left out, reported, and fails `python archive.py --search-index --check`. Same-zip candidates are listed in the build report and are never merged automatically.",
+  "fields": [
+    {
+      "name": "Great Park",
+      "zip": "92618",
+      "label": "Orange County Great Park",
+      "aliases": ["orange county great park", "oc great park", "great park", "orange county great park sports park"],
+      "evidence": "Owner decisions D6 and D6a (#156): the 12 complex IDs 80, 422, 1018, 2555, 2838, 3069, 3075, 3416, 4559, 6698, 7083 and 7319 all sit at 92618 under these four names; 3069 (Orange County Great Park Sports Park) plays on Field 17, which the other Great Park IDs also use."
+    },
+    {
+      "name": "60 Acres Park",
+      "zip": "98052",
+      "label": "60 Acres Park",
+      "aliases": ["60 acres park", "60 acres"],
+      "evidence": "Owner decision D6 (#156): \"60 Acres\" is 60 Acres Park at 98052 (complexes 2302, 5901 and 8833)."
+    },
+    {
+      "name": "Surf Sports Park",
+      "zip": "92014",
+      "label": "Surf Sports Park",
+      "aliases": ["surf sports park", "surf cup sports park"],
+      "evidence": "Owner decision Q3 (#158): Surf Cup Sports Park is the same park as Surf Sports Park, renamed; both are at 92014 (1,359 and 165 games on main 88eb9097)."
+    }
+  ]
+}

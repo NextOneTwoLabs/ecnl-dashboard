@@ -24,6 +24,9 @@ ROUTES = [
     (re.compile(r"/api/v1/clubs"), lambda: "archive/clubs.json"),
     (re.compile(r"/api/v1/teams/([^/]+)/history"), lambda t: f"archive/history/{t}.json"),
     (re.compile(r"/api/v1/teams"), lambda: "archive/directory.json"),   # #114: the team directory
+    # #158: the search data files (page-internal formats, versioned by their schema field)
+    (re.compile(r"/api/v1/search/core"), lambda: "archive/search/core.json"),
+    (re.compile(r"/api/v1/search/games/(?P<season>[^/]+)"), lambda s: f"archive/search/games-{s}.json"),
 ]
 
 
@@ -49,13 +52,14 @@ def resolve_resource(path):
     return 404, None
 
 
-# #82: the twin of cachePolicy in api/data-api.mjs. A closed season's event routes and team index
-# (a season earlier than the catalog's refresh.activeSeason) may be kept by the browser for a day;
+# #82: the twin of cachePolicy in api/data-api.mjs. A closed season's event routes, team index and
+# search games file (#158) (a season earlier than the catalog's refresh.activeSeason) may be kept by the browser for a day;
 # everything else is no-cache. Sessions are off here, which is the Worker's `off` case, so the
 # long header is sent as is. tests/cache-policy.json holds the cases both suites run.
 CLOSED_CACHE = "private, max-age=86400, stale-while-revalidate=86400"
 EVENT_ROUTE = re.compile(r"/api/v1/events/([^/]+)/(?:hierarchy|divisions/[^/]+/flights/[^/]+/standings|flights/[^/]+/schedule)")
 TEAMS_ROUTE = re.compile(r"/api/v1/seasons/([^/]+)/teams")
+SEARCH_GAMES_ROUTE = re.compile(r"/api/v1/search/games/([^/]+)")   # #158: closed seasons as the team index
 EVENT_LISTS = ("conferences", "national", "showcases")
 _catalog_memo = None   # ((catalog path, mtime_ns, size), facts); only a usable catalog is kept
 
@@ -101,7 +105,7 @@ def cache_policy(path, root):
     """The Cache-Control for a 200 or 304 on `path`. Fails safe, as the Worker does: any fault,
     or a catalog that can't be trusted, gives no-cache."""
     global _catalog_memo
-    event, teams = EVENT_ROUTE.fullmatch(path), TEAMS_ROUTE.fullmatch(path)
+    event, teams = EVENT_ROUTE.fullmatch(path), TEAMS_ROUTE.fullmatch(path) or SEARCH_GAMES_ROUTE.fullmatch(path)
     if not (event or teams):
         return "no-cache"
     try:

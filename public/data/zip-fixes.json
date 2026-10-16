@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "_comment": "Reviewed fixes for zip codes TGS holds malformed (#158 MF5). Applied after whitespace is stripped and a ZIP+4 is cut to 5 digits, and before a missing zip is filled from the field name (Q4). A null zip marks a known-bad value whose zip is unknown: the game gets no zip and none is inferred. Any other value that is not 5 digits gives no zip and is listed in the build report. search_index.py validates every entry; a bad one is left out, reported, and fails `python archive.py --search-index --check`.",
+  "fixes": [
+    {"raw": "2780", "zip": "02780", "evidence": "Taunton Forekicks (101 games, Scorpions SC home): a Massachusetts zip that lost its leading zero."},
+    {"raw": "6492", "zip": "06492", "evidence": "Choate Rosemary Hall (1 game, Connecticut FC home): a Connecticut zip that lost its leading zero."},
+    {"raw": "7834", "zip": "07834", "evidence": "Morris Catholic High School (246 games, Match Fit Surf home): a New Jersey zip that lost its leading zero."},
+    {"raw": "7940", "zip": "07940", "evidence": "Drew University (5 games, Match Fit Surf home): a New Jersey zip that lost its leading zero."},
+    {"raw": "7514", "zip": null, "evidence": "Valley Ridge Park (6 games, DKSC home, a Texas club): a 751xx Texas zip with a digit missing, not 07514 (New Jersey). Unknown, so no zip; never inferred, because the only other Valley Ridge Park in the archive is a different park at 98188 (Washington)."},
+    {"raw": "9561", "zip": "95618", "evidence": "Davis Legacy Soccer Complex (23 games): its other 382 games are at 95618; 09561 is not a civilian zip."}
+  ]
+}

@@ -411,3 +411,22 @@ test('#114: the team directory has its own route kind, not the season index kind
   assert.equal(response.headers.get('cache-control'), 'no-cache');
   assert.equal(catalogReads, 0);
 });
+
+test('#158: the search data routes have their own kinds and assets; core never reads the catalog', async () => {
+  assert.deepEqual(resolveResource('/api/v1/search/core'), { kind: 'search-core' });
+  assert.deepEqual(resolveResource('/api/v1/search/games/2025-26'), { kind: 'search-games', season: '2025-26' });
+  assert.equal(assetPath(resolveResource('/api/v1/search/core')), '/archive/search/core.json');
+  assert.equal(assetPath(resolveResource('/api/v1/search/games/2025-26')), '/archive/search/games-2025-26.json');
+  // A malformed season never reaches storage, so no path outside archive/search/ can be named.
+  for (const path of ['/api/v1/search/games/..%2f..%2fsources', '/api/v1/search/games/2025-26.json']) assert.equal(resolveResource(path).status, 400, path);
+  resetCatalogMemo();
+  let catalogReads = 0;
+  const counting = { ASSETS: { fetch(req) { if (new URL(req.url).pathname === '/data/sources.json') catalogReads++; return env.ASSETS.fetch(req); } } };
+  const core = await dataApi(request('/api/v1/search/core'), counting);
+  assert.equal(core.status, 200);
+  assert.equal(core.headers.get('cache-control'), 'no-cache');
+  assert.equal(catalogReads, 0);
+  const closed = await dataApi(request('/api/v1/search/games/2025-26'), counting);
+  assert.equal(closed.headers.get('cache-control'), CLOSED_CACHE);
+  assert.equal(catalogReads, 1);
+});

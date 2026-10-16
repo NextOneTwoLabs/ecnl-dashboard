@@ -19,5 +19,48 @@
   "logos": "dropped from directory.json (#117)",
   "refreshUpdatedAt": "2026-10-15T22:10:33Z",
   "retired": null,
-  "schema": 1
+  "schema": 1,
+  "search": {
+    "builder": "c376410e002f3bb69fd387e89ecad40fbf58a126878eb6e5e0f0c369751f7ee8",
+    "commit": "1c4c32686e49a3592ab116d26d37cc620caf7b46",
+    "files": {
+      "core.json": {
+        "bytes": 500633,
+        "sha256": "2ae3b313ca69e6cf790e6ca6eac7e3970f4682c882f2e777bb9f5e46e46bbb2b"
+      },
+      "games-2020-21.json": {
+        "bytes": 420609,
+        "sha256": "4adadafd37810c0a6b30b62c146b468ec4c6b398129d9580aa2785676e1e96c6"
+      },
+      "games-2021-22.json": {
+        "bytes": 521795,
+        "sha256": "1b038fbca1dba9b397faea23b7e84f29c19267d28fdbf2e1ba7a63067b7ef851"
+      },
+      "games-2022-23.json": {
+        "bytes": 497994,
+        "sha256": "c50e08d1c7469c801d8bccf6b232585760149d5f42484f15b1586ed33851b36c"
+      },
+      "games-2023-24.json": {
+        "bytes": 506136,
+        "sha256": "16d3203b3fcf8d7badd21b3ca3dcb671eb8e73d6feabaad43d1828b23f565b41"
+      },
+      "games-2024-25.json": {
+        "bytes": 463776,
+        "sha256": "366bf01df7c241a754cf9b2d734be69c1219f3ac5095b35c79291136a846a3a4"
+      },
+      "games-2025-26.json": {
+        "bytes": 523270,
+        "sha256": "c84e811863faced6479b0f2a55d8c92745ed6a76e9a0922ca043eb2412850921"
+      },
+      "games-2026-27.json": {
+        "bytes": 499956,
+        "sha256": "73f40f6c55f17501142f2a05792f6a9744473811e32b931693c30595ed4561a2"
+      }
+    },
+    "inputs": {
+      "field-aliases.json": "dcb26eeee161671293c0bae526887a0a96939f5114f2ef01ed62c1c94956ab93",
+      "zip-fixes.json": "b8a01f81482ed8c1669ad050b1ae6764e342c34f97140557c2ff3be8852ccfea"
+    },
+    "logos": "dropped from core.json teams (#117); directoryBuild is recomputed over the stripped directory"
+  }
 }
