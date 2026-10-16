@@ -1,0 +1,1 @@
+Hand-written imitations of the 2020 Census ZCTA relationship files (#159), in their header layout, with made-up GEOIDs and names. They are not census data and not a copy of any download; tests/test_census_places.py builds a table from them to test tools/census_places.py's rules.

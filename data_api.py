@@ -26,6 +26,7 @@ ROUTES = [
     (re.compile(r"/api/v1/teams"), lambda: "archive/directory.json"),   # #114: the team directory
     # #158: the search data files (page-internal formats, versioned by their schema field)
     (re.compile(r"/api/v1/search/core"), lambda: "archive/search/core.json"),
+    (re.compile(r"/api/v1/search/places"), lambda: "archive/search/places.json"),   # #159
     (re.compile(r"/api/v1/search/games/(?P<season>[^/]+)"), lambda s: f"archive/search/games-{s}.json"),
 ]
 

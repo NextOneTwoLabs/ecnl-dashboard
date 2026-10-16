@@ -481,9 +481,10 @@ Later engines are measured against that baseline on the same queries.
 
 ### Search data
 
-`public/archive/search/` holds the **search data files** (#158): `core.json` (every team, as the
-team directory, plus events, fields and the shared vocabulary) and one `games-<season>.json` per
-season (every game of every flight of every event, once). They are the prepared records the
+`public/archive/search/` holds the **search data files** (#158, #159): `core.json` (every team, as
+the team directory, plus events and the shared vocabulary), `places.json` (every field, and the
+census city and county of each field, club and event) and one `games-<season>.json` per season
+(every game of every flight of every event, once). They are the prepared records the
 page's search reads through `/api/v1/search/core` and `/api/v1/search/games/{season}`; the
 **index** is the word-to-records map the browser builds from them in memory (PR 3 of #149).
 Nothing visitors see uses them yet. The format is in `docs/data-api.md`, "Search data".
@@ -512,9 +513,55 @@ Nothing visitors see uses them yet. The format is in `docs/data-api.md`, "Search
   HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
     node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --search <scratch>/search-fixture
   ```
-- **Sizes** (gzipped, measured with `node tools/search_index_size.mjs`): about 98 KB for core,
-  about 69 KB for the 2026-27 games, about 566 KB for every season's games. A test fails above
-  120 KB, 100 KB and 800 KB.
+- **Sizes** (gzipped, measured with `node tools/search_index_size.mjs`): about 73 KB for core (schema
+  2 since #159), about 23 KB for places before the census table, about 69 KB for the 2026-27
+  games, about 566 KB for every season's games. A test fails above 120 KiB (core), 60 KiB
+  (places), 100 KiB (the active games file) and 800 KiB (all games files).
+
+### Census places
+
+`public/data/zip-places.json` is the census table behind `places.json` (#159): every 2020 ZCTA with
+its place and county, every census place with its county, and every county. Source: U.S. Census
+Bureau, 2020 Census ZCTA to Place and ZCTA to County Relationship Files; public domain (17 U.S.C.
+§ 105). It is a build input only: never served, never fetched by the refresh or CI.
+
+- **Built once** by `tools/census_places.py` from the two downloaded files; the rules are in
+  `docs/data-api.md`, "Search data". The table records the files' checksums, sizes and row counts,
+  the tool's own checksum and a content checksum; `tests/test_search_places.py` recomputes them,
+  so a hand edit fails CI. Corrections go in the reviewed files instead, each entry with evidence:
+  `public/data/zip-place-fixes.json` (a zip's city; a city's census place, for consolidated names
+  such as Louisville) and `public/data/city-counties.json` (a city's county, whether or not it is a
+  census place, such as Woodland Hills and Fairfax, VA).
+- **The download is a network request** (not to TGS), made only with the owner's OK at the time, to
+  exactly these two URLs, into a new empty directory outside the checkout (untrusted data):
+
+  ```bash
+  set -euo pipefail
+  D=<scratch>/census-2020-download
+  mkdir "$D"
+  for f in tab20_zcta520_place20_natl.txt tab20_zcta520_county20_natl.txt; do
+    code=$(curl -sS --proto '=https' --max-filesize 104857600 --max-time 300 \
+             -o "$D/$f" -w '%{http_code}' "https://www2.census.gov/geo/docs/maps-data/data/rel2020/zcta520/$f")
+    [ "$code" = 200 ] || { echo "HTTP $code for $f: stopping"; rm -f "$D/$f"; exit 1; }
+    head -n 1 "$D/$f" | sed 's/^\xef\xbb\xbf//' | grep -q '^OID_ZCTA5_20|GEOID_ZCTA5_20|' \
+      || { echo "unexpected header in $f: stopping"; rm -f "$D/$f"; exit 1; }
+  done
+  sha256sum "$D"/*.txt; wc -lc "$D"/*.txt
+  ```
+- **Building the table**, from the checkout, with the netguard loaded by path (under `python -I`
+  the system `sitecustomize` would shadow it):
+
+  ```bash
+  NETGUARD_REPORT=1 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 python -I -c "
+  import importlib.util as u, runpy, sys
+  s = u.spec_from_file_location('netguard_py', 'tests/netguard/sitecustomize.py')
+  m = u.module_from_spec(s); s.loader.exec_module(m); assert m.NETGUARD_ACTIVE
+  sys.argv = ['tools/census_places.py', '--zcta-place', sys.argv[1], '--zcta-county', sys.argv[2],
+              '--retrieved', sys.argv[3], '--out', 'public/data/zip-places.json']
+  runpy.run_path('tools/census_places.py', run_name='__main__')" \
+    "$D/tab20_zcta520_place20_natl.txt" "$D/tab20_zcta520_county20_natl.txt" YYYY-MM-DD
+  ```
+  Then `python archive.py --search-index`, and re-freeze the search fixture (above).
 
 ## Team history
 

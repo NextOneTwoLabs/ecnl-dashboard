@@ -39,6 +39,9 @@
     ["/api/v1/search/games/2026-27", "no-cache"],
     ["/api/v1/search/core", "no-cache"],
     ["/api/v1/search/core", "no-cache", "HEAD"],
+    ["/api/v1/search/places", "no-cache"],
+    ["/api/v1/search/places", "no-cache", "HEAD"],
+    ["/api/v1/search/places", "no-store", "POST"],
     ["/api/v1/search/games/2030-31", "no-store"],
     ["/api/v1/search/games/2026-28", "no-store"],
     ["/api/v1/search/games/2025-26", "no-store", "POST"],
@@ -77,7 +80,8 @@
       "/api/v1/search/games/2025-26",
       "/api/v1/search/games/2026-27",
       "/api/v1/search/games/2027-28",
-      "/api/v1/search/core"
+      "/api/v1/search/core",
+      "/api/v1/search/places"
     ],
     "cases": [
       { "name": "as published", "closed": [

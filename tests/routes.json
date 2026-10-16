@@ -168,6 +168,22 @@
     200
   ],
   [
+    "/api/v1/search/places",
+    200
+  ],
+  [
+    "/api/v1/search/places/",
+    404
+  ],
+  [
+    "/api/v1/search/places.json",
+    404
+  ],
+  [
+    "/api/v1/search/places/2026-27",
+    404
+  ],
+  [
     "/api/v1/search/games/2026-27",
     200
   ],

@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "_comment": "Reviewed corrections to the census table's places (#159, plan v2 MF2). `fixes` set a field zip's city where the land-area rule picks the wrong place; `aliases` name the census place of a club or event city whose census name differs (consolidated governments). Every placeGeoid must exist in public/data/zip-places.json with that placeName and state; a fix the area rule already gives is redundant. A bad entry is left out, reported, and fails `python archive.py --search-index --check`. Each entry carries its evidence.",
+  "fixes": [
+    {
+      "zip": "92014",
+      "placeGeoid": "0618506",
+      "placeName": "Del Mar",
+      "state": "CA",
+      "evidence": "Surf Sports Park (complexes at 92014) is at the Del Mar Fairgrounds, in the City of Del Mar; the 2022-23 Playoffs (event 2719) were held there, listed at \"Del Mar, CA\". Owner decision D2 and PR 1's P02/P08 treat it as Del Mar, nearby for San Diego. ZCTA 92014 also covers a larger part of the City of San Diego (Carmel Valley, Torrey Pines), so the land-area rule is expected to give San Diego. To be verified against the downloaded table: kept only if the area rule does not already give Del Mar."
+    }
+  ],
+  "aliases": [
+    {
+      "city": "Louisville",
+      "state": "KY",
+      "placeGeoid": "2148006",
+      "placeName": "Louisville/Jefferson County",
+      "evidence": "The 2020 census place for Louisville, KY is the consolidated \"Louisville/Jefferson County metro government (balance)\"; clubs 3408 (Racing Louisville Academy) and 3475 (LouCity / Racing Youth Academy) are listed at \"Louisville, KY\". GEOID and stripped name to be verified against the downloaded table."
+    }
+  ]
+}

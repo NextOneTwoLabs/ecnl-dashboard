@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "_comment": "Reviewed counties for club and event cities (#159, owner decision Q5; plan v2 MF2). An entry gives the county of a city that is not a census place, and may override the computed county of one that is. Every countyGeoid must exist in public/data/zip-places.json with that countyName and state; an entry equal to the computed county is redundant. A bad entry is left out, reported, and fails `python archive.py --search-index --check`. Each entry carries its evidence.",
+  "cities": [
+    {
+      "city": "Woodland Hills",
+      "state": "CA",
+      "countyGeoid": "06037",
+      "countyName": "Los Angeles County",
+      "evidence": "Woodland Hills is a district of the City of Los Angeles, not a census place (club 82, LAFC So Cal, is listed there). PR 1's judged county list puts it in Los Angeles County. Its own zips (91364, 91367) are to be confirmed as Los Angeles County in the downloaded table; club 82's home field at Oak Park (91377, Ventura County) is deliberately not the evidence."
+    },
+    {
+      "city": "Fairfax",
+      "state": "VA",
+      "countyGeoid": "51059",
+      "countyName": "Fairfax County",
+      "evidence": "Owner decision Q-E (#159): Braddock Road Youth Club (357) is listed at \"Fairfax, VA\", a mailing name; its home games in the archive are at Robinson High School, zip 22032, in Fairfax County (to be confirmed in the downloaded table). The census place \"Fairfax city\" is an independent city whose county-equivalent (51600) excludes the county around it."
+    }
+  ]
+}

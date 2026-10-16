@@ -38,9 +38,12 @@ import unicodedata
 
 import ecnl_api as api
 
-SCHEMA = 1                # core.json
+SCHEMA = 2                # core.json (2 since #159: fields moved to places.json)
+PLACES_SCHEMA = 1         # places.json (#159)
 GAMES_SCHEMA = 1          # games-<season>.json
 BUILD_LEN = 16            # hex digits of sha256 kept as a build id
+# The reviewed inputs under public/data/ (MANIFEST.search.inputs records each one's LF sha256, or null).
+INPUTS = ("field-aliases.json", "zip-fixes.json", "zip-places.json", "zip-place-fixes.json", "city-counties.json")
 
 # Row positions in a games file (docs/data-api.md, "Search data"). Trailing nulls are dropped.
 ROW = ("matchID", "when", "flight", "home", "away", "hs", "as", "hpk", "apk", "complex", "number", "flags", "dest")
@@ -65,6 +68,10 @@ STATES = {
 }
 ALIAS_KEYS = {"name", "zip", "label", "aliases", "evidence"}
 FIX_KEYS = {"raw", "zip", "evidence"}
+PLACE_FIX_KEYS = {"zip", "placeGeoid", "placeName", "state", "evidence"}
+PLACE_ALIAS_KEYS = {"city", "state", "placeGeoid", "placeName", "evidence"}
+CITY_COUNTY_KEYS = {"city", "state", "countyGeoid", "countyName", "evidence"}
+Q1A_STATES = ("CT", "MA", "ME", "NH", "RI", "VT", "NJ", "NY", "PA")
 KINDS = (("conferences", "c"), ("national", "n"), ("showcases", "s"))
 
 
@@ -625,23 +632,16 @@ def core_doc(sources, directory, games_by_season, facts, aliases):
                     ages = sorted(divs_of[eid])
                 events[eid] = [season, k, name, ev.get("eventName") or "", ev.get("location") or "", start, end, ages]
 
-    fields = {}
-    for (name, z), f in facts.items():
-        label = f["label"] or sorted(f["spellings"].items(), key=lambda x: (-x[1], x[0]))[0][0]
-        # key "name@zip" (the field: name plus zip, D6); value [label, {season: games}, [numbers]].
-        # The complexIDs behind a field are in each games file's `fields` table.
-        fields[f"{name}@{z}"] = [label, dict(sorted(f["seasons"].items())), sorted(f["numbers"], key=_num_key)]
     years = sorted({y for s in seasons for ag in (sources["seasons"][s].get("ageGroups") or {}).values()
                     for y in (ag.get("birthYears") or [])})
     vocab = {
-        "fieldAliases": {a: aliases[(a, z)][0] for a, z in sorted(aliases)},
         "confAliases": dict(sorted(CONF_ALIASES.items())),
         "states": STATES,
     }
     return {"schema": SCHEMA, "directoryBuild": directory_build(directory),
             "activeSeason": sources["refresh"]["activeSeason"], "seasons": seasons,
             "birthYears": [years[0], years[-1]] if years else [], "vocab": vocab,
-            "events": events, "fields": fields, "teams": teams}
+            "events": events, "teams": teams}
 
 
 def dump_core(doc, build=None):
@@ -650,10 +650,249 @@ def dump_core(doc, build=None):
         head.append(f'"build":{_j(build)}')
     head += [f'"directoryBuild":{_j(doc["directoryBuild"])}', f'"activeSeason":{_j(doc["activeSeason"])}',
              f'"seasons":{_j(doc["seasons"])}', f'"birthYears":{_j(doc["birthYears"])}', f'"vocab":{_j(doc["vocab"])}',
-             _table("events", doc["events"], int), _table("fields", doc["fields"], str)]
+             _table("events", doc["events"], int)]
     t = doc["teams"]
     thead = ",".join(f"{_j(k)}:{_j(v)}" for k, v in t.items() if k != "squads")
     head.append('"teams":{' + thead + ',"squads":[\n' + "\n,".join(_j(sq) for sq in t["squads"]) + "\n]}")
+    return ("{" + "\n,".join(head) + "}\n").encode("utf-8")
+
+
+# ---------- places (#159): fields, census places and counties ----------
+#
+# places.json holds everything about where: the fields (moved from core, which is schema 2 since),
+# and the city and county of each field, club and event, from public/data/zip-places.json (the 2020
+# Census ZCTA relationship files, built once by tools/census_places.py) and two reviewed files. It
+# hardly grows with seasons, so core keeps its headroom (owner decision MF5 (a+)).
+#
+# The order, stated once (plan v2 MF2):
+#   a club or event city's place:  zip-place-fixes.json `aliases`, else the one census place of that
+#                                  normalised name in the state (a single incorporated one wins a
+#                                  tie with CDPs), else none; two or more and no single winner: none,
+#                                  reported, never a pick
+#   its county:                    city-counties.json (which may override a census place's computed
+#                                  county), else the place's computed county, else none, reported
+#   a field zip's city:            zip-place-fixes.json `fixes`, else the table's area rule
+#   a field zip's county:          the table's county file rule, always
+# Game keys never depend on any of this: only places.json changes with the census inputs.
+
+def norm_city(name):
+    """One normalisation for club and event cities and census names (after the suffix is gone):
+    NFKC, lower case, '.' and apostrophes dropped, other punctuation a space, whitespace collapsed,
+    then st -> saint and mt -> mount word by word."""
+    n = unicodedata.normalize("NFKC", str(name or "")).lower()
+    n = re.sub(r"[.'’]", "", n)
+    n = re.sub(r"[^a-z0-9]+", " ", n)
+    words = [{"st": "saint", "mt": "mount"}.get(w, w) for w in n.split()]
+    return " ".join(words)
+
+
+def split_city(value):
+    """'City, ST' -> (city, ST), or (None, None)."""
+    v = str(value or "")
+    at = v.rfind(", ")
+    if at <= 0 or not re.fullmatch(r"[A-Z]{2}", v[at + 2:]):
+        return None, None
+    return v[:at], v[at + 2:]
+
+
+def load_census(base=None):
+    """public/data/zip-places.json, or None when it is not committed yet (reported, not fatal)."""
+    path = os.path.join(inputs_dir(base), "zip-places.json")
+    if not os.path.exists(path):
+        return None, []
+    try:
+        with open(path, "rb") as f:
+            doc = json.loads(f.read().replace(b"\r\n", b"\n"))
+    except (OSError, ValueError) as e:
+        return None, [f"zip-places.json: unreadable ({e})"]
+    if not isinstance(doc, dict) or doc.get("schema") != 1 or not all(isinstance(doc.get(k), dict) for k in ("counties", "places", "zips")):
+        return None, ["zip-places.json: not the census table schema 1"]
+    return doc, []
+
+
+def _read_doc(path, label, keys):
+    """A reviewed file's lists, by name: ({list name: [entry]}, errors)."""
+    if not os.path.exists(path):
+        return {}, [f"{label}: missing; no entry applied"]
+    try:
+        with open(path, encoding="utf-8") as f:
+            doc = json.load(f)
+    except (OSError, ValueError) as e:
+        return {}, [f"{label}: unreadable ({e}); no entry applied"]
+    if not isinstance(doc, dict) or doc.get("schema") != 1 or not all(isinstance(doc.get(k), list) for k in keys):
+        return {}, [f"{label}: not {{\"schema\": 1, {', '.join(repr(k) for k in keys)}: [...]}}; no entry applied"]
+    return {k: doc[k] for k in keys}, []
+
+
+def _entries(entries, where, keys, errors):
+    good = []
+    for i, e in enumerate(entries):
+        at = f"{where}[{i}]"
+        if not isinstance(e, dict) or set(e) != keys:
+            errors.append(f"{at}: keys must be {sorted(keys)}; skipped")
+        elif not all(isinstance(e[k], str) and e[k].strip() for k in keys):
+            errors.append(f"{at}: every value must be non-empty text; skipped")
+        else:
+            good.append((at, e))
+    return good
+
+
+def load_place_inputs(census, base=None):
+    """The reviewed census corrections, checked against the table when it is committed:
+    (zip fixes {zip: placeGeoid}, aliases {(city, ST): placeGeoid}, county overrides
+    {(city, ST): countyGeoid}, errors). Without the table the entries are taken as written."""
+    d = inputs_dir(base)
+    fixes, aliases, counties = {}, {}, {}
+    places = (census or {}).get("places") or {}
+    cnty = (census or {}).get("counties") or {}
+    zips = (census or {}).get("zips") or {}
+    doc, errors = _read_doc(os.path.join(d, "zip-place-fixes.json"), "zip-place-fixes.json", ("fixes", "aliases"))
+    for at, e in _entries(doc.get("fixes", []), "zip-place-fixes.json fixes", PLACE_FIX_KEYS, errors):
+        why = None
+        if not re.fullmatch(r"\d{5}", e["zip"]):
+            why = "zip must be 5 digits"
+        elif e["zip"] in fixes:
+            why = "zip already fixed"
+        elif census and places.get(e["placeGeoid"], [None, None])[:2] != [e["placeName"], e["state"]]:
+            why = f"place {e['placeGeoid']} is not {e['placeName']}, {e['state']} in zip-places.json"
+        elif census and (zips.get(e["zip"]) or [None])[0] == e["placeGeoid"]:
+            why = "redundant: the area rule already gives this place"
+        if why:
+            errors.append(f"{at}: {why}; skipped")
+        else:
+            fixes[e["zip"]] = e["placeGeoid"]
+    for at, e in _entries(doc.get("aliases", []), "zip-place-fixes.json aliases", PLACE_ALIAS_KEYS, errors):
+        key = (norm_city(e["city"]), e["state"])
+        if key in aliases:
+            errors.append(f"{at}: city already aliased; skipped")
+        elif census and places.get(e["placeGeoid"], [None, None])[:2] != [e["placeName"], e["state"]]:
+            errors.append(f"{at}: place {e['placeGeoid']} is not {e['placeName']}, {e['state']} in zip-places.json; skipped")
+        else:
+            aliases[key] = e["placeGeoid"]
+    doc, errs = _read_doc(os.path.join(d, "city-counties.json"), "city-counties.json", ("cities",))
+    errors += errs
+    for at, e in _entries(doc.get("cities", []), "city-counties.json cities", CITY_COUNTY_KEYS, errors):
+        key = (norm_city(e["city"]), e["state"])
+        if key in counties:
+            errors.append(f"{at}: city already given a county; skipped")
+        elif census and cnty.get(e["countyGeoid"]) != [e["countyName"], e["state"]]:
+            errors.append(f"{at}: county {e['countyGeoid']} is not {e['countyName']}, {e['state']} in zip-places.json; skipped")
+        else:
+            counties[key] = e["countyGeoid"]
+    return fixes, aliases, counties, errors
+
+
+class Places:
+    """Resolves club and event cities and field zips to [placeGeoid, countyGeoid] (MF2's order)."""
+
+    def __init__(self, census, fixes, aliases, counties, report, errors):
+        self.census, self.fixes, self.aliases, self.counties = census, fixes, aliases, counties
+        self.report, self.errors = report, errors
+        self.by_name = collections.defaultdict(list)
+        for g, (name, st, _c, cls) in sorted(((census or {}).get("places") or {}).items()):
+            self.by_name[(norm_city(name), st)].append((g, cls))
+        self.used_county = set()
+        self.place_county = {}          # a census place whose county a city-counties.json entry sets
+        self.redundant = set()
+
+    def place_of(self, city, st):
+        key = (norm_city(city), st)
+        if key in self.aliases:
+            return self.aliases[key]
+        found = self.by_name.get(key, [])
+        if len(found) == 1:
+            return found[0][0]
+        inc = [g for g, cls in found if cls.startswith("C")]
+        if len(inc) == 1:
+            return inc[0]
+        if found:
+            self.report["cities matching two or more census places (no pick; add an alias with evidence)"].append(
+                f"{city}, {st}: {', '.join(g for g, _ in found)}")
+        return None
+
+    def county_of_place(self, g, city, st):
+        key = (norm_city(city), st)
+        if key in self.counties:
+            computed = self.census["places"][g][2] if g else None
+            if computed == self.counties[key] and key not in self.redundant:
+                self.redundant.add(key)
+                self.errors.append(f"city-counties.json: {city}, {st} is redundant: its census place's county is already {computed}")
+            self.used_county.add(key)
+            if g:
+                self.place_county[g] = self.counties[key]
+            return self.counties[key]
+        return self.census["places"][g][2] if g else None
+
+    def city(self, value, what):
+        city, st = split_city(value)
+        if city is None or not self.census:
+            return [None, None]
+        g = self.place_of(city, st)
+        c = self.county_of_place(g, city, st)
+        if g is None and c is None:
+            self.report["club and event cities with no census place and no county (add a city-counties.json entry with evidence)"].append(f"{value} ({what})")
+        return [g, c]
+
+    def zip(self, z, what):
+        if not z or not self.census:
+            return [None, None]
+        row = self.census["zips"].get(z)
+        if row is None:
+            self.report["field zips that are not ZCTAs (no city, no county)"].append(f"{z} ({what})")
+            return [None, None]
+        g = self.fixes.get(z, row[0])
+        if g is None and self.census["counties"].get(row[1], [None, None])[1] in Q1A_STATES:
+            self.report["field zips with no census place in the county-subdivision states (Q1a; county kept)"].append(
+                f"{self.census['counties'][row[1]][1]} {z} ({what})")
+        return [g, row[1]]
+
+
+def places_doc(sources, directory, games_by_season, facts, aliases, census, place_inputs, report, errors):
+    fixes, city_aliases, county_overrides, _ = place_inputs
+    pl = Places(census, fixes, city_aliases, county_overrides, report, errors)
+    fields = {}
+    for (name, z), f in sorted(facts.items()):
+        label = f["label"] or sorted(f["spellings"].items(), key=lambda x: (-x[1], x[0]))[0][0]
+        # key "name@zip"; value [label or null (null when it equals the key's name), [seasons with games],
+        # [field numbers and other venue names], placeGeoid or null, countyGeoid or null].
+        fields[f"{name}@{z}"] = [None if label == name else label, sorted(f["seasons"]),
+                                 sorted(f["numbers"], key=_num_key)] + pl.zip(z, f"{label}")
+    club_places = {}
+    for c in directory["clubs"]:
+        if c[3]:
+            club_places[c[0]] = pl.city(c[3], f"club {c[0]}")
+    event_places = {}
+    for season in sorted(sources["seasons"]):
+        for kind, _k in KINDS:
+            for _name, ev in sorted((sources["seasons"][season].get(kind) or {}).items()):
+                if isinstance(ev, dict) and ev.get("eventId") and ev.get("location"):
+                    event_places[ev["eventId"]] = pl.city(ev["location"], f"event {ev['eventId']}")
+    for key in sorted(set(county_overrides) - pl.used_county):
+        report["city-counties.json entries no club or event uses"].append(f"{key[0]}, {key[1]}")
+    used = [v[3:5] for v in fields.values()] + list(club_places.values()) + list(event_places.values())
+    if census:
+        places = {g: [census["places"][g][0], census["places"][g][1], pl.place_county.get(g, census["places"][g][2])]
+                  for g in sorted({g for g, _c in used if g})}
+        county_ids = {c for _g, c in used if c} | {v[2] for v in places.values() if v[2]}
+        counties = {c: census["counties"][c] for c in sorted(county_ids)}
+    else:
+        places, counties = {}, {}
+        report["census table (public/data/zip-places.json)"].append("not committed yet: no places or counties")
+    return {"schema": PLACES_SCHEMA,
+            "census": (census or {}).get("source", {}).get("content"),
+            "vocab": {"fieldAliases": {a: aliases[(a, z)][0] for a, z in sorted(aliases)}},
+            "counties": counties, "places": places, "clubPlaces": club_places, "eventPlaces": event_places,
+            "fields": fields}
+
+
+def dump_places(doc, build=None):
+    head = [f'"schema":{doc["schema"]}']
+    if build is not None:
+        head.append(f'"build":{_j(build)}')
+    head += [f'"census":{_j(doc["census"])}', f'"vocab":{_j(doc["vocab"])}',
+             _table("counties", doc["counties"], str), _table("places", doc["places"], str),
+             _table("clubPlaces", doc["clubPlaces"], int), _table("eventPlaces", doc["eventPlaces"], int),
+             _table("fields", doc["fields"], str)]
     return ("{" + "\n,".join(head) + "}\n").encode("utf-8")
 
 
@@ -674,6 +913,8 @@ def build(sources=None, directory=None, root=None, inputs=None, fixture=False):
             c[2] = None
     aliases, alias_errors = load_aliases(inputs)
     fixes, fix_errors = load_fixes(inputs)
+    census, census_errors = load_census(inputs)
+    place_inputs = load_place_inputs(census, inputs)
     report = collections.defaultdict(list)
     games = collect(arc, sources, report)
     statuses = collections.Counter(g.get("status") for s in games.values() for g, _f, _d in s.values())
@@ -686,7 +927,10 @@ def build(sources=None, directory=None, root=None, inputs=None, fixture=False):
         doc = games_rows(season, games[season], by_cid)
         files[f"games-{season}.json"] = with_build(dump_games, doc)
     files["core.json"] = with_build(dump_core, core_doc(sources, directory, games, facts, aliases))
-    return files, alias_errors + fix_errors, report
+    place_errors = []
+    files["places.json"] = with_build(dump_places, places_doc(sources, directory, games, facts, aliases, census,
+                                                              place_inputs, report, place_errors))
+    return files, alias_errors + fix_errors + census_errors + place_inputs[3] + place_errors, report
 
 
 def print_report(report, out=None):
@@ -780,7 +1024,8 @@ def main(argv=None):
     if args.fixture:
         prov = {"commit": args.commit,
                 "builder": lf_sha(os.path.abspath(__file__)),
-                "inputs": {n: lf_sha(os.path.join(inputs_dir(args.inputs), n)) for n in ("field-aliases.json", "zip-fixes.json")}}
+                "inputs": {n: (lf_sha(os.path.join(inputs_dir(args.inputs), n)) if os.path.exists(os.path.join(inputs_dir(args.inputs), n)) else None)
+                           for n in INPUTS}}
         with open(os.path.join(args.out, "PROVENANCE.json"), "w", encoding="utf-8", newline="\n") as f:
             f.write(json.dumps(prov, indent=2, sort_keys=True) + "\n")
     print(f"Search data: {len(files)} files written to {args.out}.")

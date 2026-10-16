@@ -139,7 +139,7 @@ if (has('--search')) {
   const prov = JSON.parse(readFileSync(new URL('PROVENANCE.json', from), 'utf8'));
   const m = readManifest();
   if (prov.commit !== m.commit) throw new Error(`the search data was built from ${prov.commit}, MANIFEST's commit is ${m.commit}`);
-  const names = readdirSync(from).filter(n => n === 'core.json' || /^games-\d{4}-\d{2}\.json$/.test(n)).sort();
+  const names = readdirSync(from).filter(n => n === 'core.json' || n === 'places.json' || /^games-\d{4}-\d{2}\.json$/.test(n)).sort();
   if (!names.includes('core.json') || names.length < 2) throw new Error(`${dir}: no search data files`);
   const out = new URL('search/', FIXTURES);
   rmSync(out, { recursive: true, force: true });
