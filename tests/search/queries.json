@@ -17,7 +17,8 @@
     "D10": "One sub-issue per PR, closed by that PR; #149 is referenced as Part of #149 only.",
     "D11": "A birth year also matches a 2026-27 two-year division whose squad was born the other year: ranked lower, never forbidden.",
     "D12": "Phoenix: all current teams of 592, 3716 and 1141 in Teams, one of each in the first 8 rows, no order among them; then Phoenix Spring within the first 6 event rows.",
-    "D13": "Sting Black / Royal swapped names: the squad with the name now ranks first; earlier holders are allowed, never forbidden."
+    "D13": "Sting Black / Royal swapped names: the squad with the name now ranks first; earlier holders are allowed, never forbidden.",
+    "D14": "Owner, 2026-10-16 (#163 Q1): Northwest 2023-24 also shows the Northwest Elite FC teams, the name they had that season (design rule 3, keep ambiguity); the Northwest 2023-24 conference season still comes first."
   },
   "vocabulary": {
     "fieldAliases": {
@@ -522,7 +523,9 @@
       "group": "collisions",
       "q": "Northwest 2023-24",
       "stability": "closed",
-      "sections": ["events", "games"],
+      "sections": ["events", "teams", "games"],
+      "decision": ["D14"],
+      "note": "Changed by the owner on #163 (Q1): Teams follow, because Northwest Elite FC squads carried that name in 2023-24.",
       "mustShow": [{"conference": {"season": "2023-24", "conf": "Northwest"}}],
       "top": {"events": [{"conference": {"season": "2023-24", "conf": "Northwest"}}]},
       "exact": true,

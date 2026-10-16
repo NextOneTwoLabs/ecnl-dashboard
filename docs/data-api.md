@@ -476,7 +476,8 @@ These formats are for this site's page, versioned by their `schema` field rather
 version: a change that renames, removes or retypes a field bumps `schema`, and the page refuses a
 schema it does not know (it shows a coverage note instead of misreading the file). Scripts may
 read them, but should expect them to change with the page. Nothing visitors see uses them before
-PR 4a of #149; PR 3 builds the index.
+PR 4a of #149; the page's search modules (`public/search/`, README "Search modules", #163) build the
+index from `core.json` and `places.json`.
 
 `search_data.py` builds them offline from the committed archive (no upstream request, no clock,
 no locale): every season's hierarchies, standings and schedules, the catalog, the team
