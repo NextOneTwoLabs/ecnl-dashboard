@@ -8,6 +8,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { PAGE_START, PAGE_END } from './search/judged.mjs';
 
 const root = new URL('../public/', import.meta.url);
 const html = readFileSync(process.env.ECNL_TEST_HTML || new URL('index.html', root), 'utf8').replace(/\r\n/g, '\n');
@@ -17,7 +18,7 @@ const slice = (from, to) => {
   return html.slice(a, b);
 };
 const ENGINE_SRC = slice('\n    const TEAM_SEARCH = (() => {\n', '\n    })();\n') + '\n    })();\n';
-const PAGE_SRC = slice('    let usDb = null, usItems = []', '    (function usWire() {');
+const PAGE_SRC = slice(PAGE_START, PAGE_END);   // today's panel, dormant since #165 (its wiring is gone: see search-panel.test.mjs)
 const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
 const DIR = read('archive/directory.json');
 const FAMILIES = read('data/club-families.json').families;
@@ -26,7 +27,7 @@ const CATALOG = read('data/sources.json');
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 // ---------- a fake DOM: elements by id; list cells are found in the list's HTML ----------
-function page({ sheet = false, catalog = null, season = ACTIVE, wire = false } = {}) {
+function page({ sheet = false, catalog = null, season = ACTIVE } = {}) {
   const els = new Map();
   const node = id => ({
     id, hidden: false, value: '', textContent: '', className: '', _html: '', attrs: {}, style: { setProperty() {} }, selectionStart: 0, on: {},
@@ -59,7 +60,6 @@ function page({ sheet = false, catalog = null, season = ACTIVE, wire = false } =
   const api = new Function(...Object.keys(stubs), ENGINE_SRC + PAGE_SRC + `
     usDb = TEAM_SEARCH.prepare(${'arguments'}[${Object.keys(stubs).length}]);
     usInput = document.getElementById('usearchInput');
-    ${wire ? slice('    (function usWire() {', '\n    // #128: the form chips\' tooltip') : ''}
     return { TEAM_SEARCH, usRun, usKey, usViewOf, usGroups, usNarrowHint, usHoverCell, usHoverCancel, US_HOVER_MS, db: () => usDb,
       // Draw a view built by the test (a synthetic list), as usRun does for its own.
       draw: (res, view, q) => { usView = Object.assign(view, { res, q, open: new Set(), nav: false, sheet: false }); usRenderView(res, q); },
@@ -68,8 +68,7 @@ function page({ sheet = false, catalog = null, season = ACTIVE, wire = false } =
   const list = () => el('usearchList')._html;
   // Each search starts with the popover open, as typing in the bar does (a test may have left it).
   const usRun = q => { el('usearchPop').hidden = false; api.usRun(q); };
-  const click = (i, extra = {}) => el('usearchList').on.click({ target: { closest: () => ({ dataset: { i: String(i) } }) }, shiftKey: false, ...extra });
-  return { ...api, usRun, el, location, key, list, click };
+  return { ...api, usRun, el, location, key, list };
 }
 const P = page();
 
@@ -86,18 +85,8 @@ test('#146: U15 NorCal first result is conference standings; Enter and Shift+Ent
   }
 });
 
-test('#146: desktop click and mobile touch use the competition destination, then team selection restores actions', () => {
-  for (const sheet of [false, true]) {
-    const p = page({ sheet, catalog: CATALOG, wire: true }); p.usRun('U15 NorCal');
-    const first = p.state().usItems[0];
-    p.click(0); assert.equal(p.location.hash, `#season=${ACTIVE}&age=GU15&conf=NorCal&view=standings`);
-    p.usRun('U15 NorCal'); p.key('ArrowDown');
-    assert.notEqual(p.state().usItems[p.state().usActiveIdx].kind, 'competition');
-    assert.equal(p.el('usearchHist').hidden, false);
-    assert.equal(p.el('usearchOpen').textContent, 'Overview');
-  }
-});
-
+// (#165: "desktop click and mobile touch use the competition destination, then team selection restores actions" moved to
+// search-panel.test.mjs: it was the one test that ran today's wiring, usWire, which the new panel replaced.)
 test('#146: Enter routes the first result to conference standings rather than a team page', () => {
   const p = page({ catalog: CATALOG }); p.usRun('U15 NorCal'); p.key('Enter');
   assert.equal(p.location.hash, `#season=${ACTIVE}&age=GU15&conf=NorCal&view=standings`);

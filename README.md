@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -463,7 +463,8 @@ are recorded as `unsupported`; judgements it gets wrong are recorded as `fail`. 
 Later engines are measured against that baseline on the same queries.
 
 - **Any change to today's search** (the `TEAM_SEARCH` block or the page's code from
-  `let usDb` to `(function usWire` in `public/index.html`) re-vendors and re-records in the
+  `let usDb` to the "dormant" marker comment in `public/index.html`, which replaced `(function usWire`
+  in #165: the legacy panel stays until PR 5, but nothing runs it) re-vendors and re-records in the
   same PR, and explains the baseline diff:
   `node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --vendor --record today`.
   When a later PR removes that code on purpose, it sets `retired: { pr, reason }` in
@@ -494,7 +495,8 @@ census city and county of each field, club and event) and one `games-<season>.js
 (every game of every flight of every event, once). They are the prepared records the
 page's search reads through `/api/v1/search/core` and `/api/v1/search/games/{season}`; the
 **index** is the word-to-records map the browser builds from them in memory (`public/search/`, below).
-Nothing visitors see uses them yet. The format is in `docs/data-api.md`, "Search data".
+The page reads `core.json` and `places.json` on the first focus of the search box (#165); the
+games files wait for PR 4b. The format is in `docs/data-api.md`, "Search data".
 
 - **Built by** `search_data.py`, offline, from the committed archive: `archive.py` runs it right
   after the team directory in every path that rebuilds the directory (a crawl, `--refresh`,
@@ -528,8 +530,8 @@ Nothing visitors see uses them yet. The format is in `docs/data-api.md`, "Search
 ### Search modules
 
 `public/search/` holds the page's search (#149 phase 1, PR 3; #163): ES modules, pure functions
-with no page globals, storage or network, and the clock and time zone passed in. Nothing visitors
-see uses them yet; PR 4a wires them into the search box.
+with no page globals, storage or network, and the clock and time zone passed in. The search box
+draws them since #165 (below).
 
 - `search.mjs`, the entry point: `buildIndex({ core, places })` builds the index from the search
   data files (it throws `SearchDataError`, naming the file, on a schema it does not know), and
@@ -570,6 +572,38 @@ see uses them yet; PR 4a wires them into the search box.
   measures `buildIndex`. `tests/search-modules.test.mjs` types every judged query one character
   at a time, pins the work each keystroke does, and fails on any keystroke over 20 ms or a cold
   build over 200 ms (each the fastest of 3, so a busy CI runner cannot fail it).
+
+### The search panel
+
+`public/index.html`, from `// ===== #165: the search panel` to the form chips' tooltip, draws the slate
+of the search modules (#165, #148; PR 4a of #149 phase 1): teams, events and conference tables in one
+panel, a popover under the header's box and a full-screen dialog on a phone. Today's panel
+(`TEAM_SEARCH` and the code from `let usDb`) is still in the file, dormant, until PR 5 removes it.
+
+- **First focus** loads `/api/v1/search/core` and `/api/v1/search/places` (2 Worker requests, about
+  109 KB gzipped) and the 8 modules (static files; fetched ahead at the first idle moment, never on a
+  data-saver connection or in `?live=1`, where search is off). The index is built in steps of 50
+  units: before each step the page yields if the task so far plus the slowest step so far would pass
+  40 ms (`scheduler.yield()`, else a `MessageChannel`; never `setTimeout(0)`). Nothing is requested
+  per keystroke. Parsing `core.json` is the one task the page cannot split.
+- **The version check:** the page expects `SEARCH_API` 2. Any other version, or a data schema the
+  modules do not know, shows "Search was updated while this page was open" with a Reload button and
+  never searches.
+- **The grid:** the combobox opens a `role="grid"`; rows hold gridcells, the best match is a labelled
+  rowgroup in the grid, and the box keeps focus (`aria-activedescendant`). Up and Down move by row to
+  the nearest column; Left, Right, Home and End only after a vertical move; Enter opens, or opens and
+  closes a fold; Shift+Enter a team's season tab; Esc clears, then closes.
+- **Page rules** R1 to R12 are listed at the top of the block and pinned one by one by
+  `tests/search-panel.test.mjs`: grouping by club or reviewed family with one line per team name; live
+  teams as chips and ended ones folded; #107 may-continue teams folded into their successor; the slate's
+  `enter` always a visible cell; Nearby, partial and typo labels from the rows' structured fields
+  (never from `why`); chip links from `row.hrefs`; the Games coverage line.
+- **In a browser:** `tests/e2e/search-panel.e2e.mjs` drives Chromium against `python proxy_server.py
+  --offline` on a free port. Every request that is not to that port is aborted and counted, so the
+  run makes no request off the machine (club logos and fonts included). It is not in CI (it needs
+  Playwright and a browser); run it for a change to the panel and record the result in the PR:
+  `HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 node --import ./tests/netguard/netguard.mjs tests/e2e/search-panel.e2e.mjs`
+  (Playwright is found through `PLAYWRIGHT_MODULES`, default `/opt/node-tools/node_modules/`).
 
 ### Census places
 

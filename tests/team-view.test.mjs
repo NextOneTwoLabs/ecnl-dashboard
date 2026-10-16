@@ -207,7 +207,7 @@ test('search wiring: the status line follows the engine, Shift+Enter and the sea
   assert.match(go, /to === 'season' \? r\.seasonHref : to === 'overview' \? r\.overviewHref : r\.href/);
   const key = uiBlock('    function usKey(');
   assert.match(key, /usGo\(usActiveIdx, e\.shiftKey \? 'season' : null\)/, 'V18');
-  assert.match(html, /usGo\(usActiveIdx, id === 'usearchHist' \? 'season' : 'overview'\)/, 'V19');
+  // V19 (the season link opening the season tab through usWire) moved to search-panel.test.mjs with the wiring (#165).
   assert.match(html, /hl\.href = r\.seasonHref;/);
 });
 

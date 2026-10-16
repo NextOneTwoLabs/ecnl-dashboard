@@ -121,7 +121,7 @@ export function compile(src, stubs, tail, extra = []) {
 export const ENGINE_START = '\n    const TEAM_SEARCH = (() => {\n';
 export const ENGINE_END = '\n    })();\n';
 export const PAGE_START = '    let usDb = null, usItems = []';
-export const PAGE_END = '    (function usWire() {';
+export const PAGE_END = '    // #165: the legacy search above is dormant until PR 5 removes it (tests/search/judged.mjs PAGE_END)\n';
 const V_ENGINE = '//@@ENGINE\n', V_PAGE = '\n//@@PAGE\n';
 export const VENDOR_HEADER = [
   '// Vendored from public/index.html by tests/search/freeze.mjs --vendor (#156, owner decision D9). Do not edit by hand.',
