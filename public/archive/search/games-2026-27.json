@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"a483b44720360b53"
+,"build":"1559758b94a70950"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -945,6 +945,7 @@
 ,"2491":["mahany park","95747"]
 ,"2555":["Great Park","92618"]
 ,"2566":["san bernardino soccer complex","92346"]
+,"2601":["lindsay lyons","77396"]
 ,"2735":["real salt lake academy","84096"]
 ,"2743":["cedar lane turf","21015"]
 ,"2751":["richard siegel soccer complex","37129"]
@@ -4273,8 +4274,8 @@
 ,[1,1081100,40609,129339,110467,null,null,null,null,346,4,null,[1,0]]
 ,[1,1081300,40608,129340,110468,null,null,null,null,346,4,null,[1,0]]
 ,[1,1080900,40607,129341,111175,null,null,null,null,346,4,null,[1,0]]
-,[1,1080900,40606,129342,78763,null,null,null,null,346,2,null,[1,0]]
-,[1,1081100,40605,129343,129323,null,null,null,null,346,2,null,[1,0]]
+,[1,1080900,40606,129342,78763,null,null,null,null,2601,25,null,[1,0]]
+,[1,1081100,40605,129343,129323,null,null,null,null,2601,25,null,[1,0]]
 ,[1,1081300,40610,134483,132696,null,null,null,null,7286,4,null,[1,0]]
 ,[1,1081100,40609,134485,132697,null,null,null,null,7286,4,null,[1,0]]
 ,[1,1080900,40608,134487,132699,null,null,null,null,7286,4,null,[1,0]]

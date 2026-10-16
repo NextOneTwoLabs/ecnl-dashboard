@@ -1,5 +1,5 @@
 {"schema":1
-,"build":"2c24976cb029763b"
+,"build":"a33e41dd1c5eb96c"
 ,"census":"1f646e5cb9cf65372af12bdc4cb63c5ee8643f13c123ce0ea35746fcdd9919f6"
 ,"vocab":{"fieldAliases":{"60 acres":"60 Acres Park","60 acres park":"60 Acres Park","great park":"Great Park","oc great park":"Great Park","orange county great park":"Great Park","orange county great park sports park":"Great Park","surf cup sports park":"Surf Sports Park","surf sports park":"Surf Sports Park"}}
 ,"counties":{
@@ -1294,6 +1294,7 @@
 ,"liberty sports park@20774":["Liberty Sports Park",["2022-23","2023-24","2024-25","2025-26"],[1,2,3,4,5,6,7,8,9,10],"2410150","24033"]
 ,"lincoln school athletic complex faxon farm@02769":["Lincoln School Athletic Complex @ Faxon Farm",["2024-25","2025-26"],[1],null,"25005"]
 ,"lindbergh high school@98058":["Lindbergh High School",["2024-25","2025-26"],["Main Field"],"5323160","53033"]
+,"lindsay lyons@77396":["Lindsay Lyons",["2026-27"],[25],"4835000","48201"]
 ,"lone peak high school@84003":["Lone Peak High School",["2025-26"],["Northeast Field","Stadium Field"],"4901310","49049"]
 ,"long beach city college liberal arts campus@90806":["Long Beach City College - Liberal Arts Campus",["2023-24","2025-26","2026-27"],[1,2],"0643000","06037"]
 ,"long beach state university@90840":["Long Beach State University",["2021-22","2022-23","2023-24","2024-25"],["George Allen Field","Training Field"],"0643000","06037"]
