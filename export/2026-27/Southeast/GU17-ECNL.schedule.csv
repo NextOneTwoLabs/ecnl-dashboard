@@ -53,7 +53,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-17,09:00 AM,Group Play,Seminole United ECNL G2009/10,,,GSA ECNL G2009/10,Seminole,Field 5,On Time,1070143
 2026-10-17,09:00 AM,Group Play,Tampa Bay United ECNL G2009/10,,,South Carolina United ECNL G2009/10,Ed Radice Sports Complex,Field 5,On Time,1070159
 2026-10-17,09:00 AM,Group Play,Team Boca ECNL G2009/10,,,Atlanta Fire United ECNL G2009/10,SPANISH RIVER SPORTS COMPLEX,Field S1 #1,On Time,1070167
-2026-10-17,10:30 AM,Group Play,Jacksonville FC ECNL G2009/10,,,Alabama FC ECNL G2009/10,Patton Park,Stadium,On Time,1070147
 2026-10-17,11:00 AM,Group Play,Sporting SA JAX ECNL G2009/10,,,Concorde Fire Premier ECNL G2009/10,Veterans Park,Field 1,On Time,1070151
 2026-10-17,11:00 AM,Group Play,Athletic Club Florida ECNL G2009/10,,,United Futbol Academy ECNL G2009/10,Miami Dade College Kendall Campus,Field 2,On Time,1070163
 2026-10-17,01:00 PM,Group Play,Florida Kraze Krush ECNL G2009/10,,,Concorde Fire Platinum ECNL G2009/10,Central Winds,Field B,On Time,1070139
@@ -63,7 +62,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-18,09:00 AM,Group Play,Seminole United ECNL G2009/10,,,Concorde Fire Platinum ECNL G2009/10,Seminole,Field 5,On Time,1070175
 2026-10-18,09:00 AM,Group Play,Athletic Club Florida ECNL G2009/10,,,Atlanta Fire United ECNL G2009/10,Tequesta Trace Park,Turf B,On Time,1070195
 2026-10-18,01:00 PM,Group Play,Florida Kraze Krush ECNL G2009/10,,,GSA ECNL G2009/10,Central Winds,Field B,On Time,1070171
-2026-10-18,01:00 PM,Group Play,Sporting SA JAX ECNL G2009/10,,,Alabama FC ECNL G2009/10,Veterans Park,Field 2,On Time,1070183
 2026-10-18,01:00 PM,Group Play,Tampa Bay United ECNL G2009/10,,,CESA Liberty ECNL G2009/10,Ed Radice Sports Complex,Field 6,On Time,1070191
 2026-10-18,01:00 PM,Group Play,Team Boca ECNL G2009/10,,,United Futbol Academy ECNL G2009/10,SPANISH RIVER SPORTS COMPLEX,Field S1 #1,On Time,1070199
 2026-10-24,01:00 PM,Group Play,GSA ECNL G2009/10,,,Alabama FC ECNL G2009/10,GSA East,#3,On Time,1070203
@@ -71,7 +69,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-24,01:00 PM,Group Play,United Futbol Academy ECNL G2009/10,,,CESA Liberty ECNL G2009/10,Fowler Park,Field 7,On Time,1070211
 2026-10-24,01:00 PM,Group Play,Atlanta Fire United ECNL G2009/10,,,South Carolina United ECNL G2009/10,Scott Hudgens Park,Field 6,On Time,1070215
 2026-10-25,11:00 AM,Group Play,GSA ECNL G2009/10,,,Concorde Fire Premier ECNL G2009/10,GSA East,#3,On Time,1070223
-2026-10-25,11:00 AM,Group Play,Atlanta Fire United ECNL G2009/10,,,CESA Liberty ECNL G2009/10,Scott Hudgens Park,Field 5,On Time,1070231
+2026-10-25,12:30 PM,Group Play,Atlanta Fire United ECNL G2009/10,,,CESA Liberty ECNL G2009/10,Pinecrest Academy,Turf,On Time,1070231
 2026-10-25,01:00 PM,Group Play,Concorde Fire Platinum ECNL G2009/10,,,Alabama FC ECNL G2009/10,Georgia Sports Park ,field 3,On Time,1070219
 2026-10-25,03:00 PM,Group Play,United Futbol Academy ECNL G2009/10,,,South Carolina United ECNL G2009/10,Fowler Park,Field 6,On Time,1070227
 2026-11-01,03:00 PM,Group Play,Atlanta Fire United ECNL G2009/10,,,United Futbol Academy ECNL G2009/10,Pinecrest Academy,Turf,On Time,1070303
@@ -119,3 +117,5 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-04-17,01:00 PM,Group Play,Athletic Club Florida ECNL G2009/10,,,Team Boca ECNL G2009/10,Nob Hill Soccer Park,Field 2,On Time,1070407
 2027-04-18,10:30 AM,Group Play,Jacksonville FC ECNL G2009/10,,,Sporting SA JAX ECNL G2009/10,Patton Park,Field 3,On Time,1070399
 2027-04-24,11:00 AM,Group Play,Florida Kraze Krush ECNL G2009/10,,,Sporting SA JAX ECNL G2009/10,Central Winds,Field B,On Time,1070411
+2027-05-22,10:30 AM,Group Play,Jacksonville FC ECNL G2009/10,,,Alabama FC ECNL G2009/10,Patton Park,Stadium,On Time,1070147
+2027-05-23,10:00 AM,Group Play,Sporting SA JAX ECNL G2009/10,,,Alabama FC ECNL G2009/10,Veterans Park,Field 2,On Time,1070183
