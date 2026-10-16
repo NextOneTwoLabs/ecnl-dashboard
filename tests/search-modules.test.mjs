@@ -11,13 +11,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { performance } from 'node:perf_hooks';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { readJSON, readLF, HERE, ROOT, FIXTURES, indexOf, destinationProblem, loadFixtures } from './search/judged.mjs';
 import { CORE_SCHEMA as FORMAT_CORE, PLACES_SCHEMA as FORMAT_PLACES } from './search/search-data-format.mjs';
 
 const MODULES = new URL('public/search/', ROOT);
 const files = readdirSync(MODULES).sort();
 const SEARCH_URL = new URL('search.mjs', MODULES);
-const coldStart = performance.now();
 const S = await import(SEARCH_URL);
 const { osa, expand, TermList, Postings, CLASS } = await import(new URL('match.mjs', MODULES));
 const { readQuery, READING_CAP } = await import(new URL('reader.mjs', MODULES));
@@ -27,7 +28,6 @@ const FX = new URL('search/', FIXTURES);
 const coreText = readLF(new URL('core.json', FX)), placesText = readLF(new URL('places.json', FX));
 const fresh = () => ({ core: JSON.parse(coreText), places: JSON.parse(placesText) });
 const index = S.buildIndex(fresh());
-const COLD_BUILD_MS = performance.now() - coldStart;
 const doc = readJSON(new URL('queries.json', HERE));
 const CTX = { now: Date.parse(doc.context.now), timeZone: doc.context.timeZone, selectedSeason: doc.context.selectedSeason };
 const run = (q, idx = index, ctx = CTX, opts) => S.search(idx, q, ctx, opts);
@@ -190,6 +190,64 @@ test('MF2: a club planted in Richmond, CA never appears for Richmond, but does f
   assert.ok(clubsOf(run('Richmond CA', idx)).includes(3054));
   assert.ok(!clubsOf(run('Richmond CA', idx)).includes(417), 'the state narrows name matches too');
 });
+// #164 review: a state beside a place narrows it (AND) and the reading stays place-only (MF1, MF2)
+test('#164 MF1: an alias with its state keeps its places: LA CA finds every club LA finds in CA', () => {
+  const inCA = new Set(clubsOf(run('LA')));      // every club LA finds is in California
+  for (const q of ['LA CA', 'LA, CA', 'LA California']) {
+    const got = new Set(clubsOf(run(q)));
+    for (const c of inCA) assert.ok(got.has(c), `${q}: club ${c}`);
+    assert.ok(!got.has(1760), q);
+  }
+  assert.deepEqual([...inCA].sort((a, b) => a - b), [16, 82, 2289]);
+});
+test('#164 MF2: Redmond WA and Redmond Washington read as P03 (D2), never Washington Premier', () => {
+  for (const q of ['Redmond WA', 'Redmond Washington']) {
+    const s = run(q);
+    assert.equal(s.rule, 4, q);
+    assert.deepEqual(s.sections.map(x => x.name), ['events', 'teams'], q);
+    assert.ok(rows(s, 'teams').every(r => r.nearby && r.current), q);
+    assert.ok(!clubsOf(s).includes(112), q);
+  }
+});
+test('#164 MF2: Phoenix AZ keeps D12; Chula Vista CA and Del Mar CA keep their place order', () => {
+  const p = rows(run('Phoenix AZ'), 'teams');
+  for (const c of [592, 3716, 1141]) assert.ok(p.slice(0, 8).some(r => r.clubID === c), `Phoenix AZ: ${c} in the first 8`);
+  assert.ok(p.every(r => r.current));
+  const cv = run('Chula Vista CA');
+  assert.equal(cv.rule, 4); assert.equal(rows(cv, 'teams')[0].clubID, 300);
+  const dm = run('Del Mar CA');
+  assert.equal(dm.rule, 4); assert.equal(rows(dm, 'teams')[0].clubID, 39);
+  assert.deepEqual(dm.sections.map(x => x.name), ['teams', 'events']);
+});
+test('#164 MF4: richmond keeps its name reading (always): an older name with Richmond is found', () => {
+  const d = fresh(), t = d.core.teams;
+  const sq = t.squads.find(x => t.clubs[x.c][0] === 3054 && x.s.length >= 2 && t.seasons[x.s[x.s.length - 1][0]] === d.core.activeSeason);
+  sq.s[0][2] = 'Richmond Strikers ECNL G11';            // an earlier name only; Placer United stays in Rocklin, CA
+  const idx = S.buildIndex(d);
+  const hit = rows(run('Richmond', idx), 'teams').filter(r => r.clubID === 3054);
+  assert.equal(hit.length, 1);
+  assert.notEqual(hit[0].nearby, true);
+  assert.equal(rows(run('Richmond'), 'teams').some(r => r.clubID === 3054), false, 'and not without the planted name');
+});
+test('#164 nit 1: a prefix or typo that lands on an alias never matches city text (D8 while typing)', () => {
+  const idx = planted('0660620', '06013', 'Richmond, CA');
+  for (const q of ['Richmon', 'Richmnd', 'Richmond']) assert.ok(!clubsOf(run(q, idx)).includes(3054), q);
+});
+test('#164 nit 2: only a word with no other role is "another name word" for la (LA Utah)', () => {
+  assert.ok(!clubsOf(run('LA Utah')).includes(1760));
+});
+test('#164 nit 3: past 256 combinations every word is still read, and the cap is reported', () => {
+  const s = run('phoenix texas richmond redmond sacramento dallas houston seattle denver zzzqx');
+  assert.equal(s.capReached, true);
+  assert.equal(s.sections.filter(x => !x.partialOnly).length, 0, 'zzzqx matches nothing, so nothing matches every word');
+});
+test('#164 nit 6: deviations 6 and 9 have behavioural tests', () => {
+  // deviation 6: a team row is as specific as the most specific reading it matched
+  assert.equal(rows(run('midwest united'), 'teams')[0].filterWords, 1);
+  // deviation 9: a state code is never a plain name word (ca would prefix-match Carolina)
+  assert.ok(!clubsOf(run('Surf CA')).includes(3644));
+});
+
 test('Q6: a county fallback keeps the name reading (Placer finds Placer United directly)', () => {
   const first = rows(run('Placer'), 'teams')[0];
   assert.equal(first.clubID, 3054); assert.notEqual(first.nearby, true);
@@ -350,12 +408,28 @@ test('budget: the work per keystroke is pinned, its 95th percentile is under the
   assert.ok(p95 <= CEILING_NS, `p95 ${p95} ns-equivalent over ${CEILING_NS}`);
   assert.ok(max.cost <= KEYSTROKE_BUDGET);
 });
+// Contention (node --test runs files in parallel) only ever adds time, so each figure is the fastest
+// of 3: a keystroke's own repeats, and 3 fresh processes for the cold build (#164). Uncounted work,
+// such as a quadratic sort, slows every repeat and still trips the ceiling.
+function coldBuildMs() {
+  const src = `const t = performance.now(); const S = await import(${JSON.stringify(SEARCH_URL.href)});
+    const { readFileSync } = await import('node:fs');
+    const j = n => JSON.parse(readFileSync(new URL(n, ${JSON.stringify(FX.href)}), 'utf8'));
+    S.buildIndex({ core: j('core.json'), places: j('places.json') });
+    process.stdout.write(String(performance.now() - t));`;
+  const r = spawnSync(process.execPath, ['--import', './tests/netguard/netguard.mjs', '--input-type=module', '-e', src],
+    { cwd: fileURLToPath(ROOT), encoding: 'utf8', env: process.env });
+  assert.equal(r.status, 0, r.stderr);
+  return +r.stdout;
+}
 test('budget: wall clock backstop: no keystroke over 20 ms, no cold build over 200 ms', () => {
   replay();                                  // warm
-  const r = replay();
-  const worst = r.reduce((m, x) => (x.ms > m.ms ? x : m));
-  assert.ok(worst.ms < 20, `${worst.p}: ${worst.ms.toFixed(2)} ms`);
-  assert.ok(COLD_BUILD_MS < 200, `cold import and build ${COLD_BUILD_MS.toFixed(1)} ms`);
+  const runs = [replay(), replay(), replay()];
+  const fastest = runs[0].map((x, i) => ({ p: x.p, ms: Math.min(...runs.map(r => r[i].ms)) }));
+  const worst = fastest.reduce((m, x) => (x.ms > m.ms ? x : m));
+  assert.ok(worst.ms < 20, `${worst.p}: ${worst.ms.toFixed(2)} ms (fastest of 3)`);
+  const cold = Math.min(coldBuildMs(), coldBuildMs(), coldBuildMs());
+  assert.ok(cold < 200, `cold import and build ${cold.toFixed(1)} ms (fastest of 3 fresh processes)`);
   const s = index.stats;
   assert.ok(s.terms <= 2 * 518 && s.postings <= 2 * 11531, JSON.stringify(s));
 });

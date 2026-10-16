@@ -63,8 +63,9 @@ function tokens(raw, vocab) {
     out.segs.push({ at: i, words: [w], roles: [], name: true });
     i++;
   }
-  // MF7: an alias's plain name reading is kept only with another name word, when it says so
-  const nameSegs = s => out.segs.filter(x => x !== s && x.name && !x.code).length;
+  // MF7: an alias's plain name reading is kept only with another name word, when it says so. Only a
+  // word with no other role counts: in "LA Utah", utah is a state, not another name (#164 nit 2).
+  const nameSegs = s => out.segs.filter(x => x !== s && x.name && !x.code && !x.roles.length).length;
   for (const s of out.segs) for (const r of s.roles) if (r.alias && r.nameWord === 'with-other-name-word' && !nameSegs(s)) s.name = false;
   // two-letter state codes (today's D-P1): strict as a place when nothing else names a team or a
   // place; otherwise place-or-name; "in", "or", "me" only as the whole query
@@ -90,8 +91,17 @@ function readingsOf(tk, vocab) {
     return opts;
   });
   const all = [...dims, ...yearDims];
-  let combos = [[]];
-  for (const d of all) { if (!d.length) continue; const next = []; for (const c of combos) for (const o of d) next.push([...c, o]); combos = next; if (combos.length > 256) break; }
+  // At most 256 combinations: past that, combinations are cut, never dimensions, so every word is
+  // still read (#164 nit 3); the cut is reported as the cap.
+  let combos = [[]], cut = false;
+  for (const d of all) {
+    if (!d.length) continue;
+    const next = [];
+    for (const c of combos) for (const o of d) next.push([...c, o]);
+    cut = cut || next.length > 256;
+    combos = next.length > 256 ? next.slice(0, 256) : next;
+  }
+  tk.cut = cut;
   const out = [];
   for (const combo of combos) {
     const r = {
@@ -138,17 +148,28 @@ function readingsOf(tk, vocab) {
           soft: !!role.soft, words: seg.words, initialism: role.initialism || null, alias: role.alias || null, label: role.label || role.value });
       }
     }
-    // An alias with an explicit state reads as that state's census places of the same name, so
-    // "Richmond CA" still finds Richmond, California (plan v2 MF2).
-    const stateOf = r.places ? r.places.filter(p => p.state).map(p => p.state) : [];
-    const pinned = [...new Set([...stateOf, ...r.codes])];
-    if (r.places && pinned.length && r.places.some(p => p.alias)) {
-      r.places = r.places.filter(p => !p.state).map(p => {
-        if (!p.alias) return p;
-        const list = (vocab.placeByName.get(p.alias) || []).filter(x => pinned.includes(x.state));
-        return { ...p, alias: null, initialism: null, places: list.map(x => x.geoid), counties: [...new Set(list.map(x => x.county).filter(Boolean))], label: list.map(x => `${x.name}, ${x.state}`).join(' or ') };
+    // A state (a code or a full name) beside a place, county or alias narrows it (AND), never adds to
+    // it: "Redmond WA" and "Redmond Washington" are Redmond, Washington (#164 MF2). An alias keeps its
+    // own places in that state and its initialism, plus the census places of that name in the state:
+    // "LA CA" is still Los Angeles, and "Richmond CA" is Richmond, California (#164 MF1).
+    const where = r.places ? r.places.filter(p => !p.state) : [];
+    const pinned = [...new Set([...(r.places || []).filter(p => p.state).map(p => p.state), ...r.codes])];
+    if (where.length && pinned.length) {
+      const inState = g => vocab.places[g] && pinned.includes(vocab.places[g][1]);
+      const countyIn = c => vocab.counties[c] && pinned.includes(vocab.counties[c][1]);
+      r.places = where.map(p => {
+        let places = p.places.filter(inState), counties = p.counties.filter(countyIn);
+        if (p.alias) {
+          const named = (vocab.placeByName.get(p.alias) || []).filter(x => pinned.includes(x.state));
+          places = [...new Set([...places, ...named.map(x => x.geoid)])];
+          counties = [...new Set([...counties, ...named.map(x => x.county).filter(Boolean)])];
+        }
+        const label = places.length ? places.map(g => `${vocab.places[g][0]}, ${vocab.places[g][1]}`).join(' or ')
+          : counties.map(c => `${vocab.counties[c][0]}, ${vocab.counties[c][1]}`).join(' or ') || p.label;
+        return { ...p, places, counties, label };
       });
-      r.codes = pinned;      // the state still narrows every result (AND), names included
+      r.codes = pinned;      // the state narrows every result (AND), names included
+      r.statePinned = true;
     }
     if (r.confConflict) continue;
     r.key = r.roles.join('|');
@@ -200,9 +221,9 @@ export function readQuery(vocab, text) {
     const teams = capped(all.filter(forTeams));
     const events = capped(toks.length === 2 ? [] : all.filter(forEvents));
     const games = all.filter(r => r.field || r.dates.length);
-    capReached = capReached || teams.capReached || events.capReached;
+    capReached = capReached || teams.capReached || events.capReached || !!tk.cut;
     // design row 4: some reading uses every word as a place, with no other filter
-    const placeOnly = all.some(r => r.places && !r.codes.length && !r.names.length && !r.conf && !r.kinds.length && !r.field && !r.dates.length
+    const placeOnly = all.some(r => r.places && (!r.codes.length || r.statePinned) && !r.names.length && !r.conf && !r.kinds.length && !r.field && !r.dates.length
       && !r.seasons && !r.unknownSeason && !r.u && !r.born.length);
     return {
       tokens: tk, teams: teams.readings, events: events.readings, games, placeOnly,

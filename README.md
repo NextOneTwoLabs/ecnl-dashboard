@@ -553,7 +553,7 @@ see uses them yet; PR 4a wires them into the search box.
 - **Cost:** `node --import ./tests/netguard/netguard.mjs --expose-gc tools/search_data_size.mjs --index`
   measures `buildIndex`. `tests/search-modules.test.mjs` types every judged query one character
   at a time, pins the work each keystroke does, and fails on any keystroke over 20 ms or a cold
-  build over 200 ms.
+  build over 200 ms (each the fastest of 3, so a busy CI runner cannot fail it).
 
 ### Census places
 

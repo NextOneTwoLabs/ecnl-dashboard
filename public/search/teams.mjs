@@ -1,7 +1,7 @@
 // #163 (#149 phase 1, PR 3): the Teams category. One document per #107 squad, from core.json's
 // teams (the team directory) and places.json's club places. Pure.
 import { Postings, nameWords, withAliases, initials, capsWords, teamTitle, words, expand, filterScore, CLASS_RANK } from './match.mjs';
-import { placeWords } from './vocab.mjs';
+import { placeWords, ALIASES } from './vocab.mjs';
 import { teamHref, teamSeasonHref } from './links.mjs';
 
 export const TEAM_FIELDS = [{ name: 'name', w: 1.0 }, { name: 'club', w: 0.9 }, { name: 'older name', w: 0.6 }, { name: 'place', w: 0.4 }];
@@ -140,6 +140,9 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
       // a partial match never rests on a prefix shorter than 3 letters ("Great P", "qwerty a"): that is
       // noise, not a near miss (#163)
       const exps = partial ? exps0.map((e, k) => (r.names[k].w.length >= 3 ? e : new Map([...e].filter(([, v]) => v.cls !== 'prefix')))) : exps0;
+      // A word read as a place, or one whose prefix or typo lands on an alias (Richmon, Richmnd), never
+      // matches a club's city text by name: the place reading answers where (D8; #164 nit 1).
+      const skip = r.names.map((n, k) => (n.place || [...exps[k].keys()].some(t => ALIASES[t]) ? PLACE_FIELD : -1));
       const reach = r.places ? placeUnion(T, r.places) : null;
       let cand;
       if (!r.names.length) cand = reach ? [...reach].sort((a, b) => a - b) : r.conf ? (T.lookups.conf.get(r.conf) || []) : T.docs.map(d => d.i);
@@ -167,7 +170,7 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
         let score = 0, matched = 0, cls = 'exact', bestCls = 'typo', rarity = Infinity;
         const ws = new Array(exps.length);
         for (let k = 0; k < exps.length; k++) {
-          const w = T.post.wordScore(i, exps[k], r.names[k].place ? PLACE_FIELD : -1);
+          const w = T.post.wordScore(i, exps[k], skip[k]);
           ws[k] = w;
           if (!w) continue;
           matched++; score += w.s;

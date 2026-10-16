@@ -3,7 +3,7 @@
 // event entries (#163 Q8), and its place from places.json. A conference season's age-group tables
 // are rows inside it. Pure; "today" comes from the context's clock and time zone.
 import { Postings, nameWords, words, expand, filterScore, worseClass, CLASS_RANK } from './match.mjs';
-import { placeWords } from './vocab.mjs';
+import { placeWords, ALIASES } from './vocab.mjs';
 import { conferenceHref, nationalHref, showcaseHref } from './links.mjs';
 
 export const EVENT_FIELDS = [{ name: 'name', w: 1.0 }, { name: 'event name', w: 0.8 }, { name: 'location', w: 0.5 }, { name: 'tier', w: 0.3 }];
@@ -94,6 +94,8 @@ export function searchEvents(E, side, ctx, vocab, { partial = false, stats = nul
     // a partial match never rests on a prefix shorter than 3 letters ("Great P", "qwerty a"): that is
     // noise, not a near miss (#163)
     const exps = partial ? exps0.map((e, k) => (r.names[k].w.length >= 3 ? e : new Map([...e].filter(([, v]) => v.cls !== 'prefix')))) : exps0;
+    // as in teams.mjs: a place word, or one landing on an alias, never matches the location text (#164 nit 1)
+    const skip = r.names.map((n, k) => (n.place || [...exps[k].keys()].some(t => ALIASES[t]) ? LOCATION_FIELD : -1));
     let placePass = 0;
     if (r.places) for (const d of E.docs) if (placeHit(d, r.places)) placePass++;
     for (const d of E.docs) {
@@ -110,7 +112,7 @@ export function searchEvents(E, side, ctx, vocab, { partial = false, stats = nul
         else kindOk = kindOk && d.kind === 'n' && d.stageWords.has(k);     // playoffs, finals: in the stage's own name
       }
       if (!kindOk) continue;
-      const ws = exps.map((e, k) => E.post.wordScore(d.i, e, r.names[k].place ? LOCATION_FIELD : -1));
+      const ws = exps.map((e, k) => E.post.wordScore(d.i, e, skip[k]));
       const matched = ws.filter(Boolean).length;
       if (partial ? !(matched > 0 && matched < ws.length) : matched !== ws.length) continue;
       const ph = r.places ? placeHit(d, r.places) : null;
