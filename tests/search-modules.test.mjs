@@ -411,17 +411,33 @@ test('budget: the work per keystroke is pinned, its 95th percentile is under the
 // Contention (node --test runs files in parallel) only ever adds time, so each figure is the fastest
 // of 3: a keystroke's own repeats, and 3 fresh processes for the cold build (#164). Uncounted work,
 // such as a quadratic sort, slows every repeat and still trips the ceiling.
+// The child prints one tagged JSON line; only that line is read, because other output can share
+// stdout (the netguard's exit report under NETGUARD_REPORT=1, as in CI: #164). A child that fails or
+// prints no such line fails the test with its exit code and output, never a NaN.
+const COLD_TAG = 'SEARCH_COLD_BUILD ';
+export function parseColdBuild(r) {
+  const line = String(r.stdout || '').split('\n').find(l => l.startsWith(COLD_TAG));
+  let ms = NaN;
+  try { ms = line ? JSON.parse(line.slice(COLD_TAG.length)).ms : NaN; } catch { ms = NaN; }
+  if (r.status !== 0 || !Number.isFinite(ms)) {
+    throw new Error(`cold build child: exit ${r.status}, no ${COLD_TAG.trim()} line\nstdout: ${r.stdout}\nstderr: ${r.stderr}`);
+  }
+  return ms;
+}
 function coldBuildMs() {
   const src = `const t = performance.now(); const S = await import(${JSON.stringify(SEARCH_URL.href)});
     const { readFileSync } = await import('node:fs');
     const j = n => JSON.parse(readFileSync(new URL(n, ${JSON.stringify(FX.href)}), 'utf8'));
     S.buildIndex({ core: j('core.json'), places: j('places.json') });
-    process.stdout.write(String(performance.now() - t));`;
-  const r = spawnSync(process.execPath, ['--import', './tests/netguard/netguard.mjs', '--input-type=module', '-e', src],
-    { cwd: fileURLToPath(ROOT), encoding: 'utf8', env: process.env });
-  assert.equal(r.status, 0, r.stderr);
-  return +r.stdout;
+    process.stdout.write(${JSON.stringify(COLD_TAG)} + JSON.stringify({ ms: performance.now() - t }) + '\\n');`;
+  return parseColdBuild(spawnSync(process.execPath, ['--import', './tests/netguard/netguard.mjs', '--input-type=module', '-e', src],
+    { cwd: fileURLToPath(ROOT), encoding: 'utf8', env: process.env }));
 }
+test('budget: the cold-build child is read by its tagged line, and a broken child fails readably', () => {
+  assert.equal(parseColdBuild({ status: 0, stdout: `${COLD_TAG}{"ms":71.5}\nnetguard: 0 attempts (pid 1)\n`, stderr: '' }), 71.5);
+  assert.throws(() => parseColdBuild({ status: 1, stdout: '', stderr: 'SyntaxError: boom' }), /exit 1[\s\S]*SyntaxError: boom/);
+  assert.throws(() => parseColdBuild({ status: 0, stdout: '71.5netguard: 0 attempts\n', stderr: '' }), /no SEARCH_COLD_BUILD line/);
+});
 test('budget: wall clock backstop: no keystroke over 20 ms, no cold build over 200 ms', () => {
   replay();                                  // warm
   const runs = [replay(), replay(), replay()];
