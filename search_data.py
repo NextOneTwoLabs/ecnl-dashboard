@@ -22,9 +22,9 @@ complexID with two fields, a team with two names at one event, a flight in two e
 error, never a silent pick (#158 MF7).
 
 Usage:
-    python search_index.py --root <checkout> --inputs <checkout> --out <dir> [--fixture --commit <sha>]
+    python search_data.py --root <checkout> --inputs <checkout> --out <dir> [--fixture --commit <sha>]
 archive.py runs the build after the team directory in every path that rebuilds it, and
-`python archive.py --search-index [--check]` runs it on its own (see archive.py).
+`python archive.py --search-data [--check]` runs it on its own (see archive.py).
 """
 import argparse
 import collections
@@ -535,7 +535,7 @@ def with_build(dump, doc):
 
 
 def decode_games(doc):
-    """The games file as one dict per game (the Python twin of tests/search/index-format.mjs)."""
+    """The games file as one dict per game (the Python twin of tests/search/search-data-format.mjs)."""
     base = datetime.date.fromisoformat(doc["base"])
     out, prev = [], 0
     for r in doc["games"]:

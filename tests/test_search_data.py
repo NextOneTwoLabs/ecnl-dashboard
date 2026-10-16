@@ -1,5 +1,5 @@
 """Search data files (#158): public/archive/search/core.json and games-<season>.json, built by
-search_index.py. They are the prepared records the page's search reads; the index is the
+search_data.py. They are the prepared records the page's search reads; the index is the
 word-to-records map the browser builds from them. Each test fails without the change it names.
 
 (a) Games: undateBorrowedDates ported (one fixture with Node); every game once (#155 dedupe);
@@ -35,13 +35,13 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 import archive
 import ecnl_api as api
-import search_index as si
+import search_data as sd
 import team_directory as td
 import team_history as th
 
 SEARCH = Path(api.ARCHIVE_DIR) / "search"
 FIXTURES = HERE / "search" / "fixtures"
-FIX = "run `python archive.py --search-index`, then commit public/archive/search/"
+FIX = "run `python archive.py --search-data`, then commit public/archive/search/"
 
 
 def load(path):
@@ -52,18 +52,18 @@ def load(path):
 @functools.lru_cache(maxsize=None)
 def fresh():
     """One build of the committed archive, shared by the tests that only read it."""
-    files, errors, report = si.build()
+    files, errors, report = sd.build()
     return files, tuple(errors), report
 
 
 def decoded(files, season):
-    return {g["matchID"]: g for g in si.decode_games(json.loads(files[f"games-{season}.json"]))}
+    return {g["matchID"]: g for g in sd.decode_games(json.loads(files[f"games-{season}.json"]))}
 
 
 @functools.lru_cache(maxsize=None)
 def all_games():
     files = fresh()[0]
-    return {g["matchID"]: g for n in files if n.startswith("games-") for g in si.decode_games(json.loads(files[n]))}
+    return {g["matchID"]: g for n in files if n.startswith("games-") for g in sd.decode_games(json.loads(files[n]))}
 
 
 def overlay(changes):
@@ -82,7 +82,7 @@ class Committed(unittest.TestCase):
     def test_the_committed_files_equal_a_fresh_build(self):
         files, errors, _ = fresh()
         self.assertEqual(errors, ())
-        self.assertEqual(si.check(files), [], f"the search data files differ from a fresh build; {FIX}")
+        self.assertEqual(sd.check(files), [], f"the search data files differ from a fresh build; {FIX}")
 
     def test_every_game_of_the_archive_once(self):
         """#155: whichever flight's file holds a game, it is in its season's games file once."""
@@ -174,7 +174,7 @@ class Destinations(unittest.TestCase):
     flight of the division; team= is looked up in the whole division's standings)."""
 
     def test_the_rules_hold_on_the_archive(self):
-        arc = si.Archive()
+        arc = sd.Archive()
         src = api.load_sources()
         members, flights_in = {}, {}
         for season, entry in src["seasons"].items():
@@ -182,7 +182,7 @@ class Destinations(unittest.TestCase):
                 eid = ev["eventId"]
                 for d in (arc.hierarchy(eid) or {}).get("data", {}).get("girlsDivAndFlightList") or []:
                     fl = [f["flightID"] for f in d.get("flightList") or []]
-                    ids = {t.get("teamID") for f in fl for b in si._blocks(arc.standings(d["divisionID"], f, eid)) for t in b["teamStandings"]}
+                    ids = {t.get("teamID") for f in fl for b in sd._blocks(arc.standings(d["divisionID"], f, eid)) for t in b["teamStandings"]}
                     for f in fl:
                         members[f] = ids
                         flights_in[f] = eid
@@ -216,10 +216,10 @@ class Destinations(unittest.TestCase):
         counts = collections.Counter()
         flags = collections.Counter()
         for f in sorted((FIXTURES / "search").glob("games-*.json")):
-            for g in si.decode_games(load(f)):
+            for g in sd.decode_games(load(f)):
                 counts[(g["kind"], tuple(g["dest"]))] += 1
                 if g["kind"] == "n" and g["dest"] == [3]:
-                    flags[g["flags"] & si.F_BRACKET] += 1
+                    flags[g["flags"] & sd.F_BRACKET] += 1
         self.assertEqual(counts[("c", (1, 0))], 42790)
         self.assertEqual(counts[("c", (1, 1))], 140)
         self.assertEqual(counts[("c", (1,))], 27)
@@ -233,12 +233,12 @@ class Destinations(unittest.TestCase):
 
 class Games(unittest.TestCase):
     def test_undate_borrowed_dates_matches_the_shared_fixture(self):
-        """The port of index.html's undateBorrowedDates; tests/search-index.test.mjs runs the page's."""
+        """The port of index.html's undateBorrowedDates; tests/search-data.test.mjs runs the page's."""
         doc = load(FIXTURES / "borrowed-dates.json")
         self.assertGreaterEqual(len(doc["cases"]), 10)
         for c in doc["cases"]:
             before = json.loads(json.dumps(c["games"]))
-            out = si.undate_borrowed_dates(c["games"])
+            out = sd.undate_borrowed_dates(c["games"])
             self.assertEqual(c["games"], before, f"{c['name']}: input not mutated")
             want = [dict(g, gameDate=None, dateUnconfirmed=True) if g["matchID"] in c["undated"] else g for g in before]
             self.assertEqual(out, want, c["name"])
@@ -250,29 +250,29 @@ class Games(unittest.TestCase):
             if g is None:      # a later refresh may have resolved them; the fixture keeps them
                 continue
             self.assertIsNone(g["date"])
-            self.assertTrue(g["flags"] & si.F_UNDATED)
-        fixture = {g["matchID"]: g for f in (FIXTURES / "search").glob("games-2026-27.json") for g in si.decode_games(load(f))}
+            self.assertTrue(g["flags"] & sd.F_UNDATED)
+        fixture = {g["matchID"]: g for f in (FIXTURES / "search").glob("games-2026-27.json") for g in sd.decode_games(load(f))}
         for mid in (1133108, 1133109, 1133110):
-            self.assertTrue(fixture[mid]["flags"] & si.F_UNDATED, mid)
+            self.assertTrue(fixture[mid]["flags"] & sd.F_UNDATED, mid)
 
     def test_dates_encode_and_decode(self):
         """MF4: floor division before the base; no time; the sentinel and an empty date are no date."""
-        base = si.season_base("2023-24")
+        base = sd.season_base("2023-24")
         self.assertEqual(base.isoformat(), "2023-07-01")
-        w = si.encode_when("2022-10-28T09:00:00", base)
+        w = sd.encode_when("2022-10-28T09:00:00", base)
         self.assertEqual(w, -246 * 10000 + 900)
-        self.assertEqual(si.decode_when(w, base), ("2022-10-28", "09:00"))
-        self.assertEqual(si.decode_when(si.encode_when("2023-09-09T00:00:00", base), base), ("2023-09-09", None))
+        self.assertEqual(sd.decode_when(w, base), ("2022-10-28", "09:00"))
+        self.assertEqual(sd.decode_when(sd.encode_when("2023-09-09T00:00:00", base), base), ("2023-09-09", None))
         for d in ("0001-01-01T00:00:00", "", None, "1899-12-31T10:00:00"):
-            self.assertIsNone(si.encode_when(d, base), d)
+            self.assertIsNone(sd.encode_when(d, base), d)
         games = all_games()
         for mid in (172092, 337987, 337992, 337994, 338006, 338008, 275826):
             self.assertIsNone(games[mid]["date"], mid)
-            self.assertFalse(games[mid]["flags"] & si.F_UNDATED, f"{mid}: no date is not an undated leg")
+            self.assertFalse(games[mid]["flags"] & sd.F_UNDATED, f"{mid}: no date is not an undated leg")
         self.assertEqual((games[538653]["date"], games[538653]["time"]), ("2022-10-28", "09:00"))
 
     def test_byes_are_flagged_and_stay_in_the_bracket(self):
-        byes = [g for g in all_games().values() if g["flags"] & si.F_BYE]
+        byes = [g for g in all_games().values() if g["flags"] & sd.F_BYE]
         self.assertTrue(byes)
         self.assertTrue(all(g["kind"] == "n" for g in byes))
 
@@ -290,7 +290,7 @@ class Games(unittest.TestCase):
             return dict(doc, data=[copy] + doc["data"])
         report = collections.defaultdict(list)
         with overlay({b: add}):
-            games = si.collect(si.Archive(), src, report)
+            games = sd.collect(sd.Archive(), src, report)
         self.assertEqual(games["2023-24"][first["matchID"]][0]["hometeamscore"], first["hometeamscore"])
         self.assertEqual(games["2023-24"][first["matchID"]][1][3], fl[0])
         self.assertIn(str(first["matchID"]), report["duplicate matchIDs whose copies differ (the fuller copy is kept)"])
@@ -307,8 +307,8 @@ class Games(unittest.TestCase):
             rows = doc["data"]
             g = dict(rows[0], homeTeam=(rows[0]["homeTeam"] or "") + " Renamed")
             return dict(doc, data=[g] + rows[1:])
-        with overlay({path: rename}), self.assertRaises(si.BuildError):
-            si.build()
+        with overlay({path: rename}), self.assertRaises(sd.BuildError):
+            sd.build()
 
     def test_a_complex_with_two_fields_fails_the_build(self):
         src = api.load_sources()
@@ -321,8 +321,8 @@ class Games(unittest.TestCase):
             rows = doc["data"]
             i = next(i for i, g in enumerate(rows) if g.get("complex"))
             return dict(doc, data=rows[:i] + [dict(rows[i], zip="99999")] + rows[i + 1:])
-        with overlay({path: move}), self.assertRaisesRegex(si.BuildError, "two fields"):
-            si.build()
+        with overlay({path: move}), self.assertRaisesRegex(sd.BuildError, "two fields"):
+            sd.build()
 
 
 class Fields(unittest.TestCase):
@@ -330,18 +330,18 @@ class Fields(unittest.TestCase):
 
     def test_zip_rule(self):
         fixes = {"7834": "07834", "9561": "95618", "7514": None}
-        self.assertEqual(si.zip5("92618", fixes), ("92618", None, False))
-        self.assertEqual(si.zip5("08060 ", fixes), ("08060", None, False))
-        self.assertEqual(si.zip5(" 60441", fixes), ("60441", None, False))
-        self.assertEqual(si.zip5("97006-5941", fixes), ("97006", None, False))
-        self.assertEqual(si.zip5("7834", fixes), ("07834", None, True))
-        self.assertEqual(si.zip5("9561", fixes), ("95618", None, True))
-        self.assertEqual(si.zip5("7514", fixes), ("", None, True))
-        self.assertEqual(si.zip5("TBD", fixes), ("", "TBD", False))
-        self.assertEqual(si.zip5("20175l", fixes), ("", "20175l", False))
-        self.assertEqual(si.zip5("", fixes), ("", None, False))
-        self.assertEqual(si.zip5(None, fixes), ("", None, False))
-        self.assertEqual(si.zip5("2780", {}), ("", "2780", False), "a 4-digit zip is never padded blind")
+        self.assertEqual(sd.zip5("92618", fixes), ("92618", None, False))
+        self.assertEqual(sd.zip5("08060 ", fixes), ("08060", None, False))
+        self.assertEqual(sd.zip5(" 60441", fixes), ("60441", None, False))
+        self.assertEqual(sd.zip5("97006-5941", fixes), ("97006", None, False))
+        self.assertEqual(sd.zip5("7834", fixes), ("07834", None, True))
+        self.assertEqual(sd.zip5("9561", fixes), ("95618", None, True))
+        self.assertEqual(sd.zip5("7514", fixes), ("", None, True))
+        self.assertEqual(sd.zip5("TBD", fixes), ("", "TBD", False))
+        self.assertEqual(sd.zip5("20175l", fixes), ("", "20175l", False))
+        self.assertEqual(sd.zip5("", fixes), ("", None, False))
+        self.assertEqual(sd.zip5(None, fixes), ("", None, False))
+        self.assertEqual(sd.zip5("2780", {}), ("", "2780", False), "a 4-digit zip is never padded blind")
 
     def test_fixed_zips_and_inference_on_the_archive(self):
         """Whitespace kept (279 games); 9561 joins Davis Legacy at 95618; Valley Ridge Park's 7514
@@ -362,17 +362,17 @@ class Fields(unittest.TestCase):
         self.assertEqual(valley, {("valley ridge park", ""), ("valley ridge park", "98188")})
         self.assertEqual(by_key[("Great Park", "92618")], {80, 422, 1018, 2555, 2838, 3069, 3075, 3416, 4559, 6698, 7083, 7319})
         self.assertEqual(len(by_key[("Surf Sports Park", "92014")]) >= 2, True, "Surf Cup Sports Park joins Surf Sports Park (Q3)")
-        self.assertFalse([k for k in by_key if si.PLACEHOLDER.match(k[0]) or not k[0]], "no placeholder field")
+        self.assertFalse([k for k in by_key if sd.PLACEHOLDER.match(k[0]) or not k[0]], "no placeholder field")
 
     def test_field_numbers_and_names(self):
-        self.assertEqual(si.field_number("Field 08"), 8)
-        self.assertEqual(si.field_number("Field #03"), 3)
-        self.assertEqual(si.field_number(" Stadium  Field "), "Stadium Field")
-        self.assertIsNone(si.field_number(""))
-        self.assertEqual(si.norm_name("Orange County Great Park "), "orange county great park")
-        self.assertEqual(si.norm_name("St. Joe's  Sports Dome"), "st joes sports dome")
+        self.assertEqual(sd.field_number("Field 08"), 8)
+        self.assertEqual(sd.field_number("Field #03"), 3)
+        self.assertEqual(sd.field_number(" Stadium  Field "), "Stadium Field")
+        self.assertIsNone(sd.field_number(""))
+        self.assertEqual(sd.norm_name("Orange County Great Park "), "orange county great park")
+        self.assertEqual(sd.norm_name("St. Joe's  Sports Dome"), "st joes sports dome")
         for p in ("TBD", "tba", "To Be Determined"):
-            self.assertEqual(si.norm_name(p), "")
+            self.assertEqual(sd.norm_name(p), "")
 
     def test_core_field_rows(self):
         places = json.loads(fresh()[0]["places.json"])          # #159: fields live in places.json
@@ -381,7 +381,7 @@ class Fields(unittest.TestCase):
         self.assertIn("2023-24", seasons)
         self.assertEqual(seasons, sorted(seasons))
         self.assertIn(15, numbers)
-        self.assertEqual(numbers, sorted(numbers, key=si._num_key))
+        self.assertEqual(numbers, sorted(numbers, key=sd._num_key))
         self.assertEqual(places["vocab"]["fieldAliases"]["oc great park"], "Great Park")
         self.assertIsNone(places["fields"]["60 Acres Park@98052"][0], "a label equal to the key's name is dropped")
 
@@ -403,8 +403,8 @@ class Fields(unittest.TestCase):
                 {"name": "W", "zip": "92618", "label": "W", "aliases": ["w"]},
             ], fixes=[{"raw": "92618", "zip": "92618", "evidence": "e"}, {"raw": "123", "zip": "1", "evidence": "e"},
                       {"raw": "7834", "zip": "07834", "evidence": "again"}])
-            aliases, a_err = si.load_aliases(tmp)
-            fixes, f_err = si.load_fixes(tmp)
+            aliases, a_err = sd.load_aliases(tmp)
+            fixes, f_err = sd.load_fixes(tmp)
         self.assertEqual(len(a_err), 4, a_err)
         self.assertEqual(len(f_err), 3, f_err)
         self.assertEqual(aliases[("great park", "92618")][0], "Great Park", "the good entries are kept")
@@ -413,10 +413,10 @@ class Fields(unittest.TestCase):
     def test_the_drift_check_fails_on_a_bad_entry(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.write_inputs(tmp, fixes=[{"raw": "x", "zip": "1", "evidence": "e"}])
-            real = si.inputs_dir
-            with patch.object(si, "inputs_dir", side_effect=lambda base=None: real(base or tmp)), \
+            real = sd.inputs_dir
+            with patch.object(sd, "inputs_dir", side_effect=lambda base=None: real(base or tmp)), \
                     contextlib.redirect_stdout(io.StringIO()) as out:
-                code = archive.cmd_search_index(api.load_sources(), check=True)
+                code = archive.cmd_search_data(api.load_sources(), check=True)
         self.assertEqual(code, 1)
         self.assertIn("zip-fixes.json fixes[6]", out.getvalue())
 
@@ -430,14 +430,14 @@ class Stability(unittest.TestCase):
             for seed, tz in (("1", "UTC"), ("977", "Pacific/Kiritimati")):
                 out = os.path.join(tmp, seed)
                 env = dict(os.environ, PYTHONHASHSEED=seed, TZ=tz, LC_ALL="C")
-                subprocess.run([sys.executable, str(HERE.parent / "search_index.py"), "--root", str(HERE.parent),
+                subprocess.run([sys.executable, str(HERE.parent / "search_data.py"), "--root", str(HERE.parent),
                                 "--inputs", str(HERE.parent), "--out", out], check=True, env=env, stdout=subprocess.DEVNULL)
                 outs.append({n: Path(out, n).read_bytes() for n in sorted(os.listdir(out))})
         self.assertEqual(outs[0], outs[1])
         self.assertEqual(outs[0], fresh()[0])
 
     def test_the_builder_never_reads_the_clock_or_the_locale(self):
-        src = (HERE.parent / "search_index.py").read_text(encoding="utf-8")
+        src = (HERE.parent / "search_data.py").read_text(encoding="utf-8")
         for bad in (r"\.now\(", r"\.today\(", r"\btime\.time\(", r"^import time\b", r"\bimport locale\b", r"\blocale\.", r"utcnow", r"localtime", r"os\.environ"):
             self.assertIsNone(re.search(bad, src, re.M), bad)
 
@@ -456,7 +456,7 @@ class Stability(unittest.TestCase):
                 rows.append(dict(next(r for r in rows if r["matchID"] == mid), matchID=extra))
             return dict(doc, data=rows)
         with overlay({path: edit}):
-            return si.build()[0], active
+            return sd.build()[0], active
 
     def test_a_score_change_rewrites_one_row_and_the_build_line(self):
         files, active = self.changed_score()
@@ -487,25 +487,25 @@ class Writing(unittest.TestCase):
 
     def test_unchanged_files_are_not_rewritten_and_crlf_is_not_a_change(self):
         files = fresh()[0]
-        self.assertEqual(sorted(si.write(files, self.tmp)), sorted(files))
+        self.assertEqual(sorted(sd.write(files, self.tmp)), sorted(files))
         p = Path(self.tmp, "core.json")
         p.write_bytes(files["core.json"].replace(b"\n", b"\r\n"))
         before = os.stat(p).st_mtime_ns
-        self.assertEqual(si.write(files, self.tmp), [])
+        self.assertEqual(sd.write(files, self.tmp), [])
         self.assertEqual(os.stat(p).st_mtime_ns, before)
-        self.assertEqual(si.check(files, self.tmp), [])
+        self.assertEqual(sd.check(files, self.tmp), [])
         Path(self.tmp, "games-2019-20.json").write_text("{}", encoding="utf-8")
-        self.assertEqual(si.check(files, self.tmp), ["games-2019-20.json"], "a file no longer built is drift")
-        self.assertEqual(si.write(files, self.tmp), ["games-2019-20.json"])
+        self.assertEqual(sd.check(files, self.tmp), ["games-2019-20.json"], "a file no longer built is drift")
+        self.assertEqual(sd.write(files, self.tmp), ["games-2019-20.json"])
         self.assertFalse(Path(self.tmp, "games-2019-20.json").exists())
 
     def test_a_failed_write_leaves_the_old_files_and_no_tmp(self):
         files = fresh()[0]
         for n in files:
             Path(self.tmp, n).write_bytes(b"old")
-        with patch.object(si.os, "replace", side_effect=OSError("disk fixture fault")):
+        with patch.object(sd.os, "replace", side_effect=OSError("disk fixture fault")):
             with self.assertRaises(OSError):
-                si.write(files, self.tmp)
+                sd.write(files, self.tmp)
         self.assertEqual(sorted(os.listdir(self.tmp)), sorted(files))
         self.assertTrue(all(Path(self.tmp, n).read_bytes() == b"old" for n in files))
 
@@ -513,12 +513,12 @@ class Writing(unittest.TestCase):
         files = fresh()[0]
         moved = []
         real = os.replace
-        with patch.object(si.os, "replace", side_effect=lambda a, b: (moved.append(os.path.basename(b)), real(a, b))):
-            si.write(files, self.tmp)
+        with patch.object(sd.os, "replace", side_effect=lambda a, b: (moved.append(os.path.basename(b)), real(a, b))):
+            sd.write(files, self.tmp)
         self.assertEqual(moved[-1], "core.json")
 
     def test_dry_run_writes_nothing(self):
-        self.assertTrue(si.write(fresh()[0], self.tmp, dry_run=True))
+        self.assertTrue(sd.write(fresh()[0], self.tmp, dry_run=True))
         self.assertEqual(os.listdir(self.tmp), [])
 
 
@@ -596,7 +596,7 @@ class Pipeline(unittest.TestCase):
         Path(self.search, "core.json").write_bytes(b"old")
         state = Path(self.tmp, "refresh-state.json").read_bytes()
         code, out = self.run_in_sandbox(lambda: archive.cmd_team_history(api.load_sources()),
-                                        patch.object(si, "collect", side_effect=RuntimeError("search fixture fault")))
+                                        patch.object(sd, "collect", side_effect=RuntimeError("search fixture fault")))
         self.assertEqual(code, 1)
         self.assertIn("Search data: FAILED: search fixture fault", out)
         self.assertEqual(os.listdir(self.search), ["core.json"])
@@ -624,13 +624,27 @@ class Pipeline(unittest.TestCase):
         for n, b in fresh()[0].items():
             Path(self.search, n).write_bytes(b.replace(b"\n", b"\r\n"))
         Path(self.tmp, "directory.json").write_bytes(Path(td.directory_path()).read_bytes())
-        code, out = self.run_in_sandbox(lambda: archive.cmd_search_index(api.load_sources(), check=True))
+        code, out = self.run_in_sandbox(lambda: archive.cmd_search_data(api.load_sources(), check=True))
         self.assertEqual(code, 0, out)
         p = Path(self.search, "games-2024-25.json")
         p.write_bytes(p.read_bytes().replace(b'"schema":1', b'"schema":1 ', 1))
-        code, out = self.run_in_sandbox(lambda: archive.cmd_search_index(api.load_sources(), check=True))
+        code, out = self.run_in_sandbox(lambda: archive.cmd_search_data(api.load_sources(), check=True))
         self.assertEqual(code, 1)
         self.assertIn("games-2024-25.json", out)
+
+    def test_the_flag_is_search_data_and_the_old_name_is_gone(self):
+        """#163 (owner decision 149#6207974871): the flag is --search-data; the old name has no alias.
+        argparse refuses before any work, so neither run reads the archive or the network."""
+        env = dict(os.environ)
+        ok = subprocess.run([sys.executable, str(HERE.parent / "archive.py"), "--help"],
+                            capture_output=True, text=True, env=env, cwd=str(HERE.parent))
+        self.assertEqual(ok.returncode, 0, ok.stderr)
+        self.assertIn("--search-data", ok.stdout)
+        self.assertNotIn("--search-" + "index", ok.stdout)
+        old = subprocess.run([sys.executable, str(HERE.parent / "archive.py"), "--search-" + "index", "--check"],
+                             capture_output=True, text=True, env=env, cwd=str(HERE.parent))
+        self.assertEqual(old.returncode, 2, old.stdout + old.stderr)
+        self.assertIn("unrecognized arguments", old.stderr)
 
     def test_every_directory_build_in_archive_py_is_followed_by_the_search_data(self):
         """Every path (the crawl, --refresh both ways, --team-history, --clubs) runs the build after
@@ -660,11 +674,11 @@ class Fixture(unittest.TestCase):
 
     def test_the_builder_and_inputs_are_the_recorded_ones(self):
         m = load(FIXTURES / "MANIFEST.json")["search"]
-        self.assertEqual(m["builder"], si.lf_sha(str(HERE.parent / "search_index.py")), "re-freeze the fixture (README)")
-        self.assertEqual(sorted(m["inputs"]), sorted(si.INPUTS), "every reviewed input is recorded (#159)")
-        for n in si.INPUTS:
+        self.assertEqual(m["builder"], sd.lf_sha(str(HERE.parent / "search_data.py")), "re-freeze the fixture (README)")
+        self.assertEqual(sorted(m["inputs"]), sorted(sd.INPUTS), "every reviewed input is recorded (#159)")
+        for n in sd.INPUTS:
             path = os.path.join(api.PUBLIC_DIR, "data", n)
-            self.assertEqual(m["inputs"][n], si.lf_sha(path) if os.path.exists(path) else None, n)
+            self.assertEqual(m["inputs"][n], sd.lf_sha(path) if os.path.exists(path) else None, n)
 
 
 if __name__ == "__main__":

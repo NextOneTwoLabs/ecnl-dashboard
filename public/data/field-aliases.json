@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "_comment": "Reviewed field aliases for the search data files (#158, owner decision Q3; D6, D6a). A field is a name plus a zip: each entry merges the complex names listed in `aliases` (in search_index.norm_name form) at that zip into one field called `name`, shown as `label`. Aliases apply only at their zip. search_index.py validates every entry; a bad one is left out, reported, and fails `python archive.py --search-index --check`. Same-zip candidates are listed in the build report and are never merged automatically.",
+  "_comment": "Reviewed field aliases for the search data files (#158, owner decision Q3; D6, D6a). A field is a name plus a zip: each entry merges the complex names listed in `aliases` (in search_data.norm_name form) at that zip into one field called `name`, shown as `label`. Aliases apply only at their zip. search_data.py validates every entry; a bad one is left out, reported, and fails `python archive.py --search-data --check`. Same-zip candidates are listed in the build report and are never merged automatically.",
   "fields": [
     {
       "name": "Great Park",

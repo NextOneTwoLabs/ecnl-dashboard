@@ -1,13 +1,13 @@
 // #158: sizes and parse times of the search data files (public/archive/search/, or a directory
 // given as the first argument). Per file: raw bytes, gzip at levels 6 and 9, brotli at quality 11
 // (the transfer size: Cloudflare compresses JSON on the wire), the median JSON.parse time over 15
-// runs, and for a games file the median decode time with tests/search/index-format.mjs.
+// runs, and for a games file the median decode time with tests/search/search-data-format.mjs.
 // Reads local files only. Run it under the netguard:
-//   node --import ./tests/netguard/netguard.mjs tools/search_index_size.mjs [dir]
+//   node --import ./tests/netguard/netguard.mjs tools/search_data_size.mjs [dir]
 import { readFileSync, readdirSync } from 'node:fs';
 import { gzipSync, brotliCompressSync, constants } from 'node:zlib';
 import { performance } from 'node:perf_hooks';
-import { decodeGames } from '../tests/search/index-format.mjs';
+import { decodeGames } from '../tests/search/search-data-format.mjs';
 
 const dir = new URL(process.argv[2] ? `file://${process.argv[2].replace(/\/?$/, '/')}` : '../public/archive/search/', import.meta.url);
 const kb = n => (n / 1024).toFixed(1);

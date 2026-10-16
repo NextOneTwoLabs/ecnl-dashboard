@@ -25,7 +25,7 @@ HERE = Path(__file__).resolve().parent
 import sys
 sys.path.insert(0, str(HERE.parent))
 import ecnl_api as api
-import search_index as si
+import search_data as sd
 
 spec = importlib.util.spec_from_file_location("census_places", HERE.parent / "tools" / "census_places.py")
 cp = importlib.util.module_from_spec(spec)
@@ -62,10 +62,10 @@ def inputs(tmp, fixes=(), aliases=(), cities=(), table=True):
 
 def resolver(tmp):
     import collections
-    census, _ = si.load_census(tmp)
-    fixes, aliases, counties, errors = si.load_place_inputs(census, tmp)
+    census, _ = sd.load_census(tmp)
+    fixes, aliases, counties, errors = sd.load_place_inputs(census, tmp)
     report = collections.defaultdict(list)
-    return si.Places(census, fixes, aliases, counties, report, errors), report, errors
+    return sd.Places(census, fixes, aliases, counties, report, errors), report, errors
 
 
 class Order(unittest.TestCase):
@@ -74,7 +74,7 @@ class Order(unittest.TestCase):
         self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
 
     def test_normalisation_is_the_same_on_both_sides(self):
-        n = si.norm_city
+        n = sd.norm_city
         self.assertEqual(n("RALEIGH"), n("Raleigh"))
         self.assertEqual(n("St Johns"), n("St. Johns"))
         self.assertEqual(n("St Johns"), "saint johns")
@@ -140,8 +140,8 @@ class Order(unittest.TestCase):
                      aliases=[{"city": "Metroville", "state": "KY", "placeGeoid": "2199999", "placeName": "X", "evidence": "e"}],
                      cities=[{"city": "Fairfax", "state": "VA", "countyGeoid": "51059", "countyName": "Fairfax County", "evidence": "e"},
                              {"city": "Glen Allen", "state": "VA", "countyGeoid": "51087", "countyName": "Henrico County"}])
-        census, _ = si.load_census(tmp)
-        fixes, aliases, counties, errors = si.load_place_inputs(census, tmp)
+        census, _ = sd.load_census(tmp)
+        fixes, aliases, counties, errors = sd.load_place_inputs(census, tmp)
         self.assertEqual((fixes, aliases), ({}, {}))
         self.assertEqual(list(counties), [], "51059 is not in the synthetic table; the other entry has no evidence")
         self.assertEqual(len(errors), 6, errors)
@@ -160,7 +160,7 @@ class Stability(unittest.TestCase):
         for c in cls.directory["clubs"]:
             if c[0] in ids:
                 c[3] = {ids[0]: "Alpha, CA", ids[1]: "Alpha, CA", ids[2]: "Delta, CA"}[c[0]]
-        cls.base = si.build(directory=cls.directory, inputs=cls.tmp)[0]
+        cls.base = sd.build(directory=cls.directory, inputs=cls.tmp)[0]
 
     @classmethod
     def tearDownClass(cls):
@@ -175,7 +175,7 @@ class Stability(unittest.TestCase):
         for c in d["clubs"]:
             if c[0] == self.ids[1]:
                 c[3] = "Delta, CA"
-        files = si.build(directory=d, inputs=self.tmp)[0]
+        files = sd.build(directory=d, inputs=self.tmp)[0]
         changes = self.diff(self.base["places.json"], files["places.json"])
         self.assertEqual(len(changes), 4, changes)          # build, and the club's clubPlaces line
         self.assertTrue(all(l[1:].startswith((',"build":', f'"{self.ids[1]}":', f',"{self.ids[1]}":')) for l in changes), changes)
@@ -199,7 +199,7 @@ class Stability(unittest.TestCase):
             return raw, stamp
         from unittest.mock import patch
         with patch.object(api, "read_archive", side_effect=read):
-            files = si.build(directory=self.directory, inputs=self.tmp)[0]
+            files = sd.build(directory=self.directory, inputs=self.tmp)[0]
         self.assertEqual(files["core.json"], self.base["core.json"], "a field change never touches core (nit 4)")
         changes = self.diff(self.base["places.json"], files["places.json"])
         added = sorted(l for l in changes if l.startswith("+"))
@@ -214,7 +214,7 @@ class Stability(unittest.TestCase):
     def test_games_files_never_depend_on_census_data(self):
         without = tempfile.mkdtemp(dir=self.tmp)
         inputs(without, table=False)
-        files = si.build(directory=self.directory, inputs=without)[0]
+        files = sd.build(directory=self.directory, inputs=without)[0]
         for n, b in self.base.items():
             if n != "places.json":
                 self.assertEqual(files[n], b, n)
@@ -242,8 +242,8 @@ class Committed(unittest.TestCase):
         # Fairfax, VA needs no entry: its census place already computes to Fairfax County (Q-E is
         # pinned by RealTable.test_owner_decisions_fairfax_and_louisville); an entry would be redundant.
         self.assertNotIn(("Fairfax", "VA"), cities)
-        for doc, keys in ((fixes["fixes"], si.PLACE_FIX_KEYS), (fixes["aliases"], si.PLACE_ALIAS_KEYS),
-                          (load(DATA / "city-counties.json")["cities"], si.CITY_COUNTY_KEYS)):
+        for doc, keys in ((fixes["fixes"], sd.PLACE_FIX_KEYS), (fixes["aliases"], sd.PLACE_ALIAS_KEYS),
+                          (load(DATA / "city-counties.json")["cities"], sd.CITY_COUNTY_KEYS)):
             for e in doc:
                 self.assertEqual(set(e), keys)
                 self.assertTrue(e["evidence"].strip())

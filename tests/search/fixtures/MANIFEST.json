@@ -21,7 +21,7 @@
   "retired": null,
   "schema": 1,
   "search": {
-    "builder": "9eb37a57ffa305a285a8696fbdb125ffd7242a9c26659a623ffad1328952fcc7",
+    "builder": "7bec9feed1a2d85215bd106b0b5dc17b93f74738b6f9ec069142fd4891adb3af",
     "commit": "1c4c32686e49a3592ab116d26d37cc620caf7b46",
     "files": {
       "core.json": {
@@ -62,10 +62,10 @@
       }
     },
     "inputs": {
-      "city-counties.json": "3b6183d8011767e8ef56797b1b97bae1ff7e876d25e7e1cda7312a7458e48ea0",
-      "field-aliases.json": "dcb26eeee161671293c0bae526887a0a96939f5114f2ef01ed62c1c94956ab93",
-      "zip-fixes.json": "b8a01f81482ed8c1669ad050b1ae6764e342c34f97140557c2ff3be8852ccfea",
-      "zip-place-fixes.json": "14bb74232da170ee9c143bf9b8a8fd55872acea725a348d61e3e7c6e595206f5",
+      "city-counties.json": "104bd8439ce3ec4d6d20be31f22090dab4946d25202065ba87faa90b6cb80a07",
+      "field-aliases.json": "bc0f2bc29f8e6577aab1ed3eca094dbd8716566dcb58caa4c2803dadb4fe6979",
+      "zip-fixes.json": "79eeda3924c48c9d203477b55303505597f0fc30edb1fd166205b43e683e3afb",
+      "zip-place-fixes.json": "c5628b4bf1d16ec4263fcabc7fc116e409ab8b63277fd2ce5b3e3b8259f4f270",
       "zip-places.json": "12a63a2254f29064f6c47bc512ae498f99c5ab260fdfea0d19b0448210c7f235"
     },
     "logos": "dropped from core.json teams (#117); directoryBuild is recomputed over the stripped directory"

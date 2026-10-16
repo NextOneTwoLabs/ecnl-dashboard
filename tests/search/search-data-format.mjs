@@ -1,10 +1,11 @@
 // #158: a reference decoder for the search data files (core.json, games-<season>.json), the
-// JavaScript twin of search_index.decode_games. The files are the prepared records; the index is
+// JavaScript twin of search_data.decode_games. The files are the prepared records; the index is
 // the word-to-records map PR 3 builds from them in the browser. Pure functions: no DOM, no
 // network, no clock. docs/data-api.md, "Search data", describes the format.
 
 export const GAMES_SCHEMA = 1;
-export const CORE_SCHEMA = 1;
+export const CORE_SCHEMA = 2;     // 2 since #159 (fields moved to places.json)
+export const PLACES_SCHEMA = 1;
 export const NO_TIME = 9999;
 export const FLAGS = { bracket: 1, undated: 2, reconstructed: 4, friendly: 8, bye: 16 };
 

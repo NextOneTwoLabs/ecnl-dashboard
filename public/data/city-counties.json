@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "_comment": "Reviewed counties for club and event cities (#159, owner decision Q5; plan v2 MF2). An entry gives the county of a city that is not a census place, and may override the computed county of one that is. Every countyGeoid must exist in public/data/zip-places.json with that countyName and state; an entry equal to the computed county is redundant. A bad entry is left out, reported, and fails `python archive.py --search-index --check`. Each entry carries its evidence.",
+  "_comment": "Reviewed counties for club and event cities (#159, owner decision Q5; plan v2 MF2). An entry gives the county of a city that is not a census place, and may override the computed county of one that is. Every countyGeoid must exist in public/data/zip-places.json with that countyName and state; an entry equal to the computed county is redundant. A bad entry is left out, reported, and fails `python archive.py --search-data --check`. Each entry carries its evidence.",
   "cities": [
     {
       "city": "Woodland Hills",

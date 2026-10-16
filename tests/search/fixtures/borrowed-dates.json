@@ -1,5 +1,5 @@
 {
- "about": "Shared cases for undateBorrowedDates (public/index.html) and its Python port, search_index.undate_borrowed_dates (#158, #66). `undated` lists the matchIDs that must come back with gameDate null and dateUnconfirmed true; every other row must come back unchanged. Read by tests/search-index.test.mjs (the page's function, extracted by script) and tests/test_search_index.py.",
+ "about": "Shared cases for undateBorrowedDates (public/index.html) and its Python port, search_data.undate_borrowed_dates (#158, #66). `undated` lists the matchIDs that must come back with gameDate null and dateUnconfirmed true; every other row must come back unchanged. Read by tests/search-data.test.mjs (the page's function, extracted by script) and tests/test_search_data.py.",
  "cases": [
   {
    "name": "2026-27 live leg 1: FC Pride Elite v Racing Louisville G2009/10 (event 4269, flight 41862)",

@@ -6,7 +6,7 @@
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --search <dir>
 //
-// --search (#158) copies the search data files that `search_index.py --fixture` wrote to <dir>
+// --search (#158) copies the search data files that `search_data.py --fixture` wrote to <dir>
 // (built from another checkout's archive, at MANIFEST's commit) into fixtures/search/ as LF text,
 // refuses any logo or image, and records their LF checksums plus <dir>/PROVENANCE.json (commit,
 // builder and reviewed-input checksums) as MANIFEST.search. The README has the full command.
@@ -134,7 +134,7 @@ if (has('--record')) {
 
 if (has('--search')) {
   const dir = arg('--search');
-  if (!dir) throw new Error('--search needs <dir>, the --out of search_index.py --fixture');
+  if (!dir) throw new Error('--search needs <dir>, the --out of search_data.py --fixture');
   const from = new URL(`file://${dir.replace(/\/?$/, '/')}`);
   const prov = JSON.parse(readFileSync(new URL('PROVENANCE.json', from), 'utf8'));
   const m = readManifest();
