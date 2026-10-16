@@ -286,6 +286,18 @@ class ApiTests(unittest.TestCase):
             status, conditional, body = self.request(history, method, {'If-None-Match': headers['ETag']})
             self.assertEqual((status, body, conditional['ETag']), (304, b'', headers['ETag']))
 
+    def test_search_data_bodies_equal_their_files(self):
+        """#158, #159: each search data route serves its own file, byte for byte, with its sha256 as ETag."""
+        import hashlib
+        for path, rel in (('/api/v1/search/core', 'archive/search/core.json'),
+                          ('/api/v1/search/places', 'archive/search/places.json'),
+                          ('/api/v1/search/games/2025-26', 'archive/search/games-2025-26.json')):
+            status, headers, body = self.request(path)
+            self.assertEqual(status, 200, path)
+            want = (ROOT / rel).read_bytes()
+            self.assertEqual(body, want, f'{path} serves {rel}')
+            self.assertEqual(headers.get('ETag'), '"' + hashlib.sha256(want).hexdigest() + '"', path)
+
     def test_live_reconstructed_guard(self):
         protected = next(iter(proxy_server.api.protected_paths()))
         with patch.object(proxy_server.api, 'fetch_api_raw', side_effect=AssertionError('protected data must not contact upstream')):

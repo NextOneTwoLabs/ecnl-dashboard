@@ -21,12 +21,12 @@
   "retired": null,
   "schema": 1,
   "search": {
-    "builder": "c376410e002f3bb69fd387e89ecad40fbf58a126878eb6e5e0f0c369751f7ee8",
+    "builder": "9eb37a57ffa305a285a8696fbdb125ffd7242a9c26659a623ffad1328952fcc7",
     "commit": "1c4c32686e49a3592ab116d26d37cc620caf7b46",
     "files": {
       "core.json": {
-        "bytes": 500633,
-        "sha256": "2ae3b313ca69e6cf790e6ca6eac7e3970f4682c882f2e777bb9f5e46e46bbb2b"
+        "bytes": 402268,
+        "sha256": "dbdda1e60c71750e6cc6b38d83d5853b64e4455f7dc47c910ff65f6424a12006"
       },
       "games-2020-21.json": {
         "bytes": 420609,
@@ -55,11 +55,18 @@
       "games-2026-27.json": {
         "bytes": 499956,
         "sha256": "73f40f6c55f17501142f2a05792f6a9744473811e32b931693c30595ed4561a2"
+      },
+      "places.json": {
+        "bytes": 140036,
+        "sha256": "c979d88ee345f136d1b0ffa5f57590e303b54bb25edb986123563dd861c1a104"
       }
     },
     "inputs": {
+      "city-counties.json": "3b6183d8011767e8ef56797b1b97bae1ff7e876d25e7e1cda7312a7458e48ea0",
       "field-aliases.json": "dcb26eeee161671293c0bae526887a0a96939f5114f2ef01ed62c1c94956ab93",
-      "zip-fixes.json": "b8a01f81482ed8c1669ad050b1ae6764e342c34f97140557c2ff3be8852ccfea"
+      "zip-fixes.json": "b8a01f81482ed8c1669ad050b1ae6764e342c34f97140557c2ff3be8852ccfea",
+      "zip-place-fixes.json": "14bb74232da170ee9c143bf9b8a8fd55872acea725a348d61e3e7c6e595206f5",
+      "zip-places.json": "12a63a2254f29064f6c47bc512ae498f99c5ab260fdfea0d19b0448210c7f235"
     },
     "logos": "dropped from core.json teams (#117); directoryBuild is recomputed over the stripped directory"
   }

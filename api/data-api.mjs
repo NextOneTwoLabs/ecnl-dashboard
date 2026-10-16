@@ -16,6 +16,7 @@ const routes = [
   // search reads; the index itself is built in the browser from them. Page-internal formats,
   // versioned by their `schema` field (docs/data-api.md, "Search data").
   [/^\/api\/v1\/search\/core$/, 'search-core', []],
+  [/^\/api\/v1\/search\/places$/, 'search-places', []],   // #159: fields, places and counties
   [/^\/api\/v1\/search\/games\/([^/]+)$/, 'search-games', ['season']],
 ];
 

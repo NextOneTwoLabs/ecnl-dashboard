@@ -24,7 +24,8 @@ lock.
 | `/api/v1/clubs` | Club places, every season (derived; see below): `public/archive/clubs.json` |
 | `/api/v1/teams/{teamId}/history` | One team's squad history across every season and event (derived; see below): `public/archive/history/{teamId}.json` |
 | `/api/v1/teams` | The team directory: every team (club and age group) in one file, for team search (derived; see below): `public/archive/directory.json` |
-| `/api/v1/search/core` | Search data: teams, events, fields and vocabulary, for the page's search (derived, page-internal; see below): `public/archive/search/core.json` |
+| `/api/v1/search/core` | Search data: teams, events and vocabulary, for the page's search (derived, page-internal; see below): `public/archive/search/core.json` |
+| `/api/v1/search/places` | Search data: fields, and the census place and county of each field, club and event (derived, page-internal; see below): `public/archive/search/places.json` |
 | `/api/v1/search/games/{season}` | Search data: every game of one season (derived, page-internal; see below): `public/archive/search/games-{season}.json` |
 
 Apart from the team index, the club places, the team histories, the team directory and the search data files, success bodies are the original JSON bytes. Existing
@@ -466,10 +467,10 @@ follows the team index (#92): a refusal shows "try again" and is remembered for 
 available right now" for the page; a 5xx, a network error or bad JSON is asked again at the next
 focus. There is never a fallback scan, and `?live=1` has no team search.
 
-### Search data (`/api/v1/search/core`, `/api/v1/search/games/{season}`)
+### Search data (`/api/v1/search/core`, `/api/v1/search/places`, `/api/v1/search/games/{season}`)
 
 **Derived and page-internal** (#149 phase 1, #158). The **search data files** are the prepared
-records the page's search reads: `core.json`, and one `games-{season}.json` per season. The
+records the page's search reads: `core.json`, `places.json` (#159), and one `games-{season}.json` per season. The
 **index** is the word-to-records map the browser builds from them in memory; it is never shipped.
 These formats are for this site's page, versioned by their `schema` field rather than by the API
 version: a change that renames, removes or retypes a field bumps `schema`, and the page refuses a
@@ -479,21 +480,19 @@ PR 4a of #149; PR 3 builds the index.
 
 `search_index.py` builds them offline from the committed archive (no upstream request, no clock,
 no locale): every season's hierarchies, standings and schedules, the catalog, the team
-directory, and two reviewed inputs, `public/data/field-aliases.json` and
-`public/data/zip-fixes.json`. Byte for byte the same in any process, hash seed or time zone.
+directory, and the reviewed inputs in `public/data/`: `field-aliases.json`, `zip-fixes.json`, and
+for places (#159) `zip-places.json` (the census table), `zip-place-fixes.json` and
+`city-counties.json`. Byte for byte the same in any process, hash seed or time zone.
 
-**`core.json`** (about 504 KB raw, 98 KB gzipped):
+**`core.json`** (schema 2 since #159; about 408 KB raw, 73 KB gzipped):
 
 ```json
-{"schema":1
+{"schema":2
 ,"build":"…","directoryBuild":"0e91dd4716b17de6","activeSeason":"2026-27","seasons":["2020-21",…]
 ,"birthYears":[2002,2014]
-,"vocab":{"confAliases":{"northern california":"NorCal"},"fieldAliases":{"oc great park":"Great Park",…},"states":{"AL":"Alabama",…}}
+,"vocab":{"confAliases":{"northern california":"NorCal"},"states":{"AL":"Alabama",…}}
 ,"events":{
 "4041":["2025-26","s","San Diego Fall","ECNL Girls San Diego","Del Mar, CA","2025-10-11","2025-10-13",["G2011","G2012","G2013","G2014"]]
-,…}
-,"fields":{
-"Great Park@92618":["Orange County Great Park",{"2020-21":92,"2021-22":174,…},[1,2,…,15,…]]
 ,…}
 ,"teams":{"seasons":[…],"confs":[…],…,"squads":[
 {"b":[2011],"c":56,"s":[[3,55477,"MVLA ECNL G11",7,33,1,10],…]}
@@ -513,11 +512,77 @@ directory, and two reviewed inputs, `public/data/field-aliases.json` and
   played]]`. A conference season's dates are its first and last dated games inside the season
   window (1 July to 31 July a year later), ignoring TGS's `0001-01-01` sentinel and undated legs;
   a national event's or showcase's come from the catalog.
-- `fields`: one entry per field, keyed `name@zip` (a field is a normalised name plus a zip; D6):
-  `[label, {season: games}, [field numbers and other venue names]]`. The season counts tell the
-  page which seasons hold the field's games before it loads them (a coverage note).
-- `vocab`: the reviewed field aliases, the conference aliases today's search already knows, the
-  states, and `birthYears` (the catalog's range, read at build time).
+- `vocab`: the conference aliases today's search already knows and the states; `birthYears` (the
+  catalog's range, read at build time).
+- **Schema 2 (#159):** `fields` and `vocab.fieldAliases` moved to `places.json`, which removed a
+  field, so `schema` went from 1 to 2 (owner decision MF5 (a+): location data, which hardly grows,
+  apart from team data, which grows about 10 KB gzipped a season; core keeps about four seasons of
+  headroom under its 120 KiB budget).
+
+**`places.json`** (#159; about 137 KB raw and 36 KB gzipped, budget 60 KiB; 502 places, 205 counties, 944 fields):
+
+```json
+{"schema":1
+,"build":"…"
+,"census":"<zip-places.json source.content>"
+,"vocab":{"fieldAliases":{"oc great park":"Great Park",…}}
+,"counties":{
+"06073":["San Diego County","CA"]
+,…}
+,"places":{
+"0618506":["Del Mar","CA","06073"]
+,…}
+,"clubPlaces":{
+"87":["0666000","06073"]
+,…}
+,"eventPlaces":{
+"4041":["0618506","06073"]
+,…}
+,"fields":{
+"60 Acres Park@98052":[null,["2021-22","2023-24","2025-26"],[1,2,…,24],"5357535","53033"]
+,"Great Park@92618":["Orange County Great Park",["2020-21",…,"2026-27"],[4,5,…,24],"0636770","06059"]
+,…}}
+```
+(Real lines: Del Mar is 0618506, San Diego 0666000, Redmond 5357535, Irvine 0636770.)
+
+- `counties` and `places` are keyed by census GEOID (county 5 digits, place 7): a county is
+  `[name, ST]` with its legal name as published ("Richmond city" is Virginia's independent city,
+  51760, never Richmond County, 51159); a place is `[name, ST, countyGeoid]`, its name with the
+  place-type suffix stripped. Only the places and counties the archive uses are listed.
+- A location is `[placeGeoid or null, countyGeoid or null]`: `clubPlaces` by club id (from the
+  directory's "City, ST"), `eventPlaces` by event id (from the catalog's `location`), and the last
+  two columns of each field (from its zip).
+- `fields`, keyed `name@zip` (a field is a normalised name plus a zip; D6): `[label or null, [the
+  seasons with games there], [field numbers and other venue names], placeGeoid, countyGeoid]`. The
+  label is null when it equals the key's name. The season list tells the page which games files
+  hold the field's games before it loads them (a coverage note).
+- `census`: the census table's content checksum, so a page or a test can tell which table built it.
+- **How a location resolves** (#159 plan v2 MF2), stated once:
+  - a club or event city's place: a `zip-place-fixes.json` alias, else the one census place of that
+    normalised name in its state (a single incorporated place wins over CDPs of the same name),
+    else none; two or more and no single winner: none, reported, never a pick;
+  - its county: a `city-counties.json` entry (which may override a census place's computed county;
+    today it holds Woodland Hills and 7 club towns that are not census places, and no override), else
+    the place's computed county, else none, reported. Owner decision Q-E (Fairfax, VA is Fairfax
+    County) is met by the computed county of the census place Fairfax (5126496, class C7), 51059,
+    pinned by a test; an override would come back only if a new table changed that;
+  - a field zip's city: a `zip-place-fixes.json` fix (92014 is Del Mar), else the census area rule;
+  - a field zip's county: the census county file's rule, always;
+  - names on both sides: NFKC, lower case, `.` and apostrophes dropped, other punctuation a space,
+    `st` = `saint`, `mt` = `mount`.
+- **The census table**, `public/data/zip-places.json`, is a build input only (`/data*` is never
+  served). Source: U.S. Census Bureau, 2020 Census ZCTA to Place and ZCTA to County Relationship
+  Files; public domain (17 U.S.C. § 105). `tools/census_places.py` builds it once from the two
+  downloaded files (README, "Census places"); it records their checksums, sizes and row counts, its
+  own checksum and a content checksum, which CI recomputes, so the table changes only through the
+  tool. Rules: zip -> place by the largest land overlap above 0, ties to the lowest GEOID; zip ->
+  county from the county file the same way; place -> county by the summed land of its zip parts;
+  a zip outside every place has a county and no city. The 2020 table holds 33,791 zips (4,991 with
+  no place), 32,188 places and 3,234 counties (the states, DC, Puerto Rico and the Island Areas).
+- **Limits:** in New England, NJ, NY and PA many towns are county subdivisions, not census places,
+  so some zips there have no city (the build report lists them; the county still works). A place
+  in several counties gets the one with the largest share (Dallas, Houston, Atlanta and others).
+  Zips that are not ZCTAs (PO boxes, single buildings) have neither, and are reported.
 
 **`games-{season}.json`** (one game per line; 2026-27 is about 488 KB raw, 69 KB gzipped; all
 seasons together about 566 KB gzipped). From `games-2023-24.json` and `games-2026-27.json`:
@@ -589,7 +654,7 @@ with evidence; a known-bad value such as `7514`, a Texas park, is marked unknown
 with no zip, the zip of its normalised name when that name has exactly one valid zip in the
 archive. A name is NFKC, lower case, punctuation dropped, whitespace collapsed; then
 `field-aliases.json` maps it, at its zip, to a canonical field (Great Park @ 92618 is 12 complex
-ids). Game keys never depend on census data: city and county arrive in core only (#159). The build
+ids). Game keys never depend on census data: city and county arrive in `places.json` only (#159). The build
 report (the run's output, never a file) lists rejected zips, names with more than one zip, and
 same-zip name variants, which are alias candidates for a reviewed PR and are never merged
 automatically.
@@ -619,12 +684,13 @@ changes; a browser may then keep the old copy for up to two days (max-age plus
 stale-while-revalidate, #82). The page accepts a games schema it knows even when core's differs,
 and refuses one it does not know.
 
-**Caching and cost.** `search/core` and the active (or a future) season's games are `no-cache`
-with a validator, like the directory. A closed season's games file gets the closed-season
-lifetime (#82). They go through the same rate limits as every `/api/v1` route; nothing is served
-from `/archive`. From PR 4a, the first focus of the search box costs 2 requests (core and the
-active season's games) instead of 1, plus one per earlier season a query names (at most 6), cached
-for a day.
+**Caching and cost.** `search/core`, `search/places` and the active (or a future) season's games
+are `no-cache` with a validator, like the directory. A closed season's games file gets the
+closed-season lifetime (#82). They go through the same rate limits as every `/api/v1` route; nothing
+is served from `/archive` or `/data`. From PR 4a, the first focus of the search box costs 3 requests
+in parallel (core, places and the active season's games) instead of 1, plus one per earlier season a
+query names (at most 6), cached for a day. PR 4a sets a budget for the total first-focus bytes (owner
+decision on #159); it grows about 11 KB gzipped a season, whichever file holds the data.
 
 ## HTTP behavior
 
@@ -656,7 +722,7 @@ for a day.
 | Answer (200 or 304) | `Cache-Control` |
 | --- | --- |
 | `hierarchy`, `standings` and `schedule` of an event whose catalog season is earlier than `refresh.activeSeason`; `seasons/{s}/teams` and `search/games/{s}` (#158) with `s` earlier than it | `private, max-age=86400, stale-while-revalidate=86400` |
-| the active season; a future one (registered before the rollover); an event the catalog doesn't list; `catalog`, `status`, `clubs`, `teams/{id}/history`, `teams` (the directory, #114), `search/core` (#158) | `no-cache`, as before |
+| the active season; a future one (registered before the rollover); an event the catalog doesn't list; `catalog`, `status`, `clubs`, `teams/{id}/history`, `teams` (the directory, #114), `search/core` (#158), `search/places` (#159) | `no-cache`, as before |
 | every error, 429 and other refusal | `no-store`, as before |
 
 - **Closed** means earlier than the catalog's `refresh.activeSeason` (a string compare of two

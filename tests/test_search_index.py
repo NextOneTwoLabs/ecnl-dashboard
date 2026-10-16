@@ -129,7 +129,8 @@ class Committed(unittest.TestCase):
         """Q9: directory.json's build is the hash of its dump without it, and core names it."""
         core = json.loads(fresh()[0]["core.json"])
         self.assertEqual(list(core), ["schema", "build", "directoryBuild", "activeSeason", "seasons", "birthYears",
-                                      "vocab", "events", "fields", "teams"])
+                                      "vocab", "events", "teams"])
+        self.assertEqual(core["schema"], 2, "#159: fields moved to places.json")
         directory = load(td.directory_path())
         self.assertEqual(list(directory)[:2], ["schema", "build"])
         self.assertEqual(directory["build"], td.build_id(directory))
@@ -163,6 +164,7 @@ class Committed(unittest.TestCase):
         gz = {n: len(gzip.compress(b, 6)) for n, b in files.items()}
         active = api.load_sources()["refresh"]["activeSeason"]
         self.assertLessEqual(gz["core.json"], 120 * 1024)
+        self.assertLessEqual(gz["places.json"], 60 * 1024, "#159 (owner MF5 a+)")
         self.assertLessEqual(gz[f"games-{active}.json"], 100 * 1024)
         self.assertLessEqual(sum(v for n, v in gz.items() if n.startswith("games-")), 800 * 1024)
 
@@ -373,13 +375,15 @@ class Fields(unittest.TestCase):
             self.assertEqual(si.norm_name(p), "")
 
     def test_core_field_rows(self):
-        core = json.loads(fresh()[0]["core.json"])
-        label, seasons, numbers = core["fields"]["Great Park@92618"]
+        places = json.loads(fresh()[0]["places.json"])          # #159: fields live in places.json
+        label, seasons, numbers = places["fields"]["Great Park@92618"][:3]
         self.assertEqual(label, "Orange County Great Park")
+        self.assertIn("2023-24", seasons)
+        self.assertEqual(seasons, sorted(seasons))
         self.assertIn(15, numbers)
         self.assertEqual(numbers, sorted(numbers, key=si._num_key))
-        self.assertEqual(core["vocab"]["fieldAliases"]["oc great park"], "Great Park")
-        self.assertIn("60 Acres Park@98052", core["fields"])
+        self.assertEqual(places["vocab"]["fieldAliases"]["oc great park"], "Great Park")
+        self.assertIsNone(places["fields"]["60 Acres Park@98052"][0], "a label equal to the key's name is dropped")
 
     def write_inputs(self, tmp, aliases=None, fixes=None):
         d = Path(tmp) / "public" / "data"
@@ -550,7 +554,7 @@ class Pipeline(unittest.TestCase):
     def test_team_history_writes_the_directory_then_the_search_data(self):
         code, out = self.run_in_sandbox(lambda: archive.cmd_team_history(api.load_sources()))
         self.assertEqual(code, 0, out)
-        self.assertLess(out.index("Team directory:"), out.index("Search data: 8 files"))
+        self.assertLess(out.index("Team directory:"), out.index("Search data: 9 files"))
         for n, b in fresh()[0].items():
             self.assertEqual(Path(self.search, n).read_bytes(), b, n)
         self.assertEqual(load(os.path.join(self.search, "core.json"))["directoryBuild"],
@@ -657,8 +661,10 @@ class Fixture(unittest.TestCase):
     def test_the_builder_and_inputs_are_the_recorded_ones(self):
         m = load(FIXTURES / "MANIFEST.json")["search"]
         self.assertEqual(m["builder"], si.lf_sha(str(HERE.parent / "search_index.py")), "re-freeze the fixture (README)")
-        for n in ("field-aliases.json", "zip-fixes.json"):
-            self.assertEqual(m["inputs"][n], si.lf_sha(os.path.join(api.PUBLIC_DIR, "data", n)), n)
+        self.assertEqual(sorted(m["inputs"]), sorted(si.INPUTS), "every reviewed input is recorded (#159)")
+        for n in si.INPUTS:
+            path = os.path.join(api.PUBLIC_DIR, "data", n)
+            self.assertEqual(m["inputs"][n], si.lf_sha(path) if os.path.exists(path) else None, n)
 
 
 if __name__ == "__main__":

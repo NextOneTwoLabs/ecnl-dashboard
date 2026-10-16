@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "_comment": "Reviewed counties for club and event cities (#159, owner decision Q5; plan v2 MF2). An entry gives the county of a city that is not a census place, and may override the computed county of one that is. Every countyGeoid must exist in public/data/zip-places.json with that countyName and state; an entry equal to the computed county is redundant. A bad entry is left out, reported, and fails `python archive.py --search-index --check`. Each entry carries its evidence.",
+  "cities": [
+    {
+      "city": "Woodland Hills",
+      "state": "CA",
+      "countyGeoid": "06037",
+      "countyName": "Los Angeles County",
+      "evidence": "Woodland Hills is a district of the City of Los Angeles, not a census place (club 82, LAFC So Cal). Its own zips, 91364 and 91367, are in the census place Los Angeles (0644000), Los Angeles County, in the census table. PR 1's judged county list puts it in Los Angeles County. Club 82's home field at Oak Park (91377, Ventura County) is deliberately not the evidence."
+    },
+    {
+      "city": "Westampton",
+      "state": "NJ",
+      "countyGeoid": "34005",
+      "countyName": "Burlington County",
+      "evidence": "Westampton Township is a county subdivision, not a census place (club 2628). Not a census place. The club's main home field is at zip 08060 (239 home games in the archive), which the census table puts in Burlington County; 08060 is the Westampton Sports Complex's own zip."
+    },
+    {
+      "city": "Elma",
+      "state": "NY",
+      "countyGeoid": "36029",
+      "countyName": "Erie County",
+      "evidence": "Elma is a town (county subdivision); the census place is Elma Center (club 343). Not a census place. The club's main home field is at zip 14059 (319 home games in the archive), which the census table puts in Erie County; 14059 is Elma's own zip."
+    },
+    {
+      "city": "Lancaster",
+      "state": "MA",
+      "countyGeoid": "25027",
+      "countyName": "Worcester County",
+      "evidence": "Lancaster is a town (county subdivision); the census place is South Lancaster (club 52). Not a census place. The club's main home field is at zip 01523 (517 home games in the archive), which the census table puts in Worcester County; 01523 is Lancaster's own zip."
+    },
+    {
+      "city": "St Johns",
+      "state": "FL",
+      "countyGeoid": "12109",
+      "countyName": "St. Johns County",
+      "evidence": "There is no census place named St. Johns in Florida in 2020 (club 1353). Not a census place. The club's main home field is at zip 32259 (303 home games in the archive), which the census table puts in St. Johns County; 32259 is the St. Johns and Fruit Cove area's own zip."
+    },
+    {
+      "city": "Greenbrae",
+      "state": "CA",
+      "countyGeoid": "06041",
+      "countyName": "Marin County",
+      "evidence": "Greenbrae is unincorporated and not a census place (club 1585). The club's main home field is at zip 94904 (201 home games in the archive), shared by Greenbrae and Kentfield, which the census table puts in Marin County; its other home zips (94901, 94939) are in Marin County too."
+    },
+    {
+      "city": "Farmington",
+      "state": "CT",
+      "countyGeoid": "09003",
+      "countyName": "Hartford County",
+      "evidence": "Farmington is a town (county subdivision), not a census place (club 431). Not a census place. The club's main home field is at zip 06032 (309 home games in the archive), which the census table puts in Hartford County; 06032 is Farmington's own zip."
+    },
+    {
+      "city": "Bethany",
+      "state": "CT",
+      "countyGeoid": "09009",
+      "countyName": "New Haven County",
+      "evidence": "Bethany is a town (county subdivision), not a census place (club 31). Not a census place. The club's main home field is at zip 06524 (246 home games in the archive), which the census table puts in New Haven County (2020 counties; Connecticut's 2022 planning regions are not in the 2020 files); 06524 is Bethany's own zip."
+    }
+  ]
+}

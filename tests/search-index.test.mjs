@@ -11,7 +11,7 @@
 // Run under the netguard: node --import ./tests/netguard/netguard.mjs --test tests/search-index.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { decodeGames, decodeWhen, FLAGS } from './search/index-format.mjs';
 import { readJSON, readLF, sha, lf, IMAGE, FIXTURES, refsOf, refKind } from './search/judged.mjs';
@@ -121,7 +121,7 @@ const manifest = readJSON(new URL('MANIFEST.json', FIXTURES));
 test('fixture: each search data file\'s LF checksum and size match MANIFEST.search, from MANIFEST\'s commit', () => {
   const m = manifest.search;
   assert.equal(m.commit, manifest.commit);
-  assert.deepEqual(Object.keys(m.files).sort(), ['core.json', ...gamesFiles(FX)].sort());
+  assert.deepEqual(Object.keys(m.files).sort(), ['core.json', 'places.json', ...gamesFiles(FX)].sort());
   for (const [n, f] of Object.entries(m.files)) {
     const text = readLF(new URL(n, FX));
     assert.equal(sha(text), f.sha256, `${n} checksum`);
@@ -133,8 +133,13 @@ test('fixture: each search data file\'s LF checksum and size match MANIFEST.sear
 test('fixture: built by this builder from these reviewed inputs (else re-freeze; README "Search data")', () => {
   const lfSha = url => createHash('sha256').update(readFileSync(url).toString('latin1').replace(/\r\n/g, '\n'), 'latin1').digest('hex');
   assert.equal(manifest.search.builder, lfSha(new URL('search_index.py', ROOT)), 'search_index.py changed: re-freeze the fixture');
-  for (const n of ['field-aliases.json', 'zip-fixes.json'])
-    assert.equal(manifest.search.inputs[n], lfSha(new URL(`public/data/${n}`, ROOT)), `${n} changed: re-freeze the fixture`);
+  // #159: every reviewed input, null for one not committed yet (the census table before its download).
+  const inputs = ['field-aliases.json', 'zip-fixes.json', 'zip-places.json', 'zip-place-fixes.json', 'city-counties.json'];
+  assert.deepEqual(Object.keys(manifest.search.inputs).sort(), [...inputs].sort());
+  for (const n of inputs) {
+    const url = new URL(`public/data/${n}`, ROOT);
+    assert.equal(manifest.search.inputs[n], existsSync(url) ? lfSha(url) : null, `${n} changed: re-freeze the fixture`);
+  }
 });
 
 test('fixture: core\'s teams, without x, equal PR 1\'s frozen directory (same commit, logos dropped)', () => {
@@ -160,13 +165,13 @@ test('fixture: every closed-season game PR 1 cites has the same facts, and every
     assert.equal(g.field && g.field.complexID, j.complexID, `${j.matchID} complex`);
     if (/^\d{5}$/.test(String(j.zip).trim())) assert.equal(g.field.zip, String(j.zip).trim(), `${j.matchID} zip`);
   }
-  const core = JSON.parse(readLF(new URL('core.json', FX)));
+  const places = JSON.parse(readLF(new URL('places.json', FX)));      // #159: fields live in places.json
   const doc = readJSON(new URL('../queries.json', FIXTURES));
   const all = [...games.values()];
   for (const q of doc.queries) for (const [, ref] of refsOf(q)) {
     if (refKind(ref) !== 'field') continue;
     const { name, zip, number } = ref.field;
-    assert.ok(core.fields[`${name}@${zip}`], `${q.id}: field ${name}@${zip} not in core`);
+    assert.ok(places.fields[`${name}@${zip}`], `${q.id}: field ${name}@${zip} not in places.json`);
     const at = all.filter(g => g.field && g.field.name === name && g.field.zip === zip);
     assert.ok(at.length, `${q.id}: no game at ${name}@${zip}`);
     if (number != null) assert.ok(at.some(g => g.number === number), `${q.id}: no game on field ${number}`);
@@ -175,4 +180,34 @@ test('fixture: every closed-season game PR 1 cites has the same facts, and every
   const gp = all.filter(g => g.field && g.field.name === 'Great Park' && g.field.zip === '92618');
   assert.deepEqual([...new Set(gp.map(g => g.field.complexID))].sort((a, b) => a - b), [80, 422, 1018, 2555, 2838, 3069, 3075, 3416, 4559, 6698, 7083, 7319]);
   assert.equal(gp.filter(g => g.number === 15).length, 57);
+});
+
+// #159: the census inputs and the places.json split changed only core and places.json; every frozen
+// games file keeps the bytes #160 recorded, so game keys never depend on census data.
+const GAMES_160 = {
+  'games-2020-21.json': '4adadafd37810c0a6b30b62c146b468ec4c6b398129d9580aa2785676e1e96c6',
+  'games-2021-22.json': '1b038fbca1dba9b397faea23b7e84f29c19267d28fdbf2e1ba7a63067b7ef851',
+  'games-2022-23.json': 'c50e08d1c7469c801d8bccf6b232585760149d5f42484f15b1586ed33851b36c',
+  'games-2023-24.json': '16d3203b3fcf8d7badd21b3ca3dcb671eb8e73d6feabaad43d1828b23f565b41',
+  'games-2024-25.json': '366bf01df7c241a754cf9b2d734be69c1219f3ac5095b35c79291136a846a3a4',
+  'games-2025-26.json': 'c84e811863faced6479b0f2a55d8c92745ed6a76e9a0922ca043eb2412850921',
+  'games-2026-27.json': '73f40f6c55f17501142f2a05792f6a9744473811e32b931693c30595ed4561a2'
+};
+
+test('fixture: the seven games files are byte-identical to #160\'s (census data never reaches them)', () => {
+  for (const [n, want] of Object.entries(GAMES_160)) assert.equal(manifest.search.files[n].sha256, want, n);
+});
+
+test('places.json: every place, county and club place reference resolves (committed and frozen)', () => {
+  for (const dir of [SEARCH, FX]) {
+    const p = JSON.parse(readLF(new URL('places.json', dir)));
+    assert.equal(p.schema, 1);
+    const ok = ([g, c]) => (g === null || g in p.places) && (c === null || c in p.counties);
+    for (const [k, v] of Object.entries(p.fields)) assert.ok(ok(v.slice(3, 5)), `field ${k}`);
+    for (const [k, v] of [...Object.entries(p.clubPlaces), ...Object.entries(p.eventPlaces)]) assert.ok(ok(v), k);
+    for (const [g, v] of Object.entries(p.places)) assert.ok(v[2] === null || v[2] in p.counties, g);
+    const core = JSON.parse(readLF(new URL('core.json', dir)));
+    assert.equal(core.schema, 2);
+    assert.equal('fields' in core, false);
+  }
 });

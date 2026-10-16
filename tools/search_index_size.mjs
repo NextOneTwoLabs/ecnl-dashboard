@@ -14,7 +14,7 @@ const kb = n => (n / 1024).toFixed(1);
 const median = f => { const t = []; for (let i = 0; i < 15; i++) { const s = performance.now(); f(); t.push(performance.now() - s); } t.sort((a, b) => a - b); return t[7]; };
 const rows = [];
 let games = { raw: 0, gz6: 0, br: 0 };
-for (const n of readdirSync(dir).filter(n => /^(core|games-\d{4}-\d{2})\.json$/.test(n)).sort()) {
+for (const n of readdirSync(dir).filter(n => /^(core|places|games-\d{4}-\d{2})\.json$/.test(n)).sort()) {
   const buf = readFileSync(new URL(n, dir)), text = buf.toString('utf8');
   const gz6 = gzipSync(buf, { level: 6 }).length, gz9 = gzipSync(buf, { level: 9 }).length;
   const br = brotliCompressSync(buf, { params: { [constants.BROTLI_PARAM_QUALITY]: 11 } }).length;

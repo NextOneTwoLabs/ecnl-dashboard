@@ -9,8 +9,9 @@ Crawls the events listed in public/data/sources.json and writes:
   public/archive/clubs.json                 club city and state (derived, #87)
   public/archive/history/<teamID>.json      one squad across seasons and events (derived, #107)
   public/archive/directory.json             every team in one file, for team search (derived, #114)
-  public/archive/search/core.json           search data files (derived, #158): teams, events,
-  public/archive/search/games-<season>.json   fields and vocabulary; one row per game a season
+  public/archive/search/core.json           search data files (derived, #158): teams, events and
+  public/archive/search/games-<season>.json   vocabulary; one row per game a season
+  public/archive/search/places.json         fields and census places and counties (#159)
   export/<season>/<conference>/*.csv        human-readable standings & schedules
   export/<season>/showcases/<showcase>/*.csv  the same for a showcase (#97)
   public/archive/manifest.json              index tying event IDs to season/conference
