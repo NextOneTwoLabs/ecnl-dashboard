@@ -5,18 +5,21 @@
 //                                     (docs/data-api.md, "Search data"). Returns the index, the
 //                                     word-to-records map. Throws SearchDataError on a schema it
 //                                     does not know, naming the file.
+//   startIndex(searchData, n)         the same build as a generator, at most n units per next();
+//                                     its return value is the index (#165).
 //   search(index, query, context)     context = { now: epoch ms, timeZone, selectedSeason }.
 //                                     Returns the slate (slate.mjs).
 //
 // SEARCH_API is this module's API version. The page (PR 4a) compares it with the version it
 // expects and shows a coverage note instead of calling a changed API (plan v2 MF5).
-import { buildVocab } from './vocab.mjs';
+import { buildVocabG } from './vocab.mjs';
+import { drain } from './match.mjs';
 import { readQuery } from './reader.mjs';
-import { teamDocs, searchTeams } from './teams.mjs';
+import { teamDocsG, searchTeams } from './teams.mjs';
 import { eventDocs, searchEvents } from './events.mjs';
 import { buildSlate } from './slate.mjs';
 
-export const SEARCH_API = 1;
+export const SEARCH_API = 2;
 export const CORE_SCHEMA = 2;
 export const PLACES_SCHEMA = 1;
 
@@ -24,21 +27,29 @@ export class SearchDataError extends Error {
   constructor(file, message) { super(`${file}: ${message}`); this.name = 'SearchDataError'; this.file = file; }
 }
 
-export function buildIndex(searchData) {
+// The build in steps (#165): each next() does at most `n` units of one stage and yields a label, so the
+// page can hand the main thread back between steps. The value it returns is the index. Events are the
+// last step, so a visitor never sees teams without events. A schema it does not know throws
+// SearchDataError from the first next(), not from this call.
+export function* startIndex(searchData, n = 150) {
   const { core, places } = searchData || {};
   if (!core || core.schema !== CORE_SCHEMA) throw new SearchDataError('core.json', `unknown schema ${core && core.schema}`);
   if (!places || places.schema !== PLACES_SCHEMA) throw new SearchDataError('places.json', `unknown schema ${places && places.schema}`);
-  const vocab = buildVocab(core, places);
-  const teams = teamDocs(core, vocab);
+  const vocab = yield* buildVocabG(core, places, n);
+  const teams = yield* teamDocsG(core, vocab, n);
+  yield 'events';
   const events = eventDocs(core, vocab);
   // refinement A (#163 Q4): every word any category or the vocabulary knows
   const known = new Set([...vocab.known, ...teams.post.terms.sorted, ...events.post.terms.sorted]);
-  const postings = c => [...c.post.post.values()].reduce((n, l) => n + l.length, 0);
+  const postings = c => [...c.post.post.values()].reduce((m, l) => m + l.length, 0);
   return {
     api: SEARCH_API, build: core.build, directoryBuild: core.directoryBuild, vocab, teams, events, known,
     stats: { teamDocs: teams.N, eventDocs: events.N, terms: teams.post.post.size + events.post.post.size, postings: postings(teams) + postings(events) },
   };
 }
+
+// The whole build at once: startIndex, run to its end.
+export const buildIndex = searchData => drain(startIndex(searchData, Infinity));
 
 function checkContext(context) {
   const c = context || {};

@@ -534,8 +534,24 @@ see uses them yet; PR 4a wires them into the search box.
 - `search.mjs`, the entry point: `buildIndex({ core, places })` builds the index from the search
   data files (it throws `SearchDataError`, naming the file, on a schema it does not know), and
   `search(index, query, { now, timeZone, selectedSeason })` returns the slate. `SEARCH_API` is the
-  API version: the page compares it with the version it expects and shows a coverage note rather
-  than call a changed API.
+  API version (2 since #165): the page compares it with the version it expects and shows a
+  coverage note rather than call a changed API.
+  - `startIndex({ core, places }, n)` is the same build as a generator: each `next()` does at most
+    `n` units of one stage (vocabulary, team documents, postings, counts and lookups, then events as
+    the last step), yields a label, and returns the index. The page runs steps while the main thread
+    has time and yields between them, so no task blocks input; `buildIndex` is defined as draining
+    it, and a test proves the two give the same slate, rows in full, on every judged keystroke. A
+    schema it does not know throws `SearchDataError` from the first `next()`, not from the call.
+  - The vocabulary sorts in code-unit order, not `localeCompare`: its keys are `[a-z0-9 ]` words
+    and digit geoids, for which the two agree (a test checks both data sets), the first
+    `localeCompare` call would start the browser's ICU collator in the first build step (6-9 ms),
+    and `localeCompare` follows the visitor's locale.
+  - Rows carry what the page draws, so it never parses `why`: on a team row `family`, `line`,
+    `seasonTyped`, `continuesAs` and `mayFrom` (#107 squad keys), `place`, `last`, `matched`
+    (`[{ term, cls, field }]`), `namedPlace` and `nearbyOf`; on an event row `ekind`, `matched`,
+    `namedPlace` and `nearbyOf`; and an age-less conference row's `hrefs` holds every age group's
+    table link (#148), `href` the first.
+  - `stats.sortCompares` counts the comparator calls of the two result sorts.
 - `reader.mjs` reads the query once and keeps every reading of an ambiguous word, up to 4 per
   category: seasons, a bare year (two seasons, or a birth year in `core.birthYears`), birth years,
   age groups, conferences, states, census places and counties (D2), field complexes and dates
