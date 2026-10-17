@@ -133,8 +133,9 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
   const reasons = new Set();
   const best = new Map();
   const currentOnly = side.placeOnly;
+  let hitsOf = [];   // #167 (MF3): each reading's own hits, before they are merged, for the Games section
   const run = (onlyCurrent) => {
-    best.clear();
+    best.clear(); hitsOf = [];
     side.teams.forEach((r, ri) => {
       if (r.unknownSeason && !(r.seasons && r.seasons.length)) { reasons.add('season-not-in-archive'); return; }
       if (r.u) {
@@ -201,6 +202,7 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
           whole: d.titleWords.length > 0 && d.titleWords.every(w => nameSet.has(w)), ws, ph, conf: r.conf, seasonTyped: !!r.seasons,
           partialKey: partial ? { matched, cls: bestCls, rarity } : null });
       }
+      hitsOf[ri] = hits;
       for (const h of hits) {
         const o = best.get(h.d.i);
         const fw = Math.max(h.filterWords, o ? o.filterWords : 0);
@@ -216,7 +218,11 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
   const out = [...best.values()];
   if (stats) stats.rowsSorted += out.length;
   out.sort(stats ? (a, b) => { stats.sortCompares++; return compare(a, b, currentOnly, partial); } : (a, b) => compare(a, b, currentOnly, partial));   // #165: comparisons are counted, not only rows
-  return { rows: placeMaybe(out).map(h => rowOf(h, partial)), reasons, ended };
+  const res = { rows: placeMaybe(out).map(h => rowOf(h, partial)), reasons, ended };
+  // #167 (MF3): reading ri's squads as a search of that reading alone finds them ({ cls, squadRows, aliasIDs,
+  // born }, what the Games section reads), so Games never searches teams a second time
+  if (!partial) Object.defineProperty(res, 'readingRows', { value: ri => (hitsOf[ri] || []).map(h => ({ cls: h.cls, squadRows: h.d.rows, aliasIDs: h.d.x, born: h.d.born })) });
+  return res;
 }
 
 // one exact expansion per word, kept (a place word read as a name word)

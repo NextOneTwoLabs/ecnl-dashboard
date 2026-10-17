@@ -58,12 +58,14 @@ const hasClass = (n, c) => (n.attrs.class || '').split(/\s+/).includes(c);
 const roleOf = n => n.attrs.role || null;
 
 // ---------- the fake page: the globals the block reads, and the elements it writes ----------
-function page({ sheet = false, live = false, mod = S, data = fresh, fetchJSON, season = SEASON, importMs = 0, saveData = false, games = s => loadGames(s), gamesGate = null } = {}) {
-  const els = new Map(), listeners = [], opened = [], appended = [], fetched = [];
+function page({ sheet = false, live = false, mod = S, data = fresh, fetchJSON, season = SEASON, importMs = 0, saveData = false, games = s => loadGames(s), gamesGate = null, frames = 'auto' } = {}) {
+  const tasksQ = [];   // #167: with api.manualTasks, a MessageChannel task waits for task()
+  const els = new Map(), listeners = [], opened = [], appended = [], fetched = [], rafs = [];
   const node = id => ({
-    id, hidden: false, value: '', textContent: '', className: '', attrs: {}, style: {}, on: {}, _html: '', dataset: {},
+    id, hidden: false, value: '', textContent: '', className: '', attrs: {}, style: {}, on: {}, _html: '', dataset: {}, sets: 0, appends: 0, lives: [],
     addEventListener(k, f) { this.on[k] = f; },
-    get innerHTML() { return this._html; }, set innerHTML(h) { this._html = h; },
+    get innerHTML() { return this._html; }, set innerHTML(h) { this._html = h; this.sets++; },
+    insertAdjacentHTML(where, h) { assert.equal(where, 'beforeend', 'the painter appends'); this._html += h; this.appends++; },   // #167
     setAttribute(k, v) { this.attrs[k] = String(v); }, getAttribute(k) { return this.attrs[k] ?? null; }, removeAttribute(k) { delete this.attrs[k]; },
     querySelector: () => null, querySelectorAll: () => [], contains: () => false, scrollIntoView() { this.scrolled = (this.scrolled || 0) + 1; },
     focus() { api.focused = this; }, blur() { if (api.focused === this) api.focused = null; }, getBoundingClientRect: () => ({ left: 400, bottom: 50 }), offsetParent: {},
@@ -77,7 +79,9 @@ function page({ sheet = false, live = false, mod = S, data = fresh, fetchJSON, s
     const m = h.match(new RegExp(`<span role="gridcell"[^>]*\\bid="${id}"[^>]*>`));
     if (!m) return null;
     const n = el(id);
-    if (!cellAttrs.has(id) || cellAttrs.get(id) !== h) { n.attrs = Object.fromEntries([...m[0].matchAll(/([a-z-]+)="([^"]*)"/g)].map(x => [x[1], x[2]])); cellAttrs.set(id, h); }
+    // a node keeps what the block set on it until the list is drawn anew (innerHTML); an append keeps it (#167)
+    const gen = el('usearchList').sets;
+    if (!cellAttrs.has(id) || cellAttrs.get(id) !== gen) { n.attrs = Object.fromEntries([...m[0].matchAll(/([a-z-]+)="([^"]*)"/g)].map(x => [x[1], x[2]])); cellAttrs.set(id, gen); }
     return n;
   };
   const location = { hash: '' };
@@ -101,26 +105,38 @@ function page({ sheet = false, live = false, mod = S, data = fresh, fetchJSON, s
     }),
     Date: class extends Date { static now() { return NOW; } }, todayKey: () => TODAY, displayName,
     requestIdleCallback: undefined,
+    requestAnimationFrame: f => { if (frames === 'auto') setTimeout(f, 0); else rafs.push(f); },   // #167: a frame (manual: frame())
     setTimeout: (f, ms) => setTimeout(f, ms),
+    MessageChannel: class {   // a real one, unless the test runs the tasks itself (task())
+      constructor() {
+        if (!api.manualTasks) return new MessageChannel();
+        const p1 = { onmessage: null, close() {} };
+        this.port1 = p1; this.port2 = { postMessage: () => tasksQ.push(() => p1.onmessage && p1.onmessage({})) };
+      }
+    },
   };
   const names = Object.keys(stubs);
   const api = new Function(...names, `${BLOCK}
     sxImport = async () => { if (arguments[${names.length}] ) await arguments[${names.length}](); return arguments[${names.length + 1}]; };
     return { sxOpen, sxOpenSheet, sxClose, sxRun, sxKey, sxDrive, sxLoad, sxPreload, sxFill, sxHoverCell, sxActivate, sxGoTo, sxMark, sxGroups, SX_MODULES, SX_TASK_MS, SX_SIZES,
-      sxBuild, sxGamesFetch, SX_GAMES_STILL_MS,
-      state: () => ({ sxState, sxView, sxActive, sxLoadP, sxIndex, sxG }), setImport: f => { sxImport = f; } };`)(...Object.values(stubs), importMs ? () => wait(importMs) : null, mod);
+      sxBuild, sxGamesFetch, SX_GAMES_STILL_MS, sxResultsBody, sxFlush, sxStats, SX_FIRST_CELLS, sxRefresh, sxCtx, sxWarmUp,
+      sxRunRaw: sxRun, sxRun: q => { sxRun(q); sxFlush(); },   // #167: tests see the settled panel unless they ask for the parts (sxRunRaw)
+      state: () => ({ sxState, sxView, sxActive, sxLoadP, sxIndex, sxG, sxPaint, sxWarmed, sxTyped, sxMod }), setImport: f => { sxImport = f; } };`)(...Object.values(stubs), importMs ? () => wait(importMs) : null, mod);
   const input = el(sheet ? 'usearchSheetInput' : 'usearchInput');
   const key = (k, extra = {}) => { const e = { key: k, shiftKey: false, preventDefault() { e.prevented = true; }, target: input, ...extra }; input.on.keydown(e); return e; };
   // #168: open waits for the active season's games too (the request "ready" starts), unless told not to
   const gamesIdle = async () => { for (let k = 0; k < 400 && api.state().sxG && (api.state().sxG.running || api.state().sxG.queue.length); k++) await wait(2); };
-  const open = async (q = '', { games: g = true } = {}) => { input.value = q; api.sxOpen(input); await api.state().sxLoadP; await wait(0); if (g) await gamesIdle(); return api; };
+  const settle = async () => { for (let k = 0; k < 200 && api.state().sxPaint; k++) await wait(1); };
+  const open = async (q = '', { games: g = true } = {}) => { input.value = q; api.sxOpen(input); await api.state().sxLoadP; await wait(0); if (g) await gamesIdle(); await settle(); return api; };
+  const frame = () => { const f = rafs.splice(0); f.forEach(x => x()); return f.length; };
+  const task = () => { const t = tasksQ.shift(); if (t) t(); return !!t; };
   const run = async q => { await open(q); input.value = q; api.sxRun(q); return list(); };
   const list = () => el('usearchList')._html;
   const click = (i, extra = {}) => el('usearchList').on.click({ target: { closest: () => ({ dataset: { c: String(i) } }) }, shiftKey: false, ctrlKey: false, metaKey: false, ...extra });
   const cells = () => api.state().sxView ? api.state().sxView.cells : [];
   const activeCell = () => cells()[api.state().sxActive];
   const tree = () => parse(list());
-  return Object.assign(api, { el, input, key, open, run, list, click, cells, activeCell, tree, location, hashEvents, replaced, opened, appended, fetched, listeners, stubs, gamesIdle,
+  return Object.assign(api, { el, input, key, open, run, list, click, cells, activeCell, tree, location, hashEvents, replaced, opened, appended, fetched, listeners, stubs, gamesIdle, settle, frame, rafs, task, tasksQ,
     status: () => el('sxStatus').innerHTML, lead: () => el('sxLead').innerHTML, live: () => el('usearchLive').textContent, bar: () => ({
       hidden: el('usearchActions').hidden, text: el('usearchActive').textContent, cls: el('usearchActive').className, open: el('usearchOpen'), hist: el('usearchHist'), prev: el('usearchPrev') }),
     keysLine: () => el('sxKeys').innerHTML, pop: () => el('usearchPop'), nav: () => api.state().sxView && api.state().sxView.nav });
@@ -193,7 +209,7 @@ test('loading: the panel opens at once with the loading words and tips; a query 
   assert.equal(p.pop().hidden, false);
   p.input.on.input(); await wait(100);   // the 60 ms debounce passes, still loading: nothing runs
   assert.equal(searches, 0);
-  release(); await p.state().sxLoadP; await wait(0);
+  release(); await p.state().sxLoadP; await wait(0); await p.settle();
   assert.equal(searches, 1, 'the typed query ran once, when ready');
   assert.match(p.list(), /Surf/);
   assert.match(p.list(), /Loading 2026–27 games…<\/strong> Teams and events are ready; games join them in a moment\./, '#168: the Games section says its games are loading');
@@ -1169,4 +1185,225 @@ test('nit 7: a game link to the view already shown, differing only in match=, re
   q.location.hash = '#season=2025-26';
   q.key('Enter');
   assert.deepEqual(q.replaced, []); assert.equal(q.location.hash, h2, 'another view: a plain hash change');
+});
+
+// ---------- #167: the painter (the draw addendum v2) ----------
+const MOCKUP_STATES = ['Surf Sports Park', 'Great Park field 15', 'San Diego', 'Slammers vs Blues', '60 Acres', 'MVLA 2011', 'MVLA 2011 vs Mustang 2011',
+  'Slammers HB Koge 2007 v So Cal Blues 2007', 'so', 'fc', 'sa', 'ml', 'Sacra', 'Surf Cup', 'san dei', 'MVLA 201'];
+const drawnIds = h => [...h.matchAll(/\bid="(sx-c-\d+)"/g)].map(m => m[1]);
+// the settled panel of a query, drawn in one go by sxDraw (sxRefresh) on a page of its own: the reference
+async function reference() {
+  const r = page(); await r.open('');
+  return q => { r.sxRunRaw('x'); r.input.value = q; r.sxRefresh(q); return { list: r.list(), status: r.status(), lead: r.lead(), live: r.live(), active: r.state().sxActive, cells: r.cells().length }; };
+}
+
+test('#167 the settled panel is byte for byte the one-go draw (sxDraw) for every judged keystroke and the mockup\'s states: list, status, lead, live region, active cell', async () => {
+  const ref = await reference();
+  const p = page(); await p.open('');
+  let n = 0, deferred = 0;
+  for (const k of [...judgedKeystrokes(), ...MOCKUP_STATES]) {
+    if (k.trim().length < 2) continue;
+    p.input.value = k; p.sxRunRaw(k);
+    if (p.state().sxPaint && p.state().sxPaint.slate.gamesPending) deferred++;
+    await p.settle();
+    assert.equal(p.state().sxPaint, null, k);
+    const want = ref(k);
+    assert.equal(p.list(), want.list, `${k}: list`);
+    assert.equal(p.status(), want.status, `${k}: status`);
+    assert.equal(p.lead(), want.lead, `${k}: lead`);
+    assert.equal(p.live(), want.live, `${k}: live`);
+    assert.equal(p.state().sxActive, want.active, `${k}: active cell`);
+    assert.equal(p.el('usearchList').getAttribute('aria-busy'), null, `${k}: not busy once settled`);
+    n++;
+  }
+  assert.ok(n > 400 && deferred > 100, `${n} keystrokes, ${deferred} deferred`);
+});
+
+test('#167 the first frame: a prefix of the settled list (append only, the same nodes), the enter\'s cell and aria-activedescendant in it, aria-busy until settled, the live region set once', async () => {
+  const p = page({ frames: 'manual' }); await p.open('');
+  let split = 0;
+  for (const k of [...MOCKUP_STATES, ...judgedKeystrokes().filter(k => k.length >= 2)]) {
+    const L = p.el('usearchList'), live = p.el('usearchLive');
+    let liveSets = 0; const lv = live.textContent;
+    Object.defineProperty(live, 'textContent', { configurable: true, get() { return this._t; }, set(v) { this._t = v; liveSets++; } }); live._t = lv;
+    const sets0 = L.sets, appends0 = L.appends;
+    p.input.value = k; p.sxRunRaw(k);
+    const first = p.list(), job = p.state().sxPaint;
+    const firstIds = drawnIds(first);
+    if (job) {
+      split++;
+      assert.equal(L.getAttribute('aria-busy'), 'true', `${k}: busy while parts are pending`);
+      assert.equal(liveSets, 0, `${k}: the live region waits for the settled panel`);
+      assert.ok(firstIds.length >= Math.min(p.SX_FIRST_CELLS, p.cells().length) || job.waiting, `${k}: at least SX_FIRST_CELLS cells first`);
+      const enter = p.state().sxActive;
+      if (enter >= 0) {
+        assert.ok(firstIds.includes(`sx-c-${enter}`), `${k}: build point 3: the enter's cell is in the first frame`);
+        assert.equal(p.input.getAttribute('aria-activedescendant'), `sx-c-${enter}`, `${k}: aria-activedescendant set in the first frame`);
+      }
+      assert.ok(p.frame() >= 1, `${k}: the rest waits for a frame`);
+      await p.settle();
+    }
+    const done = p.list();
+    assert.ok(done.startsWith(first), `${k}: the first part is a prefix of the settled list`);
+    assert.equal(L.sets - sets0, 1, `${k}: the list is set once, then appended to`);
+    if (job) assert.ok(L.appends > appends0 || done === first, `${k}: the rest is appended`);
+    assert.equal(liveSets, 1, `${k}: the live region is set once`);
+    assert.equal(L.getAttribute('aria-busy'), null, k);
+    if (p.state().sxActive >= 0) assert.equal(p.input.getAttribute('aria-activedescendant'), `sx-c-${p.state().sxActive}`, `${k}: kept`);
+    delete live.textContent; live.textContent = live._t;
+  }
+  assert.ok(split > 50, `${split} split`);
+});
+
+test('#167 mutation 12: nothing is appended before the frame; a newer query drops the pending parts (a stale task appends nothing)', async () => {
+  const p = page({ frames: 'manual' }); await p.open('');
+  p.input.value = 'so'; p.sxRunRaw('so');
+  const L = p.el('usearchList'), first = p.list(), a0 = L.appends;
+  assert.ok(p.state().sxPaint, 'so is painted in parts');
+  await wait(20);
+  assert.equal(L.appends, a0, 'no append before the frame');
+  assert.equal(p.list(), first);
+  p.input.value = 'mv'; p.sxRunRaw('mv');
+  const second = p.list(), a1 = L.appends;
+  p.frame(); await p.settle();
+  await wait(20);
+  assert.ok(p.list().startsWith(second), 'only the newer query\'s parts land');
+  assert.ok(!p.state().sxPaint);
+  // the first query's frame ran (frame() ran every pending callback) and appended nothing to the newer panel
+  const ref = await reference();
+  assert.equal(p.list(), ref('mv').list);
+  assert.ok(L.appends >= a1);
+});
+
+test('#167 MF2: a key, a click and a hover rest right after the first frame act on the settled list, exactly as on the one-go draw', async () => {
+  const seqs = [['ArrowDown', 'ArrowDown', 'ArrowDown', 'ArrowDown', 'ArrowDown'], ['End'], ['ArrowDown', 'ArrowUp'], ['Enter'], ['ArrowDown', 'Enter']];
+  // two pages, each query run afresh on them (the panel reopened first: Enter may have closed it)
+  const a = page({ frames: 'manual' }), b = page();
+  const typed = async (x, q, raw = true) => { x.location.hash = ''; await x.open(''); x.input.value = q; if (raw) x.sxRunRaw(q); else x.sxRun(q); return x; };
+  for (const q of ['so', 'sa', 'fc', 'San Diego', 'MVLA 2011', 'Surf Sports Park']) {
+    for (const ks of seqs) {
+      await typed(a, q); await typed(b, q, false);
+      for (const k of ks) { a.key(k); b.key(k); }
+      assert.equal(a.state().sxPaint, null, `${q} ${ks}: a key flushes`);
+      assert.equal(a.list(), b.list(), `${q} ${ks}: list`);
+      assert.equal(a.state().sxActive, b.state().sxActive, `${q} ${ks}: active`);
+      assert.deepEqual(a.location.hash, b.location.hash, `${q} ${ks}: Enter went to the same place`);
+      assert.equal(a.el('usearchList').getAttribute('aria-busy'), null);
+      a.frame(); await a.settle(); assert.equal(a.list(), b.list(), `${q} ${ks}: the pending frame adds nothing after a flush`);
+    }
+    const h = await typed(a, q);
+    const target = Math.min(20, h.cells().length - 1);
+    h.sxHoverCell(target); await wait(300);
+    assert.equal(h.state().sxPaint, null, `${q}: a hover rest flushes`);
+    if (target > 0) assert.equal(h.state().sxActive, target, `${q}: hover lands on the settled list`);
+    const c = await typed(a, q);
+    const at = c.state().sxActive >= 0 ? c.state().sxActive : 0;
+    c.click(at);
+    assert.equal(c.state().sxPaint, null, `${q}: a click flushes`);
+    for (const [what, fire] of [['a middle click', x => x.el('usearchList').on.auxclick({ target: { closest: () => null }, button: 1 })],
+      ['an action-bar click', x => x.el('usearchOpen').on.click({ ctrlKey: true, metaKey: false, shiftKey: false, button: 0, preventDefault() {}, currentTarget: x.el('usearchOpen') })]]) {
+      const x = await typed(a, q);
+      if (!x.state().sxPaint) continue;
+      fire(x);
+      assert.equal(x.state().sxPaint, null, `${q}: ${what} flushes`);
+    }
+  }
+});
+
+test('#167 the first task runs no games search on a deferred keystroke; the games task runs exactly one team search; lazy groups: only the drawn ones are built (at most 8 a keystroke)', async () => {
+  const calls = [], stats = [];
+  const mod = { ...S, completeGames: (i, s, c) => { if (s.later && s.later.reader.text === 'so') calls.push('complete'); const st = stats[0]; return S.completeGames(i, s, c, { stats: st }); },
+    search: (i, q, c, o) => { if (q !== 'so') return S.search(i, q, c, o); calls.push(o && o.games); const st = {}; stats.push(st); return S.search(i, q, c, { ...o, stats: st }); } };   // the warm-up's searches are left out
+  const p = page({ mod, frames: 'manual' }); await p.open('');
+  calls.length = 0;
+  p.input.value = 'so'; p.sxRunRaw('so');
+  const job = p.state().sxPaint;
+  assert.ok(job && job.slate.gamesPending, 'so leaves Games for later');
+  assert.deepEqual(calls, ['later'], 'the keystroke\'s task: one search, Games left for later');
+  assert.equal(stats[0].gamesVisited || 0, 0, 'no game visited in the first task');
+  p.frame(); await p.settle();
+  assert.deepEqual(calls, ['later', 'complete']);
+  assert.ok(stats[0].gamesVisited > 0, 'the games task visits the games');
+  assert.equal(stats[0].teamSearches, 1, 'MF3: one team search for the keystroke, none in the games task');
+  let most = 0;
+  for (const k of judgedKeystrokes().filter(k => k.length >= 2)) { const g0 = p.sxStats.groupsBuilt; p.input.value = k; p.sxRun(k); most = Math.max(most, p.sxStats.groupsBuilt - g0); }
+  assert.ok(most <= 8 && most > 0, `at most ${most} groups built for one keystroke (sa: 8; every group of so would be 36 or more)`);
+});
+
+test('#167 (Q3) the warm-up: after the active season\'s games, no request, the visible panel untouched; skipped once the visitor types', async () => {
+  let release; const gate = new Promise(r => { release = r; });
+  let searches = 0;
+  const mod = { ...S, search: (i, q, c, o) => { searches++; return S.search(i, q, c, o); } };
+  const p = page({ mod, gamesGate: () => gate }); await p.open('', { games: false });
+  p.input.value = 'mvla'; p.sxRun('mvla');
+  const before = { list: p.list(), status: p.status(), live: p.live(), sets: p.el('usearchList').sets, appends: p.el('usearchList').appends, fetched: [...p.fetched] };
+  assert.equal(p.state().sxWarmed, false, 'not before the games are in');
+  const s0 = searches;
+  release(); await p.gamesIdle();
+  for (let k = 0; k < 400 && !(p.state().sxWarmed && searches - s0 >= 8 + 3); k++) await wait(2);
+  await wait(50);
+  assert.ok(p.state().sxWarmed && searches - s0 >= 8 + 3, `${searches - s0} warm-up searches`);
+  assert.deepEqual(p.fetched, before.fetched, '0 fetches');
+  // the panel on screen is what the landing's own redraw drew (sxRefresh: the games are in), nothing of the warm-up's
+  const ref = await reference(), want = ref('mvla');
+  assert.equal(p.list(), want.list); assert.equal(p.status(), want.status);
+  assert.equal(p.el('usearchList').sets, before.sets + 1, 'the visible list is set once, by the landing\'s redraw'); assert.equal(p.el('usearchList').appends, before.appends);
+  // a visitor who types stops it: no further warm-up search after the input event
+  let n = 0;
+  const mod2 = { ...S, search: (i, q, c, o) => { n++; return S.search(i, q, c, o); } };
+  let release2; const gate2 = new Promise(r => { release2 = r; });
+  const t = page({ mod: mod2, gamesGate: () => gate2 }); await t.open('', { games: false });
+  t.input.on.input();
+  release2(); await t.gamesIdle(); const n0 = n; await wait(200);
+  assert.ok(t.state().sxTyped);
+  assert.ok(n - n0 <= 1, `${n - n0} searches after typing (at most the keystroke's own, 60 ms on)`);
+});
+
+test('#167 mutations 3, 5: the first part stops early on a broad keystroke; a games task queued for an older query never runs', async () => {
+  const p = page({ frames: 'manual' }); await p.open('');
+  for (const q of ['so', 'sa', 'fc', 'san']) {   // broad keystrokes (a short list stops where Games waits)
+    p.input.value = q; p.sxRunRaw(q);
+    const first = drawnIds(p.list()).length;
+    assert.ok(p.state().sxPaint && !p.state().sxPaint.done, `${q}: parts pending`);
+    p.sxFlush();
+    const all = drawnIds(p.list()).length;
+    assert.ok(first >= p.SX_FIRST_CELLS && first < all && first <= p.SX_FIRST_CELLS + 12, `${q}: ${first} of ${all} cells first`);
+  }
+  // the rest has run and the games task is queued; a newer query comes before it
+  const calls = [];
+  const mod = { ...S, completeGames: (i, s, c) => { calls.push(s.later.reader.text); return S.completeGames(i, s, c); } };
+  const t = page({ mod, frames: 'manual' }); await t.open('');
+  t.manualTasks = true;
+  t.input.value = 'so'; t.sxRunRaw('so');
+  t.frame(); assert.ok(t.task(), 'the task after the frame: the rest');
+  assert.ok(t.state().sxPaint && t.state().sxPaint.waiting && t.tasksQ.length === 1, 'the games task is queued');
+  t.input.value = 'mv'; t.sxRunRaw('mv');
+  const mvFirst = t.list();
+  assert.ok(t.task(), 'the stale games task');
+  assert.equal(t.list(), mvFirst, 'it appends nothing to the newer panel');
+  assert.ok(!calls.includes('so'), 'and searches nothing');
+  t.frame(); while (t.task()) t.frame();
+  t.manualTasks = false;
+  const ref = await reference();
+  assert.equal(t.list(), ref('mv').list);
+  assert.ok(!calls.includes('so') && calls.includes('mv'), 'only the newer query\'s games are searched (the warm-up also searches mv)');
+});
+
+test('#167 build point 3: the enter\'s cell is always in the first part, even when it sits past the first cells', async () => {
+  // a slate whose enter is a Teams row far down the list (the data never has one: the module's enter is near the top)
+  let deep = null;
+  const mod = { ...S, search: (i, q, c, o) => {
+    const s = S.search(i, q, c, o);
+    if (q !== 'so') return s;
+    const rows = s.sections.find(x => x.name === 'teams').rows;
+    deep = rows[30];
+    return Object.assign(Object.create(Object.getPrototypeOf(s)), s, { enter: deep, best: null, later: s.later });
+  } };
+  const p = page({ mod, frames: 'manual' }); await p.open('');
+  p.input.value = 'so'; p.sxRunRaw('so');
+  const at = p.state().sxActive;
+  assert.ok(at >= p.SX_FIRST_CELLS, `the enter's cell is ${at}`);
+  assert.equal(p.cells()[at].team.key, deep.key);
+  assert.ok(drawnIds(p.list()).includes(`sx-c-${at}`), 'drawn in the first part');
+  assert.equal(p.input.getAttribute('aria-activedescendant'), `sx-c-${at}`);
 });

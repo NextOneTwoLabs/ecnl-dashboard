@@ -7602,6 +7602,8 @@
     //   G10 cell names: "<day date, time>, <home> against <away>, <state or result>, <competition>, <field>".
     //   G11 the status line and the live region count games (fields, for a place).
     //   G12 drawing makes no request: only the games loader fetches, once per season.
+    // #167: a keystroke paints in parts (sxPaintStart): the first cells, then the rest after a frame, then a deferred
+    // Games section; the settled panel equals sxDraw's. Club groups build their lines only when drawn (sxGroups).
     const SX_API_EXPECTED = 3;                     // search.mjs SEARCH_API this page was written against (#168: games)
     const SX_MODULES = ['events', 'games', 'links', 'match', 'reader', 'search', 'slate', 'teams', 'vocab'].map(n => `/search/${n}.mjs`);
     const SX_STEP_UNITS = 50;                      // units of work per build step
@@ -7740,6 +7742,8 @@
     const sxPlural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
     const sxEscRe = s => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     function sxShow({ status = '', lead = '', list = '', live = '' }) {
+      sxPaint = null;   // #167: a whole new panel: the parts of the last one are dropped
+      document.getElementById('usearchList').removeAttribute('aria-busy');
       const st = document.getElementById('sxStatus'), ld = document.getElementById('sxLead');
       st.innerHTML = status; st.hidden = !status;
       ld.innerHTML = lead; ld.hidden = !lead;
@@ -7788,7 +7792,12 @@
         const g = G.get(k);
         g.rows.push(r); g.nearby = g.nearby && r.nearby; g.partial = g.partial || !!r.partial; g.nearbyOf = g.nearbyOf || r.nearbyOf;
       }
-      const out = [...G.values()].map(g => {
+      const out = [...G.values()].map(g0 => {
+        let built = null;
+        const make = () => {
+        if (built) return built;
+        sxStats.groupsBuilt++;
+        const g = g0;
         const lines = new Map();
         for (const r of g.rows) {
           if (!lines.has(r.line)) lines.set(r.line, { title: r.line, live: [], ended: [] });
@@ -7804,7 +7813,12 @@
         const open = new Set();   // R4
         for (const l of withLive) if (l.ended.some(r => r.key === enterKey)) open.add(`${g.key}|${l.title}`);
         if (earlier && earlier.ended.some(r => r.key === enterKey)) open.add(`${g.key}|earlier`);
-        return { ...g, lines: withLive, earlier, nLive, nEnded: g.rows.length - nLive, nMay, open };
+        return (built = { lines: withLive, earlier, nLive, nEnded: g.rows.length - nLive, nMay, open });
+        };
+        // #167 (S2): the key, name, rows and flags now; the lines, folds and counts when the group is drawn
+        const lazy = { ...g0 };
+        for (const k of ['lines', 'earlier', 'nLive', 'nEnded', 'nMay', 'open']) Object.defineProperty(lazy, k, { get: () => make()[k], enumerable: true });
+        return lazy;
       });
       out.folded = folded;
       return out;
@@ -7853,9 +7867,17 @@
       `${r.sxMay && r.sxMay.length ? `, ${sxPlural(r.sxMay.length, 'earlier team')} may continue here` : ''}${r.was ? `, was ${r.was}` : ''}${r.nearby ? ', nearby' : ''}${r.partial ? ', partial match' : ''}`;
     const sxPills = o => (o.nearby ? '<span class="sx-pill near">Nearby</span>' : '') + (o.partial ? '<span class="sx-pill part">Partial match</span>' : '');
 
-    // One build of the grid: cells[] is what the keys walk; the HTML is what is drawn.
+    // One build of the grid: cells[] is what the keys walk; the HTML is what is drawn. #167: a generator that yields
+    // after each part (a group, an event, a section's head), and 'games' where a deferred Games section goes: it is
+    // resumed with the completed slate, or skipped. `out` holds the parts, cells, counts and clubs so far.
     function sxBuild(q, slate, state) {
-      const cells = [];
+      const out = { parts: [], cells: [] };
+      const gen = sxBuildG(q, slate, state, out);
+      for (let r = gen.next(); !r.done; r = gen.next());   // a deferred Games section is resumed with nothing: skipped
+      return { cells: out.cells, html: out.parts.join(''), counts: out.counts, clubs: out.clubs, parts: out.parts };
+    }
+    function* sxBuildG(q, slate, state, out) {
+      const cells = out.cells;
       let rowNo = 0;
       const cell = o => { o.id = `sx-c-${cells.length}`; cells.push(o); return o.id; };
       const enterKey = slate.enter && slate.enter.key;
@@ -7929,7 +7951,8 @@
         const id = cell({ kind: 'more', row, col: 0, section, text });
         return `<li role="row" class="sx-moreli"><span role="gridcell" class="sx-more" id="${id}" data-c="${cells.length - 1}" aria-selected="false">${esc(text)}</span></li>`;
       };
-      const parts = [], counts = Object.fromEntries(slate.sections.map(s => [s.name, s.total]));
+      const parts = out.parts, counts = Object.fromEntries(slate.sections.map(s => [s.name, s.total]));
+      out.counts = counts; out.clubs = 0;
       const gctx = { cell, cells, nextRow: () => rowNo++, head, sub, more, today: todayKey() };   // #168: the Games section's helpers
       let clubs = 0;
       const best = slate.best;
@@ -7939,39 +7962,50 @@
           ? teamGroup(sxGroups(slate.sections.find(s => s.name === 'teams').rows.filter(r => r.key === best.key), enterKey)[0])
           : eventCells(best);
         parts.push(`<li role="rowgroup" class="sx-best" aria-label="Best match"><ul role="presentation">${head('Best match')}${inner}</ul></li>`);
+        yield;
       }
       // #168 G1: Games in the slate's place; with no rows, its heading and coverage lines first under rule 3, else last
       const order = slate.sections.map(s => s.name);
       if (!order.includes('games')) order.splice(slate.rule === 3 ? 0 : order.length, 0, 'games');
       for (const name of order) {
         const sec = slate.sections.find(s => s.name === name) || null;
-        if (name === 'games') { const g = sxGamesSection(sec, slate, state, gctx); if (sec || g.length > 1) parts.push(...g); continue; }
+        if (name === 'games') {
+          let gs = slate;
+          if (slate.gamesPending) { gs = yield 'games'; if (!gs) continue; }   // #167: deferred: resumed with the completed slate
+          const gsec = gs.sections.find(s => s.name === 'games') || null;
+          const g = sxGamesSection(gsec, gs, state, gctx);
+          if (gsec || g.length > 1) parts.push(...g);
+          yield;
+          continue;
+        }
         const rows = best ? sec.rows.filter(r => (best.kind === 'team' ? r.key !== best.key : r.eventID !== best.eventID)) : sec.rows;
         if (!rows.length) continue;
         if (sec.name === 'teams') {
           const G = sxGroups(rows, enterKey);
           clubs = new Set([...G.map(g => g.key), ...(best && best.kind === 'team' ? [sxGroupKey(best)] : [])]).size;
+          out.clubs = clubs;
           parts.push(head(best ? 'More teams' : 'Teams', `${best ? rows.length : sec.total} in ${sxPlural(G.length, 'club')}`));
           const flat = G.every(g => g.rows.length === 1);
           const limit = state.limit.teams;
           let near = false;
-          G.slice(0, limit).forEach(g => {
+          for (const g of G.slice(0, limit)) {
             if (g.nearby && !near) { near = true; parts.push(sub(g.nearbyOf)); }
             parts.push(flat ? teamRow(g.rows[0]) : teamGroup(g));
-          });
+            yield;
+          }
           if (G.length > limit) parts.push(more('teams', limit === SX_SIZES.teams ? `Show all ${sec.total} teams · ${sxPlural(G.length, 'club')}` : `Show ${sxPlural(Math.min(SX_SIZES.page, G.length - limit), 'more club')} · ${G.length - limit} left`));
         } else {
           parts.push(head(best ? 'More events' : 'Events', String(rows.length)));
           const limit = state.limit.events;
           let near = false;
-          rows.slice(0, limit).forEach(r => {
+          for (const r of rows.slice(0, limit)) {
             if (r.nearby && !near) { near = true; parts.push(sub(r.nearbyOf)); }
             parts.push(eventCells(r));
-          });
+            yield;
+          }
           if (rows.length > limit) parts.push(more('events', limit === SX_SIZES.events ? `Show all ${sxPlural(rows.length, 'event')}` : `Show ${sxPlural(Math.min(SX_SIZES.page, rows.length - limit), 'more event')} · ${rows.length - limit} left`));
         }
       }
-      return { cells, html: parts.join(''), counts, clubs };
     }
 
     // R9: the first team whose matched has a typo word, as the line (or the club) spells it
@@ -7992,19 +8026,22 @@
       // build point 5: no "arrow keys" when there is no cell to move to
       return `${lead}${[te, say, cells ? 'Use the arrow keys to choose.' : ''].filter(Boolean).join(' ')}`;
     }
-    function sxResultsBody(q, slate, state) {
-      const built = sxBuild(q, slate, state);
+    function sxStatusOf(slate, counts) {
       const status = [];
-      if (built.counts.teams) status.push(`<strong>${sxPlural(built.counts.teams, 'team')}</strong>`);
-      if (built.counts.events) status.push(`<strong>${sxPlural(built.counts.events, 'event')}</strong>`);
+      if (counts.teams) status.push(`<strong>${sxPlural(counts.teams, 'team')}</strong>`);
+      if (counts.events) status.push(`<strong>${sxPlural(counts.events, 'event')}</strong>`);
       const gc = sxGamesCount(slate);   // G11: a place counts its fields; anything else its games
       if (gc.fields) status.push(`<strong>${sxPlural(gc.fields, 'field')}</strong>`);
       else if (gc.games) status.push(`<strong>${sxPlural(gc.games, 'game')}</strong>`);
       const typo = sxTypoHint(slate);
       if (typo) status.push(typo);
-      const lead = slate.empty && slate.empty.reason === 'no-full-match'
-        ? `<div class="sx-note"><strong>Nothing matches every word of “${esc(q)}”.</strong>These results match some of the words.</div>` : '';   // R7
-      return { built, body: { status: status.join(' · '), lead, list: built.html, live: sxAnnounce(slate, built.counts, built.clubs, built.cells.length) } };
+      return status.join(' · ');
+    }
+    const sxLeadOf = (q, slate) => (slate.empty && slate.empty.reason === 'no-full-match'
+      ? `<div class="sx-note"><strong>Nothing matches every word of “${esc(q)}”.</strong>These results match some of the words.</div>` : '');   // R7
+    function sxResultsBody(q, slate, state) {
+      const built = sxBuild(q, slate, state);
+      return { built, body: { status: sxStatusOf(slate, built.counts), lead: sxLeadOf(q, slate), list: built.html, live: sxAnnounce(slate, built.counts, built.clubs, built.cells.length) } };
     }
     function sxEmptyBody(q, slate) {   // R12
       const reason = slate.empty ? slate.empty.reason : 'no-match';
@@ -8069,6 +8106,7 @@
             const doc = await fetchJSON(`search/games/${job.season}`);
             await sxDrive(sxMod.startGames(sxIndex, doc, SX_GAMES_UNITS));
             sxG.status.delete(job.season);
+            if (job.season === sxIndex.vocab.active) sxWarmUp();   // #167 (Q3): it yields before each step
           } catch (e) {
             Object.assign(job.entry, { state: isMissing(e) ? 'missing' : 'failed', error: e });
           } finally {
@@ -8284,17 +8322,112 @@
       return out;
     }
 
+    // ----- #167: the painter -----
+    // A keystroke's panel is painted in parts, so no task holds the keystroke long (the draw addendum v2, approved
+    // with the owner's OK on the one-frame partial state): the first part (the status, the best match and the first
+    // cells in slate order, at least SX_FIRST_CELLS and always the slate's enter) in the keystroke's own task; after
+    // the next frame has painted it (requestAnimationFrame, then a task), the rest, appended, never re-rendered, so
+    // the cells drawn first stay the same nodes; then, in a task of its own, a Games section the search left for
+    // later ({ games: 'later' }) is searched from the Teams rows (completeGames) and appended. The settled panel is
+    // byte for byte the one sxDraw draws. While parts are pending the grid is aria-busy; the live region speaks
+    // once, when it has settled; any key, click, hover rest or action-bar click first flushes what is pending, so it
+    // acts on the settled list (MF2). A newer query drops the pending parts (they check whose they are).
+    const SX_FIRST_CELLS = 16;
+    const sxStats = { groupsBuilt: 0 };   // groups whose lines were built (lazy: only the drawn ones)
+    let sxPaint = null;
+    function sxAfterFrame(f) {
+      requestAnimationFrame(() => { const c = new MessageChannel(); c.port1.onmessage = () => { c.port1.close(); f(); }; c.port2.postMessage(0); });
+    }
+    function sxPaintStart(q, slate, state) {
+      const out = { parts: [], cells: [] }, gen = sxBuildG(q, slate, state, out);
+      const job = { q, slate, state, out, gen, painted: 0, waiting: false, done: false, full: null };
+      for (;;) {
+        const r = gen.next();
+        if (r.done) { job.done = true; break; }
+        if (r.value === 'games') { job.waiting = true; break; }
+        if (out.cells.length >= SX_FIRST_CELLS && (!slate.enter || sxEnterAt(slate, out.cells, true) >= 0)) break;
+      }
+      sxShow({ status: sxStatusOf(slate, out.counts), lead: sxLeadOf(q, slate), list: out.parts.join(''), live: null });
+      job.painted = out.parts.length;
+      sxView = { q, slate, cells: out.cells, state, nav: false };
+      const at = sxEnterCell();
+      if (at >= 0) sxSetActive(at, { noScroll: true });
+      if (job.done) { sxSettle(job); return; }
+      sxPaint = job;
+      document.getElementById('usearchList').setAttribute('aria-busy', 'true');
+      sxAfterFrame(() => { if (sxPaint === job) sxPaintRest(job, false); });
+    }
+    function sxAppend(job) {
+      const more = job.out.parts.slice(job.painted);
+      if (more.length) document.getElementById('usearchList').insertAdjacentHTML('beforeend', more.join(''));
+      job.painted = job.out.parts.length;
+    }
+    function sxPaintRest(job, sync) {
+      if (!job.waiting && !job.done) {
+        for (;;) { const r = job.gen.next(); if (r.done) { job.done = true; break; } if (r.value === 'games') { job.waiting = true; break; } }
+      }
+      sxAppend(job);
+      if (job.done) { sxSettle(job); return; }
+      if (sync) { sxPaintGames(job); return; }
+      sxYield().then(() => { if (sxPaint === job) sxPaintGames(job); });
+    }
+    function sxPaintGames(job) {
+      const full = sxMod.completeGames(sxIndex, job.slate, sxCtx());
+      job.full = full;
+      for (let r = job.gen.next(full); !r.done; r = job.gen.next());
+      job.done = true;
+      sxAppend(job);
+      sxSettle(job);
+    }
+    function sxSettle(job) {
+      if (sxPaint === job) sxPaint = null;
+      const slate = job.full || job.slate, out = job.out;
+      if (sxView && sxView.cells === out.cells) sxView.slate = slate;
+      const st = document.getElementById('sxStatus'), status = sxStatusOf(slate, out.counts);
+      st.innerHTML = status; st.hidden = !status;
+      document.getElementById('usearchLive').textContent = sxAnnounce(slate, out.counts, out.clubs, out.cells.length);   // once, settled
+      document.getElementById('usearchList').removeAttribute('aria-busy');
+      if (job.full) sxStill(job.q, slate);   // a deferred slate's seasons are known once its games are searched
+    }
+    // MF2: what is pending, now, before an event is handled
+    function sxFlush() { const job = sxPaint; if (job) sxPaintRest(job, true); }
+
+    // #167 (Q3): the warm-up. Once the active season's games are in, a few searches from small to broad and three
+    // detached draws, each in a task of its own, so the first keystrokes find the code warm; it stops before the
+    // broadest prefixes, makes no request and never touches the panel on screen, and it is skipped as soon as the
+    // visitor types.
+    const SX_WARM = ['zzzz', 'mv', 'mvla 2011', 'u15 norcal', 'surf sports park', 'slammers vs blues', 'san diego', 'sa'];
+    const SX_WARM_DRAW = ['mvla 2011', 'san diego', 'sa'];
+    let sxTyped = false, sxWarmed = false;
+    async function sxWarmUp() {
+      if (sxWarmed) return;
+      sxWarmed = true;
+      for (const q of SX_WARM) {
+        await sxYield(); if (sxTyped) return;
+        const s = sxMod.search(sxIndex, q, sxCtx(), { games: 'later' });
+        if (!s.gamesPending) continue;
+        await sxYield(); if (sxTyped) return;
+        sxMod.completeGames(sxIndex, s, sxCtx());
+      }
+      for (const q of SX_WARM_DRAW) {
+        await sxYield(); if (sxTyped) return;
+        const s = sxMod.search(sxIndex, q, sxCtx());
+        const box = document.createElement('ul');   // detached: no layout, no live region, no cell on the page
+        box.innerHTML = sxBuild(q, s, { limit: { teams: SX_SIZES.teams, events: SX_SIZES.events, games: SX_SIZES.games }, fold: new Map() }).html;
+      }
+    }
+
     // ----- run a query, draw it, and the active cell -----
     function sxRun(q) {
       sxHoverCancel();
       clearTimeout(sxG.stillT);
       if (sxState !== 'ready') return;
       if (q.trim().length < 2) { sxShow(sxTipsBody()); return; }
-      const slate = sxMod.search(sxIndex, q, sxCtx());
-      sxStill(q, slate);
+      const slate = sxMod.search(sxIndex, q, sxCtx(), { games: 'later' });   // #167: Games in a task of its own when it comes last
+      if (!slate.gamesPending) sxStill(q, slate);
       if (!slate.sections.length) { sxShow(sxEmptyBody(q, slate)); return; }
       const state = { limit: { teams: SX_SIZES.teams, events: SX_SIZES.events, games: SX_SIZES.games }, fold: new Map() };
-      sxDraw(q, slate, state, null);
+      sxPaintStart(q, slate, state);
     }
     // #168: the same query searched again (a games file landed, a Load cell was pressed): the viewer's limits, folds
     // and active cell are kept; `live` is what the live region says (null: nothing new, undefined: the counts).
@@ -8331,8 +8464,10 @@
     // R4: the slate's `enter`, else the first cell that opens something. A team folded into a
     // successor (R3) is reached through the successor. #168: Games leading with no `enter` (H04, a place's empty
     // fields) has no active cell until a key; an open field or pairing gives its first game (G4, G6).
-    function sxEnterCell() {
-      const { slate, cells } = sxView, e = slate.enter;
+    function sxEnterCell() { return sxEnterAt(sxView.slate, sxView.cells, false); }
+    // strict: the enter's own cell only (no fallback to the first team or event)
+    function sxEnterAt(slate, cells, strict) {
+      const e = slate.enter;
       if (!e && (slate.rule === 3 || (slate.sections[0] && slate.sections[0].name === 'games'))) return -1;   // also while a games-first query's season loads (4a MF4)
       if (e && (e.kind === 'field' || e.kind === 'pairing' || e.kind === 'game')) {
         const gi = cells.findIndex(c => (e.kind === 'game' ? c.game && c.game.matchID === e.matchID : c.kind === e.kind && c.key === `${e.kind === 'field' ? 'fd' : 'pr'}:${e.key}`));
@@ -8343,7 +8478,7 @@
         i = cells.findIndex(c => (c.team && c.team.key === e.key) || (c.ev && e.kind !== 'team' && c.href === e.href));
         if (i < 0 && e.key) i = cells.findIndex(c => c.team && c.team.key !== e.key && (e.continuesAs || []).includes(c.team.key));
       }
-      return i >= 0 ? i : cells.findIndex(c => c.kind === 'team' || c.kind === 'event');
+      return i >= 0 || strict ? i : cells.findIndex(c => c.kind === 'team' || c.kind === 'event');
     }
     const sxCellEl = i => document.getElementById(`sx-c-${i}`);
     function sxKeysText(c) {
@@ -8459,7 +8594,7 @@
     const sxHoverCancel = () => clearTimeout(sxHoverT);
     function sxHoverCell(i) {
       clearTimeout(sxHoverT);
-      if (sxView && i !== sxActive) sxHoverT = setTimeout(() => { if (sxView && sxView.cells.length > i) sxSetActive(i, { hover: true }); }, SX_HOVER_MS);
+      if (sxView && i !== sxActive) sxHoverT = setTimeout(() => { sxFlush(); if (sxView && sxView.cells.length > i) sxSetActive(i, { hover: true }); }, SX_HOVER_MS);
     }
 
     // ----- keys -----
@@ -8496,6 +8631,7 @@
       return false;
     }
     function sxKey(e) {
+      sxFlush();   // #167 MF2: a key acts on the settled list
       const pop = sxPop();
       if (!pop.hidden && sxKeyView(e)) return;
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
@@ -8517,6 +8653,7 @@
       const idx = el => +el.dataset.c;
       list.addEventListener('mousedown', e => { if (cellOf(e)) e.preventDefault(); });
       list.addEventListener('click', e => {
+        sxFlush();
         const el = cellOf(e); if (!el || !sxView) return;
         const i = idx(el), c = sxView.cells[i];
         if (!c) return;
@@ -8524,6 +8661,7 @@
         sxActivate(i, { season: e.shiftKey });
       });
       list.addEventListener('auxclick', e => {
+        sxFlush();
         const el = cellOf(e), c = el && sxView && sxView.cells[idx(el)];
         if (c && c.href && e.button === 1) window.open(c.href, '_blank', 'noopener');
       });
@@ -8535,6 +8673,7 @@
       });
       list.addEventListener('pointerleave', sxHoverCancel);
       ['usearchOpen', 'usearchHist', 'usearchPrev'].forEach(id => document.getElementById(id).addEventListener('click', e => {
+        sxFlush();
         if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;   // the browser's own new-tab handling
         e.preventDefault(); sxGoTo(e.currentTarget.getAttribute('href'));
       }));
@@ -8553,7 +8692,7 @@
       }, 150));
       sxInputs().forEach(inp => {
         inp.addEventListener('focus', () => sxOpen(inp));
-        inp.addEventListener('input', () => { clearTimeout(sxTimer); sxTimer = setTimeout(() => { if (sxState === 'ready') sxRun(inp.value); }, 60); });
+        inp.addEventListener('input', () => { sxTyped = true; clearTimeout(sxTimer); sxTimer = setTimeout(() => { if (sxState === 'ready') sxRun(inp.value); }, 60); });
         inp.addEventListener('keydown', sxKey);
         inp.addEventListener('blur', () => setTimeout(() => {
           if (!sxSheet() && !sxPop().contains(document.activeElement) && document.activeElement !== inp) sxClose();

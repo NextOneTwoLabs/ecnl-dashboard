@@ -62,9 +62,9 @@ test('modules: every file is an .mjs module, and every relative import resolves 
   for (const f of files) for (const m of readLF(new URL(f, MODULES)).matchAll(/\bfrom\s+'\.\/([a-z]+\.mjs)'/g)) assert.ok(files.includes(m[1]), `${f} imports ${m[1]}`);
 });
 
-test('MF5, #165, #168: search.mjs exports SEARCH_API 3 and exactly these names', () => {
+test('MF5, #165, #167, #168: search.mjs exports SEARCH_API 3 and exactly these names', () => {
   assert.equal(S.SEARCH_API, 3, 'PR 4b adds games (startGames, the Games section, context.today): the page expects 3');
-  assert.deepEqual(Object.keys(S).sort(), ['CORE_SCHEMA', 'GAMES_SCHEMA', 'PLACES_SCHEMA', 'SEARCH_API', 'SearchDataError', 'buildIndex', 'search', 'startGames', 'startIndex']);
+  assert.deepEqual(Object.keys(S).sort(), ['CORE_SCHEMA', 'GAMES_SCHEMA', 'PLACES_SCHEMA', 'SEARCH_API', 'SearchDataError', 'buildIndex', 'completeGames', 'search', 'startGames', 'startIndex']);
 });
 
 test('schemas: an unknown core or places schema throws SearchDataError naming the file; constants agree', () => {
@@ -408,7 +408,9 @@ const cost = s => WEIGHTS.base + Object.entries(s).reduce((n, [k, v]) => n + WEI
 const CEILING_NS = 16e6 / 15;            // 16 ms on a 4x-throttled phone / 15 (cold-to-cold calibration, plan v2 MF6)
 // Recorded by this PR. A change to the work done changes these numbers: re-measure and explain.
 // #168: was max 1,620,690 and p95 412,600; games add their own team search and the games it touches (so: 4,029,315).
-const RECORDED = { keystrokes: 807, max: 4029315, maxAt: 'so', p95: 807305 };
+// #167 (MF3): a name reading's games come from the Teams search already made, never a second one: max 4,029,315 ->
+// 2,509,890, p95 807,305 -> 552,325 (the Games rows are unchanged: tests/search-games.test.mjs, teamsReuse: false).
+const RECORDED = { keystrokes: 807, max: 2509890, maxAt: 'so', p95: 552325 };
 // The worst keystroke may not grow past twice its recorded cost; the 95th percentile must stay under
 // the phone ceiling. (The worst, a two-letter prefix matching ~500 squads, is over that ceiling:
 // reported on #163, and measured on a throttled browser after merge, Q12.)

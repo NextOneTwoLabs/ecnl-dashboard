@@ -548,6 +548,12 @@ draws them since #165 (below).
     `matchID`, `date`, `time`, `home` and `away` (as that event spells them, with a season tab when the
     directory lists the team), `score`, `pk`, `winner`, `competition`, `field` (with its label and city),
     `dest`, `href` and `matched` (the side the query's names matched).
+  - `search(index, query, ctx, { games: 'later' })` (#167) leaves the Games section for a task of its own
+    when it comes last and can change nothing before it (rules 1 and 5, with Teams or Events results, one
+    side, no field or date): the slate has `gamesPending`, and `completeGames(index, slate, ctx)` returns
+    the slate `search` gives. Either way a name reading's games come from the Teams search already made
+    (that reading's own squads, the complete list), never from a second team search;
+    `tests/search-games.test.mjs` proves both equal, rows in full, on 2,068 queries.
   - `startIndex({ core, places }, n)` is the same build as a generator: each `next()` does at most
     `n` units of one stage (vocabulary, team documents, postings, counts and lookups, then events as
     the last step), yields a label, and returns the index. The page runs steps while the main thread
@@ -615,6 +621,15 @@ fields and pairings too. Today's panel
   units: before each step the page yields if the task so far plus the slowest step so far would pass
   40 ms (`scheduler.yield()`, else a `MessageChannel`; never `setTimeout(0)`). Nothing is requested
   per keystroke. Parsing `core.json` is the one task the page cannot split.
+- **The painter** (#167): a keystroke draws the status, the best match and the first cells in slate order
+  (at least 16, always the `enter`'s cell) in its own task; after the next frame has painted them
+  (`requestAnimationFrame`, then a task) the rest is appended, never re-rendered; then a deferred Games
+  section is searched in a task of its own and appended. Groups are built only when drawn. The settled
+  panel is byte for byte the one-go draw. While parts are pending the grid is `aria-busy`; the live region
+  speaks once, when it has settled; a key, click, hover rest or action-bar click first flushes what is
+  pending. For one frame a visitor may see the counts before the Games section (the owner's OK). Once the
+  active season's games are in, a warm-up runs a few searches and three detached draws, a task each, with
+  no request and the panel untouched; it stops as soon as the visitor types.
 - **Games** (#168, Q5b b): right after "ready", exactly 1 request, `/api/v1/search/games/<active season>`
   (about 69 KB gzipped), read with `res.json()` and built in steps of 150 games under the same 40 ms rule.
   A season a query names (an explicit season or a bare year) is fetched once the box has been still for

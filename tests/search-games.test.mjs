@@ -7,9 +7,10 @@
 // frozen fixture, the committed data or a stated rule. Run under the netguard:
 //   node --import ./tests/netguard/netguard.mjs --test tests/search-games.test.mjs
 import { test } from 'node:test';
+import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { readJSON, readLF, HERE, ROOT, loadSearchData, loadGames, modulesContext, todayOf } from './search/judged.mjs';
-import { keystrokes, clubPrefixes, placeNames } from './search/sets.mjs';
+import { keystrokes, clubPrefixes, placeNames, reviewSet } from './search/sets.mjs';
 
 const S = await import(new URL('public/search/search.mjs', ROOT));
 const { readQuery } = await import(new URL('public/search/reader.mjs', ROOT));
@@ -335,4 +336,74 @@ test('nit 1: gamesVisited counts every game looked at (a date scans the season);
   try { assert.throws(() => run('U15 10/17'), /boom/); } finally { G.flights.get = real; }
   assert.ok(G.mark.every(x => x === 0) && G.ms.every(x => x === 0), 'no stale marks');
   assert.equal(sec(run('MVLA'), 'games').length, sec(run('MVLA'), 'games').length);
+});
+
+// ---------- #167: Games left for later (the draw addendum v2, S1 and MF1, MF3) ----------
+// The queries the Reviewer named (6230407924, 6230432011): `ml`, `Sacra` and the rest are the ones whose empty.reason a
+// search with no games installed would turn from no-match into games-loading; they are derived here as such.
+const NAMED = ['ml', 'Sacra', 'San de', 'U1', 'playoffs 2025-', 'showcase 202', 'Legends Del Ma', 'Surf Cup', 'san dei', 'MVLA 201',
+  'U15 NorCal vs U15 Texas', 'NorCal U15 vs Mustang', 'U15 NorCal vs Surf',   // rule 1 on both sides of a vs: never deferred
+  'colorado academy'];   // a field name that is also a team's: rule 3 with Teams rows, never deferred
+const textHash = s => createHash('sha256').update(slateText(s)).digest('hex');
+const LATER_SET = (() => {
+  const base = [...new Set([...reviewSet(CDATA.core, CDATA.places, doc), ...keystrokes(doc), ...NAMED])];
+  const bare = S.buildIndex(committed());   // no games installed, the active season reported loading
+  const loadingCtx = { ...CCTX, gamesLoading: [bare.vocab.active] };
+  // each query's slate searched once (the three tests below compare with it): its text as a hash, its stats
+  const ref = new Map();
+  for (const q of base) { const stats = {}, full = run(q, CIX, CCTX, { stats }); ref.set(q, { full, text: textHash(full), stats }); }
+  const flipped = base.filter(q => { const a = ref.get(q).full, b = run(q, bare, loadingCtx); return a.empty && a.empty.reason === 'no-match' && b.empty && b.empty.reason === 'games-loading'; });
+  return { all: base, flipped, ref };
+})();
+
+test('#167 S1, MF1: completeGames(search(q, later)) is search(q), rows in full (getters too), on the review set, every judged keystroke and the named queries; a deferred season is ready, never loading', () => {
+  const { all, flipped } = LATER_SET;
+  assert.ok(flipped.length >= 60, `${flipped.length} queries a games-less search would call loading`);
+  for (const q of ['ml', 'Sacra', 'San de', 'U1', 'playoffs 2025-', 'showcase 202', 'Legends Del Ma']) assert.ok(flipped.includes(q), q);
+  let deferred = 0;
+  for (const q of all) {
+    const want = LATER_SET.ref.get(q).text, st = {}, l = run(q, CIX, CCTX, { games: 'later', stats: st });
+    if (!l.gamesPending) { assert.equal(textHash(l), want, `${q}: nothing deferred, the same slate`); continue; }
+    deferred++;
+    assert.ok(!l.coverage.some(c => c.state === 'loading') && !(l.empty && l.empty.reason === 'games-loading'), `${q}: MF1`);
+    assert.equal(st.teamSearches, 1, `${q}: the keystroke's one team search`);
+    const done = S.completeGames(CIX, l, CCTX, { stats: st });
+    assert.equal(st.teamSearches, 1, `${q}: MF3: the games task searches no team`);
+    assert.equal(textHash(done), want, q);
+    assert.equal(S.completeGames(CIX, done, CCTX), done, 'a settled slate is returned as it is');
+  }
+  for (const q of flipped) assert.equal(run(q, CIX, CCTX, { games: 'later' }).empty.reason, 'no-match', `${q}: MF1`);
+  assert.ok(deferred > 900, `${deferred} deferred`);
+});
+
+test('#167 S1: later defers only under rules 1 and 5 with Teams or Events results; never under rules 2, 3, 4, on vs, on a partial slate (Surf Cup) or with nothing found', () => {
+  let seen = { 2: 0, 3: 0, 4: 0, partial: 0 };
+  for (const q of LATER_SET.all) {
+    const full = LATER_SET.ref.get(q).full, l = run(q, CIX, CCTX, { games: 'later' });
+    const partial = full.sections.some(x => x.rows.some(r => r.partial));
+    if (l.gamesPending) {
+      assert.ok([1, 5].includes(l.rule), `${q}: rule ${l.rule}`);
+      assert.ok(!partial && full.sections.some(x => x.name !== 'games' && x.rows.length), `${q}: Teams or Events found, none partial`);
+      assert.ok(!readQuery(CIX.vocab, q).vs, q);
+    } else {
+      if ([2, 3, 4].includes(full.rule)) seen[full.rule]++;
+      if (partial) seen.partial++;
+    }
+  }
+  assert.ok(seen[2] > 10 && seen[3] > 30 && seen[4] > 300 && seen.partial > 10, JSON.stringify(seen));
+  { const c = run('colorado academy', CIX, CCTX, { games: 'later' }); assert.ok(c.rule === 3 && sec(c, 'teams').length > 0 && !c.gamesPending, 'rule 3 with Teams rows is searched at once'); }
+  for (const q of ['U15 NorCal vs U15 Texas', 'NorCal U15 vs Mustang']) { const l = run(q, CIX, CCTX, { games: 'later' }); assert.ok(l.rule === 1 && !l.gamesPending, `${q}: a vs query under rule 1 is searched at once`); }
+  const sc = run('Surf Cup', CIX, CCTX, { games: 'later' });
+  assert.ok(!sc.gamesPending && sc.sections.every(x => x.rows.every(r => r.partial || x.name === 'games')), 'build point 1: partial rows never feed Games');
+});
+
+test('#167 MF3: Games from the Teams search already made equals a search of each name reading alone (teamsReuse: false), and makes one team search', () => {
+  let reused = 0;
+  for (const q of LATER_SET.all) {
+    const { text, stats: a } = LATER_SET.ref.get(q), b = {};
+    const y = run(q, CIX, CCTX, { stats: b, teamsReuse: false });
+    assert.equal(textHash(y), text, q);
+    if (a.teamSearches < b.teamSearches) { reused++; assert.equal(a.teamSearches, 1, q); }
+  }
+  assert.ok(reused > 900, `${reused} queries spared a second team search`);
 });

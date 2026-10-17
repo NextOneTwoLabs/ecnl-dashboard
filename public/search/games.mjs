@@ -175,7 +175,8 @@ function teamKeys(index, r, ctx, opts, seasons) {
   }
   return out;
 }
-// The same as int maps, per season: season -> Map(teamID -> class rank). `rows` are the Teams rows to use.
+// The same as int maps, per season: season -> Map(teamID -> class rank). `rows` are the reading's squads
+// ({ cls, squadRows, aliasIDs, born }: Teams rows, or a reading's own hits).
 function teamRanks(index, r, rows, seasons) {
   const out = new Map(seasons.map(s => [s, new Map()]));
   const put = (s, id, rk) => { const m = out.get(s); if (!m) return; const o = m.get(id); if (o === undefined || rk < o) m.set(id, rk); };
@@ -250,7 +251,10 @@ export function searchGames(index, reader, ctx, opts = {}) {
       const days = r.dates.length ? daysOf(r, loaded) : null;
       // a field reading: the last word, while it is still a prefix of "field" ("Great Park f"), names no team
       if (r.field && r.names.length === 1 && r.names[0].last && 'field'.startsWith(r.names[0].w)) r = { ...r, names: [] };
-      const tk = r.names.length ? teamRanks(index, r, opts.teamsRows || teamsOf(index, r, ctx, opts), loaded) : null;
+      // #167 (MF3): a name reading's squads from the Teams search already made for this reading (opts.teams: that
+      // search's result, whose readings are side.teams), else a team search of the reading alone
+      const tri = opts.teams && opts.teams.readingRows ? side.teams.indexOf(r) : -1;
+      const tk = r.names.length ? teamRanks(index, r, tri >= 0 ? opts.teams.readingRows(tri) : teamsOf(index, r, ctx, opts), loaded) : null;
       for (const s of loaded) {
         const G = index.games.get(s);
         const t = touch(G);
