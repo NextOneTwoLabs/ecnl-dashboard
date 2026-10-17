@@ -1,6 +1,6 @@
 // #163 (#149 phase 1, PR 3): the Teams category. One document per #107 squad, from core.json's
 // teams (the team directory) and places.json's club places. Pure.
-import { postingsG, drain, Postings, nameWords, withAliases, initials, capsWords, teamTitle, words, expand, filterScore, CLASS_RANK } from './match.mjs';
+import { postingsG, drain, Postings, nameWords, nameWordsOf, withAliases, initials, capsWords, teamTitle, words, expand, filterScore, CLASS_RANK } from './match.mjs';
 import { placeWords, ALIASES } from './vocab.mjs';
 import { teamHref, teamSeasonHref } from './links.mjs';
 
@@ -13,11 +13,14 @@ const NO_CLUB = 7;   // TGS's "No Club Selection": its name, initials and place 
 
 export function teamDocs(core, vocab) { return drain(teamDocsG(core, vocab, Infinity)); }
 // The team documents in steps of at most `n` squads (the postings, the counts and the lookups likewise).
-export function* teamDocsG(core, vocab, n) {
+export function* teamDocsG(core, vocab, n, onName = null) {
   const t = core.teams, S = t.seasons;
   // names repeat across seasons: read each distinct one once
   const memo = f => { const m = new Map(); return x => { let v = m.get(x); if (v === undefined) { v = f(x); m.set(x, v); } return v; }; };
-  const nw = memo(nameWords), caps = memo(capsWords), aliasWords = memo(x => withAliases(nameWords(x))), ini = memo(initials);
+  // #167 (review MF1): every distinct club and squad-row name is normalised here once, and handed, as its words,
+  // to the field names' check (vocab.mjs fieldNamesG), which so never normalises a name a second time
+  const nw = memo(nameWords), caps = memo(capsWords), ini = memo(initials);
+  const aliasWords = memo(x => { const w = words(x); if (onName) onName(x, w); return withAliases(nameWordsOf(w)); });
   yield 'team docs';
   const div = t.divs.map(([s, name, u, years]) => ({ season: S[s], name, u, years }));
   const docs = [];

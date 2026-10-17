@@ -17,7 +17,7 @@
 //
 // SEARCH_API is this module's API version (3 since #168: games). The page compares it with the
 // version it expects and shows a coverage note instead of calling a changed API (plan v2 MF5).
-import { buildVocabG } from './vocab.mjs';
+import { buildVocabG, fieldNamesG } from './vocab.mjs';
 import { drain } from './match.mjs';
 import { readQuery } from './reader.mjs';
 import { teamDocsG, searchTeams } from './teams.mjs';
@@ -43,7 +43,10 @@ export function* startIndex(searchData, n = 150) {
   if (!core || core.schema !== CORE_SCHEMA) throw new SearchDataError('core.json', `unknown schema ${core && core.schema}`);
   if (!places || places.schema !== PLACES_SCHEMA) throw new SearchDataError('places.json', `unknown schema ${places && places.schema}`);
   const vocab = yield* buildVocabG(core, places, n);
-  const teams = yield* teamDocsG(core, vocab, n);
+  // #168 Q4, MF5: the field names' phrases, checked against every name as the team documents read it (#167)
+  const fields = yield* fieldNamesG(vocab, n);
+  const teams = yield* teamDocsG(core, vocab, n, fields.visit);
+  yield* fields.finishG();
   yield 'events';
   const events = eventDocs(core, vocab);
   // refinement A (#163 Q4): every word any category or the vocabulary knows
@@ -111,6 +114,9 @@ export function search(index, query, context, options = {}) {
     events: merge(reader.sides.map(s => searchEvents(index.events, s, ctx, index.vocab, { ...opts, cache: caches.events }))),
   };
   if (stats) stats.teamSearches = (stats.teamSearches || 0) + reader.sides.length;   // the Teams section: one per side
+  // #167 (review MF2): Teams or Events found every word, so a field's own name does not lead (rule 3): Games
+  // follows them (slate.mjs ruleOf)
+  reader.teamsWhole = res.teams.rows.length > 0 || res.events.rows.length > 0;
   const none = () => ({ rows: [], reasons: new Set(), coverage: [] });
   // #167 (addendum v2, MF3): under rules 1 and 5 (Games after every section with results, MF3), with Teams or Events
   // results (then never partial: partial rows come only when nothing matches, build point 1), on one side with no

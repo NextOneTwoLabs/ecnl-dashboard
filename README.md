@@ -577,7 +577,11 @@ draws them since #165 (below).
   (D3) and `richmond` (D8), each with its evidence. Since #168 (Q4) every field name of two words or
   more is a field phrase, a whole name and never a part, except a name that appears inside a club's,
   team's, family's or alias's name (MF5: `fc dallas`, `oklahoma celtic`, `pda south`; listed as
-  `vocab.fieldPhrasesDropped`). Their words are games-only: they never join the known words.
+  `vocab.fieldPhrasesDropped`). Their words are games-only: they never join the known words. Teams and
+  Events read the text without them (`vocab.byFirstBase`), so a field name never takes a place, state,
+  county or conference away from them (`Dallas Texans Lewisville` is its 18 teams); the field reading is
+  added for Games only, which leads (rule 3) only when Teams and Events find nothing for every word. The
+  check runs as the team documents read each name (#167, review of #170 MF1), so no name is read twice.
 - `match.mjs` expands words (exact 1.0, prefix 0.7, typo 0.4; club initials never by typo; a
   known word never as a typo) and scores them with BM25F, one contribution per query word.
 - `teams.mjs` and `events.mjs` search squads and events (with their tier names); `games.mjs` (#168)
@@ -597,8 +601,9 @@ draws them since #165 (below).
 - **Cost:** `node --import ./tests/netguard/netguard.mjs --expose-gc tools/search_data_size.mjs --index`
   measures `buildIndex`. `tests/search-modules.test.mjs` types every judged query one character
   at a time, pins the work each keystroke does (since #168 with the active season's games, and
-  `gamesVisited` weighed), and fails on any keystroke over 20 ms or a cold build over 200 ms (each
-  the fastest of 3, so a busy CI runner cannot fail it). `tests/search-games.test.mjs` pins the
+  `gamesVisited` weighed), and fails on any keystroke over 20 ms or a cold import and build over 200 ms
+  of main-thread CPU (`process.threadCpuUsage`, since #170: other processes on a busy runner add wall
+  time, never this thread's CPU; each the fastest of 3). `tests/search-games.test.mjs` pins the
   Games category: the staged games build, field phrases, each reading, the order and the slate.
 - **Every game's link** (#168): `tests/search-game-links.test.mjs` builds the link of every game of
   every committed games file and resolves it the way the page would, with the page's own functions

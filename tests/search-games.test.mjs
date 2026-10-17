@@ -14,6 +14,8 @@ import { keystrokes, clubPrefixes, placeNames, reviewSet } from './search/sets.m
 
 const S = await import(new URL('public/search/search.mjs', ROOT));
 const { readQuery } = await import(new URL('public/search/reader.mjs', ROOT));
+const { words: normWords } = await import(new URL('public/search/match.mjs', ROOT));
+const { ALIASES } = await import(new URL('public/search/vocab.mjs', ROOT));
 const { GameRow, NO_DAY, dayOf } = await import(new URL('public/search/games.mjs', ROOT));
 const doc = readJSON(new URL('queries.json', HERE));
 const CTX = modulesContext(doc.context);   // today 2026-10-15 (America/Los_Angeles)
@@ -73,6 +75,24 @@ test('Q4, MF5: every field name of 2 words or more reads as a field, except a na
   assert.deepEqual(s.sections.map(x => x.name), ['teams', 'games'], 'MF5: FC Dallas leads with Teams');
   assert.equal(s.enter.kind, 'team'); assert.equal(s.enter.club, 'FC Dallas Youth');
 });
+test('#167 (review of #170, MF1): the field names\' phrases are built with the index, each name checked as the team documents read it', () => {
+  const ix = S.buildIndex(committed());
+  assert.equal(ix.vocab.phrases.filter(p => p.fieldName).length, 901);
+  assert.deepEqual(ix.vocab.fieldPhrasesDropped, ['fc dallas', 'oklahoma celtic', 'pda south']);
+  assert.equal(ix.vocab.fieldSource, null, 'the sources are let go');
+  assert.equal([...ix.vocab.byFirstBase.values()].flat().filter(p => p.fieldName).length, 0, 'Teams and Events read without them (MF2)');
+  // the same phrases, in the same order, as the scan over every name done on its own (3c3ba1b3's MF5 rule)
+  const C = committed(), t = C.core.teams, w = s => normWords(s);
+  const names = new Set([...t.clubs.map(c => c[1]), ...(t.families || []).map(f => f[0]), ...Object.keys(ALIASES), ...Object.keys(C.core.vocab.confAliases || {})]);
+  for (const sq of t.squads) for (const r of sq.s) names.add(r[2]);
+  const joined = [...names].map(n => ` ${w(n).join(' ')} `);
+  const alias = new Set(Object.values(C.places.vocab.fieldAliases));
+  const want = [...new Set(Object.keys(C.places.fields).map(k => k.slice(0, k.lastIndexOf('@'))).filter(n => !alias.has(n)).map(n => w(n).join(' ')))].filter(k => k.includes(' '));
+  const dropped = want.filter(k => joined.some(s => s.includes(` ${k} `)));
+  assert.deepEqual(dropped.sort(), ix.vocab.fieldPhrasesDropped);
+  assert.deepEqual(ix.vocab.phrases.filter(p => p.fieldName).map(p => p.words.join(' ')).sort(), want.filter(k => !dropped.includes(k)).sort());
+});
+
 test('MF5: a field name\'s words never join the known words (they would switch off a team\'s typo match: "mary")', () => {
   const noFields = loadSearchData(); noFields.places.fields = {};
   const plain = S.buildIndex(noFields);
@@ -343,7 +363,7 @@ test('nit 1: gamesVisited counts every game looked at (a date scans the season);
 // search with no games installed would turn from no-match into games-loading; they are derived here as such.
 const NAMED = ['ml', 'Sacra', 'San de', 'U1', 'playoffs 2025-', 'showcase 202', 'Legends Del Ma', 'Surf Cup', 'san dei', 'MVLA 201',
   'U15 NorCal vs U15 Texas', 'NorCal U15 vs Mustang', 'U15 NorCal vs Surf',   // rule 1 on both sides of a vs: never deferred
-  'colorado academy'];   // a field name that is also a team's: rule 3 with Teams rows, never deferred
+  'colorado academy'];   // a field name that is also a team's, read beside its Teams rows: never deferred
 const textHash = s => createHash('sha256').update(slateText(s)).digest('hex');
 const LATER_SET = (() => {
   const base = [...new Set([...reviewSet(CDATA.core, CDATA.places, doc), ...keystrokes(doc), ...NAMED])];
@@ -391,7 +411,7 @@ test('#167 S1: later defers only under rules 1 and 5 with Teams or Events result
     }
   }
   assert.ok(seen[2] > 10 && seen[3] > 30 && seen[4] > 300 && seen.partial > 10, JSON.stringify(seen));
-  { const c = run('colorado academy', CIX, CCTX, { games: 'later' }); assert.ok(c.rule === 3 && sec(c, 'teams').length > 0 && !c.gamesPending, 'rule 3 with Teams rows is searched at once'); }
+  { const c = run('colorado academy', CIX, CCTX, { games: 'later' }); assert.ok(c.rule === 5 && c.sections[0].name === 'teams' && !c.gamesPending, 'a field name read beside Teams rows: rule 5, and its Games is searched at once'); }
   for (const q of ['U15 NorCal vs U15 Texas', 'NorCal U15 vs Mustang']) { const l = run(q, CIX, CCTX, { games: 'later' }); assert.ok(l.rule === 1 && !l.gamesPending, `${q}: a vs query under rule 1 is searched at once`); }
   const sc = run('Surf Cup', CIX, CCTX, { games: 'later' });
   assert.ok(!sc.gamesPending && sc.sections.every(x => x.rows.every(r => r.partial || x.name === 'games')), 'build point 1: partial rows never feed Games');
@@ -406,4 +426,49 @@ test('#167 MF3: Games from the Teams search already made equals a search of each
     if (a.teamSearches < b.teamSearches) { reused++; assert.equal(a.teamSearches, 1, q); }
   }
   assert.ok(reused > 900, `${reused} queries spared a second team search`);
+});
+
+// ---------- #167 (review of #170, MF2): a field name never takes words away from Teams and Events ----------
+test('MF2: Teams and Events read every field name (alone, with 2011, with U15) as if no field name were a phrase, rows in full; Games adds the field', () => {
+  // the index with the field names' phrases taken out of the reader: what Teams and Events must equal
+  const bare = S.buildIndex(committed()); load(bare, bare.vocab.active, COMMITTED);
+  bare.vocab.byFirst = bare.vocab.byFirstBase;
+  const names = CIX.vocab.phrases.filter(p => p.fieldName).map(p => p.value);
+  assert.equal(names.length, 901);
+  let n = 0, field = 0;
+  // Teams and Events, rows in full (every getter), and the best match unless it is a game. Partial guesses are left
+  // out of the bare search: they come only when nothing matches every word, and a field name that matches is a
+  // whole match (build point 2), so those are the by-design changes the review counts (525 partial-only queries).
+  const whole = s => s.sections.filter(x => (x.name === 'teams' || x.name === 'events') && !x.rows.some(r => r.partial));
+  const part = s => slateText({ rule: null, empty: null, coverage: [], best: s.best && s.best.section !== 'games' && !s.best.partial ? s.best : null, enter: null, sections: whole(s) });
+  let partialOnly = 0;
+  for (const name of names) for (const q of [name, `${name} 2011`, `${name} U15`]) {
+    const a = run(q, CIX, CCTX), b = run(q, bare, CCTX);
+    assert.equal(part(a), part(b), q);
+    if (b.sections.some(x => x.rows.some(r => r.partial)) && !whole(b).length) partialOnly++;
+    if (sec(a, 'games').some(r => r.kind === 'field')) field++;
+    n++;
+  }
+  assert.ok(partialOnly > 0 && partialOnly < n, `${partialOnly} partial-only without the field names`);
+  assert.equal(n, 2703);
+  assert.ok(field > 2000, `${field} with the field in Games (Q4)`);
+});
+
+test('MF2: Dallas Texans Lewisville is its 18 teams first, then Games with the field; colorado academy keeps the place Colorado; a field name with no team leads with Games', () => {
+  const d = run('Dallas Texans Lewisville', CIX, CCTX);
+  assert.equal(sec(d, 'teams').length, 18);
+  assert.deepEqual(d.sections.map(x => x.name), ['teams', 'games']);
+  assert.equal(d.rule, 5, 'Teams found every word: the field does not lead (rule 3 does not apply)');
+  assert.ok(sec(d, 'games').some(r => r.kind === 'field' && /Dallas Texans Lewisville/i.test(r.name || r.field?.name || r.key)), 'Games holds the field');
+  assert.equal(d.enter.section, 'teams');
+  assert.equal(sec(run('Dallas Texans Lewisville 2011', CIX, CCTX), 'teams').length, 3);
+  assert.equal(sec(run('dallas texans lewisville u15', CIX, CCTX), 'teams').length, 1);
+  const c = run('colorado academy', CIX, CCTX), ct = sec(c, 'teams');
+  assert.equal(ct.length, 5);
+  assert.ok(ct.every(r => (r.namedPlace || []).join(' ') === 'colorado'), 'the state Colorado, as on main');
+  assert.equal(c.rule, 5);
+  const f = run('Canyon Crest Academy', CIX, CCTX);
+  assert.equal(f.rule, 3, 'a field name no team or event holds: Games first (Q4)');
+  assert.equal(f.sections[0].name, 'games');
+  for (const q of ['Great Park', 'Surf Sports Park', 'Great Park field 15']) assert.equal(run(q, CIX, CCTX).rule, 3, `${q}: a field alias leads, as before`);
 });

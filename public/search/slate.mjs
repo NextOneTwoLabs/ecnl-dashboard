@@ -24,12 +24,15 @@ export const PENDING = new Set(['loading', 'not-loaded']);
 //                                         then the more specific reading (#163 Q2), then Teams,
 //                                         Events; #168 MF3: Games after every section with results
 //                                         (its rows are that section's teams' or event's games)
+// Rule 3: a vs query, a date, a field alias (Great Park), or a field's own name when Teams and Events found nothing
+// for every word (#167, review MF2: "Dallas Texans Lewisville" is its 18 teams first; search.mjs sets teamsWhole)
+const gamesLead = reader => reader.vs || reader.sides.some(s => s.fieldAlias || (s.fieldNamed && !reader.teamsWhole) || s.dates);
 export function sectionOrder(reader, full, { specificityTie = true } = {}) {
   const sides = reader.sides;
   let base, rule;
   if (sides.some(s => s.confAge)) { base = ['events', 'teams', 'games']; rule = 1; }
   else if (sides.some(s => s.kinds)) { base = ['events', 'games', 'teams']; rule = 2; }
-  else if (reader.vs || sides.some(s => s.field || s.dates)) { base = ['games', 'teams', 'events']; rule = 3; }
+  else if (gamesLead(reader)) { base = ['games', 'teams', 'events']; rule = 3; }
   else if (sides.some(s => s.placeOnly)) {
     rule = 4;
     // 2: a result in the place itself; 1: only fields in the place with no games in the seasons asked
@@ -75,7 +78,7 @@ export function ruleOf(reader) {
   const sides = reader.sides;
   if (sides.some(s => s.confAge)) return 1;
   if (sides.some(s => s.kinds)) return 2;
-  if (reader.vs || sides.some(s => s.field || s.dates)) return 3;
+  if (gamesLead(reader)) return 3;
   if (sides.some(s => s.placeOnly)) return 4;
   return 5;
 }

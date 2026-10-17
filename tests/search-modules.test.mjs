@@ -450,12 +450,17 @@ export function parseColdBuild(r) {
   }
   return ms;
 }
+// #167 (review of #170, MF1): the child times its main thread's CPU (process.threadCpuUsage), not the wall clock.
+// Other processes on a busy runner add wall time, never this thread's CPU; a real regression (an eager scan, a
+// quadratic sort, a second pass) adds both, so it is still caught. A child without the API fails, never skips.
 function coldBuildMs() {
-  const src = `const t = performance.now(); const S = await import(${JSON.stringify(SEARCH_URL.href)});
+  const src = `if (typeof process.threadCpuUsage !== 'function') throw new Error('process.threadCpuUsage is missing');
+    const c0 = process.threadCpuUsage(); const S = await import(${JSON.stringify(SEARCH_URL.href)});
     const { readFileSync } = await import('node:fs');
     const j = n => JSON.parse(readFileSync(new URL(n, ${JSON.stringify(FX.href)}), 'utf8'));
     S.buildIndex({ core: j('core.json'), places: j('places.json') });
-    process.stdout.write(${JSON.stringify(COLD_TAG)} + JSON.stringify({ ms: performance.now() - t }) + '\\n');`;
+    const c = process.threadCpuUsage(c0);
+    process.stdout.write(${JSON.stringify(COLD_TAG)} + JSON.stringify({ ms: (c.user + c.system) / 1000 }) + '\\n');`;
   return parseColdBuild(spawnSync(process.execPath, ['--import', './tests/netguard/netguard.mjs', '--input-type=module', '-e', src],
     { cwd: fileURLToPath(ROOT), encoding: 'utf8', env: process.env }));
 }
@@ -464,14 +469,15 @@ test('budget: the cold-build child is read by its tagged line, and a broken chil
   assert.throws(() => parseColdBuild({ status: 1, stdout: '', stderr: 'SyntaxError: boom' }), /exit 1[\s\S]*SyntaxError: boom/);
   assert.throws(() => parseColdBuild({ status: 0, stdout: '71.5netguard: 0 attempts\n', stderr: '' }), /no SEARCH_COLD_BUILD line/);
 });
-test('budget: wall clock backstop: no keystroke over 20 ms, no cold build over 200 ms', () => {
+test('budget: backstop: no keystroke over 20 ms (wall clock), no cold build over 200 ms of main-thread CPU', () => {
+  assert.equal(typeof process.threadCpuUsage, 'function', 'process.threadCpuUsage (Node 22) is required: the backstop never skips');
   replay();                                  // warm
   const runs = [replay(), replay(), replay()];
   const fastest = runs[0].map((x, i) => ({ p: x.p, ms: Math.min(...runs.map(r => r[i].ms)) }));
   const worst = fastest.reduce((m, x) => (x.ms > m.ms ? x : m));
   assert.ok(worst.ms < 20, `${worst.p}: ${worst.ms.toFixed(2)} ms (fastest of 3)`);
   const cold = Math.min(coldBuildMs(), coldBuildMs(), coldBuildMs());
-  assert.ok(cold < 200, `cold import and build ${cold.toFixed(1)} ms (fastest of 3 fresh processes)`);
+  assert.ok(cold < 200, `cold import and build ${cold.toFixed(1)} ms of main-thread CPU (fastest of 3 fresh processes)`);
   const s = index.stats;
   assert.ok(s.terms <= 2 * 518 && s.postings <= 2 * 11531, JSON.stringify(s));
 });
@@ -508,7 +514,7 @@ test('#165: startIndex drained at n = 1, 7, 50 and 150 gives the same slates as 
   }
 });
 test('#165: the staged build gives the same index structure as buildIndex (vocabulary, postings, counts, lookups, known)', () => {
-  const a = drained(50).index, b = index;
+  const a = withGames(drained(50).index), b = index;   // both with the games (and so the field names' phrases)
   assert.deepEqual([...a.known].sort(), [...b.known].sort());
   assert.deepEqual(a.vocab.phrases.map(p => [p.type, p.value, p.words.join(' ')]), b.vocab.phrases.map(p => [p.type, p.value, p.words.join(' ')]));
   for (const c of ['teams', 'events']) {
@@ -534,9 +540,10 @@ test('#165: each step does at most n units: the yields per stage follow n, and t
   assert.equal(drained(50).labels.at(-1), 'events', 'events are the last step: teams are never ready without them');
   assert.equal(drained(50).labels.filter(l => l === 'events').length, 1);
 });
-// yields before the last step, on the frozen fixture (460 and 158 before #168; the field-name scan adds a stage
-// stepped by units, a squad then a name each, and the field names' own sort step: 596 and 205)
-const STEPS_50 = 596, STEPS_150 = 205;
+// yields before the last step, on the frozen fixture: 460 and 158 before #168. The field names' phrases add
+// vocab:fields: 944 fields, then the 147 clubs, families and aliases no squad row names (every squad-row name is
+// checked as teamDocsG reads it, review of #170 MF1), then one last step: 482 and 166 (596 and 205 at 3c3ba1b3).
+const STEPS_50 = 482, STEPS_150 = 166;
 test('#165 (Reviewer point 2): an unknown schema throws SearchDataError from the first next(), not from startIndex()', () => {
   const a = fresh(); a.core.schema = 3;
   const g = S.startIndex(a);

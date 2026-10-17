@@ -93,60 +93,98 @@ export function* buildVocabG(core, places, n) {
   }
   // field complexes (games only): whole names, never a part (design: never `surf` alone)
   for (const [k, v] of Object.entries((places.vocab || {}).fieldAliases || {})) phrases.push({ type: 'field', value: v, words: words(k) });
-  // #168 (Q4): every field's own name of two words or more is a field phrase too, a whole name, never a
-  // part. MF5: except a name that appears, as consecutive whole words, inside a name: a club's, a team's
-  // (current or older, every squad row), a family's or an alias ('fc dallas' is in "FC Dallas Youth" and
-  // in every FC Dallas team's name). The scan is stepped like the rest: a unit is a squad, then a name.
-  const aliasNames = new Set(Object.values((places.vocab || {}).fieldAliases || {}));
-  const cand = new Map(), byW = new Map();
-  yield 'vocab:fields';
-  for (const key of Object.keys(places.fields || {})) {
-    if (++units % n === 0) yield 'vocab:fields';
-    const name = key.slice(0, key.lastIndexOf('@')), w = words(name), k = w.join(' ');
-    if (aliasNames.has(name) || w.length < 2 || cand.has(k)) continue;
-    cand.set(k, { name, w });
-    if (!byW.has(w[0])) byW.set(w[0], []);
-    byW.get(w[0]).push(w);
-  }
-  const names = new Set([...t.clubs.map(c => c[1]), ...(t.families || []).map(f => f[0]), ...Object.keys(ALIASES), ...Object.keys(core.vocab.confAliases || {})]);
-  yield 'vocab:fields';
-  for (const sq of t.squads) { if (++units % n === 0) yield 'vocab:fields'; for (const r of sq.s) names.add(r[2]); }
-  const inName = new Set();
-  for (const nm of names) {
-    if (++units % n === 0) yield 'vocab:fields';
-    const w = words(nm);
-    for (let i = 0; i < w.length; i++) for (const fw of byW.get(w[i]) || []) if (i + fw.length <= w.length && fw.every((x, k) => w[i + k] === x)) inName.add(fw.join(' '));
-  }
-  const dropped = [], fieldPhrases = [];
-  for (const [k, { name, w }] of cand) {
-    if (inName.has(k)) dropped.push(k);
-    else fieldPhrases.push({ type: 'field', value: name, words: w, fieldName: true });
-  }
-  // longest first, then a stable order. The field names are sorted in a step of their own and merged (a tie
-  // takes the earlier list first, as the one stable sort of both did), so no step grows with them (#168).
-  const ROLE = { conf: 0, state: 1, place: 2, county: 3, field: 4 };
-  const byLen = (a, b) => b.words.length - a.words.length || ROLE[a.type] - ROLE[b.type] || cu(a.words.join(' '), b.words.join(' '));
+  // longest first, then a stable order
   yield 'vocab:sort';
   phrases.sort(byLen);
-  yield 'vocab:sort';
-  fieldPhrases.sort(byLen);
-  yield 'vocab:sort';
-  const merged = [];
-  for (let i = 0, j = 0; i < phrases.length || j < fieldPhrases.length;) merged.push(j >= fieldPhrases.length || (i < phrases.length && byLen(phrases[i], fieldPhrases[j]) <= 0) ? phrases[i++] : fieldPhrases[j++]);
-  phrases.length = 0; phrases.push(...merged);
   yield 'vocab:first';
-  const byFirst = new Map();
-  for (const p of phrases) { if (++units % (n * 8) === 0) yield 'vocab:first'; const f = p.words[0]; if (!byFirst.has(f)) byFirst.set(f, []); byFirst.get(f).push(p); }
+  const byFirst = firstIndex(phrases);
   // every word the vocabulary knows (refinement A adds the categories' terms in search.mjs). A field
   // name's words are games-only (#168 MF5): they never join it, so they cannot switch off a team's or an
   // event's typo match ("mary" of Mary Grogan Community Park).
   yield 'vocab:known';
-  const known = new Set([...phrases.filter(p => !p.fieldName).flatMap(p => p.words), ...Object.keys(KIND_WORDS)]);
-  return {
-    seasons, active, birthYears: [byLo, byHi], divs, states, phrases, byFirst, known, placeByName,
+  const known = new Set([...phrases.flatMap(p => p.words), ...Object.keys(KIND_WORDS)]);
+  const vocab = {
+    seasons, active, birthYears: [byLo, byHi], divs, states, phrases, byFirst, byFirstBase: byFirst, known, placeByName,
     places: places.places, counties: places.counties, fields: places.fields || {}, clubPlaces: places.clubPlaces || {}, eventPlaces: places.eventPlaces || {},
-    fieldPhrasesDropped: dropped.sort(cu),   // MF5: the field names left out because a name holds them
+    fieldPhrasesDropped: null,   // #168 MF5: set by fieldPhrasesG, at the end of the build
   };
+  // #167: what fieldPhrasesG reads, kept by reference until it runs
+  Object.defineProperty(vocab, 'fieldSource', { value: { places, core }, writable: true, configurable: true });
+  return vocab;
+}
+
+const ROLE = { conf: 0, state: 1, place: 2, county: 3, field: 4 };
+const PLAIN = /^[a-z0-9]+( [a-z0-9]+)*$/;
+const byLen = (a, b) => b.words.length - a.words.length || ROLE[a.type] - ROLE[b.type] || cu(a.words.join(' '), b.words.join(' '));
+function firstIndex(phrases) {
+  const byFirst = new Map();
+  for (const p of phrases) { const f = p.words[0]; if (!byFirst.has(f)) byFirst.set(f, []); byFirst.get(f).push(p); }
+  return byFirst;
+}
+
+// #168 (Q4): every field's own name of two words or more is a field phrase too, a whole name, never a part.
+// MF5: except a name that appears, as consecutive whole words, inside a name: a club's, a team's (current or
+// older, every squad row), a family's or an alias ('fc dallas' is in "FC Dallas Youth" and in every FC Dallas
+// team's name). #167 (review MF1): no name is normalised twice. startIndex runs this in three parts:
+// fieldNamesG builds the candidates (a step per n fields) and returns the check; teamDocsG hands it each club and
+// squad-row name as it normalises it (`visit`); `finishG` checks the few names left (families, aliases,
+// conference aliases, clubs with no squad) and installs the phrases in one last step. Field-name phrases read
+// Games only (review MF2): `byFirstBase` keeps the vocabulary without them, for Teams and Events.
+export function* fieldNamesG(vocab, n) {
+  const { places, core } = vocab.fieldSource, t = core.teams;
+  let units = 0;
+  const aliasNames = new Set(Object.values((places.vocab || {}).fieldAliases || {}));
+  const cand = new Map(), byTwo = new Map();   // first word -> second word -> the field names' word lists
+  for (const key of Object.keys(places.fields || {})) {
+    if (++units % n === 0) yield 'vocab:fields';
+    const name = key.slice(0, key.lastIndexOf('@'));
+    if (aliasNames.has(name)) continue;
+    const plain = PLAIN.test(name), w = plain ? name.split(' ') : words(name), k = plain ? name : w.join(' ');   // a key in words() form is split
+    if (w.length < 2 || cand.has(k)) continue;
+    cand.set(k, { name, w });
+    let m = byTwo.get(w[0]); if (!m) byTwo.set(w[0], (m = new Map()));
+    let l = m.get(w[1]); if (!l) m.set(w[1], (l = []));
+    l.push(w);
+  }
+  const inName = new Set(), seen = new Set();
+  const check = w => {
+    for (let i = 0; i + 1 < w.length; i++) {
+      const m = byTwo.get(w[i]); if (!m) continue;
+      const l = m.get(w[i + 1]); if (!l) continue;
+      for (const fw of l) {
+        if (i + fw.length > w.length) continue;
+        let ok = true;
+        for (let k = 2; k < fw.length && ok; k++) ok = w[i + k] === fw[k];
+        if (ok) inName.add(fw.join(' '));
+      }
+    }
+  };
+  const visit = (name, w) => { if (!seen.has(name)) { seen.add(name); check(w); } };
+  function* finishG() {
+    // every squad row's name was visited by teamDocsG; clubs with no squad, families and aliases were not
+    const rest = [...t.clubs.map(c => c[1]), ...(t.families || []).map(f => f[0]), ...Object.keys(ALIASES), ...Object.keys(core.vocab.confAliases || {})];
+    for (const nm of rest) { if (++units % n === 0) yield 'vocab:fields'; if (!seen.has(nm)) visit(nm, words(nm)); }
+    const dropped = [], fieldPhrases = [], fk = new Map();   // phrase -> its words joined
+    for (const [k, { name, w }] of cand) {
+      if (inName.has(k)) dropped.push(k);
+      else { const p = { type: 'field', value: name, words: w, fieldName: true }; fieldPhrases.push(p); fk.set(p, k); }
+    }
+    // sorted, merged with the vocabulary's (a tie takes the vocabulary's first, as one stable sort of both did) and
+    // indexed, in one last step; byLen with each phrase's text joined once (it would join it on every compare)
+    yield 'vocab:fields';
+    const keyed = (a, b) => b.words.length - a.words.length || ROLE[a.type] - ROLE[b.type] || cu(fk.get(a), fk.get(b));
+    fieldPhrases.sort(keyed);
+    const phrases = vocab.phrases, merged = [], pk = phrases.map(p => p.words.join(' '));
+    for (let i = 0, j = 0; i < phrases.length || j < fieldPhrases.length;) {
+      const f = fieldPhrases[j], k = f && fk.get(f);
+      const takeBase = j >= fieldPhrases.length || (i < phrases.length && (f.words.length - phrases[i].words.length || ROLE[phrases[i].type] - ROLE[f.type] || cu(pk[i], k)) <= 0);
+      merged.push(takeBase ? phrases[i++] : fieldPhrases[j++]);
+    }
+    vocab.phrases = merged; vocab.byFirst = firstIndex(merged);
+    vocab.fieldPhrasesDropped = dropped.sort(cu);   // MF5: the field names left out because a name holds them
+    vocab.fieldSource = null;
+  }
+  return { visit, finishG };
 }
 
 // The divisions of a season with age u ("U15" is GU15 in 2026-27, G2010 in 2024-25).

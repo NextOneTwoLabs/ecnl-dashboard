@@ -15,7 +15,7 @@ const PAIR = new Set(['vs', 'v', '@', 'versus']);
 const PRIO = { season: 0, age: 0, born: 0, conf: 1, state: 2, place: 2, county: 2, code: 2, kind: 3, field: 4, date: 4, name: 9 };
 
 // One side of the query (a `vs` query has two) as tokens: filters, then word segments.
-function tokens(raw, vocab) {
+function tokens(raw, vocab, byFirst = vocab.byFirst) {
   const out = { seasons: [], unknownSeason: null, u: null, born: [], band: false, years: [], dates: [], fieldNumber: null, segs: [], lastWord: -1 };
   const ws = [];
   const list = raw.split(/[\s,;]+/).filter(Boolean);
@@ -51,7 +51,7 @@ function tokens(raw, vocab) {
   for (let i = 0; i < ws.length;) {
     const w = ws[i];
     if (KIND_WORDS[w]) { out.segs.push({ at: i, words: [w], roles: [{ type: 'kind', value: KIND_WORDS[w] }], name: false }); i++; continue; }
-    const cands = (vocab.byFirst.get(w) || []).filter(p => p.words.every((x, k) => ws[i + k] === x));
+    const cands = (byFirst.get(w) || []).filter(p => p.words.every((x, k) => ws[i + k] === x));
     const len = cands.length ? Math.max(...cands.map(p => p.words.length)) : 0;
     if (len) {
       const roles = cands.filter(p => p.words.length === len).map(p => ({ ...p, type: p.type }));
@@ -216,26 +216,37 @@ export function readQuery(vocab, text) {
   const parts = norm.split(/\s+/).filter(Boolean);
   const cut = parts.findIndex((p, i) => PAIR.has(p) && i > 0 && i < parts.length - 1);
   const sideTexts = cut > 0 ? [parts.slice(0, cut).join(' '), parts.slice(cut + 1).join(' ')] : [parts.join(' ')];
-  const toks = sideTexts.map(t => tokens(t, vocab));
-  // a vs query: a season or year on either side applies to both
-  if (toks.length === 2) for (const k of ['seasons', 'years']) {
-    const all = [...new Set(toks.flatMap(t => t[k]))];
-    for (const t of toks) t[k] = all;
-    if (toks.some(t => t.unknownSeason)) for (const t of toks) t.unknownSeason = t.unknownSeason || toks.find(x => x.unknownSeason).unknownSeason;
-  }
+  const sideTokens = byFirst => {
+    const toks = sideTexts.map(t => tokens(t, vocab, byFirst));
+    // a vs query: a season or year on either side applies to both
+    if (toks.length === 2) for (const k of ['seasons', 'years']) {
+      const all = [...new Set(toks.flatMap(t => t[k]))];
+      for (const t of toks) t[k] = all;
+      if (toks.some(t => t.unknownSeason)) for (const t of toks) t.unknownSeason = t.unknownSeason || toks.find(x => x.unknownSeason).unknownSeason;
+    }
+    return toks;
+  };
+  // #167 (review MF2): Teams and Events read the text as if no field name were a phrase (byFirstBase: the field
+  // aliases only, as before #168), so a field name never takes a place, state, county or conference away from
+  // them ("Dallas Texans Lewisville"); a field name's reading is added for Games only (Q4).
+  const base = vocab.byFirstBase || vocab.byFirst;
+  const toks = sideTokens(base);
+  const full = base === vocab.byFirst ? null : sideTokens(vocab.byFirst);
   let capReached = false;
-  const sides = toks.map(tk => {
+  const sides = toks.map((tk, si) => {
     const all = readingsOf(tk, vocab);
     const teams = capped(all.filter(forTeams));
     const events = capped(toks.length === 2 ? [] : all.filter(forEvents));
-    const games = capped(all.filter(forGames));
+    const fieldNamed = full && full[si].segs.some(sg => sg.roles.some(r => r.fieldName)) ? readingsOf(full[si], vocab).filter(r => r.field && forGames(r)) : [];
+    if (full && full[si].cut) tk.cut = true;
+    const games = capped([...all.filter(forGames), ...fieldNamed]);
     capReached = capReached || teams.capReached || events.capReached || games.capReached || !!tk.cut;
     // design row 4: some reading uses every word as a place, with no other filter
     const placeOnly = all.some(r => r.places && (!r.codes.length || r.statePinned) && !r.names.length && !r.conf && !r.kinds.length && !r.field && !r.dates.length
       && !r.seasons && !r.unknownSeason && !r.u && !r.born.length);
     return {
       tokens: tk, teams: teams.readings, events: events.readings, games: games.readings, placeOnly,
-      confAge: all.some(r => r.conf && (r.u || r.band)), kinds: all.some(r => r.kinds.length), field: all.some(r => r.field), dates: tk.dates.length > 0,
+      confAge: all.some(r => r.conf && (r.u || r.band)), kinds: all.some(r => r.kinds.length), field: all.some(r => r.field) || fieldNamed.length > 0, fieldAlias: all.some(r => r.field), fieldNamed: fieldNamed.length > 0, dates: tk.dates.length > 0,
       unknownSeason: tk.unknownSeason, nameWords: [...new Set(all.flatMap(r => r.names.map(n => n.w)))],
     };
   });

@@ -1407,3 +1407,19 @@ test('#167 build point 3: the enter\'s cell is always in the first part, even wh
   assert.ok(drawnIds(p.list()).includes(`sx-c-${at}`), 'drawn in the first part');
   assert.equal(p.input.getAttribute('aria-activedescendant'), `sx-c-${at}`);
 });
+
+test('#167 (review of #170, N1): a pending paint replaced by the tips or by an empty body leaves the grid not busy; N2: "Today" is a plain pill', async () => {
+  for (const next of ['s', 'zzzz', '']) {
+    const p = page({ frames: 'manual' }); await p.open('');
+    p.input.value = 'so'; p.sxRunRaw('so');
+    assert.equal(p.el('usearchList').getAttribute('aria-busy'), 'true', 'so is painting');
+    p.input.value = next; p.sxRunRaw(next);
+    assert.equal(p.state().sxPaint, null, `${JSON.stringify(next)}: the pending parts are dropped`);
+    assert.equal(p.el('usearchList').getAttribute('aria-busy'), null, `${JSON.stringify(next)}: not busy`);
+    p.frame(); await p.settle();
+    assert.equal(p.el('usearchList').getAttribute('aria-busy'), null);
+  }
+  const css = html.slice(html.indexOf('.sxg-pill {'), html.indexOf('.sxg-pill.unreported'));
+  assert.match(css, /\.sxg-pill\.upcoming \{ background: var\(--accent-surface\)/);
+  assert.ok(!/\.sxg-pill\.today/.test(css), 'Today takes the plain pill (the mockup draws it grey)');
+});
