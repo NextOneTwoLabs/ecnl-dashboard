@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/match-param.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -480,7 +480,10 @@ Later engines are measured against that baseline on the same queries.
   it. Closed-season facts the queries cite are compared with the live archive on every run,
   never squad grouping or club details, so a data refresh cannot break CI (#151).
 - **The search modules** (`public/search/`, #163) run on the same queries against the frozen
-  search data (`fixtures/search/core.json` and `places.json`); their outcome is recorded in
+  search data (`fixtures/search/core.json`, `places.json` and, since #168, the `games-<season>.json`
+  files). Each query starts from the page's own state: the active season's games, plus the seasons the
+  query itself names, loaded and searched again as the page does; seasons loaded only on request (the
+  Load cells) are never loaded there. Head to head stays `unsupported` until PR 6. Their outcome is recorded in
   `tests/search/baseline/modules.json`. Any change to a module re-records in the same PR and
   explains the diff: `node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules`.
   `tests/search-judged.test.mjs` holds them to the plan's pass criteria: first result useful
@@ -535,9 +538,22 @@ draws them since #165 (below).
 
 - `search.mjs`, the entry point: `buildIndex({ core, places })` builds the index from the search
   data files (it throws `SearchDataError`, naming the file, on a schema it does not know), and
-  `search(index, query, { now, timeZone, selectedSeason })` returns the slate. `SEARCH_API` is the
-  API version (2 since #165): the page compares it with the version it expects and shows a
-  coverage note rather than call a changed API.
+  `search(index, query, { now, timeZone, selectedSeason, today })` returns the slate. `today`
+  ('YYYY-MM-DD', #168) is required: the page passes its own `todayKey()`, so no search makes an `Intl`
+  formatter. `SEARCH_API` is the API version (3 since #168): the page compares it with the version it
+  expects and shows a coverage note rather than call a changed API.
+  - `startGames(index, gamesDoc, n)` (#168) adds one season's games file as a generator of at most `n`
+    games per step; its last step installs the season, so a search never sees half of one. A schema it
+    does not know throws `SearchDataError` from the first `next()`. Game rows are built when read:
+    `matchID`, `date`, `time`, `home` and `away` (as that event spells them, with a season tab when the
+    directory lists the team), `score`, `pk`, `winner`, `competition`, `field` (with its label and city),
+    `dest`, `href` and `matched` (the side the query's names matched).
+  - `search(index, query, ctx, { games: 'later' })` (#167) leaves the Games section for a task of its own
+    when it comes last and can change nothing before it (rules 1 and 5, with Teams or Events results, one
+    side, no field or date): the slate has `gamesPending`, and `completeGames(index, slate, ctx)` returns
+    the slate `search` gives. Either way a name reading's games come from the Teams search already made
+    (that reading's own squads, the complete list), never from a second team search;
+    `tests/search-games.test.mjs` proves both equal, rows in full, on 2,068 queries.
   - `startIndex({ core, places }, n)` is the same build as a generator: each `next()` does at most
     `n` units of one stage (vocabulary, team documents, postings, counts and lookups, then events as
     the last step), yields a label, and returns the index. The page runs steps while the main thread
@@ -558,35 +574,74 @@ draws them since #165 (below).
   category: seasons, a bare year (two seasons, or a birth year in `core.birthYears`), birth years,
   age groups, conferences, states, census places and counties (D2), field complexes and dates
   (games only), kind words and name words. `vocab.mjs` holds the reviewed alias table: `la`
-  (D3) and `richmond` (D8), each with its evidence.
+  (D3) and `richmond` (D8), each with its evidence. Since #168 (Q4) every field name of two words or
+  more is a field phrase, a whole name and never a part, except a name that appears inside a club's,
+  team's, family's or alias's name (MF5: `fc dallas`, `oklahoma celtic`, `pda south`; listed as
+  `vocab.fieldPhrasesDropped`). Their words are games-only: they never join the known words. Teams and
+  Events read the text without them (`vocab.byFirstBase`), so a field name never takes a place, state,
+  county or conference away from them (`Dallas Texans Lewisville` is its 18 teams); the field reading is
+  added for Games only, which leads (rule 3) only when Teams and Events find nothing for every word. The
+  check runs as the team documents read each name (#167, review of #170 MF1), so no name is read twice.
 - `match.mjs` expands words (exact 1.0, prefix 0.7, typo 0.4; club initials never by typo; a
   known word never as a typo) and scores them with BM25F, one contribution per query word.
-- `teams.mjs` and `events.mjs` search squads and events (with their tier names); `slate.mjs`
-  orders the sections (the design's first-row-wins table, D2 across sections), promotes a best
-  match, shows partial matches only when nothing matches every word, and always reports games as
-  not indexed until PR 4b. `links.mjs` builds today's link formats.
+- `teams.mjs` and `events.mjs` search squads and events (with their tier names); `games.mjs` (#168)
+  builds each season's games index and searches the loaded games: a field (one row per name and zip, D6, D6a), a place's
+  fields (in the place, then Nearby, D2; Q7), the games of the Teams section's own squads, a
+  conference's, a kind word's or a day's games, and club against club (one pairing row per season and
+  age group, D5; with one squad a side, the meetings and a Load row for earlier seasons, Q2). Games
+  come upcoming first (soonest), then newest first. `slate.mjs` orders the sections (the design's
+  first-row-wins table, D2 across sections; Games after every section with results under rule 5,
+  MF3; a place's empty fields never lead, MF4), promotes a best match (never a game), shows partial
+  matches only when nothing matches every word, and reports per season whether its games are `ready`,
+  `loading`, `not-loaded`, `on-request`, `missing` or `failed`. `links.mjs` builds today's link
+  formats and the game links (`gameHref`, from the games file's `dest` code, with `&match=`).
 - **Serving:** they are static assets at `/search/*.mjs` (`wrangler.toml`'s `run_worker_first`
   does not cover them), served as `text/javascript`; `proxy_server.py` pins that type locally.
   Node tests import them directly.
 - **Cost:** `node --import ./tests/netguard/netguard.mjs --expose-gc tools/search_data_size.mjs --index`
   measures `buildIndex`. `tests/search-modules.test.mjs` types every judged query one character
-  at a time, pins the work each keystroke does, and fails on any keystroke over 20 ms or a cold
-  build over 200 ms (each the fastest of 3, so a busy CI runner cannot fail it).
+  at a time, pins the work each keystroke does (since #168 with the active season's games, and
+  `gamesVisited` weighed), and fails on any keystroke over 20 ms or a cold import and build over 200 ms
+  of main-thread CPU (`process.threadCpuUsage`, since #170: other processes on a busy runner add wall
+  time, never this thread's CPU; each the fastest of 3). `tests/search-games.test.mjs` pins the
+  Games category: the staged games build, field phrases, each reading, the order and the slate.
+- **Every game's link** (#168): `tests/search-game-links.test.mjs` builds the link of every game of
+  every committed games file and resolves it the way the page would, with the page's own functions
+  sliced from `index.html` on the archived hierarchies, standings and schedules: the router keeps
+  every value, and the view draws the game (a Matches view with the link's filter, a drawn bracket,
+  a Schedule or showcase Games view). 0 wrong destinations; a game with no link has a side still to
+  be decided.
 
 ### The search panel
 
 `public/index.html`, from `// ===== #165: the search panel` to the form chips' tooltip, draws the slate
 of the search modules (#165, #148; PR 4a of #149 phase 1): teams, events and conference tables in one
-panel, a popover under the header's box and a full-screen dialog on a phone. Today's panel
+panel, a popover under the header's box and a full-screen dialog on a phone; since #168 (PR 4b) games,
+fields and pairings too. Today's panel
 (`TEAM_SEARCH` and the code from `let usDb`) is still in the file, dormant, until PR 5 removes it.
 
 - **First focus** loads `/api/v1/search/core` and `/api/v1/search/places` (2 Worker requests, about
-  109 KB gzipped) and the 8 modules (static files; fetched ahead at the first idle moment, never on a
+  109 KB gzipped) and the 9 modules (static files; fetched ahead at the first idle moment, never on a
   data-saver connection or in `?live=1`, where search is off). The index is built in steps of 50
   units: before each step the page yields if the task so far plus the slowest step so far would pass
   40 ms (`scheduler.yield()`, else a `MessageChannel`; never `setTimeout(0)`). Nothing is requested
   per keystroke. Parsing `core.json` is the one task the page cannot split.
-- **The version check:** the page expects `SEARCH_API` 2. Any other version, or a data schema the
+- **The painter** (#167): a keystroke draws the status, the best match and the first cells in slate order
+  (at least 16, always the `enter`'s cell) in its own task; after the next frame has painted them
+  (`requestAnimationFrame`, then a task) the rest is appended, never re-rendered; then a deferred Games
+  section is searched in a task of its own and appended. Groups are built only when drawn. The settled
+  panel is byte for byte the one-go draw. While parts are pending the grid is `aria-busy`; the live region
+  speaks once, when it has settled; a key, click, hover rest or action-bar click first flushes what is
+  pending. For one frame a visitor may see the counts before the Games section (the owner's OK). Once the
+  active season's games are in, a warm-up runs a few searches and three detached draws, a task each, with
+  no request and the panel untouched; it stops as soon as the visitor types.
+- **Games** (#168, Q5b b): right after "ready", exactly 1 request, `/api/v1/search/games/<active season>`
+  (about 69 KB gzipped), read with `res.json()` and built in steps of 150 games under the same 40 ms rule.
+  A season a query names (an explicit season or a bare year) is fetched once the box has been still for
+  500 ms; one squad a side's earlier meetings and a field's earlier games only when their Load cell is
+  pressed (at most 6 seasons, 2 at a time). Each season once per visit; a closed season's file is cached
+  for a day (#82). A 404 says there is no games file; any other failure offers Try again (#92).
+- **The version check:** the page expects `SEARCH_API` 3. Any other version, or a data schema the
   modules do not know, shows "Search was updated while this page was open" with a Reload button and
   never searches.
 - **The grid:** the combobox opens a `role="grid"`; rows hold gridcells, the best match is a labelled
@@ -597,7 +652,18 @@ panel, a popover under the header's box and a full-screen dialog on a phone. Tod
   `tests/search-panel.test.mjs`: grouping by club or reviewed family with one line per team name; live
   teams as chips and ended ones folded; #107 may-continue teams folded into their successor; the slate's
   `enter` always a visible cell; Nearby, partial and typo labels from the rows' structured fields
-  (never from `why`); chip links from `row.hrefs`; the Games coverage line.
+  (never from `why`); chip links from `row.hrefs`; the empty texts. G1 to G12 (#168) do the same for
+  the Games section: game rows (date, teams, score or state, competition, field; "Upcoming" and
+  "Recent results", 3 each, then "Show all"), field rows and pairing rows that open in place, the Load
+  and Try again cells, the coverage lines, the action bar's "Open in <view>" and each side's season tab
+  (Shift+Enter the matched side's), and the counts in the status line and the live region. `today` is the
+  page's own `todayKey()`.
+- **`match=`** (#168): a game's link adds `&match=<matchID>`. The view that lists the game (a conference
+  Matches view, a national bracket or Schedule view, a showcase's Games view) scrolls only the content
+  pane to it, opens a consolation bracket that holds it, marks it until the next click or key, focuses
+  it and announces it once. It lives only as long as the load that carried it (a newer load, an error, a
+  click or a key drops it); `pushHash` and `saveState` never write it. A game the link's filter hides
+  switches the filter once; a game no longer listed gets a note. `tests/match-param.test.mjs` pins it.
 - **In a browser:** `tests/e2e/search-panel.e2e.mjs` drives Chromium against `python proxy_server.py
   --offline` on a free port. Every request that is not to that port is aborted and counted, so the
   run makes no request off the machine (club logos and fonts included). It is not in CI (it needs

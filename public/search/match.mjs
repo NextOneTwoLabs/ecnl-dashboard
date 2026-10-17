@@ -36,7 +36,8 @@ export const NOISE = new Set(['ecnl', 'girls', 'girl', 'team', 'teams', 'the', '
 export const AGE_WORD = /^(g?u\d{1,2}|g?\d{2}|g?(19|20)\d{2}|\d{2}g|u\d{2}rl|\d{4})$/;
 // Spellings that mean the same, both ways ("saint louis" finds "St Louis").
 export const NAME_ALIAS = { mount: 'mt', mt: 'mount', saint: 'st', st: 'saint' };
-export const nameWords = s => words(s).filter(w => !NOISE.has(w) && !AGE_WORD.test(w));
+export const nameWordsOf = ws => ws.filter(w => !NOISE.has(w) && !AGE_WORD.test(w));   // #167: from words() already made
+export const nameWords = s => nameWordsOf(words(s));
 // A word plus its NAME_ALIAS twin.
 export const withAliases = ws => [...new Set(ws.flatMap(w => (NAME_ALIAS[w] ? [w, NAME_ALIAS[w]] : [w])))];
 // "United Futbol Academy" -> "ufa": clubs are often called by their initials.

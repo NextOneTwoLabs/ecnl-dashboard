@@ -35,6 +35,7 @@ const CODE = [
   block('    async function loadTeamHistory('),             // Overview, the team page's default (#114)
   // #135 P1a: the landing page and the Teams index, which switchTab calls.
   block('    // ========== LANDING (#135 P1a)', 'async function renderTeamsIndex('),
+  html.slice(html.indexOf('    // ========== #168: match='), html.indexOf('    // Any click or key is the viewer')),   // #168: match= (the loads bind and focus it)
 ].join('\n');
 
 const NOINDEX = { on: false };   // no team index (?live=1, a 404): showcases are found by scanning

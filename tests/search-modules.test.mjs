@@ -13,7 +13,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { performance } from 'node:perf_hooks';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { readJSON, readLF, HERE, ROOT, FIXTURES, indexOf, destinationProblem, loadFixtures } from './search/judged.mjs';
+import { readJSON, readLF, HERE, ROOT, FIXTURES, indexOf, destinationProblem, loadFixtures, loadGames, todayOf } from './search/judged.mjs';
 import { CORE_SCHEMA as FORMAT_CORE, PLACES_SCHEMA as FORMAT_PLACES } from './search/search-data-format.mjs';
 
 const MODULES = new URL('public/search/', ROOT);
@@ -27,9 +27,11 @@ const { ALIASES } = await import(new URL('vocab.mjs', MODULES));
 const FX = new URL('search/', FIXTURES);
 const coreText = readLF(new URL('core.json', FX)), placesText = readLF(new URL('places.json', FX));
 const fresh = () => ({ core: JSON.parse(coreText), places: JSON.parse(placesText) });
-const index = S.buildIndex(fresh());
+// #168: as on the page, the active season's games are installed once the index is ready
+const withGames = (ix, seasons = [ix.vocab.active]) => { for (const s of seasons) { const g = S.startGames(ix, loadGames(s), Infinity); while (!g.next().done); } return ix; };
+const index = withGames(S.buildIndex(fresh()));
 const doc = readJSON(new URL('queries.json', HERE));
-const CTX = { now: Date.parse(doc.context.now), timeZone: doc.context.timeZone, selectedSeason: doc.context.selectedSeason };
+const CTX = { now: Date.parse(doc.context.now), timeZone: doc.context.timeZone, selectedSeason: doc.context.selectedSeason, today: todayOf(Date.parse(doc.context.now), doc.context.timeZone) };
 const run = (q, idx = index, ctx = CTX, opts) => S.search(idx, q, ctx, opts);
 const rows = (slate, name) => (slate.sections.find(s => s.name === name) || { rows: [] }).rows;
 const clubsOf = (slate, name = 'teams') => rows(slate, name).map(r => r.clubID);
@@ -60,9 +62,9 @@ test('modules: every file is an .mjs module, and every relative import resolves 
   for (const f of files) for (const m of readLF(new URL(f, MODULES)).matchAll(/\bfrom\s+'\.\/([a-z]+\.mjs)'/g)) assert.ok(files.includes(m[1]), `${f} imports ${m[1]}`);
 });
 
-test('MF5, #165: search.mjs exports SEARCH_API 2 and exactly these names', () => {
-  assert.equal(S.SEARCH_API, 2, 'PR 4a adds startIndex, sortCompares and the row fields: the page expects 2');
-  assert.deepEqual(Object.keys(S).sort(), ['CORE_SCHEMA', 'PLACES_SCHEMA', 'SEARCH_API', 'SearchDataError', 'buildIndex', 'search', 'startIndex']);
+test('MF5, #165, #167, #168: search.mjs exports SEARCH_API 3 and exactly these names', () => {
+  assert.equal(S.SEARCH_API, 3, 'PR 4b adds games (startGames, the Games section, context.today): the page expects 3');
+  assert.deepEqual(Object.keys(S).sort(), ['CORE_SCHEMA', 'GAMES_SCHEMA', 'PLACES_SCHEMA', 'SEARCH_API', 'SearchDataError', 'buildIndex', 'completeGames', 'search', 'startGames', 'startIndex']);
 });
 
 test('schemas: an unknown core or places schema throws SearchDataError naming the file; constants agree', () => {
@@ -76,15 +78,19 @@ test('schemas: an unknown core or places schema throws SearchDataError naming th
   assert.deepEqual([S.CORE_SCHEMA, S.PLACES_SCHEMA], [FORMAT_CORE, FORMAT_PLACES]);
 });
 
-test('context: now, timeZone and selectedSeason are required (the clock comes in, never read)', () => {
-  assert.throws(() => S.search(index, 'mvla', { timeZone: 'UTC', selectedSeason: '2026-27' }), /context\.now/);
-  assert.throws(() => S.search(index, 'mvla', { now: 0, selectedSeason: '2026-27' }), /timeZone/);
+test('context: now, timeZone, selectedSeason and (#168 MF7) today are required (the clock comes in, never read)', () => {
+  assert.throws(() => S.search(index, 'mvla', { timeZone: 'UTC', selectedSeason: '2026-27', today: '2026-10-15' }), /context\.now/);
+  assert.throws(() => S.search(index, 'mvla', { now: 0, selectedSeason: '2026-27', today: '2026-10-15' }), /timeZone/);
+  assert.throws(() => S.search(index, 'mvla', { now: 0, timeZone: 'UTC', selectedSeason: '2026-27' }), /context\.today/);
+  assert.throws(() => S.search(index, 'mvla', { ...CTX, today: '10/15/2026' }), /context\.today/);
 });
 
-test('clock: "today" comes from context.now (showcase 2025-26: the nearer showcase first)', () => {
-  const first = iso => rows(run('showcase 2025-26', index, { ...CTX, now: Date.parse(iso) }), 'events')[0].eventID;
-  assert.equal(first('2025-12-31T20:00:00Z'), 4041, 'San Diego Fall (2025-10-11) is nearer on 31 December');
-  assert.equal(first('2026-03-01T20:00:00Z'), 4133, 'Phoenix Spring (2026-03-27) is nearer on 1 March');
+test('clock: "today" is context.today (showcase 2025-26: the nearer showcase first); no Intl formatter in the modules', () => {
+  const first = day => rows(run('showcase 2025-26', index, { ...CTX, today: day }), 'events')[0].eventID;
+  assert.equal(first('2025-12-31'), 4041, 'San Diego Fall (2025-10-11) is nearer on 31 December');
+  assert.equal(first('2026-03-01'), 4133, 'Phoenix Spring (2026-03-27) is nearer on 1 March');
+  assert.equal(first('2026-03-01'), rows(run('showcase 2025-26', index, { ...CTX, now: 0, today: '2026-03-01' }), 'events')[0].eventID, 'now is not read for today');
+  for (const f of files) assert.ok(!/\bIntl\b/.test(readLF(new URL(f, MODULES)).replace(/\/\/.*$/gm, '')), `${f} makes no Intl formatter (MF7)`);
 });
 
 // ---------- the reader ----------
@@ -134,7 +140,7 @@ test('reader: vs, v and @ split two sides; a season on one side applies to both 
   for (const q of ['MVLA vs Mustang', 'MVLA v Mustang', 'Mustang @ MVLA']) assert.equal(R(q).vs, true, q);
   const s = R('Slammers vs Blues 2023-24').sides;
   assert.deepEqual(s.map(x => x.tokens.seasons), [['2023-24'], ['2023-24']]);
-  assert.equal(run('MVLA vs Mustang').coverage[0].asked, true);
+  assert.equal(run('MVLA vs Mustang').gamesAsked, true);
 });
 
 test('reader: the cap of 4 readings per category is reported', () => {
@@ -204,7 +210,7 @@ test('#164 MF2: Redmond WA and Redmond Washington read as P03 (D2), never Washin
   for (const q of ['Redmond WA', 'Redmond Washington']) {
     const s = run(q);
     assert.equal(s.rule, 4, q);
-    assert.deepEqual(s.sections.map(x => x.name), ['events', 'teams'], q);
+    assert.deepEqual(s.sections.map(x => x.name), ['events', 'games', 'teams'], q);   // #168 MF4: fields in Redmond, no 2026-27 games: between
     assert.ok(rows(s, 'teams').every(r => r.nearby && r.current), q);
     assert.ok(!clubsOf(s).includes(112), q);
   }
@@ -217,7 +223,7 @@ test('#164 MF2: Phoenix AZ keeps D12; Chula Vista CA and Del Mar CA keep their p
   assert.equal(cv.rule, 4); assert.equal(rows(cv, 'teams')[0].clubID, 300);
   const dm = run('Del Mar CA');
   assert.equal(dm.rule, 4); assert.equal(rows(dm, 'teams')[0].clubID, 39);
-  assert.deepEqual(dm.sections.map(x => x.name), ['teams', 'events']);
+  assert.deepEqual(dm.sections.map(x => x.name), ['teams', 'events', 'games']);
 });
 test('#164 MF4: richmond keeps its name reading (always): an older name with Richmond is found', () => {
   const d = fresh(), t = d.core.teams;
@@ -328,15 +334,15 @@ test('MF3 (d), D13: the squad named Sting Black now outranks one named so only e
 // ---------- the slate ----------
 test('slate: the section-order rows (design table), first match wins', () => {
   const order = q => run(q).sections.map(s => s.name);
-  assert.deepEqual([run('U15 NorCal').rule, order('U15 NorCal')], [1, ['events', 'teams']]);
+  assert.deepEqual([run('U15 NorCal').rule, order('U15 NorCal')], [1, ['events', 'teams', 'games']]);
   assert.deepEqual([run('playoffs 2025-26').rule, order('playoffs 2025-26')], [2, ['events']]);
-  assert.deepEqual([run('MVLA 2011 vs Mustang 2011').rule, order('MVLA 2011 vs Mustang 2011')], [3, ['teams']]);
-  assert.deepEqual([run('San Diego').rule, order('San Diego')], [4, ['teams', 'events']]);
-  assert.deepEqual([run('Slammers').rule, order('Slammers')], [5, ['teams']]);
+  assert.deepEqual([run('MVLA 2011 vs Mustang 2011').rule, order('MVLA 2011 vs Mustang 2011')], [3, ['games', 'teams']]);
+  assert.deepEqual([run('San Diego').rule, order('San Diego')], [4, ['teams', 'events', 'games']]);
+  assert.deepEqual([run('Slammers').rule, order('Slammers')], [5, ['teams', 'games']]);
 });
 test('slate: D2 across sections: a section with results in the place itself first (Redmond)', () => {
   const s = run('Redmond');
-  assert.deepEqual(s.sections.map(x => x.name), ['events', 'teams']);
+  assert.deepEqual(s.sections.map(x => x.name), ['events', 'games', 'teams'], 'P03: Redmond\'s fields (no 2026-27 games) between the events in Redmond and the nearby teams (MF4)');
   assert.ok(rows(s, 'teams').every(r => r.nearby));
 });
 test('slate: partial rows only when nothing matches fully and every reading is indexed (D4)', () => {
@@ -347,8 +353,9 @@ test('slate: partial rows only when nothing matches fully and every reading is i
   assert.ok(!rows(w, 'events').some(r => r.eventID === 4041));
   assert.equal(w.best, null, 'a partial row is never the best match');
   const f = run('Surf Sports Park');
-  assert.deepEqual(f.sections, [], 'a games-only reading: no partial Surf teams');
-  assert.equal(f.empty.reason, 'games-not-indexed');
+  assert.deepEqual(f.sections.map(x => x.name), ['games'], 'a games-only reading: the field, and no partial Surf teams');
+  assert.equal(f.empty, null);
+  assert.ok(f.sections[0].rows.every(r => !r.partial));
 });
 test('MF4: the partial order is rarity, not luck: make cup rarer than surf and events lead', () => {
   const d = fresh(), t = d.core.teams;
@@ -359,10 +366,20 @@ test('MF4: the partial order is rarity, not luck: make cup rarer than surf and e
   assert.equal(s.sections[0].name, 'events');
   assert.equal(s.enter.eventID, 4251);
 });
-test('slate: games are always reported as not indexed, never as empty', () => {
-  for (const q of ['Slammers', 'zzzz', 'Surf Sports Park', 'MVLA vs Mustang']) assert.deepEqual(run(q).coverage.map(c => [c.category, c.state]), [['games', 'not-indexed']], q);
+test('slate (#168): coverage names each season a query needs and its state; an empty query is "no match" only when nothing is pending', () => {
+  const cov = (q, ix = index, ctx = CTX) => run(q, ix, ctx).coverage.map(c => [c.category, c.season, c.state]);
+  for (const q of ['Slammers', 'Surf Sports Park', 'MVLA vs Mustang']) assert.deepEqual(cov(q), [['games', '2026-27', 'ready']], q);
+  assert.deepEqual(cov('zzzz'), [['games', '2026-27', 'ready']]);
   assert.equal(run('zzzz').empty.reason, 'no-match');
   assert.equal(run('qwerty asdf').empty.reason, 'no-match');
+  // an explicit season not loaded yet: the page loads it by itself (not-loaded), then the states it passes
+  assert.deepEqual(cov('Slammers vs Blues 2023-24'), [['games', '2023-24', 'not-loaded']]);
+  for (const [k, st] of [['gamesLoading', 'loading'], ['gamesMissing', 'missing'], ['gamesFailed', 'failed']]) assert.deepEqual(cov('Slammers vs Blues 2023-24', index, { ...CTX, [k]: ['2023-24'] }), [['games', '2023-24', st]], k);
+  // a games-only query whose season is pending is never "no match"
+  const bare = withGames(S.buildIndex(fresh()), []);
+  assert.equal(run('Surf Sports Park', bare, { ...CTX, gamesLoading: ['2026-27'] }).sections[0].name, 'games', 'the field row comes from places.json');
+  assert.equal(run('10/17', bare, { ...CTX, gamesLoading: ['2026-27'] }).empty.reason, 'games-loading');
+  assert.equal(run('10/17', bare, CTX).empty.reason, 'games-loading', 'not loaded yet is pending too');
 });
 test('slate: a best match is an exact first row, never ahead of a section that also starts exactly', () => {
   assert.equal(run('San Diego Fall').best.eventID, 4041);
@@ -383,11 +400,17 @@ test('slate: every link of every row of the judged queries opens a real page', (
 // #165 refit: sortCompares (the comparator calls of the two sorts) joins rowsSorted, because a sort costs
 // comparisons, not rows (the worst keystroke, `so`, sorts 506 rows in 3,697 counted comparisons). Fitted on the
 // committed fixture, 15 repeats of every keystroke, trimmed mean, three fits averaged.
-const WEIGHTS = { base: 28000, termsVisited: 55, osaCells: 210, postingsVisited: 125, docsScored: 620, rowsSorted: 1150, sortCompares: 160 };
+// #168 refit: gamesVisited (every game a games search looks at) joins them at 300 ns, fitted the same way on the
+// time the other weights leave unexplained (305 ns; a fit of every weight at once gives 299). teamSearches is
+// counted, not weighed: a team search's own work is in docsScored and the rest.
+const WEIGHTS = { base: 28000, termsVisited: 55, osaCells: 210, postingsVisited: 125, docsScored: 620, rowsSorted: 1150, sortCompares: 160, gamesVisited: 300, teamSearches: 0 };
 const cost = s => WEIGHTS.base + Object.entries(s).reduce((n, [k, v]) => n + WEIGHTS[k] * v, 0);
 const CEILING_NS = 16e6 / 15;            // 16 ms on a 4x-throttled phone / 15 (cold-to-cold calibration, plan v2 MF6)
 // Recorded by this PR. A change to the work done changes these numbers: re-measure and explain.
-const RECORDED = { keystrokes: 807, max: 1620690, maxAt: 'so', p95: 412600 };
+// #168: was max 1,620,690 and p95 412,600; games add their own team search and the games it touches (so: 4,029,315).
+// #167 (MF3): a name reading's games come from the Teams search already made, never a second one: max 4,029,315 ->
+// 2,509,890, p95 807,305 -> 552,325 (the Games rows are unchanged: tests/search-games.test.mjs, teamsReuse: false).
+const RECORDED = { keystrokes: 807, max: 2509890, maxAt: 'so', p95: 552325 };
 // The worst keystroke may not grow past twice its recorded cost; the 95th percentile must stay under
 // the phone ceiling. (The worst, a two-letter prefix matching ~500 squads, is over that ceiling:
 // reported on #163, and measured on a throttled browser after merge, Q12.)
@@ -396,7 +419,7 @@ function replay(idx = index) {
   const out = [];
   for (const q of doc.queries) for (let i = 1; i <= q.q.length; i++) {
     const p = q.q.slice(0, i);
-    const stats = { termsVisited: 0, osaCells: 0, postingsVisited: 0, docsScored: 0, rowsSorted: 0, sortCompares: 0 };
+    const stats = { termsVisited: 0, osaCells: 0, postingsVisited: 0, docsScored: 0, rowsSorted: 0, sortCompares: 0, gamesVisited: 0, teamSearches: 0 };
     const t = performance.now();
     S.search(idx, p, CTX, { stats });
     out.push({ p, cost: cost(stats), ms: performance.now() - t, stats });
@@ -427,12 +450,17 @@ export function parseColdBuild(r) {
   }
   return ms;
 }
+// #167 (review of #170, MF1): the child times its main thread's CPU (process.threadCpuUsage), not the wall clock.
+// Other processes on a busy runner add wall time, never this thread's CPU; a real regression (an eager scan, a
+// quadratic sort, a second pass) adds both, so it is still caught. A child without the API fails, never skips.
 function coldBuildMs() {
-  const src = `const t = performance.now(); const S = await import(${JSON.stringify(SEARCH_URL.href)});
+  const src = `if (typeof process.threadCpuUsage !== 'function') throw new Error('process.threadCpuUsage is missing');
+    const c0 = process.threadCpuUsage(); const S = await import(${JSON.stringify(SEARCH_URL.href)});
     const { readFileSync } = await import('node:fs');
     const j = n => JSON.parse(readFileSync(new URL(n, ${JSON.stringify(FX.href)}), 'utf8'));
     S.buildIndex({ core: j('core.json'), places: j('places.json') });
-    process.stdout.write(${JSON.stringify(COLD_TAG)} + JSON.stringify({ ms: performance.now() - t }) + '\\n');`;
+    const c = process.threadCpuUsage(c0);
+    process.stdout.write(${JSON.stringify(COLD_TAG)} + JSON.stringify({ ms: (c.user + c.system) / 1000 }) + '\\n');`;
   return parseColdBuild(spawnSync(process.execPath, ['--import', './tests/netguard/netguard.mjs', '--input-type=module', '-e', src],
     { cwd: fileURLToPath(ROOT), encoding: 'utf8', env: process.env }));
 }
@@ -441,14 +469,15 @@ test('budget: the cold-build child is read by its tagged line, and a broken chil
   assert.throws(() => parseColdBuild({ status: 1, stdout: '', stderr: 'SyntaxError: boom' }), /exit 1[\s\S]*SyntaxError: boom/);
   assert.throws(() => parseColdBuild({ status: 0, stdout: '71.5netguard: 0 attempts\n', stderr: '' }), /no SEARCH_COLD_BUILD line/);
 });
-test('budget: wall clock backstop: no keystroke over 20 ms, no cold build over 200 ms', () => {
+test('budget: backstop: no keystroke over 20 ms (wall clock), no cold build over 200 ms of main-thread CPU', () => {
+  assert.equal(typeof process.threadCpuUsage, 'function', 'process.threadCpuUsage (Node 22) is required: the backstop never skips');
   replay();                                  // warm
   const runs = [replay(), replay(), replay()];
   const fastest = runs[0].map((x, i) => ({ p: x.p, ms: Math.min(...runs.map(r => r[i].ms)) }));
   const worst = fastest.reduce((m, x) => (x.ms > m.ms ? x : m));
   assert.ok(worst.ms < 20, `${worst.p}: ${worst.ms.toFixed(2)} ms (fastest of 3)`);
   const cold = Math.min(coldBuildMs(), coldBuildMs(), coldBuildMs());
-  assert.ok(cold < 200, `cold import and build ${cold.toFixed(1)} ms (fastest of 3 fresh processes)`);
+  assert.ok(cold < 200, `cold import and build ${cold.toFixed(1)} ms of main-thread CPU (fastest of 3 fresh processes)`);
   const s = index.stats;
   assert.ok(s.terms <= 2 * 518 && s.postings <= 2 * 11531, JSON.stringify(s));
 });
@@ -479,13 +508,13 @@ test('#165: startIndex drained at n = 1, 7, 50 and 150 gives the same slates as 
   for (const q of doc.queries) for (let i = 1; i <= q.q.length; i++) want.push([q.q.slice(0, i), slateText(run(q.q.slice(0, i)))]);
   assert.equal(want.length, RECORDED.keystrokes);
   for (const n of [1, 7, 50, 150]) {
-    const ix = drained(n).index;
+    const ix = withGames(drained(n).index);
     assert.deepEqual(ix.stats, index.stats, `n = ${n}`);
     for (const [p, w] of want) if (slateText(run(p, ix)) !== w) assert.fail(`n = ${n}: "${p}" differs`);
   }
 });
 test('#165: the staged build gives the same index structure as buildIndex (vocabulary, postings, counts, lookups, known)', () => {
-  const a = drained(50).index, b = index;
+  const a = withGames(drained(50).index), b = index;   // both with the games (and so the field names' phrases)
   assert.deepEqual([...a.known].sort(), [...b.known].sort());
   assert.deepEqual(a.vocab.phrases.map(p => [p.type, p.value, p.words.join(' ')]), b.vocab.phrases.map(p => [p.type, p.value, p.words.join(' ')]));
   for (const c of ['teams', 'events']) {
@@ -511,7 +540,10 @@ test('#165: each step does at most n units: the yields per stage follow n, and t
   assert.equal(drained(50).labels.at(-1), 'events', 'events are the last step: teams are never ready without them');
   assert.equal(drained(50).labels.filter(l => l === 'events').length, 1);
 });
-const STEPS_50 = 460, STEPS_150 = 158;   // yields before the last step, on the frozen fixture (the reviewer measured 460 and 158 too)
+// yields before the last step, on the frozen fixture: 460 and 158 before #168. The field names' phrases add
+// vocab:fields: 944 fields, then the 147 clubs, families and aliases no squad row names (every squad-row name is
+// checked as teamDocsG reads it, review of #170 MF1), then one last step: 482 and 166 (596 and 205 at 3c3ba1b3).
+const STEPS_50 = 482, STEPS_150 = 166;
 test('#165 (Reviewer point 2): an unknown schema throws SearchDataError from the first next(), not from startIndex()', () => {
   const a = fresh(); a.core.schema = 3;
   const g = S.startIndex(a);

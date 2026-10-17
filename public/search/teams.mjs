@@ -1,6 +1,6 @@
 // #163 (#149 phase 1, PR 3): the Teams category. One document per #107 squad, from core.json's
 // teams (the team directory) and places.json's club places. Pure.
-import { postingsG, drain, Postings, nameWords, withAliases, initials, capsWords, teamTitle, words, expand, filterScore, CLASS_RANK } from './match.mjs';
+import { postingsG, drain, Postings, nameWords, nameWordsOf, withAliases, initials, capsWords, teamTitle, words, expand, filterScore, CLASS_RANK } from './match.mjs';
 import { placeWords, ALIASES } from './vocab.mjs';
 import { teamHref, teamSeasonHref } from './links.mjs';
 
@@ -13,11 +13,14 @@ const NO_CLUB = 7;   // TGS's "No Club Selection": its name, initials and place 
 
 export function teamDocs(core, vocab) { return drain(teamDocsG(core, vocab, Infinity)); }
 // The team documents in steps of at most `n` squads (the postings, the counts and the lookups likewise).
-export function* teamDocsG(core, vocab, n) {
+export function* teamDocsG(core, vocab, n, onName = null) {
   const t = core.teams, S = t.seasons;
   // names repeat across seasons: read each distinct one once
   const memo = f => { const m = new Map(); return x => { let v = m.get(x); if (v === undefined) { v = f(x); m.set(x, v); } return v; }; };
-  const nw = memo(nameWords), caps = memo(capsWords), aliasWords = memo(x => withAliases(nameWords(x))), ini = memo(initials);
+  // #167 (review MF1): every distinct club and squad-row name is normalised here once, and handed, as its words,
+  // to the field names' check (vocab.mjs fieldNamesG), which so never normalises a name a second time
+  const nw = memo(nameWords), caps = memo(capsWords), ini = memo(initials);
+  const aliasWords = memo(x => { const w = words(x); if (onName) onName(x, w); return withAliases(nameWordsOf(w)); });
   yield 'team docs';
   const div = t.divs.map(([s, name, u, years]) => ({ season: S[s], name, u, years }));
   const docs = [];
@@ -46,6 +49,7 @@ export function* teamDocsG(core, vocab, n) {
       // sort keys, read once (a sort compares them many times)
       sortClub: lc(noClub ? titleText : clubName), sortTitle: lc(titleText), sortName: lc(latest.name), sortU: latest.u || 0,
       i, club, born: sq.b, rows, latest, key: `${rows[0].season}/${rows[0].teamID}`, current: latest.season === vocab.active,
+      x: (sq.x || []).map(([si, tid]) => ({ season: S[si], teamID: tid })),   // #168: alias ids at national events and showcases
       titleText, titleWords: nw(titleText), caps: [...capsSet],
       placeGeo: loc ? loc[0] : null, countyGeo: loc ? loc[1] : null, m: sq.m || [], mp: sq.mp || [],
       fields: [[...title], [...clubF], [...older], [...placeF]],
@@ -132,8 +136,9 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
   const reasons = new Set();
   const best = new Map();
   const currentOnly = side.placeOnly;
+  let hitsOf = [];   // #167 (MF3): each reading's own hits, before they are merged, for the Games section
   const run = (onlyCurrent) => {
-    best.clear();
+    best.clear(); hitsOf = [];
     side.teams.forEach((r, ri) => {
       if (r.unknownSeason && !(r.seasons && r.seasons.length)) { reasons.add('season-not-in-archive'); return; }
       if (r.u) {
@@ -200,6 +205,7 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
           whole: d.titleWords.length > 0 && d.titleWords.every(w => nameSet.has(w)), ws, ph, conf: r.conf, seasonTyped: !!r.seasons,
           partialKey: partial ? { matched, cls: bestCls, rarity } : null });
       }
+      hitsOf[ri] = hits;
       for (const h of hits) {
         const o = best.get(h.d.i);
         const fw = Math.max(h.filterWords, o ? o.filterWords : 0);
@@ -215,7 +221,11 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
   const out = [...best.values()];
   if (stats) stats.rowsSorted += out.length;
   out.sort(stats ? (a, b) => { stats.sortCompares++; return compare(a, b, currentOnly, partial); } : (a, b) => compare(a, b, currentOnly, partial));   // #165: comparisons are counted, not only rows
-  return { rows: placeMaybe(out).map(h => rowOf(h, partial)), reasons, ended };
+  const res = { rows: placeMaybe(out).map(h => rowOf(h, partial)), reasons, ended };
+  // #167 (MF3): reading ri's squads as a search of that reading alone finds them ({ cls, squadRows, aliasIDs,
+  // born }, what the Games section reads), so Games never searches teams a second time
+  if (!partial) Object.defineProperty(res, 'readingRows', { value: ri => (hitsOf[ri] || []).map(h => ({ cls: h.cls, squadRows: h.d.rows, aliasIDs: h.d.x, born: h.d.born })) });
+  return res;
 }
 
 // one exact expansion per word, kept (a place word read as a name word)
@@ -290,6 +300,10 @@ class TeamRow {
     if (partial) { this.partial = true; this.partialKey = h.partialKey; }
   }
   get teamRows() { return this.#h.d.rows.map(r => `${r.season}/${r.teamID}`); }
+  // #168: the squad's season rows ({ season, teamID, name, conf, div, u, years }) and its alias ids
+  // ({ season, teamID }), from which the Games section takes the squad's games
+  get squadRows() { return this.#h.d.rows; }
+  get aliasIDs() { return this.#h.d.x; }
   get overviewHref() { const l = this.#h.d.latest; return teamHref(l.season, l.teamID, l.name); }
   get seasonHref() { const a = this.#h.anchor; return teamSeasonHref(a.season, a.teamID, a.name); }
   get href() { return this.#h.seasonTyped ? this.seasonHref : this.overviewHref; }

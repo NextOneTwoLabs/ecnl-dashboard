@@ -170,6 +170,7 @@ const LOADER = [
   block('    async function showcaseIndex('),
   block('    function showcaseLoadStale('),
   block('    let showcaseLoad = null;', 'async function loadShowcaseFlight('),
+  'let pendingMatch = null;', html.slice(html.indexOf('    // ========== #168: match='), html.indexOf('    // Any click or key is the viewer')),   // #168: match= (the load binds and focuses it)
 ].join('\n');
 
 function showcasePage({ holdHierarchy = false, holdStandings = false } = {}) {

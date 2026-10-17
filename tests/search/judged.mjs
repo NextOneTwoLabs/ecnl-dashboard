@@ -357,20 +357,43 @@ export const modulesSha = () => sha(moduleFiles().map(n => `${n}\n${readLF(new U
 export function loadSearchData(dir = new URL('search/', FIXTURES)) {
   return { core: readJSON(new URL('core.json', dir)), places: readJSON(new URL('places.json', dir)) };
 }
-export const modulesContext = context => ({ now: Date.parse(context.now), timeZone: context.timeZone, selectedSeason: context.selectedSeason });
-// The modules as an adapter. Games are not indexed until PR 4b, so game, field, head-to-head and
-// pairing judgements stay `unsupported`; the partial and nearby labels are judged.
-export function modulesAdapter(context, { searchData = loadSearchData(), options = {} } = {}) {
+// A season's frozen games file (#168), read once per process.
+const GAMES_FILES = new Map();
+export function loadGames(season, dir = new URL('search/', FIXTURES)) {
+  const k = `${dir.href}|${season}`;
+  if (!GAMES_FILES.has(k)) GAMES_FILES.set(k, readJSON(new URL(`games-${season}.json`, dir)));
+  return GAMES_FILES.get(k);
+}
+// #168 build point 3: the modules need context.today; here it is derived from now and the time zone (the page
+// passes its own todayKey), so the TZ variants still prove that nothing reads the machine's zone.
+export const todayOf = (now, timeZone) => new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+export const modulesContext = context => ({ now: Date.parse(context.now), timeZone: context.timeZone, selectedSeason: context.selectedSeason, today: todayOf(Date.parse(context.now), context.timeZone) });
+// The modules as an adapter (#168: games, fields and pairings are judged; head to head stays `unsupported`
+// until PR 6). MF2: every query starts from the page's own state: the active season's games, plus the
+// seasons the query itself names (an explicit season or a bare year: `not-loaded`, which the page fetches by
+// itself), loaded and searched again as the page does. Seasons loaded only on request (`on-request`, the Load
+// cells) are never loaded here.
+export function modulesAdapter(context, { searchData = loadSearchData(), options = {}, gamesDir = new URL('search/', FIXTURES) } = {}) {
   const index = SEARCH.buildIndex(searchData);
   const ctx = modulesContext(context);
+  const built = new Map();   // season -> its games index, built once (on a scratch index) and shared
+  const games = s => {
+    if (!built.has(s)) { const tmp = SEARCH.buildIndex(searchData); const g = SEARCH.startGames(tmp, loadGames(s, gamesDir), Infinity); let r; while (!(r = g.next()).done); built.set(s, r.value); }
+    return built.get(s);
+  };
+  const prep = SEARCH.startGames(index, loadGames(index.vocab.active, gamesDir), Infinity); while (!prep.next().done);   // the index's one-time lookups
+  const reset = () => { index.games = new Map([[index.vocab.active, games(index.vocab.active)]]); };
   return {
     name: 'modules', index,
-    capabilities: { sections: ['teams', 'events'], kinds: ['team', 'club', 'conference', 'event'], labels: ['partial', 'nearby'] },
+    capabilities: { sections: ['teams', 'events', 'games'], kinds: ['team', 'club', 'conference', 'event', 'game', 'field', 'pairing'], labels: ['partial', 'nearby'] },
     run(q) {
-      const slate = SEARCH.search(index, q, ctx, options);
+      reset();
+      let slate = SEARCH.search(index, q, ctx, options);
+      const need = slate.coverage.filter(c => c.state === 'not-loaded').map(c => c.season);
+      if (need.length) { for (const s of need) index.games.set(s, games(s)); slate = SEARCH.search(index, q, ctx, options); }
       const sections = slate.sections.map(s => ({ name: s.name, rows: s.rows.map(modulesRow) }));
       const enter = slate.enter ? modulesRow(slate.enter) : null;
-      return { sections, enter, capReached: !!slate.capReached, slate };
+      return { sections, enter, capReached: !!slate.capReached, slate, loaded: need };
     },
   };
 }
@@ -380,6 +403,10 @@ export function modulesRow(r) {
   if (r && r.kind === 'team') return { section: 'teams', kind: 'team', teamRows: r.teamRows, clubID: r.clubID, born: r.born, current: !!r.current, hrefs: r.hrefs, ...labels };
   if (r && r.kind === 'conference') return { section: 'events', kind: 'conference', season: r.season, conf: r.conf, div: r.div, hrefs: r.hrefs, ...labels };
   if (r && r.kind === 'event') return { section: 'events', kind: 'event', season: r.season, eventID: r.eventID, hrefs: r.hrefs, ...labels };
+  if (r && r.kind === 'game') return { section: 'games', kind: 'game', matchID: r.matchID, season: r.season, hrefs: r.hrefs, ...labels };
+  if (r && r.kind === 'field') return { section: 'games', kind: 'field', field: { name: r.field.name, zip: r.field.zip, number: r.field.number }, hrefs: [], ...labels };
+  if (r && r.kind === 'pairing') return { section: 'games', kind: 'pairing', sides: r.sides, season: r.season, div: r.div, hrefs: [], ...labels };
+  if (r && r.kind === 'load') return { section: 'games', kind: 'load', hrefs: [], ...labels };
   throw new Error(`modules adapter: unknown row kind ${r && r.kind}`);
 }
 export function modulesBaselineOf(doc, adapter, fx, run = runAll(doc, adapter, fx)) {
@@ -565,17 +592,45 @@ export function destinationProblem(href, ix) {
     if (p.has('view') && p.get('view') !== 'season') return `unknown view ${p.get('view')}`;
     return null;
   }
-  if (tab === 'playoffs') return Object.keys(src.seasons[season].national || {}).includes(p.get('stage')) ? null : `no stage ${p.get('stage')}`;
-  if (tab === 'showcases') return eventOf(src, season, +p.get('event'))?.type === 'showcases' ? null : `no showcase ${p.get('event')}`;
+  if (tab === 'playoffs') {
+    if (!Object.keys(src.seasons[season].national || {}).includes(p.get('stage'))) return `no stage ${p.get('stage')}`;
+    return p.has('match') ? gameLinkProblem(p, season, src.seasons[season].national[p.get('stage')].eventId, 'tier') : null;
+  }
+  if (tab === 'showcases') {
+    if (eventOf(src, season, +p.get('event'))?.type !== 'showcases') return `no showcase ${p.get('event')}`;
+    return p.has('match') ? gameLinkProblem(p, season, +p.get('event'), 'flight') : null;
+  }
   if (!tab && p.has('conf')) {
     const e = src.seasons[season], conf = p.get('conf'), age = p.get('age');
     if (!(e.conferences || {})[conf]) return `no conference ${conf}`;
     if (!(e.ageGroups || {})[age]) return `no age group ${age}`;
     if (!ix.squads.some(sq => sq.rows.some(r => r.season === season && r.conf === conf && r.div === age))) return 'no table for that age group';
     if (p.has('view') && !['standings', 'schedule'].includes(p.get('view'))) return `unknown view ${p.get('view')}`;
-    return null;
+    if (p.has('team') && !ix.squads.some(sq => sq.rows.some(r => r.season === season && r.conf === conf && r.div === age && r.teamID === +p.get('team')))) return 'team not in that table';
+    if (p.has('sched') && !['upcoming', 'results', 'all'].includes(p.get('sched'))) return `unknown filter ${p.get('sched')}`;
+    return p.has('match') ? gameLinkProblem(p, season, e.conferences[conf].eventId, null) : null;
   }
   return 'unknown route';
+}
+// #168: a game link names its game (match=), the game is in that event and age group, in the tier or flight
+// the link names, with the selected team as one side; the Matches view needs view=schedule and a played
+// game sched=results (tests/search-game-links.test.mjs resolves every game against the real views).
+function gameLinkProblem(p, season, eventID, flightKey) {
+  let games;
+  try { games = loadGames(season); } catch { return `no games file for ${season}`; }
+  const id = +p.get('match');
+  if (!/^-?\d+$/.test(p.get('match'))) return `match= is not a game id: ${p.get('match')}`;
+  let prev = 0, row = null;
+  for (const r of games.games) { prev += r[0]; if (prev === id) { row = r; break; } }
+  if (!row) return `no game ${id} in ${season}`;
+  const [eid, , div] = games.flights[row[2]] || [];
+  if (eid !== eventID) return `game ${id} is not in event ${eventID}`;
+  if (div !== p.get('age')) return `game ${id} is in ${div}, not ${p.get('age')}`;
+  if (flightKey && +p.get(flightKey) !== row[2]) return `game ${id} is in flight ${row[2]}, not ${p.get(flightKey)}`;
+  if (p.get('view') !== 'schedule' && !(flightKey === 'tier' && !p.has('view'))) return 'a game opens a schedule view (or the bracket)';
+  if (p.has('team') && +p.get('team') !== row[3] && +p.get('team') !== row[4]) return `team ${p.get('team')} is not in game ${id}`;
+  if (!flightKey && (row[5] != null && row[6] != null) !== (p.get('sched') === 'results')) return 'the filter hides the game';
+  return null;
 }
 
 // ---------- the whole set ----------
