@@ -2321,6 +2321,16 @@
       .sxg-in .sx-row, .sxg-in.sx-cover { padding-left: 22px; }
     }
 
+    /* ===== #168: match=: the game a search link names, scrolled to and marked until the next click or key (Q6). No
+       animation, so nothing depends on prefers-reduced-motion. ===== */
+    .match-row.is-match { background: var(--accent-surface); box-shadow: inset 0 0 0 2px var(--accent); border-radius: 6px; }
+    .match-row.is-match .match-body::before { content: 'From search'; display: block; margin-bottom: 3px; font: 700 10px var(--font); letter-spacing: .04em; text-transform: uppercase; color: var(--accent-text); }
+    .bracket-match.is-match { background: var(--accent-surface); box-shadow: 0 0 0 2px var(--accent); }
+    .schedule-table tr.is-match td { background: var(--accent-surface); }
+    .schedule-table tr.is-match td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+    .is-match:focus { outline: none; }
+    .match-gone { margin: 0 0 12px; padding: 10px 12px; border-radius: var(--radius-sm, 6px); background: var(--bg-surface-alt); border: 1px solid var(--border); color: var(--text-primary); font-size: 13px; }
+
     /* ===== #135 P1a: the landing page and the Teams index ===== */
     .landing { flex: 1; overflow-y: auto; }
     .landing[hidden] { display: none; }
@@ -2571,6 +2581,7 @@
           <div id="formatNoteText"></div>
         </details>
       </div>
+      <div class="us-sr" id="matchNote" role="status" aria-live="polite"></div>
       <div class="standings-scroll" id="standingsScroll">
         <div class="standings-container" id="standingsContainer"></div>
       </div>
@@ -2740,6 +2751,7 @@
     let teamToken = 0;                // drops a team page load that was superseded
     let playoffToken = 0;             // #99: drops a Playoffs panel load (tab, season, stage) that was superseded
     let playoffFlightToken = 0;       // #99: drops a Playoffs competition load superseded by another view, age group or competition
+    let pendingMatch = null;          // #168: { id, kind: conf | playoff | showcase, token }: a match= link's game, for the load that carries it
     // Playoffs state
     let currentPlayoffStage = null;      // a key of the season's `national` map, e.g. "Playoffs & Finals"
     let currentPlayoffAgeGroup = null;
@@ -3150,6 +3162,71 @@
       } catch (e) { }
     }
 
+    // ========== #168: match= (a game from search, scrolled to and marked) ==========
+    // A game link from search adds &match=<matchID>. loadFromHash keeps it as pendingMatch for the load that
+    // carries it (a conference Matches view, a national bracket or Schedule view, a showcase's Games view) and
+    // only for that load (MF8): the load binds it to its token, a newer load of the same kind drops it (the first
+    // is superseded), an error drops it, and so does any click or key (the viewer's own navigation). pushHash and
+    // saveState never write it, so the address loses it once the view is drawn and it is never saved as the place.
+    // focusMatch, at the end of that load's render: opens a consolation bracket that holds the game, scrolls only
+    // the content pane (the game's day heading and the game in view, else the game a third of the way down), marks
+    // it until the next click or key (Q6; no animation), focuses it instead of the title and announces it once. A
+    // game the link's filter hides (a score landed since) switches the filter once; a game that is not there gets a
+    // note, for the load that carried it only, and never a wrong page.
+    function bindMatch(kind, token) {
+      if (!pendingMatch || pendingMatch.kind !== kind) return;
+      if (pendingMatch.token == null) pendingMatch.token = token;
+      else if (pendingMatch.token !== token) pendingMatch = null;   // a newer load of the same view: the first is superseded
+    }
+    function dropMatch(kind, token) { if (pendingMatch && pendingMatch.kind === kind && pendingMatch.token === token) pendingMatch = null; }
+    function focusMatch(kind, token, games) {
+      const pm = pendingMatch;
+      if (!pm || pm.kind !== kind || pm.token !== token) return null;
+      pendingMatch = null;
+      const container = document.getElementById('standingsContainer');
+      const find = () => container.querySelector(`[data-match="${pm.id}"]`);
+      let el = find();
+      const g = (games || []).find(x => x.matchID === pm.id) || null;
+      if (!el && g && kind === 'conf' && currentView === 'schedule') {   // the link's filter hides it: switch once
+        const want = isPlayed(g) ? 'results' : 'upcoming';
+        if (want !== scheduleFilter) { scheduleFilter = want; renderConferenceView(); el = find(); }
+      }
+      if (!el) {
+        container.insertAdjacentHTML('afterbegin', '<div class="match-gone" role="status">This game isn’t in this list any more. It may have moved since the search data was built.</div>');
+        return null;
+      }
+      const det = el.closest('details');
+      if (det && !det.open) det.open = true;
+      let head = null;
+      const day = el.closest('.match-day');
+      if (day) head = day.querySelector('.match-day-head');
+      else if (el.tagName === 'TR') { for (let r = el.previousElementSibling; r; r = r.previousElementSibling) if (r.classList.contains('schedule-date-row')) { head = r; break; } }
+      const sc = document.getElementById('standingsScroll');
+      if (sc) {
+        const top = sc.getBoundingClientRect().top, r = el.getBoundingClientRect(), h = head ? head.getBoundingClientRect() : r;
+        const dTop = h.top - top, bot = r.bottom - top;
+        sc.scrollTop += head && bot - dTop + 8 <= sc.clientHeight ? dTop - 8 : r.top - top - Math.round(sc.clientHeight / 3);
+      }
+      const wide = el.closest('.bracket');
+      if (wide && wide.scrollWidth > wide.clientWidth) {   // a bracket scrolls sideways: the card in the middle
+        const b = wide.getBoundingClientRect(), r = el.getBoundingClientRect();
+        wide.scrollLeft += r.left - b.left - Math.round((wide.clientWidth - r.width) / 2);
+      }
+      el.classList.add('is-match');
+      el.setAttribute('tabindex', '-1');
+      el.focus({ preventScroll: true });
+      if (g) {
+        const where = [g.complex, g.venue].filter(Boolean).join(' ');
+        document.getElementById('matchNote').textContent = `From search: ${displayName(g.homeTeam, g.homeTeamClub)} against ${displayName(g.awayTeam, g.awayTeamClub)}, ${formatMatchDate(gameDateKey(g))}${where ? `, ${where}` : ''}.`;
+      }
+      return el;
+    }
+    // Any click or key is the viewer's own: a match still waiting for its load is dropped, and the mark goes (Q6).
+    ['pointerdown', 'keydown'].forEach(t => document.addEventListener(t, () => {
+      pendingMatch = null;
+      document.querySelectorAll('.is-match').forEach(x => x.classList.remove('is-match'));
+    }, true));
+
     // ========== URL HASH ==========
     function pushHash() {
       if (landingOpen) return;   // #135 P1a: the landing page is the empty hash
@@ -3179,6 +3256,8 @@
     }
 
     function loadFromHash() {
+      pendingMatch = null;   // #168 MF8: set (or cleared) by every call, only for the views that list games
+      const matchOf = (q, kind) => (/^-?\d+$/.test(q.get('match') || '') ? { id: Number(q.get('match')), kind, token: null } : null);
       const hash = location.hash.slice(1);
       if (!hash) return false;
       const p = new URLSearchParams(hash);
@@ -3210,6 +3289,7 @@
         currentShowcase = Number(p.get('event')) || null;            // validated in loadShowcasesPanel
         currentShowcaseAge = p.get('age') || null;                   // validated in loadShowcaseFlight
         currentShowcaseFlight = Number(p.get('flight')) || null;
+        pendingMatch = matchOf(p, 'showcase');
         return true;
       }
       if (p.get('tab') === 'playoffs') {
@@ -3219,6 +3299,7 @@
         currentPlayoffStage = p.get('stage') || null;                  // validated in buildStageTabs
         currentPlayoffAgeGroup = p.get('age') || null;                 // validated in loadPlayoffsPanel
         currentPlayoffTier = Number(p.get('tier')) || null;
+        pendingMatch = matchOf(p, 'playoff');
         return true;
       }
       currentTab = 'conferences';
@@ -3226,7 +3307,8 @@
       if (p.get('conf') && SEASONS[currentSeason].conferences[p.get('conf')]) { currentConference = p.get('conf'); changed = true; }
       if (p.get('team')) { selectedTeamID = Number(p.get('team')) || null; changed = true; } // validated once the tables load
       if (['upcoming', 'results', 'all'].includes(p.get('sched'))) { scheduleFilter = p.get('sched'); changed = true; }
-      if (!changed) return false;   // an unknown-only hash such as #foo stays a no-op
+      if (!changed) return false;   // an unknown-only hash such as #foo (or #match=5) stays a no-op
+      pendingMatch = matchOf(p, 'conf');
       teamsIndex = !p.has('age') && !p.has('conf') && !p.has('team');   // #135 P1a: #season=X alone is the Teams index
       // A link describes the whole view: what it omits is the default, not what
       // this browser showed last (same-document navigation reuses live state).
@@ -3247,7 +3329,7 @@
       syncSeasonUI();
       if (currentTab === 'playoffs' || currentTab === 'favorites' || currentTab === 'showcases') switchTab(currentTab);
       else { switchTab('conferences', { silent: true }); rebuildAll(); }
-      if (handOff) focusContentTitle();
+      if (handOff && !pendingMatch) focusContentTitle();   // #168: a match= link focuses its game, once
     });
 
     // ========== THEME ==========
@@ -3883,7 +3965,7 @@
           ? `<div class="bracket-meta">Decided on penalties (score not published)</div>` : '';
       const when = [g.gamenumber ? `GM#${g.gamenumber}` : '', formatShortDate(g.gameDate), g.gameTimeText, g.complex]
         .filter(Boolean).join(' · ');
-      return `<div class="bracket-match" data-gm="${g.gamenumber || ''}">
+      return `<div class="bracket-match" data-gm="${g.gamenumber || ''}" data-match="${esc(g.matchID)}">
         ${team(g.homeTeam, g.homeClubLogo, hs, e.winner === 'home')}
         ${team(g.awayTeam, g.awayClubLogo, as, e.winner === 'away')}
         ${pk}<div class="bracket-meta" title="${esc(when)}">${esc(when)}</div></div>`;
@@ -3970,6 +4052,7 @@
       if (!evt) return;
       const nav = playoffToken, token = ++playoffFlightToken;
       const stale = () => nav !== playoffToken || token !== playoffFlightToken;
+      bindMatch('playoff', token);
 
       const ageLabel = currentPlayoffAgeGroup ? getAgeLabel(currentPlayoffAgeGroup) : '';
       const container = document.getElementById('standingsContainer');
@@ -4117,8 +4200,10 @@
             }
           }
         }
+        focusMatch('playoff', token, games);
       } catch (err) {
         console.error(err);
+        dropMatch('playoff', token);
         if (stale()) return;
         container.innerHTML = `<div class="error-message">
           <strong>Couldn't load ${esc(currentPlayoffStage)}.</strong><br>
@@ -4237,6 +4322,7 @@
       if (!entry) return;
       const { name, evt } = entry;
       const token = rerender ? showcaseToken : ++showcaseToken;   // a re-render supersedes nothing
+      if (!rerender) bindMatch('showcase', token);
       const stale = flightId => token !== showcaseToken || showcaseLoadStale(evt.eventId, flightId);
       const container = document.getElementById('standingsContainer');
       const noteEl = document.getElementById('formatNote');
@@ -4336,7 +4422,9 @@
           panel.insertAdjacentHTML('beforeend', `<div class="sc-foot">Results only, not a ranking. Showcase games don't count toward conference standings. Listed in the order TGS publishes it.${showcaseLinkable ? ' Underlined teams play in an ECNL conference this season and link to their team page.' : ''}</div>`);
           container.appendChild(panel);
         }
+        focusMatch('showcase', token, games);
       } catch (err) {
+        dropMatch('showcase', token);
         if (stale()) return;
         console.error(err);
         container.innerHTML = `<div class="error-message"><strong>Couldn't load ${esc(name)}.</strong><br><small>${esc(retryText(err))}</small></div>`;
@@ -5759,7 +5847,7 @@
         const tag = rowTag ? rowTag(g) : '';
 
         html += `
-      <tr>
+      <tr data-match="${esc(g.matchID)}">
         <td class="sched-meta">${esc(g.gameTimeText || 'TBD')}${tag ? `<div class="sched-tag">${esc(tag)}</div>` : ''}</td>
         <td><div class="sched-team reversed ${homeWin ? 'winner' : ''}">
           ${logo(g.homeClubLogo)}<span class="team-name" title="${esc(g.homeTeam)}">${esc(g.homeTeam)}</span>
@@ -5837,6 +5925,7 @@
       const container = document.getElementById('standingsContainer');
       container.innerHTML = `<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading ${currentView === 'schedule' ? 'matches' : 'standings'}…</div></div>`;
       const token = ++loadToken;
+      bindMatch('conf', token);
       currentFlightData = [];
       currentConfMeta = null;
 
@@ -5881,8 +5970,10 @@
           if (token !== loadToken) return;
         }
         renderConferenceView();
+        focusMatch('conf', token, currentFlightData.flatMap(fd => fd.games || []));
       } catch (err) {
         console.error(err);
+        dropMatch('conf', token);
         if (token !== loadToken) return;
         container.innerHTML = `<div class="error-message">
       <strong>Couldn't load ${currentConference}.</strong><br>
@@ -6076,7 +6167,7 @@
       const teams = played
         ? `${team(home, g.homeTeam, g.hometeamID, homeWin)}<span class="match-score">${g.hometeamscore}–${g.awayteamscore}</span>${team(away, g.awayTeam, g.awayteamID, awayWin)}${pk}`
         : `${team(home, g.homeTeam, g.hometeamID)}<span class="match-vs">vs</span>${team(away, g.awayTeam, g.awayteamID)}`;
-      return `<div class="match-row${sel ? ' is-selected' : ''}" data-home="${esc(g.hometeamID)}" data-away="${esc(g.awayteamID)}">
+      return `<div class="match-row${sel ? ' is-selected' : ''}" data-home="${esc(g.hometeamID)}" data-away="${esc(g.awayteamID)}" data-match="${esc(g.matchID)}">
         <div class="match-time">${esc(g.gameTimeText || 'TBD')}${tag ? `<div class="sched-tag">${esc(tag)}</div>` : ''}</div>
         <div class="match-body">
           <div class="match-teams">${teams}${pending}${status}</div>
@@ -8307,7 +8398,10 @@
       if (sxInput) sxInput.blur();
       closeSidebarIfMobile();
       if (location.hash === target) window.dispatchEvent(new HashChangeEvent('hashchange'));
-      else location.hash = target;
+      else if (/&match=-?\d+$/.test(target) && target.replace(/&match=-?\d+$/, '') === location.hash) {   // #168 nit 7: only match= differs
+        history.replaceState(null, '', target);
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
+      } else location.hash = target;
     }
     function sxActivate(i, { season = false } = {}) {
       const c = sxView && sxView.cells[i];

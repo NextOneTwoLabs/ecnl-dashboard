@@ -81,13 +81,14 @@ function page({ sheet = false, live = false, mod = S, data = fresh, fetchJSON, s
     return n;
   };
   const location = { hash: '' };
-  const hashEvents = [];
+  const hashEvents = [], replaced = [];
+  const history = { replaceState: (st, t, url) => { replaced.push(url); location.hash = url; } };   // #168 nit 7
   const head = { appendChild: n => appended.push(n) };
   const stubs = {
     document: { getElementById, addEventListener() {}, createElement: tag => ({ tag }), head, querySelector: () => null },
     window: { location, innerWidth: sheet ? 390 : 1400, innerHeight: 900, dispatchEvent: e => hashEvents.push(e), addEventListener: (k, f) => listeners.push([k, f]), open: (...a) => opened.push(a) },
     navigator: { connection: saveData ? { saveData: true } : undefined },
-    location, HashChangeEvent: class { constructor(t) { this.type = t; } },
+    location, history, HashChangeEvent: class { constructor(t) { this.type = t; } },
     esc, isPhone: () => sheet, LIVE: live, NO_CLUB: 7, currentSeason: season, sessionBackAt: 0,
     teamSeasonTabLabel: seasonLabel, closeSidebarIfMobile() { api.sidebarClosed = (api.sidebarClosed || 0) + 1; },
     retryText: e => (e && e.status === 429 ? 'Too many requests.' : 'Please try again shortly.'),
@@ -119,7 +120,7 @@ function page({ sheet = false, live = false, mod = S, data = fresh, fetchJSON, s
   const cells = () => api.state().sxView ? api.state().sxView.cells : [];
   const activeCell = () => cells()[api.state().sxActive];
   const tree = () => parse(list());
-  return Object.assign(api, { el, input, key, open, run, list, click, cells, activeCell, tree, location, hashEvents, opened, appended, fetched, listeners, stubs, gamesIdle,
+  return Object.assign(api, { el, input, key, open, run, list, click, cells, activeCell, tree, location, hashEvents, replaced, opened, appended, fetched, listeners, stubs, gamesIdle,
     status: () => el('sxStatus').innerHTML, lead: () => el('sxLead').innerHTML, live: () => el('usearchLive').textContent, bar: () => ({
       hidden: el('usearchActions').hidden, text: el('usearchActive').textContent, cls: el('usearchActive').className, open: el('usearchOpen'), hist: el('usearchHist'), prev: el('usearchPrev') }),
     keysLine: () => el('sxKeys').innerHTML, pop: () => el('usearchPop'), nav: () => api.state().sxView && api.state().sxView.nav });
@@ -1151,4 +1152,21 @@ test('MF1: H04 leads with Games, its Load row and no active cell; Down makes the
   q.sxActivate(t); await q.gamesIdle(); await wait(0);
   assert.equal(q.activeCell().game.season, '2024-25');
   assert.ok(!q.cells().some(c => c.kind === 'retry' || c.kind === 'load'));
+});
+
+test('nit 7: a game link to the view already shown, differing only in match=, replaces the address (no second history entry) and fires the route', async () => {
+  const p = page(); await p.run('MVLA 2011');
+  const i = p.cells().findIndex(c => c.game);
+  for (let k = 0; k < 10 && p.state().sxActive !== i; k++) p.key('ArrowDown');
+  const href = p.activeCell().game.href;
+  p.location.hash = href.replace(/&match=-?\d+$/, '');   // the view on screen, as pushHash wrote it
+  p.key('Enter');
+  assert.deepEqual(p.replaced, [href], 'replaceState, not a new entry');
+  assert.equal(p.hashEvents.length, 1, 'the route fires itself');
+  const q = page(); await q.run('MVLA 2011');
+  for (let k = 0; k < 10 && !(q.activeCell() || {}).game; k++) q.key('ArrowDown');
+  const h2 = q.activeCell().game.href;
+  q.location.hash = '#season=2025-26';
+  q.key('Enter');
+  assert.deepEqual(q.replaced, []); assert.equal(q.location.hash, h2, 'another view: a plain hash change');
 });

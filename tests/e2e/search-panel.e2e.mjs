@@ -264,18 +264,49 @@ test('games, desktop: a field opens its next game; FC Dallas, Naperville and St 
   assert.equal(gamesApi(log).length - n1, loadedBefore ? 0 : 1, 'the field\'s Load cell: exactly 1 request');
   await typeQ('Slammers vs Blues');
   assert.match((await heads())[0], /^Games \d+ pairings · \d+ meetings$/);
-  // Enter on a game opens its view
+  // Enter on a game opens its view, scrolled to the game, marked and focused; the address drops match= (#168)
   await typeQ('Surf Sports Park');
   const href = await page.evaluate(() => sxView.cells[sxActive].href);
+  const hashBefore = await page.evaluate(() => location.hash);
   await page.keyboard.press('Enter');
   await page.waitForFunction(() => document.getElementById('usearchPop').hidden);
-  await page.waitForFunction(() => document.querySelectorAll('.match-row').length > 0, null, { timeout: 15000 });
-  assert.match(href, /^#season=2026-27&age=[^&]+&conf=Southwest&view=schedule&team=\d+/);
+  await page.waitForSelector('.match-row.is-match', { timeout: 15000 });
+  assert.match(href, /^#season=2026-27&age=[^&]+&conf=Southwest&view=schedule&team=\d+(&sched=results)?&match=\d+$/);
+  const id = href.match(/&match=(\d+)$/)[1];
+  const mark = await page.evaluate(id => {
+    const r = document.querySelector('.match-row.is-match'), sc = document.getElementById('standingsScroll'), a = r.getBoundingClientRect(), b = sc.getBoundingClientRect();
+    return { id: r.dataset.match, focused: document.activeElement === r, inView: a.top >= b.top && a.bottom <= b.bottom, hash: location.hash, note: document.getElementById('matchNote').textContent, label: getComputedStyle(r.querySelector('.match-body'), '::before').content };
+  }, id);
+  assert.equal(mark.id, id); assert.ok(mark.focused, 'focused'); assert.ok(mark.inView, 'in view');
+  assert.ok(!/match=/.test(mark.hash), `the address drops match=: ${mark.hash}`);
+  assert.match(mark.note, /^From search: .+ against .+, /);
+  assert.equal(mark.label, '"From search"');
+  // nit 8: the marked row in dark mode keeps 4.5:1
+  await page.evaluate(() => document.getElementById('themeToggle').click());
+  await page.waitForTimeout(400);
+  const ratio = await page.evaluate(() => {
+    const rgba = s => { const v = s.match(/\d+(\.\d+)?/g).map(Number); return [v[0], v[1], v[2], v.length > 3 ? v[3] : 1]; };
+    const lum = c => { const [r, g, b] = c.slice(0, 3).map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+    // the background a reader sees: each translucent layer blended over the ones behind it, down to an opaque one
+    const layers = []; for (let e = document.querySelector('.match-row.is-match'); e; e = e.parentElement) { const c = rgba(getComputedStyle(e).backgroundColor); if (c[3] > 0) layers.push(c); if (c[3] >= 1) break; }
+    const bg = layers.reverse().reduce((acc, c) => acc.map((v, i) => (i < 3 ? v * (1 - c[3]) + c[i] * c[3] : 1)), [255, 255, 255, 1]);
+    const row = document.querySelector('.match-row.is-match'), rgb = s => rgba(s);
+    const worst = [...row.querySelectorAll('.match-team, .match-where, .match-time')].map(e => { const a = lum(rgb(getComputedStyle(e).color)), b = lum(bg); return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05); });
+    return Math.min(...worst);
+  });
+  assert.ok(ratio >= 4.5, `dark mode contrast in the marked row: ${ratio.toFixed(2)}:1`);
+  await page.evaluate(() => document.getElementById('themeToggle').click());
+  // a key clears the mark (Q6)
+  await page.keyboard.press('Shift');
+  assert.equal(await page.locator('.is-match').count(), 0, 'the mark stays until the next key');
+  // Back once: the view before
+  await page.goBack();
+  await page.waitForFunction(h => location.hash === h, hashBefore, { timeout: 10000 });
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
   assert.deepEqual(errors, []);
   assert.deepEqual(log.answered, []);
   for (const h of new Set(log.aborted.map(u => new URL(u).host))) assert.ok(['fonts.googleapis.com', 'fonts.gstatic.com', 's3.amazonaws.com'].includes(h), `unexpected host ${h}`);
-  console.log(JSON.stringify({ games: { sameOrigin: log.same.length, gamesApi: gamesApi(log), abortedOffMachine: log.aborted.length } }));
+  console.log(JSON.stringify({ games: { sameOrigin: log.same.length, gamesApi: gamesApi(log), abortedOffMachine: log.aborted.length, markedRowDarkContrast: +ratio.toFixed(2) } }));
   await ctx.close();
 });
 

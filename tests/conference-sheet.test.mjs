@@ -55,6 +55,7 @@ const CODE = [
   block('    function glancePanelHtml('),
   between('    // ========== KEYBOARD NAV ==========', "    document.getElementById('ageGroupTabs')"),
   block('    function matchTeamKey('),
+  html.slice(html.indexOf('    // ========== #168: match='), html.indexOf('    // Any click or key is the viewer')),   // #168: match= (the loads bind and focus it)
 ].join('\n');
 const CHIP_TIPS = between('    (function chipTips() {', '    // ========== KEYBOARD NAV ==========');
 

@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/match-param.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -638,6 +638,12 @@ fields and pairings too. Today's panel
   and Try again cells, the coverage lines, the action bar's "Open in <view>" and each side's season tab
   (Shift+Enter the matched side's), and the counts in the status line and the live region. `today` is the
   page's own `todayKey()`.
+- **`match=`** (#168): a game's link adds `&match=<matchID>`. The view that lists the game (a conference
+  Matches view, a national bracket or Schedule view, a showcase's Games view) scrolls only the content
+  pane to it, opens a consolation bracket that holds it, marks it until the next click or key, focuses
+  it and announces it once. It lives only as long as the load that carried it (a newer load, an error, a
+  click or a key drops it); `pushHash` and `saveState` never write it. A game the link's filter hides
+  switches the filter once; a game no longer listed gets a note. `tests/match-param.test.mjs` pins it.
 - **In a browser:** `tests/e2e/search-panel.e2e.mjs` drives Chromium against `python proxy_server.py
   --offline` on a free port. Every request that is not to that port is aborted and counted, so the
   run makes no request off the machine (club logos and fonts included). It is not in CI (it needs

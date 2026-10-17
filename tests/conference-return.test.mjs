@@ -37,6 +37,7 @@ const CODE = [
   block('    async function loadTeamHistory('),             // Overview, the team page's default (#114)
   // #135 P1a: the landing page and the Teams index, which hashchange, switchTab and rebuildAll call.
   block('    // ========== LANDING (#135 P1a)', 'async function renderTeamsIndex('),
+  html.slice(html.indexOf('    // ========== #168: match='), html.indexOf('    // Any click or key is the viewer')),   // #168: match= (the loads bind and focus it)
 ].join('\n');
 
 // Three seasons; 2020-21 Mid-Atlantic never ran the GU18/U19 Composite that other conferences did.
