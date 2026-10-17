@@ -1,5 +1,5 @@
 {"schema":1
-,"build":"ad6363d8cabc8e75"
+,"build":"1a0c412d7ddd8689"
 ,"census":"1f646e5cb9cf65372af12bdc4cb63c5ee8643f13c123ce0ea35746fcdd9919f6"
 ,"vocab":{"fieldAliases":{"60 acres":"60 Acres Park","60 acres park":"60 Acres Park","great park":"Great Park","oc great park":"Great Park","orange county great park":"Great Park","orange county great park sports park":"Great Park","surf cup sports park":"Surf Sports Park","surf sports park":"Surf Sports Park"}}
 ,"counties":{
@@ -1341,7 +1341,7 @@
 ,"mercyhealth sportscore two@61111":["Mercyhealth Sportscore Two",["2022-23","2023-24","2024-25","2025-26","2026-27"],[205,206,209,218,231,233,234,235,"FIELD-TBA (9v9)","Field - TBA (11v11)","Field 219 Stadium","Field TBA (11v11)","Indoor Field 3"],"1745031","17201"]
 ,"mesa soccer complex@29651":["Mesa Soccer Complex",["2020-21","2021-22","2022-23","2023-24","2024-25","2025-26","2026-27"],[1,2,3,4,5,11,12,13,14,15,17,18,19],"4530985","45045"]
 ,"meyer park@77379":["Meyer Park",["2020-21"],[2,4,22,23,24,27,28],"4835000","48201"]
-,"miami dade college kendall campus@33176":["Miami Dade College Kendall Campus",["2025-26","2026-27"],[1,2],"1236100","12086"]
+,"miami dade college kendall campus@33176":["Miami Dade College Kendall Campus",["2025-26"],[1,2],"1236100","12086"]
 ,"miami valley christian@45244":["Miami Valley Christian",["2024-25"],[1],"3922674","39061"]
 ,"michigan stars sports complex@48095":["Michigan Stars Sports Complex",["2025-26","2026-27"],[1],null,"26099"]
 ,"midamerican energy company recplex@50266":["MidAmerican Energy Company RecPlex",["2021-22","2022-23"],[1,2,3,"Fieldhouse","Indoor"],"1983910","19049"]
