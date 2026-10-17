@@ -29,7 +29,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-04,10:00 AM,Group Play,Phoenix Rising FC ECNL G2011/12,5,1,LAFC So Cal ECNL G2011/12,PRFC Youth Soccer Facility,Field 1,On Time,1085514
 2026-10-04,10:30 AM,Group Play,LV Heat Surf ECNL G2011/12,0,2,SLAMMERS FC ECNL G2011/12,Heritage Park Sports Complex,Field 6,On Time,1085664
 2026-10-07,07:45 PM,Group Play,Arizona Arsenal ECNL G2011/12,2,2,Phoenix Rising FC ECNL G2011/12,Arizona Athletic Grounds,Field 9,On Time,1085352
-2026-10-17,09:00 AM,Group Play,Eagles SC ECNL G2011/12,,,Legends FC Del Mar ECNL G2011/12,Pleasant Valley Fields,Field 19,On Time,1085520
 2026-10-17,09:00 AM,Group Play,Legends FC (CA) ECNL G2011/12,,,Sporting California USA ECNL G2011/12,Silverlakes Complex,Field 6,On Time,1085526
 2026-10-17,12:45 PM,Group Play,Rebels SC ECNL G2011/12,,,Arizona Arsenal ECNL G2011/12,Monte Vista High School,Stadium,On Time,1085532
 2026-10-17,01:00 PM,Group Play,San Diego Surf ECNL G2011/12,,,So Cal Blues ECNL G2011/12,Surf Sports Park,Field 13,On Time,1085538
@@ -130,6 +129,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-05-15,TBD,Group Play,SLAMMERS FC ECNL G2011/12,,,Pateadores Soccer Club ECNL G2011/12,,,On Time,1086102
 2027-05-15,TBD,Group Play,So Cal Blues ECNL G2011/12,,,Slammers FC HB Koge ECNL G2011/12,,,On Time,1086108
 2027-05-16,TBD,Group Play,Utah Royals FC-AZ ECNL G2011/12,,,Legends FC (CA) ECNL G2011/12,,,On Time,1086114
+2027-05-16,02:45 PM,Group Play,Eagles SC ECNL G2011/12,,,Legends FC Del Mar ECNL G2011/12,Moorpark High School ,Stadium Field,On Time,1085520
 2027-05-22,TBD,Group Play,Legends FC Del Mar ECNL G2011/12,,,Slammers FC HB Koge ECNL G2011/12,,,On Time,1086120
 2027-05-22,TBD,Group Play,LV Heat Surf ECNL G2011/12,,,Arizona Arsenal ECNL G2011/12,,,On Time,1086126
 2027-05-22,TBD,Group Play,Pateadores Soccer Club ECNL G2011/12,,,San Diego Surf ECNL G2011/12,,,On Time,1086132

@@ -1,5 +1,5 @@
 {"schema":1
-,"build":"a33e41dd1c5eb96c"
+,"build":"ad6363d8cabc8e75"
 ,"census":"1f646e5cb9cf65372af12bdc4cb63c5ee8643f13c123ce0ea35746fcdd9919f6"
 ,"vocab":{"fieldAliases":{"60 acres":"60 Acres Park","60 acres park":"60 Acres Park","great park":"Great Park","oc great park":"Great Park","orange county great park":"Great Park","orange county great park sports park":"Great Park","surf cup sports park":"Surf Sports Park","surf sports park":"Surf Sports Park"}}
 ,"counties":{
@@ -1294,7 +1294,7 @@
 ,"liberty sports park@20774":["Liberty Sports Park",["2022-23","2023-24","2024-25","2025-26"],[1,2,3,4,5,6,7,8,9,10],"2410150","24033"]
 ,"lincoln school athletic complex faxon farm@02769":["Lincoln School Athletic Complex @ Faxon Farm",["2024-25","2025-26"],[1],null,"25005"]
 ,"lindbergh high school@98058":["Lindbergh High School",["2024-25","2025-26"],["Main Field"],"5323160","53033"]
-,"lindsay lyons@77396":["Lindsay Lyons",["2026-27"],[25],"4835000","48201"]
+,"lindsay lyons@77396":["Lindsay Lyons",["2026-27"],[25,26],"4835000","48201"]
 ,"lone peak high school@84003":["Lone Peak High School",["2025-26"],["Northeast Field","Stadium Field"],"4901310","49049"]
 ,"long beach city college liberal arts campus@90806":["Long Beach City College - Liberal Arts Campus",["2023-24","2025-26","2026-27"],[1,2],"0643000","06037"]
 ,"long beach state university@90840":["Long Beach State University",["2021-22","2022-23","2023-24","2024-25"],["George Allen Field","Training Field"],"0643000","06037"]
@@ -1370,7 +1370,7 @@
 ,"montgomery blair high school@20901":["Montgomery Blair High School",["2022-23","2023-24","2024-25"],[1],"2472450","24031"]
 ,"montgomery blair hs@20901":["Montgomery Blair HS",["2023-24"],["Stadium Field"],"2472450","24031"]
 ,"montour junction sports complex@15108":["Montour Junction Sports Complex",["2020-21","2021-22","2022-23","2023-24","2024-25","2025-26","2026-27"],[1,2,"Indoor"],"4211348","42003"]
-,"moorpark high school@93021":["Moorpark High School",["2023-24"],["Stadium"],"0649138","06111"]
+,"moorpark high school@93021":["Moorpark High School",["2023-24","2026-27"],["Stadium","Stadium Field"],"0649138","06111"]
 ,"moose athletic club@21061":["Moose Athletic Club",["2021-22"],[1,2],"2432650","24003"]
 ,"morgan hill outdoor sports center@95037":["Morgan Hill Outdoor Sports Center",["2020-21"],["Field 1 (Football)","Field 2 (Soccer)","Field B"],"0668000","06085"]
 ,"morningside farm@08873":["Morningside Farm",["2020-21","2021-22","2022-23","2023-24"],[3,11,12,13,14],"3467820","34035"]
