@@ -1,6 +1,6 @@
 // #163 (#149 phase 1, PR 3): the Teams category. One document per #107 squad, from core.json's
 // teams (the team directory) and places.json's club places. Pure.
-import { Postings, nameWords, withAliases, initials, capsWords, teamTitle, words, expand, filterScore, CLASS_RANK } from './match.mjs';
+import { postingsG, drain, Postings, nameWords, withAliases, initials, capsWords, teamTitle, words, expand, filterScore, CLASS_RANK } from './match.mjs';
 import { placeWords, ALIASES } from './vocab.mjs';
 import { teamHref, teamSeasonHref } from './links.mjs';
 
@@ -11,17 +11,22 @@ const NO_CLUB = 7;   // TGS's "No Club Selection": its name, initials and place 
 // Sorting compares lower-cased keys made once per document (plain code-unit order: the same in every
 // locale, and cheap).
 
-export function teamDocs(core, vocab) {
+export function teamDocs(core, vocab) { return drain(teamDocsG(core, vocab, Infinity)); }
+// The team documents in steps of at most `n` squads (the postings, the counts and the lookups likewise).
+export function* teamDocsG(core, vocab, n) {
   const t = core.teams, S = t.seasons;
   // names repeat across seasons: read each distinct one once
   const memo = f => { const m = new Map(); return x => { let v = m.get(x); if (v === undefined) { v = f(x); m.set(x, v); } return v; }; };
   const nw = memo(nameWords), caps = memo(capsWords), aliasWords = memo(x => withAliases(nameWords(x))), ini = memo(initials);
+  yield 'team docs';
   const div = t.divs.map(([s, name, u, years]) => ({ season: S[s], name, u, years }));
-  const docs = t.squads.map((sq, i) => {
+  const docs = [];
+  for (let i = 0; i < t.squads.length; i++) { const sq = t.squads[i]; if (i && i % n === 0) yield 'team docs'; docs.push((() => {
     const [id, clubName, , place, fam] = t.clubs[sq.c];
     const noClub = id === NO_CLUB;
     const at = noClub ? -1 : (place || '').lastIndexOf(', ');
-    const club = { id, name: clubName, city: at > 0 ? place.slice(0, at) : '', state: at > 0 ? place.slice(at + 2) : '', family: fam };
+    const famRow = fam != null && fam !== '' && t.families[fam] ? t.families[fam] : null;
+    const club = { familyName: famRow ? famRow[0] : null, familyMain: famRow ? famRow[1] : null, id, name: clubName, city: at > 0 ? place.slice(0, at) : '', state: at > 0 ? place.slice(at + 2) : '', family: fam };
     const rows = sq.s.map(([s, teamID, name, conf, d, rank, of]) => ({ season: S[s], teamID, name, conf: t.confs[conf], div: div[d].name, u: div[d].u, years: div[d].years, rank, of }));
     const latest = rows[rows.length - 1];
     const title = new Set(aliasWords(latest.name));
@@ -45,22 +50,22 @@ export function teamDocs(core, vocab) {
       placeGeo: loc ? loc[0] : null, countyGeo: loc ? loc[1] : null, m: sq.m || [], mp: sq.mp || [],
       fields: [[...title], [...clubF], [...older], [...placeF]],
     };
-  });
+  })()); }
   for (const d of docs) { d.maybe = d.m.map(i => docs[i]); d.maybePrev = d.mp.map(i => docs[i]); }
-  const post = new Postings(TEAM_FIELDS, docs);
+  const post = yield* postingsG(TEAM_FIELDS, docs, n);
   // documents passing each filter alone, for a filter's rarity (MF3)
-  const count = (key, f) => { const m = new Map(); for (const d of docs) for (const k of new Set(f(d))) m.set(k, (m.get(k) || 0) + 1); return m; };
+  const count = function* (key, f) { const m = new Map(); for (const d of docs) { if (d.i && d.i % n === 0) yield 'counts'; for (const k of new Set(f(d))) m.set(k, (m.get(k) || 0) + 1); } return m; };
   const counts = {
-    conf: count('conf', d => d.rows.map(r => r.conf)),
-    season: count('season', d => d.rows.map(r => r.season)),
-    u: count('u', d => d.rows.map(r => r.u)),
-    born: count('born', d => d.born),
+    conf: yield* count('conf', d => d.rows.map(r => r.conf)),
+    season: yield* count('season', d => d.rows.map(r => r.season)),
+    u: yield* count('u', d => d.rows.map(r => r.u)),
+    born: yield* count('born', d => d.born),
   };
   // lookups, so a place, state or conference reading starts from its candidates, not every squad
-  const by = f => { const m = new Map(); for (const d of docs) for (const k of new Set(f(d))) if (k != null && k !== '') { if (!m.has(k)) m.set(k, []); m.get(k).push(d.i); } return m; };
+  const by = function* (f) { const m = new Map(); for (const d of docs) { if (d.i && d.i % n === 0) yield 'lookups'; for (const k of new Set(f(d))) if (k != null && k !== '') { if (!m.has(k)) m.set(k, []); m.get(k).push(d.i); } } return m; };
   const lookups = {
-    place: by(d => [d.placeGeo]), county: by(d => [d.countyGeo]), state: by(d => [d.club.state]),
-    caps: by(d => d.caps), conf: by(d => d.rows.map(r => r.conf)),
+    place: yield* by(d => [d.placeGeo]), county: yield* by(d => [d.countyGeo]), state: yield* by(d => [d.club.state]),
+    caps: yield* by(d => d.caps), conf: yield* by(d => d.rows.map(r => r.conf)),
   };
   return { docs, post, counts, lookups, N: docs.length };
 }
@@ -209,7 +214,7 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
   if (currentOnly && !best.size) { run(false); ended = best.size > 0; }
   const out = [...best.values()];
   if (stats) stats.rowsSorted += out.length;
-  out.sort((a, b) => compare(a, b, currentOnly, partial));
+  out.sort(stats ? (a, b) => { stats.sortCompares++; return compare(a, b, currentOnly, partial); } : (a, b) => compare(a, b, currentOnly, partial));   // #165: comparisons are counted, not only rows
   return { rows: placeMaybe(out).map(h => rowOf(h, partial)), reasons, ended };
 }
 
@@ -290,6 +295,38 @@ class TeamRow {
   get href() { return this.#h.seasonTyped ? this.seasonHref : this.overviewHref; }
   get hrefs() { return [...new Set([this.href, this.overviewHref, this.seasonHref])]; }
   get why() { return explain(this.#h); }
+  // #165 (SEARCH_API 2): structured fields, so the page never parses `why`.
+  //   family {name, main}|null   the reviewed club family (#133), else null
+  //   line                       the team name this squad's line is drawn under
+  //   seasonTyped                the query named a season: the row opens that season's tab
+  //   continuesAs / mayFrom      #107 squad keys: who this squad may continue as / who may continue as it
+  //   place, last                the club's "City, ST" and the squad's last season
+  //   matched [{term, cls, field}]   what each query word matched (cls: exact | prefix | typo)
+  //   namedPlace                 the place's words when the place is in the team's name
+  //   nearbyOf                   the place's label when the row is only nearby it
+  //   was                        the earlier name that matched, when only an older name did (Reviewer point 6)
+  get family() { const c = this.#h.d.club; return c.familyName ? { name: c.familyName, main: c.familyMain } : null; }
+  get line() { return this.#h.d.titleText; }
+  get seasonTyped() { return !!this.#h.seasonTyped; }
+  get continuesAs() { return this.#h.d.maybe.map(x => x.key); }
+  get mayFrom() { return this.#h.d.maybePrev.map(x => x.key); }
+  get place() { const c = this.#h.d.club; return c.city ? `${c.city}, ${c.state}` : ''; }
+  get matched() { return this.#h.ws.filter(Boolean).map(w => ({ term: w.term.replace(/^#/, ''), cls: w.cls, field: w.field })); }
+  get namedPlace() { const p = this.#h.ph; return p && p.named && !p.p.initialism ? p.p.words : null; }
+  get nearbyOf() { const p = this.#h.ph; return p && !p.direct ? p.p.label : null; }
+  get last() { return this.#h.d.latest.season; }
+  // The latest earlier name that holds every word the query matched in an older name ("Sting Black", for the
+  // squad now called Sting Royal), or null: why a row is found when its own line says nothing of the query.
+  get was() {
+    const ow = this.#h.ws.filter(w => w && w.field === 'older name').map(w => w.term);
+    if (!ow.length) return null;
+    const d = this.#h.d;
+    for (let k = d.rows.length - 2; k >= 0; k--) {
+      const ws = withAliases(nameWords(d.rows[k].name));
+      if (ow.every(t => ws.includes(t))) return teamTitle(d.rows[k].name, d.club.name);
+    }
+    return null;
+  }
 }
 
 const rowOf = (h, partial) => new TeamRow(h, partial);

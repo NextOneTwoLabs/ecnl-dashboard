@@ -131,7 +131,7 @@ export function searchEvents(E, side, ctx, vocab, { partial = false, stats = nul
       const cls = ws.filter(Boolean).reduce((c, w) => worseClass(c, w.cls), 'exact');
       const bestCls = ws.filter(Boolean).reduce((c, w) => (CLASS_RANK[w.cls] < CLASS_RANK[c] ? w.cls : c), 'typo');
       const rarity = Math.min(...ws.filter(Boolean).map(w => E.post.df(w.term) / E.N));
-      const base = { d, score, cls, reading: ri, filterWords: r.filterWords, nearby: ph ? !ph.direct : false, why, partialKey: partial ? { matched, cls: bestCls, rarity } : null };
+      const base = { namedPlace: ph && ph.named ? ph.p.words : null, ws, nearbyOf: ph && !ph.direct ? ph.p.label : null, d, score, cls, reading: ri, filterWords: r.filterWords, nearby: ph ? !ph.direct : false, why, partialKey: partial ? { matched, cls: bestCls, rarity } : null };
       // a conference season with an age group: its tables in that age group; otherwise the event
       const divs = d.kind === 'c' && r.u ? d.ages.filter(a => d.ageU(a) === r.u) : [null];
       if (d.kind === 'c' && r.u && !divs.length) continue;
@@ -151,7 +151,8 @@ export function searchEvents(E, side, ctx, vocab, { partial = false, stats = nul
   for (const h of out) h.dist = distance(h.d, today);
   // Events order (design): direct before nearby; score; the selected season first; then the event
   // nearest today; within a conference season, age groups oldest first.
-  out.sort((a, b) => {
+  const compare = (a, b) => {
+    if (stats) stats.sortCompares++;   // #165: comparisons are counted, not only rows
     if (partial) {
       const p = a.partialKey, q = b.partialKey;
       if (p.matched !== q.matched) return q.matched - p.matched;
@@ -165,7 +166,8 @@ export function searchEvents(E, side, ctx, vocab, { partial = false, stats = nul
     if (a.dist !== b.dist) return a.dist - b.dist;
     if (a.d.id !== b.d.id) return cmpStr(a.d.name, b.d.name) || a.d.id - b.d.id;
     return (a.div ? a.d.ageU(b.div) - a.d.ageU(a.div) : 0) || cmpStr(a.div || '', b.div || '');
-  });
+  };
+  out.sort(compare);
   return { rows: out.map(h => rowOf(h, partial)), reasons };
 }
 
@@ -175,11 +177,12 @@ function rowOf(h, partial) {
   if (d.kind === 'c') {
     const age = div || d.ages[0];
     row = { section: 'events', kind: 'conference', season: d.season, conf: d.name, div: div || '', eventID: d.id, title: d.eventName, name: d.name,
-      hrefs: age ? [conferenceHref(d.season, age, d.name)] : [], ages: d.ages };
+      hrefs: div ? [conferenceHref(d.season, div, d.name)] : d.ages.map(a => conferenceHref(d.season, a, d.name)), ages: d.ages };   // #165: every chip's link (nit 1)
   } else if (d.kind === 'n') row = { section: 'events', kind: 'event', season: d.season, eventID: d.id, title: d.name, name: d.name, hrefs: [nationalHref(d.season, d.name)] };
   else row = { section: 'events', kind: 'event', season: d.season, eventID: d.id, title: d.name, name: d.name, hrefs: [showcaseHref(d.season, d.id)] };
   Object.assign(row, { href: row.hrefs[0] || null, location: d.location, start: d.start, end: d.end, cls: h.cls, reading: h.reading,
-    filterWords: h.filterWords, nearby: h.nearby, score: h.score, why: h.why.join('; ') });
+    filterWords: h.filterWords, nearby: h.nearby, score: h.score, why: h.why.join('; '),
+    ekind: d.kind, matched: h.ws ? h.ws.filter(Boolean).map(w => ({ term: w.term, cls: w.cls, field: w.field })) : [], nearbyOf: h.nearbyOf || null, namedPlace: h.namedPlace || null });
   if (partial) { row.partial = true; row.partialKey = h.partialKey; }
   return row;
 }

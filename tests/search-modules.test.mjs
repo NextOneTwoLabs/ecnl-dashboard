@@ -60,9 +60,9 @@ test('modules: every file is an .mjs module, and every relative import resolves 
   for (const f of files) for (const m of readLF(new URL(f, MODULES)).matchAll(/\bfrom\s+'\.\/([a-z]+\.mjs)'/g)) assert.ok(files.includes(m[1]), `${f} imports ${m[1]}`);
 });
 
-test('MF5: search.mjs exports SEARCH_API 1 and exactly these names', () => {
-  assert.equal(S.SEARCH_API, 1);
-  assert.deepEqual(Object.keys(S).sort(), ['CORE_SCHEMA', 'PLACES_SCHEMA', 'SEARCH_API', 'SearchDataError', 'buildIndex', 'search']);
+test('MF5, #165: search.mjs exports SEARCH_API 2 and exactly these names', () => {
+  assert.equal(S.SEARCH_API, 2, 'PR 4a adds startIndex, sortCompares and the row fields: the page expects 2');
+  assert.deepEqual(Object.keys(S).sort(), ['CORE_SCHEMA', 'PLACES_SCHEMA', 'SEARCH_API', 'SearchDataError', 'buildIndex', 'search', 'startIndex']);
 });
 
 test('schemas: an unknown core or places schema throws SearchDataError naming the file; constants agree', () => {
@@ -380,11 +380,14 @@ test('slate: every link of every row of the judged queries opens a real page', (
 // Work counts are deterministic: every judged query is typed one character at a time and each
 // keystroke's counters are weighed in estimated nanoseconds (weights fitted on the PR's machine,
 // Intel Xeon 2.10 GHz, Node 22: a least-squares fit of the time per keystroke against the counters).
-const WEIGHTS = { base: 30000, termsVisited: 70, osaCells: 320, postingsVisited: 160, docsScored: 980, rowsSorted: 2850 };
+// #165 refit: sortCompares (the comparator calls of the two sorts) joins rowsSorted, because a sort costs
+// comparisons, not rows (the worst keystroke, `so`, sorts 506 rows in 3,697 counted comparisons). Fitted on the
+// committed fixture, 15 repeats of every keystroke, trimmed mean, three fits averaged.
+const WEIGHTS = { base: 28000, termsVisited: 55, osaCells: 210, postingsVisited: 125, docsScored: 620, rowsSorted: 1150, sortCompares: 160 };
 const cost = s => WEIGHTS.base + Object.entries(s).reduce((n, [k, v]) => n + WEIGHTS[k] * v, 0);
 const CEILING_NS = 16e6 / 15;            // 16 ms on a 4x-throttled phone / 15 (cold-to-cold calibration, plan v2 MF6)
 // Recorded by this PR. A change to the work done changes these numbers: re-measure and explain.
-const RECORDED = { keystrokes: 807, max: 2115570, maxAt: 'so', p95: 598660 };
+const RECORDED = { keystrokes: 807, max: 1620690, maxAt: 'so', p95: 412600 };
 // The worst keystroke may not grow past twice its recorded cost; the 95th percentile must stay under
 // the phone ceiling. (The worst, a two-letter prefix matching ~500 squads, is over that ceiling:
 // reported on #163, and measured on a throttled browser after merge, Q12.)
@@ -393,7 +396,7 @@ function replay(idx = index) {
   const out = [];
   for (const q of doc.queries) for (let i = 1; i <= q.q.length; i++) {
     const p = q.q.slice(0, i);
-    const stats = { termsVisited: 0, osaCells: 0, postingsVisited: 0, docsScored: 0, rowsSorted: 0 };
+    const stats = { termsVisited: 0, osaCells: 0, postingsVisited: 0, docsScored: 0, rowsSorted: 0, sortCompares: 0 };
     const t = performance.now();
     S.search(idx, p, CTX, { stats });
     out.push({ p, cost: cost(stats), ms: performance.now() - t, stats });
@@ -448,6 +451,171 @@ test('budget: wall clock backstop: no keystroke over 20 ms, no cold build over 2
   assert.ok(cold < 200, `cold import and build ${cold.toFixed(1)} ms (fastest of 3 fresh processes)`);
   const s = index.stats;
   assert.ok(s.terms <= 2 * 518 && s.postings <= 2 * 11531, JSON.stringify(s));
+});
+
+// ---------- #165 (PR 4a): the staged build, the sort counter and the row fields ----------
+const DATA = fresh();
+const drained = (n, d = fresh()) => { const g = S.startIndex(d, n); const labels = []; let r; while (!(r = g.next()).done) labels.push(r.value); return { index: r.value, labels }; };
+// A row in full: its own fields and every getter of its class (a TeamRow's links, `why`, `line`, `matched`,
+// `continuesAs`, `mayFrom` ...), so a difference in any of them shows (Reviewer point 8).
+export function dump(row) {
+  const out = { ...row };
+  for (let p = Object.getPrototypeOf(row); p && p !== Object.prototype; p = Object.getPrototypeOf(p)) {
+    for (const [k, d] of Object.entries(Object.getOwnPropertyDescriptors(p))) if (d.get && !(k in out)) out[k] = row[k];
+  }
+  return out;
+}
+const slateText = sl => JSON.stringify({ rule: sl.rule, empty: sl.empty, coverage: sl.coverage, ended: sl.ended, capReached: sl.capReached,
+  best: sl.best && dump(sl.best), enter: sl.enter && dump(sl.enter), sections: sl.sections.map(x => ({ ...x, rows: x.rows.map(dump) })) });
+test('#165: dump() reads the getters, so a difference in line, matched or continuesAs shows', () => {
+  const r = rows(run('pateadors'), 'teams').find(x => x.continuesAs.length);
+  const d = dump(r);
+  for (const k of ['hrefs', 'why', 'line', 'matched', 'continuesAs', 'mayFrom', 'family', 'seasonTyped', 'place', 'last', 'namedPlace', 'nearbyOf', 'overviewHref', 'seasonHref']) assert.ok(k in d, k);
+  const a = JSON.stringify(d);
+  assert.notEqual(a, JSON.stringify({ ...d, line: 'x' }));
+});
+test('#165: startIndex drained at n = 1, 7, 50 and 150 gives the same slates as buildIndex over every judged keystroke, rows in full', () => {
+  const want = [];
+  for (const q of doc.queries) for (let i = 1; i <= q.q.length; i++) want.push([q.q.slice(0, i), slateText(run(q.q.slice(0, i)))]);
+  assert.equal(want.length, RECORDED.keystrokes);
+  for (const n of [1, 7, 50, 150]) {
+    const ix = drained(n).index;
+    assert.deepEqual(ix.stats, index.stats, `n = ${n}`);
+    for (const [p, w] of want) if (slateText(run(p, ix)) !== w) assert.fail(`n = ${n}: "${p}" differs`);
+  }
+});
+test('#165: the staged build gives the same index structure as buildIndex (vocabulary, postings, counts, lookups, known)', () => {
+  const a = drained(50).index, b = index;
+  assert.deepEqual([...a.known].sort(), [...b.known].sort());
+  assert.deepEqual(a.vocab.phrases.map(p => [p.type, p.value, p.words.join(' ')]), b.vocab.phrases.map(p => [p.type, p.value, p.words.join(' ')]));
+  for (const c of ['teams', 'events']) {
+    assert.deepEqual([...a[c].post.post], [...b[c].post.post], c);
+    assert.deepEqual(a[c].post.avg, b[c].post.avg, c);
+  }
+  for (const k of ['place', 'county', 'state', 'caps', 'conf']) assert.deepEqual([...a.teams.lookups[k]], [...b.teams.lookups[k]], k);
+  for (const k of ['conf', 'season', 'u', 'born']) assert.deepEqual([...a.teams.counts[k]], [...b.teams.counts[k]], k);
+});
+test('#165: each step does at most n units: the yields per stage follow n, and the step count is pinned', () => {
+  const one = drained(1).labels, hist = l => l.reduce((m, x) => (m[x] = (m[x] || 0) + 1, m), {});
+  const h1 = hist(one);
+  for (const n of [7, 50, 150]) {
+    const hn = hist(drained(n).labels);
+    assert.deepEqual(Object.keys(hn).sort(), Object.keys(h1).sort(), `n = ${n}: the same stages`);
+    for (const [stage, c1] of Object.entries(h1)) {
+      assert.ok(Math.abs(hn[stage] - c1 / n) <= 6,   // a stage has up to 5 loops, each losing at most one yield to rounding
+         `n = ${n} ${stage}: ${hn[stage]} yields for ${c1} at n = 1`);
+    }
+  }
+  assert.equal(drained(50).labels.length, STEPS_50, 'the step count at n = 50 changed: re-measure, record and explain');
+  assert.equal(drained(150).labels.length, STEPS_150);
+  assert.equal(drained(50).labels.at(-1), 'events', 'events are the last step: teams are never ready without them');
+  assert.equal(drained(50).labels.filter(l => l === 'events').length, 1);
+});
+const STEPS_50 = 460, STEPS_150 = 158;   // yields before the last step, on the frozen fixture (the reviewer measured 460 and 158 too)
+test('#165 (Reviewer point 2): an unknown schema throws SearchDataError from the first next(), not from startIndex()', () => {
+  const a = fresh(); a.core.schema = 3;
+  const g = S.startIndex(a);
+  assert.throws(() => g.next(), e => e instanceof S.SearchDataError && e.file === 'core.json');
+  const b = fresh(); b.places.schema = 9;
+  assert.throws(() => S.startIndex(b).next(), e => e instanceof S.SearchDataError && e.file === 'places.json');
+  assert.throws(() => S.startIndex(null).next(), S.SearchDataError);
+});
+test('#165: the vocabulary order needs no ICU collator: code-unit order equals localeCompare order, on both data sets', async () => {
+  const committed = { core: JSON.parse(readLF(new URL('public/archive/search/core.json', ROOT))), places: JSON.parse(readLF(new URL('public/archive/search/places.json', ROOT))) };
+  for (const [name, d] of [['fixture', fresh()], ['committed', committed]]) {
+    const ix = S.buildIndex(d), ph = ix.vocab.phrases;
+    const ROLE = { conf: 0, state: 1, place: 2, county: 3, field: 4 };
+    const old = [...ph].sort((a, b) => b.words.length - a.words.length || ROLE[a.type] - ROLE[b.type] || a.words.join(' ').localeCompare(b.words.join(' ')));
+    assert.deepEqual(ph.map(p => p.value + '|' + p.type), old.map(p => p.value + '|' + p.type), `${name}: the phrase order`);
+    for (const p of ph) {
+      assert.match(p.words.join(' '), /^[a-z0-9 ]+$/, `${name}: a phrase key outside [a-z0-9 ]`);
+      if (p.places) {
+        assert.deepEqual(p.places, [...p.places].sort((a, b) => a.localeCompare(b)), `${name}: ${p.value}`);
+        for (const g of p.places) assert.match(g, /^\d{7}$/);
+      }
+    }
+    assert.ok(ph.length > 800, `${name}: ${ph.length} phrases`);
+  }
+});
+test('#165: no module calls localeCompare while the index is built (the first call starts the ICU collator, 6-9 ms)', () => {
+  const calls = [], orig = String.prototype.localeCompare;
+  String.prototype.localeCompare = function (...a) { calls.push(String(this)); return orig.apply(this, a); };
+  try { drained(50); } finally { String.prototype.localeCompare = orig; }
+  assert.deepEqual(calls.slice(0, 3), [], 'localeCompare in the build');
+});
+test('#165: sortCompares counts the comparator calls of both sorts, and stays out of the way without stats', () => {
+  const real = Array.prototype.sort; let calls = 0;
+  Array.prototype.sort = function (cmp) { return real.call(this, cmp ? (a, b) => { calls++; return cmp(a, b); } : cmp); };
+  const stats = { termsVisited: 0, osaCells: 0, postingsVisited: 0, docsScored: 0, rowsSorted: 0, sortCompares: 0 };
+  try { S.search(index, 'so', CTX, { stats }); } finally { Array.prototype.sort = real; }
+  assert.ok(stats.sortCompares > 1000, `so: ${stats.sortCompares} comparisons`);
+  // the two result sorts are counted; the small candidate-set sorts are not (they are linear in the postings, which are counted)
+  assert.ok(stats.sortCompares <= calls && stats.sortCompares >= calls * 0.5 && stats.sortCompares > stats.rowsSorted, `counted ${stats.sortCompares} of ${calls} comparator calls for ${stats.rowsSorted} rows`);
+  assert.deepEqual(S.search(index, 'so', CTX).sections.map(x => x.total), S.search(index, 'so', CTX, { stats: { ...stats, sortCompares: 0 } }).sections.map(x => x.total));
+});
+test('#165: a quadratic sort now fails the pinned work count, not only the wall clock', () => {
+  // the comparator is called about n^2/4 times by an insertion sort; the pinned cost must notice
+  const real = Array.prototype.sort;
+  Array.prototype.sort = function (cmp) { if (!cmp) return real.call(this); for (let i = 1; i < this.length; i++) for (let j = i; j > 0 && cmp(this[j - 1], this[j]) > 0; j--) [this[j - 1], this[j]] = [this[j], this[j - 1]]; return this; };
+  let base, bad;
+  try {
+    const st = { termsVisited: 0, osaCells: 0, postingsVisited: 0, docsScored: 0, rowsSorted: 0, sortCompares: 0 };
+    S.search(index, 'so', CTX, { stats: st }); bad = cost(st);
+  } finally { Array.prototype.sort = real; }
+  const st = { termsVisited: 0, osaCells: 0, postingsVisited: 0, docsScored: 0, rowsSorted: 0, sortCompares: 0 };
+  S.search(index, 'so', CTX, { stats: st }); base = cost(st);
+  assert.ok(bad > 5 * base, `quadratic ${bad} vs ${base}`);
+  assert.ok(bad > KEYSTROKE_BUDGET, 'over the pinned budget');
+});
+test('#165 MF7: team rows carry the structured fields the page draws from (family, line, matched, nearbyOf, namedPlace, seasonTyped, mayFrom ...)', () => {
+  const pda = rows(run('PDA'), 'teams');
+  assert.ok(pda.length && pda.every(r => r.family && r.family.name === 'PDA' && r.family.main === 2357), 'a reviewed family (#133)');
+  assert.equal(rows(run('Slammers'), 'teams')[0].family, null);
+  const lines = new Set(rows(run('Slammers'), 'teams').map(r => r.line));
+  assert.ok(lines.has('SLAMMERS FC') && lines.has('Slammers FC HB Koge'), [...lines].join('|'));
+  const sting = rows(run('Sting Black'), 'teams');
+  assert.ok(sting.some(r => r.line === 'Sting Royal' && r.matched.some(m => m.field === 'older name' && m.term === 'black')), 'an older name is reported as one');
+  assert.ok(sting[0].matched.every(m => m.field === 'name' && m.cls === 'exact'));
+  assert.deepEqual([...new Set(sting.filter(r => r.line === 'Sting Royal').map(r => r.was))].sort(), ['Sting Black', 'Sting Dallas Black'], 'an older-name match says which name (Reviewer point 6)');
+  assert.ok(sting.filter(r => r.matched.every(m => m.field !== 'older name')).every(r => r.was === null));
+  const pat = rows(run('pateadors'), 'teams');
+  assert.ok(pat.every(r => r.matched.some(m => m.cls === 'typo' && m.term === 'pateadores')), 'the typo word is the matched term');
+  const succ = pat.find(r => r.mayFrom.length), pred = pat.find(r => r.continuesAs.length);
+  assert.ok(succ && pred && pred.continuesAs.includes(succ.key) && pat.some(r => r.mayFrom.includes(pred.key)), '#107 keys, both directions');
+  assert.ok(pat.every(r => r.place === 'Costa Mesa, CA' && /^\d{4}-\d{2}$/.test(r.last)));
+  const dated = rows(run('pateadores 2022-23'), 'teams');
+  assert.ok(dated.length && dated.every(r => r.seasonTyped === true && r.href === r.seasonHref), 'a season in the query opens the season tab');
+  assert.ok(rows(run('Slammers'), 'teams').every(r => r.seasonTyped === false));
+  const sd = run('San Diego');
+  assert.deepEqual(rows(sd, 'teams')[0].namedPlace, ['san', 'diego']);
+  assert.equal(rows(sd, 'teams')[0].nearbyOf, null);
+  const near = rows(run('Redmond WA'), 'teams').find(r => r.nearby);
+  assert.equal(near.nearbyOf, 'Redmond, WA');
+  assert.equal(near.namedPlace, null);
+  assert.ok(rows(run('Redmond WA'), 'teams').filter(r => !r.nearby).every(r => r.nearbyOf === null));
+});
+test('#165 MF7: event rows carry matched, namedPlace, nearbyOf and the kind (the tier reason, the Nearby sub-heading)', () => {
+  const cup = rows(run('Surf Cup'), 'events');
+  assert.ok(cup.length && cup.every(r => r.partial && r.matched.length && r.matched.every(m => m.field === 'tier' && m.term === 'cup')), 'a partial event row that matched only a tier name');
+  assert.ok(rows(run('Surf Cup'), 'teams').every(r => r.partial && r.matched.every(m => m.field !== 'tier')));
+  const sd = rows(run('San Diego'), 'events');
+  assert.deepEqual(sd.find(r => r.title === 'San Diego Fall').namedPlace, ['san', 'diego']);
+  assert.equal(sd.find(r => r.nearby).nearbyOf, 'San Diego, CA');
+  assert.deepEqual([...new Set(rows(run('southwest'), 'events').map(r => r.ekind))], ['c']);
+  assert.ok(rows(run('playoffs'), 'events').some(r => r.ekind === 'n') && rows(run('San Diego'), 'events').some(r => r.ekind === 's'));
+});
+test('#148, #165 nit 1: an age-less conference row carries every chip\'s link, one per age group; a row with an age keeps one', () => {
+  const sw = rows(run('southwest'), 'events');
+  assert.equal(sw.length, 7);
+  for (const r of sw) {
+    assert.equal(r.div, '');
+    assert.deepEqual(r.hrefs, r.ages.map(a => `#season=${r.season}&age=${encodeURIComponent(a)}&conf=Southwest&view=standings`), r.season);
+    assert.equal(r.href, r.hrefs[0], 'href stays the first chip (the oldest age group)');
+  }
+  assert.deepEqual(sw[1].ages, ['G2008/2007', 'G2009', 'G2010', 'G2011', 'G2012', 'G2013'], '2025-26 names its divisions by birth year');
+  const nc = rows(run('U15 NorCal'), 'events');
+  assert.equal(nc.length, 1);
+  assert.deepEqual(nc[0].hrefs, ['#season=2026-27&age=GU15&conf=NorCal&view=standings']);
 });
 
 // ---------- serving and CI ----------

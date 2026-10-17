@@ -7,7 +7,7 @@
     },
     "engine": "modules",
     "manifestSha": "14d0ca0bbb0f18363ee6fe330e2759ecad18a4245babacc46cec28f26481335c",
-    "modulesSha": "2b4be83f73d7800ae3945b90ee2fa9cf86919807751bd4aedfac15914c252e4f",
+    "modulesSha": "9ebc86d890e584bb87cd64da706af5cc5ede6f24c309ede7749b9f92b61f05a6",
     "queriesSha": "2cea55dd01746ff794d7680c371a2e156cfbb88162db2b3cceb9f22ae6924a95",
     "recordedBy": "node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules"
   },

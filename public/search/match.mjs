@@ -148,27 +148,32 @@ export function expand(word, { terms, initials: inits, known, last, stats, cache
   return out;
 }
 
-// One category's fielded documents and postings, for BM25F.
+// Runs a staged builder (a generator) to its end and returns its value: how the one-shot builders
+// are defined (#165: startIndex is the build; buildIndex drains it).
+export function drain(g) { let r; while (!(r = g.next()).done); return r.value; }
+
+// One category's fielded documents and postings, for BM25F, built in steps of at most `n` documents
+// (the `Postings` constructor drains it).
 //   fields   [{ name, w }]
 //   docs     [{ fields: [[term...]...] }]: each field its distinct terms (names are short: tf = 1)
-export class Postings {
-  constructor(fieldDefs, docs) {
-    this.fieldDefs = fieldDefs;
-    this.N = docs.length;
-    this.docs = docs;
-    this.post = new Map();
-    this.idfs = new Map();
-    this.lists = docs.map(d => d.fields);
-    const sums = fieldDefs.map(() => 0);
-    docs.forEach((d, i) => {
-      const seen = new Set();
-      d.fields.forEach((f, k) => { sums[k] += f.length; for (const t of f) if (!seen.has(t)) { seen.add(t); if (!this.post.has(t)) this.post.set(t, []); this.post.get(t).push(i); } });
-    });
-    this.avg = sums.map(s => (docs.length ? s / docs.length || 1 : 1));
-    const all = [...this.post.keys()];
-    this.terms = new TermList(all.filter(t => t[0] !== '#'));
-    this.initials = new TermList(all.filter(t => t[0] === '#'));
+export function* postingsG(fieldDefs, docs, n) {
+  const P = Object.create(Postings.prototype);
+  P.fieldDefs = fieldDefs; P.N = docs.length; P.docs = docs; P.post = new Map(); P.idfs = new Map(); P.lists = docs.map(d => d.fields);
+  const sums = fieldDefs.map(() => 0);
+  for (let i = 0; i < docs.length; i++) {
+    if (i && i % n === 0) yield 'postings';
+    const d = docs[i], seen = new Set();
+    d.fields.forEach((f, k) => { sums[k] += f.length; for (const t of f) if (!seen.has(t)) { seen.add(t); if (!P.post.has(t)) P.post.set(t, []); P.post.get(t).push(i); } });
   }
+  P.avg = sums.map(s => (docs.length ? s / docs.length || 1 : 1));
+  yield 'postings';
+  const all = [...P.post.keys()];
+  P.terms = new TermList(all.filter(t => t[0] !== '#'));
+  P.initials = new TermList(all.filter(t => t[0] === '#'));
+  return P;
+}
+export class Postings {
+  constructor(fieldDefs, docs) { return drain(postingsG(fieldDefs, docs, Infinity)); }
   df(t) { return (this.post.get(t) || []).length; }
   idf(t) {
     let v = this.idfs.get(t);

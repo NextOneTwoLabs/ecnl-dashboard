@@ -121,7 +121,7 @@ export function compile(src, stubs, tail, extra = []) {
 export const ENGINE_START = '\n    const TEAM_SEARCH = (() => {\n';
 export const ENGINE_END = '\n    })();\n';
 export const PAGE_START = '    let usDb = null, usItems = []';
-export const PAGE_END = '    (function usWire() {';
+export const PAGE_END = '    // #165: the legacy search above is dormant until PR 5 removes it (tests/search/judged.mjs PAGE_END)\n';
 const V_ENGINE = '//@@ENGINE\n', V_PAGE = '\n//@@PAGE\n';
 export const VENDOR_HEADER = [
   '// Vendored from public/index.html by tests/search/freeze.mjs --vendor (#156, owner decision D9). Do not edit by hand.',
@@ -402,7 +402,7 @@ export function driftStatus(html, vendored, manifest) {
     if (s) return { ok: false, message: 'MANIFEST.retired is set, but index.html still holds the legacy search: re-vendor, or unset retired' };
     return { ok: true, retired: true, message: `retired by ${manifest.retired.pr}: ${manifest.retired.reason}` };
   }
-  if (!s) return { ok: false, message: 'index.html no longer holds the legacy search markers (const TEAM_SEARCH, let usDb, (function usWire) and MANIFEST.retired is unset. If the legacy search was removed on purpose, set MANIFEST.retired = { pr, reason }; otherwise restore the markers. This check is never skipped silently (MF7).' };
+  if (!s) return { ok: false, message: 'index.html no longer holds the legacy search markers (const TEAM_SEARCH, let usDb, and the "#165: the legacy search above is dormant" comment) and MANIFEST.retired is unset. If the legacy search was removed on purpose, set MANIFEST.retired = { pr, reason }; otherwise restore the markers. This check is never skipped silently (MF7).' };
   if (s.engine !== v.engine || s.page !== v.page) return { ok: false, message: 'index.html\'s search code differs from tests/search/engines/today.js. Re-vendor and re-record in the same PR: freeze.mjs --vendor, then --record today (MF7).' };
   if (engineSha(v) !== manifest.engineSha) return { ok: false, message: 'engines/today.js does not match MANIFEST.engineSha: re-run freeze.mjs --vendor' };
   return { ok: true, retired: false };
