@@ -53,11 +53,14 @@ async function context(opts) {
   return { ctx, log };
 }
 const ready = page => page.waitForFunction(() => !/Getting search ready/.test(document.querySelector('#sxStatus').textContent), null, { timeout: 20000 });
+// #168: the active season's games, loaded right after "ready"
+const gamesReady = page => page.waitForFunction(() => typeof sxIndex !== 'undefined' && sxIndex && sxIndex.games.has(sxIndex.vocab.active) && !sxG.running, null, { timeout: 20000 });
+const gamesApi = log => log.same.filter(p => p.startsWith('/api/v1/search/games/'));
 const apiSearch = log => log.same.filter(p => p.startsWith('/api/v1/search/'));
 const modules = log => log.same.filter(p => /^\/search\/[a-z]+\.mjs/.test(p));
 const sameCount = log => log.same.length;
 
-test('desktop: first focus makes exactly 2 search API requests and 0 to /api/v1/teams, typing makes none, a chip opens its table', async () => {
+test('desktop: first focus makes exactly 2 search API requests, then 1 for the active season\'s games, and 0 to /api/v1/teams; typing makes none; a chip opens its table', async () => {
   const { ctx, log } = await context({ viewport: { width: 1280, height: 800 } });
   const page = await ctx.newPage();
   const errors = []; page.on('pageerror', e => errors.push(e.message));
@@ -65,13 +68,16 @@ test('desktop: first focus makes exactly 2 search API requests and 0 to /api/v1/
   await page.waitForLoadState('load');
   await page.waitForTimeout(600);   // the idle preload of the modules
   assert.equal(apiSearch(log).length, 0, 'nothing from the search API before the first focus');
-  assert.equal(modules(log).length, 8, 'the 8 modules are preloaded at idle');
+  assert.equal(modules(log).length, 9, 'the 9 modules are preloaded at idle');
   await page.keyboard.press('/');
   assert.equal(await page.evaluate(() => document.activeElement.id), 'usearchInput', '"/" focuses the box');
   await ready(page);
-  assert.deepEqual(apiSearch(log).sort(), ['/api/v1/search/core', '/api/v1/search/places']);
+  await gamesReady(page);
+  const api = apiSearch(log);
+  assert.deepEqual(api.slice(0, 2).sort(), ['/api/v1/search/core', '/api/v1/search/places']);
+  assert.deepEqual(api.slice(2), ['/api/v1/search/games/2026-27'], '#168 (Q5b b): exactly 1 games request, after "ready"');
   assert.equal(log.same.filter(p => p.startsWith('/api/v1/teams')).length, 0, 'no request to /api/v1/teams');
-  assert.equal(modules(log).length, 8, 'no module requested twice');
+  assert.equal(modules(log).length, 9, 'no module requested twice');
 
   const before = sameCount(log);
   await page.keyboard.type('southwest');
@@ -104,7 +110,7 @@ test('desktop: first focus makes exactly 2 search API requests and 0 to /api/v1/
   await page.keyboard.press('/');
   await page.keyboard.type('Redmond WA');
   await page.waitForSelector('.sx-sub');
-  assert.equal(await page.locator('.sx-sub').count(), 1);
+  assert.equal(await page.locator('.sx-sub').count(), 2, 'one Nearby sub-heading per section: Games (#168) and Teams');
   assert.ok(await page.locator('.sx-pill.near').count() >= 4);
   await page.keyboard.press('Escape'); await page.keyboard.press('Escape');
   assert.equal(await page.evaluate(() => document.getElementById('usearchPop').hidden), true);
@@ -115,7 +121,7 @@ test('desktop: first focus makes exactly 2 search API requests and 0 to /api/v1/
   await page.evaluate(() => document.getElementById('themeToggle').click());
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
   assert.deepEqual(errors, []);
-  assert.equal(apiSearch(log).length, 2, 'still exactly 2 search API requests after every query above');
+  assert.equal(apiSearch(log).length, 3, 'still exactly 3 search API requests after every query above');
   // the network: everything off the machine was aborted, nothing was answered
   assert.deepEqual(log.answered, []);
   assert.ok(log.aborted.length >= 1, 'the font request was aborted and counted');
@@ -136,6 +142,7 @@ test('phone: the sheet opens from the header button, traps Tab, Cancel returns f
   assert.equal(await page.evaluate(() => document.getElementById('usearchPop').getAttribute('role')), 'dialog');
   assert.equal(await page.evaluate(() => document.getElementById('usearchPop').getAttribute('aria-modal')), 'true');
   await ready(page);
+  await gamesReady(page);
   await page.keyboard.type('southwest');
   await page.waitForSelector('#usearchList [role=gridcell]');
   // Tab stays inside the sheet, in both directions
@@ -162,7 +169,7 @@ test('phone: the sheet opens from the header button, traps Tab, Cancel returns f
   assert.equal(await page.evaluate(() => document.activeElement.id), 'headerSearch', 'Cancel returns focus to the header button');
   assert.equal(await page.evaluate(() => document.getElementById('usearchSheetInput').value), '');
   assert.deepEqual(errors, []);
-  assert.equal(apiSearch(log).length, 2);
+  assert.equal(apiSearch(log).length, 3);
   assert.deepEqual(log.answered, []);
   console.log(JSON.stringify({ phone: { sameOrigin: log.same.length, searchApi: apiSearch(log).length, abortedOffMachine: log.aborted.length } }));
   await ctx.close();
@@ -193,7 +200,7 @@ test('action bar: a team that two earlier teams may continue is named whole, nev
 test('version: a search.mjs with another SEARCH_API shows the reload note, and nothing is searched (the 2 data files are still fetched)', async () => {
   const { ctx, log } = await context({ viewport: { width: 1280, height: 800 } });
   await ctx.route('**/search/search.mjs', async route => {
-    const body = (await (await route.fetch()).text()).replace('export const SEARCH_API = 2', 'export const SEARCH_API = 999');
+    const body = (await (await route.fetch()).text()).replace('export const SEARCH_API = 3', 'export const SEARCH_API = 999');
     assert.match(body, /SEARCH_API = 999/);
     await route.fulfill({ contentType: 'text/javascript', body });
   });
@@ -207,5 +214,90 @@ test('version: a search.mjs with another SEARCH_API shows the reload note, and n
   await page.keyboard.type('Surf'); await page.waitForTimeout(300);
   assert.equal(await page.locator('#usearchList [role=gridcell]').count(), 0, 'nothing is searched');
   assert.equal(apiSearch(log).filter(p => p.endsWith('/core') || p.endsWith('/places')).length <= 2, true);
+  await ctx.close();
+});
+
+// #168 (PR 4b): the Games section, as the Auditor will run it on production (0 TGS, requests counted)
+test('games, desktop: a field opens its next game; FC Dallas, Naperville and St lead with Teams; one squad a side loads earlier meetings only on the press (exactly 3); a typed season and a field\'s Load make exactly 1', async () => {
+  const { ctx, log } = await context({ viewport: { width: 1280, height: 800 } });
+  const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto(BASE + '/'); await page.waitForTimeout(500);
+  await page.keyboard.press('/');
+  await ready(page); await gamesReady(page);
+  const typeQ = async q => { await page.locator('#usearchInput').fill(''); await page.keyboard.type(q); await page.waitForTimeout(250); };
+  const heads = () => page.evaluate(() => [...document.querySelectorAll('#usearchList .sx-head')].map(h => h.textContent.replace(/\s+/g, ' ').trim()));
+  const active = () => page.evaluate(() => { const id = document.getElementById('usearchInput').getAttribute('aria-activedescendant'); const e = id && document.getElementById(id); return e ? e.getAttribute('aria-label') : null; });
+  const base = gamesApi(log).length;
+  for (const q of ['FC Dallas', 'Naperville', 'St']) { await typeQ(q); const h = await heads(); assert.match(h[0], /^(Best match|Teams)/, `${q}: ${h.join(' | ')}`); }
+  await typeQ('Surf Sports Park');
+  assert.match((await heads())[0], /^Games \d+ games at Surf Sports Park$/);
+  assert.match(await active(), / against .*, Surf Sports Park · Field \d+, Del Mar, CA$/, 'the field\'s first game is active');
+  await typeQ('MVLA 2011');
+  for (let k = 0; k < 4; k++) await page.keyboard.press('ArrowDown');
+  assert.match(await page.locator('#usearchOpen').textContent(), /^Open in (Matches|Bracket|Schedule|Showcase games)$/);
+  assert.match(await page.locator('#usearchHist').textContent(), / season$/);
+  await typeQ('MVLA 2011 vs Mustang 2011');
+  await page.waitForTimeout(700);
+  assert.equal(gamesApi(log).length, base, '0 games requests before the press');
+  assert.match(await page.locator('#usearchList').textContent(), /Load earlier meetings · 2023–24, 2024–25, 2025–26/);
+  const meetings0 = await page.locator('#usearchList .sxg-row').count();
+  assert.equal(meetings0, 2, 'the 2 meetings of 2026-27');
+  for (let k = 0; k < 2; k++) await page.keyboard.press('ArrowDown');
+  assert.match(await active(), /^Load earlier meetings, /);
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => ['2023-24', '2024-25', '2025-26'].every(s => sxIndex.games.has(s)) && !sxView.cells.some(c => c.kind === 'busy'), null, { timeout: 20000 });
+  await page.waitForTimeout(100);
+  assert.deepEqual(gamesApi(log).slice(base).sort(), ['/api/v1/search/games/2023-24', '/api/v1/search/games/2024-25', '/api/v1/search/games/2025-26'], 'exactly 3 on the press');
+  assert.match(await active(), /, (2023|2024|2025|2026)[^,]*,.* against /, 'a meeting is active');
+  assert.ok(await page.evaluate(() => ['2023-24', '2024-25', '2025-26'].includes(sxView.cells[sxActive].game.season)), 'the first newly added meeting');
+  const n1 = gamesApi(log).length;
+  await typeQ('Pateadores vs Slammers 2024-25'); await page.waitForTimeout(700);
+  assert.equal(gamesApi(log).length, n1, '2024-25 is already in: 0 requests');
+  await typeQ('60 Acres');
+  for (let k = 0; k < 15 && !/^Load /.test(await active() || ''); k++) await page.keyboard.press('ArrowDown');
+  assert.match(await active(), /^Load 2021–22 games, one request$/, 'the latest season not loaded yet (the press above loaded 2023-24 to 2025-26)');
+  const latest = await page.evaluate(() => sxView.cells[sxActive].seasons[0]);
+  const loadedBefore = await page.evaluate(s => sxIndex.games.has(s), latest);
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(s => sxIndex.games.has(s) && !sxView.cells.some(c => c.kind === 'busy'), latest, { timeout: 15000 });
+  assert.equal(gamesApi(log).length - n1, loadedBefore ? 0 : 1, 'the field\'s Load cell: exactly 1 request');
+  await typeQ('Slammers vs Blues');
+  assert.match((await heads())[0], /^Games \d+ pairings · \d+ meetings$/);
+  // Enter on a game opens its view
+  await typeQ('Surf Sports Park');
+  const href = await page.evaluate(() => sxView.cells[sxActive].href);
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => document.getElementById('usearchPop').hidden);
+  await page.waitForFunction(() => document.querySelectorAll('.match-row').length > 0, null, { timeout: 15000 });
+  assert.match(href, /^#season=2026-27&age=[^&]+&conf=Southwest&view=schedule&team=\d+/);
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
+  assert.deepEqual(errors, []);
+  assert.deepEqual(log.answered, []);
+  for (const h of new Set(log.aborted.map(u => new URL(u).host))) assert.ok(['fonts.googleapis.com', 'fonts.gstatic.com', 's3.amazonaws.com'].includes(h), `unexpected host ${h}`);
+  console.log(JSON.stringify({ games: { sameOrigin: log.same.length, gamesApi: gamesApi(log), abortedOffMachine: log.aborted.length } }));
+  await ctx.close();
+});
+
+test('games, phone: the sheet; Surf Sports Park then Enter; MVLA 2011 with the keys; no horizontal scroll; cells at least 36 px', async () => {
+  const { ctx, log } = await context({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+  const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto(BASE + '/'); await page.waitForTimeout(500);
+  await page.locator('#headerSearch').click();
+  await ready(page); await gamesReady(page);
+  await page.keyboard.type('MVLA 2011'); await page.waitForTimeout(300);
+  for (let k = 0; k < 4; k++) await page.keyboard.press('ArrowDown');
+  assert.ok(await page.evaluate(() => !!sxView.cells[sxActive].game), 'a game cell by the keys');
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'no horizontal scroll at 390');
+  const cell = await page.locator('#usearchList .sxg-row').first().boundingBox();
+  assert.ok(cell.height >= 36, `a game cell is ${cell.height} px tall`);
+  await page.locator('#usearchSheetInput').fill('Surf Sports Park'); await page.waitForTimeout(300);
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => document.getElementById('usearchPop').hidden);
+  await page.waitForFunction(() => /view=schedule/.test(location.hash) || document.querySelectorAll('.match-row').length > 0, null, { timeout: 15000 });
+  assert.deepEqual(errors, []);
+  assert.equal(gamesApi(log).length, 1);
+  assert.deepEqual(log.answered, []);
   await ctx.close();
 });

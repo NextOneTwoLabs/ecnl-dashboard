@@ -10,7 +10,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-import { readJSON, readLF, HERE, ROOT, FIXTURES, indexOf, destinationProblem, loadFixtures } from './search/judged.mjs';
+import { readJSON, readLF, HERE, ROOT, FIXTURES, indexOf, destinationProblem, loadFixtures, loadGames, todayOf } from './search/judged.mjs';
 
 const PAGE = process.env.ECNL_TEST_HTML ? pathToFileURL(process.env.ECNL_TEST_HTML) : new URL('public/index.html', ROOT);   // a mutated copy, for the mutation checks
 const html = readLF(PAGE);
@@ -26,9 +26,14 @@ const coreText = readLF(new URL('core.json', FX)), placesText = readLF(new URL('
 const fresh = () => ({ core: JSON.parse(coreText), places: JSON.parse(placesText) });
 const doc = readJSON(new URL('queries.json', HERE));
 const NOW = Date.parse(doc.context.now), SEASON = doc.context.selectedSeason;
-const CTX = { now: NOW, timeZone: doc.context.timeZone, selectedSeason: SEASON };
+const TODAY = todayOf(NOW, doc.context.timeZone);   // the page's todayKey() on the fixture's clock
+const CTX = { now: NOW, timeZone: doc.context.timeZone, selectedSeason: SEASON, today: TODAY };
 const BUILT = S.buildIndex(fresh());
+{ const g = S.startGames(BUILT, loadGames(BUILT.vocab.active), Infinity); while (!g.next().done); }   // as the page has it once games are ready
 const slateOf = q => S.search(BUILT, q, CTX);
+// the page's own helpers the block calls (displayName for a game's sides), sliced from index.html
+const pageFn = head => { const a = html.indexOf('\n' + head) + 1, b = html.indexOf('\n    }\n', a) + 6; assert.ok(a > 0 && b > a, head); return html.slice(a, b); };
+const { displayName } = new Function(pageFn('    function shortTeamName(') + pageFn('    function displayName(') + 'return { displayName };')();
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const seasonLabel = s => (s === SEASON ? 'Current season' : `${s.replace('-', '–')} season`);
 const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -53,7 +58,7 @@ const hasClass = (n, c) => (n.attrs.class || '').split(/\s+/).includes(c);
 const roleOf = n => n.attrs.role || null;
 
 // ---------- the fake page: the globals the block reads, and the elements it writes ----------
-function page({ sheet = false, live = false, mod = S, data = fresh, fetchJSON, season = SEASON, importMs = 0, saveData = false } = {}) {
+function page({ sheet = false, live = false, mod = S, data = fresh, fetchJSON, season = SEASON, importMs = 0, saveData = false, games = s => loadGames(s), gamesGate = null } = {}) {
   const els = new Map(), listeners = [], opened = [], appended = [], fetched = [];
   const node = id => ({
     id, hidden: false, value: '', textContent: '', className: '', attrs: {}, style: {}, on: {}, _html: '', dataset: {},
@@ -87,8 +92,13 @@ function page({ sheet = false, live = false, mod = S, data = fresh, fetchJSON, s
     teamSeasonTabLabel: seasonLabel, closeSidebarIfMobile() { api.sidebarClosed = (api.sidebarClosed || 0) + 1; },
     retryText: e => (e && e.status === 429 ? 'Too many requests.' : 'Please try again shortly.'),
     isMissing: e => !!e && e.status === 404, isRefusal: e => !!e && e.status >= 400 && e.status < 500 && e.status !== 404,
-    fetchJSON: fetchJSON || (async path => { fetched.push(path); const d = data(); return path === 'search/core' ? d.core : d.places; }),
-    Date: { now: () => NOW },
+    fetchJSON: fetchJSON || (async path => {
+      fetched.push(path);
+      const m = /^search\/games\/(.+)$/.exec(path);
+      if (m) { if (gamesGate) await gamesGate(m[1]); return games(m[1]); }   // #168: a games file, from the fixture
+      const d = data(); return path === 'search/core' ? d.core : d.places;
+    }),
+    Date: class extends Date { static now() { return NOW; } }, todayKey: () => TODAY, displayName,
     requestIdleCallback: undefined,
     setTimeout: (f, ms) => setTimeout(f, ms),
   };
@@ -96,17 +106,20 @@ function page({ sheet = false, live = false, mod = S, data = fresh, fetchJSON, s
   const api = new Function(...names, `${BLOCK}
     sxImport = async () => { if (arguments[${names.length}] ) await arguments[${names.length}](); return arguments[${names.length + 1}]; };
     return { sxOpen, sxOpenSheet, sxClose, sxRun, sxKey, sxDrive, sxLoad, sxPreload, sxFill, sxHoverCell, sxActivate, sxGoTo, sxMark, sxGroups, SX_MODULES, SX_TASK_MS, SX_SIZES,
-      state: () => ({ sxState, sxView, sxActive, sxLoadP, sxIndex }), setImport: f => { sxImport = f; } };`)(...Object.values(stubs), importMs ? () => wait(importMs) : null, mod);
+      sxBuild, sxGamesFetch, SX_GAMES_STILL_MS,
+      state: () => ({ sxState, sxView, sxActive, sxLoadP, sxIndex, sxG }), setImport: f => { sxImport = f; } };`)(...Object.values(stubs), importMs ? () => wait(importMs) : null, mod);
   const input = el(sheet ? 'usearchSheetInput' : 'usearchInput');
   const key = (k, extra = {}) => { const e = { key: k, shiftKey: false, preventDefault() { e.prevented = true; }, target: input, ...extra }; input.on.keydown(e); return e; };
-  const open = async (q = '') => { input.value = q; api.sxOpen(input); await api.state().sxLoadP; await wait(0); return api; };
+  // #168: open waits for the active season's games too (the request "ready" starts), unless told not to
+  const gamesIdle = async () => { for (let k = 0; k < 400 && api.state().sxG && (api.state().sxG.running || api.state().sxG.queue.length); k++) await wait(2); };
+  const open = async (q = '', { games: g = true } = {}) => { input.value = q; api.sxOpen(input); await api.state().sxLoadP; await wait(0); if (g) await gamesIdle(); return api; };
   const run = async q => { await open(q); input.value = q; api.sxRun(q); return list(); };
   const list = () => el('usearchList')._html;
   const click = (i, extra = {}) => el('usearchList').on.click({ target: { closest: () => ({ dataset: { c: String(i) } }) }, shiftKey: false, ctrlKey: false, metaKey: false, ...extra });
   const cells = () => api.state().sxView ? api.state().sxView.cells : [];
   const activeCell = () => cells()[api.state().sxActive];
   const tree = () => parse(list());
-  return Object.assign(api, { el, input, key, open, run, list, click, cells, activeCell, tree, location, hashEvents, opened, appended, fetched, listeners, stubs,
+  return Object.assign(api, { el, input, key, open, run, list, click, cells, activeCell, tree, location, hashEvents, opened, appended, fetched, listeners, stubs, gamesIdle,
     status: () => el('sxStatus').innerHTML, lead: () => el('sxLead').innerHTML, live: () => el('usearchLive').textContent, bar: () => ({
       hidden: el('usearchActions').hidden, text: el('usearchActive').textContent, cls: el('usearchActive').className, open: el('usearchOpen'), hist: el('usearchHist'), prev: el('usearchPrev') }),
     keysLine: () => el('sxKeys').innerHTML, pop: () => el('usearchPop'), nav: () => api.state().sxView && api.state().sxView.nav });
@@ -122,14 +135,15 @@ test('index.html keeps one line-ending style, and the panel block is bounded by 
   assert.ok(!/function usWire|usWire\(\)/.test(html.slice(mark)), 'the legacy wiring is gone');
 });
 
-test('markup: the combobox opens a grid, the grid is always in the DOM and named, no role=option remains, the labels say events', () => {
+test('markup: the combobox opens a grid, the grid is always in the DOM and named, no role=option remains, the labels say events and games', () => {
   assert.match(html, /id="usearchInput"[^>]*aria-haspopup="grid"/);
   assert.match(html, /id="usearchSheetInput"[^>]*aria-haspopup="grid"/);
   assert.match(html, /<ul class="sx-list" id="usearchList" role="grid" aria-label="Search results"><\/ul>/);
   assert.ok(!/role="option"|role="listbox"/.test(BLOCK + html.slice(html.indexOf('<div class="usearch-pop sx"'), html.indexOf('<div class="sidebar-overlay"'))));
-  assert.match(html, /id="headerSearch"[^>]*aria-label="Search teams and events"/, 'nit 5');
-  assert.match(html, /<div class="usearch" id="usearch" role="search" aria-label="Teams and events">/);
-  assert.match(html, /placeholder="Search teams, clubs, places, events…"/);
+  assert.match(html, /id="headerSearch"[^>]*aria-label="Search teams, events and games"/, 'nit 5; #168');
+  assert.match(html, /<div class="usearch" id="usearch" role="search" aria-label="Teams, events and games">/);
+  assert.equal(html.split('placeholder="Search teams, clubs, places, events, fields…"').length, 3, 'both boxes (#168)');
+  assert.match(html, /<span>Teams, events and games since 2020-21<\/span>/);
   for (const f of ['usOpenSheet()', 'usClose(true)']) assert.ok(!html.slice(0, html.indexOf('let usDb')).includes(`onclick="${f}"`), `${f} is not called from the markup`);
   for (const f of ['sxOpenSheet()', 'sxClose(true)']) assert.ok(html.includes(`onclick="${f}"`), f);
 });
@@ -145,13 +159,19 @@ test('modules are preloaded at idle from the real file list, never in live mode 
   assert.match(BLOCK, /requestIdleCallback\(sxPreload/);
 });
 
-test('loading: first focus makes exactly 2 fetches (core, places), none per keystroke, and the second focus none', async () => {
+test('loading: first focus makes exactly 2 fetches (core, places), then (#168, Q5b b) exactly 1 for the active season\'s games after "ready"; none per keystroke, none on the second focus', async () => {
   const p = page();
+  let seenAtReady = null;
+  const t = setInterval(() => { if (seenAtReady === null && p.state().sxState === 'ready') seenAtReady = [...p.fetched]; }, 0);
   await p.open('');
-  assert.deepEqual(p.fetched, ['search/core', 'search/places']);
-  for (const q of ['Surf', 'Surf C', 'southwest', 'zzzz']) { p.input.value = q; p.sxRun(q); }
+  clearInterval(t);
+  assert.deepEqual(p.fetched, ['search/core', 'search/places', 'search/games/2026-27']);
+  assert.ok(!seenAtReady || !seenAtReady.includes('search/games/2026-27') || seenAtReady.indexOf('search/games/2026-27') === 2, 'the games file is asked for after core and places');
+  assert.ok(p.state().sxIndex.games.has('2026-27'));
+  for (const q of ['Surf', 'Surf C', 'southwest', 'zzzz', 'Surf Sports Park', 'MVLA 2011 vs Mustang 2011', 'Slammers HB Koge 2007 v So Cal Blues 2007']) { p.input.value = q; p.sxRun(q); }
+  await wait(p.SX_GAMES_STILL_MS + 50);
   p.sxClose(); await p.open('Surf');
-  assert.deepEqual(p.fetched, ['search/core', 'search/places']);
+  assert.deepEqual(p.fetched, ['search/core', 'search/places', 'search/games/2026-27'], '0 per keystroke; on-request seasons are never fetched by themselves (MF1)');
   assert.equal(p.state().sxState, 'ready');
 });
 
@@ -164,7 +184,8 @@ test('loading: the panel opens at once with the loading words and tips; a query 
     observed.push(['index built', p.state().sxState]);   // the moment the last step (events) has run
     return r.value;
   } };
-  const p = page({ mod }); p.setImport(async () => { await gate; return mod; });
+  let releaseGames; const gamesGate = new Promise(r => { releaseGames = r; });
+  const p = page({ mod, gamesGate: () => gamesGate }); p.setImport(async () => { await gate; return mod; });
   p.input.value = 'Surf'; p.sxOpen(p.input);
   assert.match(p.status(), /Getting search ready/);
   assert.match(p.lead(), /sx-bar/); assert.match(p.lead(), /us-chip/); assert.match(p.lead(), /sx-skel/);
@@ -174,6 +195,10 @@ test('loading: the panel opens at once with the loading words and tips; a query 
   release(); await p.state().sxLoadP; await wait(0);
   assert.equal(searches, 1, 'the typed query ran once, when ready');
   assert.match(p.list(), /Surf/);
+  assert.match(p.list(), /Loading 2026–27 games…<\/strong> Teams and events are ready; games join them in a moment\./, '#168: the Games section says its games are loading');
+  releaseGames(); await p.gamesIdle(); await wait(0);
+  assert.equal(searches, 2, '#168: the query runs once more when its games land');
+  assert.ok(!/Loading 2026–27 games/.test(p.list()) && /sxg-row/.test(p.list()));
   assert.ok(observed.length > 100 && observed.every(([, s]) => s === 'loading'), 'never ready before the last step');
   assert.deepEqual(observed.at(-2)[0], 'events', 'events are the last step: teams are never shown without them');
   assert.equal(observed.at(-1)[0], 'index built');
@@ -210,7 +235,7 @@ test('sxDrive: an error thrown on the first step reaches the caller (the generat
 
 test('version: a SEARCH_API other than the expected shows the reload note, search is never called, and the note is an alert', async () => {
   let searches = 0, started = 0;
-  const mod = { ...S, SEARCH_API: 3, search: () => { searches++; }, startIndex: () => { started++; } };
+  const mod = { ...S, SEARCH_API: 4, search: () => { searches++; }, startIndex: () => { started++; } };
   const p = page({ mod }); await p.open('Surf').catch(() => { });
   assert.match(p.lead(), /Search was updated while this page was open/);
   assert.match(p.lead(), /role="alert"/);
@@ -222,8 +247,10 @@ test('version: a SEARCH_API other than the expected shows the reload note, searc
   p.sxClose(); p.sxOpen(p.input);   // reopening shows the note again, no new import
   assert.match(p.lead(), /Search was updated/);
   assert.match(BLOCK, /mod\.SEARCH_API !== SX_API_EXPECTED/, 'not >=: any other version');
-  assert.match(BLOCK, /const SX_API_EXPECTED = 2;/);
-  assert.equal(S.SEARCH_API, 2);
+  assert.match(BLOCK, /const SX_API_EXPECTED = 3;/);
+  assert.equal(S.SEARCH_API, 3);
+  const old = page({ mod: { ...S, SEARCH_API: 2 } }); await old.open('Surf').catch(() => { });
+  assert.match(old.lead(), /Search was updated while this page was open/, 'a 4a module (SEARCH_API 2) is refused too');
 });
 
 test('version: an unknown schema (SearchDataError, thrown by the first build step) shows the same note', async () => {
@@ -266,15 +293,18 @@ test('R12 and slate order: for every judged query the panel draws the slate\'s s
   let checked = 0;
   for (const { q } of doc.queries) {
     const s = slateOf(q); p.input.value = q; p.sxRun(q);
-    if (!s.sections.length) { assert.equal(p.list().includes('role="row"'), p.list().includes('Games'), q); continue; }
+    if (!s.sections.length) { assert.equal(p.list(), '', q); continue; }
     const want = [];
     if (s.best) want.push('Best match');
-    for (const sec of s.sections) {
+    const order = s.sections.map(x => x.name);
+    if (!order.includes('games')) order.splice(s.rule === 3 ? 0 : order.length, 0, 'games');   // G1: its coverage lines, when it has some
+    for (const name of order) {
+      const sec = s.sections.find(x => x.name === name);
+      if (name === 'games') { if (sec || /role="rowheader">Games/.test(p.list())) want.push('Games'); continue; }
       const n = s.best ? sec.rows.filter(r => (s.best.kind === 'team' ? r.key !== s.best.key : r.eventID !== s.best.eventID)).length : sec.rows.length;
       if (n) want.push(sec.name === 'teams' ? (s.best ? 'More teams' : 'Teams') : (s.best ? 'More events' : 'Events'));
     }
-    want.push('Games');
-    assert.deepEqual(headings(p).map(h => h.replace(/\s\d.*$/, '').replace(/\s+\d+$/, '')), want, q);
+    assert.deepEqual(headings(p).map(h => h.replace(/\s(\d|no ).*$/, '').replace(/\s+\d+$/, '')), want, q);
     checked++;
   }
   assert.ok(checked >= 40, `${checked} queries drawn`);
@@ -299,7 +329,9 @@ test('ARIA grid: every cell sits in a row, every row in the grid or a rowgroup, 
     assert.equal(all(t, x => roleOf(x) === 'option').length, 0, q);
     for (const e of all(t, x => 'aria-expanded' in x.attrs)) assert.equal(roleOf(e), 'gridcell', `${q}: aria-expanded only on gridcells`);
     const ad = p.input.getAttribute('aria-activedescendant');
-    if (p.cells().length) { assert.ok(ad && ids.has(ad), `${q}: aria-activedescendant names a cell of the grid`); assert.equal(all(t, x => x.attrs['aria-selected'] === 'true').length, 0, 'the drawn html has none selected: the block sets it on the element'); }
+    const sl = slateOf(q), noActive = !sl.enter && (sl.rule === 3 || (sl.sections[0] && sl.sections[0].name === 'games'));
+    if (noActive) assert.equal(ad, null, `${q}: Games leads (or a games query waits) with no enter: no active cell until a key (#168)`);
+    else if (p.cells().length) { assert.ok(ad && ids.has(ad), `${q}: aria-activedescendant names a cell of the grid`); assert.equal(all(t, x => x.attrs['aria-selected'] === 'true').length, 0, 'the drawn html has none selected: the block sets it on the element'); }
     else assert.equal(ad, null, q);
     n++;
   }
@@ -347,7 +379,7 @@ test('Q2, DOM cap: 8 clubs and 6 events at first; "Show all" grows a section in 
   const p = page(); await p.run('so');
   const clubsIn = () => all(p.tree(), n => hasClass(n, 'sx-clubhead') || (hasClass(n, 'sx-rowli') && /Overview ›/.test(text(n)))).length;
   assert.equal(clubsIn(), 8);
-  const evIn = () => all(p.tree(), n => (hasClass(n, 'sx-rowli') || hasClass(n, 'sx-grp')) && !/Overview ›/.test(text(n))).length;
+  const evIn = () => all(p.tree(), n => (hasClass(n, 'sx-rowli') || hasClass(n, 'sx-grp')) && !/Overview ›/.test(text(n)) && !all(n, x => hasClass(x, 'sxg-row') || hasClass(x, 'sxg-field')).length).length;
   assert.equal(evIn(), 6);
   const more = p.cells().findIndex(c => c.kind === 'more' && c.section === 'teams');
   assert.match(p.cells()[more].text, /^Show all 492 teams · 38 clubs$/);
@@ -362,7 +394,8 @@ test('Q2, DOM cap: 8 clubs and 6 events at first; "Show all" grows a section in 
   p.sxActivate(ev); assert.equal(evIn(), 14);
   // 50 at a time: fc has 51 clubs: 8, then 50, then "Show 1 more club"
   const f = page(); await f.run('fc');
-  const m1 = f.cells().findIndex(c => c.kind === 'more');
+  const teamsMore = c => c.kind === 'more' && c.section === 'teams';   // #168: Games has its own "Show all"
+  const m1 = f.cells().findIndex(teamsMore);
   assert.match(f.cells()[m1].text, /^Show all 578 teams · 51 clubs$/);
   f.sxActivate(m1);
   // MF2 (review of #166): the first new cell is active, not the "Show 1 more club" cell at the bottom
@@ -371,10 +404,10 @@ test('Q2, DOM cap: 8 clubs and 6 events at first; "Show all" grows a section in 
   assert.equal(f.state().sxActive, m1, 'the active cell is where the "more" cell was');
   assert.equal(keyOf(f.activeCell().team), ninth, "the 9th club's first cell");
   assert.notEqual(f.activeCell().kind, 'more');
-  const m2 = f.cells().findIndex(c => c.kind === 'more');
+  const m2 = f.cells().findIndex(teamsMore);
   assert.equal(f.cells()[m2].text, 'Show 1 more club · 1 left');
   f.sxActivate(m2);
-  assert.ok(!f.cells().some(c => c.kind === 'more'));
+  assert.ok(!f.cells().some(teamsMore));
   // the cap per keystroke: at most 8 clubs and 6 events are drawn, whatever the match count
   const g = page(); await g.open('');
   let max = 0, maxAt = '';
@@ -513,7 +546,7 @@ test('keys: Up/Down move by row to the nearest column; Left/Right/Home/End only 
   p.key('Home'); assert.equal(p.activeCell().col, 0);
   for (let i = 0; i < 20; i++) p.key('ArrowUp');   // wraps around
   assert.ok(p.activeCell());
-  p.key('ArrowDown'); p.key('ArrowDown');
+  for (let i = 0; i < 40 && !p.activeCell().ev; i++) p.key('ArrowDown');
   p.key('Enter'); assert.ok(/^#season=.*&view=standings$/.test(p.location.hash), p.location.hash);
   assert.equal(p.pop().hidden, true, 'opening closes the panel');
   assert.equal(p.input.value, '', 'and clears the box');
@@ -634,10 +667,14 @@ test('R6: Nearby is a pill on a nearby club or event only, with one sub-heading 
   assert.ok(s.sections[0].rows.every(r => !r.nearby) && s.sections.find(x => x.name === 'teams').rows.every(r => r.nearby), 'precondition: events in Redmond, teams near it');
   const t = p.tree();
   const subs = all(t, n => hasClass(n, 'sx-sub')).map(text);
-  assert.deepEqual(subs, ['Near Redmond, WA, in the same county'], 'one sub-heading, before the first nearby row');
-  const pills = all(t, n => hasClass(n, 'sx-pill') && hasClass(n, 'near'));
+  assert.deepEqual(subs, ['Near Redmond, WA, in the same county', 'Near Redmond, WA, in the same county'], 'one sub-heading per section (#168: Games, then Teams), before its first nearby row');
   const teamHeads = all(t, n => hasClass(n, 'sx-clubhead'));
+  const pills = teamHeads.flatMap(h => all(h, n => hasClass(n, 'sx-pill') && hasClass(n, 'near')));
   assert.equal(pills.length, teamHeads.length, 'a pill on each nearby club, none on a direct event');
+  const fieldRows = all(t, n => roleOf(n) === 'gridcell' && hasClass(n, 'sxg-field'));
+  assert.ok(fieldRows.length, 'Redmond WA lists fields');
+  for (const n of fieldRows) assert.equal(/Nearby/.test(text(n)), /, nearby$/.test(n.attrs['aria-label']), '#168: a field\'s pill and its name agree');
+  assert.ok(fieldRows.some(n => !/Nearby/.test(text(n)) && /Redmond, WA/.test(text(n))), 'a field in Redmond itself has no pill');
   assert.ok(pills.length >= 4);
   for (const row of all(t, n => hasClass(n, 'sx-rowli') && /Playoffs/.test(text(n)))) assert.ok(!/Nearby/.test(text(row)), 'an event in Redmond is direct');
   for (const c of all(t, n => roleOf(n) === 'gridcell' && n.attrs['aria-label'] && /nearby/.test(n.attrs['aria-label']))) assert.match(c.attrs['aria-label'], /, nearby$/);
@@ -667,21 +704,21 @@ test('R7: Surf Cup: the lead sentence, a Partial match pill on every row, no bes
   assert.ok(!/Partial match|partial match|in a tier name|Nothing matches/.test(q.list() + q.lead()));
 });
 
-test('R12: zzzz says no team or event matches, and offers examples; a field says games are not in search yet and never "no match"', async () => {
+test('R12: zzzz says no team or event matches, and offers examples; a field is never "no match" (#168: it is a result)', async () => {
   const z = page(); await z.run('zzzz');
   assert.match(z.lead(), /<h3>No team or event matches “zzzz”<\/h3>/);
   assert.match(z.lead(), /class="us-chip"/);
   assert.match(z.status(), /No results/);
-  assert.ok(z.list().includes('Games and fields aren’t in search yet'), 'the Games line');
+  assert.equal(z.list(), '', '#168: the old "Games aren\'t in search yet" line is gone');
   assert.equal(z.cells().length, 0);
   assert.equal(z.bar().hidden, true);
   assert.match(z.keysLine(), /^<kbd>Esc<\/kbd> close$/);
   assert.equal(z.input.getAttribute('aria-activedescendant'), null);
   const f = page(); await f.run('Surf Sports Park');
-  assert.equal(slateOf('Surf Sports Park').empty.reason, 'games-not-indexed');
-  assert.match(f.lead(), /<h3>Games and fields aren’t in search yet<\/h3>/);
+  assert.equal(slateOf('Surf Sports Park').empty, null);
   assert.ok(!/No team or event matches “|No results/.test(f.lead() + f.status()), 'never "no match" for a games reading');
-  assert.match(f.status(), /No teams or events/);
+  assert.match(f.status(), new RegExp(`<strong>${slateOf('Surf Sports Park').sections[0].rows[0].count} games</strong>`), 'a field query counts its field\'s games');
+  assert.ok(!/games-not-indexed|aren’t in search yet/.test(BLOCK), 'the not-indexed words are gone');
   // season and age group
   const s = page(); await s.run('U15 NorCal 2030-31');
   assert.match(s.lead(), /No 2030-31 season in this archive/);
@@ -740,13 +777,14 @@ test('Reviewer point 6: a line that matched only through an older name says so (
 
 test('Reviewer points 3, 4: names end with ", partial match" or ", nearby"; a fold\'s name has no "collapsed"; the live region says the plan\'s words', async () => {
   const p = page(); await p.run('Surf');
-  assert.equal(p.live(), '83 teams in 7 clubs, no events. Games aren\'t in search yet. Use the arrow keys to choose.');
+  const ng = slateOf('Surf').sections.find(x => x.name === 'games').rows.length;
+  assert.equal(p.live(), `83 teams in 7 clubs, no events. ${ng} games. Use the arrow keys to choose.`, '#168 G11: the games count');
   for (const c of all(p.tree(), n => roleOf(n) === 'gridcell' && 'aria-expanded' in n.attrs)) {
     assert.ok(!/collapsed|expanded/.test(c.attrs['aria-label']), c.attrs['aria-label']);
     assert.match(c.attrs['aria-label'], /^.+: \d+ ended teams?$/);
   }
   const q = page(); await q.run('southwest');
-  assert.equal(q.live(), 'No teams, 7 events. Games aren\'t in search yet. Use the arrow keys to choose.');
+  assert.equal(q.live(), `No teams, 7 events. ${slateOf('southwest').sections.find(x => x.name === 'games').rows.length} games. Use the arrow keys to choose.`);
   const s = page(); await s.run('Surf Cup');
   assert.equal(s.live().startsWith('Nothing matches every word. '), true);
   assert.match(s.live(), /101 teams in \d+ clubs?, 6 events\./);
@@ -776,13 +814,18 @@ test('every judged keystroke draws without error, with a key line, a status and 
     p.input.value = k; p.sxRun(k);
     if (k.trim().length < 2) { assert.match(p.status(), /Teams and events since 2020-21/); continue; }
     const s = slateOf(k);
-    if (!s.sections.length) { assert.equal(p.cells().length, 0, k); assert.match(p.status(), /No results|No teams or events/); continue; }
+    if (!s.sections.length) { assert.equal(p.cells().length, 0, k); assert.match(p.status(), /No results/); continue; }
     drawn++;
     const sec = Object.fromEntries(s.sections.map(x => [x.name, x.total]));
     if (sec.teams) assert.ok(p.status().includes(`<strong>${sec.teams} team${sec.teams === 1 ? '' : 's'}</strong>`), k);
     if (sec.events) assert.ok(p.status().includes(`<strong>${sec.events} event${sec.events === 1 ? '' : 's'}</strong>`), k);
-    assert.ok(p.cells().length > 0 && p.state().sxActive >= 0, k);
-    assert.ok(p.live().includes('Games aren\'t in search yet'), k);
+    const noActive = !s.enter && (s.rule === 3 || s.sections[0].name === 'games');
+    assert.ok(p.cells().length > 0 && (p.state().sxActive >= 0 || noActive), k);
+    assert.ok(p.live().endsWith('Use the arrow keys to choose.'), k);
+    const g = s.sections.find(x => x.name === 'games'), f = g ? g.rows.filter(r => r.kind === 'field') : [];
+    if (f.length > 1) assert.ok(p.status().includes(`<strong>${f.length} fields</strong>`), `${k}: G11 a place counts its fields`);
+    else if (f.length === 1) assert.equal(p.status().includes(`<strong>${f[0].count} game${f[0].count === 1 ? '' : 's'}</strong>`), f[0].count > 0, `${k}: G11 a field's games`);
+    else if (g && g.rows.some(r => r.kind === 'game')) assert.ok(p.status().includes(' game') && /\d+ games?\./.test(p.live()), `${k}: G11 games`);
   }
   assert.ok(drawn > 400, `${drawn} drawn`);
 });
@@ -791,7 +834,9 @@ test('sxRun asks the module with the clock, the league zone and the selected sea
   const seen = [];
   const mod = { ...S, search: (i, q, c, o) => { seen.push(c); return S.search(i, q, c, o); } };
   const p = page({ mod, season: null }); await p.run('Surf');
-  assert.deepEqual(seen[0], { now: NOW, timeZone: 'America/Los_Angeles', selectedSeason: '' });
+  assert.deepEqual(seen[0], { now: NOW, timeZone: 'America/Los_Angeles', selectedSeason: '', today: TODAY, gamesLoading: ['2026-27'], gamesMissing: [], gamesFailed: [] },
+    '#168 MF7: today is the page\'s todayKey(); the games the page is loading, missing or failed');
+  assert.deepEqual(seen.at(-1).gamesLoading, [], 'once the games are in');
   const q = page({ mod, season: '2024-25' }); await q.run('Surf');
   assert.equal(seen.at(-1).selectedSeason, '2024-25');
 });
@@ -805,8 +850,9 @@ test('goHome, the "/" key and the header buttons reach the new panel (the legacy
   assert.match(html, /class="us-cancel" onclick="sxClose\(true\)"/);
 });
 
-test('no request per keystroke: the block makes no fetch but the two search data files, and no event handler fetches', () => {
-  assert.equal((BLOCK.match(/fetchJSON\(/g) || []).length, 2);
+test('no request per keystroke: the block makes no fetch but the two search data files and (#168) the games loader\'s one, and no event handler fetches', () => {
+  assert.equal((BLOCK.match(/fetchJSON\(/g) || []).length, 3);
+  assert.equal((BLOCK.match(/fetchJSON\(`search\/games\/\$\{job\.season\}`\)/g) || []).length, 1, 'only the games loader fetches games (G12)');
   assert.ok(!/\bfetch\(/.test(BLOCK));
   assert.ok(!/getTeamDirectory/.test(BLOCK), 'search no longer reads /api/v1/teams');
   const code = BLOCK.replace(/^\s*\/\/.*$/gm, '');
@@ -819,4 +865,290 @@ test('the grid\'s CSS: chips are at least 28 px (36 px on the phone), the legacy
   assert.match(html, /@media \(max-width: 768px\) \{\s*\.sx-grp, \.sx-row \{[^}]*\}\s*\.sx-chip \{ height: 36px/);
   assert.ok(!/\.usearch-pop\.sx \{ display/.test(html), 'a rule that would beat [hidden]');
   assert.match(html, /\.usearch-pop\[hidden\] \{ display: none; \}/);
+});
+
+// ---------- #168 (PR 4b): the Games section, G1-G12, its loading and the meetings' Load cell (MF1) ----------
+const gamesOf = q => (slateOf(q).sections.find(x => x.name === 'games') || { rows: [] }).rows;
+const gameCells = p => p.cells().filter(c => c.game);
+const cellEl = (p, i) => all(p.tree(), n => roleOf(n) === 'gridcell' && n.attrs.id === `sx-c-${i}`)[0];
+
+test('G1, G2, G3: a team\'s games: the heading and count, up to 3 Upcoming then 3 Recent results, each one gridcell; "Show all" lists them in order', async () => {
+  const p = page(); await p.run('MVLA 2011');
+  const rows = gamesOf('MVLA 2011');
+  assert.ok(headings(p).includes(`Games ${rows.length} games`), headings(p).join(' | '));
+  const subs = all(p.tree(), n => hasClass(n, 'sxg-sub')).map(text);
+  assert.deepEqual(subs, ['Upcoming', 'Recent results']);
+  const g = gameCells(p);
+  assert.equal(g.length, 6);
+  const up = rows.filter(r => r.date >= TODAY && !r.score), done = rows.filter(r => !(r.date >= TODAY && !r.score));
+  assert.deepEqual(g.map(c => c.game.matchID), [...up.slice(0, 3), ...done.slice(0, 3)].map(r => r.matchID), 'the soonest 3, then the newest 3');
+  for (const c of g) {
+    const el = cellEl(p, p.cells().indexOf(c));
+    assert.equal(roleOf(el.parent), 'row', 'one gridcell per row');
+    assert.match(el.attrs['aria-label'], /^(Sun|Mon|Tue|Wed|Thu|Fri|Sat) [A-Z][a-z]{2} \d+, \d{4}(, \d+:\d{2} [AP]M)?, .+ against .+, (upcoming|today|.+ won \d+–\d+|drawn \d+–\d+|result not reported), NorCal U\d+/, 'G10');
+    assert.ok(all(el, n => hasClass(n, 'hit')).length >= 1, 'the side the query matched is marked');
+  }
+  const played = g.find(c => c.game.score);
+  if (played && played.game.winner) assert.equal(all(cellEl(p, p.cells().indexOf(played)), n => hasClass(n, 'win')).length, 1, 'the winner bold');
+  const more = p.cells().findIndex(c => c.kind === 'more' && c.section === 'games');
+  assert.equal(p.cells()[more].text, `Show all ${rows.length} games`);
+  p.sxActivate(more);
+  assert.deepEqual(gameCells(p).map(c => c.game.matchID), rows.map(r => r.matchID), 'in order, every game (42 < 50)');
+  assert.equal(p.activeCell().game.matchID, rows[6].matchID, 'the first new cell is active');
+  assert.ok(!/sxg-sub/.test(p.list()), 'no split once shown in full');
+});
+
+test('G4: a field query: one field row (aria-expanded) open by itself with its games under it, the first game active; Enter on the field closes it; "Show all" at the field', async () => {
+  const p = page(); await p.run('Surf Sports Park');
+  const f = p.cells().find(c => c.kind === 'field');
+  assert.equal(f.open, true);
+  assert.equal(cellEl(p, p.cells().indexOf(f)).attrs['aria-expanded'], 'true');
+  const fr = gamesOf('Surf Sports Park')[0], gs = fr.games;
+  assert.deepEqual(gameCells(p).map(c => c.game.matchID), gs.slice(0, 6).map(r => r.matchID));
+  assert.equal(p.activeCell().game.matchID, gs[0].matchID, 'Enter opens the next game there');
+  assert.match(text(cellEl(p, p.cells().indexOf(f))), /Surf Sports Park.*Del Mar, CA · \d+ upcoming games? in 2026–27/);
+  assert.ok(p.cells().some(c => c.kind === 'more' && c.text === `Show all ${gs.length} games at Surf Sports Park`));
+  assert.equal(p.bar().open.textContent, 'Open in Matches');
+  p.key('ArrowUp'); assert.equal(p.activeCell().kind, 'field');
+  assert.equal(p.bar().hidden, true, 'a field opens in the panel: no links');
+  p.key('Enter');
+  assert.equal(p.activeCell().kind, 'field'); assert.equal(p.activeCell().open, false);
+  assert.equal(gameCells(p).length, 0);
+  p.key('Enter'); assert.equal(gameCells(p).length, 6);
+});
+
+test('G5: a field with no games in the seasons asked names its seasons and offers one Load cell (one request); in a place\'s list, empty fields share one line', async () => {
+  const p = page(); await p.run('60 Acres');
+  const fr = gamesOf('60 Acres')[0];
+  assert.equal(fr.count, 0);
+  assert.match(p.list(), /Games here in 2021–22, 2023–24, 2025–26\. Earlier seasons load when you ask\./);
+  assert.ok(!/No team or event matches|No results/.test(p.list() + p.lead() + p.status()), 'never "no match"');
+  const L = p.cells().findIndex(c => c.kind === 'load');
+  assert.deepEqual(p.cells()[L].seasons, ['2025-26']);
+  assert.equal(cellEl(p, L).attrs['aria-label'], 'Load 2025–26 games, one request');
+  assert.equal(p.activeCell().kind, 'field', 'the field is active, open over its Load line');
+  assert.equal(p.activeCell().open, true);
+  const before = p.fetched.length;
+  for (let k = 0; k < 5 && p.state().sxActive !== L; k++) p.key('ArrowDown');
+  p.key('Enter');
+  await p.gamesIdle(); await wait(0);
+  assert.deepEqual(p.fetched.slice(before), ['search/games/2025-26'], 'exactly 1 request');
+  assert.equal(p.activeCell().game.season, '2025-26', 'the first newly added game is active');
+  assert.ok(p.cells().find(c => c.kind === 'field').open);
+  // seasons this visit loaded already show their games; the Load cell then names the latest season still not loaded
+  const v = page(); await v.open(''); await v.sxGamesFetch(['2023-24', '2025-26']);
+  v.input.value = '60 Acres'; v.sxRun('60 Acres');
+  assert.ok(gameCells(v).length > 0 && gameCells(v).every(c => ['2023-24', '2025-26'].includes(c.game.season)));
+  assert.match(v.list(), /Also games here in 2021–22\. Earlier seasons load when you ask\./);
+  assert.deepEqual(v.cells().find(c => c.kind === 'load').seasons, ['2021-22']);
+  const sp = page(); await sp.run('Surf Sports Park');
+  assert.ok(!sp.cells().some(c => c.kind === 'load'), 'a field with games this season offers no Load cell');
+  // a place: no Load cell per field, one shared line
+  const s = page(); await s.run('San Diego');
+  assert.equal(s.cells().filter(c => c.kind === 'load').length, 0);
+  assert.match(s.list(), /\d+ fields here had games only in earlier seasons\. Type a season, such as 2024-25, to search them\./);
+  assert.match(headings(s).find(h => h.startsWith('Games')), /^Games \d+ fields · \d+ upcoming games$/);
+});
+
+test('G6: club against club: one pairing row per season and age group (aria-expanded), the first open with its meetings; the record names the first side', async () => {
+  const p = page(); await p.run('Slammers vs Blues');
+  const pr = p.cells().filter(c => c.kind === 'pairing');
+  assert.equal(pr.length, 6);
+  assert.deepEqual(pr.map(c => c.open), [true, false, false, false, false, false]);
+  const el = cellEl(p, p.cells().indexOf(pr[0]));
+  assert.equal(el.attrs['aria-expanded'], 'true');
+  assert.match(el.attrs['aria-label'], /^Slammers FC against So Cal Blues, U18\/19, 2026–27, 2 meetings · none played yet · next Sat May 1, 2027$/);
+  assert.equal(gameCells(p).length, 2, 'the first pairing\'s 2 meetings');
+  assert.equal(p.activeCell().game.matchID, gamesOf('Slammers vs Blues')[0].meetings[0].matchID, 'its first meeting is active');
+  assert.equal(headings(p)[0], 'Games 6 pairings · 12 meetings');
+});
+
+test('G7: coverage lines are rows with a rowheader only; the only cells among them are Load and Try again cells', async () => {
+  const p = page(); await p.open('');
+  for (const q of ['60 Acres', 'San Diego', 'MVLA 2011', 'MVLA 2011 vs Mustang 2011', 'Slammers HB Koge 2007 v So Cal Blues 2007', 'Surf Cup']) {
+    p.input.value = q; p.sxRun(q);
+    for (const r of all(p.tree(), n => hasClass(n, 'sxg-cover'))) {
+      assert.equal(roleOf(r), 'row', q);
+      assert.equal(all(r, n => roleOf(n) === 'rowheader').length, 1, q);
+      for (const c of all(r, n => roleOf(n) === 'gridcell')) assert.ok(hasClass(c, 'sxg-load'), `${q}: a cell in a coverage line is a Load or Try again cell`);
+    }
+  }
+  p.input.value = 'MVLA 2011'; p.sxRun('MVLA 2011');
+  assert.match(p.list(), /Games from 2026–27\. Type a season, such as 2024-25, for earlier games\./, 'the scope line');
+});
+
+test('G8: a game\'s action bar: what it is, "Open in <view>" from row.href (never rebuilt), each side\'s season tab; Shift+Enter opens the matched side\'s season tab', async () => {
+  const p = page(); await p.run('MVLA 2011');
+  const i = p.cells().findIndex(c => c.game);
+  for (let k = 0; k < 10 && p.state().sxActive !== i; k++) p.key('ArrowDown');
+  const g = p.activeCell().game, row = g.row;
+  const b = p.bar();
+  assert.equal(b.hidden, false);
+  assert.equal(b.open.textContent, 'Open in Matches'); assert.equal(b.open.href, row.href);
+  assert.equal(b.hist.textContent, `${displayName(row.home.name, '')} season`); assert.equal(b.hist.href, row.home.seasonHref);
+  assert.equal(b.prev.textContent, `${displayName(row.away.name, '')} season`); assert.equal(b.prev.href, row.away.seasonHref);
+  assert.match(p.keysLine(), /Shift<\/kbd>\+<kbd>Enter<\/kbd> team’s season/);
+  const mine = row.matched === 'away' ? row.away : row.home;
+  assert.match(mine.name, /MVLA/, 'precondition: the matched side is MVLA');
+  p.key('Enter', { shiftKey: true });
+  assert.equal(p.location.hash, mine.seasonHref, 'the matched side\'s season tab');
+  const q = page(); await q.run('MVLA 2011');
+  const j = q.cells().findIndex(c => c.game);
+  for (let k = 0; k < 10 && q.state().sxActive !== j; k++) q.key('ArrowDown');
+  const href = q.activeCell().game.href;
+  q.key('Enter'); assert.equal(q.location.hash, href, 'Enter opens the game in its view');
+  // the bar reads row.href: a row whose href is planted shows that one
+  const flat = r => ({ ...r, home: r.home, away: r.away, date: r.date, time: r.time, score: r.score, pk: r.pk, winner: r.winner, competition: r.competition, field: r.field, dest: r.dest, href: '#planted' });
+  const real = slateOf('MVLA 2011'), planted = { ...real, sections: real.sections.map(s => (s.name !== 'games' ? s : { ...s, rows: s.rows.map((r, k) => (k ? r : flat(r))) })) };
+  const m = page({ mod: { ...S, search: () => planted } }); await m.run('MVLA 2011');
+  const k0 = m.cells().findIndex(c => c.game && c.game.matchID === real.sections.find(s => s.name === 'games').rows[0].matchID);
+  for (let k = 0; k < 10 && m.state().sxActive !== k0; k++) m.key('ArrowDown');
+  assert.equal(m.bar().open.href, '#planted');
+});
+
+test('G9: a game with no link (a side still to be decided) says "No page yet"; Enter does nothing; G10: names render as text', async () => {
+  const p = page(); await p.open('');
+  await p.sxGamesFetch(['2020-21']);
+  p.input.value = '2021-07-07 2020-21'; p.sxRun('2021-07-07 2020-21');
+  const i = p.cells().findIndex(c => c.kind === 'nolink');
+  assert.ok(i >= 0, 'a TBD game is listed');
+  assert.match(text(cellEl(p, i)), /No page yet/);
+  p.input.value = '2021-07-07 2020-21';
+  for (let k = 0; k < 20 && p.state().sxActive !== i; k++) p.key('ArrowDown');
+  p.key('Enter');
+  assert.equal(p.location.hash, '', 'nothing opens');
+  assert.equal(p.bar().open.hidden, true);
+  // a name is text: a planted team name with markup is escaped in the cell and its name
+  const games = s => { const d = structuredClone(loadGames(s)); for (const t of Object.values(d.teams)) t[0] = '<img src=x onerror=alert(1)> FC'; return d; };
+  const h = page({ games }); await h.run('MVLA 2011');
+  assert.ok(!/<img\b/i.test(h.list()) && h.list().includes('&lt;img src=x'));
+});
+
+test('G11: the status line and the live region count games or fields; "no games" fields and the meetings\' Load say so (build point 5)', async () => {
+  const p = page(); await p.run('MVLA 2011');
+  assert.match(p.status(), new RegExp(`<strong>${gamesOf('MVLA 2011').length} games</strong>`));
+  const f = page(); await f.run('Farmington');
+  assert.equal(f.live(), 'No teams, no events. 3 fields, no games in 2026–27. Use the arrow keys to choose.', 'nit 6, build point 5');
+  assert.equal(f.status(), '<strong>3 fields</strong>', 'a place counts its fields');
+  const a = page(); await a.run('60 Acres');
+  assert.equal(a.live(), 'No teams, no events. 1 field, no games in 2026–27. Use the arrow keys to choose.');
+  const h = page(); await h.run('Slammers HB Koge 2007 v So Cal Blues 2007');
+  assert.equal(h.live(), '2 teams in 2 clubs, no events. No meetings loaded; earlier meetings can be loaded. Use the arrow keys to choose.');
+  const m = page(); await m.run('MVLA 2011 vs Mustang 2011');
+  assert.equal(m.live(), '4 teams in 2 clubs, no events. 2 games. Use the arrow keys to choose.');
+  const sp = page(); await sp.run('Surf Sports Park');
+  assert.equal(sp.live(), `No teams, no events. ${gamesOf('Surf Sports Park')[0].count} games. Use the arrow keys to choose.`);
+  const sd = page(); await sd.run('San Diego');
+  const fs = gamesOf('San Diego').filter(r => r.kind === 'field');
+  assert.match(sd.live(), new RegExp(`, 2 events\\. ${fs.length} fields, ${fs.reduce((n, f) => n + f.upcoming, 0)} upcoming games\\. Use the arrow keys to choose\\.$`));
+  assert.match(sd.status(), new RegExp(`<strong>${fs.length} fields</strong>`));
+});
+
+test('G12: drawing makes no request: every judged keystroke draws with no fetch beyond the 3 of the first focus', async () => {
+  const p = page(); await p.open('');
+  for (const k of judgedKeystrokes()) { p.input.value = k; p.sxRun(k); }
+  assert.deepEqual(p.fetched, ['search/core', 'search/places', 'search/games/2026-27']);
+});
+
+test('loading: games-first queries wait without a best match or a committed Enter; a season a query names loads after 500 ms of stillness, once, and never while typing', async () => {
+  let release; const gate = new Promise(r => { release = r; });
+  const p = page({ gamesGate: s => (s === '2024-25' ? gate : null) }); await p.open('');
+  const q = 'Pateadores vs Slammers 2024-25';
+  for (const k of ['Pateadores vs Slammers 2', 'Pateadores vs Slammers 202', 'Pateadores vs Slammers 2024', 'Pateadores vs Slammers 2024-2']) { p.input.value = k; p.sxRun(k); await wait(60); }
+  p.input.value = q; p.sxRun(q);
+  assert.equal(p.state().sxActive, -1, 'no committed Enter while 2024-25 is pending (4a MF4)');
+  assert.ok(!/Best match/.test(p.list()));
+  await wait(p.SX_GAMES_STILL_MS - 150);
+  assert.ok(!p.fetched.some(f => /games\/202[0-5]/.test(f)), 'nothing yet');
+  await wait(250);
+  assert.deepEqual(p.fetched.filter(f => /games\/202[0-5]/.test(f)), ['search/games/2024-25'], 'exactly 1, after the box was still; none for 2023-24 or 2024-25 while typing "2024"');
+  assert.equal(headings(p)[0], 'Games');
+  assert.match(p.list(), /Loading 2024–25 games…<\/strong> Teams and events are ready; games join them in a moment\./, 'Games leads with its loading line');
+  release(); await p.gamesIdle(); await wait(0);
+  const firstPair = p.cells().find(c => c.kind === 'pairing');
+  assert.ok(firstPair.open && p.activeCell().game && p.cells().indexOf(p.activeCell()) === p.cells().indexOf(firstPair) + 1, 'once in, Enter is committed: the first pairing\'s first meeting (G6)');
+  assert.match(p.list(), /2024–25 games loaded for this search \(one request, kept for the visit\)\./);
+  p.input.value = q; p.sxRun(q); await wait(p.SX_GAMES_STILL_MS + 50);
+  assert.equal(p.fetched.filter(f => f === 'search/games/2024-25').length, 1, 'once per visit');
+});
+
+test('loading: a failed games file says Try again (a cell), and Try again asks once more; a 404 says there is no games file', async () => {
+  let fail = true;
+  const games = s => { if (s === '2023-24' && fail) throw Object.assign(new Error('API error 429'), { status: 429 }); if (s === '2022-23') throw Object.assign(new Error('API error 404'), { status: 404 }); return loadGames(s); };
+  const p = page({ games }); await p.run('MVLA 2023-24');
+  await wait(p.SX_GAMES_STILL_MS + 50); await p.gamesIdle(); await wait(0);
+  assert.match(p.list(), /Couldn't load 2023–24 games\.<\/strong> Too many requests\./);
+  const t = p.cells().findIndex(c => c.kind === 'retry');
+  assert.ok(t >= 0 && hasClass(cellEl(p, t), 'sxg-load'));
+  fail = false;
+  p.sxActivate(t); await p.gamesIdle(); await wait(0);
+  assert.equal(p.fetched.filter(f => f === 'search/games/2023-24').length, 2);
+  assert.ok(gameCells(p).some(c => c.game.season === '2023-24'));
+  const m = page({ games }); await m.run('MVLA 2022-23');
+  await wait(m.SX_GAMES_STILL_MS + 50); await m.gamesIdle(); await wait(0);
+  assert.match(m.list(), /No games file for 2022–23\./);
+});
+
+test('MF1 (Q2): one squad a side: the loaded meetings and a Load cell; 0 fetches before the press, exactly 3 on it; a disabled cell keeps the place while loading; the first new meeting is active after', async () => {
+  let release; const gate = new Promise(r => { release = r; });
+  const p = page({ gamesGate: s => (s !== '2026-27' ? gate : null) }); await p.run('MVLA 2011 vs Mustang 2011');
+  await wait(p.SX_GAMES_STILL_MS + 50);
+  assert.deepEqual(p.fetched, ['search/core', 'search/places', 'search/games/2026-27'], '0 before the press');
+  assert.equal(p.activeCell().game.matchID, 1094466, 'the latest loaded meeting');
+  assert.equal(gameCells(p).length, 2);
+  const L = p.cells().findIndex(c => c.kind === 'load');
+  assert.equal(cellEl(p, L).attrs['aria-label'], 'Load earlier meetings, 2023–24, 2024–25, 2025–26, 3 seasons');
+  assert.match(p.list(), /Earlier meetings: both teams also played 2023–24, 2024–25, 2025–26\./);
+  for (let k = 0; k < 5 && p.state().sxActive !== L; k++) p.key('ArrowDown');
+  assert.equal(p.state().sxActive, L);
+  assert.equal(p.bar().hidden, true, 'no links for a Load cell');
+  p.key('Enter', { shiftKey: true });
+  assert.equal(p.fetched.length, 3, 'Shift+Enter does nothing');
+  p.key(' ');
+  assert.deepEqual(p.fetched.slice(3), ['search/games/2023-24', 'search/games/2024-25'], 'Space fetches, 2 at a time');
+  const busy = p.activeCell();
+  assert.equal(busy.kind, 'busy', 'the cell becomes a load in flight and stays active (build point 4)');
+  assert.equal(cellEl(p, p.state().sxActive).attrs['aria-disabled'], 'true');
+  assert.ok(p.input.getAttribute('aria-activedescendant'));
+  assert.equal(p.live(), 'Loading earlier meetings… (3 requests)');
+  assert.match(p.list(), /Loading earlier meetings…<\/strong> 2023–24, 2024–25, 2025–26 \(3 requests\)\./);
+  p.key('Enter'); assert.equal(p.fetched.length, 5, 'pressing it again fetches nothing');
+  release(); await p.gamesIdle(); await wait(0);
+  assert.deepEqual(p.fetched.slice(3).sort(), ['search/games/2023-24', 'search/games/2024-25', 'search/games/2025-26'], 'exactly 3 on the press');
+  const a = p.activeCell();
+  assert.ok(a.game && ['2023-24', '2024-25', '2025-26'].includes(a.game.season), 'the first newly added meeting is active');
+  assert.equal(a.game.matchID, gamesOf('MVLA 2011 vs Mustang 2011').length ? S.search((() => { const ix = S.buildIndex(fresh()); for (const s of ['2026-27', '2023-24', '2024-25', '2025-26']) { const g = S.startGames(ix, loadGames(s), Infinity); while (!g.next().done); } return ix; })(), 'MVLA 2011 vs Mustang 2011', CTX).sections[0].rows[2].matchID : null);
+  assert.ok(!p.cells().some(c => c.kind === 'load' || c.kind === 'busy'), 'no season remains: the cell is gone');
+  assert.equal(p.el('usearchList').scrolled, undefined, 'the list does not jump');
+});
+
+test('MF1: H04 leads with Games, its Load row and no active cell; Down makes the Load cell active; a changed query while loading draws nothing; a failure, then Try again', async () => {
+  const p = page(); await p.run('Slammers HB Koge 2007 v So Cal Blues 2007');
+  assert.equal(headings(p)[0], 'Games no meetings loaded');
+  assert.match(p.list(), /No meetings in the seasons loaded\. Both teams played 2020–21 to 2024–25\./);
+  assert.equal(p.state().sxActive, -1); assert.equal(p.input.getAttribute('aria-activedescendant'), null);
+  p.key('Enter'); assert.equal(p.location.hash, '', 'Enter does nothing');
+  p.key('ArrowDown');
+  assert.equal(p.activeCell().kind, 'load');
+  assert.deepEqual(p.activeCell().seasons, ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25']);
+  // a changed query while loading: the seasons are installed, nothing is redrawn
+  let release; const gate = new Promise(r => { release = r; });
+  let fail = true;
+  const q = page({ gamesGate: s => (s !== '2026-27' ? gate : null), games: s => { if (s === '2024-25' && fail) throw Object.assign(new Error('x'), { status: 503 }); return loadGames(s); } });
+  await q.run('MVLA 2011 vs Mustang 2011');
+  const L = q.cells().findIndex(c => c.kind === 'load');
+  q.sxActivate(L);
+  q.input.value = 'Surf'; q.sxRun('Surf');
+  const drawn = q.list();
+  release(); await q.gamesIdle(); await wait(0);
+  assert.equal(q.list(), drawn, 'Surf is not redrawn by the meetings landing');
+  assert.ok(q.state().sxIndex.games.has('2023-24') && q.state().sxIndex.games.has('2025-26'), 'the seasons are installed');
+  q.input.value = 'MVLA 2011 vs Mustang 2011'; q.sxRun('MVLA 2011 vs Mustang 2011');
+  const t = q.cells().findIndex(c => c.kind === 'retry');
+  assert.ok(t >= 0, 'the failed season: Try again');
+  assert.match(q.list(), /Couldn't load 2024–25 games\./);
+  fail = false;
+  q.sxActivate(t); await q.gamesIdle(); await wait(0);
+  assert.equal(q.activeCell().game.season, '2024-25');
+  assert.ok(!q.cells().some(c => c.kind === 'retry' || c.kind === 'load'));
 });

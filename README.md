@@ -605,16 +605,23 @@ draws them since #165 (below).
 
 `public/index.html`, from `// ===== #165: the search panel` to the form chips' tooltip, draws the slate
 of the search modules (#165, #148; PR 4a of #149 phase 1): teams, events and conference tables in one
-panel, a popover under the header's box and a full-screen dialog on a phone. Today's panel
+panel, a popover under the header's box and a full-screen dialog on a phone; since #168 (PR 4b) games,
+fields and pairings too. Today's panel
 (`TEAM_SEARCH` and the code from `let usDb`) is still in the file, dormant, until PR 5 removes it.
 
 - **First focus** loads `/api/v1/search/core` and `/api/v1/search/places` (2 Worker requests, about
-  109 KB gzipped) and the 8 modules (static files; fetched ahead at the first idle moment, never on a
+  109 KB gzipped) and the 9 modules (static files; fetched ahead at the first idle moment, never on a
   data-saver connection or in `?live=1`, where search is off). The index is built in steps of 50
   units: before each step the page yields if the task so far plus the slowest step so far would pass
   40 ms (`scheduler.yield()`, else a `MessageChannel`; never `setTimeout(0)`). Nothing is requested
   per keystroke. Parsing `core.json` is the one task the page cannot split.
-- **The version check:** the page expects `SEARCH_API` 2. Any other version, or a data schema the
+- **Games** (#168, Q5b b): right after "ready", exactly 1 request, `/api/v1/search/games/<active season>`
+  (about 69 KB gzipped), read with `res.json()` and built in steps of 150 games under the same 40 ms rule.
+  A season a query names (an explicit season or a bare year) is fetched once the box has been still for
+  500 ms; one squad a side's earlier meetings and a field's earlier games only when their Load cell is
+  pressed (at most 6 seasons, 2 at a time). Each season once per visit; a closed season's file is cached
+  for a day (#82). A 404 says there is no games file; any other failure offers Try again (#92).
+- **The version check:** the page expects `SEARCH_API` 3. Any other version, or a data schema the
   modules do not know, shows "Search was updated while this page was open" with a Reload button and
   never searches.
 - **The grid:** the combobox opens a `role="grid"`; rows hold gridcells, the best match is a labelled
@@ -625,7 +632,12 @@ panel, a popover under the header's box and a full-screen dialog on a phone. Tod
   `tests/search-panel.test.mjs`: grouping by club or reviewed family with one line per team name; live
   teams as chips and ended ones folded; #107 may-continue teams folded into their successor; the slate's
   `enter` always a visible cell; Nearby, partial and typo labels from the rows' structured fields
-  (never from `why`); chip links from `row.hrefs`; the Games coverage line.
+  (never from `why`); chip links from `row.hrefs`; the empty texts. G1 to G12 (#168) do the same for
+  the Games section: game rows (date, teams, score or state, competition, field; "Upcoming" and
+  "Recent results", 3 each, then "Show all"), field rows and pairing rows that open in place, the Load
+  and Try again cells, the coverage lines, the action bar's "Open in <view>" and each side's season tab
+  (Shift+Enter the matched side's), and the counts in the status line and the live region. `today` is the
+  page's own `todayKey()`.
 - **In a browser:** `tests/e2e/search-panel.e2e.mjs` drives Chromium against `python proxy_server.py
   --offline` on a free port. Every request that is not to that port is aborted and counted, so the
   run makes no request off the machine (club logos and fonts included). It is not in CI (it needs

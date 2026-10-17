@@ -2296,6 +2296,31 @@
     .usearch-pop.sx .us-actions span.us-two { display: block; -webkit-line-clamp: unset; overflow: visible; white-space: normal; line-height: 1.35; }
     .sx-was { font: 500 11.5px var(--font); color: var(--text-secondary); margin-left: 4px; }   /* the earlier name that matched */
 
+    /* ===== #168: the search panel's Games section (G1-G9). Only the page's theme tokens; no new colours. ===== */
+    .sxg-row { grid-template-columns: 84px minmax(0, 1fr) auto; align-items: start; }
+    .sxg-when { display: grid; gap: 1px; font-size: 12px; color: var(--text-secondary); padding-top: 1px; }
+    .sxg-when b { font-weight: 700; color: var(--text-primary); font-size: 12.5px; white-space: nowrap; }
+    .sxg-teams { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; font: 500 13.5px var(--font); color: var(--text-primary); }
+    .sxg-side.win { font-weight: 700; }
+    .sxg-side.hit { color: var(--accent-text); }
+    .sxg-v { color: var(--text-secondary); font-weight: 500; font-size: 12px; }
+    .sxg-score { font: 700 13px var(--font); padding: 0 6px; border-radius: 6px; background: var(--bg-surface-alt); border: 1px solid var(--border-light); white-space: nowrap; }
+    .sxg-pill { display: inline-block; padding: 0 7px; border-radius: 999px; font: 600 10.5px/18px var(--font); white-space: nowrap; background: var(--bg-surface-alt); color: var(--text-secondary); border: 1px solid var(--border-light); }
+    .sxg-pill.upcoming, .sxg-pill.today { background: var(--accent-surface); color: var(--accent-text); border-color: transparent; }
+    .sxg-pill.unreported { border-style: dashed; }
+    .sxg-meta { display: block; margin-top: 2px; }
+    .sxg-in .sx-row, .sxg-in.sx-cover { padding-left: 34px; }
+    .sxg-sub { padding-left: 14px; }
+    .sxg-cover { flex-wrap: wrap; align-items: center; }
+    .sxg-cover > span[role=rowheader] { flex: 1 1 260px; }
+    .sxg-load { margin-left: 26px; }
+    .sxg-load[aria-disabled="true"] { cursor: default; border-style: dashed; }
+    .sxg-field[aria-expanded="true"] { background: var(--bg-surface-alt); }
+    @media (max-width: 768px) {
+      .sxg-row { grid-template-columns: 70px minmax(0, 1fr); }
+      .sxg-in .sx-row, .sxg-in.sx-cover { padding-left: 22px; }
+    }
+
     /* ===== #135 P1a: the landing page and the Teams index ===== */
     .landing { flex: 1; overflow-y: auto; }
     .landing[hidden] { display: none; }
@@ -2377,19 +2402,19 @@
     </div>
     <!-- #114: one team search for every tab (by name, club, place, birth year, age group, conference). -->
     <div class="usearch-slot" id="usearchSlot">
-      <div class="usearch" id="usearch" role="search" aria-label="Teams and events">
+      <div class="usearch" id="usearch" role="search" aria-label="Teams, events and games">
           <div class="usearch-box">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg>
             <input class="usearch-input" id="usearchInput" type="text" role="combobox" aria-autocomplete="list"
               aria-expanded="false" aria-controls="usearchList" aria-haspopup="grid" autocomplete="off" spellcheck="false"
-              placeholder="Search teams, clubs, places, events…" aria-label="Search teams and events by name, place, age group, conference or season">
+              placeholder="Search teams, clubs, places, events, fields…" aria-label="Search teams, events and games by name, place, field, age group, conference or season">
             <kbd class="usearch-kbd" aria-hidden="true">/</kbd>
           </div>
         </div>
     </div>
     <div class="header-right">
       <span class="season-label" id="seasonLabel"></span>
-      <button class="header-search" id="headerSearch" type="button" aria-label="Search teams and events" aria-haspopup="dialog" onclick="sxOpenSheet()"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg></button>
+      <button class="header-search" id="headerSearch" type="button" aria-label="Search teams, events and games" aria-haspopup="dialog" onclick="sxOpenSheet()"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg></button>
       <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Switch to dark mode">🌙</button>
     </div>
   </div>
@@ -2400,15 +2425,15 @@
     <div class="us-sheet-head">
       <div class="usearch-box"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg>
         <input class="usearch-input" id="usearchSheetInput" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false"
-          aria-controls="usearchList" aria-haspopup="grid" autocomplete="off" spellcheck="false" placeholder="Search teams, clubs, places, events…"
-          aria-label="Search teams and events">
+          aria-controls="usearchList" aria-haspopup="grid" autocomplete="off" spellcheck="false" placeholder="Search teams, clubs, places, events, fields…"
+          aria-label="Search teams, events and games">
       </div>
       <button type="button" class="us-cancel" onclick="sxClose(true)">Cancel</button>
     </div>
     <div class="sx-status" id="sxStatus" hidden></div>
     <div class="sx-scroll" id="sxBody"><div class="sx-lead" id="sxLead" hidden></div><ul class="sx-list" id="usearchList" role="grid" aria-label="Search results"></ul></div>
     <div class="us-actions" id="usearchActions" hidden><span id="usearchActive"></span><a id="usearchOpen" href="#">Overview</a><a id="usearchHist" href="#">Current season</a><a id="usearchPrev" href="#" hidden>Earlier team</a></div>
-    <div class="us-foot"><span class="us-keys" id="sxKeys"><kbd>Esc</kbd> close</span><span>Teams and events since 2020-21</span></div>
+    <div class="us-foot"><span class="us-keys" id="sxKeys"><kbd>Esc</kbd> close</span><span>Teams, events and games since 2020-21</span></div>
     <div class="us-sr" id="usearchLive" role="status" aria-live="polite"></div>
   </div>
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -7464,13 +7489,37 @@
     //   R9 typo: the first team whose matched has cls 'typo': that word, as the line or club spells it.
     //   R10 tier: a partial event whose every matched field is 'tier' says "'cup' in a tier name".
     //   R11 a chip's link is row.hrefs[k] (an age-less conference season: one per age group).
-    //   R12 coverage: coverage.games 'not-indexed' gives the Games line; empty.reason the empty text.
-    const SX_API_EXPECTED = 2;                     // search.mjs SEARCH_API this page was written against
-    const SX_MODULES = ['events', 'links', 'match', 'reader', 'search', 'slate', 'teams', 'vocab'].map(n => `/search/${n}.mjs`);
+    //   R12 coverage: empty.reason gives the empty text (#168: 'games-loading' while a season the query needs loads).
+    // #168 (PR 4b), the Games section, each pinned by tests/search-panel.test.mjs:
+    //   G1 the "Games" heading and its count; the rows in the slate's order.
+    //   G2 a game is a row with one gridcell: the date and kick-off, the two teams' short names (the winner bold,
+    //      the side the query matched marked), the score or its state, the competition, the field and its city,
+    //      and where it opens.
+    //   G3 a team, conference, kind word or date: up to 3 under Upcoming, then up to 3 under Recent results, then
+    //      "Show all N games" (in order, then 50 at a time). One squad a side's meetings come in order.
+    //   G4 a field row is a gridcell with aria-expanded: Enter opens its games under it. A field query's one
+    //      field opens by itself, and its first game is the active cell.
+    //   G5 a field with no games in the seasons asked names the seasons that have them, and a field query's own
+    //      field offers one "Load <season> games" cell (one request); in a place's list they share one line.
+    //   G6 a pairing row (D5) is a gridcell with aria-expanded: the sides, season and age group, the meetings and
+    //      the record from the first side's view; the first is open.
+    //   G7 coverage lines are a row with a rowheader only; the exceptions are a Load and a Try again cell, and a
+    //      load in flight (a disabled cell that keeps the keyboard's place).
+    //   G8 a game's action bar: what it is, "Open in <view>" (row.href) and each side's season tab when it has a
+    //      team page; Shift+Enter opens the matched side's season tab, else the home side's.
+    //   G9 a game with no link (a side still to be decided) says "No page yet"; Enter does nothing.
+    //   G10 cell names: "<day date, time>, <home> against <away>, <state or result>, <competition>, <field>".
+    //   G11 the status line and the live region count games (fields, for a place).
+    //   G12 drawing makes no request: only the games loader fetches, once per season.
+    const SX_API_EXPECTED = 3;                     // search.mjs SEARCH_API this page was written against (#168: games)
+    const SX_MODULES = ['events', 'games', 'links', 'match', 'reader', 'search', 'slate', 'teams', 'vocab'].map(n => `/search/${n}.mjs`);
     const SX_STEP_UNITS = 50;                      // units of work per build step
     const SX_TASK_MS = 40;                         // no build task may run past this (the Auditor measures 50)
     const SX_TZ = 'America/Los_Angeles';           // the league's zone: event dates are local there
-    const SX_SIZES = { teams: 8, events: 6, page: 50 };
+    const SX_SIZES = { teams: 8, events: 6, games: 6, page: 50 };
+    const SX_GAMES_UNITS = 150;                    // #168: games per build step (startGames)
+    const SX_GAMES_STILL_MS = 500;                 // a season a query names loads once the box has been still this long
+    const SX_GAMES_PARALLEL = 2;                   // games files in flight at once
     const SX_HOVER_MS = 250;
     const SX_TIPS = ['MVLA 2011', 'San Diego', 'U15 NorCal', 'Southwest', 'Playoffs 2025-26'];
     let sxImport = () => import('/search/search.mjs');   // tests replace it
@@ -7540,6 +7589,7 @@
         if (mod.SEARCH_API !== SX_API_EXPECTED) throw Object.assign(new Error('api'), { sxReload: true });
         sxIndex = await sxDrive(mod.startIndex(data, SX_STEP_UNITS), { onStep: label => sxProgress(label) });
         sxMod = mod; sxState = 'ready'; sxPct = 100;
+        sxGamesFetch([sxIndex.vocab.active]);   // #168 (Q5b b): the active season's games, right after "ready": 1 request
       })().catch(e => {
         sxLoadP = null;
         sxState = e && (e.sxReload || e.name === 'SearchDataError') ? 'reload' : 'failed';
@@ -7560,7 +7610,7 @@
     const sxSheet = () => isPhone();
     function sxPlace() {
       const pop = sxPop();
-      if (sxSheet()) { pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-modal', 'true'); pop.setAttribute('aria-label', 'Search teams and events'); return; }
+      if (sxSheet()) { pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-modal', 'true'); pop.setAttribute('aria-label', 'Search teams, events and games'); return; }
       pop.removeAttribute('role'); pop.removeAttribute('aria-modal'); pop.removeAttribute('aria-label');
       const r = document.getElementById('usearchInput').getBoundingClientRect();
       const width = Math.min(640, window.innerWidth - 32);
@@ -7605,7 +7655,7 @@
       document.getElementById('usearchList').innerHTML = list;   // the grid stays in the DOM, so aria-controls never points at nothing
       document.getElementById('usearchActions').hidden = true;
       document.getElementById('sxKeys').innerHTML = sxKeysText(null);
-      document.getElementById('usearchLive').textContent = live;
+      if (live !== null) document.getElementById('usearchLive').textContent = live;   // null: a redraw that says nothing new (#168)
       sxInputs().forEach(i => i.removeAttribute('aria-activedescendant'));
       sxView = null; sxActive = -1;
     }
@@ -7789,6 +7839,7 @@
         return `<li role="row" class="sx-moreli"><span role="gridcell" class="sx-more" id="${id}" data-c="${cells.length - 1}" aria-selected="false">${esc(text)}</span></li>`;
       };
       const parts = [], counts = Object.fromEntries(slate.sections.map(s => [s.name, s.total]));
+      const gctx = { cell, cells, nextRow: () => rowNo++, head, sub, more, today: todayKey() };   // #168: the Games section's helpers
       let clubs = 0;
       const best = slate.best;
       if (best) {
@@ -7798,7 +7849,12 @@
           : eventCells(best);
         parts.push(`<li role="rowgroup" class="sx-best" aria-label="Best match"><ul role="presentation">${head('Best match')}${inner}</ul></li>`);
       }
-      for (const sec of slate.sections) {
+      // #168 G1: Games in the slate's place; with no rows, its heading and coverage lines first under rule 3, else last
+      const order = slate.sections.map(s => s.name);
+      if (!order.includes('games')) order.splice(slate.rule === 3 ? 0 : order.length, 0, 'games');
+      for (const name of order) {
+        const sec = slate.sections.find(s => s.name === name) || null;
+        if (name === 'games') { const g = sxGamesSection(sec, slate, state, gctx); if (sec || g.length > 1) parts.push(...g); continue; }
         const rows = best ? sec.rows.filter(r => (best.kind === 'team' ? r.key !== best.key : r.eventID !== best.eventID)) : sec.rows;
         if (!rows.length) continue;
         if (sec.name === 'teams') {
@@ -7826,8 +7882,6 @@
       }
       return { cells, html: parts.join(''), counts, clubs };
     }
-    const sxGamesLine = () => `<li role="row" class="sx-head"><span role="rowheader">Games</span></li><li role="row" class="sx-cover"><span role="rowheader">${SX_ICON.info}<span>Games and fields aren’t in search yet. A team’s page lists its games.</span></span></li>`;
-    const sxGamesAsked = slate => slate.coverage.some(c => c.category === 'games' && c.state === 'not-indexed' && c.asked);
 
     // R9: the first team whose matched has a typo word, as the line (or the club) spells it
     function sxTypoHint(slate) {
@@ -7839,65 +7893,360 @@
       return `<span class="sx-hint">Matched “${esc(m ? m[0] : term)}”</span>`;
     }
     // The words a screen reader gets once per settled query (a polite live region)
-    function sxAnnounce(slate, counts, clubs) {
+    function sxAnnounce(slate, counts, clubs, cells) {
       const lead = slate.empty && slate.empty.reason === 'no-full-match' ? 'Nothing matches every word. ' : '';
+      const say = sxGamesSay(slate);   // G11
       const teams = counts.teams ? `${sxPlural(counts.teams, 'team')} in ${sxPlural(clubs, 'club')}` : 'No teams';
-      const events = counts.events ? sxPlural(counts.events, 'event') : 'no events';
-      return `${lead}${teams[0].toUpperCase()}${teams.slice(1)}, ${events}. Games aren't in search yet. Use the arrow keys to choose.`;
+      const te = `${teams[0].toUpperCase()}${teams.slice(1)}, ${counts.events ? sxPlural(counts.events, 'event') : 'no events'}.`;
+      // build point 5: no "arrow keys" when there is no cell to move to
+      return `${lead}${[te, say, cells ? 'Use the arrow keys to choose.' : ''].filter(Boolean).join(' ')}`;
     }
     function sxResultsBody(q, slate, state) {
       const built = sxBuild(q, slate, state);
       const status = [];
       if (built.counts.teams) status.push(`<strong>${sxPlural(built.counts.teams, 'team')}</strong>`);
       if (built.counts.events) status.push(`<strong>${sxPlural(built.counts.events, 'event')}</strong>`);
+      const gc = sxGamesCount(slate);   // G11: a place counts its fields; anything else its games
+      if (gc.fields) status.push(`<strong>${sxPlural(gc.fields, 'field')}</strong>`);
+      else if (gc.games) status.push(`<strong>${sxPlural(gc.games, 'game')}</strong>`);
       const typo = sxTypoHint(slate);
       if (typo) status.push(typo);
       const lead = slate.empty && slate.empty.reason === 'no-full-match'
         ? `<div class="sx-note"><strong>Nothing matches every word of “${esc(q)}”.</strong>These results match some of the words.</div>` : '';   // R7
-      return { built, body: { status: status.join(' · '), lead, list: built.html + sxGamesLine(), live: sxAnnounce(slate, built.counts, built.clubs) } };
+      return { built, body: { status: status.join(' · '), lead, list: built.html, live: sxAnnounce(slate, built.counts, built.clubs, built.cells.length) } };
     }
     function sxEmptyBody(q, slate) {   // R12
       const reason = slate.empty ? slate.empty.reason : 'no-match';
-      if (reason === 'games-not-indexed') {
-        return { status: '<strong>No teams or events</strong>', live: 'Games and fields aren\'t in search yet.',
-          lead: `<div class="sx-empty"><h3>Games and fields aren’t in search yet</h3><p>“${esc(q)}” reads as a field, and games aren’t searchable yet. No team or event matches it either.</p><p>To find a game, open either team’s page: it lists every game with its field.</p></div>` };
+      if (reason === 'games-loading') {   // #168: a games search whose season is still loading is never "no match"
+        const ls = slate.coverage.filter(c => c.state === 'loading' || c.state === 'not-loaded').map(c => c.season);
+        return { status: '<strong>Loading games…</strong>', live: 'Games are loading.',
+          lead: `<div class="sx-empty"><h3>Loading ${esc(sxgSeasons(ls))} games…</h3><p>“${esc(q)}” searches games. They join the results in a moment.</p></div>` };
+      }
+      const failed = slate.coverage.filter(c => c.state === 'failed').map(c => c.season);
+      if (failed.length) {   // #92: a refusal is "try again", never "no match"
+        const e = (sxG.status.get(failed[0]) || {}).error;
+        return { status: '<strong>No results yet</strong>', live: `Couldn't load ${sxgSeasons(failed)} games.`,
+          lead: `<div class="sx-empty"><h3>Couldn't load ${esc(sxgSeasons(failed))} games</h3><p>${esc(retryText(e))}</p><button type="button" class="sx-btn" onclick="sxRetryGames()">Try again</button></div>` };
       }
       let h3 = `No team or event matches “${esc(q)}”`, p = 'Try a club or team name, a place, a birth year or an age group, or a conference.';
       if (reason === 'season-not-in-archive') {
         const s = sxIndex.vocab.seasons;
         h3 = `No ${esc(slate.empty.unknownSeason || 'such')} season in this archive`; p = `Search covers ${esc(s[0])} to ${esc(s[s.length - 1])}.`;
       } else if (reason === 'no-such-age-group') { h3 = 'No such age group in that season'; p = 'Try another age group, or a birth year such as 2011.'; }
-      return { status: '<strong>No results</strong>', live: `No results for ${q}.`, list: sxGamesLine(),
+      return { status: '<strong>No results</strong>', live: `No results for ${q}.`,
         lead: `<div class="sx-empty"><h3>${h3}</h3><p>${p}</p>${sxTipChips()}</div>` };
+    }
+    function sxRetryGames() {   // the empty state's Try again: the failed seasons once more, then the query again
+      const failed = [...sxG.status].filter(([, v]) => v.state === 'failed').map(([s]) => s);
+      failed.forEach(s => sxG.status.delete(s));
+      sxGamesFetch(failed);
+      if (sxInput) { sxRefresh(sxInput.value, { live: 'Games are loading.' }); sxInput.focus(); }
+    }
+
+    // ----- #168: the games files -----
+    // The active season's file right after "ready" (Q5b b); a season a query names (coverage 'not-loaded': an
+    // explicit season or a bare year) once the box has been still for 500 ms; a Load cell's seasons only on its
+    // press. Each season once per visit, at most 2 at a time; the browser's cache keeps a closed season for a day
+    // (#82). Each file is read with res.json() and built in steps under the 40 ms rule (sxDrive). A 404 is "no
+    // games file" (kept for the page); anything else is "Try again" (#92). Drawing never fetches (G12).
+    const sxG = { status: new Map(), queue: [], running: 0, demanded: new Set(), pressed: new Set(), stillT: 0 };   // status: season -> { state: loading | missing | failed }
+    function sxGamesCtx() {
+      const of = st => [...sxG.status].filter(([, v]) => v.state === st).map(([s]) => s);
+      return { gamesLoading: of('loading'), gamesMissing: of('missing'), gamesFailed: of('failed') };
+    }
+    function sxGamesFetch(seasons) {
+      const ps = [];
+      for (const s of seasons) {
+        if (sxIndex.games.has(s)) continue;
+        const cur = sxG.status.get(s);
+        if (cur && cur.state === 'missing') continue;
+        if (cur && cur.state === 'loading') { ps.push(cur.p); continue; }
+        const entry = { state: 'loading' };
+        entry.p = new Promise(resolve => sxG.queue.push({ season: s, entry, resolve }));
+        sxG.status.set(s, entry);
+        ps.push(entry.p);
+      }
+      sxGamesPump();
+      return Promise.all(ps);
+    }
+    function sxGamesPump() {
+      while (sxG.running < SX_GAMES_PARALLEL && sxG.queue.length) {
+        const job = sxG.queue.shift();
+        sxG.running++;
+        (async () => {
+          try {
+            const doc = await fetchJSON(`search/games/${job.season}`);
+            await sxDrive(sxMod.startGames(sxIndex, doc, SX_GAMES_UNITS));
+            sxG.status.delete(job.season);
+          } catch (e) {
+            Object.assign(job.entry, { state: isMissing(e) ? 'missing' : 'failed', error: e });
+          } finally {
+            sxG.running--;
+            job.resolve();
+            sxGamesPump();
+            sxGamesLanded(job.season);
+          }
+        })();
+      }
+    }
+    // A season landed (or failed): the panel on screen is searched again if its query asked for that season.
+    // The viewer's place is kept; the live region is left alone until nothing it asked for is still loading.
+    function sxGamesLanded(season) {
+      if (sxG.pressed.has(season) || sxState !== 'ready' || !sxPop() || sxPop().hidden || !sxInput) return;   // a press redraws once, when all its seasons are in
+      const q = sxInput.value;
+      if (q.trim().length < 2) return;
+      const asked = sxView ? sxView.slate.coverage.some(c => c.season === season) : true;
+      if (asked) sxRefresh(q);
+    }
+    // A season the query names, fetched once the box has been still for SX_GAMES_STILL_MS (typing "2023" on the way
+    // to "2023-24" fetches nothing).
+    function sxStill(q, slate) {
+      clearTimeout(sxG.stillT);
+      const want = slate.coverage.filter(c => c.state === 'not-loaded').map(c => c.season);
+      if (!want.length) return;
+      sxG.stillT = setTimeout(() => {
+        if (!sxInput || sxInput.value !== q || sxPop().hidden) return;
+        want.forEach(s => sxG.demanded.add(s));
+        sxGamesFetch(want);
+        sxRefresh(q);
+      }, SX_GAMES_STILL_MS);
+    }
+    const sxCtx = () => ({ now: Date.now(), timeZone: SX_TZ, selectedSeason: currentSeason || '', today: todayKey(), ...sxGamesCtx() });
+
+    // ----- #168: the Games section (G1-G11) -----
+    const SXG_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const sxgDate = (d, withYear) => { if (!d) return 'Date TBD'; const [y, m, dd] = d.split('-').map(Number); const w = SXG_DAYS[new Date(Date.UTC(y, m - 1, dd)).getUTCDay()]; return `${w} ${SX_MONTHS[m - 1]} ${dd}${withYear ? `, ${y}` : ''}`; };
+    const sxgTime = t => { if (!t) return ''; let [h, m] = t.split(':').map(Number); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2, '0')} ${ap}`; };
+    const sxgShort = s => (s && s.teamID ? displayName(s.name, '') : (s && s.name) || 'TBD');
+    const sxgComp = c => (c.kind === 'c' ? `${c.event} ${sxShortAge(c.div)}` : c.kind === 'n' ? `${c.event} · ${sxShortAge(c.div)} · ${c.tier}` : `${c.event} showcase · ${sxShortAge(c.div)}`);
+    const sxgView = g => (g.dest[0] === 1 ? 'Matches' : g.dest[0] === 2 ? 'Bracket' : g.dest[0] === 3 ? 'Schedule' : g.dest[0] === 4 ? 'Showcase games' : '');
+    const sxgNum = n => (n == null ? '' : typeof n === 'number' ? `Field ${n}` : String(n));
+    const sxgField = f => (f ? [f.label, sxgNum(f.number)].filter(Boolean).join(' · ') + (f.place ? `, ${f.place}` : '') : '');
+    const sxgSeasons = ss => (ss.length > 3 ? `${sxSeason(ss[0])} to ${sxSeason(ss[ss.length - 1])}` : ss.map(sxSeason).join(', '));
+    const sxgRequests = n => (n === 1 ? 'one request' : `${n} requests`);
+    const sxgEarlier = () => { const s = sxIndex.vocab.seasons; return s[Math.max(0, s.length - 3)]; };   // "such as 2024-25"
+    // A game row's fields, read once (each getter builds its value): the state is from the page's own today
+    // (nit 4: an unscored game today is "Today" whatever the kick-off; from the next day "Result not reported").
+    function sxgGame(r, today) {
+      const score = r.score, date = r.date;
+      return { row: r, matchID: r.matchID, season: r.season, date, time: r.time, home: r.home, away: r.away, score, pk: r.pk, winner: r.winner,
+        competition: r.competition, field: r.field, dest: r.dest, href: r.href, matched: r.matched,
+        state: !date ? 'undated' : score ? 'played' : date === today ? 'today' : date > today ? 'upcoming' : 'unreported' };
+    }
+    const sxgState = g => (g.state === 'played' ? `${g.score[0]}–${g.score[1]}${g.pk ? ` (${g.pk[0]}–${g.pk[1]} PK)` : ''}` : g.state === 'today' ? 'Today' : g.state === 'upcoming' ? 'Upcoming' : g.state === 'unreported' ? 'Result not reported' : 'Date to be confirmed');
+    function sxgName(g) {   // G10
+      const h = sxgShort(g.home), a = sxgShort(g.away);
+      const res = g.state === 'played' ? (g.winner ? `${g.winner === 'home' ? h : a} won ${g.score[0]}–${g.score[1]}${g.pk ? ` on penalties ${g.pk[0]}–${g.pk[1]}` : ''}` : `drawn ${g.score[0]}–${g.score[1]}`) : sxgState(g).toLowerCase();
+      return `${sxgDate(g.date, true)}${g.time ? `, ${sxgTime(g.time)}` : ''}, ${h} against ${a}, ${res}, ${sxgComp(g.competition)}${g.field ? `, ${sxgField(g.field)}` : ''}`;
+    }
+    const SXG_PIN = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17s-5-4.6-5-8.5a5 5 0 0 1 10 0C15 12.4 10 17 10 17Z"/><circle cx="10" cy="8.5" r="1.8"/></svg>';
+    const SXG_VS = '<span style="font:700 12px var(--font)">v</span>';
+    const sxgLine = (text, extra = '') => `<li role="row" class="sx-cover sxg-cover"><span role="rowheader">${SX_ICON.info}<span>${text}</span></span>${extra}</li>`;
+    // The count a section, the status line and the live region give for games (G1, G11)
+    function sxGamesCount(slate) {
+      const s = slate.sections.find(x => x.name === 'games');
+      if (!s) return { games: 0, fields: 0, upcoming: 0 };
+      const f = s.rows.filter(r => r.kind === 'field');
+      // a field query: its field's games; a place: its fields (the section draws fields, not every game there)
+      if (f.length) return { games: f.reduce((n, x) => n + x.count, 0), fields: f.length > 1 ? f.length : 0, single: f.length === 1, upcoming: f.reduce((n, x) => n + x.upcoming, 0) };
+      return { games: s.rows.filter(r => r.kind === 'game').length + s.rows.filter(r => r.kind === 'pairing').reduce((n, p) => n + p.meetings.length, 0), fields: 0, upcoming: 0 };
+    }
+    function sxGamesSay(slate) {
+      const s = slate.sections.find(x => x.name === 'games'), rows = s ? s.rows : [];
+      const c = sxGamesCount(slate), load = rows.find(r => r.kind === 'load');
+      if (!rows.length && slate.coverage.some(x => x.state === 'loading')) return 'Games are loading.';
+      if (load && !c.games) return 'No meetings loaded; earlier meetings can be loaded.';   // build point 5 (H04)
+      const nf = c.fields || (c.single ? 1 : 0);
+      if (nf && !c.games) return `${sxPlural(nf, 'field')}, no games in ${sxgSeasons([...new Set(rows.filter(r => r.kind === 'field').flatMap(r => r.asked))])}.`;   // nit 6
+      if (c.fields) return `${sxPlural(c.fields, 'field')}, ${sxPlural(c.upcoming, 'upcoming game')}.`;
+      if (c.games) return `${sxPlural(c.games, 'game')}.`;
+      return '';
+    }
+
+    // The Games section, drawn into sxBuild's parts with its cell(), rows and helpers (G1-G9). `sec` is null when
+    // the slate has no Games rows: then only its heading and coverage lines (loading, failed, the scope line).
+    function sxGamesSection(sec, slate, state, ctx) {
+      const out = [], rows = sec ? sec.rows : [], today = ctx.today;
+      const cov = slate.coverage || [], active = sxIndex.vocab.active;
+      const seasonsIn = st => cov.filter(c => c.state === st).map(c => c.season);
+      const fields = rows.filter(r => r.kind === 'field'), pairs = rows.filter(r => r.kind === 'pairing'), games = rows.filter(r => r.kind === 'game'), loads = rows.filter(r => r.kind === 'load');
+      const n = games.length + pairs.reduce((k, p) => k + p.meetings.length, 0);
+      const count = loads.length && !games.length ? 'no meetings loaded' : pairs.length ? `${sxPlural(pairs.length, 'pairing')} · ${sxPlural(n, 'meeting')}`
+        : fields.length > 1 ? `${sxPlural(fields.length, 'field')} · ${sxPlural(fields.reduce((k, f) => k + f.upcoming, 0), 'upcoming game')}`
+          : fields.length === 1 ? (fields[0].count ? `${sxPlural(fields[0].count, 'game')} at ${fields[0].label}` : '1 field') : games.length ? sxPlural(games.length, 'game') : '';
+      out.push(ctx.head('Games', count));
+      const gameCell = (r, { indent = false } = {}) => {   // G2, G9, G10
+        const g = sxgGame(r, today), row = ctx.nextRow();
+        const hit = side => (g.matched === 'both' || g.matched === side ? ' hit' : '');
+        const year = g.date && g.date.slice(0, 4) !== today.slice(0, 4);
+        const id = ctx.cell({ kind: g.href ? 'game' : 'nolink', row, col: 0, game: g, href: g.href, act: g.href ? `Open in ${sxgView(g)}` : '',
+          text: `${sxgShort(g.home)} v ${sxgShort(g.away)} · ${sxgDate(g.date, year)} · ${sxgComp(g.competition)}` });
+        const sc = g.state === 'played' ? `<span class="sxg-score">${esc(sxgState(g))}</span>` : `<span class="sxg-pill ${g.state}">${esc(sxgState(g))}</span>`;
+        return `<li role="row" class="sx-rowli${indent ? ' sxg-in' : ''}"><span role="gridcell" class="sx-row sxg-row" id="${id}" data-c="${ctx.cells.length - 1}" aria-selected="false" aria-label="${esc(sxgName(g))}">` +
+          `<span class="sxg-when"><b>${esc(sxgDate(g.date, false))}</b><span>${esc([year ? g.date.slice(0, 4) : '', sxgTime(g.time) || (g.date ? 'TBD' : '')].filter(Boolean).join(' · '))}</span></span>` +
+          `<span style="min-width:0"><span class="sxg-teams"><span class="sxg-side${g.winner === 'home' ? ' win' : ''}${hit('home')}">${esc(sxgShort(g.home))}</span><span class="sxg-v">v</span>` +
+          `<span class="sxg-side${g.winner === 'away' ? ' win' : ''}${hit('away')}">${esc(sxgShort(g.away))}</span>${sc}</span>` +
+          `<span class="sx-meta sxg-meta">${esc(sxgComp(g.competition))}${g.field ? ` · ${esc(sxgField(g.field))}` : ''}</span></span>` +
+          `<span class="sx-act" aria-hidden="true">${g.href ? `${esc(sxgView(g))} ›` : 'No page yet'}</span></span></li>`;
+      };
+      // G3: up to 3 upcoming and 3 recent results, or (one squad a side, a field's games, "Show all") in order
+      const list = (gs, { split, limit, indent = false }) => {
+        const o = [];
+        if (!split) { gs.slice(0, limit).forEach(r => o.push(gameCell(r, { indent }))); return o; }
+        // the module orders upcoming games first: the first result is found by halving (no getter per game)
+        const isUp = r => { const d = r.date; return !!d && !r.score && d >= today; };
+        let lo = 0, hi = gs.length;
+        while (lo < hi) { const mid = (lo + hi) >> 1; if (isUp(gs[mid])) lo = mid + 1; else hi = mid; }
+        const nUp = lo, nDone = gs.length - lo;
+        const nu = Math.min(nUp, nDone ? 3 : limit), nd = Math.min(nDone, limit - nu);
+        if (nu) { o.push('<li role="row" class="sx-sub sxg-sub"><span role="rowheader">Upcoming</span></li>'); gs.slice(0, nu).forEach(r => o.push(gameCell(r, { indent }))); }
+        if (nd) { o.push('<li role="row" class="sx-sub sxg-sub"><span role="rowheader">Recent results</span></li>'); gs.slice(nUp, nUp + nd).forEach(r => o.push(gameCell(r, { indent }))); }
+        return o;
+      };
+      // a coverage cell (G7's exception): a Load, a Try again, or a load in flight (a disabled cell that keeps the
+      // keyboard's place: build point 4)
+      const coverCell = (o, label, name, extra = '') => {
+        const id = ctx.cell({ ...o, row: ctx.nextRow(), col: 0 });
+        return `<span role="gridcell" class="sx-chip sxg-load" id="${id}" data-c="${ctx.cells.length - 1}" aria-selected="false" aria-label="${esc(name)}"${extra}>${esc(label)}</span>`;
+      };
+      const loadCell = (seasons, what, label, name) => {   // one season's (a field's) or the earlier meetings' Load cell
+        const st = seasons.map(s => (sxG.status.get(s) || {}).state);
+        if (st.includes('loading')) return coverCell({ kind: 'busy', seasons, what, text: `Loading ${what}…` }, `Loading ${what}…`, `Loading ${what}, ${sxgRequests(seasons.length)}`, ' aria-disabled="true"');
+        if (st.includes('failed')) { const e = (sxG.status.get(seasons[st.indexOf('failed')]) || {}).error; return coverCell({ kind: 'retry', seasons, what, text: 'Try again' }, 'Try again', `Couldn't load ${sxgSeasons(seasons)} games. ${retryText(e)} Try again`); }
+        return coverCell({ kind: 'load', seasons, what, text: `${label}: ${sxgRequests(seasons.length)}` }, label, name);
+      };
+      if (!rows.length && seasonsIn('loading').length) {
+        const others = slate.sections.some(s => s.name !== 'games');
+        out.push(sxgLine(`<strong>Loading ${esc(seasonsIn('loading').map(sxSeason).join(', '))} games…</strong> ${others ? 'Teams and events are ready; games join them in a moment.' : 'They join the results in a moment.'}`));
+        return out;
+      }
+      // fields (G4, G5): a field query's one field opens by itself; a place's empty fields share one line
+      let near = false;
+      const single = fields.length === 1;
+      fields.slice(0, state.limit.games).forEach(f => {
+        if (f.nearby && !near) { near = true; out.push(ctx.sub(f.nearbyOf)); }
+        const key = `fd:${f.key}`, open = state.fold.has(key) ? state.fold.get(key) : !!(single && slate.enter && slate.enter.kind === 'field' && slate.enter.key === f.key);
+        const name = f.label + (f.field.number != null ? ` · ${sxgNum(f.field.number)}` : '');
+        const loaded = sxgSeasons(f.loaded), earlier = f.seasons.filter(s => !f.loaded.includes(s));
+        const meta = f.count ? `${sxPlural(f.upcoming, 'upcoming game')} in ${loaded}${f.played ? ` · ${f.played} played` : ''}${f.allAges ? ' · all ages' : ''}`
+          : `No ${f.field.number != null ? sxgNum(f.field.number) + ' ' : ''}games here in ${loaded}${!single && earlier.length ? ` · last ${sxSeason(earlier[earlier.length - 1])}` : ''}`;
+        const id = ctx.cell({ kind: 'field', row: ctx.nextRow(), col: 0, key, open, text: `${name} · ${f.place}` });
+        out.push(`<li role="row" class="sx-rowli"><span role="gridcell" class="sx-row sxg-field" id="${id}" data-c="${ctx.cells.length - 1}" aria-selected="false" aria-expanded="${open}" aria-label="${esc(`${name}, ${f.place}, ${meta}${f.nearby ? ', nearby' : ''}`)}">` +
+          `<span class="sx-logo ev" aria-hidden="true">${SXG_PIN}</span><span style="min-width:0"><span class="sx-line"><span class="sx-name">${esc(name)}</span>${f.nearby ? '<span class="sx-pill near">Nearby</span>' : ''}</span>` +
+          `<span class="sx-meta" style="display:block">${esc(f.place)} · ${esc(meta)}</span></span><span class="sx-act" aria-hidden="true">${open ? 'Hide ▴' : 'Games ▾'}</span></span></li>`);
+        const gs = open || single ? f.games : [];
+        if (open && f.count) {
+          const fl = state.limit[key] || SX_SIZES.games;
+          out.push(...list(gs, { split: false, limit: fl, indent: true }));
+          if (gs.length > fl) out.push(ctx.more(key, fl === SX_SIZES.games ? `Show all ${sxPlural(gs.length, 'game')} at ${f.label}` : `Show ${sxPlural(Math.min(SX_SIZES.page, gs.length - fl), 'more game')} · ${gs.length - fl} left`));
+        }
+        // G5: the one field a field query names, with no games in the active season and seasons not loaded yet:
+        // one Load cell for the latest of them (seasons this visit loaded already show their games above)
+        if (single && f.notLoaded.length && !gs.some(g => g.season === active)) {
+          const latest = f.notLoaded[f.notLoaded.length - 1];
+          out.push(`<li role="row" class="sx-cover sxg-cover sxg-in"><span role="rowheader">${SX_ICON.info}<span>${f.count ? 'Also games' : 'Games'} here in ${esc(sxgSeasons(f.notLoaded))}. Earlier seasons load when you ask.</span></span>` +
+            `${loadCell([latest], `${sxSeason(latest)} games`, `Load ${sxSeason(latest)} games`, `Load ${sxSeason(latest)} games, ${sxgRequests(1)}`)}</li>`);
+        }
+      });
+      const none = fields.filter(f => !f.count).length;
+      if (fields.length > 1 && none) out.push(sxgLine(`${sxPlural(none, 'field')} here had games only in earlier seasons. Type a season, such as ${esc(sxgEarlier())}, to search them.`));
+      if (fields.length > state.limit.games) out.push(ctx.more('games', state.limit.games === SX_SIZES.games ? `Show all ${sxPlural(fields.length, 'field')}` : `Show ${sxPlural(Math.min(SX_SIZES.page, fields.length - state.limit.games), 'more field')} · ${fields.length - state.limit.games} left`));
+      // pairings (G6): the first is open
+      pairs.slice(0, state.limit.games).forEach((p, k) => {
+        const key = `pr:${p.key}`, open = state.fold.has(key) ? state.fold.get(key) : k === 0;
+        const short = s => { const t = [...s].sort((x, y) => x.length - y.length)[0]; return s.length > 1 ? `${t} +${s.length - 1}` : t; };
+        const [a, b] = p.sideNames.map(short), [fa, fb] = p.sideNames.map(s => s.join(' and '));
+        const [w, d, l] = p.record, played = w + d + l;
+        const next = p.meetings.find(m => m.date && !m.score && m.date >= today);
+        const meta = [sxPlural(p.meetings.length, 'meeting'), played ? `${p.sideNames[0][0].split(' ')[0]} W${w} D${d} L${l}` : 'none played yet', next ? `next ${sxgDate(next.date, true)}` : ''].filter(Boolean).join(' · ');
+        const id = ctx.cell({ kind: 'pairing', row: ctx.nextRow(), col: 0, key, open, text: `${a} v ${b} · ${sxShortAge(p.div)} · ${sxSeason(p.season)}` });
+        out.push(`<li role="row" class="sx-rowli"><span role="gridcell" class="sx-row sxg-field" id="${id}" data-c="${ctx.cells.length - 1}" aria-selected="false" aria-expanded="${open}" aria-label="${esc(`${fa} against ${fb}, ${sxShortAge(p.div)}, ${sxSeason(p.season)}, ${meta}`)}">` +
+          `<span class="sx-logo ev" aria-hidden="true">${SXG_VS}</span><span style="min-width:0"><span class="sx-line"><span class="sx-name">${esc(a)} <span class="sxg-v">v</span> ${esc(b)}</span><span class="sx-pill season">${esc(sxSeason(p.season))}</span><span class="sx-pill season">${esc(sxShortAge(p.div))}</span></span>` +
+          `<span class="sx-meta" style="display:block">${esc(meta)}</span></span><span class="sx-act" aria-hidden="true">${open ? 'Hide ▴' : 'Meetings ▾'}</span></span></li>`);
+        if (open) out.push(...list(p.meetings, { split: false, limit: SX_SIZES.page, indent: true }));
+      });
+      if (pairs.length > state.limit.games) out.push(ctx.more('games', `Show all ${sxPlural(pairs.length, 'pairing')}`));
+      // games (G3): a team, conference, kind word or date splits; one squad a side's meetings come in order
+      if (!fields.length && games.length) {
+        const lim = state.limit.games;
+        out.push(...list(games, { split: slate.rule !== 3 && lim === SX_SIZES.games, limit: lim }));
+        if (games.length > lim) out.push(ctx.more('games', lim === SX_SIZES.games ? `Show all ${sxPlural(games.length, 'game')}` : `Show ${sxPlural(Math.min(SX_SIZES.page, games.length - lim), 'more game')} · ${games.length - lim} left`));
+      }
+      // MF1 (Q2): one squad a side: the meetings this visit has loaded, then "Load earlier meetings"
+      for (const L of loads) {
+        const span = sxgSeasons(L.seasons), k = L.seasons.length;
+        const lead = L.state === 'loading' ? `<strong>Loading earlier meetings…</strong> ${esc(span)} (${sxgRequests(k)}).`
+          : L.state === 'failed' ? `<strong>Couldn't load ${esc(sxgSeasons(L.seasons.filter(s => (sxG.status.get(s) || {}).state === 'failed')))} games.</strong>`
+            : games.length ? `Earlier meetings: both teams also played ${esc(span)}.` : `No meetings in the seasons loaded. Both teams played ${esc(sxgSeasons(L.played))}.`;
+        out.push(sxgLine(lead, loadCell(L.seasons, 'earlier meetings', `Load earlier meetings · ${span}`, `Load earlier meetings, ${span}, ${sxPlural(k, 'season')}`)));
+      }
+      // G7: coverage lines
+      const failed = seasonsIn('failed'), missing = seasonsIn('missing'), loading = seasonsIn('loading');
+      if (failed.length && !loads.length) { const e = (sxG.status.get(failed[0]) || {}).error; out.push(sxgLine(`<strong>Couldn't load ${esc(sxgSeasons(failed))} games.</strong> ${esc(retryText(e))}`, loadCell(failed, `${sxgSeasons(failed)} games`, 'Try again', 'Try again'))); }
+      if (missing.length) out.push(sxgLine(`No games file for ${esc(sxgSeasons(missing))}.`));
+      if (loading.length && rows.length && !loads.length) out.push(sxgLine(`<strong>Loading ${esc(loading.map(sxSeason).join(', '))} games…</strong>`));
+      const ready = seasonsIn('ready');
+      if (!pairs.length && !fields.length && !loads.length && slate.rule !== 3 && ready.length === 1 && ready[0] === active && !loading.length && !failed.length)
+        out.push(sxgLine(`Games from ${esc(sxSeason(active))}. Type a season, such as ${esc(sxgEarlier())}, for earlier games.`));
+      const demand = ready.filter(s => s !== active && sxG.demanded.has(s));
+      if (demand.length && !loads.length) out.push(sxgLine(`${esc(sxgSeasons(demand))} games loaded for this search (${sxgRequests(demand.length)}, kept for the visit).`));
+      return out;
     }
 
     // ----- run a query, draw it, and the active cell -----
     function sxRun(q) {
       sxHoverCancel();
+      clearTimeout(sxG.stillT);
       if (sxState !== 'ready') return;
       if (q.trim().length < 2) { sxShow(sxTipsBody()); return; }
-      const slate = sxMod.search(sxIndex, q, { now: Date.now(), timeZone: SX_TZ, selectedSeason: currentSeason || '' });
+      const slate = sxMod.search(sxIndex, q, sxCtx());
+      sxStill(q, slate);
       if (!slate.sections.length) { sxShow(sxEmptyBody(q, slate)); return; }
-      const state = { limit: { teams: SX_SIZES.teams, events: SX_SIZES.events }, fold: new Map() };
+      const state = { limit: { teams: SX_SIZES.teams, events: SX_SIZES.events, games: SX_SIZES.games }, fold: new Map() };
       sxDraw(q, slate, state, null);
     }
-    // keep: the cell to keep active after a fold toggled or a section grew, as { kind, key|section, firstNew }
-    function sxDraw(q, slate, state, keep) {
+    // #168: the same query searched again (a games file landed, a Load cell was pressed): the viewer's limits, folds
+    // and active cell are kept; `live` is what the live region says (null: nothing new, undefined: the counts).
+    const sxCellKey = c => (c.kind === 'team' ? `t:${c.team.key}` : c.kind === 'event' ? `e:${c.href}` : c.game ? `g:${c.game.matchID}` : c.seasons ? `l:${c.seasons.join()}` : c.key ? `k:${c.kind}:${c.key}` : c.section ? `m:${c.section}` : c.kind);
+    function sxRefresh(q, { live = null, pick = null, prepare = null } = {}) {
+      if (sxState !== 'ready' || q.trim().length < 2) return;
+      const slate = sxMod.search(sxIndex, q, sxCtx());
+      const pending = slate.coverage.some(c => c.state === 'loading');
+      const say = live !== null ? live : pending ? null : undefined;
+      if (!slate.sections.length) { const b = sxEmptyBody(q, slate); if (say !== undefined) b.live = say; sxShow(b); return; }
+      const same = sxView && sxView.q === q;
+      const state = same ? sxView.state : { limit: { teams: SX_SIZES.teams, events: SX_SIZES.events, games: SX_SIZES.games }, fold: new Map() };
+      if (prepare) prepare(slate, state);
+      const was = same && sxActive >= 0 ? sxCellKey(sxView.cells[sxActive]) : null;
+      const keep = pick ? { pick } : was ? { pick: cells => cells.findIndex(c => sxCellKey(c) === was) } : null;
+      sxDraw(q, slate, state, keep, { live: say });
+    }
+    // keep: the cell to keep active after a fold toggled or a section grew, as { kind, key|section, firstNew }, or
+    // { pick: cells => index } (#168)
+    function sxDraw(q, slate, state, keep, { live } = {}) {
       const { built, body } = sxResultsBody(q, slate, state);
+      if (live !== undefined) body.live = live;
       const nav = sxView ? sxView.nav : false;
       sxShow(body);
       sxView = { q, slate, cells: built.cells, state, nav: keep ? nav : false };
       let at = -1;
       // a "show more" step keeps the viewer's place: the first new cell, even when another "more" cell follows it
-      if (keep && keep.kind === 'more' && keep.firstNew != null) at = keep.firstNew;
+      if (keep && keep.pick) at = keep.pick(sxView.cells);
+      else if (keep && keep.kind === 'more' && keep.firstNew != null) at = keep.firstNew;
       else if (keep) at = sxView.cells.findIndex(c => c.kind === keep.kind && (keep.key ? c.key === keep.key : c.section === keep.section));
       if (at < 0) at = sxEnterCell();
       if (at >= 0) sxSetActive(at, { noScroll: true });
     }
     // R4: the slate's `enter`, else the first cell that opens something. A team folded into a
-    // successor (R3) is reached through the successor.
+    // successor (R3) is reached through the successor. #168: Games leading with no `enter` (H04, a place's empty
+    // fields) has no active cell until a key; an open field or pairing gives its first game (G4, G6).
     function sxEnterCell() {
       const { slate, cells } = sxView, e = slate.enter;
+      if (!e && (slate.rule === 3 || (slate.sections[0] && slate.sections[0].name === 'games'))) return -1;   // also while a games-first query's season loads (4a MF4)
+      if (e && (e.kind === 'field' || e.kind === 'pairing' || e.kind === 'game')) {
+        const gi = cells.findIndex(c => (e.kind === 'game' ? c.game && c.game.matchID === e.matchID : c.kind === e.kind && c.key === `${e.kind === 'field' ? 'fd' : 'pr'}:${e.key}`));
+        if (gi >= 0) return cells[gi].open && cells[gi + 1] && cells[gi + 1].game ? gi + 1 : gi;
+      }
       let i = -1;
       if (e) {
         i = cells.findIndex(c => (c.team && c.team.key === e.key) || (c.ev && e.kind !== 'team' && c.href === e.href));
@@ -7909,7 +8258,7 @@
     function sxKeysText(c) {
       if (!c) return '<kbd>Esc</kbd> close';
       return '<kbd>↑</kbd> <kbd>↓</kbd> rows · <kbd>←</kbd> <kbd>→</kbd> along a row · <kbd>Enter</kbd> open' +
-        (c && c.kind === 'team' ? ' · <kbd>Shift</kbd>+<kbd>Enter</kbd> team’s season' : '') + ' · <kbd>Esc</kbd> close';
+        (c && (c.kind === 'team' || c.kind === 'game') ? ' · <kbd>Shift</kbd>+<kbd>Enter</kbd> team’s season' : '') + ' · <kbd>Esc</kbd> close';
     }
     // Makes cell i the active one: its aria-selected, the box's aria-activedescendant, the action bar.
     // The bar sits outside the grid (a cell holds no link), so new tab, copy link and middle-click work on it.
@@ -7925,8 +8274,10 @@
       const bar = document.getElementById('usearchActions'), span = document.getElementById('usearchActive');
       const open = document.getElementById('usearchOpen'), hist = document.getElementById('usearchHist'), prevLink = document.getElementById('usearchPrev');
       document.getElementById('sxKeys').innerHTML = sxKeysText(c);
-      if (c.kind === 'toggle' || c.kind === 'more') { bar.hidden = true; return; }
+      // a fold, "show more", a field or pairing row and a Load cell open in the panel: no links (#168: MF1)
+      if (!['team', 'event', 'game', 'nolink'].includes(c.kind)) { bar.hidden = true; return; }
       span.className = 'us-two';
+      open.hidden = false; prevLink.textContent = 'Earlier team';
       if (c.kind === 'team') {
         const r = c.team, may = r.sxMay || [];
         open.textContent = 'Overview'; open.href = r.overviewHref;
@@ -7934,6 +8285,12 @@
         const mayText = may.length ? ` · May continue here: ${may.map(x => `${x.last} team, born ${sxBorn(x.born)}`).join('; ')}` : '';
         span.textContent = c.text + mayText;
         prevLink.hidden = !may.length; prevLink.href = may.length ? may[0].overviewHref : '#';
+      } else if (c.game) {   // G8: what it is, where it opens, each side's season tab when it has one
+        const g = c.game, h = g.home, a = g.away;
+        span.textContent = c.text;
+        open.hidden = !g.href; open.textContent = c.act || 'Open'; open.href = g.href || '#';
+        hist.hidden = !h.seasonHref; hist.textContent = `${sxgShort(h)} season`; hist.href = h.seasonHref || '#';
+        prevLink.hidden = !a.seasonHref; prevLink.textContent = `${sxgShort(a)} season`; prevLink.href = a.seasonHref || '#';
       } else {
         open.textContent = c.act; open.href = c.href;
         hist.hidden = true; hist.href = '#'; prevLink.hidden = true; prevLink.href = '#';
@@ -7955,19 +8312,55 @@
     function sxActivate(i, { season = false } = {}) {
       const c = sxView && sxView.cells[i];
       if (!c) return;
-      if (c.kind === 'toggle') {
+      if (c.kind === 'toggle' || c.kind === 'field' || c.kind === 'pairing') {   // #168 G4, G6: a field or pairing opens like a fold
         const s = sxView.state;
         s.fold.set(c.key, !c.open);
-        sxDraw(sxView.q, sxView.slate, s, { kind: 'toggle', key: c.key });
+        sxDraw(sxView.q, sxView.slate, s, { kind: c.kind, key: c.key });
         return;
       }
       if (c.kind === 'more') {
-        const s = sxView.state, l = s.limit, first = i;
-        l[c.section] = l[c.section] === SX_SIZES[c.section] ? SX_SIZES.page : l[c.section] + SX_SIZES.page;
+        const s = sxView.state, l = s.limit, first = i, base = SX_SIZES[c.section] || SX_SIZES.games, cur = l[c.section] || base;
+        l[c.section] = cur === base ? SX_SIZES.page : cur + SX_SIZES.page;
         sxDraw(sxView.q, sxView.slate, s, { kind: 'more', section: c.section, firstNew: first });
         return;
       }
+      if (c.kind === 'load' || c.kind === 'retry') { sxLoadSeasons(c); return; }
+      if (c.kind === 'busy' || c.kind === 'nolink') return;   // G9: no page yet; a load in flight
+      if (c.kind === 'game') {   // G8: Shift+Enter opens the matched side's season tab, else the home side's
+        const g = c.game, mine = g.matched === 'away' ? g.away : g.home, other = mine === g.home ? g.away : g.home;
+        sxGoTo(season ? mine.seasonHref || other.seasonHref || c.href : c.href);
+        return;
+      }
       sxGoTo(c.kind === 'team' && season ? c.team.seasonHref : c.href);
+    }
+    // #168 (MF1, G5): a Load or Try again cell fetches its seasons, only on the press (at most 6, 2 at a time). The
+    // live region says so once; when they land, the first newly added game is the active cell; if the query
+    // changed meanwhile, the seasons are installed and nothing is redrawn.
+    function sxLoadSeasons(c) {
+      const q = sxView.q, seasons = c.seasons.slice(0, 6);
+      for (const s of seasons) { if ((sxG.status.get(s) || {}).state === 'failed') sxG.status.delete(s); sxG.pressed.add(s); }
+      const p = sxGamesFetch(seasons);
+      const same = cells => cells.findIndex(x => x.seasons && x.seasons.join() === seasons.join());
+      sxRefresh(q, { live: `Loading ${c.what || `${sxgSeasons(seasons)} games`}… (${sxgRequests(seasons.length)})`, pick: same });
+      p.then(() => {
+        seasons.forEach(s => sxG.pressed.delete(s));
+        if (sxState !== 'ready' || !sxView || sxView.q !== q || !sxInput || sxInput.value !== q || sxPop().hidden) return;
+        const isNew = r => r.kind === 'game' && seasons.includes(r.season);
+        sxRefresh(q, {
+          live: undefined,
+          prepare: (slate, state) => {   // the first new game must be drawn: the list grows to it
+            const g = slate.sections.find(x => x.name === 'games'), k = g ? g.rows.findIndex(isNew) : -1;
+            if (k >= state.limit.games) state.limit.games = Math.ceil((k + 1) / SX_SIZES.page) * SX_SIZES.page;
+            for (const f of g ? g.rows.filter(r => r.kind === 'field') : []) {
+              const i = f.games.findIndex(isNew);
+              if (i < 0) continue;
+              state.fold.set(`fd:${f.key}`, true);
+              if (i >= (state.limit[`fd:${f.key}`] || SX_SIZES.games)) state.limit[`fd:${f.key}`] = Math.ceil((i + 1) / SX_SIZES.page) * SX_SIZES.page;
+            }
+          },
+          pick: cells => { const k = cells.findIndex(x => x.game && seasons.includes(x.game.season)); return k >= 0 ? k : same(cells); },
+        });
+      });
     }
     const sxHoverCancel = () => clearTimeout(sxHoverT);
     function sxHoverCell(i) {
@@ -7979,11 +8372,13 @@
     // Up and Down move between rows (keeping the nearest column); Left, Right, Home and End move
     // along a row, but only once the viewer has moved into the grid with Up or Down (until then they
     // are the text caret's; a hover moves the active cell without taking them); Enter opens the
-    // active cell, or opens and closes a fold, or shows more.
+    // active cell, or opens and closes a fold, or shows more. #168: Space too on a Load cell reached by the keys.
     function sxKeyView(e) {
       sxHoverCancel();   // a key wins over a pending hover
-      if (!sxView || !sxView.cells.length || sxActive < 0) return false;
+      if (!sxView || !sxView.cells.length) return false;
       const cells = sxView.cells, at = cells[sxActive];
+      // #168: Games leading with no active cell (H04): Down or Up starts at the first cell
+      if (sxActive < 0) { if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return false; e.preventDefault(); sxView.nav = true; sxSetActive(e.key === 'ArrowDown' ? 0 : cells.length - 1); return true; }
       const pick = (pred, score) => { let best = -1, bs = Infinity; cells.forEach((x, i) => { if (pred(x)) { const s = score(x); if (s < bs) { bs = s; best = i; } } }); return best; };
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
@@ -8002,7 +8397,8 @@
         if (j >= 0 && j < same.length) sxSetActive(same[j]);
         return true;
       }
-      if (e.key === 'Enter') { e.preventDefault(); sxActivate(sxActive, { season: e.shiftKey }); return true; }
+      if (e.key === 'Enter') { e.preventDefault(); if (!(e.shiftKey && (at.kind === 'load' || at.kind === 'retry'))) sxActivate(sxActive, { season: e.shiftKey }); return true; }
+      if (e.key === ' ' && sxView.nav && (at.kind === 'load' || at.kind === 'retry')) { e.preventDefault(); sxActivate(sxActive); return true; }
       return false;
     }
     function sxKey(e) {

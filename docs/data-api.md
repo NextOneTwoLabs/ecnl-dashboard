@@ -688,9 +688,10 @@ and refuses one it does not know.
 **Caching and cost.** `search/core`, `search/places` and the active (or a future) season's games
 are `no-cache` with a validator, like the directory. A closed season's games file gets the
 closed-season lifetime (#82). They go through the same rate limits as every `/api/v1` route; nothing
-is served from `/archive` or `/data`. From PR 4a, the first focus of the search box costs 3 requests
-in parallel (core, places and the active season's games) instead of 1, plus one per earlier season a
-query names (at most 6), cached for a day. PR 4a sets a budget for the total first-focus bytes (owner
+is served from `/archive` or `/data`. From PR 4a, the first focus of the search box costs 2 requests
+in parallel (core and places); since PR 4b (#168, owner decision Q5b b) the active season's games follow
+in 1 request once the index is ready, plus one per earlier season a query names or a Load cell asks for
+(at most 6 at a press), each cached for a day. PR 4a sets a budget for the total first-focus bytes (owner
 decision on #159); it grows about 11 KB gzipped a season, whichever file holds the data.
 
 ## HTTP behavior
