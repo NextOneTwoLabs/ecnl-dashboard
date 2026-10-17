@@ -1,17 +1,17 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,Michigan Hawks ECNL G2008/09,Michigan Hawks,134109,8,8,0,0,24,3.0,37,6,31
-2,Nationals SC ECNL G2008/09,Nationals,94331,7,7,0,0,21,3.0,31,6,25
+1,Michigan Hawks ECNL G2008/09,Michigan Hawks,134109,9,9,0,0,27,3.0,38,6,32
+2,Nationals SC ECNL G2008/09,Nationals,94331,8,7,1,0,21,2.63,31,9,22
 3,Chicago Inter ECNL G2008/09,Chicago Inter,127909,9,6,1,2,20,2.22,25,16,9
-4,Gretna Elite Academy ECNL G2008/09,Gretna Elite Academy,46765,9,5,2,2,17,1.89,26,10,16
-5,Rockford Raptors FC ECNL G2008/09,Rockford Raptors FC,134307,8,4,1,3,15,1.88,24,14,10
-6,St. Louis Scott Gallagher Navy ECNL G2008/09,St. Louis Scott Gallagher,134859,9,5,3,1,16,1.78,23,12,11
-7,Eclipse Select Soccer Club ECNL G2008/09,Eclipse Select Soccer Club,136040,8,4,2,2,14,1.75,28,16,12
-8,Kansas City Athletics ECNL G2008/09,KC Athletics,33175,10,4,3,3,15,1.5,21,15,6
-9,Missouri Rush ECNL G2008/09,Missouri Rush,114377,11,4,6,1,13,1.18,19,26,-7
-10,Sporting Iowa ECNL G2008/09,Sporting Iowa Central,59751,9,3,5,1,10,1.11,10,27,-17
-11,Michigan Hawks Magic ECNL G2008/09,Michigan Hawks,134120,9,2,3,4,10,1.11,12,12,0
-12,Sporting Blue Valley ECNL G2008/09,Sporting Blue Valley,131586,8,1,6,1,4,0.5,5,17,-12
-13,St. Louis Scott Gallagher Green ECNL G2008/09,St. Louis Scott Gallagher,134867,9,1,7,1,4,0.44,9,30,-21
-14,Liverpool FC MI ECNL G2008/09,Liverpool FC-IA Michigan,58647,9,1,7,1,4,0.44,9,35,-26
+4,Gretna Elite Academy ECNL G2008/09,Gretna Elite Academy,46765,10,6,2,2,20,2.0,28,10,18
+5,Rockford Raptors FC ECNL G2008/09,Rockford Raptors FC,134307,9,5,1,3,18,2.0,28,14,14
+6,Kansas City Athletics ECNL G2008/09,KC Athletics,33175,11,5,3,3,18,1.64,24,15,9
+7,St. Louis Scott Gallagher Navy ECNL G2008/09,St. Louis Scott Gallagher,134859,10,5,4,1,16,1.6,23,14,9
+8,Eclipse Select Soccer Club ECNL G2008/09,Eclipse Select Soccer Club,136040,9,4,3,2,14,1.56,28,17,11
+9,Missouri Rush ECNL G2008/09,Missouri Rush,114377,12,5,6,1,16,1.33,23,28,-5
+10,Sporting Iowa ECNL G2008/09,Sporting Iowa Central,59751,10,3,6,1,10,1.0,10,28,-18
+11,Michigan Hawks Magic ECNL G2008/09,Michigan Hawks,134120,10,2,4,4,10,1.0,12,16,-4
+12,Sporting Blue Valley ECNL G2008/09,Sporting Blue Valley,131586,9,2,6,1,7,0.78,6,17,-11
+13,St. Louis Scott Gallagher Green ECNL G2008/09,St. Louis Scott Gallagher,134867,10,2,7,1,7,0.7,10,30,-20
+14,Liverpool FC MI ECNL G2008/09,Liverpool FC-IA Michigan,58647,10,1,8,1,4,0.4,9,36,-27
 15,MN Thunder Academy ECNL G2008/09,Minnesota Thunder Academy,134415,0,0,0,0,0,0.0,0,0,0
-16,FC Wisconsin ECNL G2008/09,FC Wisconsin Girls,53835,9,0,9,0,0,0.0,2,39,-37
+16,FC Wisconsin ECNL G2008/09,FC Wisconsin Girls,53835,10,0,10,0,0,0.0,4,43,-39
