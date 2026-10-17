@@ -1,8 +1,8 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,San Juan SC ECNL G2013/14,San Juan Soccer Club,111781,9,8,0,1,25,2.78,40,4,36
 2,Mustang SC ECNL G2013/14,Mustang Soccer,103790,8,7,1,0,21,2.63,19,6,13
-3,Bay Area Surf - ECNL G2013/14,Bay Area Surf,135939,6,4,2,0,12,2.0,11,8,3
-4,Davis Legacy ECNL G2013/14,Davis Legacy Soccer Club,126188,8,5,2,1,16,2.0,17,6,11
+3,Davis Legacy ECNL G2013/14,Davis Legacy Soccer Club,126188,9,6,2,1,19,2.11,19,7,12
+4,Bay Area Surf - ECNL G2013/14,Bay Area Surf,135939,6,4,2,0,12,2.0,11,8,3
 5,MVLA ECNL G2013/14,MVLA,97182,10,6,3,1,19,1.9,36,10,26
 6,Placer United ECNL G2013/14,Placer United Soccer Club,106267,9,5,2,2,17,1.89,17,7,10
 7,Marin FC ECNL G2013/14,Marin FC,114298,10,4,4,2,14,1.4,14,13,1
@@ -10,4 +10,4 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 9,Force (CA) ECNL G2013/14,Force,112400,6,1,4,1,4,0.67,4,17,-13
 10,Santa Rosa United ECNL G2013/14,Santa Rosa United Soccer,132201,9,2,7,0,6,0.67,7,28,-21
 11,COSC ECNL G2013/14,California Odyssey Soccer Club,116964,8,1,6,1,4,0.5,7,26,-19
-12,Stanislaus Surf - ECNL G2013/14,Stanislaus Surf Soccer Club,82861,9,0,9,0,0,0.0,2,31,-29
+12,Stanislaus Surf - ECNL G2013/14,Stanislaus Surf Soccer Club,82861,10,0,10,0,0,0.0,3,33,-30
