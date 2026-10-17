@@ -7,7 +7,7 @@
     },
     "engine": "modules",
     "manifestSha": "14d0ca0bbb0f18363ee6fe330e2759ecad18a4245babacc46cec28f26481335c",
-    "modulesSha": "9ebc86d890e584bb87cd64da706af5cc5ede6f24c309ede7749b9f92b61f05a6",
+    "modulesSha": "39814f688149c7c4b56a0f0fbb5dd11a2eab11d9d23a1a93a1f469bdb95483ed",
     "queriesSha": "2cea55dd01746ff794d7680c371a2e156cfbb88162db2b3cceb9f22ae6924a95",
     "recordedBy": "node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules"
   },
@@ -19,11 +19,12 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
-        "events": 7
+        "events": 7,
+        "games": 816
       },
       "enter": "conference:2026-27/Southwest/",
       "exact": {
@@ -40,6 +41,14 @@
           "conference:2023-24/Southwest/",
           "conference:2022-23/Southwest/",
           "conference:2021-22/Southwest/"
+        ],
+        "games": [
+          "game:1085541",
+          "game:1085548",
+          "game:1085530",
+          "game:1085517",
+          "game:1085520",
+          "game:1085524"
         ]
       },
       "rr": {
@@ -47,14 +56,15 @@
       },
       "sections": {
         "actual": [
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "events",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "C02": {
@@ -64,11 +74,12 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
-        "events": 5
+        "events": 5,
+        "games": 786
       },
       "enter": "conference:2026-27/NorCal/",
       "exact": {
@@ -84,6 +95,14 @@
           "conference:2024-25/NorCal/",
           "conference:2023-24/NorCal/",
           "conference:2022-23/NorCal/"
+        ],
+        "games": [
+          "game:1094709",
+          "game:1094710",
+          "game:1094715",
+          "game:1094718",
+          "game:1094721",
+          "game:1094724"
         ]
       },
       "rr": {
@@ -91,14 +110,15 @@
       },
       "sections": {
         "actual": [
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "events",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "C03": {
@@ -188,11 +208,12 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
         "events": 7,
+        "games": 834,
         "teams": 60
       },
       "enter": "team:2026-27/39582",
@@ -209,6 +230,14 @@
           "conference:2022-23/Texas/",
           "conference:2021-22/Texas/"
         ],
+        "games": [
+          "field:burroughs park@77375",
+          "field:sting national training center@75006",
+          "field:campbell road sports park@77080",
+          "field:clark east field@75023",
+          "field:burger activity center@78745",
+          "field:st andrews episcopal school@78735"
+        ],
         "teams": [
           "team:2026-27/39582",
           "team:2026-27/129337",
@@ -222,7 +251,8 @@
       "sections": {
         "actual": [
           "teams",
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "teams",
@@ -230,7 +260,7 @@
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "C06": {
@@ -240,11 +270,12 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
         "events": 1,
+        "games": 234,
         "teams": 16
       },
       "enter": "conference:2026-27/Texas/GU15",
@@ -257,6 +288,14 @@
       "rows": {
         "events": [
           "conference:2026-27/Texas/GU15"
+        ],
+        "games": [
+          "field:burroughs park@77375",
+          "field:sting national training center@75006",
+          "field:campbell road sports park@77080",
+          "field:clark east field@75023",
+          "field:burger activity center@78745",
+          "field:st andrews episcopal school@78735"
         ],
         "teams": [
           "team:2024-25/59566",
@@ -273,7 +312,8 @@
       "sections": {
         "actual": [
           "events",
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "events",
@@ -281,7 +321,7 @@
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "C07": {
@@ -291,11 +331,12 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
         "events": 1,
+        "games": 546,
         "teams": 9
       },
       "enter": "conference:2023-24/Northwest/",
@@ -308,6 +349,14 @@
       "rows": {
         "events": [
           "conference:2023-24/Northwest/"
+        ],
+        "games": [
+          "game:634042",
+          "game:634016",
+          "game:634003",
+          "game:634031",
+          "game:634027",
+          "game:633996"
         ],
         "teams": [
           "team:2020-21/18342",
@@ -324,7 +373,8 @@
       "sections": {
         "actual": [
           "events",
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "events",
@@ -332,7 +382,7 @@
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "E01": {
@@ -342,11 +392,12 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
         "events": 1,
+        "games": 131,
         "teams": 12
       },
       "enter": "conference:2026-27/NorCal/GU15",
@@ -360,6 +411,14 @@
       "rows": {
         "events": [
           "conference:2026-27/NorCal/GU15"
+        ],
+        "games": [
+          "game:1094718",
+          "game:1094724",
+          "game:1094700",
+          "game:1094706",
+          "game:1094712",
+          "game:1094694"
         ],
         "teams": [
           "team:2024-25/95449",
@@ -377,7 +436,8 @@
       "sections": {
         "actual": [
           "events",
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "events",
@@ -385,7 +445,7 @@
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "E02": {
@@ -395,11 +455,12 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
         "events": 1,
+        "games": 90,
         "teams": 10
       },
       "enter": "conference:2024-25/NorCal/G2010",
@@ -413,6 +474,14 @@
       "rows": {
         "events": [
           "conference:2024-25/NorCal/G2010"
+        ],
+        "games": [
+          "game:644693",
+          "game:644621",
+          "game:644705",
+          "game:644603",
+          "game:644945",
+          "game:644753"
         ],
         "teams": [
           "team:2022-23/33633",
@@ -430,7 +499,8 @@
       "sections": {
         "actual": [
           "events",
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "events",
@@ -438,7 +508,7 @@
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "E03": {
@@ -448,11 +518,12 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
-        "events": 1
+        "events": 1,
+        "games": 468
       },
       "enter": "event:2025-26/4251",
       "exact": {
@@ -464,6 +535,14 @@
       "rows": {
         "events": [
           "event:2025-26/4251"
+        ],
+        "games": [
+          "game:1047093",
+          "game:1047317",
+          "game:1047263",
+          "game:1047371",
+          "game:1046854",
+          "game:1047332"
         ]
       },
       "rr": {
@@ -471,14 +550,15 @@
       },
       "sections": {
         "actual": [
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "events",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "E04": {
@@ -566,11 +646,12 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
-        "events": 1
+        "events": 1,
+        "games": 468
       },
       "enter": "event:2025-26/4251",
       "exact": {
@@ -582,6 +663,14 @@
       "rows": {
         "events": [
           "event:2025-26/4251"
+        ],
+        "games": [
+          "game:1047093",
+          "game:1047317",
+          "game:1047263",
+          "game:1047371",
+          "game:1046854",
+          "game:1047332"
         ]
       },
       "rr": {
@@ -589,14 +678,15 @@
       },
       "sections": {
         "actual": [
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "events",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "E07": {
@@ -606,11 +696,12 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
-        "events": 2
+        "events": 2,
+        "games": 80
       },
       "enter": "event:2024-25/3975",
       "exact": null,
@@ -621,6 +712,14 @@
         "events": [
           "event:2024-25/3975",
           "event:2023-24/3238"
+        ],
+        "games": [
+          "game:-3442507",
+          "game:-3442607",
+          "game:-3442707",
+          "game:-3442807",
+          "game:-3442907",
+          "game:-3442505"
         ]
       },
       "rr": {
@@ -628,14 +727,15 @@
       },
       "sections": {
         "actual": [
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "events",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "E08": {
@@ -645,11 +745,12 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
-        "events": 2
+        "events": 2,
+        "games": 618
       },
       "enter": "event:2025-26/4133",
       "exact": null,
@@ -660,6 +761,14 @@
         "events": [
           "event:2025-26/4133",
           "event:2025-26/4041"
+        ],
+        "games": [
+          "game:1026110",
+          "game:1025624",
+          "game:1025623",
+          "game:1025620",
+          "game:1025616",
+          "game:1025614"
         ]
       },
       "rr": {
@@ -667,76 +776,98 @@
       },
       "sections": {
         "actual": [
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "events",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "F01": {
       "capReached": false,
       "checks": {
-        "exact": "unsupported",
-        "mustNever": "unsupported",
-        "mustShow": "unsupported",
+        "exact": "pass",
+        "mustNever": "pass",
+        "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
-        "useful": "unsupported"
+        "sections": "pass",
+        "useful": "pass"
       },
-      "counts": {},
-      "enter": null,
+      "counts": {
+        "games": 49
+      },
+      "enter": "field:Surf Sports Park@92014",
       "exact": {
-        "games": "unsupported"
+        "games": "pass"
       },
-      "firstUseful": 0,
+      "firstUseful": 1,
       "mustNeverHits": [],
       "mustShowMissing": [],
-      "rows": {},
+      "rows": {
+        "games": [
+          "field:Surf Sports Park@92014",
+          "game:1085535",
+          "game:1085536",
+          "game:1085537",
+          "game:1085540",
+          "game:1085538"
+        ]
+      },
       "rr": {
-        "games": null
+        "games": 1
       },
       "sections": {
-        "actual": [],
+        "actual": [
+          "games"
+        ],
         "expected": [
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "F02": {
       "capReached": false,
       "checks": {
-        "exact": "unsupported",
-        "mustNever": "unsupported",
-        "mustShow": "unsupported",
+        "exact": "pass",
+        "mustNever": "pass",
+        "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
-        "useful": "unsupported"
+        "sections": "pass",
+        "useful": "pass"
       },
-      "counts": {},
-      "enter": null,
+      "counts": {
+        "games": 1
+      },
+      "enter": "field:60 Acres Park@98052",
       "exact": {
-        "games": "unsupported"
+        "games": "pass"
       },
-      "firstUseful": 0,
+      "firstUseful": 1,
       "mustNeverHits": [],
       "mustShowMissing": [],
-      "rows": {},
+      "rows": {
+        "games": [
+          "field:60 Acres Park@98052"
+        ]
+      },
       "rr": {
-        "games": null
+        "games": 1
       },
       "sections": {
-        "actual": [],
+        "actual": [
+          "games"
+        ],
         "expected": [
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "F03": {
@@ -744,84 +875,118 @@
       "checks": {
         "exact": null,
         "mustNever": null,
-        "mustShow": "unsupported",
+        "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
-        "useful": "unsupported"
+        "sections": "pass",
+        "useful": "pass"
       },
-      "counts": {},
-      "enter": null,
+      "counts": {
+        "games": 1
+      },
+      "enter": "field:Great Park@92618",
       "exact": null,
-      "firstUseful": 0,
+      "firstUseful": 1,
       "mustNeverHits": [],
       "mustShowMissing": [],
-      "rows": {},
+      "rows": {
+        "games": [
+          "field:Great Park@92618"
+        ]
+      },
       "rr": {},
       "sections": {
-        "actual": [],
+        "actual": [
+          "games"
+        ],
         "expected": [
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "F04": {
       "capReached": false,
       "checks": {
-        "exact": "unsupported",
-        "mustNever": "unsupported",
-        "mustShow": "unsupported",
+        "exact": "pass",
+        "mustNever": "pass",
+        "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
-        "useful": "unsupported"
+        "sections": "pass",
+        "useful": "pass"
       },
-      "counts": {},
-      "enter": null,
+      "counts": {
+        "games": 50
+      },
+      "enter": "field:Great Park@92618",
       "exact": {
-        "games": "unsupported"
+        "games": "pass"
       },
-      "firstUseful": 0,
+      "firstUseful": 1,
       "mustNeverHits": [],
       "mustShowMissing": [],
-      "rows": {},
+      "rows": {
+        "games": [
+          "field:Great Park@92618",
+          "game:1085577",
+          "game:1085580",
+          "game:1085578",
+          "game:1085581",
+          "game:1085579"
+        ]
+      },
       "rr": {
-        "games": null
+        "games": 1
       },
       "sections": {
-        "actual": [],
+        "actual": [
+          "games"
+        ],
         "expected": [
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "F05": {
       "capReached": false,
       "checks": {
         "exact": null,
-        "mustNever": "unsupported",
-        "mustShow": "unsupported",
+        "mustNever": "pass",
+        "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
-        "useful": "unsupported"
+        "sections": "pass",
+        "useful": "pass"
       },
-      "counts": {},
-      "enter": null,
+      "counts": {
+        "games": 69
+      },
+      "enter": "field:Great Park@92618",
       "exact": null,
-      "firstUseful": 0,
+      "firstUseful": 1,
       "mustNeverHits": [],
       "mustShowMissing": [],
-      "rows": {},
+      "rows": {
+        "games": [
+          "field:Great Park@92618",
+          "game:539045",
+          "game:539372",
+          "game:539695",
+          "game:539427",
+          "game:539697"
+        ]
+      },
       "rr": {},
       "sections": {
-        "actual": [],
+        "actual": [
+          "games"
+        ],
         "expected": [
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "H01": {
@@ -831,13 +996,14 @@
         "mustNever": null,
         "mustShow": "unsupported",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "unsupported"
       },
       "counts": {
+        "games": 3,
         "teams": 4
       },
-      "enter": "team:2023-24/55477",
+      "enter": "game:1094466",
       "exact": {
         "games": "unsupported"
       },
@@ -845,6 +1011,11 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1094466",
+          "game:1094465",
+          "load"
+        ],
         "teams": [
           "team:2023-24/55477",
           "team:2024-25/55325",
@@ -857,6 +1028,7 @@
       },
       "sections": {
         "actual": [
+          "games",
           "teams"
         ],
         "expected": [
@@ -872,20 +1044,29 @@
       "checks": {
         "exact": null,
         "mustNever": null,
-        "mustShow": "unsupported",
+        "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
-        "useful": "unsupported"
+        "sections": "pass",
+        "useful": "pass"
       },
       "counts": {
+        "games": 6,
         "teams": 27
       },
-      "enter": "team:2021-22/33438",
+      "enter": "pairing",
       "exact": null,
-      "firstUseful": 0,
+      "firstUseful": 1,
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "pairing",
+          "pairing",
+          "pairing",
+          "pairing",
+          "pairing",
+          "pairing"
+        ],
         "teams": [
           "team:2021-22/33438",
           "team:2022-23/33633",
@@ -896,10 +1077,11 @@
         ]
       },
       "rr": {
-        "games": null
+        "games": 1
       },
       "sections": {
         "actual": [
+          "games",
           "teams"
         ],
         "expected": [
@@ -907,7 +1089,7 @@
           "teams"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "H03": {
@@ -915,20 +1097,29 @@
       "checks": {
         "exact": null,
         "mustNever": "pass",
-        "mustShow": "unsupported",
+        "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
-        "useful": "unsupported"
+        "sections": "pass",
+        "useful": "pass"
       },
       "counts": {
+        "games": 6,
         "teams": 18
       },
-      "enter": "team:2021-22/42498",
+      "enter": "pairing",
       "exact": null,
-      "firstUseful": 0,
+      "firstUseful": 1,
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "pairing",
+          "pairing",
+          "pairing",
+          "pairing",
+          "pairing",
+          "pairing"
+        ],
         "teams": [
           "team:2021-22/42498",
           "team:2022-23/64956",
@@ -939,10 +1130,11 @@
         ]
       },
       "rr": {
-        "games": null
+        "games": 1
       },
       "sections": {
         "actual": [
+          "games",
           "teams"
         ],
         "expected": [
@@ -950,7 +1142,7 @@
           "teams"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "H04": {
@@ -960,13 +1152,14 @@
         "mustNever": null,
         "mustShow": "unsupported",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "unsupported"
       },
       "counts": {
+        "games": 1,
         "teams": 2
       },
-      "enter": "team:2020-21/8995",
+      "enter": null,
       "exact": {
         "games": "unsupported"
       },
@@ -974,6 +1167,9 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "load"
+        ],
         "teams": [
           "team:2020-21/8995",
           "team:2020-21/35189"
@@ -984,6 +1180,7 @@
       },
       "sections": {
         "actual": [
+          "games",
           "teams"
         ],
         "expected": [
@@ -1001,13 +1198,14 @@
         "mustNever": null,
         "mustShow": "unsupported",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "unsupported"
       },
       "counts": {
+        "games": 3,
         "teams": 4
       },
-      "enter": "team:2023-24/31529",
+      "enter": "game:1094466",
       "exact": {
         "games": "unsupported"
       },
@@ -1015,6 +1213,11 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1094466",
+          "game:1094465",
+          "load"
+        ],
         "teams": [
           "team:2023-24/31529",
           "team:2024-25/29444",
@@ -1027,6 +1230,7 @@
       },
       "sections": {
         "actual": [
+          "games",
           "teams"
         ],
         "expected": [
@@ -1044,18 +1248,23 @@
         "mustNever": null,
         "mustShow": "unsupported",
         "order": null,
-        "sections": "unsupported",
-        "useful": "unsupported"
+        "sections": "pass",
+        "useful": "pass"
       },
       "counts": {
+        "games": 2,
         "teams": 2
       },
-      "enter": "team:2023-24/55477",
+      "enter": "game:644874",
       "exact": null,
-      "firstUseful": 0,
+      "firstUseful": 1,
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:644874",
+          "game:644820"
+        ],
         "teams": [
           "team:2023-24/55477",
           "team:2023-24/31529"
@@ -1064,6 +1273,7 @@
       "rr": {},
       "sections": {
         "actual": [
+          "games",
           "teams"
         ],
         "expected": [
@@ -1079,20 +1289,29 @@
       "checks": {
         "exact": null,
         "mustNever": null,
-        "mustShow": "unsupported",
+        "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
-        "useful": "unsupported"
+        "sections": "pass",
+        "useful": "pass"
       },
       "counts": {
+        "games": 6,
         "teams": 18
       },
-      "enter": "team:2022-23/68895",
+      "enter": "pairing",
       "exact": null,
-      "firstUseful": 0,
+      "firstUseful": 1,
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "pairing",
+          "pairing",
+          "pairing",
+          "pairing",
+          "pairing",
+          "pairing"
+        ],
         "teams": [
           "team:2022-23/68895",
           "team:2022-23/68894",
@@ -1103,10 +1322,11 @@
         ]
       },
       "rr": {
-        "games": null
+        "games": 1
       },
       "sections": {
         "actual": [
+          "games",
           "teams"
         ],
         "expected": [
@@ -1114,7 +1334,7 @@
           "teams"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "N01": {
@@ -1249,10 +1469,11 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 2,
         "teams": 6
       },
       "enter": "team:2021-22/31488",
@@ -1261,6 +1482,10 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "field:tiemann law firm fields at san juan soccer complex@95670",
+          "field:san juan soccer complex@95670"
+        ],
         "teams": [
           "team:2021-22/31488",
           "team:2022-23/32669",
@@ -1273,14 +1498,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "P02": {
@@ -1290,11 +1516,12 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": "pass",
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
         "events": 2,
+        "games": 119,
         "teams": 18
       },
       "enter": "team:2026-27/132458",
@@ -1306,6 +1533,14 @@
         "events": [
           "event:2025-26/4041",
           "event:2022-23/2719"
+        ],
+        "games": [
+          "field:miramesa high school@92126",
+          "field:canyon crest academy@92130",
+          "field:scripps ranch high school@92131",
+          "field:torrey pines high school@92130",
+          "field:madison high school@92117",
+          "field:john muir language academy@92117"
         ],
         "teams": [
           "team:2026-27/132458",
@@ -1322,7 +1557,8 @@
       "sections": {
         "actual": [
           "teams",
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "teams",
@@ -1330,7 +1566,7 @@
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "P03": {
@@ -1338,13 +1574,14 @@
       "checks": {
         "exact": null,
         "mustNever": "pass",
-        "mustShow": "unsupported",
+        "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
         "events": 3,
+        "games": 33,
         "teams": 24
       },
       "enter": "event:2025-26/4251",
@@ -1357,6 +1594,14 @@
           "event:2025-26/4251",
           "event:2023-24/3064",
           "event:2021-22/2436"
+        ],
+        "games": [
+          "field:marymoor park@98052",
+          "field:60 Acres Park@98052",
+          "field:redmond high school@98052",
+          "field:grass lawn park@98052",
+          "field:grasslawn park@98052",
+          "field:preston park athletic fields@98027"
         ],
         "teams": [
           "team:2021-22/60436",
@@ -1371,6 +1616,7 @@
       "sections": {
         "actual": [
           "events",
+          "games",
           "teams"
         ],
         "expected": [
@@ -1379,7 +1625,7 @@
           "teams"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "P04": {
@@ -1389,10 +1635,11 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": "pass",
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 21,
         "teams": 18
       },
       "enter": "team:2021-22/55512",
@@ -1403,6 +1650,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "field:alemany high school@91345",
+          "field:el camino real charter high school@91367",
+          "field:st bernards high school@90292",
+          "field:drollinger field@90045",
+          "field:silverlakes complex@90293",
+          "field:university high school@90025"
+        ],
         "teams": [
           "team:2021-22/55512",
           "team:2022-23/68845",
@@ -1417,14 +1672,15 @@
       },
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "P05": {
@@ -1434,10 +1690,11 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": "pass",
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 21,
         "teams": 18
       },
       "enter": "team:2021-22/55512",
@@ -1448,6 +1705,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "field:alemany high school@91345",
+          "field:el camino real charter high school@91367",
+          "field:st bernards high school@90292",
+          "field:drollinger field@90045",
+          "field:silverlakes complex@90293",
+          "field:university high school@90025"
+        ],
         "teams": [
           "team:2021-22/55512",
           "team:2022-23/68845",
@@ -1462,14 +1727,15 @@
       },
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "P06": {
@@ -1479,11 +1745,12 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
         "events": 5,
+        "games": 81,
         "teams": 6
       },
       "enter": "team:2026-27/133819",
@@ -1499,6 +1766,14 @@
           "event:2021-22/2437",
           "event:2020-21/2289"
         ],
+        "games": [
+          "field:ukrop park@23234",
+          "game:1121297",
+          "game:1122188",
+          "game:1121299",
+          "game:1122187",
+          "game:1121296"
+        ],
         "teams": [
           "team:2026-27/133819",
           "team:2026-27/133820",
@@ -1512,7 +1787,8 @@
       "sections": {
         "actual": [
           "teams",
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "teams",
@@ -1520,7 +1796,7 @@
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "P07": {
@@ -1530,11 +1806,12 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
         "events": 1,
+        "games": 121,
         "teams": 18
       },
       "enter": "team:2021-22/59771",
@@ -1545,6 +1822,14 @@
       "rows": {
         "events": [
           "event:2025-26/4133"
+        ],
+        "games": [
+          "field:reach 11 sports complex@85050",
+          "field:prfc youth soccer facility@85281",
+          "field:bell road sports complex@85251",
+          "field:arizona athletic grounds@85212",
+          "field:scottsdale sports complex@85255",
+          "field:desert sky@85212"
         ],
         "teams": [
           "team:2021-22/59771",
@@ -1559,7 +1844,8 @@
       "sections": {
         "actual": [
           "teams",
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "teams",
@@ -1567,7 +1853,7 @@
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "P08": {
@@ -1577,11 +1863,12 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": "pass",
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
         "events": 2,
+        "games": 119,
         "teams": 18
       },
       "enter": "team:2026-27/131727",
@@ -1593,6 +1880,14 @@
         "events": [
           "event:2025-26/4041",
           "event:2022-23/2719"
+        ],
+        "games": [
+          "field:Surf Sports Park@92014",
+          "field:miramesa high school@92126",
+          "field:canyon crest academy@92130",
+          "field:monte vista high school@91977",
+          "field:el cajon valley high school@92021",
+          "field:scripps ranch high school@92131"
         ],
         "teams": [
           "team:2026-27/131727",
@@ -1607,7 +1902,8 @@
       "sections": {
         "actual": [
           "teams",
-          "events"
+          "events",
+          "games"
         ],
         "expected": [
           "teams",
@@ -1615,7 +1911,7 @@
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "T01": {
@@ -1625,10 +1921,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 42,
         "teams": 2
       },
       "enter": "team:2023-24/55477",
@@ -1639,6 +1936,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1094706",
+          "game:1094705",
+          "game:1094729",
+          "game:1094730",
+          "game:1094796",
+          "game:1094795"
+        ],
         "teams": [
           "team:2023-24/55477",
           "team:2024-25/55325"
@@ -1649,14 +1954,15 @@
       },
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "T02": {
@@ -1666,10 +1972,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 186,
         "teams": 31
       },
       "enter": "team:2021-22/42498",
@@ -1678,6 +1985,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1085541",
+          "game:1085548",
+          "game:1085545",
+          "game:1085547",
+          "game:1085543",
+          "game:1085552"
+        ],
         "teams": [
           "team:2021-22/42498",
           "team:2022-23/64956",
@@ -1690,14 +2005,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "T03": {
@@ -1707,10 +2023,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": "pass",
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 118,
         "teams": 16
       },
       "enter": "team:2021-22/59553",
@@ -1719,6 +2036,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1073669",
+          "game:1073670",
+          "game:1073667",
+          "game:1073672",
+          "game:1073668",
+          "game:1073671"
+        ],
         "teams": [
           "team:2021-22/59553",
           "team:2022-23/48667",
@@ -1731,14 +2056,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "T04": {
@@ -1748,10 +2074,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 44,
         "teams": 3
       },
       "enter": "team:2024-25/94686",
@@ -1762,6 +2089,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1073670",
+          "game:1073671",
+          "game:1073748",
+          "game:1073713",
+          "game:1073712",
+          "game:1073754"
+        ],
         "teams": [
           "team:2024-25/94686",
           "team:2024-25/59609",
@@ -1773,14 +2108,15 @@
       },
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "T05": {
@@ -1790,10 +2126,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 90,
         "teams": 15
       },
       "enter": "team:2026-27/45834",
@@ -1802,6 +2139,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1069808",
+          "game:1070164",
+          "game:1069807",
+          "game:1070163",
+          "game:1070161",
+          "game:1070162"
+        ],
         "teams": [
           "team:2026-27/45834",
           "team:2022-23/59536",
@@ -1814,14 +2159,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "T06": {
@@ -1831,10 +2177,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 126,
         "teams": 13
       },
       "enter": "team:2021-22/33438",
@@ -1843,6 +2190,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1094706",
+          "game:1094707",
+          "game:1094705",
+          "game:1094708",
+          "game:1094703",
+          "game:1094704"
+        ],
         "teams": [
           "team:2021-22/33438",
           "team:2022-23/33633",
@@ -1855,14 +2210,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "T07": {
@@ -1872,10 +2228,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 58,
         "teams": 4
       },
       "enter": "team:2025-26/112295",
@@ -1884,6 +2241,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1069796",
+          "game:1069801",
+          "game:1069802",
+          "game:1069795",
+          "game:1069816",
+          "game:1069814"
+        ],
         "teams": [
           "team:2025-26/112295",
           "team:2026-27/133392",
@@ -1894,14 +2259,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "T08": {
@@ -1911,10 +2277,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 18,
         "teams": 3
       },
       "enter": "team:2026-27/128086",
@@ -1923,6 +2290,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1072690",
+          "game:1072689",
+          "game:1072553",
+          "game:1072554",
+          "game:1072574",
+          "game:1072573"
+        ],
         "teams": [
           "team:2026-27/128086",
           "team:2021-22/13678",
@@ -1932,14 +2307,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "T09": {
@@ -1949,10 +2325,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 18,
         "teams": 1
       },
       "enter": "team:2023-24/55477",
@@ -1963,6 +2340,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:644604",
+          "game:644766",
+          "game:644874",
+          "game:644934",
+          "game:644856",
+          "game:645042"
+        ],
         "teams": [
           "team:2023-24/55477"
         ]
@@ -1972,27 +2357,29 @@
       },
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "W01": {
       "capReached": false,
       "checks": {
         "exact": null,
-        "mustNever": "unsupported",
+        "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 96,
         "teams": 18
       },
       "enter": "team:2026-27/132458",
@@ -2001,6 +2388,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1085535",
+          "game:1085536",
+          "game:1085537",
+          "game:1085540",
+          "game:1085538",
+          "game:1085539"
+        ],
         "teams": [
           "team:2026-27/132458",
           "team:2021-22/61178",
@@ -2013,21 +2408,22 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "W02": {
       "capReached": false,
       "checks": {
         "exact": null,
-        "mustNever": "unsupported",
+        "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
         "sections": "pass",
@@ -2065,7 +2461,7 @@
         "actual": [],
         "expected": []
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "W03": {
@@ -2075,10 +2471,11 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 96,
         "teams": 13
       },
       "enter": "team:2021-22/59771",
@@ -2087,6 +2484,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1085583",
+          "game:1085584",
+          "game:1085585",
+          "game:1085586",
+          "game:1085587",
+          "game:1085588"
+        ],
         "teams": [
           "team:2021-22/59771",
           "team:2022-23/68888",
@@ -2099,14 +2504,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "W04": {
@@ -2116,10 +2522,11 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 96,
         "teams": 18
       },
       "enter": "team:2026-27/131727",
@@ -2128,6 +2535,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1085517",
+          "game:1085520",
+          "game:1085518",
+          "game:1085521",
+          "game:1085519",
+          "game:1085522"
+        ],
         "teams": [
           "team:2026-27/131727",
           "team:2021-22/53810",
@@ -2140,14 +2555,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "W05": {
@@ -2157,10 +2573,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 44,
         "teams": 2
       },
       "enter": "team:2023-24/74987",
@@ -2171,6 +2588,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1094694",
+          "game:1094693",
+          "game:1094729",
+          "game:1094730",
+          "game:1094784",
+          "game:1094783"
+        ],
         "teams": [
           "team:2023-24/74987",
           "team:2024-25/95449"
@@ -2181,14 +2606,15 @@
       },
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "Y01": {
@@ -2198,10 +2624,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 186,
         "teams": 31
       },
       "enter": "team:2021-22/42498",
@@ -2210,6 +2637,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1085541",
+          "game:1085548",
+          "game:1085545",
+          "game:1085547",
+          "game:1085543",
+          "game:1085552"
+        ],
         "teams": [
           "team:2021-22/42498",
           "team:2022-23/64956",
@@ -2222,14 +2657,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "Y02": {
@@ -2239,10 +2675,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 126,
         "teams": 13
       },
       "enter": "team:2021-22/33438",
@@ -2251,6 +2688,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1094706",
+          "game:1094707",
+          "game:1094705",
+          "game:1094708",
+          "game:1094703",
+          "game:1094704"
+        ],
         "teams": [
           "team:2021-22/33438",
           "team:2022-23/33633",
@@ -2263,27 +2708,29 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "Y03": {
       "capReached": false,
       "checks": {
         "exact": null,
-        "mustNever": "unsupported",
+        "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 96,
         "teams": 18
       },
       "enter": "team:2026-27/132458",
@@ -2292,6 +2739,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1085535",
+          "game:1085536",
+          "game:1085537",
+          "game:1085540",
+          "game:1085538",
+          "game:1085539"
+        ],
         "teams": [
           "team:2026-27/132458",
           "team:2021-22/61178",
@@ -2304,14 +2759,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "Y04": {
@@ -2321,10 +2777,11 @@
         "mustNever": "pass",
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 722,
         "teams": 83
       },
       "enter": "team:2022-23/69035",
@@ -2333,6 +2790,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1085535",
+          "game:1085536",
+          "game:1094691",
+          "game:1094697",
+          "game:1094700",
+          "game:1085537"
+        ],
         "teams": [
           "team:2022-23/69035",
           "team:2022-23/69036",
@@ -2345,14 +2810,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "Y05": {
@@ -2362,10 +2828,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 42,
         "teams": 2
       },
       "enter": "team:2023-24/31529",
@@ -2376,6 +2843,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1094711",
+          "game:1094712",
+          "game:1094753",
+          "game:1094754",
+          "game:1094777",
+          "game:1094778"
+        ],
         "teams": [
           "team:2023-24/31529",
           "team:2024-25/29444"
@@ -2386,14 +2861,15 @@
       },
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     },
     "Y06": {
@@ -2403,10 +2879,11 @@
         "mustNever": null,
         "mustShow": "pass",
         "order": null,
-        "sections": "unsupported",
+        "sections": "pass",
         "useful": "pass"
       },
       "counts": {
+        "games": 96,
         "teams": 15
       },
       "enter": "team:2026-27/130900",
@@ -2415,6 +2892,14 @@
       "mustNeverHits": [],
       "mustShowMissing": [],
       "rows": {
+        "games": [
+          "game:1085577",
+          "game:1085580",
+          "game:1085578",
+          "game:1085581",
+          "game:1085579",
+          "game:1085582"
+        ],
         "teams": [
           "team:2026-27/130900",
           "team:2022-23/68893",
@@ -2427,14 +2912,15 @@
       "rr": {},
       "sections": {
         "actual": [
-          "teams"
+          "teams",
+          "games"
         ],
         "expected": [
           "teams",
           "games"
         ]
       },
-      "status": "unsupported",
+      "status": "pass",
       "wrongDestinations": []
     }
   },
@@ -2467,14 +2953,14 @@
         },
         "mustNeverHits": 0,
         "mustShowMissing": 0,
-        "pass": 0,
+        "pass": 8,
         "queries": 8,
-        "sectionsAgree": 0,
-        "sectionsAgreeRate": 0,
-        "sectionsAgreeRateSupported": null,
-        "sectionsAgreeSupported": 0,
-        "sectionsSupported": 0,
-        "unsupported": 8,
+        "sectionsAgree": 8,
+        "sectionsAgreeRate": 1,
+        "sectionsAgreeRateSupported": 1,
+        "sectionsAgreeSupported": 8,
+        "sectionsSupported": 8,
+        "unsupported": 0,
         "wrongDestinations": 0
       },
       "collisions": {
@@ -2504,14 +2990,14 @@
         },
         "mustNeverHits": 0,
         "mustShowMissing": 0,
-        "pass": 2,
+        "pass": 7,
         "queries": 7,
-        "sectionsAgree": 2,
-        "sectionsAgreeRate": 0.2857,
+        "sectionsAgree": 7,
+        "sectionsAgreeRate": 1,
         "sectionsAgreeRateSupported": 1,
-        "sectionsAgreeSupported": 2,
-        "sectionsSupported": 2,
-        "unsupported": 5,
+        "sectionsAgreeSupported": 7,
+        "sectionsSupported": 7,
+        "unsupported": 0,
         "wrongDestinations": 0
       },
       "events": {
@@ -2541,21 +3027,21 @@
         },
         "mustNeverHits": 0,
         "mustShowMissing": 0,
-        "pass": 2,
+        "pass": 8,
         "queries": 8,
-        "sectionsAgree": 2,
-        "sectionsAgreeRate": 0.25,
+        "sectionsAgree": 8,
+        "sectionsAgreeRate": 1,
         "sectionsAgreeRateSupported": 1,
-        "sectionsAgreeSupported": 2,
-        "sectionsSupported": 2,
-        "unsupported": 6,
+        "sectionsAgreeSupported": 8,
+        "sectionsSupported": 8,
+        "unsupported": 0,
         "wrongDestinations": 0
       },
       "fields": {
         "capReached": 0,
         "fail": 0,
-        "firstUseful": 0,
-        "firstUsefulRate": 0,
+        "firstUseful": 5,
+        "firstUsefulRate": 1,
         "mrr": {
           "events": {
             "all": null,
@@ -2564,10 +3050,10 @@
             "supportedOnly": null
           },
           "games": {
-            "all": 0,
+            "all": 1,
             "judged": 3,
-            "supported": 0,
-            "supportedOnly": null
+            "supported": 3,
+            "supportedOnly": 1
           },
           "teams": {
             "all": null,
@@ -2578,21 +3064,21 @@
         },
         "mustNeverHits": 0,
         "mustShowMissing": 0,
-        "pass": 0,
+        "pass": 5,
         "queries": 5,
-        "sectionsAgree": 0,
-        "sectionsAgreeRate": 0,
-        "sectionsAgreeRateSupported": null,
-        "sectionsAgreeSupported": 0,
-        "sectionsSupported": 0,
-        "unsupported": 5,
+        "sectionsAgree": 5,
+        "sectionsAgreeRate": 1,
+        "sectionsAgreeRateSupported": 1,
+        "sectionsAgreeSupported": 5,
+        "sectionsSupported": 5,
+        "unsupported": 0,
         "wrongDestinations": 0
       },
       "games-h2h": {
         "capReached": 0,
         "fail": 0,
-        "firstUseful": 0,
-        "firstUsefulRate": 0,
+        "firstUseful": 4,
+        "firstUsefulRate": 0.5714,
         "mrr": {
           "events": {
             "all": null,
@@ -2601,10 +3087,10 @@
             "supportedOnly": null
           },
           "games": {
-            "all": 0,
+            "all": 0.5,
             "judged": 6,
-            "supported": 0,
-            "supportedOnly": null
+            "supported": 3,
+            "supportedOnly": 1
           },
           "teams": {
             "all": null,
@@ -2615,14 +3101,14 @@
         },
         "mustNeverHits": 0,
         "mustShowMissing": 0,
-        "pass": 0,
+        "pass": 3,
         "queries": 7,
-        "sectionsAgree": 0,
-        "sectionsAgreeRate": 0,
-        "sectionsAgreeRateSupported": null,
-        "sectionsAgreeSupported": 0,
-        "sectionsSupported": 0,
-        "unsupported": 7,
+        "sectionsAgree": 7,
+        "sectionsAgreeRate": 1,
+        "sectionsAgreeRateSupported": 1,
+        "sectionsAgreeSupported": 7,
+        "sectionsSupported": 7,
+        "unsupported": 4,
         "wrongDestinations": 0
       },
       "not-ignored": {
@@ -2652,14 +3138,14 @@
         },
         "mustNeverHits": 0,
         "mustShowMissing": 0,
-        "pass": 0,
+        "pass": 5,
         "queries": 5,
-        "sectionsAgree": 1,
-        "sectionsAgreeRate": 0.2,
+        "sectionsAgree": 5,
+        "sectionsAgreeRate": 1,
         "sectionsAgreeRateSupported": 1,
-        "sectionsAgreeSupported": 1,
-        "sectionsSupported": 1,
-        "unsupported": 5,
+        "sectionsAgreeSupported": 5,
+        "sectionsSupported": 5,
+        "unsupported": 0,
         "wrongDestinations": 0
       },
       "nothing": {
@@ -2726,14 +3212,14 @@
         },
         "mustNeverHits": 0,
         "mustShowMissing": 0,
-        "pass": 0,
+        "pass": 9,
         "queries": 9,
-        "sectionsAgree": 0,
-        "sectionsAgreeRate": 0,
-        "sectionsAgreeRateSupported": null,
-        "sectionsAgreeSupported": 0,
-        "sectionsSupported": 0,
-        "unsupported": 9,
+        "sectionsAgree": 9,
+        "sectionsAgreeRate": 1,
+        "sectionsAgreeRateSupported": 1,
+        "sectionsAgreeSupported": 9,
+        "sectionsSupported": 9,
+        "unsupported": 0,
         "wrongDestinations": 0
       },
       "typos": {
@@ -2763,22 +3249,22 @@
         },
         "mustNeverHits": 0,
         "mustShowMissing": 0,
-        "pass": 0,
+        "pass": 6,
         "queries": 6,
-        "sectionsAgree": 0,
-        "sectionsAgreeRate": 0,
-        "sectionsAgreeRateSupported": null,
-        "sectionsAgreeSupported": 0,
-        "sectionsSupported": 0,
-        "unsupported": 6,
+        "sectionsAgree": 6,
+        "sectionsAgreeRate": 1,
+        "sectionsAgreeRateSupported": 1,
+        "sectionsAgreeSupported": 6,
+        "sectionsSupported": 6,
+        "unsupported": 0,
         "wrongDestinations": 0
       }
     },
     "overall": {
       "capReached": 0,
       "fail": 0,
-      "firstUseful": 48,
-      "firstUsefulRate": 0.8,
+      "firstUseful": 57,
+      "firstUsefulRate": 0.95,
       "mrr": {
         "events": {
           "all": 1,
@@ -2787,10 +3273,10 @@
           "supportedOnly": 1
         },
         "games": {
-          "all": 0,
+          "all": 0.6667,
           "judged": 9,
-          "supported": 0,
-          "supportedOnly": null
+          "supported": 6,
+          "supportedOnly": 1
         },
         "teams": {
           "all": 1,
@@ -2801,14 +3287,14 @@
       },
       "mustNeverHits": 0,
       "mustShowMissing": 0,
-      "pass": 9,
+      "pass": 56,
       "queries": 60,
-      "sectionsAgree": 10,
-      "sectionsAgreeRate": 0.1667,
+      "sectionsAgree": 60,
+      "sectionsAgreeRate": 1,
       "sectionsAgreeRateSupported": 1,
-      "sectionsAgreeSupported": 10,
-      "sectionsSupported": 10,
-      "unsupported": 51,
+      "sectionsAgreeSupported": 60,
+      "sectionsSupported": 60,
+      "unsupported": 4,
       "wrongDestinations": 0
     }
   }

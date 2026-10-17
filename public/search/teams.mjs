@@ -46,6 +46,7 @@ export function* teamDocsG(core, vocab, n) {
       // sort keys, read once (a sort compares them many times)
       sortClub: lc(noClub ? titleText : clubName), sortTitle: lc(titleText), sortName: lc(latest.name), sortU: latest.u || 0,
       i, club, born: sq.b, rows, latest, key: `${rows[0].season}/${rows[0].teamID}`, current: latest.season === vocab.active,
+      x: (sq.x || []).map(([si, tid]) => ({ season: S[si], teamID: tid })),   // #168: alias ids at national events and showcases
       titleText, titleWords: nw(titleText), caps: [...capsSet],
       placeGeo: loc ? loc[0] : null, countyGeo: loc ? loc[1] : null, m: sq.m || [], mp: sq.mp || [],
       fields: [[...title], [...clubF], [...older], [...placeF]],
@@ -290,6 +291,10 @@ class TeamRow {
     if (partial) { this.partial = true; this.partialKey = h.partialKey; }
   }
   get teamRows() { return this.#h.d.rows.map(r => `${r.season}/${r.teamID}`); }
+  // #168: the squad's season rows ({ season, teamID, name, conf, div, u, years }) and its alias ids
+  // ({ season, teamID }), from which the Games section takes the squad's games
+  get squadRows() { return this.#h.d.rows; }
+  get aliasIDs() { return this.#h.d.x; }
   get overviewHref() { const l = this.#h.d.latest; return teamHref(l.season, l.teamID, l.name); }
   get seasonHref() { const a = this.#h.anchor; return teamSeasonHref(a.season, a.teamID, a.name); }
   get href() { return this.#h.seasonTyped ? this.seasonHref : this.overviewHref; }

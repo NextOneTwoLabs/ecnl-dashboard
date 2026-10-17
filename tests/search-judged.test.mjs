@@ -278,8 +278,9 @@ test('MF5: a simulated refresh (new squads, a relink, club changes) keeps the fa
 });
 
 // ---------- the search modules (#163, PR 3): public/search/*.mjs measured on the same set ----------
-// The pass criteria of the approved plan (v2, section 5). The modules answer teams and events only:
-// games, fields, head to head and pairings stay `unsupported` until PR 4b and PR 6.
+// The pass criteria of the approved plan (v2, section 5). Since #168 (PR 4b) the modules answer games, fields
+// and pairings too, each query from the page's own state (the active season's games, plus the seasons the
+// query names: MF2); head to head stays `unsupported` until PR 6.
 const MODULES = readJSON(new URL('baseline/modules.json', HERE));
 const modules = modulesAdapter(doc.context);
 const modulesRun = runAll(doc, modules, fx);
@@ -300,7 +301,8 @@ test('#163: the modules on the fixtures equal the recorded baseline, query by qu
 test('#163 pass criteria: first result useful better than today overall, and no group worse', () => {
   const t = BASELINE.summary, m = modulesRun.summary;
   assert.ok(m.overall.firstUseful > t.overall.firstUseful, `${m.overall.firstUseful} > ${t.overall.firstUseful}`);
-  assert.equal(m.overall.firstUseful, 48, 'the plan expects 48/60: every query the modules can answer');
+  assert.equal(m.overall.firstUseful, 57, '#168 expects 57/60: every query but the three head-to-head ones (PR 6)');
+  assert.deepEqual(Object.entries(modulesRun.perQuery).filter(([, r]) => r.firstUseful === 0).map(([id]) => id).sort(), ['H01', 'H04', 'H05']);
   for (const g of GROUPS) assert.ok(m.groups[g].firstUseful >= t.groups[g].firstUseful, `${g}: ${m.groups[g].firstUseful} >= ${t.groups[g].firstUseful}`);
 });
 

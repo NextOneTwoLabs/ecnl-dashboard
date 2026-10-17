@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -480,7 +480,10 @@ Later engines are measured against that baseline on the same queries.
   it. Closed-season facts the queries cite are compared with the live archive on every run,
   never squad grouping or club details, so a data refresh cannot break CI (#151).
 - **The search modules** (`public/search/`, #163) run on the same queries against the frozen
-  search data (`fixtures/search/core.json` and `places.json`); their outcome is recorded in
+  search data (`fixtures/search/core.json`, `places.json` and, since #168, the `games-<season>.json`
+  files). Each query starts from the page's own state: the active season's games, plus the seasons the
+  query itself names, loaded and searched again as the page does; seasons loaded only on request (the
+  Load cells) are never loaded there. Head to head stays `unsupported` until PR 6. Their outcome is recorded in
   `tests/search/baseline/modules.json`. Any change to a module re-records in the same PR and
   explains the diff: `node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules`.
   `tests/search-judged.test.mjs` holds them to the plan's pass criteria: first result useful
@@ -535,9 +538,16 @@ draws them since #165 (below).
 
 - `search.mjs`, the entry point: `buildIndex({ core, places })` builds the index from the search
   data files (it throws `SearchDataError`, naming the file, on a schema it does not know), and
-  `search(index, query, { now, timeZone, selectedSeason })` returns the slate. `SEARCH_API` is the
-  API version (2 since #165): the page compares it with the version it expects and shows a
-  coverage note rather than call a changed API.
+  `search(index, query, { now, timeZone, selectedSeason, today })` returns the slate. `today`
+  ('YYYY-MM-DD', #168) is required: the page passes its own `todayKey()`, so no search makes an `Intl`
+  formatter. `SEARCH_API` is the API version (3 since #168): the page compares it with the version it
+  expects and shows a coverage note rather than call a changed API.
+  - `startGames(index, gamesDoc, n)` (#168) adds one season's games file as a generator of at most `n`
+    games per step; its last step installs the season, so a search never sees half of one. A schema it
+    does not know throws `SearchDataError` from the first `next()`. Game rows are built when read:
+    `matchID`, `date`, `time`, `home` and `away` (as that event spells them, with a season tab when the
+    directory lists the team), `score`, `pk`, `winner`, `competition`, `field` (with its label and city),
+    `dest`, `href` and `matched` (the side the query's names matched).
   - `startIndex({ core, places }, n)` is the same build as a generator: each `next()` does at most
     `n` units of one stage (vocabulary, team documents, postings, counts and lookups, then events as
     the last step), yields a label, and returns the index. The page runs steps while the main thread
@@ -558,20 +568,38 @@ draws them since #165 (below).
   category: seasons, a bare year (two seasons, or a birth year in `core.birthYears`), birth years,
   age groups, conferences, states, census places and counties (D2), field complexes and dates
   (games only), kind words and name words. `vocab.mjs` holds the reviewed alias table: `la`
-  (D3) and `richmond` (D8), each with its evidence.
+  (D3) and `richmond` (D8), each with its evidence. Since #168 (Q4) every field name of two words or
+  more is a field phrase, a whole name and never a part, except a name that appears inside a club's,
+  team's, family's or alias's name (MF5: `fc dallas`, `oklahoma celtic`, `pda south`; listed as
+  `vocab.fieldPhrasesDropped`). Their words are games-only: they never join the known words.
 - `match.mjs` expands words (exact 1.0, prefix 0.7, typo 0.4; club initials never by typo; a
   known word never as a typo) and scores them with BM25F, one contribution per query word.
-- `teams.mjs` and `events.mjs` search squads and events (with their tier names); `slate.mjs`
-  orders the sections (the design's first-row-wins table, D2 across sections), promotes a best
-  match, shows partial matches only when nothing matches every word, and always reports games as
-  not indexed until PR 4b. `links.mjs` builds today's link formats.
+- `teams.mjs` and `events.mjs` search squads and events (with their tier names); `games.mjs` (#168)
+  builds each season's games index and searches the loaded games: a field (one row per name and zip, D6, D6a), a place's
+  fields (in the place, then Nearby, D2; Q7), the games of the Teams section's own squads, a
+  conference's, a kind word's or a day's games, and club against club (one pairing row per season and
+  age group, D5; with one squad a side, the meetings and a Load row for earlier seasons, Q2). Games
+  come upcoming first (soonest), then newest first. `slate.mjs` orders the sections (the design's
+  first-row-wins table, D2 across sections; Games after every section with results under rule 5,
+  MF3; a place's empty fields never lead, MF4), promotes a best match (never a game), shows partial
+  matches only when nothing matches every word, and reports per season whether its games are `ready`,
+  `loading`, `not-loaded`, `on-request`, `missing` or `failed`. `links.mjs` builds today's link
+  formats and the game links (`gameHref`, from the games file's `dest` code, with `&match=`).
 - **Serving:** they are static assets at `/search/*.mjs` (`wrangler.toml`'s `run_worker_first`
   does not cover them), served as `text/javascript`; `proxy_server.py` pins that type locally.
   Node tests import them directly.
 - **Cost:** `node --import ./tests/netguard/netguard.mjs --expose-gc tools/search_data_size.mjs --index`
   measures `buildIndex`. `tests/search-modules.test.mjs` types every judged query one character
-  at a time, pins the work each keystroke does, and fails on any keystroke over 20 ms or a cold
-  build over 200 ms (each the fastest of 3, so a busy CI runner cannot fail it).
+  at a time, pins the work each keystroke does (since #168 with the active season's games, and
+  `gamesVisited` weighed), and fails on any keystroke over 20 ms or a cold build over 200 ms (each
+  the fastest of 3, so a busy CI runner cannot fail it). `tests/search-games.test.mjs` pins the
+  Games category: the staged games build, field phrases, each reading, the order and the slate.
+- **Every game's link** (#168): `tests/search-game-links.test.mjs` builds the link of every game of
+  every committed games file and resolves it the way the page would, with the page's own functions
+  sliced from `index.html` on the archived hierarchies, standings and schedules: the router keeps
+  every value, and the view draws the game (a Matches view with the link's filter, a drawn bracket,
+  a Schedule or showcase Games view). 0 wrong destinations; a game with no link has a side still to
+  be decided.
 
 ### The search panel
 

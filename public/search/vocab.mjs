@@ -93,19 +93,59 @@ export function* buildVocabG(core, places, n) {
   }
   // field complexes (games only): whole names, never a part (design: never `surf` alone)
   for (const [k, v] of Object.entries((places.vocab || {}).fieldAliases || {})) phrases.push({ type: 'field', value: v, words: words(k) });
-  // longest first, then a stable order
+  // #168 (Q4): every field's own name of two words or more is a field phrase too, a whole name, never a
+  // part. MF5: except a name that appears, as consecutive whole words, inside a name: a club's, a team's
+  // (current or older, every squad row), a family's or an alias ('fc dallas' is in "FC Dallas Youth" and
+  // in every FC Dallas team's name). The scan is stepped like the rest: a unit is a squad, then a name.
+  const aliasNames = new Set(Object.values((places.vocab || {}).fieldAliases || {}));
+  const cand = new Map(), byW = new Map();
+  yield 'vocab:fields';
+  for (const key of Object.keys(places.fields || {})) {
+    if (++units % n === 0) yield 'vocab:fields';
+    const name = key.slice(0, key.lastIndexOf('@')), w = words(name), k = w.join(' ');
+    if (aliasNames.has(name) || w.length < 2 || cand.has(k)) continue;
+    cand.set(k, { name, w });
+    if (!byW.has(w[0])) byW.set(w[0], []);
+    byW.get(w[0]).push(w);
+  }
+  const names = new Set([...t.clubs.map(c => c[1]), ...(t.families || []).map(f => f[0]), ...Object.keys(ALIASES), ...Object.keys(core.vocab.confAliases || {})]);
+  yield 'vocab:fields';
+  for (const sq of t.squads) { if (++units % n === 0) yield 'vocab:fields'; for (const r of sq.s) names.add(r[2]); }
+  const inName = new Set();
+  for (const nm of names) {
+    if (++units % n === 0) yield 'vocab:fields';
+    const w = words(nm);
+    for (let i = 0; i < w.length; i++) for (const fw of byW.get(w[i]) || []) if (i + fw.length <= w.length && fw.every((x, k) => w[i + k] === x)) inName.add(fw.join(' '));
+  }
+  const dropped = [], fieldPhrases = [];
+  for (const [k, { name, w }] of cand) {
+    if (inName.has(k)) dropped.push(k);
+    else fieldPhrases.push({ type: 'field', value: name, words: w, fieldName: true });
+  }
+  // longest first, then a stable order. The field names are sorted in a step of their own and merged (a tie
+  // takes the earlier list first, as the one stable sort of both did), so no step grows with them (#168).
   const ROLE = { conf: 0, state: 1, place: 2, county: 3, field: 4 };
+  const byLen = (a, b) => b.words.length - a.words.length || ROLE[a.type] - ROLE[b.type] || cu(a.words.join(' '), b.words.join(' '));
   yield 'vocab:sort';
-  phrases.sort((a, b) => b.words.length - a.words.length || ROLE[a.type] - ROLE[b.type] || cu(a.words.join(' '), b.words.join(' ')));
+  phrases.sort(byLen);
+  yield 'vocab:sort';
+  fieldPhrases.sort(byLen);
+  yield 'vocab:sort';
+  const merged = [];
+  for (let i = 0, j = 0; i < phrases.length || j < fieldPhrases.length;) merged.push(j >= fieldPhrases.length || (i < phrases.length && byLen(phrases[i], fieldPhrases[j]) <= 0) ? phrases[i++] : fieldPhrases[j++]);
+  phrases.length = 0; phrases.push(...merged);
   yield 'vocab:first';
   const byFirst = new Map();
-  for (const p of phrases) { const f = p.words[0]; if (!byFirst.has(f)) byFirst.set(f, []); byFirst.get(f).push(p); }
-  // every word the vocabulary knows (refinement A adds the categories' terms in search.mjs)
+  for (const p of phrases) { if (++units % (n * 8) === 0) yield 'vocab:first'; const f = p.words[0]; if (!byFirst.has(f)) byFirst.set(f, []); byFirst.get(f).push(p); }
+  // every word the vocabulary knows (refinement A adds the categories' terms in search.mjs). A field
+  // name's words are games-only (#168 MF5): they never join it, so they cannot switch off a team's or an
+  // event's typo match ("mary" of Mary Grogan Community Park).
   yield 'vocab:known';
-  const known = new Set([...phrases.flatMap(p => p.words), ...Object.keys(KIND_WORDS)]);
+  const known = new Set([...phrases.filter(p => !p.fieldName).flatMap(p => p.words), ...Object.keys(KIND_WORDS)]);
   return {
     seasons, active, birthYears: [byLo, byHi], divs, states, phrases, byFirst, known, placeByName,
-    places: places.places, counties: places.counties, clubPlaces: places.clubPlaces || {}, eventPlaces: places.eventPlaces || {},
+    places: places.places, counties: places.counties, fields: places.fields || {}, clubPlaces: places.clubPlaces || {}, eventPlaces: places.eventPlaces || {},
+    fieldPhrasesDropped: dropped.sort(cu),   // MF5: the field names left out because a name holds them
   };
 }
 

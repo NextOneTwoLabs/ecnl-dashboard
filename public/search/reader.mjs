@@ -196,6 +196,14 @@ function forEvents(r) {
   return named || !!r.conf || r.kinds.length > 0 || !!r.places;
 }
 
+// #168: the Games category reads names (through the Teams section's own matcher), a field, a place, a
+// conference, a kind word or a date.
+function forGames(r) {
+  if (r.field || r.dates.length) return true;
+  if (r.names.length) return r.names.map(n => n.w).join('').length >= 2;
+  return !!r.places || !!r.conf || r.kinds.length > 0;
+}
+
 function capped(list) {
   const seen = new Set(), out = [];
   for (const r of [...list].sort(order)) { if (seen.has(r.key)) continue; seen.add(r.key); out.push(r); }
@@ -220,14 +228,14 @@ export function readQuery(vocab, text) {
     const all = readingsOf(tk, vocab);
     const teams = capped(all.filter(forTeams));
     const events = capped(toks.length === 2 ? [] : all.filter(forEvents));
-    const games = all.filter(r => r.field || r.dates.length);
-    capReached = capReached || teams.capReached || events.capReached || !!tk.cut;
+    const games = capped(all.filter(forGames));
+    capReached = capReached || teams.capReached || events.capReached || games.capReached || !!tk.cut;
     // design row 4: some reading uses every word as a place, with no other filter
     const placeOnly = all.some(r => r.places && (!r.codes.length || r.statePinned) && !r.names.length && !r.conf && !r.kinds.length && !r.field && !r.dates.length
       && !r.seasons && !r.unknownSeason && !r.u && !r.born.length);
     return {
-      tokens: tk, teams: teams.readings, events: events.readings, games, placeOnly,
-      confAge: all.some(r => r.conf && (r.u || r.band)), kinds: all.some(r => r.kinds.length), field: games.some(r => r.field), dates: tk.dates.length > 0,
+      tokens: tk, teams: teams.readings, events: events.readings, games: games.readings, placeOnly,
+      confAge: all.some(r => r.conf && (r.u || r.band)), kinds: all.some(r => r.kinds.length), field: all.some(r => r.field), dates: tk.dates.length > 0,
       unknownSeason: tk.unknownSeason, nameWords: [...new Set(all.flatMap(r => r.names.map(n => n.w)))],
     };
   });

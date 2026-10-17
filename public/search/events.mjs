@@ -1,7 +1,7 @@
 // #163 (#149 phase 1, PR 3): the Events category. One document per catalog event (a conference
 // season, a national event or a showcase) from core.json's events, its tier names from the squads'
 // event entries (#163 Q8), and its place from places.json. A conference season's age-group tables
-// are rows inside it. Pure; "today" comes from the context's clock and time zone.
+// are rows inside it. Pure; "today" comes from the context (context.today, #168 MF7).
 import { Postings, nameWords, words, expand, filterScore, worseClass, CLASS_RANK } from './match.mjs';
 import { placeWords, ALIASES } from './vocab.mjs';
 import { conferenceHref, nationalHref, showcaseHref } from './links.mjs';
@@ -72,15 +72,6 @@ function distance(d, today) {
   return Math.min(Math.abs(days(d.start, today)), Math.abs(days(end, today)));
 }
 
-// Today's date in the context's time zone, 'YYYY-MM-DD'. A formatter is costly to build, so one is
-// kept per time zone (it holds no clock: the instant comes from ctx.now).
-const FORMATS = new Map();
-function todayIn(ctx) {
-  let f = FORMATS.get(ctx.timeZone);
-  if (!f) { f = new Intl.DateTimeFormat('en-CA', { timeZone: ctx.timeZone, year: 'numeric', month: '2-digit', day: '2-digit' }); FORMATS.set(ctx.timeZone, f); }
-  return f.format(ctx.now);
-}
-
 // -> { rows, reasons: Set }
 export function searchEvents(E, side, ctx, vocab, { partial = false, stats = null, known = null, cache = null } = {}) {
   const reasons = new Set();
@@ -145,7 +136,7 @@ export function searchEvents(E, side, ctx, vocab, { partial = false, stats = nul
       }
     }
   });
-  const today = todayIn(ctx);
+  const today = ctx.today;   // #168 MF7: 'YYYY-MM-DD', from the page (its todayKey): no Intl formatter is made here
   const out = [...best.values()];
   if (stats) stats.rowsSorted += out.length;
   for (const h of out) h.dist = distance(h.d, today);
