@@ -1,5 +1,5 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,Slammers FC HB Koge ECNL G2011/12,Slammers FC,133597,3,3,0,0,9,3.0,15,3,12
+1,Slammers FC HB Koge ECNL G2011/12,Slammers FC,133597,4,4,0,0,12,3.0,16,3,13
 2,Beach Futbol Club (CA) ECNL G2011/12,Beach Futbol Club,131923,4,4,0,0,12,3.0,12,0,12
 3,San Diego Surf ECNL G2011/12,San Diego Surf Soccer Club,132461,2,2,0,0,6,3.0,11,1,10
 4,So Cal Blues ECNL G2011/12,So Cal Blues,135889,2,2,0,0,6,3.0,8,1,7
@@ -10,8 +10,8 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 9,Rebels SC ECNL G2011/12,Rebels Soccer Club,94955,3,1,1,1,4,1.33,5,6,-1
 10,Pateadores Soccer Club ECNL G2011/12,Pateadores Soccer Club,130972,3,1,1,1,4,1.33,2,3,-1
 11,Legends FC Del Mar ECNL G2011/12,Legends FC - Del Mar,131712,2,0,0,2,2,1.0,1,1,0
-12,LA Breakers FC ECNL G2011/12,LA Breakers FC,84686,3,0,1,2,2,0.67,3,7,-4
-13,Arizona Arsenal ECNL G2011/12,Arizona Arsenal Soccer Club,134384,4,0,2,2,2,0.5,5,8,-3
+12,Arizona Arsenal ECNL G2011/12,Arizona Arsenal Soccer Club,134384,4,0,2,2,2,0.5,5,8,-3
+13,LA Breakers FC ECNL G2011/12,LA Breakers FC,84686,4,0,2,2,2,0.5,3,8,-5
 14,LV Heat Surf ECNL G2011/12,LV Heat Surf SC ,84197,5,0,3,2,2,0.4,3,8,-5
 15,Eagles SC ECNL G2011/12,Eagles SC,25917,2,0,2,0,0,0.0,2,6,-4
 16,LAFC So Cal ECNL G2011/12,LAFC So Cal,133713,3,0,3,0,0,0.0,1,11,-10
