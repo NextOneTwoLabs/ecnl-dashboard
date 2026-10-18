@@ -72,11 +72,11 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-17,02:00 PM,Group Play,Sporting Iowa ECNL G2011/12,2,2,St. Louis Scott Gallagher Green ECNL G2011/12,Pinnacle Bank Soccer Complex ( Gretna Soccer Compl,Field 2,On Time,1067965
 2026-10-17,03:00 PM,Group Play,Kansas City Athletics ECNL G2011/12,0,1,Nationals SC ECNL G2011/12,KC Current Training Facility,Field 2,On Time,1067953
 2026-10-18,10:00 AM,Group Play,Sporting Iowa ECNL G2011/12,0,2,St. Louis Scott Gallagher Navy ECNL G2011/12,Nebraska Multisports Complex,Field 5,On Time,1067989
-2026-10-18,11:00 AM,Group Play,Rockford Raptors FC ECNL G2011/12,,,Michigan Hawks ECNL G2011/12,Mercyhealth Sportscore Two,Field TBA (11v11),On Time,1067973
+2026-10-18,11:00 AM,Group Play,Rockford Raptors FC ECNL G2011/12,1,4,Michigan Hawks ECNL G2011/12,Mercyhealth Sportscore Two,Field TBA (11v11),On Time,1067973
 2026-10-18,11:00 AM,Group Play,Sporting Blue Valley ECNL G2011/12,0,2,Nationals SC ECNL G2011/12,Scheels Overland Park Soccer Complex,Field 4,On Time,1067977
-2026-10-18,12:00 PM,Group Play,Gretna Elite Academy ECNL G2011/12,,,St. Louis Scott Gallagher Green ECNL G2011/12,Pinnacle Bank Soccer Complex ( Gretna Soccer Compl,Field 2,On Time,1067985
+2026-10-18,12:00 PM,Group Play,Gretna Elite Academy ECNL G2011/12,4,0,St. Louis Scott Gallagher Green ECNL G2011/12,Pinnacle Bank Soccer Complex ( Gretna Soccer Compl,Field 2,On Time,1067985
 2026-10-18,01:00 PM,Group Play,Eclipse Select Soccer Club ECNL G2011/12,,,Michigan Hawks Magic ECNL G2011/12,Lewis University,Field 2,On Time,1067969
-2026-10-18,01:00 PM,Group Play,Kansas City Athletics ECNL G2011/12,,,Liverpool FC MI ECNL G2011/12,KC Current Training Facility,Field 2,On Time,1067981
+2026-10-18,01:00 PM,Group Play,Kansas City Athletics ECNL G2011/12,4,0,Liverpool FC MI ECNL G2011/12,KC Current Training Facility,Field 2,On Time,1067981
 2026-10-24,12:00 PM,Group Play,Gretna Elite Academy ECNL G2011/12,,,Eclipse Select Soccer Club ECNL G2011/12,HyVee Multiplex,White 2,On Time,1067993
 2026-10-24,04:00 PM,Group Play,Sporting Iowa ECNL G2011/12,,,Chicago Inter ECNL G2011/12,Hy-Vee Multiplex,Green #1,On Time,1067997
 2026-10-24,04:00 PM,Group Play,FC Wisconsin ECNL G2011/12,,,Nationals SC ECNL G2011/12,University School Milwaukee,Stadium,On Time,1068001
