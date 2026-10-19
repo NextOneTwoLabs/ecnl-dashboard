@@ -15,7 +15,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-19,01:00 PM,Group Play,LA Breakers FC ECNL G2008/09,0,3,Beach Futbol Club (CA) ECNL G2008/09,Bell Gardens Sports Complex,Field 4,On Time,1085385
 2026-09-20,11:00 AM,Group Play,Utah Royals FC AZ ECNL G2008/09,2,1,LV Heat Surf ECNL G2008/09,Scottsdale Sports Complex,Field 6,On Time,1085421
 2026-09-26,08:00 AM,Group Play,Sporting California USA ECNL G2008/09,1,8,San Diego Surf ECNL G2008/09,San Bernardino Soccer Complex,Field 1,On Time,1085457
-2026-09-26,12:00 PM,Group Play,Phoenix Rising FC ECNL G2008/09,,,Utah Royals FC AZ ECNL G2008/09,PRFC Youth Soccer Facility,Field 2,On Time,1085439
+2026-09-26,12:00 PM,Group Play,Phoenix Rising FC ECNL G2008/09,0,3,Utah Royals FC AZ ECNL G2008/09,PRFC Youth Soccer Facility,Field 2,On Time,1085439
 2026-09-26,12:00 PM,Group Play,SLAMMERS FC ECNL G2008/09,3,5,Arizona Arsenal ECNL G2008/09,Saddleback College,Turf Field,On Time,1085451
 2026-09-26,12:30 PM,Group Play,LV Heat Surf ECNL G2008/09,7,1,Legends FC (CA) ECNL G2008/09,James Regionals Soccer Complex,Field 5,On Time,1085619
 2026-09-26,01:00 PM,Group Play,LA Breakers FC ECNL G2008/09,4,1,Pateadores Soccer Club ECNL G2008/09,Bell Gardens Sports Complex,Field 4,On Time,1085427
@@ -57,8 +57,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-07,01:00 PM,Group Play,Utah Royals FC AZ ECNL G2008/09,,,LA Breakers FC ECNL G2008/09,Bell Road Sports Complex,Field 16,On Time,1085691
 2026-11-07,05:15 PM,Group Play,Slammers FC HB Koge ECNL G2008/09,,,Eagles SC ECNL G2008/09,Saddleback College,Turf Field,On Time,1085679
 2026-11-07,06:00 PM,Group Play,So Cal Blues ECNL G2008/09,,,Beach Futbol Club (CA) ECNL G2008/09,OC Great Park,Field 19,On Time,1085685
-2026-11-08,TBD,Group Play,San Diego Surf ECNL G2008/09,,,So Cal Blues ECNL G2008/09,Surf Sports Park,Field 12,On Time,1085535
 2026-11-08,10:00 AM,Group Play,Arizona Arsenal ECNL G2008/09,,,LA Breakers FC ECNL G2008/09,Arizona Athletic Grounds,Field 5,On Time,1085697
+2026-11-08,03:00 PM,Group Play,San Diego Surf ECNL G2008/09,,,So Cal Blues ECNL G2008/09,Surf Sports Park,Field 12,On Time,1085535
 2026-11-18,07:45 PM,Group Play,Arizona Arsenal ECNL G2008/09,,,Utah Royals FC AZ ECNL G2008/09,Arizona Athletic Grounds,Field 9,On Time,1085745
 2026-11-21,TBD,Group Play,Arizona Arsenal ECNL G2008/09,,,San Diego Surf ECNL G2008/09,,,On Time,1085703
 2026-11-21,09:00 AM,Group Play,LAFC So Cal ECNL G2008/09,,,So Cal Blues ECNL G2008/09,Oak Park High School,Stadium,On Time,1085715
