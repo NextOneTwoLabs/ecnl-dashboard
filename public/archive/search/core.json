@@ -1,6 +1,6 @@
 {"schema":2
-,"build":"701ee7ed22d5ce82"
-,"directoryBuild":"5e92aca13d7f12d6"
+,"build":"e78c09d47922195e"
+,"directoryBuild":"7c943528bac5f6b4"
 ,"activeSeason":"2026-27"
 ,"seasons":["2020-21","2021-22","2022-23","2023-24","2024-25","2025-26","2026-27"]
 ,"birthYears":[2002,2014]
@@ -903,7 +903,7 @@
 ,{"b":[2009],"best":0,"c":30,"e":[[4,8,0,"Group 3/4"],[5,12,11,""]],"s":[[1,47024,"Connecticut FC ECNL GU13",3,22,6,9],[2,47024,"Connecticut FC ECNL G09",3,23,5,8],[3,47024,"Connecticut FC ECNL G09",3,24,6,8],[4,47024,"Connecticut FC ECNL G09",3,25,4,9],[5,47024,"Connecticut FC United ECNL G09",3,26,7,9],[6,47024,"Connecticut FC United ECNL G2008/09",3,27,1,9]]}
 ,{"b":[2009],"best":2,"c":65,"e":[[1,2,0,"Group 3/4"],[2,4,0,"Group 4/4"],[3,6,0,"Round of 16"],[4,8,0,"Group 3/4"],[5,10,7,"Round of 16"]],"m":[1811,1812],"s":[[1,47036,"Tennessee Soccer Club ECNL GU13",9,22,1,6],[2,47036,"Tennessee Soccer Club ECNL G09",9,23,1,6],[3,47036,"Tennessee Soccer Club ECNL G09",9,24,2,6],[4,47036,"Tennessee SC ECNL G09",9,25,4,12],[5,47036,"Tennessee SC ECNL G09",9,26,3,6]]}
 ,{"b":[2009],"c":60,"e":[[5,12,11,""]],"s":[[1,47038,"WNY Flash Academy ECNL GU13",9,22,4,6],[2,47038,"WNY Flash ECNL G09",9,23,6,6],[3,47038,"WNY Flash ECNL G09",9,24,5,6],[4,47038,"WNY Flash ECNL G09",9,25,9,12],[5,47038,"WNY Flash ECNL G09",9,26,4,6],[6,47038,"WNY Flash ECNL G2008/09",9,27,12,12]]}
-,{"b":[2009],"best":1,"c":114,"e":[[1,2,0,"Round of 16"],[2,4,0,"Round of 16"]],"s":[[1,47082,"DKSC ECNL GU13",6,22,2,12],[2,47082,"DKSC ECNL G09",6,23,1,12],[3,47082,"DKSC ECNL G09",6,24,15,16],[4,47082,"DKSC ECNL G09",6,25,13,16],[5,47082,"DKSC ECNL G09",6,26,12,16],[6,47082,"DKSC ECNL G2008/09",6,27,9,16]]}
+,{"b":[2009],"best":1,"c":114,"e":[[1,2,0,"Round of 16"],[2,4,0,"Round of 16"]],"s":[[1,47082,"DKSC ECNL GU13",6,22,2,12],[2,47082,"DKSC ECNL G09",6,23,1,12],[3,47082,"DKSC ECNL G09",6,24,15,16],[4,47082,"DKSC ECNL G09",6,25,13,16],[5,47082,"DKSC ECNL G09",6,26,12,16],[6,47082,"DKSC ECNL G2008/09",6,27,11,16]]}
 ,{"b":[2009],"c":61,"m":[1523],"s":[[1,49152,"Tampa Bay United ECNL GU13",4,22,3,7],[2,49152,"Tampa Bay United ECNL G09",4,23,14,16],[3,49152,"Tampa Bay United ECNL G09",4,24,15,16],[4,49152,"Tampa Bay United ECNL G09",4,25,14,16],[5,49152,"Tampa Bay United ECNL G09",4,26,15,16]]}
 ,{"b":[2009],"best":0,"c":43,"e":[[1,2,0,"Group 2/4"],[5,12,11,""]],"m":[1772,1773],"s":[[1,49621,"Santa Rosa United ECNL GU13",5,22,3,8],[2,49621,"Santa Rosa United ECNL G09",7,23,5,10],[3,49621,"Santa Rosa United ECNL G09",7,24,8,10],[4,49621,"Santa Rosa United ECNL G09",7,25,7,10],[5,49621,"Santa Rosa United ECNL G09",7,26,10,11]]}
 ,{"b":[2009],"c":40,"m":[1517,1542],"s":[[1,50566,"NC Fusion ECNL GU13",2,22,13,14],[2,50566,"NC Fusion ECNL G09",2,23,13,13],[3,50566,"NC Fusion ECNL G09",2,24,12,13],[4,50566,"NC Fusion ECNL G09",2,25,10,12],[5,50566,"NC Fusion ECNL G09",2,26,7,10]]}
@@ -975,7 +975,7 @@
 ,{"b":[2003,2004],"c":119,"s":[[1,59756,"Sporting Iowa ECNL GU18/U19",8,7,14,14]]}
 ,{"b":[2009],"c":92,"e":[[4,8,6,"Quarterfinals"],[5,12,11,""]],"s":[[1,59771,"Phoenix Rising ECNL GU13",0,22,7,8],[2,59771,"Phoenix Rising ECNL G09",0,23,6,8],[3,59771,"Phoenix Rising ECNL G09",0,24,7,8],[4,59771,"Phoenix Rising ECNL G09",0,25,13,17],[5,59771,"Phoenix Rising ECNL G09",0,26,14,17],[6,59771,"Phoenix Rising FC ECNL G2008/09",0,27,15,17]]}
 ,{"b":[2009],"c":32,"s":[[1,59824,"Eclipse Select SC North ECNL GU13",8,22,4,7],[2,59824,"Eclipse Select SC North ECNL G09",8,23,14,15]]}
-,{"b":[2009],"c":11,"e":[[4,8,2,"Quarterfinals"],[5,10,10,"Semifinals"]],"s":[[1,59850,"Colorado Rapids ECNL GU13",5,22,3,6],[2,59850,"Colorado Rapids ECNL G09",5,23,6,14],[3,59850,"Colorado Rapids ECNL G09",6,24,10,16],[4,59850,"Colorado Rapids ECNL G09",6,25,10,16],[5,59850,"Colorado Rapids ECNL G09",6,26,7,16],[6,59850,"Colorado Storm ECNL G2008/09",6,27,10,16]]}
+,{"b":[2009],"c":11,"e":[[4,8,2,"Quarterfinals"],[5,10,10,"Semifinals"]],"s":[[1,59850,"Colorado Rapids ECNL GU13",5,22,3,6],[2,59850,"Colorado Rapids ECNL G09",5,23,6,14],[3,59850,"Colorado Rapids ECNL G09",6,24,10,16],[4,59850,"Colorado Rapids ECNL G09",6,25,10,16],[5,59850,"Colorado Rapids ECNL G09",6,26,7,16],[6,59850,"Colorado Storm ECNL G2008/09",6,27,8,16]]}
 ,{"b":[2009],"c":68,"e":[[4,8,2,"Round of 16"],[5,10,3,"Group 1/14"],[5,12,11,""]],"s":[[1,59855,"Eastside FC ECNL GU13",5,22,5,9],[2,59855,"Eastside FC ECNL G09",5,23,9,14],[3,59855,"Eastside FC ECNL G09",5,24,5,10],[4,59855,"Eastside FC ECNL G09",5,25,6,10],[5,59855,"Eastside FC ECNL G09",5,26,9,10],[6,59855,"Eastside FC ECNL G2008/09",5,27,3,10]]}
 ,{"b":[2009],"c":104,"e":[[4,8,7,"Quarterfinals"],[5,10,3,"Group 6/14"],[5,12,11,""]],"m":[1818,1819],"s":[[1,59866,"LAFC So Cal ECNL GU13",0,22,6,9],[2,59866,"LAFC So Cal ECNL G09",0,23,8,9],[3,59866,"LAFC So Cal ECNL G09",0,24,8,9],[4,59866,"LAFC So Cal ECNL G09",0,25,10,17],[5,59866,"LAFC So Cal ECNL G09",0,26,13,17]]}
 ,{"b":[2009],"c":94,"s":[[1,59883,"Pride SC ECNL GU13",5,22,4,6],[2,48226,"Pride SC ECNL G09",5,23,12,14],[3,48226,"Pride SC ECNL G09",6,24,16,16]]}
@@ -1431,7 +1431,7 @@
 ,{"b":[2012],"c":9,"e":[[5,11,13,""]],"s":[[4,94955,"Rebels SC ECNL G12",0,37,7,17],[5,94955,"Rebels SC ECNL G12",0,38,8,17],[6,94955,"Rebels SC ECNL G2011/12",0,39,10,17]]}
 ,{"b":[2006,2007],"c":132,"s":[[4,94978,"Colorado Rush ECNL G07/06",6,4,4,16]]}
 ,{"b":[2008],"best":0,"c":132,"e":[[4,8,0,"Group 3/4"]],"s":[[4,94980,"Colorado Rush ECNL G08",6,16,6,16],[5,94980,"Colorado Rush Academy Blue ECNL G08/07",6,21,5,16]]}
-,{"b":[2009],"c":132,"e":[[4,8,7,"Quarterfinals"],[5,10,10,"Quarterfinals"],[5,12,11,""]],"s":[[4,94982,"Colorado Rush ECNL G09",6,25,8,16],[5,94982,"Colorado Rush Blue ECNL G09",6,26,11,16],[6,94982,"Colorado Rush ECNL G2008/09",6,27,8,16]]}
+,{"b":[2009],"c":132,"e":[[4,8,7,"Quarterfinals"],[5,10,10,"Quarterfinals"],[5,12,11,""]],"s":[[4,94982,"Colorado Rush ECNL G09",6,25,8,16],[5,94982,"Colorado Rush Blue ECNL G09",6,26,11,16],[6,94982,"Colorado Rush ECNL G2008/09",6,27,9,16]]}
 ,{"b":[2010],"c":132,"e":[[5,12,11,""]],"s":[[4,94985,"Colorado Rush ECNL G10",6,30,16,16],[5,94985,"Colorado Rush Academy Blue ECNL G10",6,31,13,16],[6,94985,"Colorado Rush ECNL G2009/10",6,32,13,16]]}
 ,{"b":[2011],"best":0,"c":131,"e":[[4,8,0,"Round of 16"],[5,10,7,"Champion"],[5,12,11,""]],"m":[1871,1872],"s":[[4,95005,"South Shore Select ECNL G11",3,34,2,9],[5,95005,"Select ECNL G11",3,35,3,9]],"t":1}
 ,{"b":[2010],"c":131,"e":[[4,8,7,"Round of 16"],[5,10,10,"Round of 16"],[5,12,11,""]],"m":[1872,1873],"s":[[4,95006,"South Shore Select ECNL G10",3,30,4,9],[5,95006,"Select ECNL G10",3,31,5,9]]}
@@ -1617,7 +1617,7 @@
 ,{"b":[2009,2010],"c":4,"mp":[748,938],"s":[[6,36636,"FC Stars Blue ECNL G2009/10",3,32,3,9]]}
 ,{"b":[2008,2009],"c":84,"mp":[934],"s":[[6,38492,"Athletic Club Florida ECNL G2008/09",4,27,3,16]]}
 ,{"b":[2008,2009],"c":69,"mp":[840],"s":[[6,39162,"Seattle United ECNL G2008/09",5,27,8,10]]}
-,{"b":[2008,2009],"c":24,"mp":[861],"s":[[6,39582,"Albion Hurricanes FC ECNL G2008/09",6,27,11,16]]}
+,{"b":[2008,2009],"c":24,"mp":[861],"s":[[6,39582,"Albion Hurricanes FC ECNL G2008/09",6,27,10,16]]}
 ,{"b":[2010,2011],"c":24,"mp":[926],"s":[[6,40463,"AHFC ECNL G2010/11",6,36,12,16]]}
 ,{"b":[2009,2010],"c":72,"mp":[754,999],"s":[[6,45064,"Sporting SA JAX ECNL G2009/10",4,32,12,16]]}
 ,{"b":[2008,2009],"c":97,"mp":[790],"s":[[6,45827,"Pipeline SC ECNL G2008/09",1,27,10,10]]}
