@@ -469,15 +469,17 @@ test('MF2: Teams and Events read every field name (alone, with 2011, with U15) a
 
 test('MF2: Dallas Texans Lewisville is its 18 teams first, then Games with the field; colorado academy keeps the place Colorado; a field name with no team leads with Games', () => {
   const d = run('Dallas Texans Lewisville', CIX, CCTX);
-  assert.equal(sec(d, 'teams').length, 18);
+  assert.equal(sec(run('Dallas Texans Lewisville'), 'teams').length, 18, 'frozen fixture: the live count moves with every refresh');
+  assert.ok(sec(d, 'teams').length > 0, 'committed data: Teams first');
   assert.deepEqual(d.sections.map(x => x.name), ['teams', 'games']);
   assert.equal(d.rule, 5, 'Teams found every word: the field does not lead (rule 3 does not apply)');
   assert.ok(sec(d, 'games').some(r => r.kind === 'field' && /Dallas Texans Lewisville/i.test(r.name || r.field?.name || r.key)), 'Games holds the field');
   assert.equal(d.enter.section, 'teams');
-  assert.equal(sec(run('Dallas Texans Lewisville 2011', CIX, CCTX), 'teams').length, 3);
-  assert.equal(sec(run('dallas texans lewisville u15', CIX, CCTX), 'teams').length, 1);
+  assert.equal(sec(run('Dallas Texans Lewisville 2011'), 'teams').length, 3, 'frozen fixture');
+  assert.equal(sec(run('dallas texans lewisville u15'), 'teams').length, 1, 'frozen fixture');
   const c = run('colorado academy', CIX, CCTX), ct = sec(c, 'teams');
-  assert.equal(ct.length, 5);
+  assert.equal(sec(run('colorado academy'), 'teams').length, 5, 'frozen fixture');
+  assert.ok(ct.length > 0, 'committed data: Teams rows');
   assert.ok(ct.every(r => (r.namedPlace || []).join(' ') === 'colorado'), 'the state Colorado, as on main');
   assert.equal(c.rule, 5);
   const f = run('Canyon Crest Academy', CIX, CCTX);
