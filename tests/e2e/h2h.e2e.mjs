@@ -149,3 +149,47 @@ test('phone: from a Matches card, a cold open makes core, places and the games f
   console.log(JSON.stringify({ phone: { coldLoadSameOrigin: cold, sameOrigin: log.same.length, searchApi: apiSearch(log).length, aborted: log.aborted.length } }));
   await ctx.close();
 });
+
+test('#182: the "can\'t open" note lines up with the cards (left edge, and right edge with the grid) at 390, 1280 and 1920 wide; a hash that names nothing leaves the head to head on screen, 0 requests', async () => {
+  const geo = [];
+  for (const [width, height] of [[1280, 800], [390, 844], [1920, 1080]]) {
+    const { ctx, log } = await context({ viewport: { width, height }, ...(width === 390 ? { deviceScaleFactor: 2, isMobile: true, hasTouch: true } : {}) });
+    const page = await ctx.newPage();
+    const errors = []; page.on('pageerror', e => errors.push(e.message));
+    await page.goto(BASE + '/#tab=teams&season=2026-27&team=55477&name=MVLA&vs=2026-27:1');
+    await page.waitForSelector('.h2h-note:not([hidden])', { timeout: 20000 });
+    await page.waitForSelector('#standingsContainer .flight-panel', { timeout: 20000 });
+    await page.waitForTimeout(500);
+    const g = await page.evaluate(() => {
+      const n = document.querySelector('.h2h-note').getBoundingClientRect(), c = document.querySelector('#standingsContainer .flight-panel').getBoundingClientRect(), box = document.getElementById('standingsContainer').getBoundingClientRect();
+      return { noteLeft: n.left, noteRight: n.right, cardLeft: c.left, gridRight: box.right, gap: c.top - n.bottom, scrollW: document.documentElement.scrollWidth, innerW: window.innerWidth };
+    });
+    geo.push({ width, ...Object.fromEntries(Object.entries(g).map(([k, v]) => [k, Math.round(v * 10) / 10])) });
+    assert.ok(Math.abs(g.noteLeft - g.cardLeft) <= 0.5, `${width}: the note starts at the cards' left edge (${g.noteLeft} v ${g.cardLeft})`);
+    assert.ok(Math.abs(g.noteRight - g.gridRight) <= 0.5, `${width}: the note ends at the grid's right edge (${g.noteRight} v ${g.gridRight})`);
+    assert.ok(g.gap >= 8 && g.gap <= 24, `${width}: a gap above the cards, not flush (${g.gap})`);
+    assert.ok(g.scrollW <= g.innerW, `${width}: no horizontal scroll`);
+    assert.deepEqual(errors, []); assert.deepEqual(log.answered, []);
+    await ctx.close();
+  }
+  console.log(JSON.stringify({ note: geo }));
+  // a hash that names nothing
+  const { ctx, log } = await context({ viewport: { width: 1280, height: 800 } });
+  const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto(BASE + '/#tab=teams&season=2026-27&team=55477&name=MVLA&vs=2026-27:31529');
+  await h2hDone(page);
+  for (let i = 0; i < 100 && gamesApi(log).length < 4; i++) await wait(100);
+  await wait(500);
+  const n = log.same.length;
+  for (const h of ['#foo', '#match=5']) {
+    await page.evaluate(x => { location.hash = x; }, h); await wait(500);
+    assert.equal(await page.locator('.h2h .h2h-summary').count(), 1, `${h}: the head to head stays on screen`);
+    assert.equal(await page.locator('#viewTabH2H').getAttribute('aria-selected'), 'true');
+    assert.equal(await page.evaluate(() => currentTab), 'favorites', `${h}: the tab is as it was`);
+    assert.equal(await page.evaluate(() => /vs=|h2h/.test(localStorage.getItem('ecnl-dash-v2-state') || '')), false, `${h}: still never saved as the place to resume`);
+  }
+  assert.equal(log.same.length, n, 'a hash that names nothing makes 0 requests');
+  assert.deepEqual(errors, []); assert.deepEqual(log.answered, []);
+  await ctx.close();
+});

@@ -72,7 +72,7 @@ test('Yunchang and Yide keep the same engineer rules: the bodies are identical a
 
 test('the rules that must survive the merge are in the files: Kongming\'s production check and budget, Xuande\'s limits', () => {
   const k = agent('kongming.md').body;
-  for (const s of ['https://ecnl.nextonetwo.com/', '1280x800', '390x844', 'not verified', 'at most 25 requests', 'Return the report to Xuande', 'totalglobalsports.com', 'D:\\Projects\\ECNLDash']) assert.ok(k.includes(s), `kongming.md: ${s}`);
+  for (const s of ['https://ecnl.nextonetwo.com/', '1280x800', '390x844', 'not verified', 'at most 25 requests', 'Return the report to Xuande', 'totalglobalsports.com', 'D:\\Projects\\ECNLDash', 'Do not post audit results to GitHub']) assert.ok(k.includes(s), `kongming.md: ${s}`);
   const x = agent('xuande.md').body;
   for (const s of ['only the owner merges', "owner's explicit OK", 'tier label', '#12', 'tokens and cost']) assert.ok(x.includes(s), `xuande.md: ${s}`);
   assert.match(agent('yide.md').body, /Kongming verifies live after merge/);
@@ -92,6 +92,7 @@ test('the front-matter reader has teeth: each bad file is rejected, and a CRLF c
   const bad = {
     'no opening ---': 'name: x\n---\n',
     'no closing ---': '---\nname: x\nbody\n',
+    'no closing --- (front matter only)': '---\nname: x\n',
     'a duplicate key': '---\nname: x\nname: y\n---\n',
     'a blank value': '---\nname: x\nmodel:  \n---\n',
     'an unknown key': '---\nname: x\ncolor: red\n---\n',
