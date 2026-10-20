@@ -100,7 +100,7 @@ function page({ hash = '', saved = null, live = false, games = s => loadGames(s)
     ${loadTeamStub ? 'loadTeamSummary = async rec => { T.loads.push(["team", teamView, rec.name]); };' : ''}
     favorites = new Set(arguments[${names.length + 1}]); for (const n of favorites) favoriteMeta.set(n, { name: n, teamID: arguments[${names.length + 2}][n] });
     return { saveState, pushHash, loadFromHash, loadTeamSummary, selectFavorite, selectTeamView, showTeamViewTabs, switchTab, changeSeason, showLanding, sxLoad, sxGamesFetch, matchRowHtml,
-      h2hCardLinker, h2hSeasonLinks, h2hToggle, h2hLoad, sxRun, sxOpen, sxFlush, sxActivate,
+      h2hCardLinker, h2hSeasonLinks, h2hToggle, h2hLoad, h2hNameOf, h2hClean, sxRun, sxOpen, sxFlush, sxActivate,
       get: () => ({ teamView, h2hVs, h2hMatch, h2hNote, previewTeam, currentFavorite, currentTab, currentSeason, sxIndex, sxMod, sxG, sxView, sxActive, sxState, h2hChosen, teamToken }),
       set: o => { if ('teamView' in o) teamView = o.teamView; if ('currentFlightData' in o) currentFlightData = o.currentFlightData; if ('selectedTeamID' in o) selectedTeamID = o.selectedTeamID; if ('currentSeason' in o) currentSeason = o.currentSeason; if ('currentTab' in o) currentTab = o.currentTab; } };`)(...Object.values(stubs), S, favs.map(f => f[0]), Object.fromEntries(favs));
   api.set({ currentSeason: season });
@@ -441,4 +441,81 @@ test('line endings: index.html keeps one line-ending style, and the head-to-head
   const crlf = (raw.match(/\r\n/g) || []).length, lf = (raw.match(/\n/g) || []).length;
   assert.ok(crlf === 0 || crlf === lf, `one style: ${crlf} CRLF of ${lf} line ends`);   // a Windows checkout may be all CRLF; a mix is the bug
   assert.equal(raw.split('// ===== #178: head to head =====').length, 2);
+});
+
+// ---------- #182: head-to-head polish ----------
+test('#182 N3: a hash that names nothing (#foo, #match=5, an unknown season or tab) leaves the page as it was: the head to head and its state, the tab, and what saveState and pushHash write; on any tab', () => {
+  const noop = ['#foo', '#match=5', '#season=1999-00', '#tab=bogus'];
+  // on the head to head: nothing is cleared, nothing is saved, and the address a push writes is the head to head's
+  for (const h of noop) {
+    const p = page({ saved: saved(), realTeam: false }); p.location.hash = H2H + '&match=1094466'; assert.equal(p.loadFromHash(), true);
+    const was = JSON.stringify([p.get().teamView, p.get().h2hVs, p.get().h2hMatch, p.get().currentTab]);
+    assert.equal(was, JSON.stringify(['h2h', { season: '2026-27', teamID: 31529 }, 1094466, 'favorites']));
+    p.location.hash = h; assert.equal(p.loadFromHash(), false, `${h}: not a route`);
+    assert.equal(JSON.stringify([p.get().teamView, p.get().h2hVs, p.get().h2hMatch, p.get().currentTab]), was, `${h}: the state is as it was (currentTab too)`);
+    p.saveState(); assert.equal(p.store['ecnl-dash-v2-state'], JSON.stringify(saved()), `${h}: a head to head is still never saved as the place to resume`);
+    p.pushHash(); assert.equal(p.location.hash, H2H, `${h}: the address written is the head to head's, without match=`);
+  }
+  // on a pending note: an unknown hash neither drops it nor shows it twice
+  const n = page({ realTeam: false }); n.location.hash = `${MVLA}&vs=abc`; n.loadFromHash();
+  assert.equal(n.get().h2hNote, 'That head-to-head link is incomplete.');
+  n.location.hash = '#foo'; assert.equal(n.loadFromHash(), false);
+  assert.equal(n.get().h2hNote, 'That head-to-head link is incomplete.', 'the pending note is kept');
+  // on the other tabs: the tab is as it was, and saveState writes that tab, not Conferences (older than #178)
+  for (const [tab, hash] of [['playoffs', '#tab=playoffs&season=2025-26'], ['showcases', '#tab=showcases&season=2025-26']]) {
+    for (const h of noop) {
+      const p = page({ saved: saved(), realTeam: false }); p.location.hash = hash; assert.equal(p.loadFromHash(), true);
+      assert.equal(p.get().currentTab, tab);
+      p.location.hash = h; assert.equal(p.loadFromHash(), false, `${tab} ${h}`);
+      assert.equal(p.get().currentTab, tab, `${tab} ${h}: the tab is as it was`);
+      p.saveState(); assert.equal(JSON.parse(p.store['ecnl-dash-v2-state']).tab, tab, `${tab} ${h}: saveState writes the tab the visitor is on`);
+      p.pushHash(); assert.ok(p.location.hash.startsWith(`#tab=${tab}&season=2025-26`), `${tab} ${h}: ${p.location.hash}`);
+    }
+  }
+  // a real route still leaves the head to head
+  const q = page({ saved: saved(), realTeam: false }); q.location.hash = H2H; q.loadFromHash();
+  q.location.hash = '#tab=playoffs&season=2025-26'; assert.equal(q.loadFromHash(), true);
+  assert.deepEqual([q.get().teamView, q.get().h2hVs, q.get().currentTab], ['history', null, 'playoffs']);
+});
+
+test('#182 N1: the note names the team from the vs season\'s own games file when it is in memory, never another season\'s; else "Team N" (no request: the squads hold no team without a team page)', async () => {
+  const ID = 46809;   // a team with no squad in 2020-21: "…GU13" in 2020-21, "…GU14" in 2021-22
+  const run = async seasons => {
+    const p = page({ realTeam: true });
+    await p.sxLoad({ activeGames: false });
+    for (const s of seasons) { await p.sxGamesFetch([s]); await p.settle(); }
+    const a = p.get().sxIndex.teams.docs.find(d => d.rows.some(r => r.season === '2020-21')), row = a.rows.find(r => r.season === '2020-21');
+    p.location.hash = `#tab=teams&season=2020-21&team=${row.teamID}&name=${encodeURIComponent(row.name)}&vs=2020-21:${ID}`; p.loadFromHash();
+    const fetched = p.T.fetched.length;
+    await p.loadTeamSummary({ name: row.name, teamID: row.teamID }); await p.settle();
+    assert.equal(p.T.fetched.length, fetched, 'the note asks for nothing');
+    return text(p.el('h2hNote').innerHTML);
+  };
+  assert.match(await run(['2021-22', '2020-21']), /Concorde Fire Premier ECNL GU13 has no team page for 2020–21/, 'its own season\'s spelling, whichever file loaded first');
+  assert.match(await run(['2021-22']), /Team 46809 has no team page for 2020–21/, 'another season\'s file does not name it');
+  assert.match(await run([]), /Team 46809 has no team page for 2020–21/, 'no file loaded: its id');
+});
+
+test('#182 N5: a card\'s link and label carry the directory\'s spelling of a name (the builder\'s " ".join(name.split())), whichever side is A; so does the schedule row\'s', async () => {
+  const p = page();
+  assert.deepEqual(['  A  b ', 'A\tb', '', null, 'A b'].map(p.h2hClean), ['A b', 'A b', '', '', 'A b']);
+  p.set({ currentFlightData: [{ standings: { teamStandings: [{ teamID: 10 }, { teamID: 20 }] } }], currentSeason: '2026-27', selectedTeamID: null });
+  const g = { matchID: 5, hometeamID: 10, awayteamID: 20, homeTeam: 'Home  FC ', awayTeam: ' Away\u00a0 FC', homeTeamClub: 'Home', awayTeamClub: 'Away', gameTimeText: '9:00 AM', hometeamscore: null, awayteamscore: null };
+  const home = p.matchRowHtml(g, { today: TODAY, h2h: p.h2hCardLinker() });
+  assert.match(home, /team=10&amp;name=Home%20FC&amp;vs=2026-27:20&amp;match=5" aria-label="Head to head: Home FC against Away FC">/);
+  p.set({ selectedTeamID: 20 });
+  assert.match(p.matchRowHtml(g, { today: TODAY, h2h: p.h2hCardLinker() }), /team=20&amp;name=Away%20FC&amp;vs=2026-27:10&amp;match=5" aria-label="Head to head: Away FC against Home FC">/);
+  const added = [], panel = { querySelectorAll: () => [{ dataset: { match: '1' }, querySelectorAll: sel => (sel === 'td' ? [{}, {}, { insertAdjacentHTML: (w, h) => added.push(h) }] : [{ textContent: 'A' }, { textContent: 'B' }]) }] };
+  await page({ teamIndex: [{ teamID: 7 }, { teamID: 8 }] }).h2hSeasonLinks(panel, { name: ' MVLA  ECNL G2010/11 ', teamID: 7 }, 7, '2026-27', [{ matchID: 1, hometeamID: 7, awayteamID: 8 }], 0);
+  assert.match(added.join(''), /&name=MVLA%20ECNL%20G2010%2F11&vs=2026-27:8&match=1/);
+});
+
+test('#182 N4: the "can\'t open" note starts at the cards\' left edge and ends at the grid\'s right: no side margin and no maximum width of its own (the e2e measures it)', () => {
+  const rule = /\n    \.h2h-note \{([^}]*)\}/.exec(html);
+  assert.ok(rule, 'the rule is in index.html');
+  const m = /(?:^|;)\s*margin:\s*([^;]+);/.exec(rule[1]);
+  assert.ok(m, 'the rule sets margin');
+  const v = m[1].trim().split(/\s+/), horizontal = v.length === 1 ? [v[0]] : v.length === 2 ? [v[1]] : [v[1], v[3] || v[1]];
+  assert.ok(horizontal.every(x => /^0(px)?$/.test(x)), `no side margin: margin ${m[1]}`);
+  assert.doesNotMatch(rule[1], /max-width/, 'no maximum width');
 });

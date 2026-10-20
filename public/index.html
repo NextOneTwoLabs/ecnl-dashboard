@@ -2322,7 +2322,7 @@
     .h2h-empty p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; max-width: 52ch; margin: 0 auto 4px; }
     .h2h-loading { padding: 14px 20px; font-size: 13px; color: var(--text-secondary); }
     .h2h-loading .sx-bar { margin-top: 10px; border-radius: 2px; }
-    .h2h-note { padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--gold); background: var(--gold-glow); font-size: 13px; color: var(--text-primary); line-height: 1.45; max-width: 860px; margin: 14px 24px 0; }
+    .h2h-note { padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--gold); background: var(--gold-glow); font-size: 13px; color: var(--text-primary); line-height: 1.45; margin: 0 0 16px; }
     .h2h-note strong { display: block; margin-bottom: 2px; }
     /* search: the lead row, the pairing note, the H2H cell on a game row */
     .sxg-h2hrow { grid-template-columns: 32px minmax(0, 1fr) auto; }
@@ -3303,6 +3303,7 @@
       if (!hash) return false;
       const p = new URLSearchParams(hash);
       let changed = false;
+      const keep = { teamView, h2hVs, h2hMatch, h2hNote };   // #182 N3: restored when the hash turns out to name nothing
       if (teamView === 'h2h') teamView = 'history';   // #178: every route starts out of the head to head; the team branch below may open it again
       h2hVs = null; h2hMatch = null; h2hNote = null;
       if (p.get('season') && SEASONS[p.get('season')]) { currentSeason = p.get('season'); changed = true; }
@@ -3353,12 +3354,12 @@
         pendingMatch = matchOf(p, 'playoff');
         return true;
       }
-      currentTab = 'conferences';
       if (p.get('age')) { currentAgeGroup = p.get('age'); changed = true; } // validated after API fetch
       if (p.get('conf') && SEASONS[currentSeason].conferences[p.get('conf')]) { currentConference = p.get('conf'); changed = true; }
       if (p.get('team')) { selectedTeamID = Number(p.get('team')) || null; changed = true; } // validated once the tables load
       if (['upcoming', 'results', 'all'].includes(p.get('sched'))) { scheduleFilter = p.get('sched'); changed = true; }
-      if (!changed) return false;   // an unknown-only hash such as #foo (or #match=5) stays a no-op
+      if (!changed) { ({ teamView, h2hVs, h2hMatch, h2hNote } = keep); return false; }   // an unknown-only hash such as #foo (or #match=5) is a no-op: the page and its head to head stay as they were (#182 N3)
+      currentTab = 'conferences';   // after the no-op return: a hash that names nothing leaves the tab as it was (#182 N3, every tab)
       pendingMatch = matchOf(p, 'conf');
       teamsIndex = !p.has('age') && !p.has('conf') && !p.has('team');   // #135 P1a: #season=X alone is the Teams index
       // A link describes the whole view: what it omits is the default, not what
@@ -6651,7 +6652,7 @@
     const SX_API_EXPECTED = 4;                     // search.mjs SEARCH_API this page was written against (#178: head to head)
     const SX_MODULES = ['events', 'games', 'links', 'match', 'reader', 'search', 'slate', 'teams', 'vocab'].map(n => `/search/${n}.mjs`);
     const SX_STEP_UNITS = 50;                      // units of work per build step
-    const SX_TASK_MS = 40;                         // no build task may run past this (the Auditor measures 50)
+    const SX_TASK_MS = 40;                         // no build task may run past this (the production check measured 50)
     const SX_TZ = 'America/Los_Angeles';           // the league's zone: event dates are local there
     const SX_SIZES = { teams: 8, events: 6, games: 6, page: 50 };
     const SX_GAMES_UNITS = 150;                    // #168: games per build step (startGames)
@@ -7198,13 +7199,14 @@
     const h2hSeasonsOf = d => [...new Set([...d.rows.map(r => r.season), ...d.x.map(x => x.season)])].sort();
     const h2hInitials = n => String(n).replace(/\b(ECNL|RL|SC|FC|G\d.*)\b/g, '').split(/\s+/).filter(w => /^[A-Za-z]/.test(w)).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
     const h2hShort = d => displayName(d.latest.name, d.club.name);
+    const h2hClean = n => String(n || '').replace(/\s+/g, ' ').trim();   // the builder's spelling of a name, " ".join(name.split()), so name= matches the directory's (#182 N5). It differs from Python's split() only on \x1c-\x1f and \x85 (Python only) and \ufeff (JS only); none occurs in the data
     const h2hTeamLink = d => `#tab=teams&season=${encodeURIComponent(d.latest.season)}&team=${d.latest.teamID}&name=${encodeURIComponent(d.latest.name)}`;
     // Where a game's head to head is opened from a Matches card: side A is the selected team when it plays, else the home side
     function h2hCardHref(g) {
       if (LIVE || !g.hometeamID || !g.awayteamID || g.hometeamID === g.awayteamID) return null;
       const away = !!selectedTeamID && g.awayteamID === selectedTeamID, e = encodeURIComponent;
-      const [a, b, an] = away ? [g.awayteamID, g.hometeamID, g.awayTeam] : [g.hometeamID, g.awayteamID, g.homeTeam];
-      return { href: `#tab=teams&season=${e(currentSeason)}&team=${e(a)}&name=${e(an)}&vs=${e(currentSeason)}:${e(b)}&match=${e(g.matchID)}`, label: `Head to head: ${an} against ${away ? g.homeTeam : g.awayTeam}` };
+      const [a, b, an, bn] = away ? [g.awayteamID, g.hometeamID, h2hClean(g.awayTeam), h2hClean(g.homeTeam)] : [g.hometeamID, g.awayteamID, h2hClean(g.homeTeam), h2hClean(g.awayTeam)];
+      return { href: `#tab=teams&season=${e(currentSeason)}&team=${e(a)}&name=${e(an)}&vs=${e(currentSeason)}:${e(b)}&match=${e(g.matchID)}`, label: `Head to head: ${an} against ${bn}` };
     }
     // The cards' link maker: only a game whose two sides are both in the division's standings (a side outside them
     // is a side with no squad), which the Matches view already holds: no request
@@ -7230,7 +7232,7 @@
         const cell = tr.querySelectorAll('td')[2];
         if (!cell) return;
         const names = [...tr.querySelectorAll('.team-name')].map(x => x.textContent);
-        cell.insertAdjacentHTML('beforeend', `<a class="sched-h2h" href="#tab=teams&season=${e(season)}&team=${e(teamID)}&name=${e(rec.name)}&vs=${e(season)}:${e(opp)}&match=${e(g.matchID)}" aria-label="${esc(`Head to head: ${names[0]} against ${names[1]}`)}">H2H</a>`);
+        cell.insertAdjacentHTML('beforeend', `<a class="sched-h2h" href="#tab=teams&season=${e(season)}&team=${e(teamID)}&name=${e(h2hClean(rec.name))}&vs=${e(season)}:${e(opp)}&match=${e(g.matchID)}" aria-label="${esc(`Head to head: ${names[0]} against ${names[1]}`)}">H2H</a>`);
       });
     }
     // A note above the page, outside the container so no load wipes it: why a vs= link opened Overview instead
@@ -7244,7 +7246,8 @@
       n.innerHTML = text ? `<strong>This head to head can’t open</strong>${esc(text)}` : '';
     }
     function h2hNameOf(season, id) {
-      if (sxIndex) { const t = sxIndex.teamAt && sxIndex.teamAt.get(`${season}/${id}`); if (t) return t; for (const G of sxIndex.games.values()) if (G.teams[id]) return G.teams[id][0]; }
+      // the name this season's games file gives it, when that file is in memory; never another season's (a team's label changes with its age group: 66 of the 67 (season, id) pairs whose id is also in another season's file, 56 distinct ids, are spelled differently there). No request: the squads hold no team without a team page (#182 N1)
+      if (sxIndex) { const t = sxIndex.teamAt && sxIndex.teamAt.get(`${season}/${id}`); if (t) return t; const G = sxIndex.games.get(season); if (G && G.teams[id]) return G.teams[id][0]; }
       return `Team ${id}`;
     }
     function h2hChrome(rec, A, B) {
