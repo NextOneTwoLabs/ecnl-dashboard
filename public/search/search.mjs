@@ -5,8 +5,9 @@
 //                                     (docs/data-api.md, "Search data"). Returns the index, the
 //                                     word-to-records map. Throws SearchDataError on a schema it
 //                                     does not know, naming the file.
-//   startIndex(searchData, n)         the same build as a generator, at most n units per next();
-//                                     its return value is the index (#165).
+//   startIndex(searchData, n, { stats })  the same build as a generator, at most n units per next();
+//                                     its return value is the index (#165). #188: { stats } counts the build's work
+//                                     (units, sorts, sortRows, sortCompares, normalised, words), pinned in the tests.
 //   search(index, query, context)     context = { now: epoch ms, timeZone, selectedSeason, today:
 //                                     'YYYY-MM-DD' (#168 MF7: the page's own todayKey; no Intl
 //                                     formatter is made by a search), and optionally gamesLoading,
@@ -19,7 +20,7 @@
 // SEARCH_API is this module's API version (4 since #178: head to head; 3 since #168: games). The page compares it with the
 // version it expects and shows a coverage note instead of calling a changed API (plan v2 MF5).
 import { buildVocabG, fieldNamesG } from './vocab.mjs';
-import { drain } from './match.mjs';
+import { drain, wordsCalled } from './match.mjs';
 import { readQuery } from './reader.mjs';
 import { teamDocsG, searchTeams } from './teams.mjs';
 import { eventDocs, searchEvents } from './events.mjs';
@@ -40,20 +41,22 @@ export class SearchDataError extends Error {
 // page can hand the main thread back between steps. The value it returns is the index. Events are the
 // last step, so a visitor never sees teams without events. A schema it does not know throws
 // SearchDataError from the first next(), not from this call.
-export function* startIndex(searchData, n = 150) {
+export function* startIndex(searchData, n = 150, options = {}) {
+  const stats = options.stats || null, words0 = wordsCalled();
   const { core, places } = searchData || {};
   if (!core || core.schema !== CORE_SCHEMA) throw new SearchDataError('core.json', `unknown schema ${core && core.schema}`);
   if (!places || places.schema !== PLACES_SCHEMA) throw new SearchDataError('places.json', `unknown schema ${places && places.schema}`);
-  const vocab = yield* buildVocabG(core, places, n);
+  const vocab = yield* buildVocabG(core, places, n, stats);
   // #168 Q4, MF5: the field names' phrases, checked against every name as the team documents read it (#167)
-  const fields = yield* fieldNamesG(vocab, n);
-  const teams = yield* teamDocsG(core, vocab, n, fields.visit);
+  const fields = yield* fieldNamesG(vocab, n, stats);
+  const teams = yield* teamDocsG(core, vocab, n, fields.visit, stats);
   yield* fields.finishG();
   yield 'events';
-  const events = eventDocs(core, vocab);
+  const events = eventDocs(core, vocab, stats);
   // refinement A (#163 Q4): every word any category or the vocabulary knows
   const known = new Set([...vocab.known, ...teams.post.terms.sorted, ...events.post.terms.sorted]);
   const postings = c => [...c.post.post.values()].reduce((m, l) => m + l.length, 0);
+  if (stats) stats.words = wordsCalled() - words0;   // #188: strings the build normalised; set last, so a later call in this assembly is inside it
   return {
     api: SEARCH_API, build: core.build, directoryBuild: core.directoryBuild, vocab, teams, events, known, games: new Map(),
     stats: { teamDocs: teams.N, eventDocs: events.N, terms: teams.post.post.size + events.post.post.size, postings: postings(teams) + postings(events) },

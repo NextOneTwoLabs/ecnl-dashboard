@@ -181,11 +181,12 @@ test('action bar: a team that two earlier teams may continue is named whole, nev
     const page = await ctx.newPage();
     await page.goto(BASE + '/'); await page.waitForTimeout(500);
     if (phone) await page.locator('#headerSearch').click(); else await page.keyboard.press('/');
-    await ready(page);
+    await ready(page); await gamesReady(page);     // #171: type once the games are in, so no intermediate panel is drawn
     await page.keyboard.type('Slammers');
+    await page.waitForFunction(() => sxView && sxView.q === 'Slammers' && !document.getElementById('usearchList').hasAttribute('aria-busy'), null, { timeout: 20000 });
     await page.waitForSelector('#usearchList [role=gridcell]');
     let text = '';
-    for (let i = 0; i < 40 && !/born 2010$/.test(text); i++) {   // down, then right: HB Koge U17 has two earlier teams
+    for (let i = 0; i < 40 && !/May continue here: 2025-26 team, born 2009; 2025-26 team, born 2010$/.test(text); i++) {   // down, then right: HB Koge U17 has two earlier teams
       await page.keyboard.press(i % 2 ? 'ArrowRight' : 'ArrowDown');
       text = await page.locator('#usearchActive').textContent();
     }

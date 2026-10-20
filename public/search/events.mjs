@@ -2,7 +2,7 @@
 // season, a national event or a showcase) from core.json's events, its tier names from the squads'
 // event entries (#163 Q8), and its place from places.json. A conference season's age-group tables
 // are rows inside it. Pure; "today" comes from the context (context.today, #168 MF7).
-import { Postings, nameWords, words, expand, filterScore, worseClass, CLASS_RANK } from './match.mjs';
+import { Postings, nameWords, words, expand, filterScore, worseClass, CLASS_RANK, sortCounted } from './match.mjs';
 import { placeWords, ALIASES } from './vocab.mjs';
 import { conferenceHref, nationalHref, showcaseHref } from './links.mjs';
 
@@ -19,7 +19,7 @@ function distinctFields(lists) {
   return lists.map(l => { const f = [...new Set(l.filter(w => !seen.has(w)))]; for (const w of f) seen.add(w); return f; });
 }
 
-export function eventDocs(core, vocab) {
+export function eventDocs(core, vocab, stats = null) {
   const t = core.teams;
   const tiers = new Map();
   for (const sq of t.squads) for (const [, e, tier] of sq.e || []) {
@@ -27,8 +27,9 @@ export function eventDocs(core, vocab) {
     if (!tiers.has(id)) tiers.set(id, new Set());
     tiers.get(id).add(t.tiers[tier]);
   }
-  const ids = Object.keys(core.events).sort((a, b) => +a - +b);
+  const ids = sortCounted(Object.keys(core.events), stats, (a, b) => +a - +b);
   const docs = ids.map((id, i) => {
+    if (stats) stats.units++;
     const [season, kind, name, eventName, location, start, end, ages] = core.events[id];
     const at = location.lastIndexOf(', ');
     const state = at > 0 ? location.slice(at + 2) : null;
@@ -36,14 +37,14 @@ export function eventDocs(core, vocab) {
     const loc = vocab.eventPlaces[id] || null;
     const u = div => ((vocab.divs.get(season) || []).find(x => x.name === div) || {}).u || 0;
     return {
-      i, id: +id, season, kind, name, eventName, location, start, end, ages: [...ages].sort((a, b) => u(b) - u(a) || cmpStr(a, b)), ageU: u,
+      i, id: +id, season, kind, name, eventName, location, start, end, ages: sortCounted([...ages], stats, (a, b) => u(b) - u(a) || cmpStr(a, b)), ageU: u,
       state, tierNames, placeGeo: loc ? loc[0] : null, countyGeo: loc ? loc[1] : null, stageWords: new Set(words(name)),
       fields: distinctFields([nameWords(name), nameWords(eventName),
         at > 0 ? [...placeWords(location.slice(0, at)), ...words((core.vocab.states || {})[state] || '')] : [],
         tierNames.flatMap(nameWords)]),
     };
   });
-  const post = new Postings(EVENT_FIELDS, docs);
+  const post = new Postings(EVENT_FIELDS, docs, stats);
   const kinds = new Map(); for (const d of docs) kinds.set(d.kind, (kinds.get(d.kind) || 0) + 1);
   return { docs, post, N: docs.length, kinds };
 }

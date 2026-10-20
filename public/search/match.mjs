@@ -43,7 +43,10 @@ export function normalize(s) {
   if (!ASCII.test(t)) t = t.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[–—]/g, '-').replace(/’/g, '');
   return t.toLowerCase().replace(/[.']/g, '');
 }
-export const words = s => { const out = []; for (const w of normalize(s).split(/[^a-z0-9]+/)) if (w) out.push(w); return out; };
+// #188: how many strings were normalised; one integer increment per call, read by startIndex's `stats`.
+let wordsCalls = 0;
+export const wordsCalled = () => wordsCalls;
+export const words = s => { wordsCalls++; const out = []; for (const w of normalize(s).split(/[^a-z0-9]+/)) if (w) out.push(w); return out; };
 
 // Words that say nothing about which team or event it is (today's search, #114).
 export const NOISE = new Set(['ecnl', 'girls', 'girl', 'team', 'teams', 'the', 'and', 'of', 'based', 'from']);
@@ -166,17 +169,22 @@ export function expand(word, { terms, initials: inits, known, last, stats, cache
 
 // Runs a staged builder (a generator) to its end and returns its value: how the one-shot builders
 // are defined (#165: startIndex is the build; buildIndex drains it).
+// #188: a comparator that counts its own calls and the rows each sort is given, when a build asks for `stats`;
+// otherwise the comparator itself, so a page without stats pays nothing.
+export const counted = (stats, f) => (stats ? (a, b) => { stats.sortCompares++; return f(a, b); } : f);
+export function sortCounted(list, stats, f) { if (stats) { stats.sorts++; stats.sortRows += list.length; } return list.sort(counted(stats, f)); }
 export function drain(g) { let r; while (!(r = g.next()).done); return r.value; }
 
 // One category's fielded documents and postings, for BM25F, built in steps of at most `n` documents
 // (the `Postings` constructor drains it).
 //   fields   [{ name, w }]
 //   docs     [{ fields: [[term...]...] }]: each field its distinct terms (names are short: tf = 1)
-export function* postingsG(fieldDefs, docs, n) {
+export function* postingsG(fieldDefs, docs, n, stats = null) {
   const P = Object.create(Postings.prototype);
   P.fieldDefs = fieldDefs; P.N = docs.length; P.docs = docs; P.post = new Map(); P.idfs = new Map(); P.lists = docs.map(d => d.fields);
   const sums = fieldDefs.map(() => 0);
   for (let i = 0; i < docs.length; i++) {
+    if (stats) stats.units++;
     if (i && i % n === 0) yield 'postings';
     const d = docs[i], seen = new Set();
     d.fields.forEach((f, k) => { sums[k] += f.length; for (const t of f) if (!seen.has(t)) { seen.add(t); if (!P.post.has(t)) P.post.set(t, []); P.post.get(t).push(i); } });
@@ -189,7 +197,7 @@ export function* postingsG(fieldDefs, docs, n) {
   return P;
 }
 export class Postings {
-  constructor(fieldDefs, docs) { return drain(postingsG(fieldDefs, docs, Infinity)); }
+  constructor(fieldDefs, docs, stats = null) { return drain(postingsG(fieldDefs, docs, Infinity, stats)); }
   df(t) { return (this.post.get(t) || []).length; }
   idf(t) {
     let v = this.idfs.get(t);
