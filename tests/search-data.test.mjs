@@ -134,7 +134,7 @@ test('fixture: built by this builder from these reviewed inputs (else re-freeze;
   const lfSha = url => createHash('sha256').update(readFileSync(url).toString('latin1').replace(/\r\n/g, '\n'), 'latin1').digest('hex');
   assert.equal(manifest.search.builder, lfSha(new URL('search_data.py', ROOT)), 'search_data.py changed: re-freeze the fixture');
   // #159: every reviewed input, null for one not committed yet (the census table before its download).
-  const inputs = ['field-aliases.json', 'zip-fixes.json', 'zip-places.json', 'zip-place-fixes.json', 'city-counties.json'];
+  const inputs = ['field-aliases.json', 'zip-fixes.json', 'zip-places.json', 'zip-place-fixes.json', 'city-counties.json', 'orphan-team-ids.json'];   // #179
   assert.deepEqual(Object.keys(manifest.search.inputs).sort(), [...inputs].sort());
   for (const n of inputs) {
     const url = new URL(`public/data/${n}`, ROOT);

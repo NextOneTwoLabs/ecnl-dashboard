@@ -1055,8 +1055,10 @@ def update_search_data(sources, stats, directory, dry_run=False):
     """search_data.build + write for the crawl, refresh, --team-history and --clubs paths. Never
     raises. With no directory (its build failed or did not run), the files are left as they were.
     A failure goes to stats.fail, so the run exits non-zero, keeps the old files and never touches
-    refresh-state.json. A bad field-aliases.json or zip-fixes.json entry is left out, reported and
-    fails the run; the files are still written."""
+    refresh-state.json. A bad entry in a reviewed input (field-aliases.json, zip-fixes.json, the
+    place inputs, orphan-team-ids.json: each error names its file) is left out, reported and fails
+    the run; the files are still written. A stale orphan-team-ids.json entry (TGS now has the row)
+    is such an error until it is removed (#179 Q7)."""
     import search_data
     if dry_run:
         print("Search data: not built (dry run).")
@@ -1073,7 +1075,7 @@ def update_search_data(sources, stats, directory, dry_run=False):
         print(f"Search data: FAILED: {e}. The search data files were left as they were.")
         return None
     for err in errors:
-        stats.fail(f"search data: {err} (fix public/data/field-aliases.json or zip-fixes.json)")
+        stats.fail(f"search data: {err} (fix the reviewed input it names, in public/data/)")
         print(f"Search data: {err}")
     print(f"Search data: {len(files)} files, {len(changed)} changed.")
     return changed

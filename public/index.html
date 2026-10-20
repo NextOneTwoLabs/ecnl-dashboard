@@ -7194,7 +7194,7 @@
     // search already loads. Never saved as the visitor's place (saveState), never a history entry of its own beyond
     // the link that opened it; every exit clears h2hVs. A 2026-27 squad's earlier teams are listed for the visitor
     // to add (a checkbox each); none is chosen for them and none is merged. What is added is kept for the visit.
-    const H2H_COVER = 'Games from 2020–21 on: conference seasons, national events and showcases in this archive. A game counts when both teams have a team page for that season, so games a team played before its team page begins (mostly 2020–21 and 2021–22) aren’t included.';
+    const H2H_COVER = 'Games from 2020–21 on: conference seasons, national events and showcases in this archive. A game counts when both teams have a team page for that season, or a reviewed earlier id of the same team, so a few games from before a team’s page begins (mostly 2020–21) aren’t included.';
     const h2hSpan = seasons => (!seasons.length ? '' : seasons.length === 1 ? sxSeason(seasons[0]) : `${sxSeason(seasons[0])} to ${sxSeason(seasons[seasons.length - 1])}`);
     const h2hSeasonsOf = d => [...new Set([...d.rows.map(r => r.season), ...d.x.map(x => x.season)])].sort();
     const h2hInitials = n => String(n).replace(/\b(ECNL|RL|SC|FC|G\d.*)\b/g, '').split(/\s+/).filter(w => /^[A-Za-z]/.test(w)).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';

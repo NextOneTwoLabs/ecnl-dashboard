@@ -475,8 +475,11 @@ games files wait for PR 4b. The format is in `docs/data-api.md`, "Search data".
   `--search-data --check` (CI) fails when a committed file differs from a fresh build.
 - **Reviewed inputs**, each entry with evidence, like `club-families.json`:
   `public/data/field-aliases.json` (complex names that are one field at one zip; owner decisions
-  D6, D6a, Q3) and `public/data/zip-fixes.json` (malformed zips, including known-bad ones that
-  must not be guessed; MF5). A bad entry is left out, reported, and fails the check.
+  D6, D6a, Q3), `public/data/zip-fixes.json` (malformed zips, including known-bad ones that
+  must not be guessed; MF5) and `public/data/orphan-team-ids.json` (#179: team ids with games in a
+  season TGS's conference table left them out of, attached to their squads; every entry re-checked
+  on every build, see `docs/data-api.md`, "Search data"). A bad entry is left out, reported, and
+  fails the check.
 - **The build report** goes to the run's output only: zips that are not 5 digits, names with
   more than one zip, and same-zip name variants (alias candidates, never merged automatically).
 - **The frozen fixture** in `tests/search/fixtures/search/` is the same build from MANIFEST's

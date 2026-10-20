@@ -475,9 +475,10 @@ index from `core.json` and `places.json`.
 
 `search_data.py` builds them offline from the committed archive (no upstream request, no clock,
 no locale): every season's hierarchies, standings and schedules, the catalog, the team
-directory, and the reviewed inputs in `public/data/`: `field-aliases.json`, `zip-fixes.json`, and
-for places (#159) `zip-places.json` (the census table), `zip-place-fixes.json` and
-`city-counties.json`. Byte for byte the same in any process, hash seed or time zone.
+directory, and the reviewed inputs in `public/data/`: `field-aliases.json`, `zip-fixes.json`,
+`orphan-team-ids.json` (#179), and for places (#159) `zip-places.json` (the census table),
+`zip-place-fixes.json` and `city-counties.json`. Byte for byte the same in any process, hash seed
+or time zone.
 
 **`core.json`** (schema 2 since #159; about 408 KB raw, 73 KB gzipped):
 
@@ -495,15 +496,16 @@ for places (#159) `zip-places.json` (the census table), `zip-place-fixes.json` a
 ]}}
 ```
 
-(#178: the head-to-head page reads `x` too: a game at a national event or showcase is between the squads that own the two ids, and a link to it names each side by its conference id that season.)
+(#178: the head-to-head page reads `x` too: a game at a national event or showcase is between the squads that own the two ids, and a link to it names each side by its conference id that season. #179: a side with no conference row that season, a reviewed orphan id, is named by the squad's nearest row; on a tie, the row with the game's own id, else the earlier.)
 
 - `build`: the hash of the file without it. `directoryBuild`: the team directory's `build`, the
   directory this file was built from (in the same run, never a file left on disk).
 - `teams`: the team directory's content **verbatim** (its tables and squads, logos included
   exactly as the directory carries them: MF8 option a, no new exposure, #117 unchanged), plus
   `x` on a squad that played a showcase or national event under another team id (the catalog's
-  `teamAliases`), as `[[season, teamID]]`. Today one: 2025-26 Phoenix Spring team 112470 for
-  squad 69910.
+  `teamAliases`), or (#179) under a reviewed orphan id, as `[[season, teamID]]`. Today 17 keys:
+  2025-26 Phoenix Spring team 112470 for squad 69910, and the 16 entries of
+  `orphan-team-ids.json`.
 - `events`: every catalog event, by event id: `[season, kind ("c" conference season, "n" national,
   "s" showcase), name (the conference or the stage), eventName, location, start, end, [divisions
   played]]`. A conference season's dates are its first and last dated games inside the season
@@ -655,6 +657,38 @@ ids). Game keys never depend on census data: city and county arrive in `places.j
 report (the run's output, never a file) lists rejected zips, names with more than one zip, and
 same-zip name variants, which are alias candidates for a reviewed PR and are never merged
 automatically.
+
+**Reviewed orphan team ids** (#179). Some teams have games in a season whose conference table, as
+TGS published it, leaves them out (2020-21 and 2021-22 GU13 flights, mostly), so their squad
+starts a season late and head to head missed those games. `public/data/orphan-team-ids.json`
+attaches each such id, for that season, to its squad as an `x` key: `{"season", "teamID", "squad"
+(the squad's first row, "season/teamID"), "name" (TGS's name for it that season), "clubID",
+"birthYears", "games" (its game count that season), "evidence"}`, plus, only for an owner-approved
+rename, `"renamed": {"from", "to", "approved"}` (the club parts before and after, and a link to the
+owner's comment). It is a reviewed list, never a rule, because TGS reuses ids across birth years.
+`search_data.py` re-checks every entry against the archive on every build:
+
+- **level:** no game in a Regional League flight, and no TGS name with RL, Pre-ECNL or US Club;
+- **regroup:** never onto a squad that starts in 2026-27 from an earlier season (#107 M6);
+- **club:** the TGS club on every game is the squad's;
+- **birth year:** `birthYears` is the squad's, and at least one conference game proves it: every
+  conference division TGS placed the id in that season has the squad's birth year;
+- **continuity:** the squad has a row with this id in an adjacent season;
+- **clash:** the squad has no conference row that season; the key is no catalog `teamAliases` key;
+  a (season, id) is listed once; one reviewed id per squad per season. Every entry of a clash fails,
+  so the result never depends on the file's order;
+- **stale:** no squad has a conference row for the key;
+- **name:** `name` is TGS's, and its club part (`team_history.stem`) is the squad's, or `renamed`
+  says exactly which rename it is;
+- **games and evidence:** the count is the archive's, and the evidence is not empty.
+
+An entry that fails is **left out and reported with every reason it fails**: the run fails (the
+files are still written), and `python archive.py --search-data --check` fails until it is fixed.
+**A stale entry** (TGS has published the missing row) is a hard failure by owner decision (Q7):
+the scheduled refresh only touches the active season, so it can only arise when someone re-crawls a
+closed season, and that person removes the entry in the same PR. RL and Pre-ECNL teams, ids kept
+for an age slot, a club's second team that season and ids across the regroup stay out (Q6); the
+candidates, with the evidence for each, were reviewed on #179.
 
 **How a refresh changes them** (MF2). Rows and tables are keyed by TGS's own ids, the tables hold
 one entry per line in id order, and each line begins with its comma. A refresh that changes one

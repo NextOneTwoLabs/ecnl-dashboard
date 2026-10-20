@@ -1,0 +1,198 @@
+{
+  "schema": 1,
+  "_comment": "Reviewed orphan team ids for the search data (#179; docs/data-api.md, 'Search data'). Each entry attaches one (season, teamID) that has games but no conference row that season (TGS's published table leaves it out) to the squad named by its first row ('squad'), as an alias id ('x' in core.json), so head to head and search find its games. A reviewed list with evidence per id, approved by the owner in a PR, never a rule: TGS reuses ids across birth years. search_data.py re-checks every entry on every build (level, regroup, club, birth year, continuity, clash, stale, name, games, evidence); an entry failing any check is left out and reported with every reason, which fails the run and 'python archive.py --search-data --check'. A stale entry (TGS now has the row) is removed by whoever re-crawls that season, in the same PR. A rename needs 'renamed': {from, to, approved}, where approved links the owner's comment.",
+  "orphans": [
+    {
+      "season": "2020-21",
+      "teamID": 45785,
+      "squad": "2021-22/45785",
+      "name": "NCFC Youth ECNL GU13",
+      "clubID": 22,
+      "birthYears": [
+        2008
+      ],
+      "games": 21,
+      "evidence": "TGS lists 21 games for 45785 in 2020-21 but leaves it out of its conference table (flight 8893 (GU13 ECNL): 12 teams, not 45785). Same id, club 22 (NCFC Youth) and birth year 2008 as the squad's 2021-22 row 'NCFC Youth ECNL GU14'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2020-21",
+      "teamID": 45786,
+      "squad": "2021-22/45786",
+      "name": "Dallas Texans ECNL GU13",
+      "clubID": 37,
+      "birthYears": [
+        2008
+      ],
+      "games": 22,
+      "evidence": "TGS lists 22 games for 45786 in 2020-21 but leaves it out of its conference table (flight 8866 (GU13 ECNL): 11 teams, not 45786). Same id, club 37 (Dallas Texans) and birth year 2008 as the squad's 2021-22 row 'Dallas Texans ECNL GU14'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2020-21",
+      "teamID": 45837,
+      "squad": "2021-22/45837",
+      "name": "United Futbol Academy ECNL GU16",
+      "clubID": 3407,
+      "birthYears": [
+        2005
+      ],
+      "games": 20,
+      "evidence": "TGS lists 20 games for 45837 in 2020-21 but leaves it out of its conference table (flight 8882 (GU16 ECNL): 11 teams, not 45837). Same id, club 3407 (United Futbol Academy) and birth year 2005 as the squad's 2021-22 row 'United Futbol Academy ECNL GU17'; the name's club part matches every season; no other squad of the club has these birth years with this name. TGS reused 45837 from 2023-24 for the club's 2006 squad (2020-21/45836 onward); that squad is born 2006, while TGS placed 45837 in GU16 in 2020-21 (born 2005), so it is not this id's squad that season."
+    },
+    {
+      "season": "2020-21",
+      "teamID": 46754,
+      "squad": "2021-22/46754",
+      "name": "Utah Avalanche ECNL GU13",
+      "clubID": 107,
+      "birthYears": [
+        2008
+      ],
+      "games": 10,
+      "evidence": "TGS lists 10 games for 46754 in 2020-21 but leaves it out of its conference table (flight 8846 (GU13 Mountain): 5 teams, not 46754). Same id, club 107 (Utah Avalanche) and birth year 2008 as the squad's 2021-22 row 'Utah Avalanche ECNL GU14'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2020-21",
+      "teamID": 46756,
+      "squad": "2021-22/46756",
+      "name": "Boise Thorns FC ECNL GU13",
+      "clubID": 51,
+      "birthYears": [
+        2008
+      ],
+      "games": 8,
+      "evidence": "TGS lists 8 games for 46756 in 2020-21 but leaves it out of its conference table (flight 9530 (GU13 Pacific): 8 teams, not 46756). Same id, club 51 (Boise Timbers | Thorns) and birth year 2008 as the squad's 2021-22 row 'Boise Thorns FC ECNL GU14'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2020-21",
+      "teamID": 46771,
+      "squad": "2021-22/46771",
+      "name": "Michigan Hawks ECNL GU13",
+      "clubID": 2359,
+      "birthYears": [
+        2008
+      ],
+      "games": 15,
+      "evidence": "TGS lists 15 games for 46771 in 2020-21 but leaves it out of its conference table (flight 9344 (GU13 East): 4 teams, not 46771; flight 8860 (GU13 West): 4 teams, not 46771). Same id, club 2359 (Michigan Hawks) and birth year 2008 as the squad's 2021-22 row 'Michigan Hawks ECNL GU14'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2020-21",
+      "teamID": 46773,
+      "squad": "2021-22/46773",
+      "name": "Michigan Hawks Magic ECNL GU13",
+      "clubID": 2359,
+      "birthYears": [
+        2008
+      ],
+      "games": 15,
+      "evidence": "TGS lists 15 games for 46773 in 2020-21 but leaves it out of its conference table (flight 9344 (GU13 East): 4 teams, not 46773; flight 8860 (GU13 West): 4 teams, not 46773). Same id, club 2359 (Michigan Hawks) and birth year 2008 as the squad's 2021-22 row 'Michigan Hawks Magic ECNL GU14'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2020-21",
+      "teamID": 46804,
+      "squad": "2021-22/46804",
+      "name": "Tennessee Soccer Club ECNL GU13",
+      "clubID": 1354,
+      "birthYears": [
+        2008
+      ],
+      "games": 21,
+      "evidence": "TGS lists 21 games for 46804 in 2020-21 but leaves it out of its conference table (flight 8873 (GU13 ECNL): 9 teams, not 46804). Same id, club 1354 (Tennessee SC) and birth year 2008 as the squad's 2021-22 row 'Tennessee Soccer Club ECNL GU14'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2020-21",
+      "teamID": 46806,
+      "squad": "2021-22/46806",
+      "name": "Concorde Fire Platinum ECNL GU13",
+      "clubID": 30,
+      "birthYears": [
+        2008
+      ],
+      "games": 19,
+      "evidence": "TGS lists 19 games for 46806 in 2020-21 but leaves it out of its conference table (flight 8879 (GU13 ECNL): 10 teams, not 46806). Same id, club 30 (Concorde Fire) and birth year 2008 as the squad's 2021-22 row 'Concorde Fire Platinum ECNL GU14'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2020-21",
+      "teamID": 46809,
+      "squad": "2021-22/46809",
+      "name": "Concorde Fire Premier ECNL GU13",
+      "clubID": 30,
+      "birthYears": [
+        2008
+      ],
+      "games": 16,
+      "evidence": "TGS lists 16 games for 46809 in 2020-21 but leaves it out of its conference table (flight 8879 (GU13 ECNL): 10 teams, not 46809). Same id, club 30 (Concorde Fire) and birth year 2008 as the squad's 2021-22 row 'Concorde Fire Premier ECNL GU14'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2021-22",
+      "teamID": 46728,
+      "squad": "2022-23/46728",
+      "name": "FC Prime ECNL GU13",
+      "clubID": 2329,
+      "birthYears": [
+        2009
+      ],
+      "games": 25,
+      "evidence": "TGS lists 25 games for 46728 in 2021-22 but leaves it out of its conference table (flight 12533 (GU13 Flight 1): 7 teams, not 46728). Same id, club 2329 (Athletic Club Florida) and birth year 2009 as the squad's 2022-23 row 'FC Prime ECNL G09'; the name's club part matches every season; no other squad of the club has these birth years with this name. TGS reused 46728 in 2026-27 for Athletic Club Florida ECNL G2009/10, a squad that starts after the regroup; never linked across it (#107 M6)."
+    },
+    {
+      "season": "2021-22",
+      "teamID": 58734,
+      "squad": "2022-23/58734",
+      "name": "Alabama FC ECNL GU13",
+      "clubID": 18,
+      "birthYears": [
+        2009
+      ],
+      "games": 25,
+      "evidence": "TGS lists 25 games for 58734 in 2021-22 but leaves it out of its conference table (flight 12533 (GU13 Flight 1): 7 teams, not 58734). Same id, club 18 (Alabama FC) and birth year 2009 as the squad's 2022-23 row 'Alabama FC ECNL G09'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2021-22",
+      "teamID": 59236,
+      "squad": "2022-23/59236",
+      "name": "Concorde Fire Premier ECNL GU13",
+      "clubID": 30,
+      "birthYears": [
+        2009
+      ],
+      "games": 22,
+      "evidence": "TGS lists 22 games for 59236 in 2021-22 but leaves it out of its conference table (flight 12533 (GU13 Flight 1): 7 teams, not 59236). Same id, club 30 (Concorde Fire) and birth year 2009 as the squad's 2022-23 row 'Concorde Fire Premier ECNL G09'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2021-22",
+      "teamID": 59255,
+      "squad": "2022-23/59255",
+      "name": "Concorde Fire Platinum ECNL GU13",
+      "clubID": 30,
+      "birthYears": [
+        2009
+      ],
+      "games": 25,
+      "evidence": "TGS lists 25 games for 59255 in 2021-22 but leaves it out of its conference table (flight 12533 (GU13 Flight 1): 7 teams, not 59255). Same id, club 30 (Concorde Fire) and birth year 2009 as the squad's 2022-23 row 'Concorde Fire Platinum ECNL G09'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2021-22",
+      "teamID": 59307,
+      "squad": "2022-23/59307",
+      "name": "Liverpool FC IA Michigan ECNL GU14",
+      "clubID": 3712,
+      "birthYears": [
+        2008
+      ],
+      "games": 19,
+      "evidence": "TGS lists 19 games for 59307 in 2021-22 but leaves it out of its conference table (flight 12516 (GU14 East): 6 teams, not 59307; flight 12937 (GU14 West): 7 teams, not 59307). Same id, club 3712 (Liverpool FC-IA Michigan) and birth year 2008 as the squad's 2022-23 row 'Liverpool FC IA Michigan ECNL G08'; the name's club part matches every season; no other squad of the club has these birth years with this name."
+    },
+    {
+      "season": "2021-22",
+      "teamID": 59536,
+      "squad": "2022-23/59536",
+      "name": "United Futbol Academy ECNL GU13",
+      "clubID": 3407,
+      "birthYears": [
+        2009
+      ],
+      "games": 25,
+      "evidence": "TGS lists 25 games for 59536 in 2021-22 but leaves it out of its conference table (flight 12533 (GU13 Flight 1): 7 teams, not 59536). Same id, club 3407 (United Futbol Academy) and birth year 2009 as the squad's 2022-23 row 'United Futbol Academy ECNL G09'; the name's club part matches every season; no other squad of the club has these birth years with this name. TGS kept 59536 in 2026-27 for United Futbol Academy ECNL G2009/10, a squad that starts after the regroup; never linked across it (#107 M6)."
+    }
+  ]
+}
