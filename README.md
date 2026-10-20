@@ -18,7 +18,7 @@ upstream API or website ever goes away.
 - **Showcases** — ECNL showcase weekends (2025-26: San Diego Fall and Phoenix Spring) per age group: a Results table (TGS's order, no positions) and the Games, with conference teams linked to their team pages
 - **★ My Teams** — Follow any team (the ★ My Teams button at the foot of the sidebar opens the list); each favorite opens a summary page: the glance panel, the full table with the team highlighted, the team's own fixtures and results, its showcase games, and its post-season games when it played any
 - **Team overview** — A team page opens on **Overview** (tabs **Overview | Current season**, or e.g. **Overview | 2024–25 season**): one squad (e.g. MVLA, girls born 2011) across every archived season, with its conference finishes, Playoffs and Finals, showcases and totals; see [Team history](#team-history)
-- **Team search** — One bar in the header, on every tab, finds any team since 2020-21 (one club and age group) by name, club, place ("California", "Dallas", "SC"), birth year, age group or conference ("MVLA 2011", "U15 NorCal"); a ranked list, each team with a one-line description, opens its team page on Overview (Shift+Enter: its season tab); see [Team search](#team-search)
+- **Search** — One bar in the header, on every tab, finds teams, events and games since 2020-21 by name, club, place ("California", "Dallas"), field, birth year, age group, conference or season ("MVLA 2011", "U15 NorCal", "Surf Sports Park"); one panel shows them as Teams, Events and Games, best match first (Enter opens it; Shift+Enter a team's season tab); see [Team search](#team-search) and [The search panel](#the-search-panel)
 - **Age group navigation** — Tabs populated from the API; keyboard arrow-key navigation, `/` to search
 - **Dark mode**, and **deep links** (season, age group, conference, view, selected team and match filter in the URL hash)
 - **Send feedback** — A panel at the foot of the sidebar posts a message (and an optional reply
@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-search.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/search-groups.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/match-param.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/match-param.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -173,7 +173,7 @@ the files that changed, so the workflow commits them with the data they come fro
 build fails, the old files stay, the data is still committed and the run fails.
 
 Last, after the club places, the same run rebuilds the team directory
-(`public/archive/directory.json`, every team in one file for team search, #114) from that
+(`public/archive/directory.json`, every team in one file, #114: the API's `/api/v1/teams` and the teams of the search data) from that
 history build; a failed history build leaves it as it was.
 
 Commit `public/archive/` and `export/` — that is what makes the data durable, and
@@ -403,50 +403,17 @@ first flight) and `&view=schedule` (the Games view).
 
 One search bar sits in the header, after "ECNL Girls", on every tab, on My Teams and on team
 pages (#114); `/` focuses it from anywhere. On a phone it is the header's search icon, which opens
-a full-screen dialog. A result is a **team**: one club and age group followed across seasons (a
-#107 squad), shown as "MVLA · born 2011" with one line about it (age group and conference, place,
-seasons, a standout result). Enter opens its team page on Overview, or, when the query names a
-season ("MVLA 2011 2024-25"), on that season's tab; Shift+Enter opens the season tab;
-Ctrl/Cmd-click or middle-click a new tab.
+a full-screen dialog. One query searches teams, events and games at once (#149 phase 1) and shows
+them as one panel: Teams, Events and Games, the best match first. A team is one club and age group
+followed across seasons (a #107 squad). Enter opens the active cell's page (a team opens on
+Overview, or, when the query names a season ("MVLA 2011 2024-25"), on that season's tab);
+Shift+Enter opens a team's season tab; Ctrl/Cmd-click or middle-click a new tab.
 
-- **What it matches.** Team and club names (exact, prefix, one typo, initials such as "UFA"),
-  birth years ("2011", "G11", "G2011"), two-year bands ("G2010/11"), age groups ("U15", in the
-  season in view), seasons ("2024-25"), conferences, and places: state names ("california",
-  "new jersey"), two-letter codes ("CA"; on its own "SC" means South Carolina, while "Mustang SC"
-  is a name) and club cities ("dallas", "costa mesa"). A search needs a team name, a place, or an
-  age group (or band) plus a conference ("U15 NorCal"). "Texas" on its own is the state; with an
-  age group it is the conference table.
-- **A place on its own** lists the teams playing now ("150 teams · based in California · playing
-  in 2026-27"), by club, then team line, then oldest age group; add a season, a birth year or an
-  age group for earlier teams. A place whose teams have all ended lists them all, and says so.
-  A two-letter code for a state with no club ("LA") lists the teams with that word in their name,
-  and says so.
-- **By club (#133).** The list comes one club at a time.
-  - **A name search** ("pda", "MVLA", "Sting") shows each club (logo, place, counts, its best
-    Champions League finish) with a row of **age chips** per team line, oldest first ("U18" …
-    "U13"; the season's own age groups when the query names a season), a "+n ended" chip for that
-    line's ended teams. Two or more lines with no team playing are one "Earlier lines" row; a
-    single such line keeps its own name ("PDA South"). A gold dot marks a team that a squad of the
-    season before may continue (#107); the bar under the list shows the active chip's one-line
-    description, and those squads, with a link. A hover moves the bar once the pointer rests on a
-    chip (250 ms), so a mouse crossing chips on its way to the bar's links leaves it in place.
-  - **A place search** ("california", "Dallas", "SC") lists first the clubs named for the place
-    (or matched by a team's name, or based elsewhere), as chips, then the other clubs based
-    there as an **age grid**: one column per age group, aligned across clubs. On a phone the grid
-    is drawn as the same chips. A code counts by its state's name ("SC" is South Carolina, never
-    the "SC" of a club's name). A code that fell back to team names, and a place whose teams have
-    all ended, show chips (all ended: unfolded, so Enter opens a team).
-  - **Today's list stays** for 3 teams or fewer, any search with an age group or band ("U15
-    NorCal", "fc U15", "california U15": one team per line), and a search where every club has
-    one team.
-  - TGS lists some clubs under several ids (PDA under four): a reviewed list,
-    `public/data/club-families.json`, shows them as one club (see docs/data-api.md).
-  - Keys: ↑/↓ move between rows; after that ←/→ (and Home/End) move along a row; Enter opens the
-    team (or opens and closes an "ended" chip), Shift+Enter its season tab. At most 30 clubs are
-    drawn, with a line saying how many more; every match is counted.
-- **Cost.** It reads the team directory (`/api/v1/teams`, about 74 KB gzipped) once per page
-  load, on the first focus, and nothing per keystroke. A refusal shows "try again" and is
-  remembered as the team index's is (#92); `?live=1` has no team search.
+How it matches, what the panel draws, what it loads (the search data, `/api/v1/search/*`, once, on the
+first focus; nothing per keystroke) and its keys are in [The search panel](#the-search-panel) and
+[Search modules](#search-modules). The old team-only search that read the team directory
+(`/api/v1/teams`) was removed in #172; the endpoint stays in the API.
+
 - The Playoffs and Showcases tabs keep their own "Filter this table" box, which highlights teams
   in the table on screen.
 
@@ -462,13 +429,14 @@ Queries today's search cannot answer (games, fields, head to head, nearby and pa
 are recorded as `unsupported`; judgements it gets wrong are recorded as `fail`. Neither fails CI.
 Later engines are measured against that baseline on the same queries.
 
-- **Any change to today's search** (the `TEAM_SEARCH` block or the page's code from
-  `let usDb` to the "dormant" marker comment in `public/index.html`, which replaced `(function usWire`
-  in #165: the legacy panel stays until PR 5, but nothing runs it) re-vendors and re-records in the
-  same PR, and explains the baseline diff:
-  `node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --vendor --record today`.
-  When a later PR removes that code on purpose, it sets `retired: { pr, reason }` in
-  `tests/search/fixtures/MANIFEST.json`. A missing marker never skips the check silently.
+- **Today's search is retired (#172, PR 5).** The page no longer holds it: `MANIFEST.retired` is
+  `{ pr, reason }` in `tests/search/fixtures/MANIFEST.json`, and `tests/search-judged.test.mjs` fails if
+  it is unset or malformed, if any single marker of the old code (`const TEAM_SEARCH`, `let usDb`, the
+  "dormant" comment, a `function us*` declaration) comes back in `public/index.html`, or if the frozen
+  copy `tests/search/engines/today.js` is edited (it is checked against `MANIFEST.engineSha`; it is no
+  longer re-vendored, and `--vendor` is gone). The copy stays so the baseline remains reproducible:
+  `node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today` re-records
+  `baseline/today.json` byte for byte. "No group worse than today" compares with that record.
 - **A query change** re-records too (`--record today`); the baseline header holds the query
   file's checksum.
 - **Re-freezing** (rare, its own reviewed PR):
@@ -617,8 +585,7 @@ draws them since #165 (below).
 `public/index.html`, from `// ===== #165: the search panel` to the form chips' tooltip, draws the slate
 of the search modules (#165, #148; PR 4a of #149 phase 1): teams, events and conference tables in one
 panel, a popover under the header's box and a full-screen dialog on a phone; since #168 (PR 4b) games,
-fields and pairings too. Today's panel
-(`TEAM_SEARCH` and the code from `let usDb`) is still in the file, dormant, until PR 5 removes it.
+fields and pairings too. Today's team-only panel was removed by PR 5 (#172).
 
 - **First focus** loads `/api/v1/search/core` and `/api/v1/search/places` (2 Worker requests, about
   109 KB gzipped) and the 9 modules (static files; fetched ahead at the first idle moment, never on a
@@ -838,7 +805,7 @@ cover the sibling site's `/api/*`, since the rule has no hostname field) or move
 | `public/archive/refresh-state.json` | When the data was last refreshed (powers "Updated 3h ago"; read via `/api/v1/status`) |
 | `public/archive/manifest.json` | Index tying event IDs back to season/conference/flight |
 | `public/archive/teams/<season>.json` | Per-season team index, derived from the archived hierarchies and standings by `archive.py` (read via `/api/v1/seasons/{season}/teams`; see `docs/data-api.md`) |
-| `public/archive/directory.json` | The team directory: every team (club and age group, one #107 squad per row) in one file, for team search, derived by `team_directory.py` from the team histories, the team indexes and `clubs.json` (read via `/api/v1/teams`; see `docs/data-api.md`) |
+| `public/archive/directory.json` | The team directory: every team (club and age group, one #107 squad per row) in one file, served as `/api/v1/teams` and the teams of the search data, derived by `team_directory.py` from the team histories, the team indexes and `clubs.json` (read via `/api/v1/teams`; see `docs/data-api.md`) |
 | `public/archive/clubs.json` | Club city and state for every season's clubs (`null` when TGS lists none), derived by `archive.py` from TGS's club records, keeping nothing else (read via `/api/v1/clubs`; see `docs/data-api.md`) |
 | `archive.py` | Crawler: match-day refresh, bulk backfill, CSV exports, `--verify` |
 | `ecnl_api.py` | Shared API/archive helpers |

@@ -659,6 +659,48 @@ test('serving: /search/*.mjs are static assets: no run_worker_first pattern matc
   assert.equal(hit('/archive/x.json'), true, 'the check has teeth');
   assert.equal(hit('/api/v1/search/core'), true);
 });
+// #172 (moved from the legacy engine's tests): every squad can be found, by its TGS name and by what a visitor types.
+// Both queries start from the frozen core (tests/search/fixtures/search); the expectations come from the squad data
+// (names, seasons, birth years, club names), never from the engine's rows.
+const squadKeys = (core, q) => {
+  const T = core.teams, f = q.s[0], l = q.s[q.s.length - 1];
+  return { first: `${T.seasons[f[0]]}/${f[1]}`, last: `${T.seasons[l[0]]}/${l[1]}`, name: l[2], season: T.seasons[l[0]], club: T.clubs[q.c][1], born: q.b[0] };
+};
+// the name a visitor types for a team: the TGS name without its age, birth-year and ECNL words (the legacy teamTitle rule)
+const typedTitle = (name, club) => {
+  const t = String(name || '')
+    .replace(/\b(G?U\d{1,2}(\/U?\d{1,2})?( Composite)?|G?(19|20)\d{2}(\/\d{2,4})?|G\d{2}(\/\d{2})?|\d{2}G|U\d{2}RL)\b/gi, '')
+    .replace(/\bECNL\b(?!\s*-?R)/gi, '').replace(/\s*[-\u2013]\s*$/, '').replace(/\(\s*\)/g, '').replace(/\s+/g, ' ').trim();
+  return t || club || name;
+};
+// #173: TGS named this squad "Eagles SC ECNL GU17/U18" but filed it in the GU18/U19 division (club 7, born 2004). reader.mjs reads a
+// slash pair as its first age, so "<its TGS name> 2021-22" applies a hard U17 filter and misses it. The reader's rule is right for
+// the other ~300 slash-age names. Remove this pin when #173 is fixed: the test then fails because the squad starts passing.
+const KNOWN_MISS = { '2020-21/2195': 'Eagles SC ECNL GU17/U18 2021-22' };
+test('#172: every squad is found in the first 3 Teams rows by "<TGS name> <season>" (one named exception, #173)', () => {
+  const core = fresh().core, misses = {};
+  for (const q of core.teams.squads) {
+    const k = squadKeys(core, q), query = `${k.name} ${k.season}`;
+    const i = rows(run(query), 'teams').findIndex(r => r.key === k.first || r.key === k.last);
+    if (i < 0 || i > 2) misses[k.first] = query;
+  }
+  assert.deepEqual(misses, KNOWN_MISS, 'exactly the pinned squad misses; if it starts passing, remove the pin (#173)');
+});
+test('#172: every squad is found in the first 3 Teams rows by "<team title> <birth year> <season>", with no exception', () => {
+  const core = fresh().core, misses = [];
+  for (const q of core.teams.squads) {
+    const k = squadKeys(core, q), query = `${typedTitle(k.name, k.club)} ${k.born} ${k.season}`;
+    const i = rows(run(query), 'teams').findIndex(r => r.key === k.first || r.key === k.last);
+    if (i < 0 || i > 2) misses.push(`${query} -> ${i}`);
+  }
+  assert.deepEqual(misses, []);
+});
+test('#172, #173: the pinned squad is still found first by its age or birth year, and by the title query', () => {
+  const keys = new Set(['2020-21/2195', '2021-22/2195']);
+  for (const q of ['Eagles SC U18 2021-22', 'Eagles SC 2004 2021-22']) assert.ok(keys.has(rows(run(q), 'teams')[0].key), q);
+  const core = fresh().core, sq = core.teams.squads.find(x => squadKeys(core, x).first === '2020-21/2195'), k = squadKeys(core, sq);
+  assert.ok(rows(run(`${typedTitle(k.name, k.club)} ${k.born} ${k.season}`), 'teams').slice(0, 3).some(r => keys.has(r.key)));
+});
 test('CI: the Node test lists in api-tests.yml and the README equal tests/*.test.mjs', () => {
   const all = readdirSync(new URL('tests/', ROOT)).filter(n => n.endsWith('.test.mjs')).map(n => `tests/${n}`).sort();
   const list = text => [...new Set((/--test ([^\n]*?)(?:\s+#|\n|$)/.exec(text) || [])[1].split(/\s+/).filter(x => x.endsWith('.test.mjs')))].sort();

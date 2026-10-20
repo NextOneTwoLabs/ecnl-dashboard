@@ -196,26 +196,3 @@ test('SC1: a team with no history file opens on its season tab, and Overview is 
   await r.flush();
   assert.equal(r.overviewShown(), true);
 });
-
-// SC2: the search wiring that only a browser covered (prreview122b F3, F7, V18, V19).
-const uiBlock = (head, last = head) => block(head, last);
-test('search wiring: the status line follows the engine, Shift+Enter and the season link open the season tab', () => {
-  const status = uiBlock('    function usStatus(');
-  assert.match(status, /if \(res\.currentOnly\) bits\.push\(`playing in /, 'F3: "playing in" only for a current-only list');
-  assert.ok(!/placeOnly/.test(status));
-  const go = uiBlock('    function usGo(');
-  assert.match(go, /to === 'season' \? r\.seasonHref : to === 'overview' \? r\.overviewHref : r\.href/);
-  const key = uiBlock('    function usKey(');
-  assert.match(key, /usGo\(usActiveIdx, e\.shiftKey \? 'season' : null\)/, 'V18');
-  // V19 (the season link opening the season tab through usWire) moved to search-panel.test.mjs with the wiring (#165).
-  assert.match(html, /hl\.href = r\.seasonHref;/);
-});
-
-test('search wiring: a code with no club and no name says so (F7)', () => {
-  const code = line('    const usPlaceWord = ') + uiBlock('    function usEmptyText(');
-  const usEmptyText = new Function('esc', code + '\nreturn usEmptyText;')(x => String(x));
-  const p = { text: [], places: [], codes: [{ code: 'RI', strict: true }], conf: null };
-  assert.equal(usEmptyText('RI', p, { note: { kind: 'name', code: 'RI', label: 'Rhode Island', n: 0 } }),
-    'No teams based in Rhode Island, and no team has “RI” in its name.');
-  assert.equal(usEmptyText('NJ NY', { ...p, codes: [{}, {}] }, { note: null }), 'No team is based in any of those places.');
-});

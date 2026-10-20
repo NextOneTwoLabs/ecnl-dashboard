@@ -1,7 +1,7 @@
 // #165 (#149 phase 1, PR 4a), #148: the search panel. The page's own block (public/index.html, from
 // "// ===== #165: the search panel" to the form chips' tooltip) is extracted and run in a small fake DOM
 // on an index built, by the real modules (public/search), from the frozen search data
-// (tests/search/fixtures/search). The legacy panel is dormant and not run here. What a browser adds
+// (tests/search/fixtures/search). (The legacy panel was removed by #172.) What a browser adds
 // (focus, layout, the phone sheet's trap, real requests) is tests/e2e/search-panel.e2e.mjs.
 // Every expectation comes from the slate, the fixture or a stated page rule (R1-R12, at the top of the
 // block), never from the code under test. Run under the netguard:
@@ -147,9 +147,22 @@ test('index.html keeps one line-ending style, and the panel block is bounded by 
   assert.ok(!/\r\n/.test(rawHtml) || !/[^\r]\n/.test(rawHtml), 'mixed line endings');
   assert.equal(html.split(START).length, 2);
   assert.ok(html.indexOf(START) < html.indexOf(END));
-  const mark = html.indexOf('    // #165: the legacy search above is dormant until PR 5 removes it');
-  assert.ok(mark > 0 && mark < html.indexOf(START), 'the dormant marker sits before the block (PAGE_END)');
-  assert.ok(!/function usWire|usWire\(\)/.test(html.slice(mark)), 'the legacy wiring is gone');
+});
+
+// #172 (PR 5): the legacy search is gone from the page, and its CSS with it. The kept .us- classes are named, so a
+// failure names the class: each is used by the markup or the panel code, and no other .us- class is in the CSS.
+test('#172: the legacy search is gone, and only the 9 kept .us- classes remain in the CSS, each used outside it', () => {
+  assert.ok(!/TEAM_SEARCH|let usDb|usWire|dormant until PR 5/.test(html), 'no legacy marker');
+  assert.ok(!/(?<![\w$.])us[A-Z]\w*\(/.test(html), 'no us* function call or declaration');
+  assert.ok(!/\bUS_[A-Z_]+\b|usearchStatus|usearchTips|us-opt-/.test(html), 'no legacy constant or id');
+  const css = html.slice(html.indexOf('<style>'), html.indexOf('</style>')), rest = html.replace(css, '');
+  const KEPT = ['us-actions', 'us-cancel', 'us-chip', 'us-foot', 'us-keys', 'us-sheet-head', 'us-sr', 'us-tipsbox', 'us-two'];
+  const inCss = [...new Set([...css.matchAll(/(?<![\w-])(us-[a-z0-9-]+)/g)].map(m => m[1]))].sort();
+  for (const c of inCss) assert.ok(KEPT.includes(c), `.${c} is in the CSS but is not a kept class (nothing uses it)`);
+  for (const c of KEPT) {
+    assert.ok(inCss.includes(c), `${c} has CSS`);
+    assert.ok(new RegExp(`(?<![\\w-])${c}(?![\\w-])`).test(rest), `${c} is used by the markup or the panel code`);
+  }
 });
 
 test('markup: the combobox opens a grid, the grid is always in the DOM and named, no role=option remains, the labels say events and games', () => {
@@ -161,7 +174,7 @@ test('markup: the combobox opens a grid, the grid is always in the DOM and named
   assert.match(html, /<div class="usearch" id="usearch" role="search" aria-label="Teams, events and games">/);
   assert.equal(html.split('placeholder="Search teams, clubs, places, events, fields…"').length, 3, 'both boxes (#168)');
   assert.match(html, /<span>Teams, events and games since 2020-21<\/span>/);
-  for (const f of ['usOpenSheet()', 'usClose(true)']) assert.ok(!html.slice(0, html.indexOf('let usDb')).includes(`onclick="${f}"`), `${f} is not called from the markup`);
+  for (const f of ['usOpenSheet()', 'usClose(true)']) assert.ok(!html.includes(`onclick="${f}"`), `${f} is not called from the markup`);
   for (const f of ['sxOpenSheet()', 'sxClose(true)']) assert.ok(html.includes(`onclick="${f}"`), f);
 });
 
@@ -858,9 +871,8 @@ test('sxRun asks the module with the clock, the league zone and the selected sea
   assert.equal(seen.at(-1).selectedSeason, '2024-25');
 });
 
-test('goHome, the "/" key and the header buttons reach the new panel (the legacy functions are not called from outside the dormant slice)', () => {
-  const outside = html.slice(html.indexOf('\n    // ========== DATA FETCH =========='), html.indexOf('let usDb')) + html.slice(html.indexOf(END));
-  for (const f of ['usClose(', 'usOpenSheet(', 'usOpen(', 'usRun(']) assert.ok(!outside.includes(f), `${f} outside the dormant slice`);
+test('goHome, the "/" key and the header buttons reach the new panel (the legacy functions are not on the page)', () => {
+  for (const f of ['usClose(', 'usOpenSheet(', 'usOpen(', 'usRun(']) assert.ok(!html.includes(f), `${f} is not on the page`);
   assert.match(html, /sxClose\(true\);\n      closeSidebarIfMobile\(\);\n      \/\/ #135 P1a/);
   assert.match(html, /if \(isPhone\(\)\) \{ sxOpenSheet\(\); return; \}/);
   assert.match(html, /id="headerSearch"[^>]*onclick="sxOpenSheet\(\)"/);
@@ -877,7 +889,7 @@ test('no request per keystroke: the block makes no fetch but the two search data
   assert.match(BLOCK, /scheduler\.yield/); assert.match(BLOCK, /new MessageChannel\(\)/);
 });
 
-test('the grid\'s CSS: chips are at least 28 px (36 px on the phone), the legacy list rules stay for the dormant code', () => {
+test('the grid\'s CSS: chips are at least 28 px (36 px on the phone), the page keeps the popover [hidden] rule', () => {
   assert.match(html, /\.sx-chip \{[^}]*height: 28px/);
   assert.match(html, /@media \(max-width: 768px\) \{\s*\.sx-grp, \.sx-row \{[^}]*\}\s*\.sx-chip \{ height: 36px/);
   assert.ok(!/\.usearch-pop\.sx \{ display/.test(html), 'a rule that would beat [hidden]');

@@ -124,8 +124,8 @@ Showcases tab, the index tells which rows have a team page: if it is refused, ev
 shown by its plain name with "try again", never as "no team page".
 
 The page uses the index to find a deep-linked team or a saved favourite: one request per
-season instead of every hierarchy and standings file. (Team search reads the team directory
-instead, #114.) What the page does with the index answer (#92):
+season instead of every hierarchy and standings file. (The page's search reads the search
+data, below, #165.) What the page does with the index answer (#92):
 
 | Index answer | The page | Remembered |
 | --- | --- | --- |
@@ -388,7 +388,7 @@ use 1.9 % of the daily 100,000 and take about 32 minutes at `RL_ANON`'s 60 a min
 
 ### Team directory (`/api/v1/teams`)
 
-Also **derived** (#114): every team in one file, for the page's team search. A team is one
+Also **derived** (#114): every team in one file (the page's team search read it until #165; it is now an API resource and the teams of the search data). A team is one
 club and age group followed across seasons, which is one #107 squad, exactly as
 `team_history.build()` links it, so the directory has one row per squad. It lists only teams
 with a conference row, i.e. with a team page: a team seen only at a national event or a
@@ -458,14 +458,8 @@ holds, and writes it only when its bytes change:
 
 **Caching and cost.** `no-cache` with a validator, like the histories and the club places: it
 changes with the active season, and its route has its own kind (`directory`), so the
-closed-season policy (#82) never applies to it and no catalog read is made for it. The page
-reads it once per page load, when team search is first opened, never on page load; searching
-costs no further request. After a data refresh that changed a team, the next load downloads it
-again (about 74 KB); otherwise it revalidates with a 304. What the page does with the answer
-follows the team index (#92): a refusal shows "try again" and is remembered for a minute (a
-`none` refusal until the session is back); a 404 or an unknown schema means "Team search isn't
-available right now" for the page; a 5xx, a network error or bad JSON is asked again at the next
-focus. There is never a fallback scan, and `?live=1` has no team search.
+closed-season policy (#82) never applies to it and no catalog read is made for it. After a data refresh that changed a team, the next request downloads it again (about 74 KB); otherwise it
+revalidates with a 304. The page does not request it (the search panel reads the search data instead, #165).
 
 ### Search data (`/api/v1/search/core`, `/api/v1/search/places`, `/api/v1/search/games/{season}`)
 

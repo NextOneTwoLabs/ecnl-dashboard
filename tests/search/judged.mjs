@@ -117,27 +117,10 @@ export function compile(src, stubs, tail, extra = []) {
   return new Function(...names, src + '\n' + tail)(...Object.values(stubs), ...extra);
 }
 
-// ---------- the vendored copy of today's search (D9) ----------
-export const ENGINE_START = '\n    const TEAM_SEARCH = (() => {\n';
-export const ENGINE_END = '\n    })();\n';
-export const PAGE_START = '    let usDb = null, usItems = []';
-export const PAGE_END = '    // #165: the legacy search above is dormant until PR 5 removes it (tests/search/judged.mjs PAGE_END)\n';
+// ---------- the frozen copy of today's search (D9) ----------
+// Vendored from index.html by #156; since #172 (PR 5) the page no longer holds it, so the copy is frozen: it is no
+// longer compared with index.html (MANIFEST.retired), only with MANIFEST.engineSha.
 const V_ENGINE = '//@@ENGINE\n', V_PAGE = '\n//@@PAGE\n';
-export const VENDOR_HEADER = [
-  '// Vendored from public/index.html by tests/search/freeze.mjs --vendor (#156, owner decision D9). Do not edit by hand.',
-  '// The TEAM_SEARCH block, then the page\'s search code from `let usDb` up to `(function usWire`.',
-  '// Any PR that changes these lines in public/index.html re-vendors (--vendor) and re-records (--record today) in the same PR.',
-].join('\n') + '\n';
-// The two slices of index.html (LF), or null when a marker is missing.
-export function slicesOf(html) {
-  html = lf(html);
-  const a = html.indexOf(ENGINE_START); if (a < 0) return null;
-  const b = html.indexOf(ENGINE_END, a + 1); if (b < 0) return null;
-  const c = html.indexOf(PAGE_START); if (c < 0) return null;
-  const d = html.indexOf(PAGE_END, c); if (d < 0) return null;
-  return { engine: html.slice(a + 1, b + ENGINE_END.length), page: html.slice(c, d) };
-}
-export const vendoredText = s => VENDOR_HEADER + V_ENGINE + s.engine + V_PAGE + s.page;
 export function vendoredSlices(text) {
   text = lf(text);
   const a = text.indexOf(V_ENGINE), b = text.indexOf(V_PAGE);
@@ -412,7 +395,7 @@ export function modulesRow(r) {
 export function modulesBaselineOf(doc, adapter, fx, run = runAll(doc, adapter, fx)) {
   return {
     header: {
-      engine: 'modules', modulesSha: modulesSha(), manifestSha: sha(stable(fx.manifest)), queriesSha: sha(stable(doc)), context: doc.context,
+      engine: 'modules', modulesSha: modulesSha(), manifestSha: manifestSha(fx.manifest), queriesSha: sha(stable(doc)), context: doc.context,
       recordedBy: 'node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules',
     },
     summary: run.summary,
@@ -420,19 +403,27 @@ export function modulesBaselineOf(doc, adapter, fx, run = runAll(doc, adapter, f
   };
 }
 
-// The drift check on the vendored copy (MF7): compared with index.html's slices as LF text; never
-// skipped silently. Once PR 4a or 5 removes the legacy search, MANIFEST.retired = { pr, reason }.
+// Each marker of the removed legacy search, checked on its own: one coming back alone (a partial restore) fails
+// the retirement. Line endings never count (the text is compared as LF).
+export const LEGACY_MARKERS = [
+  { name: 'const TEAM_SEARCH', re: /const TEAM_SEARCH = \(\(\) =>/ },
+  { name: 'let usDb', re: /let usDb\b/ },
+  { name: 'the "#165: the legacy search above is dormant" comment', re: /the legacy search above is dormant until PR 5/ },
+  { name: 'a function us* declaration', re: /function us[A-Z]\w*\(/ },
+];
+export const legacyMarkers = html => LEGACY_MARKERS.filter(m => m.re.test(lf(html))).map(m => m.name);
+
+// The retirement check on the frozen copy (MF7): MANIFEST.retired must be { pr, reason } (non-empty strings),
+// index.html must hold none of the legacy markers, and the frozen copy must still match MANIFEST.engineSha.
+// Never skipped silently: an unset or malformed retirement fails.
 export function driftStatus(html, vendored, manifest) {
-  const s = slicesOf(html), v = vendoredSlices(vendored);
-  if (manifest.retired != null) {
-    if (!manifest.retired.pr || !manifest.retired.reason) return { ok: false, message: 'MANIFEST.retired must be { pr, reason }' };
-    if (s) return { ok: false, message: 'MANIFEST.retired is set, but index.html still holds the legacy search: re-vendor, or unset retired' };
-    return { ok: true, retired: true, message: `retired by ${manifest.retired.pr}: ${manifest.retired.reason}` };
-  }
-  if (!s) return { ok: false, message: 'index.html no longer holds the legacy search markers (const TEAM_SEARCH, let usDb, and the "#165: the legacy search above is dormant" comment) and MANIFEST.retired is unset. If the legacy search was removed on purpose, set MANIFEST.retired = { pr, reason }; otherwise restore the markers. This check is never skipped silently (MF7).' };
-  if (s.engine !== v.engine || s.page !== v.page) return { ok: false, message: 'index.html\'s search code differs from tests/search/engines/today.js. Re-vendor and re-record in the same PR: freeze.mjs --vendor, then --record today (MF7).' };
-  if (engineSha(v) !== manifest.engineSha) return { ok: false, message: 'engines/today.js does not match MANIFEST.engineSha: re-run freeze.mjs --vendor' };
-  return { ok: true, retired: false };
+  const r = manifest.retired;
+  if (r == null) return { ok: false, message: 'MANIFEST.retired is not set: index.html no longer holds the legacy search (#172); set retired { pr, reason }' };
+  if (typeof r !== 'object' || Array.isArray(r) || typeof r.pr !== 'string' || !r.pr || typeof r.reason !== 'string' || !r.reason) return { ok: false, message: 'MANIFEST.retired must be { pr, reason }' };
+  const back = legacyMarkers(html);
+  if (back.length) return { ok: false, message: `MANIFEST.retired is set, but index.html still holds the legacy search (${back.join('; ')}): remove it, or unset retired and re-vendor from an older commit` };
+  if (engineSha(vendoredSlices(vendored)) !== manifest.engineSha) return { ok: false, message: 'engines/today.js does not match MANIFEST.engineSha: the frozen copy was edited' };
+  return { ok: true, retired: true, message: `retired by ${r.pr}: ${r.reason}` };
 }
 
 // The clock canary (MF6): engine source that reads the clock and the time zone. It runs through the
@@ -670,12 +661,15 @@ export function summarise(doc, perQuery) {
 }
 
 // ---------- the baseline ----------
+// The fixtures' checksum for a baseline header. `retired` (#172) is not fixture content: setting it must not re-record
+// the baselines, so it is left out (the value is the one recorded while retired was null).
+export const manifestSha = m => sha(stable({ ...m, retired: null }));
 export function baselineOf(doc, adapter, fx, run = runAll(doc, adapter, fx)) {
   return {
     header: {
       engine: adapter.name,
       engineSha: fx.manifest.engineSha,
-      manifestSha: sha(stable(fx.manifest)),
+      manifestSha: manifestSha(fx.manifest),
       queriesSha: sha(stable(doc)),
       context: doc.context,
       recordedBy: 'node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today',
