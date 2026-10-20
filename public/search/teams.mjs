@@ -232,7 +232,9 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
 const EXACT = new Map();
 const exactOf = w => { let m = EXACT.get(w); if (!m) { m = new Map([[w, { cls: 'exact', m: 1 }]]); EXACT.set(w, m); } return m; };
 
-const better = (a, b) => (a.nearby !== b.nearby ? !a.nearby : a.weak !== b.weak ? !a.weak : a.table !== b.table ? a.table : a.score !== b.score ? a.score > b.score : a.viaPair !== b.viaPair ? a.viaPair : a.reading < b.reading);
+// #173: `better` (one squad matched by several readings) has no viaPair step. Two readings that anchor a squad on different rows carry
+// different filter scores, so they never tie there; the tie-break lives in `compare` alone.
+const better = (a, b) => (a.nearby !== b.nearby ? !a.nearby : a.weak !== b.weak ? !a.weak : a.table !== b.table ? a.table : a.score !== b.score ? a.score > b.score : a.reading < b.reading);
 
 // Teams order (design, plus #163 Q3): table rows in table order; direct before nearby (D2); strong
 // before weak (D11); score; whole-title match; plays this season; newest season; then, for a place
