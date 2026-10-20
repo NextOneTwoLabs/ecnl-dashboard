@@ -101,7 +101,7 @@ function page({ saved = null, favs = null, hash = '', search = '', state = null,
     getEventHierarchy: async () => { throw new Error('no hierarchy request on these routes'); },
     buildAgeGroupTabs() {}, buildConferenceList() {}, buildFavoritesList() {}, updateMyTeamsCount() {},
     loadTheme() {}, loadSidebarState() {}, purgeLegacyCache() {}, loadSources: async () => {}, loadRefreshState: async () => {}, setObserved() {},
-    usClose() {}, sxClose() {}, closeSidebarIfMobile: () => { T.drawerClosed++; }, toggleSidebar() {}, focusTeamSearch: () => { T.searchFocus++; },
+    sxClose() {}, closeSidebarIfMobile: () => { T.drawerClosed++; }, toggleSidebar() {}, focusTeamSearch: () => { T.searchFocus++; },
     closeTeamSheet: () => { T.sheetClosed++; }, focusContentTitle: () => el('contentTitle').focus(),
     selectAgeGroup: a => T.picks.push('age:' + a), selectConference: c => T.picks.push('conf:' + c), retryText: () => 'try again',
     isPhone: () => false,
@@ -113,7 +113,7 @@ function page({ saved = null, favs = null, hash = '', search = '', state = null,
         team: selectedTeamID, sched: scheduleFilter, more: showMoreStats, fav: currentFavorite, preview: previewTeam && previewTeam.name,
         teamView, stage: currentPlayoffStage, pAge: currentPlayoffAgeGroup, tier: currentPlayoffTier,
         showcase: currentShowcase, sAge: currentShowcaseAge, flight: currentShowcaseFlight }),
-      flags: () => ({ landingOpen, teamsIndex }), ages: () => AGE_GROUPS.slice(), usGoTo: h => { location.hash = h; } };`)(...Object.values(stubs));
+      flags: () => ({ landingOpen, teamsIndex }), ages: () => AGE_GROUPS.slice() };`)(...Object.values(stubs));
   const p = {
     ...api, T, store, el, history, location,
     init: async () => { await api.initPage(); await flush(); },

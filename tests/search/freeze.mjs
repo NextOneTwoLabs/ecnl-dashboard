@@ -1,8 +1,8 @@
-// #156: re-freezes the judged set's fixtures, re-vendors today's search, and records the baseline.
+// #156: re-freezes the judged set's fixtures and records the baselines. (--vendor went with #172: today's search is
+// frozen in engines/today.js, no longer re-vendored from index.html.)
 // Reads committed files only: never runs git, never uses the network. Run it under the netguard:
 //
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --freeze --commit <sha>
-//   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --vendor
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules   (#163)
 //   node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --search <dir>
@@ -20,7 +20,7 @@
 import { readdirSync, writeFileSync, mkdirSync, rmSync, readFileSync } from 'node:fs';
 import {
   ROOT, HERE, FIXTURES, FIXTURE_FILES, lf, sha, readLF, readJSON, stable, refsOf, refKind, fieldName, fieldNumber, fieldKey,
-  trimGame, SCHEDULES, IMAGE, slicesOf, vendoredText, vendoredSlices, engineSha, loadFixtures, todayAdapter, baselineOf,
+  trimGame, SCHEDULES, IMAGE, vendoredSlices, loadFixtures, todayAdapter, baselineOf,
   modulesAdapter, modulesBaselineOf,
 } from './judged.mjs';
 
@@ -33,15 +33,6 @@ const QUERIES = new URL('queries.json', HERE);
 const VENDORED = new URL('engines/today.js', HERE);
 const readManifest = () => { try { return readJSON(MANIFEST); } catch { return { schema: 1, retired: null }; } };
 const writeManifest = m => write(MANIFEST, stable(m));
-
-if (has('--vendor')) {
-  const s = slicesOf(readLF(new URL('public/index.html', ROOT)));
-  if (!s) throw new Error('index.html: the search markers are missing; set MANIFEST.retired instead of re-vendoring');
-  mkdirSync(new URL('engines/', HERE), { recursive: true });
-  write(VENDORED, vendoredText(s));
-  const m = readManifest(); m.engineSha = engineSha(s); writeManifest(m);
-  console.log(`vendored ${s.engine.split('\n').length + s.page.split('\n').length} lines, engineSha ${m.engineSha}`);
-}
 
 if (has('--freeze')) {
   const commit = arg('--commit');
@@ -160,7 +151,7 @@ if (has('--search')) {
   console.log(`froze ${names.length} search data files from ${prov.commit}`);
 }
 
-if (!['--vendor', '--freeze', '--record', '--search'].some(has)) {
-  console.error('usage: freeze.mjs [--vendor] [--freeze --commit <sha>] [--record today|modules] [--search <dir>]');
+if (!['--freeze', '--record', '--search'].some(has)) {
+  console.error('usage: freeze.mjs [--freeze --commit <sha>] [--record today|modules] [--search <dir>]');
   process.exit(2);
 }

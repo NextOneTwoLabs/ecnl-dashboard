@@ -1,6 +1,7 @@
-// Vendored from public/index.html by tests/search/freeze.mjs --vendor (#156, owner decision D9). Do not edit by hand.
-// The TEAM_SEARCH block, then the page's search code from `let usDb` up to `(function usWire`.
-// Any PR that changes these lines in public/index.html re-vendors (--vendor) and re-records (--record today) in the same PR.
+// Today's search, as public/index.html held it until PR 5 (#172) removed it. FROZEN: the page no longer holds this code, so it is
+// no longer compared with index.html (tests/search/fixtures/MANIFEST.json retired); tests/search-judged.test.mjs checks it
+// against MANIFEST.engineSha, and tests/search/baseline/today.json is what it records (freeze.mjs --record today).
+// The TEAM_SEARCH block, then the page's search code from `let usDb` up to the removed `#165 ... dormant` comment. Do not edit.
 //@@ENGINE
     const TEAM_SEARCH = (() => {
       // #114 team search engine (PR B). Inlined into public/index.html between the TEAM SEARCH

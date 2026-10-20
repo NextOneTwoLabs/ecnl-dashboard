@@ -12,7 +12,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   HERE, ROOT, FIXTURES, FIXTURE_FILES, IMAGE, lf, sha, readLF, readJSON, stable, loadFixtures, indexOf, checkSchema, resolveProblems,
-  todayAdapter, todayRow, canaryRun, makeClock, driftStatus, slicesOf, vendoredText, vendoredSlices, engineSha, runAll, baselineOf,
+  todayAdapter, todayRow, canaryRun, makeClock, driftStatus, LEGACY_MARKERS, legacyMarkers, vendoredSlices, engineSha, runAll, baselineOf,
   evaluate, summarise, destinationProblem, seasonFacts, liveGame, GROUPS,
   modulesAdapter, modulesRow, modulesBaselineOf, modulesSha,
 } from './search/judged.mjs';
@@ -86,28 +86,42 @@ test('every ref resolves in the fixtures; county judgements are consistent (D2)'
   assert.match(p, /"game":1}: game not in games-judged/);
 });
 
-// ---------- the vendored copy of today's search (D9, MF7) ----------
-test('MF7: the vendored search equals index.html\'s slices (LF), and its checksum is in MANIFEST', () => {
+// ---------- the frozen copy of today's search (D9, MF7; retired by #172) ----------
+test('MF7: the legacy search is retired: index.html holds no marker, retired is { pr, reason }, the frozen copy matches its checksum', () => {
   const html = readFileSync(new URL('public/index.html', ROOT), 'utf8');
   const st = driftStatus(html, VENDORED, fx.manifest);
   assert.ok(st.ok, st.message);
-  assert.equal(st.retired, false);
+  assert.equal(st.retired, true);
+  assert.deepEqual(legacyMarkers(html), []);
   assert.equal(engineSha(vendoredSlices(VENDORED)), fx.manifest.engineSha);
-  assert.ok(driftStatus(html.replace(/\n/g, '\r\n'), VENDORED, fx.manifest).ok, 'line endings never count as drift');
+  assert.ok(driftStatus(html.replace(/\n/g, '\r\n'), VENDORED, fx.manifest).ok, 'line endings never count');
 });
 
-test('MF7: drift and retirement are never silent', () => {
+test('MF7: retirement is never silent: unset or malformed fails, and any single legacy marker coming back fails', () => {
   const html = lf(readFileSync(new URL('public/index.html', ROOT), 'utf8'));
   const m = clone(fx.manifest);
-  const edited = html.replace('const NOISE = new Set([', 'const NOISE = new Set([\'xyz\', ');
-  assert.match(driftStatus(edited, VENDORED, m).message, /differs from tests\/search\/engines\/today\.js/);
-  const renamed = html.replace('    let usDb = null, usItems = []', '    let usDatabase = null, usItems = []');
-  assert.match(driftStatus(renamed, VENDORED, m).message, /no longer holds the legacy search markers/, 'a renamed marker fails, never skips');
-  assert.equal(driftStatus(renamed, VENDORED, { ...m, retired: { pr: '#999', reason: 'PR 5 removed the legacy search' } }).ok, true, 'explicit retirement');
-  assert.match(driftStatus(html, VENDORED, { ...m, retired: { pr: '#999', reason: 'x' } }).message, /still holds the legacy search/);
-  assert.match(driftStatus(renamed, VENDORED, { ...m, retired: true }).message, /must be \{ pr, reason \}/);
-  const s = slicesOf(html);
-  assert.equal(vendoredText(s), VENDORED, 'the vendored file is exactly what --vendor writes');
+  assert.match(driftStatus(html, VENDORED, { ...m, retired: null }).message, /MANIFEST\.retired is not set/, 'unset');
+  assert.match(driftStatus(html, VENDORED, { ...m, retired: undefined }).message, /not set/, 'missing');
+  for (const bad of [true, 'x', [], {}, { pr: '#9' }, { reason: 'x' }, { pr: '', reason: 'x' }, { pr: '#9', reason: '' }, { pr: 9, reason: 'x' }]) {
+    assert.match(driftStatus(html, VENDORED, { ...m, retired: bad }).message, /must be \{ pr, reason \}/, JSON.stringify(bad));
+  }
+  // one case per marker, each added alone to the real page text
+  const added = {
+    'const TEAM_SEARCH': '\n    const TEAM_SEARCH = (() => {\n    })();\n',
+    'let usDb': '\n    let usDb = null;\n',
+    'the "#165: the legacy search above is dormant" comment': '\n    // #165: the legacy search above is dormant until PR 5 removes it\n',
+    'a function us* declaration': '\n    function usRun(q) {}\n',
+  };
+  assert.deepEqual(Object.keys(added), LEGACY_MARKERS.map(x => x.name), 'one mutation per marker');
+  for (const [name, text] of Object.entries(added)) {
+    const st = driftStatus(html + text, VENDORED, m);
+    assert.equal(st.ok, false, name);
+    assert.ok(st.message.includes(name) && /still holds the legacy search/.test(st.message), `${name}: ${st.message}`);
+    assert.deepEqual(legacyMarkers(html + text), [name], `${name} alone`);
+    assert.equal(driftStatus((html + text).replace(/\n/g, '\r\n'), VENDORED, m).ok, false, `${name}, CRLF`);
+  }
+  // an edited frozen copy fails
+  assert.match(driftStatus(html, VENDORED.replace('const norm =', 'const norm0 ='), m).message, /frozen copy was edited/);
 });
 
 // ---------- the clock (MF6) ----------
