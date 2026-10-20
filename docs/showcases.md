@@ -76,7 +76,7 @@ event. `tests/test_showcases.py` re-checks every declared alias against the arch
 
 | # | Who | Step | TGS requests |
 |---|---|---|---|
-| 0 | TPM (from an owner-approved list, or the owner names one) | File one issue per event, or one per season batch: "Onboard showcase <name> (TGS <id>)" | 0 |
+| 0 | Xuande, the TPM (from an owner-approved list, or the owner names one) | File one issue per event, or one per season batch: "Onboard showcase <name> (TGS <id>)" | 0 |
 | 1 | SWE | **Identify:** event details and hierarchy give the TGS name, dates, place, divisions, flights, team counts and girls-only status. The season is the one whose August-to-July span holds the dates, cross-checked against the division naming | 2 |
 | 2 | SWE | **Registry edit:** one hand-written hunk under `seasons.<S>.showcases` (display name, `eventId`, exact `eventName`, `location` "City, ST", ISO `startDate`/`endDate`, optional `tierNotes`/`dataGaps`). Never re-serialize `sources.json` | 0 |
 | 3 | SWE | `python archive.py --verify --season <S> --showcases --event <id> --max-requests 2` → one OK line, for this showcase only; save its printed request line to the issue. Without `--event`, verify and the crawl act on every showcase of the season | 1 |
@@ -84,9 +84,9 @@ event. `tests/test_showcases.py` re-checks every declared alias against the arch
 | 5 | SWE, offline under the netguard | The team index's `teams` rows unchanged and its `showcases` rows added; manifest +1 entry (and its `updated` stamp); blast radius = the event's archive paths, its export folder, `teams/<S>.json` and the manifest; `reconstruct.py --check`; the Python and Node suites; `--refresh --dry-run --date <a day inside and outside the event>` | 0 |
 | 6 | SWE, offline | **Data audit:** placeholder dates, null sides, unscored past games, `gamenumber`, TGS `rank`, standings block count, teams with no conference row. **Name check:** the display name is unique among the season's conferences, national events and showcases (`tests/test_showcases.py`). **Alias review:** list showcase teams whose exact name matches a conference team with another id in the same age group; declare each confirmed one in `teamAliases` with a `teamAliasesNote` naming the evidence. Anything odd goes into `tierNotes` or `dataGaps`, with a source | 0 |
 | 7 | SWE, offline browser | Every age group (Results and Games), "no team page" only on rows with none, one attendee team page, 390 px, dark mode; no console errors | 0 |
-| 8 | SWE → Reviewer | Pull request; the Reviewer re-fetches a sample for provenance (at most 1 + 2 × flights, retries counted) | ≤ 1 + 2 × flights |
+| 8 | SWE → Kongming | Pull request; Kongming re-fetches a sample for provenance (at most 1 + 2 × flights, retries counted) | ≤ 1 + 2 × flights |
 | 9 | **Owner** | Approves the display name and any note; merges | 0 |
-| 10 | Auditor | Checks the Cloudflare preview before merge and production after the deploy | 0 TGS |
+| 10 | Kongming | The production check: the Cloudflare preview before merge and production after the deploy | 0 TGS |
 | 11 | Nobody | A live showcase refreshes itself on its dates and is frozen afterwards; a past one is never re-fetched | automatic |
 
 Discovery of other showcases (which events exist, with their TGS ids) is deferred by the

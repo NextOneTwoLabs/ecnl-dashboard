@@ -217,7 +217,7 @@ test('version: a search.mjs with another SEARCH_API shows the reload note, and n
   await ctx.close();
 });
 
-// #168 (PR 4b): the Games section, as the Auditor will run it on production (0 TGS, requests counted)
+// #168 (PR 4b): the Games section, as the production check will run it on production (0 TGS, requests counted)
 test('games, desktop: a field opens its next game; FC Dallas, Naperville and St lead with Teams; one squad a side loads earlier meetings only on the press (exactly 3); a typed season and a field\'s Load make exactly 1', async () => {
   const { ctx, log } = await context({ viewport: { width: 1280, height: 800 } });
   const page = await ctx.newPage();
