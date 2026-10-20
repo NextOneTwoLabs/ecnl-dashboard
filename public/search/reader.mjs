@@ -16,7 +16,7 @@ const PRIO = { season: 0, age: 0, born: 0, conf: 1, state: 2, place: 2, county: 
 
 // One side of the query (a `vs` query has two) as tokens: filters, then word segments.
 function tokens(raw, vocab, byFirst = vocab.byFirst) {
-  const out = { seasons: [], unknownSeason: null, u: null, born: [], band: false, years: [], dates: [], fieldNumber: null, segs: [], lastWord: -1 };
+  const out = { seasons: [], unknownSeason: null, u: null, u2: null, born: [], band: false, years: [], dates: [], fieldNumber: null, segs: [], lastWord: -1 };
   const ws = [];
   const list = raw.split(/[\s,;]+/).filter(Boolean);
   for (let i = 0; i < list.length; i++) {
@@ -28,7 +28,8 @@ function tokens(raw, vocab, byFirst = vocab.byFirst) {
       continue;
     }
     if ((m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(t)) || (m = /^(\d{1,2})\/(\d{1,2})$/.exec(t))) { out.dates.push(t); continue; }
-    if ((m = /^g?u-?(\d{1,2})(?:\/u?\d{1,2})?s?$/.exec(t)) && +m[1] >= 8 && +m[1] <= 19) { out.u = +m[1]; continue; }
+    // #173: a slash pair keeps its second age (u2) when it is the next one up (GU17/U18); teams.mjs and games.mjs use it only for a reading that names a team
+    if ((m = /^g?u-?(\d{1,2})(?:\/u?(\d{1,2}))?s?$/.exec(t)) && +m[1] >= 8 && +m[1] <= 19) { out.u = +m[1]; out.u2 = m[2] && +m[2] === out.u + 1 ? +m[2] : null; continue; }
     if ((m = /^([gb])?((?:19|20)\d{2})(?:\/((?:19|20)?\d{2}))?([gb])?$/.exec(t))) {
       const y = +m[2];
       if (m[3]) { out.born.push(y, m[3].length === 2 ? Math.floor(y / 100) * 100 + +m[3] : +m[3]); out.band = true; }
@@ -105,7 +106,7 @@ function readingsOf(tk, vocab) {
   const out = [];
   for (const combo of combos) {
     const r = {
-      seasons: tk.seasons.length ? [...tk.seasons] : null, unknownSeason: tk.unknownSeason, u: tk.u, born: [...tk.born], band: tk.band,
+      seasons: tk.seasons.length ? [...tk.seasons] : null, unknownSeason: tk.unknownSeason, u: tk.u, u2: tk.u2, born: [...tk.born], band: tk.band,
       conf: null, places: null, kinds: [], field: null, dates: tk.dates, fieldNumber: tk.fieldNumber, names: [], filterWords: 0, longest: 0, prio: 9,
       roles: [], key: '', confConflict: false, codes: [],
     };

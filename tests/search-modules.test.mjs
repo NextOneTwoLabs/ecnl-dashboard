@@ -20,7 +20,7 @@ const MODULES = new URL('public/search/', ROOT);
 const files = readdirSync(MODULES).sort();
 const SEARCH_URL = new URL('search.mjs', MODULES);
 const S = await import(SEARCH_URL);
-const { osa, expand, TermList, Postings, CLASS } = await import(new URL('match.mjs', MODULES));
+const { osa, expand, TermList, Postings, CLASS, ageOk, agePairOf } = await import(new URL('match.mjs', MODULES));
 const { readQuery, READING_CAP } = await import(new URL('reader.mjs', MODULES));
 const { ALIASES } = await import(new URL('vocab.mjs', MODULES));
 
@@ -676,18 +676,17 @@ const typedTitle = (name, club) => {
     .replace(/\bECNL\b(?!\s*-?R)/gi, '').replace(/\s*[-\u2013]\s*$/, '').replace(/\(\s*\)/g, '').replace(/\s+/g, ' ').trim();
   return t || club || name;
 };
-// #173: TGS named this squad "Eagles SC ECNL GU17/U18" but filed it in the GU18/U19 division (club 7, born 2004). reader.mjs reads a
-// slash pair as its first age, so "<its TGS name> 2021-22" applies a hard U17 filter and misses it. The reader's rule is right for
-// the other ~300 slash-age names. Remove this pin when #173 is fixed: the test then fails because the squad starts passing.
-const KNOWN_MISS = { '2020-21/2195': 'Eagles SC ECNL GU17/U18 2021-22' };
-test('#172: every squad is found in the first 3 Teams rows by "<TGS name> <season>" (one named exception, #173)', () => {
+// #173: TGS named squad 2195 "Eagles SC ECNL GU17/U18" but filed it in the GU18/U19 division (u 18). The reader used to read the pair as
+// its first age only, so "<its TGS name> 2021-22" asked for U17 and missed it (#172 pinned that as one named exception). A pair's second
+// age now counts for a reading that names a team, when the row's own name spells that pair (match.mjs ageOk).
+test('#172, #173: every squad is found in the first 3 Teams rows by "<TGS name> <season>", with no exception', () => {
   const core = fresh().core, misses = {};
   for (const q of core.teams.squads) {
     const k = squadKeys(core, q), query = `${k.name} ${k.season}`;
     const i = rows(run(query), 'teams').findIndex(r => r.key === k.first || r.key === k.last);
     if (i < 0 || i > 2) misses[k.first] = query;
   }
-  assert.deepEqual(misses, KNOWN_MISS, 'exactly the pinned squad misses; if it starts passing, remove the pin (#173)');
+  assert.deepEqual(misses, {});
 });
 test('#172: every squad is found in the first 3 Teams rows by "<team title> <birth year> <season>", with no exception', () => {
   const core = fresh().core, misses = [];
@@ -698,11 +697,59 @@ test('#172: every squad is found in the first 3 Teams rows by "<team title> <bir
   }
   assert.deepEqual(misses, []);
 });
-test('#172, #173: the pinned squad is still found first by its age or birth year, and by the title query', () => {
+test('#172, #173: squad 2195 is found first by its TGS name and season, and still by its age, its birth year and its title', () => {
   const keys = new Set(['2020-21/2195', '2021-22/2195']);
+  assert.ok(keys.has(rows(run('Eagles SC ECNL GU17/U18 2021-22'), 'teams')[0].key), 'its own name and season, first (tie-break)');
   for (const q of ['Eagles SC U18 2021-22', 'Eagles SC 2004 2021-22']) assert.ok(keys.has(rows(run(q), 'teams')[0].key), q);
   const core = fresh().core, sq = core.teams.squads.find(x => squadKeys(core, x).first === '2020-21/2195'), k = squadKeys(core, sq);
   assert.ok(rows(run(`${typedTitle(k.name, k.club)} ${k.born} ${k.season}`), 'teams').slice(0, 3).some(r => keys.has(r.key)));
+});
+test('#173: the reader keeps a slash pair\'s second age only when it is the next one up', () => {
+  for (const q of ['GU17/U18', 'GU17/18', 'u17/18', 'U17/U18', 'gu17/u18']) {
+    const r = R(`Eagles ${q}`).sides[0].teams[0];
+    assert.equal(r.u, 17, q); assert.equal(r.u2, 18, q);
+  }
+  for (const q of ['U17/U19', 'U18', 'GU18', 'U17-U18', 'GU17/GU18']) assert.equal(R(`Eagles ${q}`).sides[0].teams[0].u2, null, q);
+  assert.equal(R('Eagles GU18/U19').sides[0].teams[0].u2, 19);
+});
+test('#173: ageOk: the second age counts only for a reading that names a team, and only when the row\'s own name parses to the typed pair', () => {
+  const r = { u: 17, u2: 18, names: ['eagles'] };
+  const at = (name, u = 18) => ageOk({ u, name }, r);
+  for (const n of ['X GU17/18', 'X GU17/U18', 'X u17/u18', 'X U17/U18 Composite']) assert.equal(at(n), true, n);
+  for (const n of ['X GU16/U17', 'X GU18/U19', 'X GU17', 'X G05/04', 'X GU17-U18', 'X GU17/GU18', '']) assert.equal(at(n), false, n);
+  assert.equal(at('X GU16/U17', 17), true, 'the filed age is the typed one: always passes');
+  assert.equal(ageOk({ u: 18, name: 'X GU17/U18' }, { u: 17, u2: 18, names: [] }), false, 'no team named (a conference table): the filed age alone');
+  assert.equal(ageOk({ u: 18, name: 'X GU17/U18' }, { u: 17, u2: null, names: ['eagles'] }), false, 'no pair typed');
+  assert.deepEqual(['GU18/19', 'U18/U19', 'GU18/U19 Composite', 'GU17-U18', 'GU17'].map(agePairOf), [[18, 19], [18, 19], [18, 19], null, null]);
+});
+test('#173: a conference-and-age table, a bare pair and an age-less pair query keep today\'s exact rows; Games follows Teams (fixture counts)', () => {
+  const table = ['2021-22/46287', '2020-21/45878', '2020-21/10076', '2021-22/56707', '2020-21/15648', '2020-21/20460', '2020-21/11814', '2020-21/2399', '2021-22/17410',
+    '2020-21/20446', '2020-21/16163', '2020-21/17223', '2020-21/34922', '2020-21/17811', '2020-21/19165', '2020-21/45890', '2020-21/5941'];
+  for (const q of ['GU17/U18 Southwest 2021-22', 'GU17/18 Southwest 2021-22', 'u17/18 Southwest 2021-22']) assert.deepEqual(rows(run(q), 'teams').map(r => r.key), table, q);
+  assert.equal(rows(run('U17/U18 Southwest 2021'), 'teams').length, 31);
+  assert.equal(rows(run('GU17/U18 2021-22'), 'teams').length, 0, 'no team named: the pair alone adds nothing');
+  assert.deepEqual(rows(run('Eagles SC ECNL GU17/U18'), 'teams').map(r => r.key), ['2026-27/5544'], 'no season: the selected season, as before (not "either age")');
+  assert.deepEqual(rows(run('Eagles SC U19 2021-22'), 'teams').map(r => r.key), []);
+  const ix = withGames(S.buildIndex(fresh()), ['2021-22']), sl = run('Eagles SC ECNL GU17/U18 2021-22', ix);
+  assert.deepEqual(rows(sl, 'teams').map(r => r.key), ['2020-21/2195', '2020-21/5941']);
+  assert.equal(rows(sl, 'games').length, 47, '2195\'s games join Games (24 before #173)');
+});
+// A data tripwire, not a test of the change (it passes without it): the rule rests on this census. A second row filed at its second
+// age (a new TGS mislabel, or a refresh) fails it, to be looked at; live data gets the rule, never these counts.
+test('#173: data tripwire: the fixture has 300 age-pair names in 300 squads (216 distinct), and exactly one row filed at its second age', () => {
+  const T = fresh().core.teams, names = new Set(), second = [];
+  let n = 0, squads = 0;
+  for (const q of T.squads) {
+    let any = false;
+    for (const r of q.s) {
+      const p = agePairOf(r[2]);
+      if (!p) continue;
+      any = true; n++; names.add(r[2]);
+      if (T.divs[r[4]][2] === p[1]) second.push(`${T.seasons[r[0]]}/${r[1]}`);
+    }
+    if (any) squads++;
+  }
+  assert.deepEqual({ rows: n, squads, names: names.size, second }, { rows: 300, squads: 300, names: 216, second: ['2021-22/2195'] });
 });
 test('CI: the Node test lists in api-tests.yml and the README equal tests/*.test.mjs', () => {
   const all = readdirSync(new URL('tests/', ROOT)).filter(n => n.endsWith('.test.mjs')).map(n => `tests/${n}`).sort();

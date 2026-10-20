@@ -14,6 +14,21 @@
 
 export const CLASS = { exact: 1.0, prefix: 0.7, typo: 0.4 };
 export const CLASS_RANK = { exact: 0, prefix: 1, typo: 2 };
+// #173: the age pair a squad's own name spells ("GU17/U18", "GU18/19", "U18/U19"), read with the reader's slash-pair rule; -> [a, b] or null.
+// "GU17-U18" and "GU17/GU18" are not pairs, for the reader or here (neither spelling is in the data).
+const AGE_PAIR = /\bg?u-?(\d{1,2})\/u?(\d{1,2})\b/i;
+export const agePairOf = name => { const m = AGE_PAIR.exec(name || ''); return m ? [+m[1], +m[2]] : null; };
+// Does a season row pass a reading's age? Its filed age is the typed one; or, for a reading that names a team, the typed pair's second
+// age when the row's own name spells that pair (TGS named it "GU17/U18" and filed it in GU18/U19). A reading with no team name
+// (a conference table) keeps the filed age alone, so a squad from another division never joins its table.
+// The no-such-age-group gate (teams.mjs, games.mjs) still reads only r.u: a season with a U18 but no U17 division would reject
+// "GU17/U18" before this runs. That cannot happen on today's data.
+export function ageOk(row, r) {
+  if (!r.u || row.u === r.u) return true;
+  if (r.u2 == null || row.u !== r.u2 || !r.names.length) return false;
+  const p = agePairOf(row.name);
+  return !!p && p[0] === r.u && p[1] === r.u2;
+}
 export const K1 = 1.2;
 // b = 0: names are 2 to 6 words, and a lighter b still let an old squad's shorter name outrank
 // the current squad of the same club before "plays this season" could break the tie (#163, tuned
