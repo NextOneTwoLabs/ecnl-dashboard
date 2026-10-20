@@ -32,6 +32,22 @@ const CCTX = { now: Date.parse('2026-10-17T19:00:00Z'), timeZone: 'America/Los_A
 // a row in full: its own fields and every getter of its class
 const dump = row => { const out = { ...row }; for (let p = Object.getPrototypeOf(row); p && p !== Object.prototype; p = Object.getPrototypeOf(p)) for (const [k, d] of Object.entries(Object.getOwnPropertyDescriptors(p))) if (d.get && !(k in out)) out[k] = row[k]; return out; };
 const slateText = s => JSON.stringify({ rule: s.rule, empty: s.empty, coverage: s.coverage, best: s.best && dump(s.best), enter: s.enter && dump(s.enter), sections: s.sections.map(x => ({ ...x, rows: x.rows.map(dump) })) });
+// The field-name rule, derived from the data alone and independently of the modules (3c3ba1b3's MF5 rule):
+// every field name of 2+ words, except one held by a club, team, family or alias (a name's words are a whole
+// run inside the other name's words). Returns the phrases that read as a field and the names dropped.
+const fieldRule = ({ core, places }) => {
+  const t = core.teams, w = s => normWords(s);
+  const names = new Set([...t.clubs.map(c => c[1]), ...(t.families || []).map(f => f[0]), ...Object.keys(ALIASES), ...Object.keys(core.vocab.confAliases || {})]);
+  for (const sq of t.squads) for (const r of sq.s) names.add(r[2]);
+  const joined = [...names].map(n => ` ${w(n).join(' ')} `);
+  const alias = new Set(Object.values(places.vocab.fieldAliases));
+  const want = [...new Set(Object.keys(places.fields).map(k => k.slice(0, k.lastIndexOf('@'))).filter(n => !alias.has(n)).map(n => w(n).join(' ')))].filter(k => k.includes(' '));
+  const dropped = want.filter(k => joined.some(s => s.includes(` ${k} `))).sort();
+  return { kept: want.filter(k => !dropped.includes(k)).sort(), dropped };
+};
+const FIXTURE_COUNT = 900;   // the frozen fixture: tests/search/fixtures/search/
+const FIXTURE_RULE = fieldRule(loadSearchData()), LIVE_RULE = fieldRule(CDATA);
+const phraseNames = ix => ix.vocab.phrases.filter(p => p.fieldName).map(p => p.words.join(' ')).sort();
 
 // ---------- the staged games build ----------
 test('startGames: staged at n = 1, 50 and 150 equals the build at once, on all 7 fixture files; rows in full', () => {
@@ -62,11 +78,16 @@ test('startGames: an unknown games schema throws SearchDataError from the first 
 });
 
 // ---------- field phrases (Q4, MF5) ----------
-test('Q4, MF5: every field name of 2 words or more reads as a field, except a name held by a club, team, family or alias; 901 on the committed data', () => {
+test('Q4, MF5: every field name of 2 words or more reads as a field, except a name held by a club, team, family or alias; exact on the frozen fixture, the rule itself on the committed data', () => {
   const v = CIX.vocab;
-  assert.equal(v.phrases.filter(p => p.fieldName).length, 901);
-  assert.deepEqual(v.fieldPhrasesDropped, ['fc dallas', 'oklahoma celtic', 'pda south'], 'the report: FC Dallas is in "FC Dallas Youth" and its teams\' names');
-  assert.deepEqual(IX.vocab.fieldPhrasesDropped, ['fc dallas', 'oklahoma celtic', 'pda south']);
+  // the frozen fixture does not move: its counts are pinned. The committed data changes with every refresh: only the rule is asserted
+  assert.equal(IX.vocab.phrases.filter(p => p.fieldName).length, FIXTURE_COUNT);
+  assert.deepEqual(IX.vocab.fieldPhrasesDropped, ['fc dallas', 'oklahoma celtic', 'pda south'], 'the report: FC Dallas is in "FC Dallas Youth" and its teams\' names');
+  assert.deepEqual(phraseNames(IX), FIXTURE_RULE.kept);
+  assert.ok(LIVE_RULE.kept.length > 800 && LIVE_RULE.dropped.length > 0, 'the rule keeps most names and drops some');
+  assert.deepEqual(phraseNames(CIX), LIVE_RULE.kept, 'committed data: exactly the names the rule keeps');
+  assert.deepEqual([...v.fieldPhrasesDropped].sort(), LIVE_RULE.dropped, 'committed data: exactly the names the rule drops');
+  for (const d of ['fc dallas', 'pda south']) assert.ok(LIVE_RULE.dropped.includes(d), `${d}: a club's name never reads as a field`);
   for (const p of v.phrases.filter(x => x.fieldName)) assert.ok(p.words.length >= 2, p.value);
   const field = (q, ix = CIX) => readQuery(ix.vocab, q).sides[0].field;
   assert.equal(field('Canyon Crest Academy'), true);
@@ -77,20 +98,12 @@ test('Q4, MF5: every field name of 2 words or more reads as a field, except a na
 });
 test('#167 (review of #170, MF1): the field names\' phrases are built with the index, each name checked as the team documents read it', () => {
   const ix = S.buildIndex(committed());
-  assert.equal(ix.vocab.phrases.filter(p => p.fieldName).length, 901);
-  assert.deepEqual(ix.vocab.fieldPhrasesDropped, ['fc dallas', 'oklahoma celtic', 'pda south']);
+  assert.equal(S.buildIndex(loadSearchData()).vocab.phrases.filter(p => p.fieldName).length, FIXTURE_COUNT, 'the frozen fixture: pinned');
   assert.equal(ix.vocab.fieldSource, null, 'the sources are let go');
   assert.equal([...ix.vocab.byFirstBase.values()].flat().filter(p => p.fieldName).length, 0, 'Teams and Events read without them (MF2)');
   // the same phrases, in the same order, as the scan over every name done on its own (3c3ba1b3's MF5 rule)
-  const C = committed(), t = C.core.teams, w = s => normWords(s);
-  const names = new Set([...t.clubs.map(c => c[1]), ...(t.families || []).map(f => f[0]), ...Object.keys(ALIASES), ...Object.keys(C.core.vocab.confAliases || {})]);
-  for (const sq of t.squads) for (const r of sq.s) names.add(r[2]);
-  const joined = [...names].map(n => ` ${w(n).join(' ')} `);
-  const alias = new Set(Object.values(C.places.vocab.fieldAliases));
-  const want = [...new Set(Object.keys(C.places.fields).map(k => k.slice(0, k.lastIndexOf('@'))).filter(n => !alias.has(n)).map(n => w(n).join(' ')))].filter(k => k.includes(' '));
-  const dropped = want.filter(k => joined.some(s => s.includes(` ${k} `)));
-  assert.deepEqual(dropped.sort(), ix.vocab.fieldPhrasesDropped);
-  assert.deepEqual(ix.vocab.phrases.filter(p => p.fieldName).map(p => p.words.join(' ')).sort(), want.filter(k => !dropped.includes(k)).sort());
+  assert.deepEqual([...ix.vocab.fieldPhrasesDropped].sort(), LIVE_RULE.dropped);
+  assert.deepEqual(phraseNames(ix), LIVE_RULE.kept);
 });
 
 test('MF5: a field name\'s words never join the known words (they would switch off a team\'s typo match: "mary")', () => {
@@ -434,7 +447,7 @@ test('MF2: Teams and Events read every field name (alone, with 2011, with U15) a
   const bare = S.buildIndex(committed()); load(bare, bare.vocab.active, COMMITTED);
   bare.vocab.byFirst = bare.vocab.byFirstBase;
   const names = CIX.vocab.phrases.filter(p => p.fieldName).map(p => p.value);
-  assert.equal(names.length, 901);
+  assert.equal(names.length, LIVE_RULE.kept.length, 'one phrase for each name the rule keeps');
   let n = 0, field = 0;
   // Teams and Events, rows in full (every getter), and the best match unless it is a game. Partial guesses are left
   // out of the bare search: they come only when nothing matches every word, and a field name that matches is a
@@ -450,7 +463,7 @@ test('MF2: Teams and Events read every field name (alone, with 2011, with U15) a
     n++;
   }
   assert.ok(partialOnly > 0 && partialOnly < n, `${partialOnly} partial-only without the field names`);
-  assert.equal(n, 2703);
+  assert.equal(n, 3 * LIVE_RULE.kept.length);
   assert.ok(field > 2000, `${field} with the field in Games (Q4)`);
 });
 
