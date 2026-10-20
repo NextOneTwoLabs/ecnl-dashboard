@@ -3,7 +3,7 @@
 // No word is ever matched against game text: a game is found through the team documents the Teams
 // section uses (its two team ids), a field (places.json's name@zip, D6/D6a), a flight (a conference,
 // a national event, a showcase) or a day. Pure: "today" comes in through the context.
-import { gameHref, teamSeasonHref } from './links.mjs';
+import { gameHref, teamHref, teamSeasonHref } from './links.mjs';
 import { searchTeams } from './teams.mjs';
 import { CLASS_RANK } from './match.mjs';
 
@@ -17,8 +17,9 @@ export const dateOf = day => { const t = new Date(day * 86400000); return `${t.g
 // The games index of one season, in steps of at most n games per stage. It throws on a schema it does
 // not know from the first next(). From the index: `vocab` (places.json's fields, places and counties: a
 // field's label and city), `teamAt` ("season/teamID" -> the directory's name: a side's season tab) and
-// `events` (eventID -> the event's document: its conference or stage name).
-export function* gamesIndexG(doc, { vocab, teamAt, events }, n = 150) {
+// `events` (eventID -> the event's document: its conference or stage name) and `squadAt` (#178: "season/teamID"
+// -> the squad document, for a game's head-to-head link; null: no link).
+export function* gamesIndexG(doc, { vocab, teamAt, events, squadAt = null }, n = 150) {
   if (!doc || doc.schema !== GAMES_SCHEMA) throw new Error(`games: unknown schema ${doc && doc.schema}`);
   const N = doc.games.length, base = dayOf(doc.base);
   const id = new Int32Array(N), day = new Int32Array(N), hm = new Int16Array(N), fl = new Int32Array(N), h = new Int32Array(N), a = new Int32Array(N);
@@ -63,7 +64,7 @@ export function* gamesIndexG(doc, { vocab, teamAt, events }, n = 150) {
     return m;
   };
   return { season: doc.season, build: doc.build, N, id, day, hm, fl, h, a, hs, as, hp, ap, fx, num, flags, dest, dside, tbd, fieldKeys, byTeam, byField, byFlight, byOrd, ord, flights,
-    teams: doc.teams, alt: doc.alt, teamAt, fieldInfo, mark: new Uint8Array(N), mr: new Int8Array(N), ms: new Uint8Array(N) };
+    teams: doc.teams, alt: doc.alt, teamAt, squadAt, fieldInfo, mark: new Uint8Array(N), mr: new Int8Array(N), ms: new Uint8Array(N) };
 }
 
 // A field's label (its original spelling, places.json) and "City, ST" (its census place, else its county).
@@ -120,6 +121,9 @@ export class GameRow {
   get dest() { const G = this.#G, i = this.#i; return G.dside[i] >= 0 ? [G.dest[i], G.dside[i]] : [G.dest[i]]; }
   get href() { return gameHref(this); }
   get hrefs() { const h = this.href; return h ? [h] : []; }
+  // #178: the game's head to head: side A is the side the query matched (else home), both by this game's season and
+  // ids; null when a side is still to be decided, has no squad in the directory (no team page) or is the other side
+  get h2hHref() { return gameH2HHref(this.#G, this.#i, this.matched === 'away' ? 'a' : 'h', this.#G.squadAt, this.#G.teamAt, true); }
 }
 
 // ---------- the search ----------
@@ -388,6 +392,18 @@ function vsGames(index, reader, ctx, opts, cov, stateOf, tday) {
   const asRows = list => orderGames(list.map(m => ({ ...m, o: { cls: m.cls, reading: 0, filterWords: r0.filterWords, aHome: m.aHome } })), tday).map(({ G, i, o }) => new GameRow(G, i, o));
   if (both) {
     const rows = asRows(uniq);
+    // #178: one squad a side leads with the head-to-head summary. A side's squad: its one strong match (D11's weak
+    // match, the active season's two-year division of the other birth year, gives way), else its one match; a side
+    // with two strong squads (a club's Navy and Green teams) gets no lead row (Q9)
+    const pick = s => {
+      const by = new Map();
+      for (const r of readsOf(s)) if (r.names.length) for (const t of teamsOf(index, r, ctx, opts)) { const o = by.get(t.key); if (!o || (o.weak && !t.weak)) by.set(t.key, t); }
+      const all = [...by.values()], strong = all.filter(t => !t.weak);
+      return strong.length === 1 ? strong[0] : !strong.length && all.length === 1 ? all[0] : null;
+    };
+    const pa = pick(A), pb = pick(B), sq = squadAt(index);
+    const da = pa && sq.get(pa.key), db = pb && sq.get(pb.key);
+    if (da && db && da !== db) rows.unshift(h2hRow(index, da, db, ctx, { cls: 'exact', reading: 0, filterWords: r0.filterWords }));
     // the Load row: never `enter`, never a result; it keeps the Games section (H04) when nothing is loaded yet
     const rest = onRequest.filter(s => cov.get(s) !== 'missing');
     if (rest.length) {
@@ -411,11 +427,160 @@ function vsGames(index, reader, ctx, opts, cov, stateOf, tday) {
   }
   const rows = [...by.values()].map(p => {
     let w = 0, d = 0, l = 0;
-    for (const m of p.games) { const G = m.G, i = m.i; if (G.hs[i] < 0 || G.as[i] < 0) continue; const [x, y] = m.aHome ? [G.hs[i], G.as[i]] : [G.as[i], G.hs[i]]; if (x > y) w++; else if (x < y) l++; else d++; }
+    for (const m of p.games) { const o = outcome(m); if (o === 1) w++; else if (o === -1) l++; else if (o === 0) d++; }
+    // #178: the squad pairs that met in this row; one opens its head to head, several each open theirs (their meetings')
+    const sq = squadAt(index), sp = new Map();
+    for (const m of p.games) {
+      const G = m.G, x = sq.get(`${G.season}/${m.aHome ? G.h[m.i] : G.a[m.i]}`), y = sq.get(`${G.season}/${m.aHome ? G.a[m.i] : G.h[m.i]}`);
+      if (x && y && x !== y && !sp.has(`${x.key}|${y.key}`)) sp.set(`${x.key}|${y.key}`, { a: x, b: y, m });
+    }
+    const one = sp.size === 1 ? [...sp.values()][0] : null;
     return { section: 'games', kind: 'pairing', key: `${p.season}|${p.div}`, sides, sideNames, season: p.season, div: p.div, u: divOf(vocab, p.season, p.div).u || 0,
+      squadPairs: sp.size, h2hHref: one ? gameH2HHref(one.m.G, one.m.i, one.m.aHome ? 'h' : 'a', sq, index.teamAt) : null,
+      pairNames: [...sp.values()].map(x => [x.a.latest.name, x.b.latest.name]),
       record: [w, d, l], meetings: asRows(p.games), cls: p.games.map(m => m.cls).sort((x, y) => CLASS_RANK[y] - CLASS_RANK[x])[0], reading: 0, filterWords: r0.filterWords, hrefs: [] };
   });
   // newest season first; then the oldest age group first
   rows.sort((a, b) => (a.season < b.season ? 1 : a.season > b.season ? -1 : 0) || b.u - a.u || (a.div < b.div ? -1 : 1));
   return { rows, reasons, coverage: coverage() };
+}
+
+// ---------- #178 (#149 phase 1, PR 6): head to head ----------
+// Computed on the fly from the per-season games indexes search already loads; nothing is pre-built per pair.
+// Pure: "today" comes in. A side is a squad (a team document: its conference rows `rows` and its alias ids at
+// national events and showcases `x`); its earlier teams across the 2026-27 regroup (`maybePrev`) are listed for the
+// visitor to add, never added or merged here.
+const enc = encodeURIComponent;
+
+// The head-to-head link: side A's team page with vs=<season>:<B>. The colon stays literal (URLSearchParams reads it).
+export const h2hHref = (a, b) => `${teamHref(a.season, a.teamID, a.name)}&vs=${enc(b.season)}:${enc(b.teamID)}`;
+export const VS_RE = /^(\d{4}-\d{2}):([1-9]\d{0,9})$/;
+// vs= -> { season, teamID } | null (malformed)
+export function parseVs(v) { const m = VS_RE.exec(v || ''); return m ? { season: m[1], teamID: +m[2] } : null; }
+
+// "season/teamID" -> the squad document, built once per index. TGS reuses ids across squads, but never two squads in
+// one season (a test pins it).
+export function squadAt(index) {
+  if (!index.squadAt) {
+    const m = new Map();
+    for (const d of index.teams.docs) { for (const r of d.rows) m.set(`${r.season}/${r.teamID}`, d); for (const x of d.x) m.set(`${x.season}/${x.teamID}`, d); }
+    index.squadAt = m;
+  }
+  return index.squadAt;
+}
+
+// One side: season plus team id -> its squad, and the earlier teams it may continue across the regroup (#107
+// maybePrev). None is chosen, none is merged: the page lists them and the visitor adds them.
+export function resolveSide(index, season, teamID) {
+  if (!index.vocab.seasons.includes(season)) return { error: 'unknown-season' };
+  const d = squadAt(index).get(`${season}/${teamID}`);
+  if (!d) return { error: 'no-squad' };
+  return { doc: d, key: d.key, name: d.latest.name, club: d.club.name, born: d.born, first: d.rows[0].season, last: d.latest.season, candidates: d.maybePrev };
+}
+
+// season -> Set(teamID) over a side's squads
+function idsOf(docs) {
+  const m = new Map();
+  const put = (s, t) => { let x = m.get(s); if (!x) m.set(s, (x = new Set())); x.add(t); };
+  for (const d of docs) { for (const r of d.rows) put(r.season, r.teamID); for (const x of d.x) put(x.season, x.teamID); }
+  return m;
+}
+// The seasons both sides played (their squads plus any earlier teams chosen): the only games files that can hold a
+// meeting, so the head to head is complete once they are loaded. -> { both, loaded, need }
+export function h2hSeasons(index, A, B) {
+  const ia = idsOf(A), ib = idsOf(B), have = index.games || new Map();
+  const both = index.vocab.seasons.filter(s => ia.has(s) && ib.has(s));
+  return { both, loaded: both.filter(s => have.has(s)), need: both.filter(s => !have.has(s)) };
+}
+
+// How a game went for side A: 1 won, -1 lost, 0 drawn, null unplayed. As on the team Overview (docs/data-api.md), a
+// shoot-out win counts as a win and a shoot-out loss as a loss; penalties are never goals. -> { r, pk } or null
+function outcomeOf(G, i, aHome) {
+  if (G.hs[i] < 0 || G.as[i] < 0) return null;
+  const [x, y] = aHome ? [G.hs[i], G.as[i]] : [G.as[i], G.hs[i]];
+  if (x !== y) return { r: x > y ? 1 : -1, pk: false, x, y };
+  if (G.hp[i] >= 0 && G.ap[i] >= 0 && G.hp[i] !== G.ap[i]) { const [p, q] = aHome ? [G.hp[i], G.ap[i]] : [G.ap[i], G.hp[i]]; return { r: p > q ? 1 : -1, pk: true, x, y }; }
+  return { r: 0, pk: false, x, y };
+}
+const outcome = m => { const o = outcomeOf(m.G, m.i, m.aHome); return o ? o.r : null; };
+
+// The head to head of side A (its squads: the squad first, then the earlier teams chosen) against side B, over the
+// seasons loaded. -> { seasons, complete, meetings (GameRow, upcoming first then newest first), upcoming, next, last,
+// record [w, d, l] from A's side, goals [for, against], pens { won, lost } (shoot-outs inside the record),
+// unreported, undated, played } or { error: 'same-team' }
+export function headToHead(index, A, B, { today, stats = null } = {}) {
+  const sa = new Set(A), sb = new Set(B);
+  if ([...sa].some(d => sb.has(d))) return { error: 'same-team' };
+  const ia = idsOf(A), ib = idsOf(B), seasons = h2hSeasons(index, A, B), tday = dayOf(today);
+  const found = [];
+  for (const s of seasons.loaded) {
+    // A game is visited once per id of A it holds, and found once: its two ids never both belong to A (an id is in one squad a
+    // season, and a side's two squads are never the same), so no game can come up twice
+    const G = index.games.get(s), xa = ia.get(s), xb = ib.get(s);
+    for (const t of xa) for (const i of G.byTeam.get(t) || []) {
+      if (stats) stats.gamesVisited = (stats.gamesVisited || 0) + 1;
+      const h = G.h[i], a = G.a[i];
+      if (xa.has(h) && xb.has(a)) found.push({ G, i, aHome: true });
+      else if (xa.has(a) && xb.has(h)) found.push({ G, i, aHome: false });
+    }
+  }
+  const up = [], done = [], undated = [];
+  for (const m of found) { const { G, i } = m; if (G.day[i] === NO_DAY) undated.push(m); else if (G.hs[i] < 0 && G.day[i] >= tday) up.push(m); else done.push(m); }
+  const k = m => m.G.ord[m.i];
+  const ss = (x, y) => (x.G.season < y.G.season ? -1 : x.G.season > y.G.season ? 1 : 0);
+  up.sort((x, y) => ss(x, y) || k(x) - k(y));            // the next meeting first
+  done.sort((x, y) => -ss(x, y) || k(y) - k(x));         // newest first
+  undated.sort((x, y) => -ss(x, y) || k(x) - k(y));
+  let w = 0, d = 0, l = 0, gf = 0, ga = 0, pw = 0, pl = 0, unreported = 0, last = null;
+  for (const m of done) {
+    const o = outcomeOf(m.G, m.i, m.aHome);
+    if (!o) { unreported++; continue; }
+    gf += o.x; ga += o.y;
+    if (o.r > 0) { w++; if (o.pk) pw++; } else if (o.r < 0) { l++; if (o.pk) pl++; } else d++;
+    if (!last) last = m;
+  }
+  const row = m => new GameRow(m.G, m.i, { cls: 'exact', reading: 0, filterWords: 0, aHome: m.aHome });
+  return {
+    seasons, complete: !seasons.need.length,
+    meetings: [...up.slice().reverse(), ...done, ...undated].map(row),   // newest first: the farthest upcoming on top
+    upcoming: up.map(row), next: up.length ? row(up[0]) : null, last: last ? row(last) : null,
+    record: [w, d, l], goals: [gf, ga], pens: { won: pw, lost: pl }, unreported, undated: undated.length, played: w + d + l,
+  };
+}
+
+// The Games section's lead row for a vs query with one squad a side (design: "leads with the head-to-head summary").
+// Typing makes no request, so its summary covers the seasons loaded; `notLoaded` are the others both played, which
+// opening the head to head loads (at most 6). a and b are the squads' first season rows (as judged).
+export function h2hRow(index, da, db, ctx, base) {
+  const s = headToHead(index, [da], [db], { today: ctx.today });
+  const la = da.latest, lb = db.latest;
+  const href = h2hHref({ season: la.season, teamID: la.teamID, name: la.name }, { season: lb.season, teamID: lb.teamID });
+  return {
+    section: 'games', kind: 'h2h', key: `${da.key}|${db.key}`,
+    a: { season: da.rows[0].season, teamID: da.rows[0].teamID }, b: { season: db.rows[0].season, teamID: db.rows[0].teamID },
+    aName: la.name, bName: lb.name, aClub: da.club.name, bClub: db.club.name, aCandidates: da.maybePrev.length, bCandidates: db.maybePrev.length,
+    played: s.seasons.both, loaded: s.seasons.loaded, notLoaded: s.seasons.need, complete: s.complete,
+    record: s.record, goals: s.goals, pens: s.pens, meetings: s.meetings.length, last: s.last, next: s.next,
+    href, hrefs: [href], ...base,
+  };
+}
+
+// The one place a game's head-to-head link is made, for game rows and pairing rows alike: both sides must be squads
+// (different ones); an alias id (a showcase's own id) links by the squad's conference id that season. aSide: 'h' | 'a';
+// withMatch adds &match=<matchID> (Q2: a game row's link opens the head to head on that meeting, marked)
+export function gameH2HHref(G, i, aSide, sq, teamAt, withMatch = false) {
+  const h = G.h[i], a = G.a[i];
+  if (!sq) return null;
+  const sh = sq.get(`${G.season}/${h}`), sa = sq.get(`${G.season}/${a}`);   // a side still to be decided has id 0: no squad
+  if (!sh || !sa || sh === sa) return null;
+  const own = (d, t) => (d.rows.find(r => r.season === G.season) || { teamID: t }).teamID;
+  const [x, y] = aSide === 'a' ? [own(sa, a), own(sh, h)] : [own(sh, h), own(sa, a)];
+  return h2hHref({ season: G.season, teamID: x, name: teamAt ? teamAt.get(`${G.season}/${x}`) : undefined }, { season: G.season, teamID: y }) + (withMatch ? `&match=${enc(G.id[i])}` : '');
+}
+
+// A side's candidate earlier teams, as the control lists them: never the other side's own squad; one the other side
+// has added is listed disabled, with the reason, so one squad is never on both sides.
+// -> [{ doc, chosen, disabled: null | 'other-side' }]
+export function candidateList(side, other, chosen, otherChosen) {
+  return side.candidates.filter(c => c !== other.doc).map(c => ({ doc: c, chosen: chosen.includes(c), disabled: otherChosen.includes(c) ? 'other-side' : null }));
 }

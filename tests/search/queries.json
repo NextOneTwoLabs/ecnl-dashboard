@@ -1111,6 +1111,66 @@
       ],
       "decision": ["D5"]
     },
+    {
+      "id": "H08",
+      "group": "games-h2h",
+      "q": "Force (CA) 2009/10 vs MVLA 2009/10",
+      "stability": "frozen",
+      "sections": ["games", "teams"],
+      "mustShow": [{"h2h": {"a": {"season": "2026-27", "teamID": 60044}, "b": {"season": "2022-23", "teamID": 33633}}}],
+      "mustNever": [{"h2h": {"a": {"season": "2021-22", "teamID": 60044}, "b": {"season": "2022-23", "teamID": 33633}}}, {"h2h": {"a": {"season": "2022-23", "teamID": 62271}, "b": {"season": "2022-23", "teamID": 33633}}}],
+      "top": {"games": [{"h2h": {"a": {"season": "2026-27", "teamID": 60044}, "b": {"season": "2022-23", "teamID": 33633}}}]},
+      "useful": [{"h2h": {"a": {"season": "2026-27", "teamID": 60044}, "b": {"season": "2022-23", "teamID": 33633}}}],
+      "note": "#178: a squad new in 2026-27 leads with itself; its earlier candidate teams are the visitor's to add on the page, never a side of the row (nothing is merged)."
+    },
+    {
+      "id": "H09",
+      "group": "games-h2h",
+      "q": "MVLA 2011 vs Solar 2011",
+      "stability": "frozen",
+      "sections": ["games", "teams"],
+      "mustShow": [{"h2h": {"a": {"season": "2023-24", "teamID": 55477}, "b": {"season": "2023-24", "teamID": 81882}}}],
+      "top": {"games": [{"h2h": {"a": {"season": "2023-24", "teamID": 55477}, "b": {"season": "2023-24", "teamID": 81882}}}]},
+      "useful": [{"h2h": {"a": {"season": "2023-24", "teamID": 55477}, "b": {"season": "2023-24", "teamID": 81882}}}],
+      "note": "#178: both played 2023-24 to 2026-27 and no game between them is listed: the lead row is still the way in (it says so)."
+    },
+    {
+      "id": "H10",
+      "group": "games-h2h",
+      "q": "Davis Legacy 2009 vs San Juan 2009",
+      "stability": "frozen",
+      "sections": ["games", "teams"],
+      "mustShow": [{"h2h": {"a": {"season": "2021-22", "teamID": 60301}, "b": {"season": "2021-22", "teamID": 31488}}}],
+      "top": {"games": [{"h2h": {"a": {"season": "2021-22", "teamID": 60301}, "b": {"season": "2021-22", "teamID": 31488}}}]},
+      "useful": [{"h2h": {"a": {"season": "2021-22", "teamID": 60301}, "b": {"season": "2021-22", "teamID": 31488}}}],
+      "note": "#178: one squad a side, with a meeting still to be played."
+    },
+    {
+      "id": "H11",
+      "group": "games-h2h",
+      "q": "SLSG Navy 2009/10 vs Kansas City 2009/10",
+      "stability": "frozen",
+      "sections": ["games", "teams"],
+      "mustShow": [{"h2h": {"a": {"season": "2026-27", "teamID": 134858}, "b": {"season": "2022-23", "teamID": 46766}}}],
+      "top": {"games": [{"h2h": {"a": {"season": "2026-27", "teamID": 134858}, "b": {"season": "2022-23", "teamID": 46766}}}]},
+      "useful": [{"h2h": {"a": {"season": "2026-27", "teamID": 134858}, "b": {"season": "2022-23", "teamID": 46766}}}],
+      "note": "#178: SLSG Navy G2009/10 has 4 candidate earlier teams (Q12): none is in the row."
+    },
+    {
+      "id": "H12",
+      "group": "games-h2h",
+      "q": "Slammers 2008 vs So Cal Blues 2008 2023-24",
+      "stability": "closed",
+      "sections": ["games", "teams"],
+      "mustShow": [{"game": 635435}, {"game": 539129}, {"game": 539475}, {"game": 539617}],
+      "mustNever": [
+        {"h2h": {"a": {"season": "2020-21", "teamID": 9288}, "b": {"season": "2020-21", "teamID": 29588}}},
+        {"h2h": {"a": {"season": "2020-21", "teamID": 29720}, "b": {"season": "2020-21", "teamID": 29588}}}
+      ],
+      "useful": [{"game": 635435}, {"game": 539129}, {"game": 539475}, {"game": 539617}],
+      "decision": ["D5"],
+      "note": "#178 (Q9): Slammers has two strong 2008 squads (Slammers FC and Slammers FC HB Koge), so no one squad pair leads: no head-to-head row, and the four meetings stay. (The same holds for the current season, 'Slammers 2008 vs LA Breakers 2008': tests/search-h2h.test.mjs, games 1085613 and 1085547, which a closed-season fixture cannot cite.)"
+    },
     {"id": "N01", "group": "nothing", "q": "zzzz", "stability": "frozen", "sections": [], "useful": [{"empty": {"reason": "no-match"}}]},
     {
       "id": "N02",

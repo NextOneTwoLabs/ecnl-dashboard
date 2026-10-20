@@ -8,7 +8,7 @@
     "engine": "today",
     "engineSha": "1a54fe54edcd6407d9225f19413d38a937a589d7920d0e329b0deb6e9c7f1fe0",
     "manifestSha": "14d0ca0bbb0f18363ee6fe330e2759ecad18a4245babacc46cec28f26481335c",
-    "queriesSha": "2cea55dd01746ff794d7680c371a2e156cfbb88162db2b3cceb9f22ae6924a95",
+    "queriesSha": "b89503c0c752b6e1d15a64ab87f70b23a8d6b3f7253a6d8f88ddded97be83f8b",
     "recordedBy": "node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today"
   },
   "perQuery": {
@@ -1006,6 +1006,154 @@
       "rr": {
         "games": null
       },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H08": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "unsupported",
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H09": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H10": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H11": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": null,
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {
+        "games": null
+      },
+      "sections": {
+        "actual": [],
+        "expected": [
+          "games",
+          "teams"
+        ]
+      },
+      "status": "fail",
+      "wrongDestinations": []
+    },
+    "H12": {
+      "capReached": null,
+      "checks": {
+        "exact": null,
+        "mustNever": "unsupported",
+        "mustShow": "unsupported",
+        "order": null,
+        "sections": "fail",
+        "useful": "unsupported"
+      },
+      "counts": {},
+      "enter": null,
+      "exact": null,
+      "firstUseful": 0,
+      "mustNeverHits": [],
+      "mustShowMissing": [],
+      "rows": {},
+      "rr": {},
       "sections": {
         "actual": [],
         "expected": [
@@ -2441,7 +2589,7 @@
       },
       "games-h2h": {
         "capReached": null,
-        "fail": 7,
+        "fail": 12,
         "firstUseful": 0,
         "firstUsefulRate": 0,
         "mrr": {
@@ -2453,7 +2601,7 @@
           },
           "games": {
             "all": 0,
-            "judged": 6,
+            "judged": 10,
             "supported": 0,
             "supportedOnly": null
           },
@@ -2467,12 +2615,12 @@
         "mustNeverHits": 0,
         "mustShowMissing": 0,
         "pass": 0,
-        "queries": 7,
+        "queries": 12,
         "sectionsAgree": 0,
         "sectionsAgreeRate": 0,
         "sectionsAgreeRateSupported": 0,
         "sectionsAgreeSupported": 0,
-        "sectionsSupported": 7,
+        "sectionsSupported": 12,
         "unsupported": 0,
         "wrongDestinations": 0
       },
@@ -2627,9 +2775,9 @@
     },
     "overall": {
       "capReached": null,
-      "fail": 22,
+      "fail": 27,
       "firstUseful": 41,
-      "firstUsefulRate": 0.6833,
+      "firstUsefulRate": 0.6308,
       "mrr": {
         "events": {
           "all": 0.7083,
@@ -2639,7 +2787,7 @@
         },
         "games": {
           "all": 0,
-          "judged": 9,
+          "judged": 13,
           "supported": 0,
           "supportedOnly": null
         },
@@ -2653,12 +2801,12 @@
       "mustNeverHits": 13,
       "mustShowMissing": 7,
       "pass": 9,
-      "queries": 60,
+      "queries": 65,
       "sectionsAgree": 10,
-      "sectionsAgreeRate": 0.1667,
-      "sectionsAgreeRateSupported": 0.3704,
+      "sectionsAgreeRate": 0.1538,
+      "sectionsAgreeRateSupported": 0.3125,
       "sectionsAgreeSupported": 10,
-      "sectionsSupported": 27,
+      "sectionsSupported": 32,
       "unsupported": 29,
       "wrongDestinations": 0
     }
