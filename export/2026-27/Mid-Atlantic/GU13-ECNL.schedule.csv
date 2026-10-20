@@ -26,7 +26,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-18,02:30 PM,Group Play,Arlington Soccer Association ECNL G2013/14,0,1,Richmond United ECNL G2013/14,Long Bridge Park,Boeing #3,On Time,1122187
 2026-10-24,TBD,Group Play,NC Fusion ECNL G2013/14,,,Beach FC (VA) ECNL G2013/14,,,On Time,1122195
 2026-10-24,09:00 AM,Group Play,South Carolina Surf ECNL G2013/14,,,Fairfax Virginia Union ECNL G2013/14,Shea Family Fields,Field 3,On Time,1122197
-2026-10-24,09:00 AM,Group Play,Wilmington Hammerheads ECNL G2013/14,,,VDA ECNL G2013/14,NCINO Sports Park,Field 7,On Time,1122201
+2026-10-24,09:00 AM,Group Play,Wilmington Hammerheads ECNL G2013/14,,,VDA ECNL G2013/14,NCINO Sports Park,Field 6,On Time,1122201
 2026-10-24,10:00 AM,Group Play,NCFC Youth NC Courage ECNL G2013/14,,,Richmond United ECNL G2013/14,WRAL ,Field 5,On Time,1122199
 2026-10-24,02:00 PM,Group Play,Charlotte SA ECNL G2013/14,,,Arlington Soccer Association ECNL G2013/14,Orthocarolina Complex,Field 5,On Time,1122193
 2026-10-25,09:00 AM,Group Play,Charlotte SA ECNL G2013/14,,,Fairfax Virginia Union ECNL G2013/14,Orthocarolina Complex,Field 5,On Time,1122207
@@ -58,8 +58,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-02-06,TBD,Group Play,South Carolina Surf ECNL G2013/14,,,Arlington Soccer Association ECNL G2013/14,,,On Time,1122255
 2027-02-07,TBD,Group Play,Wilmington Hammerheads ECNL G2013/14,,,Arlington Soccer Association ECNL G2013/14,,,On Time,1122257
 2027-02-07,01:00 PM,Group Play,NCFC Youth ECNL G2013/14,,,Fairfax Virginia Union ECNL G2013/14,WRAL ,Field 5,On Time,1122259
-2027-02-13,TBD,Group Play,South Carolina Surf ECNL G2013/14,,,Wilmington Hammerheads ECNL G2013/14,,,On Time,1122265
 2027-02-13,11:00 AM,Group Play,NCFC Youth NC Courage ECNL G2013/14,,,NC Fusion ECNL G2013/14,WRAL ,Field 5,On Time,1122263
+2027-02-13,11:00 AM,Group Play,South Carolina Surf ECNL G2013/14,,,Wilmington Hammerheads ECNL G2013/14,Shea Family Fields,Field 3,On Time,1122265
 2027-02-13,12:00 PM,Group Play,Beach FC (VA) ECNL G2013/14,,,Fairfax Virginia Union ECNL G2013/14,Hampton Roads Soccer Complex,Field 15,On Time,1122261
 2027-02-20,TBD,Group Play,NC Fusion ECNL G2013/14,,,NCFC Youth ECNL G2013/14,,,On Time,1122269
 2027-02-20,09:00 AM,Group Play,VDA ECNL G2013/14,,,NCFC Youth NC Courage ECNL G2013/14,Long Park,Field 7,On Time,1122267
