@@ -200,7 +200,7 @@ test('action bar: a team that two earlier teams may continue is named whole, nev
 test('version: a search.mjs with another SEARCH_API shows the reload note, and nothing is searched (the 2 data files are still fetched)', async () => {
   const { ctx, log } = await context({ viewport: { width: 1280, height: 800 } });
   await ctx.route('**/search/search.mjs', async route => {
-    const body = (await (await route.fetch()).text()).replace('export const SEARCH_API = 3', 'export const SEARCH_API = 999');
+    const body = (await (await route.fetch()).text()).replace('export const SEARCH_API = 4', 'export const SEARCH_API = 999');
     assert.match(body, /SEARCH_API = 999/);
     await route.fulfill({ contentType: 'text/javascript', body });
   });
@@ -243,7 +243,7 @@ test('games, desktop: a field opens its next game; FC Dallas, Naperville and St 
   assert.match(await page.locator('#usearchList').textContent(), /Load earlier meetings · 2023–24, 2024–25, 2025–26/);
   const meetings0 = await page.locator('#usearchList .sxg-row').count();
   assert.equal(meetings0, 2, 'the 2 meetings of 2026-27');
-  for (let k = 0; k < 2; k++) await page.keyboard.press('ArrowDown');
+  for (let k = 0; k < 3; k++) await page.keyboard.press('ArrowDown');   // #178: the head to head's lead row is first, then the 2 meetings, then the Load cell
   assert.match(await active(), /^Load earlier meetings, /);
   await page.keyboard.press('Enter');
   await page.waitForFunction(() => ['2023-24', '2024-25', '2025-26'].every(s => sxIndex.games.has(s)) && !sxView.cells.some(c => c.kind === 'busy'), null, { timeout: 20000 });

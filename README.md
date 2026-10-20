@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/match-param.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/search-h2h.test.mjs tests/h2h-page.test.mjs tests/match-param.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -419,7 +419,7 @@ first focus; nothing per keystroke) and its keys are in [The search panel](#the-
 
 ### Judged search queries
 
-`tests/search/` holds about 60 judged queries in nine groups (#149 phase 1, #156): what each
+`tests/search/` holds about 65 judged queries in nine groups (#149 phase 1, #156): what each
 must show, must never show, the expected section order (teams, events, games), and, on frozen
 or closed-season data only, the expected top results. Judgements are facts from the archive and
 the owner's decisions (D1–D13, listed in `queries.json`), never the engine's output.
@@ -508,7 +508,7 @@ draws them since #165 (below).
   data files (it throws `SearchDataError`, naming the file, on a schema it does not know), and
   `search(index, query, { now, timeZone, selectedSeason, today })` returns the slate. `today`
   ('YYYY-MM-DD', #168) is required: the page passes its own `todayKey()`, so no search makes an `Intl`
-  formatter. `SEARCH_API` is the API version (3 since #168): the page compares it with the version it
+  formatter. `SEARCH_API` is the API version (4 since #178, 3 since #168): the page compares it with the version it
   expects and shows a coverage note rather than call a changed API.
   - `startGames(index, gamesDoc, n)` (#168) adds one season's games file as a generator of at most `n`
     games per step; its last step installs the season, so a search never sees half of one. A schema it
@@ -608,7 +608,7 @@ fields and pairings too. Today's team-only panel was removed by PR 5 (#172).
   500 ms; one squad a side's earlier meetings and a field's earlier games only when their Load cell is
   pressed (at most 6 seasons, 2 at a time). Each season once per visit; a closed season's file is cached
   for a day (#82). A 404 says there is no games file; any other failure offers Try again (#92).
-- **The version check:** the page expects `SEARCH_API` 3. Any other version, or a data schema the
+- **The version check:** the page expects `SEARCH_API` 4. Any other version, or a data schema the
   modules do not know, shows "Search was updated while this page was open" with a Reload button and
   never searches.
 - **The grid:** the combobox opens a `role="grid"`; rows hold gridcells, the best match is a labelled
@@ -631,7 +631,21 @@ fields and pairings too. Today's team-only panel was removed by PR 5 (#172).
   it and announces it once. It lives only as long as the load that carried it (a newer load, an error, a
   click or a key drops it); `pushHash` and `saveState` never write it. A game the link's filter hides
   switches the filter once; a game no longer listed gets a note. `tests/match-param.test.mjs` pins it.
-- **In a browser:** `tests/e2e/search-panel.e2e.mjs` drives Chromium against `python proxy_server.py
+- **Head to head** (#178): `#tab=teams&season=<sA>&team=<A>&name=<A's name>&vs=<sB>:<B>` opens side A's
+  squad against side B's: the record from A's side (a shoot-out is a win or a loss, as on the team
+  Overview; penalties are never goals), the last and next meetings and every meeting by season, each
+  opening its game (`match=` marks one). A side is a squad; the modules compute it on the fly from the games
+  indexes (`games.mjs`: `squadAt`, `resolveSide`, `h2hSeasons`, `headToHead`, `candidateList`), so nothing is
+  built per pair. Only the seasons both sides played are loaded (at most 6; a cold open is `search/core`,
+  `search/places` and those). A squad new in 2026-27 lists its earlier teams for the visitor to add (checkboxes,
+  none chosen, none merged; a team added on one side is disabled on the other); the choice lives for the visit.
+  A game counts only when both teams have a team page for that season. Ways in: the Games section's lead row
+  (one squad a side), an H2H cell on each game row and one-pair pairing row, a "Head to head" link on Matches
+  cards and "H2H" on the team's season tab. A bad `vs=` opens A's Overview with a note. It is never saved as
+  the place to resume (`saveState` skips it while it is open, and every exit clears it).
+  `tests/search-h2h.test.mjs` (the modules, frozen fixture), `tests/h2h-page.test.mjs` (the page) and
+  `tests/search-game-links.test.mjs` (every link, three kinds) pin it.
+- **In a browser:** `tests/e2e/h2h.e2e.mjs` (the head to head; run it the same way) and `tests/e2e/search-panel.e2e.mjs` drive Chromium against `python proxy_server.py
   --offline` on a free port. Every request that is not to that port is aborted and counted, so the
   run makes no request off the machine (club logos and fonts included). It is not in CI (it needs
   Playwright and a browser); run it for a change to the panel and record the result in the PR:
