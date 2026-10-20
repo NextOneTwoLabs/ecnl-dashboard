@@ -573,7 +573,7 @@ draws them since #165 (below).
   team, the typed pair's second age passes when the squad row's own name parses to that pair (`ageOk` in `match.mjs`); a conference table
   keeps the filed age alone, and a tie goes to the squad that passed through its own pair. `tools/search_pair_check.mjs` is the production
   check: it runs the modules of `--before-rev` and the modules under test on the same core, places and games files, offline, and asserts
-  rules (only squads filed at their second age differ; 2195 is first). `--fetch <site>` downloads the 13 files it needs (cap 25).
+  rules (only squads filed at their second age differ; 2195 is first). `--fetch <site>` downloads the 13 files it needs (the page, the 9 modules, and the data from `/api/v1/search/core`, `/places` and `/games/2021-22`: the Worker answers `/archive*` with 404; cap 25) and needs `--expect-rev`. `--short` (about 20 queries) is a smoke test of the command line and refuses any host but loopback; `tests/search-pair-check.test.mjs` runs it against `python proxy_server.py --offline` (a local server started by a Node test, new to the CI list; `PYTHON` picks the interpreter).
 - **Cost:** `node --import ./tests/netguard/netguard.mjs --expose-gc tools/search_data_size.mjs --index`
   measures `buildIndex`. `tests/search-modules.test.mjs` types every judged query one character
   at a time, pins the work each keystroke does (since #168 with the active season's games, and

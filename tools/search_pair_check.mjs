@@ -8,10 +8,15 @@
 //
 // Local (a dry run, no request at all):
 //   node --import ./tests/netguard/netguard.mjs tools/search_pair_check.mjs --before-rev <parent commit> [--after public] [--quick]
+// --quick is a smaller version of the real query set (still thousands of queries). --short is a smoke test of the command line: about 20
+// queries (SHORT_QUERIES), local only. --short with --fetch is accepted for a loopback host alone (127.0.0.1, localhost, [::1], compared
+// exactly on the parsed URL), so it can never bless production; it prints "short": true and ends "ok (short list, local only)".
+// --short with --quick is refused (exit 2): neither may run silently under the other's label.
 // Production (13 GETs to our own site, cap 25, 0 to TGS; --expect-rev is the merge commit, whose modules the served bytes must equal):
 //   node tools/search_pair_check.mjs --before-rev <merge parent> --expect-rev <merge commit> --fetch https://<site>
 // --fetch needs --expect-rev: without it the served bytes would never be compared, so the run exits 2 with the usage line.
-// The page (/) is only a wiring smoke test: its HTML must mention /search/; the modules themselves are compared byte for byte.
+// The data comes from the site's API routes (/api/v1/search/core, /places, /games/2021-22): the Worker answers /archive* with 404, and
+// serves the same bytes from the API (#190). The page (/) is only a wiring smoke test: its HTML must mention /search/; the modules themselves are compared byte for byte.
 // Exit 0 when every rule holds, 1 otherwise, 2 for bad arguments.
 import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -21,7 +26,8 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 const MODULES = ['events', 'games', 'links', 'match', 'reader', 'search', 'slate', 'teams', 'vocab'];
-const DATA = ['core.json', 'places.json', 'games-2021-22.json'];
+// [the API route the site serves, the file name the tool saves it as]: the same bytes as public/archive/search/<name> (#190)
+const DATA = [['/api/v1/search/core', 'core.json'], ['/api/v1/search/places', 'places.json'], ['/api/v1/search/games/2021-22', 'games-2021-22.json']];
 export const REQUEST_CAP = 25;
 
 const arg = (name, argv) => { const i = argv.indexOf(name); return i < 0 ? null : argv[i + 1]; };
@@ -30,15 +36,21 @@ const git = (...a) => { const r = spawnSync('git', a, { cwd: ROOT, encoding: 'ut
 // Download the 13 files the check needs: the page, the 9 modules and 3 data files. Returns { dir, requests }.
 export async function fetchSite(base, fetchFn = fetch) {
   const dir = mkdtempSync(join(tmpdir(), 'pair-check-after-'));
-  const wanted = [['/', null], ...MODULES.map(m => [`/search/${m}.mjs`, `search/${m}.mjs`]), ...DATA.map(d => [`/archive/search/${d}`, `archive/search/${d}`])];
+  const wanted = [['/', null], ...MODULES.map(m => [`/search/${m}.mjs`, `search/${m}.mjs`]), ...DATA.map(([route, name]) => [route, `archive/search/${name}`])];
   let requests = 0;
   try {
   for (const [path, out] of wanted) {
     if (requests >= REQUEST_CAP) throw new Error(`request cap ${REQUEST_CAP} reached`);
     requests++;
     const res = await fetchFn(new URL(path, base));
+    if (res.status === 429) throw new Error(`${path}: HTTP 429, rate limited: wait 60 s and run again (the tool never retries past its cap)`);
     if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
     const body = Buffer.from(await res.arrayBuffer());
+    if (out && out.startsWith('archive/')) {   // a data route: JSON, never the page
+      const type = (res.headers && res.headers.get && res.headers.get('content-type')) || '';
+      if (!/^application\/json(?:;|$)/i.test(type)) throw new Error(`${path}: content type "${type}", not JSON`);
+      try { JSON.parse(body.toString('utf8')); } catch { throw new Error(`${path}: the body is not valid JSON`); }
+    }
     if (out) { mkdirSync(join(dir, out, '..'), { recursive: true }); writeFileSync(join(dir, out), body); }
     else if (!body.toString('utf8').includes('/search/')) throw new Error('the page does not mention /search/');
   }
@@ -54,7 +66,25 @@ function beforeDir(rev, dataDir) {
   return { dir, dataDir };
 }
 
-export const USAGE = 'usage: --before-rev <rev> [--after <dir containing search/ and archive/search/>] [--quick] | --before-rev <rev> --fetch <site> --expect-rev <rev>';
+export const USAGE = 'usage: --before-rev <rev> [--after <dir containing search/ and archive/search/>] [--quick | --short] | --before-rev <rev> --fetch <site> --expect-rev <rev> [--short, loopback site only]';
+// The tool's own list of about 20 queries for --short: the three squad-2195 queries (rule 3), the five Eagles pair spellings with and
+// without the season, a conference table, a no-season query and a pair with no team named.
+export const SHORT_QUERIES = ['Eagles SC ECNL GU17/U18 2021-22', 'Eagles SC U18 2021-22', 'Eagles SC 2004 2021-22', 'GU17/U18 Southwest 2021-22', 'Eagles SC ECNL GU17/U18',
+  ...['GU17/U18', 'gu17/u18', 'U17/U18', 'GU17/18', 'u17/18'].flatMap(p => [`Eagles SC ECNL ${p} 2021-22`, `Eagles SC ECNL ${p} 2021`]), 'U17/U18 Southwest 2021', 'GU17/U18 2021-22'];
+// Loopback by the parsed URL's hostname, exactly: "127.0.0.1.example.invalid", "localhost.example.invalid" and "127.0.0.1@example.invalid"
+// (whose host is example.invalid) are not loopback.
+export function isLoopback(site) {
+  try { return ['127.0.0.1', 'localhost', '[::1]'].includes(new URL(site).hostname); } catch { return false; }
+}
+// Reads and validates the command line before anything is fetched or created. -> { error } (exit 2) or the options.
+export function parseArgs(argv) {
+  const quick = argv.includes('--quick'), short = argv.includes('--short');
+  const beforeRev = arg('--before-rev', argv), site = arg('--fetch', argv), expectRev = arg('--expect-rev', argv), after = arg('--after', argv);
+  if (!beforeRev || (site && !expectRev)) return { error: USAGE };
+  if (short && quick) return { error: `--short and --quick are exclusive. ${USAGE}` };
+  if (short && site && !isLoopback(site)) return { error: `--short is for the local server; production runs the full set. ${USAGE}` };
+  return { quick, short, beforeRev, site, expectRev, after };
+}
 // The served modules against a git revision's files (line endings aside): -> a list of problems.
 export function servedProblems(dir, rev) {
   const problems = [];
@@ -100,7 +130,7 @@ export function queriesOf(core, judged, quick) {
 const text = sl => JSON.stringify(sl, (k, v) => (v instanceof Map || v instanceof Set ? [...v] : v));
 
 // -> { problems: [], summary }
-export async function check({ afterDir, beforeModules, quick = false, queries = null, judgedPath = join(ROOT, 'tests/search/queries.json'), log = () => {} }) {
+export async function check({ afterDir, beforeModules, quick = false, short = false, queries = null, judgedPath = join(ROOT, 'tests/search/queries.json'), log = () => {} }) {
   const judgedDoc = JSON.parse(readFileSync(judgedPath, 'utf8'));
   const A = await load(afterDir, afterDir), B = await load(beforeModules.dir, afterDir);
   const ctx = { now: Date.parse(judgedDoc.context.now), timeZone: judgedDoc.context.timeZone, selectedSeason: judgedDoc.context.selectedSeason };
@@ -108,7 +138,7 @@ export async function check({ afterDir, beforeModules, quick = false, queries = 
   const T = A.core.teams, byKey = new Map();
   for (const q of T.squads) byKey.set(`${T.seasons[q.s[0][0]]}/${q.s[0][1]}`, q);
   const judged = new Set(judgedDoc.queries.map(q => q.q));
-  const qs = queries || queriesOf(A.core, [...judged], quick);   // an explicit list is for the tests; the real run uses the full set
+  const qs = queries || (short ? SHORT_QUERIES : queriesOf(A.core, [...judged], quick));   // an explicit list is for the tests; the real run uses the full set
   const problems = [], differing = [];
   const teamKeys = sl => ((sl.sections.find(s => s.name === 'teams') || { rows: [] }).rows).map(r => r.key);
   for (const q of qs) {
@@ -133,13 +163,13 @@ export async function check({ afterDir, beforeModules, quick = false, queries = 
   const first = q => teamKeys(A.S.search(A.ix, q, ctx))[0];
   const own = ['2020-21/2195', '2021-22/2195'];
   for (const q of ['Eagles SC ECNL GU17/U18 2021-22', 'Eagles SC U18 2021-22', 'Eagles SC 2004 2021-22']) if (!own.includes(first(q))) problems.push(`rule 3: "${q}" has ${first(q)} first, not squad 2195`);
-  return { problems, summary: { queries: qs.length, differing: differing.length, differingQueries: differing } };
+  return { problems, summary: { ...(short ? { short: true } : {}), queries: qs.length, differing: differing.length, differingQueries: differing } };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const argv = process.argv.slice(2), quick = argv.includes('--quick');
-  const beforeRev = arg('--before-rev', argv), site = arg('--fetch', argv), expectRev = arg('--expect-rev', argv);
-  if (!beforeRev || (site && !expectRev)) { console.error(USAGE); process.exit(2); }
+  const opts = parseArgs(process.argv.slice(2));
+  if (opts.error) { console.error(opts.error); process.exit(2); }
+  const { quick, short, beforeRev, site, expectRev } = opts;
   const temp = [];
   let code = 0;
   try {
@@ -150,15 +180,15 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       temp.push(afterDir);
       problems.push(...servedProblems(afterDir, expectRev));
     } else {
-      afterDir = resolve(arg('--after', argv) || join(ROOT, 'public'));
+      afterDir = resolve(opts.after || join(ROOT, 'public'));
     }
     const before = beforeDir(beforeRev, afterDir);
     temp.push(before.dir);
-    const r = await check({ afterDir, beforeModules: before, quick });
+    const r = await check({ afterDir, beforeModules: before, quick, short });
     problems.push(...r.problems);
     console.log(JSON.stringify({ requests, ...r.summary, differingQueries: undefined }));
     for (const q of r.summary.differingQueries) console.log('differs:', JSON.stringify(q));
-    if (problems.length) { console.error(problems.join('\n')); code = 1; } else console.log('ok: every rule holds');
+    if (problems.length) { console.error(problems.join('\n')); code = 1; } else console.log(short ? 'ok (short list, local only): every rule holds' : 'ok: every rule holds');
   } finally {
     for (const d of temp) rmSync(d, { recursive: true, force: true });   // the temp folders are this run's own
   }
