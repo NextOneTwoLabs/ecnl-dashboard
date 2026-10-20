@@ -14,8 +14,9 @@
 //   startGames(index, gamesDoc, n)    #168: one season's games file into the index, as a generator of
 //                                     at most n games per step; its last step installs the season.
 //   completeGames(index, slate, ctx)  #167: the Games section of a slate searched with { games: 'later' }.
+//   squadAt, resolveSide, h2hSeasons, headToHead, parseVs, h2hHref, candidateList   #178: the head to head (games.mjs).
 //
-// SEARCH_API is this module's API version (3 since #168: games). The page compares it with the
+// SEARCH_API is this module's API version (4 since #178: head to head; 3 since #168: games). The page compares it with the
 // version it expects and shows a coverage note instead of calling a changed API (plan v2 MF5).
 import { buildVocabG, fieldNamesG } from './vocab.mjs';
 import { drain } from './match.mjs';
@@ -23,10 +24,11 @@ import { readQuery } from './reader.mjs';
 import { teamDocsG, searchTeams } from './teams.mjs';
 import { eventDocs, searchEvents } from './events.mjs';
 import { buildSlate, ruleOf } from './slate.mjs';
-import { gamesIndexG, GAMES_SCHEMA, searchGames } from './games.mjs';
+import { gamesIndexG, GAMES_SCHEMA, searchGames, squadAt } from './games.mjs';
+export { squadAt, resolveSide, h2hSeasons, headToHead, parseVs, h2hHref, candidateList, h2hRow, gameH2HHref, VS_RE } from './games.mjs';
 
 export { GAMES_SCHEMA };
-export const SEARCH_API = 3;
+export const SEARCH_API = 4;
 export const CORE_SCHEMA = 2;
 export const PLACES_SCHEMA = 1;
 
@@ -74,7 +76,7 @@ export function* startGames(index, doc, n = 150) {
     index.teamAt = teamAt;
   }
   if (!index.eventByID) index.eventByID = new Map(index.events.docs.map(d => [d.id, d]));
-  const G = yield* gamesIndexG(doc, { vocab: index.vocab, teamAt: index.teamAt, events: index.eventByID }, n);
+  const G = yield* gamesIndexG(doc, { vocab: index.vocab, teamAt: index.teamAt, events: index.eventByID, squadAt: squadAt(index) }, n);
   if (!index.games) index.games = new Map();
   index.games.set(doc.season, G);
   return G;

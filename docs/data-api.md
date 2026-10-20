@@ -495,6 +495,8 @@ for places (#159) `zip-places.json` (the census table), `zip-place-fixes.json` a
 ]}}
 ```
 
+(#178: the head-to-head page reads `x` too: a game at a national event or showcase is between the squads that own the two ids, and a link to it names each side by its conference id that season.)
+
 - `build`: the hash of the file without it. `directoryBuild`: the team directory's `build`, the
   directory this file was built from (in the same run, never a file left on disk).
 - `teams`: the team directory's content **verbatim** (its tables and squads, logos included

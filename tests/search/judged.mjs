@@ -368,7 +368,7 @@ export function modulesAdapter(context, { searchData = loadSearchData(), options
   const reset = () => { index.games = new Map([[index.vocab.active, games(index.vocab.active)]]); };
   return {
     name: 'modules', index,
-    capabilities: { sections: ['teams', 'events', 'games'], kinds: ['team', 'club', 'conference', 'event', 'game', 'field', 'pairing'], labels: ['partial', 'nearby'] },
+    capabilities: { sections: ['teams', 'events', 'games'], kinds: ['team', 'club', 'conference', 'event', 'game', 'field', 'pairing', 'h2h'], labels: ['partial', 'nearby'] },
     run(q) {
       reset();
       let slate = SEARCH.search(index, q, ctx, options);
@@ -389,6 +389,7 @@ export function modulesRow(r) {
   if (r && r.kind === 'game') return { section: 'games', kind: 'game', matchID: r.matchID, season: r.season, hrefs: r.hrefs, ...labels };
   if (r && r.kind === 'field') return { section: 'games', kind: 'field', field: { name: r.field.name, zip: r.field.zip, number: r.field.number }, hrefs: [], ...labels };
   if (r && r.kind === 'pairing') return { section: 'games', kind: 'pairing', sides: r.sides, season: r.season, div: r.div, hrefs: [], ...labels };
+  if (r && r.kind === 'h2h') return { section: 'games', kind: 'h2h', a: r.a, b: r.b, hrefs: r.hrefs, ...labels };
   if (r && r.kind === 'load') return { section: 'games', kind: 'load', hrefs: [], ...labels };
   throw new Error(`modules adapter: unknown row kind ${r && r.kind}`);
 }
@@ -581,6 +582,15 @@ export function destinationProblem(href, ix) {
     if (!hits) return 'team not in that season';
     if (p.has('name') && !hits.some(h => h.r.name === p.get('name'))) return 'name is not that team\'s name in that season';
     if (p.has('view') && p.get('view') !== 'season') return `unknown view ${p.get('view')}`;
+    if (p.has('vs')) {   // #178: vs=<season>:<B>, a squad other than A's, and no view= beside it
+      const m = /^(\d{4}-\d{2}):([1-9]\d*)$/.exec(p.get('vs'));
+      if (!m) return `vs= is not <season>:<team>: ${p.get('vs')}`;
+      if (p.has('view')) return 'vs= takes no view=';
+      if (!src.seasons[m[1]]) return `unknown vs season ${m[1]}`;
+      const b = ix.rowAt.get(`${m[1]}/${m[2]}`);
+      if (!b) return 'vs team not in that season';
+      if (b.some(x => hits.some(h => h.sq === x.sq))) return 'vs is the same squad';
+    }
     return null;
   }
   if (tab === 'playoffs') {

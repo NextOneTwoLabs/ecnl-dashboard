@@ -53,7 +53,7 @@ test('#117: no fixture holds a logo or an image URL', () => {
 });
 
 // ---------- the query file ----------
-test('queries.json: the schema holds (60 queries, nine groups, MF10, D11)', () => {
+test('queries.json: the schema holds (65 queries, nine groups, MF10, D11)', () => {
   assert.deepEqual(checkSchema(doc, ix), []);
   assert.deepEqual(doc.groups, GROUPS);
   assert.ok(doc.queries.length >= 55 && doc.queries.length <= 70);
@@ -315,8 +315,9 @@ test('#163: the modules on the fixtures equal the recorded baseline, query by qu
 test('#163 pass criteria: first result useful better than today overall, and no group worse', () => {
   const t = BASELINE.summary, m = modulesRun.summary;
   assert.ok(m.overall.firstUseful > t.overall.firstUseful, `${m.overall.firstUseful} > ${t.overall.firstUseful}`);
-  assert.equal(m.overall.firstUseful, 57, '#168 expects 57/60: every query but the three head-to-head ones (PR 6)');
-  assert.deepEqual(Object.entries(modulesRun.perQuery).filter(([, r]) => r.firstUseful === 0).map(([id]) => id).sort(), ['H01', 'H04', 'H05']);
+  assert.equal(doc.queries.length, 65);
+  assert.equal(m.overall.firstUseful, 65, '#178 (PR 6): 65/65, every query: the head-to-head ones H01, H04 and H05 (57/60 before) and the five this PR adds, H08 to H12');
+  assert.deepEqual(Object.entries(modulesRun.perQuery).filter(([, r]) => r.firstUseful === 0).map(([id]) => id).sort(), []);
   for (const g of GROUPS) assert.ok(m.groups[g].firstUseful >= t.groups[g].firstUseful, `${g}: ${m.groups[g].firstUseful} >= ${t.groups[g].firstUseful}`);
 });
 

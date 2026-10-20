@@ -265,7 +265,7 @@ test('sxDrive: an error thrown on the first step reaches the caller (the generat
 
 test('version: a SEARCH_API other than the expected shows the reload note, search is never called, and the note is an alert', async () => {
   let searches = 0, started = 0;
-  const mod = { ...S, SEARCH_API: 4, search: () => { searches++; }, startIndex: () => { started++; } };
+  const mod = { ...S, SEARCH_API: 5, search: () => { searches++; }, startIndex: () => { started++; } };
   const p = page({ mod }); await p.open('Surf').catch(() => { });
   assert.match(p.lead(), /Search was updated while this page was open/);
   assert.match(p.lead(), /role="alert"/);
@@ -277,8 +277,8 @@ test('version: a SEARCH_API other than the expected shows the reload note, searc
   p.sxClose(); p.sxOpen(p.input);   // reopening shows the note again, no new import
   assert.match(p.lead(), /Search was updated/);
   assert.match(BLOCK, /mod\.SEARCH_API !== SX_API_EXPECTED/, 'not >=: any other version');
-  assert.match(BLOCK, /const SX_API_EXPECTED = 3;/);
-  assert.equal(S.SEARCH_API, 3);
+  assert.match(BLOCK, /const SX_API_EXPECTED = 4;/);   // #178: 4 (head to head)
+  assert.equal(S.SEARCH_API, 4);   // #178
   const old = page({ mod: { ...S, SEARCH_API: 2 } }); await old.open('Surf').catch(() => { });
   assert.match(old.lead(), /Search was updated while this page was open/, 'a 4a module (SEARCH_API 2) is refused too');
 });
@@ -1123,7 +1123,8 @@ test('MF1 (Q2): one squad a side: the loaded meetings and a Load cell; 0 fetches
   const p = page({ gamesGate: s => (s !== '2026-27' ? gate : null) }); await p.run('MVLA 2011 vs Mustang 2011');
   await wait(p.SX_GAMES_STILL_MS + 50);
   assert.deepEqual(p.fetched, ['search/core', 'search/places', 'search/games/2026-27'], '0 before the press');
-  assert.equal(p.activeCell().game.matchID, 1094466, 'the latest loaded meeting');
+  assert.equal(p.activeCell().kind, 'h2h', '#178: one squad a side leads with the head to head: it is the active cell (it was the latest loaded meeting, 1094466)');
+  assert.deepEqual(gameCells(p).map(c => c.game.matchID).slice(0, 1), [1094466], 'the latest loaded meeting follows');
   assert.equal(gameCells(p).length, 2);
   const L = p.cells().findIndex(c => c.kind === 'load');
   assert.equal(cellEl(p, L).attrs['aria-label'], 'Load earlier meetings, 2023–24, 2024–25, 2025–26, 3 seasons');
@@ -1146,7 +1147,7 @@ test('MF1 (Q2): one squad a side: the loaded meetings and a Load cell; 0 fetches
   assert.deepEqual(p.fetched.slice(3).sort(), ['search/games/2023-24', 'search/games/2024-25', 'search/games/2025-26'], 'exactly 3 on the press');
   const a = p.activeCell();
   assert.ok(a.game && ['2023-24', '2024-25', '2025-26'].includes(a.game.season), 'the first newly added meeting is active');
-  assert.equal(a.game.matchID, gamesOf('MVLA 2011 vs Mustang 2011').length ? S.search((() => { const ix = S.buildIndex(fresh()); for (const s of ['2026-27', '2023-24', '2024-25', '2025-26']) { const g = S.startGames(ix, loadGames(s), Infinity); while (!g.next().done); } return ix; })(), 'MVLA 2011 vs Mustang 2011', CTX).sections[0].rows[2].matchID : null);
+  assert.equal(a.game.matchID, gamesOf('MVLA 2011 vs Mustang 2011').length ? S.search((() => { const ix = S.buildIndex(fresh()); for (const s of ['2026-27', '2023-24', '2024-25', '2025-26']) { const g = S.startGames(ix, loadGames(s), Infinity); while (!g.next().done); } return ix; })(), 'MVLA 2011 vs Mustang 2011', CTX).sections[0].rows[3].matchID : null);   // rows[0] is #178's lead row
   assert.ok(!p.cells().some(c => c.kind === 'load' || c.kind === 'busy'), 'no season remains: the cell is gone');
   assert.equal(p.el('usearchList').scrolled, undefined, 'the list does not jump');
 });
@@ -1155,8 +1156,8 @@ test('MF1: H04 leads with Games, its Load row and no active cell; Down makes the
   const p = page(); await p.run('Slammers HB Koge 2007 v So Cal Blues 2007');
   assert.equal(headings(p)[0], 'Games no meetings loaded');
   assert.match(p.list(), /No meetings in the seasons loaded\. Both teams played 2020–21 to 2024–25\./);
-  assert.equal(p.state().sxActive, -1); assert.equal(p.input.getAttribute('aria-activedescendant'), null);
-  p.key('Enter'); assert.equal(p.location.hash, '', 'Enter does nothing');
+  // #178: both sides are one squad, so the head to head leads (0 meetings loaded) and is the active cell; it was -1 (no active cell) before
+  assert.equal(p.activeCell().kind, 'h2h'); assert.equal(p.input.getAttribute('aria-activedescendant'), 'sx-c-0');
   p.key('ArrowDown');
   assert.equal(p.activeCell().kind, 'load');
   assert.deepEqual(p.activeCell().seasons, ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25']);

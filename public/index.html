@@ -2256,6 +2256,108 @@
       .sxg-in .sx-row, .sxg-in.sx-cover { padding-left: 22px; }
     }
 
+    /* ===== #178: head to head (existing tokens only) ===== */
+    .h2h { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 860px; }
+    .h2h .flight-panel { min-width: 0; flex: none; }
+    .h2h-summary { padding: 18px 20px 14px; }
+    .h2h-sides { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 16px; align-items: center; }
+    .h2h-side { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 10px; align-items: center; color: var(--text-primary); text-decoration: none; min-width: 0; }
+    .h2h-side.b { grid-template-columns: minmax(0, 1fr) 40px; text-align: right; }
+    .h2h-side.b .h2h-badge { order: 2; }
+    .h2h-side:hover .h2h-name { color: var(--accent-text); text-decoration: underline; }
+    .h2h-badge { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; font: 700 13px var(--font); background: var(--bg-surface-alt); border: 1px solid var(--border); color: var(--text-secondary); }
+    .h2h-name { display: block; font: 700 16px/1.25 var(--font); overflow-wrap: anywhere; }
+    .h2h-sub { display: block; font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .h2h-record { text-align: center; min-width: 168px; }
+    .h2h-nums { display: flex; justify-content: center; gap: 14px; font-variant-numeric: tabular-nums; }
+    .h2h-nums span { display: grid; gap: 1px; }
+    .h2h-nums b { font: 800 26px/1 var(--font); color: var(--text-primary); }
+    .h2h-nums i { font: 600 10.5px var(--font); font-style: normal; letter-spacing: .05em; color: var(--text-secondary); text-transform: uppercase; }
+    .h2h-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin: 8px auto 6px; max-width: 180px; background: var(--border-light); }
+    .h2h-bar i { display: block; }
+    .h2h-bar .w { background: var(--accent-text); } .h2h-bar .d { background: #64748b; } .h2h-bar .l { background: var(--danger-text); }
+    .h2h-goals { font-size: 12px; color: var(--text-secondary); }
+    .h2h-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-light); }
+    .h2h-facts dt { font: 700 10.5px var(--font); letter-spacing: .05em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 3px; }
+    .h2h-facts dd { font-size: 13.5px; color: var(--text-primary); line-height: 1.4; }
+    .h2h-facts dd small { display: block; font-size: 12px; color: var(--text-secondary); }
+    .h2h-pens { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+    .h2h-regroup { padding: 14px 20px; border-color: var(--gold); background: var(--gold-glow); }
+    .h2h-regroup h2 { font: 700 13.5px var(--font); color: var(--text-primary); margin-bottom: 4px; }
+    .h2h-regroup p { font-size: 12.5px; color: var(--text-secondary); line-height: 1.45; margin-bottom: 8px; max-width: 70ch; }
+    .h2h-regroup fieldset { border: 0; display: grid; gap: 6px; }
+    .h2h-regroup legend { font: 600 12.5px var(--font); color: var(--text-primary); margin-bottom: 6px; }
+    .h2h-cand { display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; gap: 8px; align-items: center; min-height: 40px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-surface); font-size: 13px; color: var(--text-primary); cursor: pointer; }
+    .h2h-cand input { width: 18px; height: 18px; accent-color: var(--accent); }
+    .h2h-cand small { display: block; color: var(--text-secondary); font-size: 12px; }
+    .h2h-cand .h2h-cost { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+    .h2h-cand.on { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+    .h2h-cand.off { background: var(--bg-surface-alt); cursor: default; }
+    .h2h-cand.off b { color: var(--text-secondary); }
+    .h2h-cand.off .h2h-cost { color: var(--text-secondary); }   /* the reason is information: the secondary text colour, 4.5:1 on the panel */
+    .h2h-v { color: var(--text-secondary); font-weight: 500; }
+    .h2h-fail { max-width: 860px; }
+    .h2h-next { padding: 14px 20px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: center; }
+    .h2h-cal { width: 52px; text-align: center; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .h2h-cal b { display: block; font: 800 20px/1.1 var(--font); color: var(--text-primary); padding: 4px 0 5px; }
+    .h2h-cal span { display: block; font: 700 10.5px/18px var(--font); text-transform: uppercase; letter-spacing: .05em; background: var(--accent); color: var(--accent-contrast); }
+    .h2h-next h2 { font: 700 10.5px var(--font); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-text); margin-bottom: 2px; }
+    .h2h-next .t { font: 700 15px var(--font); color: var(--text-primary); }
+    .h2h-next .m { font-size: 12.5px; color: var(--text-secondary); margin-top: 2px; }
+    .h2h-link { font: 600 13px var(--font); color: var(--accent-text); text-decoration: none; white-space: nowrap; }
+    .h2h-link:hover { text-decoration: underline; }
+    .h2h-season { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; padding: 9px 20px; background: var(--bg-surface-alt); border-top: 1px solid var(--border-light); font: 700 13px var(--font); color: var(--text-primary); }
+    .h2h-season span { font: 500 12px var(--font); color: var(--text-secondary); }
+    a.h2h-game { grid-template-columns: 76px minmax(0, 1fr) auto; color: var(--text-primary); text-decoration: none; align-items: start; }
+    a.h2h-game .match-time b { color: var(--text-primary); }
+    a.h2h-game:hover { background: var(--row-hover); }
+    a.h2h-game .h2h-open { font-size: 12px; color: var(--text-secondary); white-space: nowrap; padding-top: 2px; }
+    a.h2h-game:hover .h2h-open { color: var(--accent-text); }
+    .h2h-up { font: 600 10.5px/18px var(--font); padding: 0 7px; border-radius: 999px; background: var(--accent-surface); color: var(--accent-text); }
+    .h2h-me { color: var(--accent-text); }
+    .h2h-cover { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--text-secondary); line-height: 1.45; padding: 0 4px; }
+    .h2h-cover svg { flex: none; width: 16px; height: 16px; margin-top: 1px; }
+    .h2h-empty { padding: 26px 20px; text-align: center; }
+    .h2h-empty h2 { font: 700 15px var(--font); color: var(--text-primary); margin-bottom: 6px; }
+    .h2h-empty p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; max-width: 52ch; margin: 0 auto 4px; }
+    .h2h-loading { padding: 14px 20px; font-size: 13px; color: var(--text-secondary); }
+    .h2h-loading .sx-bar { margin-top: 10px; border-radius: 2px; }
+    .h2h-note { padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--gold); background: var(--gold-glow); font-size: 13px; color: var(--text-primary); line-height: 1.45; max-width: 860px; margin: 14px 24px 0; }
+    .h2h-note strong { display: block; margin-bottom: 2px; }
+    /* search: the lead row, the pairing note, the H2H cell on a game row */
+    .sxg-h2hrow { grid-template-columns: 32px minmax(0, 1fr) auto; }
+    .sxg-h2hrow .sx-name { font-size: 14px; }
+    .sxg-rec { font: 700 12.5px var(--font); color: var(--text-primary); }
+    .sxg-h2hli { display: flex; align-items: center; }
+    .sxg-h2hli > .sx-row { flex: 1 1 auto; min-width: 0; }
+    .sxg-h2hgap { flex: none; width: 44px; margin: 0 14px 0 4px; }
+    .sx-chip.sxg-h2h { flex: none; width: 44px; justify-content: center; margin: 0 14px 0 4px; min-width: 0; height: 26px; font-size: 11.5px; }
+    .sx-pill.sxg-h2hpill { background: var(--accent-surface); color: var(--accent-text); }
+    /* match cards and the team's schedule tables */
+    .match-where.h2h-where { display: flex; gap: 10px; justify-content: space-between; align-items: baseline; }
+    .match-h2h, .sched-h2h { font: 600 12px var(--font); color: var(--accent-text); text-decoration: none; white-space: nowrap; }
+    .match-h2h:hover, .sched-h2h:hover { text-decoration: underline; }
+    .sched-h2h { display: block; margin-top: 3px; font-size: 11px; }
+    @media (max-width: 768px) {
+      .h2h-summary { padding: 14px 14px 12px; }
+      .h2h-sides { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .h2h-record { grid-column: 1 / -1; grid-row: 2; min-width: 0; }
+      .h2h-side { grid-template-columns: 32px minmax(0, 1fr); }
+      .h2h-side.b { grid-template-columns: minmax(0, 1fr) 32px; }
+      .h2h-badge { width: 32px; height: 32px; font-size: 11px; border-radius: 8px; }
+      .h2h-name { font-size: 14px; }
+      .h2h-facts { grid-template-columns: 1fr; }
+      .h2h-regroup, .h2h-next { padding: 12px 14px; }
+      .h2h-next { grid-template-columns: auto minmax(0, 1fr); }
+      .h2h-next .h2h-link { grid-column: 1 / -1; min-height: 44px; display: flex; align-items: center; }
+      .h2h-season { padding: 9px 14px; }
+      a.h2h-game { grid-template-columns: 64px minmax(0, 1fr); padding: 10px 14px; }
+      a.h2h-game .h2h-open { display: none; }
+      .h2h-cand { min-height: 48px; }
+      .sx-chip.sxg-h2h { margin-right: 10px; height: 36px; }
+      .sxg-h2hrow { grid-template-columns: 32px minmax(0, 1fr); }
+    }
+
     /* ===== #168: match=: the game a search link names, scrolled to and marked until the next click or key (Q6). No
        animation, so nothing depends on prefers-reduced-motion. ===== */
     .match-row.is-match { background: var(--accent-surface); box-shadow: inset 0 0 0 2px var(--accent); border-radius: 6px; }
@@ -2373,7 +2475,7 @@
     </div>
     <div class="sx-status" id="sxStatus" hidden></div>
     <div class="sx-scroll" id="sxBody"><div class="sx-lead" id="sxLead" hidden></div><ul class="sx-list" id="usearchList" role="grid" aria-label="Search results"></ul></div>
-    <div class="us-actions" id="usearchActions" hidden><span id="usearchActive"></span><a id="usearchOpen" href="#">Overview</a><a id="usearchHist" href="#">Current season</a><a id="usearchPrev" href="#" hidden>Earlier team</a></div>
+    <div class="us-actions" id="usearchActions" hidden><span id="usearchActive"></span><a id="usearchOpen" href="#">Overview</a><a id="usearchH2H" href="#" hidden>Head to head</a><a id="usearchHist" href="#">Current season</a><a id="usearchPrev" href="#" hidden>Earlier team</a></div>
     <div class="us-foot"><span class="us-keys" id="sxKeys"><kbd>Esc</kbd> close</span><span>Teams, events and games since 2020-21</span></div>
     <div class="us-sr" id="usearchLive" role="status" aria-live="polite"></div>
   </div>
@@ -2506,6 +2608,7 @@
         <div class="view-tabs" id="viewTabs" role="tablist" aria-label="View" style="display:none">
           <button class="view-tab active" id="viewTabStandings" role="tab" aria-selected="true" onclick="selectView('standings')">Standings</button>
           <button class="view-tab" id="viewTabSchedule" role="tab" aria-selected="false" onclick="selectView('schedule')">Schedule</button>
+          <button class="view-tab" id="viewTabH2H" role="tab" aria-selected="false" hidden>Head to head</button>
         </div>
         <details class="format-note" id="formatNote" style="display:none">
           <summary>ⓘ Format</summary>
@@ -2679,6 +2782,12 @@
     // 2026-10-01) or 'season' (that season's table and games). Code names stay as in #107.
     let teamView = 'history';
     let teamViewFor = null;           // the team teamView belongs to: another team starts on Overview (S11)
+    // #178: teamView 'h2h' is the head to head of this team (side A) against h2hVs { season, teamID } (the vs= of the link).
+    // Every exit clears it (MF2). h2hMatch: the meeting a link names (&match=), marked once. h2hNote: why a vs= link opened
+    // Overview instead. h2hChosen: earlier teams added on a pair's regroup control, kept for the visit (Q1).
+    const H2H_VS_RE = /^(\d{4}-\d{2}):([1-9]\d{0,9})$/;   // games.mjs VS_RE (a test pins that they agree)
+    let h2hVs = null, h2hMatch = null, h2hNote = null, h2hNoteOn = false;
+    const h2hChosen = new Map();
     let teamToken = 0;                // drops a team page load that was superseded
     let playoffToken = 0;             // #99: drops a Playoffs panel load (tab, season, stage) that was superseded
     let playoffFlightToken = 0;       // #99: drops a Playoffs competition load superseded by another view, age group or competition
@@ -3013,6 +3122,7 @@
       // #135 P1a: neither the landing page nor the Teams index is a place to resume (the index only
       // while Conferences shows it: on another tab the flag is a memory of where Conferences was).
       if (landingOpen || (teamsIndex && currentTab === 'conferences')) return;
+      if (currentTab === 'favorites' && teamView === 'h2h') return;   // #178: a head to head is never the place to resume
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
           season: currentSeason, ageGroup: currentTab === 'favorites' && previewTeam && !teamSidebarFor ? null : currentAgeGroup,
@@ -3178,7 +3288,7 @@
         : currentTab === 'favorites'
         ? `#tab=teams&season=${e(currentSeason)}` +
           (fav && fav.teamID ? `&team=${e(fav.teamID)}` : '') + (fav ? `&name=${e(fav.name)}` : '') +
-          (teamView === 'season' ? '&view=season' : '')   // no view: Overview
+          (teamView === 'h2h' && h2hVs ? `&vs=${e(h2hVs.season)}:${e(h2hVs.teamID)}` : teamView === 'season' ? '&view=season' : '')   // no view: Overview; #178: vs= (never match=)
         : teamsIndex ? `#season=${e(currentSeason)}`   // #135 P1a: the Teams index
         : `#season=${e(currentSeason)}&age=${e(currentAgeGroup)}&conf=${e(currentConference)}${view}` +
           (selectedTeamID ? `&team=${e(selectedTeamID)}` : '') +
@@ -3193,6 +3303,8 @@
       if (!hash) return false;
       const p = new URLSearchParams(hash);
       let changed = false;
+      if (teamView === 'h2h') teamView = 'history';   // #178: every route starts out of the head to head; the team branch below may open it again
+      h2hVs = null; h2hMatch = null; h2hNote = null;
       if (p.get('season') && SEASONS[p.get('season')]) { currentSeason = p.get('season'); changed = true; }
       if (p.get('view') === 'schedule' || p.get('view') === 'standings') { currentView = p.get('view'); changed = true; }
       if (p.get('tab') === 'teams' || p.get('tab') === 'myteams') {   // myteams: an alias (#97 addendum)
@@ -3206,6 +3318,14 @@
         // (the #107 links) and &view=overview mean Overview. Only for the team it names (S11).
         teamView = p.get('view') === 'season' ? 'season' : 'history';
         teamViewFor = { id: teamID, name };
+        // #178: vs=<season>:<team> opens the head to head of this team against that one (view= is ignored). A link that
+        // cannot is not silent: this team's Overview opens, with a note saying why.
+        if (p.has('vs')) {
+          const vm = H2H_VS_RE.exec(p.get('vs'));
+          if (!vm || !teamID || !(p.get('season') && SEASONS[p.get('season')])) h2hNote = 'That head-to-head link is incomplete.';
+          else if (!SEASONS[vm[1]]) h2hNote = `No ${vm[1].replace('-', '\u2013')} season in this archive.`;
+          else { h2hVs = { season: vm[1], teamID: Number(vm[2]) }; teamView = 'h2h'; h2hMatch = /^-?\d+$/.test(p.get('match') || '') ? Number(p.get('match')) : null; }
+        }
         if (!rec && (teamID || name)) {
           // Not one of this browser's favourites: show it anyway, resolved from
           // the archive, without adding it to the list.
@@ -3416,6 +3536,7 @@
       const isPO   = tab === 'playoffs';
       const isSC   = tab === 'showcases';
       if (!isFav) previewTeam = null;   // #135 P3: leaving the team page leaves its preview
+      if (!isFav) { if (teamView === 'h2h') teamView = 'history'; h2hVs = null; h2hMatch = null; }   // #178: another tab leaves the head to head
       // #102: leaving My Teams cancels a team page still loading, which would otherwise paint
       // over this tab (and could move the season) when its requests answer.
       if (!isFav) { lastTopTab = tab; teamToken++; }
@@ -4643,6 +4764,8 @@
       if (!favorites.has(name)) return;
       currentFavorite = name;
       previewTeam = null;
+      if (teamView === 'h2h') teamView = 'history';   // #178 N-a: a click on a team, this one too, opens its Overview
+      h2hVs = null; h2hMatch = null;
       buildFavoritesList();
       loadTeamSummary(favoriteMeta.get(name) || { name });
       closeSidebarIfMobile();
@@ -4876,6 +4999,9 @@
       if (teamView === 'history' && !overviewAvailable(rec)) teamView = 'season';
       teamViewFor = { id: rec.teamID, name: rec.name };
       const token = ++teamToken;
+      if (h2hNote !== null) { h2hShowNote(h2hNote); h2hNote = null; } else if (h2hNoteOn) h2hShowNote(null);   // #178
+      if (teamView === 'h2h') { await h2hLoad(rec, token); return; }
+      h2hVs = null;
       const ta = document.getElementById('titleActions');
       if (ta) { ta.hidden = true; ta.innerHTML = ''; }
       showTeamViewTabs();
@@ -4974,7 +5100,11 @@
         // The team's own games
         const short = shortTeamName(rec.name);
         if (gamesError) stack.appendChild(failedFlightPanel(`${short} · all games`, 'these matches'));
-        else stack.appendChild(renderScheduleTable(mine, flightName, rec.flightID, rec.eventID, null, `${short} · all games`));
+        else {
+          const own = renderScheduleTable(mine, flightName, rec.flightID, rec.eventID, null, `${short} · all games`);
+          stack.appendChild(own);
+          if (typeof h2hSeasonLinks === 'function') h2hSeasonLinks(own, rec, teamID, ctx.season, mine, token);   // #178: H2H under each score
+        }
 
         // Showcases (#97): the team's games at this season's showcases, which never count
         // toward the conference table above. A refusal shows "try again" in place (#92).
@@ -5109,12 +5239,15 @@
       o.textContent = 'Overview'; s.textContent = teamSeasonTabLabel(currentSeason);
       o.style.display = overviewAvailable(teamViewFor && { teamID: teamViewFor.id }) ? '' : 'none';
       o.classList.toggle('active', teamView === 'history'); o.setAttribute('aria-selected', String(teamView === 'history'));
-      s.classList.toggle('active', teamView !== 'history'); s.setAttribute('aria-selected', String(teamView !== 'history'));
+      s.classList.toggle('active', teamView === 'season'); s.setAttribute('aria-selected', String(teamView === 'season'));
+      const h = document.getElementById('viewTabH2H');   // #178: a third tab, only on a head to head
+      if (h) { h.hidden = teamView !== 'h2h'; h.classList.toggle('active', teamView === 'h2h'); h.setAttribute('aria-selected', String(teamView === 'h2h')); }
     }
 
     function selectTeamView(v) {
       if (v === teamView) return;
       teamView = v;
+      h2hVs = null; h2hMatch = null;   // #178: the Overview and the season tab leave the head to head
       const rec = currentFavorite ? (favoriteMeta.get(currentFavorite) || { name: currentFavorite }) : previewTeam;
       if (!rec) return;
       teamViewFor = { id: rec.teamID, name: rec.name };
@@ -5800,6 +5933,7 @@
     function updateViewTabsUI(firstLabel, secondLabel) {
       const tabs = document.getElementById('viewTabs');
       if (tabs) tabs.style.display = '';
+      const h2t = document.getElementById('viewTabH2H'); if (h2t) h2t.hidden = true;   // #178: only a head to head shows its tab
       const s = document.getElementById('viewTabStandings');
       const c = document.getElementById('viewTabSchedule');
       if (s) {
@@ -6053,6 +6187,7 @@
     <div class="match-groups"></div>`;
 
       const wrap = panel.querySelector('.match-groups');
+      const h2h = typeof h2hCardLinker === 'function' ? h2hCardLinker() : null;   // #178
       if (!list.length) {
         wrap.innerHTML = `<div class="matches-empty">${esc(empty)}</div>`;
       } else {
@@ -6063,7 +6198,7 @@
           return `<section class="match-day${isNext ? ' is-next' : ''}" id="d-${esc(grp.key)}">
             <h3 class="match-day-head"><span>${esc(formatMatchDate(grp.key))}</span>` +
             `<span class="match-day-count">${grp.games.length} match${grp.games.length !== 1 ? 'es' : ''}</span></h3>
-            ${grp.games.map(g => matchRowHtml(g, { today, rowTag })).join('')}
+            ${grp.games.map(g => matchRowHtml(g, { today, rowTag, h2h })).join('')}
           </section>`;
         }).join('');
       }
@@ -6081,7 +6216,7 @@
       return panel;
     }
 
-    function matchRowHtml(g, { today, rowTag } = {}) {
+    function matchRowHtml(g, { today, rowTag, h2h } = {}) {
       const played = isPlayed(g);
       const home = displayName(g.homeTeam, g.homeTeamClub), away = displayName(g.awayTeam, g.awayTeamClub);
       const sel = !!selectedTeamID && (g.hometeamID === selectedTeamID || g.awayteamID === selectedTeamID);
@@ -6095,6 +6230,7 @@
       const status = g.status && g.status !== 'On Time' ? `<span class="sched-status">${esc(g.status)}</span>` : '';
       const where = [g.complex, g.venue].filter(Boolean).join(' · ') || (g.dateUnconfirmed ? 'Date to be confirmed' : '');
       const tag = rowTag ? rowTag(g) : '';
+      const link = h2h ? h2h(g) : null;   // #178: "Head to head", when both sides have a team page
       const teams = played
         ? `${team(home, g.homeTeam, g.hometeamID, homeWin)}<span class="match-score">${g.hometeamscore}–${g.awayteamscore}</span>${team(away, g.awayTeam, g.awayteamID, awayWin)}${pk}`
         : `${team(home, g.homeTeam, g.hometeamID)}<span class="match-vs">vs</span>${team(away, g.awayTeam, g.awayteamID)}`;
@@ -6102,7 +6238,7 @@
         <div class="match-time">${esc(g.gameTimeText || 'TBD')}${tag ? `<div class="sched-tag">${esc(tag)}</div>` : ''}</div>
         <div class="match-body">
           <div class="match-teams">${teams}${pending}${status}</div>
-          ${where ? `<div class="match-where">${esc(where)}</div>` : ''}
+          ${link ? `<div class="match-where h2h-where"><span>${esc(where)}</span><a class="match-h2h" href="${esc(link.href)}" aria-label="${esc(link.label)}">Head to head</a></div>` : where ? `<div class="match-where">${esc(where)}</div>` : ''}
         </div>
       </div>`;
     }
@@ -6419,6 +6555,8 @@
     }
 
     async function changeSeason(season) {
+      if (teamView === 'h2h') teamView = 'history';   // #178: the season select leaves the head to head (it goes to Conferences below) and drops vs
+      h2hVs = null; h2hMatch = null;
       currentSeason = season;
       eventHierarchy = {};
       selectedTeamID = null;
@@ -6510,7 +6648,7 @@
     //   G12 drawing makes no request: only the games loader fetches, once per season.
     // #167: a keystroke paints in parts (sxPaintStart): the first cells, then the rest after a frame, then a deferred
     // Games section; the settled panel equals sxDraw's. Club groups build their lines only when drawn (sxGroups).
-    const SX_API_EXPECTED = 3;                     // search.mjs SEARCH_API this page was written against (#168: games)
+    const SX_API_EXPECTED = 4;                     // search.mjs SEARCH_API this page was written against (#178: head to head)
     const SX_MODULES = ['events', 'games', 'links', 'match', 'reader', 'search', 'slate', 'teams', 'vocab'].map(n => `/search/${n}.mjs`);
     const SX_STEP_UNITS = 50;                      // units of work per build step
     const SX_TASK_MS = 40;                         // no build task may run past this (the Auditor measures 50)
@@ -6578,7 +6716,7 @@
     const SX_STAGES = ['vocab', 'team docs', 'postings', 'counts', 'lookups', 'events'];
     const sxStageOf = label => { const i = SX_STAGES.findIndex(s => String(label).startsWith(s)); return i < 0 ? 0 : i; };
 
-    function sxLoad() {
+    function sxLoad({ activeGames = true } = {}) {   // #178: a head to head opened cold fetches only the seasons it needs
       if (sxLoadP) return sxLoadP;
       sxState = 'loading'; sxPct = 0;
       sxLoadP = (async () => {
@@ -6588,7 +6726,7 @@
         if (mod.SEARCH_API !== SX_API_EXPECTED) throw Object.assign(new Error('api'), { sxReload: true });
         sxIndex = await sxDrive(mod.startIndex(data, SX_STEP_UNITS), { onStep: label => sxProgress(label) });
         sxMod = mod; sxState = 'ready'; sxPct = 100;
-        sxGamesFetch([sxIndex.vocab.active]);   // #168 (Q5b b): the active season's games, right after "ready": 1 request
+        if (activeGames) sxGamesFetch([sxIndex.vocab.active]);   // #168 (Q5b b): the active season's games, right after "ready": 1 request
       })().catch(e => {
         sxLoadP = null;
         sxState = e && (e.sxReload || e.name === 'SearchDataError') ? 'reload' : 'failed';
@@ -6623,7 +6761,7 @@
       sxPlace();
       sxPop().hidden = false;
       inp.setAttribute('aria-expanded', 'true');
-      if (sxState === 'ready') { sxRun(inp.value); return; }
+      if (sxState === 'ready') { sxEnsureActive(); sxRun(inp.value); return; }
       if (sxState === 'reload') { sxShow(sxReloadNote()); return; }
       sxShow(sxLoadingBody());
       sxLoad().then(() => { if (!sxPop().hidden) sxRun(sxInput.value); })
@@ -7048,6 +7186,290 @@
     }
     const sxCtx = () => ({ now: Date.now(), timeZone: SX_TZ, selectedSeason: currentSeason || '', today: todayKey(), ...sxGamesCtx() });
 
+    // ===== #178: head to head =====
+    // #tab=teams&season=<sA>&team=<A>&name=<A's name>&vs=<sB>:<B> opens A's squad against B's, from the search data
+    // (search/core and the games files of the seasons both played). A side is a squad (public/search/games.mjs
+    // resolveSide). The page keeps no copy of a result: it asks the modules, which compute it from the games indexes
+    // search already loads. Never saved as the visitor's place (saveState), never a history entry of its own beyond
+    // the link that opened it; every exit clears h2hVs. A 2026-27 squad's earlier teams are listed for the visitor
+    // to add (a checkbox each); none is chosen for them and none is merged. What is added is kept for the visit.
+    const H2H_COVER = 'Games from 2020–21 on: conference seasons, national events and showcases in this archive. A game counts when both teams have a team page for that season, so games a team played before its team page begins (mostly 2020–21 and 2021–22) aren’t included.';
+    const h2hSpan = seasons => (!seasons.length ? '' : seasons.length === 1 ? sxSeason(seasons[0]) : `${sxSeason(seasons[0])} to ${sxSeason(seasons[seasons.length - 1])}`);
+    const h2hSeasonsOf = d => [...new Set([...d.rows.map(r => r.season), ...d.x.map(x => x.season)])].sort();
+    const h2hInitials = n => String(n).replace(/\b(ECNL|RL|SC|FC|G\d.*)\b/g, '').split(/\s+/).filter(w => /^[A-Za-z]/.test(w)).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
+    const h2hShort = d => displayName(d.latest.name, d.club.name);
+    const h2hTeamLink = d => `#tab=teams&season=${encodeURIComponent(d.latest.season)}&team=${d.latest.teamID}&name=${encodeURIComponent(d.latest.name)}`;
+    // Where a game's head to head is opened from a Matches card: side A is the selected team when it plays, else the home side
+    function h2hCardHref(g) {
+      if (LIVE || !g.hometeamID || !g.awayteamID || g.hometeamID === g.awayteamID) return null;
+      const away = !!selectedTeamID && g.awayteamID === selectedTeamID, e = encodeURIComponent;
+      const [a, b, an] = away ? [g.awayteamID, g.hometeamID, g.awayTeam] : [g.hometeamID, g.awayteamID, g.homeTeam];
+      return { href: `#tab=teams&season=${e(currentSeason)}&team=${e(a)}&name=${e(an)}&vs=${e(currentSeason)}:${e(b)}&match=${e(g.matchID)}`, label: `Head to head: ${an} against ${away ? g.homeTeam : g.awayTeam}` };
+    }
+    // The cards' link maker: only a game whose two sides are both in the division's standings (a side outside them
+    // is a side with no squad), which the Matches view already holds: no request
+    function h2hCardLinker() {
+      if (LIVE) return null;
+      const ids = new Set(currentFlightData.flatMap(fd => ((fd.standings && fd.standings.teamStandings) || []).map(t => t.teamID)));
+      return g => (ids.has(g.hometeamID) && ids.has(g.awayteamID) ? h2hCardHref(g) : null);
+    }
+    // H2H under each score of the team's own schedule, once the season's team index is in memory (0 requests when it
+    // is: deep links, search links, showcases; else 1 per season per session). A refused index: no links.
+    async function h2hSeasonLinks(panel, rec, teamID, season, games, token) {
+      if (LIVE || !teamID) return;
+      let index;
+      try { index = await getTeamIndex(season); } catch (e) { return; }
+      if (!index || token !== teamToken) return;
+      const ids = new Set(index.map(t => t.teamID)), by = new Map(games.map(g => [String(g.matchID), g]));
+      const e = encodeURIComponent;
+      panel.querySelectorAll('tr[data-match]').forEach(tr => {
+        const g = by.get(tr.dataset.match);
+        if (!g || !g.hometeamID || !g.awayteamID) return;
+        const opp = g.hometeamID === teamID ? g.awayteamID : g.hometeamID;
+        if (opp === teamID || !ids.has(opp)) return;
+        const cell = tr.querySelectorAll('td')[2];
+        if (!cell) return;
+        const names = [...tr.querySelectorAll('.team-name')].map(x => x.textContent);
+        cell.insertAdjacentHTML('beforeend', `<a class="sched-h2h" href="#tab=teams&season=${e(season)}&team=${e(teamID)}&name=${e(rec.name)}&vs=${e(season)}:${e(opp)}&match=${e(g.matchID)}" aria-label="${esc(`Head to head: ${names[0]} against ${names[1]}`)}">H2H</a>`);
+      });
+    }
+    // A note above the page, outside the container so no load wipes it: why a vs= link opened Overview instead
+    function h2hShowNote(text) {
+      const c = document.getElementById('standingsContainer');
+      let n = document.getElementById('h2hNote');
+      if (!n && c && c.parentNode) { n = document.createElement('div'); n.id = 'h2hNote'; n.className = 'h2h-note'; n.setAttribute('role', 'status'); c.parentNode.insertBefore(n, c); }
+      if (!n) return;
+      h2hNoteOn = !!text;
+      n.hidden = !text;
+      n.innerHTML = text ? `<strong>This head to head can’t open</strong>${esc(text)}` : '';
+    }
+    function h2hNameOf(season, id) {
+      if (sxIndex) { const t = sxIndex.teamAt && sxIndex.teamAt.get(`${season}/${id}`); if (t) return t; for (const G of sxIndex.games.values()) if (G.teams[id]) return G.teams[id][0]; }
+      return `Team ${id}`;
+    }
+    function h2hChrome(rec, A, B) {
+      const a = A && A.doc, b = B && B.doc;
+      document.getElementById('breadcrumb').innerHTML = `<span>${esc(currentSeason)}</span><span class="breadcrumb-sep">›</span><span>${esc(a ? a.latest.name : rec.name || 'Team')}</span><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Head to head</span>`;
+      document.getElementById('contentTitle').innerHTML = a && b ? `${esc(h2hShort(a))} <span class="h2h-v">v</span> ${esc(h2hShort(b))}` : esc(rec.name || 'Team');
+      const age = a && a.latest.div ? sxShortAge(a.latest.div) : '';
+      document.getElementById('contentSubtitle').textContent = a && b ? ['Head to head', a.latest.conf === b.latest.conf ? a.latest.conf : '', age ? `${age} in ${sxSeason(a.latest.season)}` : ''].filter(Boolean).join(' · ') : 'Loading the head to head…';
+      document.getElementById('extLinks').innerHTML = '';
+      const ta = document.getElementById('titleActions'); if (ta) { ta.hidden = true; ta.innerHTML = ''; }
+      const fn = document.getElementById('formatNote'); if (fn) fn.style.display = 'none';
+      showTeamViewTabs();
+    }
+    // the result of a game from side A's view, in words (a shoot-out as on the team Overview)
+    function h2hResult(g, an, bn) {
+      if (!g.score) return '';
+      const [x, y] = g.aHome ? g.score : [g.score[1], g.score[0]], pk = g.pk;
+      if (x === y) return pk && pk[0] !== pk[1] ? `${(g.aHome ? pk[0] > pk[1] : pk[1] > pk[0]) ? an : bn} won on penalties (${x}–${y}, ${Math.max(...pk)}–${Math.min(...pk)} PK)` : `Drawn ${x}–${y}`;
+      return `${x > y ? an : bn} won ${Math.max(x, y)}–${Math.min(x, y)}`;
+    }
+    function h2hSideHtml(d, cls) {
+      const sub = [`born ${d.born.join('/')}`, d.latest.conf, h2hSpan(h2hSeasonsOf(d))].filter(Boolean).join(' · ');
+      return `<a class="h2h-side ${cls}" href="${esc(h2hTeamLink(d))}"><span class="h2h-badge" aria-hidden="true">${esc(h2hInitials(d.club.name))}</span><span style="min-width:0"><span class="h2h-name">${esc(d.latest.name)}</span><span class="h2h-sub">${esc(sub)}</span></span></a>`;
+    }
+    function h2hSummaryHtml(a, b, h, opt) {
+      const [w, dr, l] = h.record, an = h2hShort(a), bn = h2hShort(b), tot = w + dr + l, last = h.last, next = h.next;
+      const lastTxt = last ? `${esc(h2hResult(last, an, bn))}<small>${esc(sxgDate(last.date, true))} · ${esc(sxgComp(last.competition))}</small>` : 'Not played yet';
+      const nextTxt = next ? `${esc(sxgDate(next.date, true))}${next.time ? ` · ${esc(sxgTime(next.time))}` : ''}<small>${next.field ? esc(sxgField(next.field)) : 'Field not published yet'}</small>` : 'None scheduled';
+      const np = h.pens.won + h.pens.lost;
+      const pens = np ? `<div class="h2h-pens">Includes ${np === 1 ? 'one shoot-out' : `${np} shoot-outs`} (${esc(an)} won ${h.pens.won}, lost ${h.pens.lost}). As on the team Overview, a shoot-out win counts as a win and a shoot-out loss as a loss; penalties are not goals.</div>` : '';
+      const nUp = h.upcoming.length;
+      const scope = opt.scope || `${sxPlural(tot, 'meeting')} played${nUp ? ` · ${nUp} upcoming` : ''}${h.unreported ? ` · ${h.unreported} not reported` : ''}${h.undated ? ` · ${h.undated} undated` : ''} · ${h2hSpan(h.seasons.loaded)}${opt.added ? ` · with ${opt.added}` : ''}`;
+      return `<section class="flight-panel h2h-summary" aria-labelledby="h2hSumTitle"><h2 id="h2hSumTitle" class="us-sr">Summary</h2>` +
+        `<div class="h2h-sides">${h2hSideHtml(a, 'a')}<div class="h2h-record" role="img" aria-label="${esc(`${an}: ${w} won, ${dr} drawn, ${l} lost`)}"><div class="h2h-nums"><span><b>${w}</b><i>Won</i></span><span><b>${dr}</b><i>Drawn</i></span><span><b>${l}</b><i>Lost</i></span></div>` +
+        `<div class="h2h-bar" aria-hidden="true">${tot ? `<i class="w" style="flex:${w}"></i><i class="d" style="flex:${dr}"></i><i class="l" style="flex:${l}"></i>` : ''}</div>` +
+        `<div class="h2h-goals">${esc(an)}’s record · goals ${h.goals[0]}–${h.goals[1]}<br>${esc(scope)}</div></div>${h2hSideHtml(b, 'b')}</div>` +
+        `<dl class="h2h-facts"><div><dt>Last result</dt><dd>${lastTxt}</dd></div><div><dt>Next meeting</dt><dd>${nextTxt}</dd></div></dl>${pens}</section>`;
+    }
+    function h2hNextHtml(h) {
+      const g = h.next; if (!g) return '';
+      const [y, m, d] = g.date.split('-').map(Number), days = Math.round((Date.UTC(y, m - 1, d) - Date.parse(todayKey() + 'T00:00:00Z')) / 864e5);
+      return `<section class="flight-panel h2h-next" aria-labelledby="h2hNextT"><div class="h2h-cal" aria-hidden="true"><span>${esc(SX_MONTHS[m - 1])}</span><b>${d}</b></div>` +
+        `<div><h2 id="h2hNextT">Next meeting · ${days <= 0 ? 'today' : `in ${sxPlural(days, 'day')}`}</h2><div class="t">${esc(sxgDate(g.date, true))}${g.time ? ` · ${esc(sxgTime(g.time))}` : ' · time not published yet'}</div>` +
+        `<div class="m">${esc(sxgShort(g.home))} v ${esc(sxgShort(g.away))} · ${esc(sxgComp(g.competition))}${g.field ? ` · ${esc(sxgField(g.field))}` : ' · field not published yet'}</div></div>` +
+        `${g.href ? `<a class="h2h-link" href="${esc(g.href)}">Open in ${esc(sxgView(g))} ›</a>` : ''}</section>`;
+    }
+    function h2hGameHtml(g, an, bn) {
+      const st = sxgGame(g, todayKey()), hw = g.winner === 'home', aw = g.winner === 'away';
+      const me = side => ((g.aHome && side === 'home') || (!g.aHome && side === 'away') ? ' h2h-me' : '');
+      const score = st.state === 'played' ? `<span class="match-score">${g.score[0]}–${g.score[1]}</span>${g.pk ? `<span class="match-pk">(${g.pk[0]}–${g.pk[1]} PK)</span>` : ''}` : '<span class="match-vs">v</span>';
+      const tag = st.state === 'upcoming' || st.state === 'today' ? `<span class="h2h-up">${st.state === 'today' ? 'Today' : 'Upcoming'}</span>` : st.state === 'unreported' ? '<span class="match-tag">Result not reported</span>' : st.state === 'undated' ? '<span class="match-tag">Date to be confirmed</span>' : '';
+      const label = `${sxgDate(g.date, true)}, ${sxgShort(g.home)} against ${sxgShort(g.away)}, ${st.state === 'played' ? h2hResult(g, an, bn) : sxgState(st).toLowerCase()}, ${sxgComp(g.competition)}${g.field ? `, ${sxgField(g.field)}` : ''}. Open in ${sxgView(g)}`;
+      return `<a class="match-row h2h-game" href="${esc(g.href || '#')}" data-match="${esc(g.matchID)}" aria-label="${esc(label)}"><div class="match-time"><b>${esc(sxgDate(g.date, false))}</b><br>${esc(g.time ? sxgTime(g.time) : 'TBD')}</div>` +
+        `<div class="match-body"><div class="match-teams"><span class="match-team${hw ? ' winner' : ''}${me('home')}">${esc(sxgShort(g.home))}</span>${score}<span class="match-team${aw ? ' winner' : ''}${me('away')}">${esc(sxgShort(g.away))}</span>${tag}</div>` +
+        `<div class="match-where">${esc(sxgComp(g.competition))}${g.field ? ` · ${esc(sxgField(g.field))}` : ''}</div></div><span class="h2h-open" aria-hidden="true">${esc(sxgView(g))} ›</span></a>`;
+    }
+    function h2hListHtml(a, b, h) {
+      const an = h2hShort(a), bn = h2hShort(b), by = new Map();
+      for (const g of h.meetings) { if (!by.has(g.season)) by.set(g.season, []); by.get(g.season).push(g); }
+      let html = '';
+      for (const [s, gs] of by) {
+        let w = 0, d = 0, l = 0;
+        for (const g of gs) if (g.score) { const [x, y] = g.aHome ? g.score : [g.score[1], g.score[0]], pk = g.pk && g.pk[0] !== g.pk[1] ? (g.aHome ? g.pk[0] - g.pk[1] : g.pk[1] - g.pk[0]) : 0; if (x > y || (x === y && pk > 0)) w++; else if (x < y || (x === y && pk < 0)) l++; else d++; }
+        html += `<h3 class="h2h-season">${esc(sxSeason(s))}<span>${sxPlural(gs.length, 'meeting')}${w + d + l ? ` · ${esc(an)} W${w} D${d} L${l}` : ''}</span></h3>` + gs.map(g => h2hGameHtml(g, an, bn)).join('');
+      }
+      return `<section class="flight-panel h2h-list" aria-labelledby="h2hListT"><div class="flight-header"><div class="flight-title" id="h2hListT">Every meeting</div><span class="flight-team-count">${sxPlural(h.meetings.length, 'meeting')} · newest first</span></div>${html}</section>`;
+    }
+    const h2hCover = extra => `<p class="h2h-cover">${SX_ICON.info}<span>${esc(H2H_COVER)}${extra ? esc(extra) : ''}</span></p>`;
+    // One side's regroup control: a fieldset of native checkboxes, one per candidate earlier team, none checked for the visitor
+    function h2hRegroupHtml(side, d, list, cost, added) {
+      if (!list.length) return '';
+      const rows = list.map((x, i) => {
+        const c = x.doc, id = `h2h-c-${side}-${i}`, meta = `${esc(c.club.name)} · born ${esc(c.born.join('/'))} · ${esc(h2hSpan(h2hSeasonsOf(c)))}`;
+        if (x.disabled) return `<label class="h2h-cand off"><input type="checkbox" id="${id}" disabled aria-describedby="rg${side} ${id}-why"><span><b>${esc(c.latest.name)}</b><small>${meta}</small></span><span class="h2h-cost" id="${id}-why">Added on the other side</span></label>`;
+        return `<label class="h2h-cand${x.chosen ? ' on' : ''}"><input type="checkbox" id="${id}" data-side="${side}" data-i="${i}"${x.chosen ? ' checked' : ''} aria-describedby="rg${side}"><span><b>${esc(c.latest.name)}</b><small>${meta}</small></span><span class="h2h-cost">${x.chosen ? esc(`Added · ${sxPlural(added(c, side), 'meeting')}`) : esc(cost(c, side))}</span></label>`;
+      }).join('');
+      return `<section class="flight-panel h2h-regroup" aria-labelledby="rgT${side}"><h2 id="rgT${side}">${esc(d.latest.name)} is new in ${esc(sxSeason(d.rows[0].season))}</h2>` +
+        `<p id="rg${side}">At the 2026–27 regroup it got a new place, so we can’t tell which earlier team it continues. Add an earlier team to include its games against the other side. Nothing is added for you, and nothing is merged. A team added on one side can’t be added on the other.</p>` +
+        `<fieldset><legend>Earlier teams it may continue (${list.length})</legend>${rows}</fieldset></section>`;
+    }
+    // Draws the page for the sides and what is added; `loading` are the seasons still on their way
+    function h2hRender(st, { loading = null, failed = null, focusId = null, announce = '' } = {}) {
+      const { A, B, ix, mod } = st, container = document.getElementById('standingsContainer');
+      const xa = st.chosen.a, xb = st.chosen.b, a = A.doc, b = B.doc;
+      const h = mod.headToHead(ix, [a, ...xa], [b, ...xb], { today: todayKey() });
+      const costOf = (c, side) => { const n = (side === 'a' ? mod.h2hSeasons(ix, [a, ...xa, c], [b, ...xb]) : mod.h2hSeasons(ix, [a, ...xa], [b, ...xb, c])).need.length; return n ? `Loads ${sxPlural(n, 'season')}` : 'Loads no more seasons'; };
+      const addedOf = (c, side) => { const r = side === 'a' ? mod.headToHead(ix, [c], [b, ...xb], { today: todayKey() }) : mod.headToHead(ix, [a, ...xa], [c], { today: todayKey() }); return r.error ? 0 : r.meetings.length; };
+      const added = [...xa, ...xb].map(x => x.latest.name).join(', ');
+      let body;
+      if (loading) {
+        body = h2hSummaryHtml(a, b, h, { scope: `so far: ${h2hSpan(h.seasons.loaded) || 'nothing loaded'} · loading ${h2hSpan(loading)}` }) +
+          `<section class="flight-panel h2h-loading" role="status"><strong>Loading ${sxPlural(loading.length, 'earlier season')}…</strong> ${esc(h2hSpan(loading))} (${sxgRequests(loading.length)}). The record above grows as each season lands.<div class="sx-bar" aria-hidden="true"><i style="width:34%"></i></div></section>` + h2hListHtml(a, b, h) + h2hCover();
+      } else if (failed) {
+        body = h2hSummaryHtml(a, b, h, {}) + `<div class="h2h-fail" id="h2hFail"></div>` + h2hListHtml(a, b, h) + h2hCover();
+      } else if (!h.meetings.length) {
+        const both = h.seasons.both;
+        body = h2hRegroupHtml('a', a, mod.candidateList(A, B, xa, xb), costOf, addedOf) + h2hRegroupHtml('b', b, mod.candidateList(B, A, xb, xa), costOf, addedOf) +
+          `<section class="flight-panel h2h-empty"><h2>These teams haven’t met in this archive</h2><p>${esc(a.latest.name)} and ${esc(b.latest.name)} ${both.length ? `both played ${esc(h2hSpan(both))}, and no game between them is listed in ${both.length === 1 ? 'that season' : 'those seasons'}` : 'have no season in common'}.</p>` +
+          `<p><a class="h2h-link" href="${esc(h2hTeamLink(a))}">${esc(h2hShort(a))} overview ›</a> &nbsp; <a class="h2h-link" href="${esc(h2hTeamLink(b))}">${esc(h2hShort(b))} overview ›</a></p></section>` + h2hCover();
+      } else {
+        body = h2hSummaryHtml(a, b, h, { added }) + h2hRegroupHtml('a', a, mod.candidateList(A, B, xa, xb), costOf, addedOf) + h2hRegroupHtml('b', b, mod.candidateList(B, A, xb, xa), costOf, addedOf) +
+          h2hNextHtml(h) + h2hListHtml(a, b, h) + h2hCover(xa.length || xb.length ? ` Includes ${[...xa, ...xb].map(x => x.latest.name).join(' and ')}, added above.` : '');
+      }
+      container.innerHTML = `<div class="h2h">${body}<div class="us-sr" id="h2hLive" role="status" aria-live="polite">${esc(announce)}</div></div>`;
+      const box = container.querySelector('.h2h');
+      box.addEventListener('change', e => { const t = e.target; if (t && t.dataset && t.dataset.side) h2hToggle(st, t.dataset.side, Number(t.dataset.i), t.checked); });
+      if (failed) { const f = container.querySelector('#h2hFail'); if (f) { f.appendChild(loadWarning(failed.error, () => h2hCompute(st, st.token))); } }
+      if (focusId) { const el = document.getElementById(focusId); if (el && el.focus) el.focus({ preventScroll: true }); }
+      return h;
+    }
+    // Fetches the seasons both sides played that are not loaded, drawing what is in first; token guards every wait
+    async function h2hCompute(st, token, opts = {}) {
+      const { A, B, ix, mod } = st, a = A.doc, b = B.doc;
+      const need = () => mod.h2hSeasons(ix, [a, ...st.chosen.a], [b, ...st.chosen.b]).need;
+      let n = need();
+      if (n.length) {
+        h2hRender(st, { loading: n, focusId: opts.focusId });
+        await sxGamesFetch(n);
+        if (token !== teamToken) return;
+        const bad = n.map(s => [s, sxG.status.get(s)]).filter(([, v]) => v && (v.state === 'failed' || v.state === 'missing'));
+        n = need();
+        if (bad.length && n.length) {
+          const [s, v] = bad[0];
+          if (v.state === 'failed') sxG.status.delete(s);   // Try again asks once more
+          h2hRender(st, { failed: v.state === 'failed' ? { error: v.error } : { error: Object.assign(new Error('missing'), { status: 404 }) }, focusId: opts.focusId });
+          return;
+        }
+      }
+      const h = h2hRender(st, { focusId: opts.focusId, announce: opts.announce || '' });
+      saveState(); pushHash();
+      if (opts.first) h2hArrive(st);
+      return h;
+    }
+    // Arrival: focus goes to the title, or to the meeting the link named (&match=), marked until the next click or key
+    function h2hArrive(st) {
+      const id = h2hMatch; h2hMatch = null;
+      const container = document.getElementById('standingsContainer');
+      const el = id != null ? container.querySelector(`[data-match="${id}"]`) : null;
+      if (!el) { if (id != null) container.insertAdjacentHTML('afterbegin', '<div class="match-gone" role="status">This game isn’t in this head to head. It may be from a season both teams have no page for.</div>'); focusContentTitle(); return; }
+      const sc = document.getElementById('standingsScroll');
+      if (sc) { const top = sc.getBoundingClientRect().top, r = el.getBoundingClientRect(); sc.scrollTop += r.top - top - Math.round(sc.clientHeight / 3); }
+      el.classList.add('is-match'); el.focus({ preventScroll: true });
+    }
+    function h2hToggle(st, side, i, on) {
+      const { A, B, mod } = st, list = side === 'a' ? mod.candidateList(A, B, st.chosen.a, st.chosen.b) : mod.candidateList(B, A, st.chosen.b, st.chosen.a);
+      const x = list[i]; if (!x || x.disabled) return;
+      const mine = st.chosen[side];
+      if (on && !mine.includes(x.doc)) mine.push(x.doc); else if (!on) st.chosen[side] = mine.filter(d => d !== x.doc);
+      st.mem.a = st.chosen.a; st.mem.b = st.chosen.b;
+      h2hCompute(st, st.token, { focusId: `h2h-c-${side}-${i}`, announce: on ? `Added ${x.doc.latest.name}` : `Removed ${x.doc.latest.name}` });
+    }
+    async function h2hLoad(rec, token) {
+      const container = document.getElementById('standingsContainer');
+      h2hShowNote(null);
+      h2hChrome(rec, null, null);
+      container.innerHTML = '<div class="loading-container"><div class="spinner"></div><div class="loading-text">Loading the head to head…</div></div>';
+      const vs = h2hVs;
+      // A vs= that cannot open leaves the rest of the link as it was: A's Overview, with a note saying why
+      const back = text => {
+        if (token !== teamToken) return;
+        h2hNote = text; teamView = 'history'; h2hVs = null; h2hMatch = null; teamViewFor = { id: rec.teamID, name: rec.name };
+        loadTeamSummary(rec);
+      };
+      if (LIVE) return back('Head to head needs the archive and isn’t available in live mode.');
+      try { await sxLoad({ activeGames: false }); }
+      catch (e) {
+        if (token !== teamToken) return;
+        document.getElementById('contentSubtitle').textContent = '';
+        container.innerHTML = '';
+        container.appendChild(loadWarning(e, () => loadTeamSummary(rec)));
+        return;
+      }
+      if (token !== teamToken) return;
+      const mod = sxMod, ix = sxIndex;
+      const A = mod.resolveSide(ix, currentSeason, rec.teamID), B = mod.resolveSide(ix, vs.season, vs.teamID);
+      if (A.error) { teamView = 'history'; h2hVs = null; h2hMatch = null; teamViewFor = { id: rec.teamID, name: rec.name }; loadTeamSummary(rec); return; }
+      const own = rec.name || A.name;
+      if (B.error === 'unknown-season') return back(`No ${sxSeason(vs.season)} season in this archive. Here is ${own}’s overview instead.`);
+      if (B.error) return back(`${h2hNameOf(vs.season, vs.teamID)} has no team page for ${sxSeason(vs.season)}, so there is no squad to compare. Here is ${own}’s overview instead.`);
+      if (A.doc === B.doc) return back(`Both sides are the same team. Here is ${own}’s overview instead.`);
+      const key = `${A.key}|${B.key}`;
+      if (!h2hChosen.has(key)) h2hChosen.set(key, { a: [], b: [] });
+      const mem = h2hChosen.get(key);
+      const st = { A, B, ix, mod, token, mem, chosen: { a: mem.a.slice(), b: mem.b.slice() } };
+      h2hChrome(rec, A, B);
+      const row = A.doc.rows.find(r => r.season === currentSeason) || A.doc.latest;
+      if (typeof showTeamInSidebar === 'function') showTeamInSidebar(row.season, row.conf, row.div);   // a team not followed sits under Conferences: its table's place in the sidebar
+      await h2hCompute(st, token, { first: true });
+    }
+
+    // ----- search: the Games section's head-to-head lead row (one squad a side) -----
+    function sxgLeadRow(r, ctx) {
+      const sq = sxMod.squadAt(sxIndex), da = sq.get(`${r.a.season}/${r.a.teamID}`), db = sq.get(`${r.b.season}/${r.b.teamID}`);
+      const an = displayName(r.aName, r.aClub), bn = displayName(r.bName, r.bClub), [w, d, l] = r.record, played = w + d + l;
+      const born = da.born.join('/') === db.born.join('/') ? `born ${da.born.join('/')}` : '';
+      const who = [born, da.latest.conf === db.latest.conf ? da.latest.conf : '', `both played ${h2hSpan(r.played)}`].filter(Boolean).join(' · ');
+      const lastTxt = r.last ? `${h2hResult(r.last, an, bn)} (${sxgDate(r.last.date, r.complete)})` : '';
+      const loaded = r.loaded.filter(s => r.played.includes(s));
+      const meta = r.complete
+        ? `${an} W${w} D${d} L${l} · goals ${r.goals[0]}–${r.goals[1]}${lastTxt ? ` · last: ${lastTxt}` : ''}${r.next ? ` · next ${sxgDate(r.next.date, true)}` : ''}`
+        : `${loaded.length ? `${h2hSpan(loaded)}: ${played ? lastTxt : r.next ? 'not played yet' : 'no meeting'}${r.next ? ` · next ${sxgDate(r.next.date, false)}` : ''} · ` : ''}${r.notLoaded.length === 1 ? '1 earlier season loads' : `${r.notLoaded.length} earlier seasons load`} when you open it`;
+      const id = ctx.cell({ kind: 'h2h', row: ctx.nextRow(), col: 0, key: r.key, href: r.href, act: 'Open head to head', text: `Head to head: ${r.aName} v ${r.bName}` });
+      return `<li role="row" class="sx-rowli"><span role="gridcell" class="sx-row sxg-h2hrow" id="${id}" data-c="${ctx.cells.length - 1}" aria-selected="false" aria-label="${esc(`Head to head, ${r.aName} against ${r.bName}, ${who}. ${meta}`)}"><span class="sx-logo ev" aria-hidden="true">${SXG_VS}</span>` +
+        `<span style="min-width:0"><span class="sx-name">${esc(an)} <span class="sxg-v">v</span> ${esc(bn)} <span class="sx-pill sxg-h2hpill">Head to head</span></span>` +
+        `<span class="sx-meta" style="display:block">${esc(who)}</span><span class="sx-meta" style="display:block;color:var(--text-primary)">${esc(meta)}</span></span><span class="sx-act" aria-hidden="true">Head to head ›</span></span></li>`;
+    }
+    // The H2H gridcell after a game row's own (column 1), or an empty aria-hidden gap that keeps the column (N5)
+    function sxgH2hCell(ctx, row, g) {
+      const hh = g.row.h2hHref;
+      if (!hh) return '<span class="sxg-h2hgap" aria-hidden="true"></span>';
+      const id = ctx.cell({ kind: 'chip', row, col: 1, hgame: g, href: hh, text: `${sxgShort(g.home)} v ${sxgShort(g.away)} · ${sxgDate(g.date, false)}` });
+      return `<span role="gridcell" class="sx-chip sxg-h2h" id="${id}" data-c="${ctx.cells.length - 1}" aria-selected="false" title="Head to head" aria-label="${esc(`Head to head: ${sxgShort(g.home)} against ${sxgShort(g.away)}`)}">H2H</span>`;
+    }
+    // Why a game has no H2H cell, when a side is a team with no team page that season (a side still to be decided says nothing)
+    function sxgNoH2h(g) {
+      if (g.row.h2hHref || !g.home.teamID || !g.away.teamID) return '';
+      const no = !g.home.seasonHref ? g.home : !g.away.seasonHref ? g.away : null;
+      return no ? ` · ${no.name} has no team page for ${sxSeason(g.season)}, so this game has no head to head` : '';
+    }
+    // sxLoad({ activeGames: false }) leaves the active season's games unfetched: the next focus of the bar fetches them
+    function sxEnsureActive() {
+      const a = sxIndex && sxIndex.vocab.active;
+      if (a && sxIndex.games && !sxIndex.games.has(a) && !sxG.status.has(a)) sxGamesFetch([a]);
+    }
+
     // ----- #168: the Games section (G1-G11) -----
     const SXG_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const sxgDate = (d, withYear) => { if (!d) return 'Date TBD'; const [y, m, dd] = d.split('-').map(Number); const w = SXG_DAYS[new Date(Date.UTC(y, m - 1, dd)).getUTCDay()]; return `${w} ${SX_MONTHS[m - 1]} ${dd}${withYear ? `, ${y}` : ''}`; };
@@ -7117,12 +7539,13 @@
         const id = ctx.cell({ kind: g.href ? 'game' : 'nolink', row, col: 0, game: g, href: g.href, act: g.href ? `Open in ${sxgView(g)}` : '',
           text: `${sxgShort(g.home)} v ${sxgShort(g.away)} · ${sxgDate(g.date, year)} · ${sxgComp(g.competition)}` });
         const sc = g.state === 'played' ? `<span class="sxg-score">${esc(sxgState(g))}</span>` : `<span class="sxg-pill ${g.state}">${esc(sxgState(g))}</span>`;
-        return `<li role="row" class="sx-rowli${indent ? ' sxg-in' : ''}"><span role="gridcell" class="sx-row sxg-row" id="${id}" data-c="${ctx.cells.length - 1}" aria-selected="false" aria-label="${esc(sxgName(g))}">` +
+        const main = `<span role="gridcell" class="sx-row sxg-row" id="${id}" data-c="${ctx.cells.length - 1}" aria-selected="false" aria-label="${esc(sxgName(g))}">` +
           `<span class="sxg-when"><b>${esc(sxgDate(g.date, false))}</b><span>${esc([year ? g.date.slice(0, 4) : '', sxgTime(g.time) || (g.date ? 'TBD' : '')].filter(Boolean).join(' · '))}</span></span>` +
           `<span style="min-width:0"><span class="sxg-teams"><span class="sxg-side${g.winner === 'home' ? ' win' : ''}${hit('home')}">${esc(sxgShort(g.home))}</span><span class="sxg-v">v</span>` +
           `<span class="sxg-side${g.winner === 'away' ? ' win' : ''}${hit('away')}">${esc(sxgShort(g.away))}</span>${sc}</span>` +
           `<span class="sx-meta sxg-meta">${esc(sxgComp(g.competition))}${g.field ? ` · ${esc(sxgField(g.field))}` : ''}</span></span>` +
-          `<span class="sx-act" aria-hidden="true">${g.href ? `${esc(sxgView(g))} ›` : 'No page yet'}</span></span></li>`;
+          `<span class="sx-act" aria-hidden="true">${g.href ? `${esc(sxgView(g))} ›` : 'No page yet'}</span></span>`;
+        return `<li role="row" class="sx-rowli sxg-h2hli${indent ? ' sxg-in' : ''}">${main}${sxgH2hCell(ctx, row, g)}</li>`;   // #178: the H2H cell, column 1
       };
       // G3: up to 3 upcoming and 3 recent results, or (one squad a side, a field's games, "Show all") in order
       const list = (gs, { split, limit, indent = false }) => {
@@ -7150,6 +7573,7 @@
         if (st.includes('failed')) { const e = (sxG.status.get(seasons[st.indexOf('failed')]) || {}).error; return coverCell({ kind: 'retry', seasons, what, text: 'Try again' }, 'Try again', `Couldn't load ${sxgSeasons(seasons)} games. ${retryText(e)} Try again`); }
         return coverCell({ kind: 'load', seasons, what, text: `${label}: ${sxgRequests(seasons.length)}` }, label, name);
       };
+      for (const r of rows) if (r.kind === 'h2h') out.push(sxgLeadRow(r, ctx));   // #178: one squad a side leads with the head to head
       if (!rows.length && seasonsIn('loading').length) {
         const others = slate.sections.some(s => s.name !== 'games');
         out.push(sxgLine(`<strong>Loading ${esc(seasonsIn('loading').map(sxSeason).join(', '))} games…</strong> ${others ? 'Teams and events are ready; games join them in a moment.' : 'They join the results in a moment.'}`));
@@ -7195,9 +7619,16 @@
         const next = p.meetings.find(m => m.date && !m.score && m.date >= today);
         const meta = [sxPlural(p.meetings.length, 'meeting'), played ? `${p.sideNames[0][0].split(' ')[0]} W${w} D${d} L${l}` : 'none played yet', next ? `next ${sxgDate(next.date, true)}` : ''].filter(Boolean).join(' · ');
         const id = ctx.cell({ kind: 'pairing', row: ctx.nextRow(), col: 0, key, open, text: `${a} v ${b} · ${sxShortAge(p.div)} · ${sxSeason(p.season)}` });
-        out.push(`<li role="row" class="sx-rowli"><span role="gridcell" class="sx-row sxg-field" id="${id}" data-c="${ctx.cells.length - 1}" aria-selected="false" aria-expanded="${open}" aria-label="${esc(`${fa} against ${fb}, ${sxShortAge(p.div)}, ${sxSeason(p.season)}, ${meta}`)}">` +
+        const hasChip = p.squadPairs === 1 && !!p.h2hHref;
+        const pnote = p.squadPairs === 1 ? 'Earlier seasons are added when you open the head to head.' : p.squadPairs > 1 ? `${p.squadPairs} team pairings: each meeting has its own head to head.` : '';
+        const pchip = () => {   // #178: one squad pair opens its head to head from the row (column 1)
+          if (!hasChip) return '';
+          const nm = `${p.pairNames[0][0]} against ${p.pairNames[0][1]}`, cid = ctx.cell({ kind: 'chip', row: ctx.cells[ctx.cells.length - 1].row, col: 1, href: p.h2hHref, act: 'Head to head', text: `Head to head: ${nm}, every season` });
+          return `<span role="gridcell" class="sx-chip sxg-h2h" id="${cid}" data-c="${ctx.cells.length - 1}" aria-selected="false" title="Head to head" aria-label="${esc(`Head to head: ${nm}, every season`)}">H2H</span>`;
+        };
+        out.push(`<li role="row" class="sx-rowli${hasChip ? ' sxg-h2hli' : ''}"><span role="gridcell" class="sx-row sxg-field" id="${id}" data-c="${ctx.cells.length - 1}" aria-selected="false" aria-expanded="${open}" aria-label="${esc(`${fa} against ${fb}, ${sxShortAge(p.div)}, ${sxSeason(p.season)}, ${meta}`)}">` +
           `<span class="sx-logo ev" aria-hidden="true">${SXG_VS}</span><span style="min-width:0"><span class="sx-line"><span class="sx-name">${esc(a)} <span class="sxg-v">v</span> ${esc(b)}</span><span class="sx-pill season">${esc(sxSeason(p.season))}</span><span class="sx-pill season">${esc(sxShortAge(p.div))}</span></span>` +
-          `<span class="sx-meta" style="display:block">${esc(meta)}</span></span><span class="sx-act" aria-hidden="true">${open ? 'Hide ▴' : 'Meetings ▾'}</span></span></li>`);
+          `<span class="sx-meta" style="display:block">${esc(meta)}</span>${pnote ? `<span class="sx-meta" style="display:block">${pnote}</span>` : ''}</span><span class="sx-act" aria-hidden="true">${open ? 'Hide ▴' : 'Meetings ▾'}</span></span>${pchip()}</li>`);
         if (open) out.push(...list(p.meetings, { split: false, limit: SX_SIZES.page, indent: true }));
       });
       if (pairs.length > state.limit.games) out.push(ctx.more('games', `Show all ${sxPlural(pairs.length, 'pairing')}`));
@@ -7375,6 +7806,7 @@
     function sxEnterAt(slate, cells, strict) {
       const e = slate.enter;
       if (!e && (slate.rule === 3 || (slate.sections[0] && slate.sections[0].name === 'games'))) return -1;   // also while a games-first query's season loads (4a MF4)
+      if (e && e.kind === 'h2h') { const hi = cells.findIndex(c => c.kind === 'h2h' && c.key === e.key); if (hi >= 0) return hi; }   // #178
       if (e && (e.kind === 'field' || e.kind === 'pairing' || e.kind === 'game')) {
         const gi = cells.findIndex(c => (e.kind === 'game' ? c.game && c.game.matchID === e.matchID : c.kind === e.kind && c.key === `${e.kind === 'field' ? 'fd' : 'pr'}:${e.key}`));
         if (gi >= 0) return cells[gi].open && cells[gi + 1] && cells[gi + 1].game ? gi + 1 : gi;
@@ -7389,6 +7821,8 @@
     const sxCellEl = i => document.getElementById(`sx-c-${i}`);
     function sxKeysText(c) {
       if (!c) return '<kbd>Esc</kbd> close';
+      if (c.kind === 'chip') return '<kbd>←</kbd> the game · <kbd>Enter</kbd> head to head · <kbd>Esc</kbd> close';   // #178
+      if (c.kind === 'h2h') return '<kbd>↑</kbd> <kbd>↓</kbd> rows · <kbd>→</kbd> H2H · <kbd>Enter</kbd> open · <kbd>Esc</kbd> close';
       return '<kbd>↑</kbd> <kbd>↓</kbd> rows · <kbd>←</kbd> <kbd>→</kbd> along a row · <kbd>Enter</kbd> open' +
         (c && (c.kind === 'team' || c.kind === 'game') ? ' · <kbd>Shift</kbd>+<kbd>Enter</kbd> team’s season' : '') + ' · <kbd>Esc</kbd> close';
     }
@@ -7406,8 +7840,9 @@
       const bar = document.getElementById('usearchActions'), span = document.getElementById('usearchActive');
       const open = document.getElementById('usearchOpen'), hist = document.getElementById('usearchHist'), prevLink = document.getElementById('usearchPrev');
       document.getElementById('sxKeys').innerHTML = sxKeysText(c);
+      const h2l = document.getElementById('usearchH2H'); if (h2l) h2l.hidden = true;   // #178: shown for a game with a head to head
       // a fold, "show more", a field or pairing row and a Load cell open in the panel: no links (#168: MF1)
-      if (!['team', 'event', 'game', 'nolink'].includes(c.kind)) { bar.hidden = true; return; }
+      if (!['team', 'event', 'game', 'nolink', 'h2h', 'chip'].includes(c.kind)) { bar.hidden = true; return; }
       span.className = 'us-two';
       open.hidden = false; prevLink.textContent = 'Earlier team';
       if (c.kind === 'team') {
@@ -7417,10 +7852,11 @@
         const mayText = may.length ? ` · May continue here: ${may.map(x => `${x.last} team, born ${sxBorn(x.born)}`).join('; ')}` : '';
         span.textContent = c.text + mayText;
         prevLink.hidden = !may.length; prevLink.href = may.length ? may[0].overviewHref : '#';
-      } else if (c.game) {   // G8: what it is, where it opens, each side's season tab when it has one
-        const g = c.game, h = g.home, a = g.away;
-        span.textContent = c.text;
-        open.hidden = !g.href; open.textContent = c.act || 'Open'; open.href = g.href || '#';
+      } else if (c.game || c.hgame) {   // G8: what it is, where it opens, each side's season tab when it has one (#178: an H2H cell has its game as hgame)
+        const g = c.game || c.hgame, h = g.home, a = g.away;
+        span.textContent = c.text + (c.kind === 'chip' ? '' : sxgNoH2h(g));
+        const hh = g.row.h2hHref; if (h2l && hh) { h2l.hidden = false; h2l.href = hh; }   // #178
+        open.hidden = !g.href; open.textContent = g.href ? `Open in ${sxgView(g)}` : 'Open'; open.href = g.href || '#';
         hist.hidden = !h.seasonHref; hist.textContent = `${sxgShort(h)} season`; hist.href = h.seasonHref || '#';
         prevLink.hidden = !a.seasonHref; prevLink.textContent = `${sxgShort(a)} season`; prevLink.href = a.seasonHref || '#';
       } else {
@@ -7578,7 +8014,7 @@
         if (el) sxHoverCell(idx(el)); else sxHoverCancel();
       });
       list.addEventListener('pointerleave', sxHoverCancel);
-      ['usearchOpen', 'usearchHist', 'usearchPrev'].forEach(id => document.getElementById(id).addEventListener('click', e => {
+      ['usearchOpen', 'usearchH2H', 'usearchHist', 'usearchPrev'].filter(id => document.getElementById(id)).forEach(id => document.getElementById(id).addEventListener('click', e => {
         sxFlush();
         if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;   // the browser's own new-tab handling
         e.preventDefault(); sxGoTo(e.currentTarget.getAttribute('href'));
@@ -7881,6 +8317,8 @@
       const ta = document.getElementById('titleActions');   // #135 P3: no Follow, no preview behind the landing page
       if (ta) { ta.hidden = true; ta.innerHTML = ''; }
       previewTeam = null;
+      if (teamView === 'h2h') teamView = 'history';   // #178: the landing page leaves the head to head
+      h2hVs = null; h2hMatch = null;
       landingOpen = true;
       // Conferences opened from here (after the Events card) is the index only when no table was
       // chosen in this page; a chosen or resumed table stays the visitor's (S10, PR #142 MF2).

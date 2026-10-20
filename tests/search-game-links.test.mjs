@@ -32,6 +32,7 @@ const page = new Function([block('    function bracketName('), block('    functi
 const json = p => { try { return JSON.parse(readFileSync(new URL(p, root), 'utf8')); } catch { return null; } };
 const S = await import(new URL('search/search.mjs', root));
 const { GameRow } = await import(new URL('search/games.mjs', root));
+const { indexOf, destinationProblem } = await import(new URL('../tests/search/judged.mjs', root));   // #178: the judged set's link check
 const src = json('data/sources.json');
 const index = S.buildIndex({ core: json('archive/search/core.json'), places: json('archive/search/places.json') });
 const memo = new Map(), get = (k, f) => { if (!memo.has(k)) memo.set(k, f()); return memo.get(k); };
@@ -159,4 +160,94 @@ test('the resolver has teeth: each planted mistake is caught on the games it app
     assert.ok(tried > 0, `${name}: no game to plant it on`);
     assert.equal(caught, tried, `${name}: ${caught} of ${tried} caught`);
   }
+});
+
+// ---------- #178: the head-to-head links ----------
+// Three kinds of link go to a head to head: a game row's (side A the matched side, else home; &match=), a pairing row's (one
+// per season, age group, squad pair and orientation: the pairing groups are keyed by home and away, so they are a superset of
+// the rows search shows, which are by unordered pair) and the lead row's (every squad pair that met, both ways). Each must pass
+// the judged set's destinationProblem, open exactly the pair it names through the squads (never a candidate or an alias id), carry
+// only conference-row ids (a showcase's own id is mapped to its squad's id that season) and have name= on A. On the committed
+// data, which a refresh moves, the counts are rules (each derived here from the games), never pinned; the exact counts are on the
+// frozen fixture (tests/search-h2h.test.mjs).
+test('every head-to-head link (game rows, pairing rows, lead rows) opens the pair it names: 0 wrong destinations, only canonical ids', () => {
+  const jix = indexOf(json('archive/search/core.json').teams, src);
+  const sq = S.squadAt(index), ctx = { today: '2026-10-20' };
+  const canon = (d, season, id) => d.rows.some(r => r.season === season && r.teamID === id);
+  const pairMemo = new Map();
+  const holds = (a, b, key) => {
+    const k = `${a.key}|${b.key}`;
+    let h = pairMemo.get(k);
+    if (!h) { const r = S.headToHead(index, [a], [b], { today: ctx.today }); h = new Set(r.meetings.map(m => `${m.season}/${m.matchID}`)); pairMemo.set(k, h); }
+    return h.has(key);
+  };
+  const check = (href, season, ha, hb, gameKey, why) => {
+    const bad = destinationProblem(href, jix);
+    if (bad) return `${why}: ${bad}: ${href}`;
+    const p = new URLSearchParams(href.slice(1)), vs = S.parseVs(p.get('vs'));
+    const A = S.resolveSide(index, p.get('season'), +p.get('team')), B = S.resolveSide(index, vs.season, vs.teamID);
+    if (A.error || B.error || A.doc !== ha || B.doc !== hb) return `${why}: not the pair: ${href}`;
+    if (!canon(A.doc, p.get('season'), +p.get('team')) || !canon(B.doc, vs.season, vs.teamID)) return `${why}: not a conference id: ${href}`;
+    if (A.doc.rows.find(r => r.season === p.get('season') && r.teamID === +p.get('team')).name !== p.get('name')) return `${why}: name= is not A's: ${href}`;
+    if (gameKey && !holds(A.doc, B.doc, gameKey)) return `${why}: the head to head lacks the game: ${href}`;
+    return null;
+  };
+  const wrong = [], n = { game: 0, pairing: 0, lead: 0, noLink: 0, games: 0, ok: 0 };
+  const groups = new Map(), pairs = new Map();
+  for (const s of seasons) {
+    const G = games.get(s);
+    for (let i = 0; i < G.N; i++) {
+      n.games++;
+      const h = sq.get(`${s}/${G.h[i]}`), a = sq.get(`${s}/${G.a[i]}`), ok = G.h[i] && G.a[i] && h && a && h !== a;
+      for (const matched of [null, 'away']) {
+        const row = new GameRow(G, i, { cls: 'exact', matched }), href = row.h2hHref;
+        if (!ok) { if (href) wrong.push(`${s} ${G.id[i]}: a link where there is no head to head`); else if (!matched) n.noLink++; continue; }
+        if (!href) { wrong.push(`${s} ${G.id[i]}: no link between two squads`); continue; }
+        n.game++;
+        const [x, y] = matched ? [a, h] : [h, a];
+        const w = check(href, s, x, y, `${s}/${G.id[i]}`, `game ${s} ${G.id[i]}`);
+        if (w) wrong.push(w);
+        if (new URLSearchParams(href.slice(1)).get('match') !== String(G.id[i])) wrong.push(`${s} ${G.id[i]}: match= is not the game`);
+      }
+      if (ok) {
+        n.ok++;
+        const f = G.flights.get(G.fl[i]);
+        for (const side of ['h', 'a']) {
+          const k = `${s}|${f.div}|${side === 'h' ? `${h.key}|${a.key}` : `${a.key}|${h.key}`}`;
+          if (!groups.has(k)) groups.set(k, [G, i, side, side === 'h' ? [h, a] : [a, h]]);
+        }
+        pairs.set(h.key < a.key ? `${h.key}|${a.key}` : `${a.key}|${h.key}`, h.key < a.key ? [h, a] : [a, h]);
+      }
+    }
+  }
+  for (const [k, [G, i, side, [x, y]]] of groups) {
+    n.pairing++;
+    const href = S.gameH2HHref(G, i, side, sq, index.teamAt);
+    const w = check(href, G.season, x, y, null, `pairing ${k}`);
+    if (w) wrong.push(w);
+    if (/match=/.test(href)) wrong.push(`pairing ${k}: a pairing link names no meeting`);
+  }
+  for (const [, [x, y]] of pairs) for (const [da, db] of [[x, y], [y, x]]) {
+    n.lead++;
+    const r = S.h2hRow(index, da, db, ctx, {}), w = check(r.href, da.latest.season, da, db, null, `lead ${da.key} v ${db.key}`);
+    if (w) wrong.push(w);
+  }
+  assert.deepEqual(wrong.slice(0, 20), [], `${wrong.length} wrong`);
+  assert.equal(n.lead, 2 * pairs.size, 'a lead row for every squad pair that met, both ways');
+  assert.ok(n.game > 40000 && n.pairing > 20000 && n.lead > 10000, JSON.stringify(n));
+  assert.equal(n.game, 2 * n.ok, 'both orientations of every game between two squads');
+  assert.equal(n.ok + n.noLink, n.games - 0 - (n.games - n.ok - n.noLink), 'every game is linked or has none');
+  console.log(`# h2h links: ${n.game} game, ${n.pairing} pairing (by orientation; a superset of the rows shown), ${n.lead} lead; 0 wrong`);
+});
+
+test('the h2h link check has teeth: a candidate id, an alias id, a wrong name and a same-squad vs are each caught', () => {
+  const jix = indexOf(json('archive/search/core.json').teams, src), sq = S.squadAt(index);
+  const G = games.get(active), g = rowsOf(active).find(r => r.h2hHref);
+  const href = g.h2hHref, p = new URLSearchParams(href.slice(1));
+  assert.equal(destinationProblem(href, jix), null);
+  assert.match(destinationProblem(href.replace(/vs=[^&]+/, 'vs=2019-20:5'), jix), /unknown vs season/);
+  assert.match(destinationProblem(href.replace(/vs=[^&]+/, `vs=${p.get('season')}:${p.get('team')}`), jix), /same squad/);
+  assert.match(destinationProblem(href.replace(/name=[^&]+/, 'name=Nobody'), jix), /name is not/);
+  assert.match(destinationProblem(`${href}&view=season`, jix), /vs= takes no view=/);
+  assert.ok(sq.size > 0 && G);
 });

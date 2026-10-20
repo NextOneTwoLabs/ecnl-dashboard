@@ -214,34 +214,37 @@ test('D5: club against club is one pairing row per season and age group, newest 
   assert.ok(h.length && h.every(r => JSON.stringify(r.sides) === '[[96,1656],[98]]'), 'H03: Slammers is clubs 96 and 1656 that season');
   for (const r of h) {
     let w = 0, d = 0, l = 0;
-    for (const m of r.meetings) if (m.score) { const [x, y] = m.aHome ? m.score : [m.score[1], m.score[0]]; if (x > y) w++; else if (x < y) l++; else d++; }
+    // #178 (MF4, Q3): as the team Overview counts it, a drawn game decided on penalties is a win or a loss for the side that won them
+    for (const m of r.meetings) if (m.score) { const [x, y] = m.aHome ? m.score : [m.score[1], m.score[0]]; const pk = m.pk && m.pk[0] !== m.pk[1] ? (m.aHome ? m.pk[0] - m.pk[1] : m.pk[1] - m.pk[0]) : 0; if (x > y || (x === y && pk > 0)) w++; else if (x < y || (x === y && pk < 0)) l++; else d++; }
     assert.deepEqual(r.record, [w, d, l], `${r.div}`);
   }
   assert.ok(h.some(r => r.record.some(Boolean)), 'some meetings were played');
+  // B1: the G2008 pairing was [1,2,1] while a shoot-out counted as a draw; a drawn game decided on penalties is now a win (Q3: the owner's decision)
+  assert.deepEqual(h.find(r => r.div === 'G2008').record, [2, 1, 1]);
 });
 test('MF1 (Q2): one squad a side, no season: the loaded seasons\' meetings, then a Load row for the other seasons both played, never fetched by itself', () => {
   const s = run('MVLA 2011 vs Mustang 2011');
   const g = sec(s, 'games');
-  assert.deepEqual(g.map(r => r.kind), ['game', 'game', 'load']);
-  assert.deepEqual(g.slice(0, 2).map(r => r.matchID), [1094466, 1094465]);
-  assert.equal(s.enter.matchID, 1094466, 'the latest loaded meeting; never the Load row');
-  const L = g[2];
+  assert.deepEqual(g.map(r => r.kind), ['h2h', 'game', 'game', 'load'], '#178: one squad a side leads with the head to head');
+  assert.deepEqual(g.slice(1, 3).map(r => r.matchID), [1094466, 1094465]);
+  assert.equal(s.enter, g[0], 'the head to head (it was the latest loaded meeting, 1094466); never the Load row');
+  const L = g[3];
   assert.deepEqual([L.what, L.state, L.seasons], ['meetings', 'on-request', ['2023-24', '2024-25', '2025-26']]);
   assert.deepEqual(s.coverage.filter(c => c.state === 'on-request').map(c => c.season), ['2023-24', '2024-25', '2025-26'], 'on-request, not not-loaded: the page never fetches them by itself');
   assert.ok(!s.coverage.some(c => c.state === 'not-loaded'));
   // H04: no meeting in a loaded season: Games still leads, with the Load row only; Enter commits nothing
   const h = run('Slammers HB Koge 2007 v So Cal Blues 2007');
   assert.deepEqual(h.sections.map(x => x.name), ['games', 'teams']);
-  assert.deepEqual(sec(h, 'games').map(r => r.kind), ['load']);
-  assert.deepEqual(sec(h, 'games')[0].seasons, ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25']);
-  assert.equal(h.enter, null); assert.equal(h.best, null); assert.equal(h.empty, null);
+  assert.deepEqual(sec(h, 'games').map(r => r.kind), ['h2h', 'load'], '#178: the head to head leads, with 0 meetings in the loaded seasons');
+  assert.deepEqual(sec(h, 'games')[1].seasons, ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25']);
+  assert.equal(h.enter, sec(h, 'games')[0], 'it is the enter (it was null: Enter committed nothing)'); assert.equal(h.best, null); assert.equal(h.empty, null);
   // while loading, and after: the seasons loaded so far count (the visit's own results)
   assert.equal(sec(run('MVLA 2011 vs Mustang 2011', IX, { ...CTX, gamesLoading: ['2023-24', '2024-25', '2025-26'] }), 'games').at(-1).state, 'loading');
   assert.equal(sec(run('MVLA 2011 vs Mustang 2011', IX, { ...CTX, gamesFailed: ['2024-25'] }), 'games').at(-1).state, 'failed');
   const after = run('MVLA 2011 vs Mustang 2011', fixture(['2026-27', '2023-24', '2024-25', '2025-26']));
   const ga = sec(after, 'games');
-  assert.ok(ga.length > 2 && ga.every(r => r.kind === 'game'), 'the Load row is gone once no season remains');
-  assert.deepEqual(new Set(ga.map(r => r.season)), new Set(['2023-24', '2024-25', '2025-26', '2026-27']));
+  assert.ok(ga.length > 2 && ga[0].kind === 'h2h' && ga.slice(1).every(r => r.kind === 'game'), 'the Load row is gone once no season remains');
+  assert.deepEqual(new Set(ga.slice(1).map(r => r.season)), new Set(['2023-24', '2024-25', '2025-26', '2026-27']));
   const part = sec(run('MVLA 2011 vs Mustang 2011', fixture(['2026-27', '2024-25'])), 'games').at(-1);
   assert.deepEqual(part.seasons, ['2023-24', '2025-26'], 'a season loaded earlier counts: the Load row names only the rest');
 });
