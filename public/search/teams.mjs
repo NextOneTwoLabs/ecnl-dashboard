@@ -13,10 +13,10 @@ const NO_CLUB = 7;   // TGS's "No Club Selection": its name, initials and place 
 
 export function teamDocs(core, vocab) { return drain(teamDocsG(core, vocab, Infinity)); }
 // The team documents in steps of at most `n` squads (the postings, the counts and the lookups likewise).
-export function* teamDocsG(core, vocab, n, onName = null) {
+export function* teamDocsG(core, vocab, n, onName = null, stats = null) {
   const t = core.teams, S = t.seasons;
   // names repeat across seasons: read each distinct one once
-  const memo = f => { const m = new Map(); return x => { let v = m.get(x); if (v === undefined) { v = f(x); m.set(x, v); } return v; }; };
+  const memo = f => { const m = new Map(); return x => { let v = m.get(x); if (v === undefined) { if (stats) stats.normalised++; v = f(x); m.set(x, v); } return v; }; };
   // #167 (review MF1): every distinct club and squad-row name is normalised here once, and handed, as its words,
   // to the field names' check (vocab.mjs fieldNamesG), which so never normalises a name a second time
   const nw = memo(nameWords), caps = memo(capsWords), ini = memo(initials);
@@ -24,7 +24,7 @@ export function* teamDocsG(core, vocab, n, onName = null) {
   yield 'team docs';
   const div = t.divs.map(([s, name, u, years]) => ({ season: S[s], name, u, years }));
   const docs = [];
-  for (let i = 0; i < t.squads.length; i++) { const sq = t.squads[i]; if (i && i % n === 0) yield 'team docs'; docs.push((() => {
+  for (let i = 0; i < t.squads.length; i++) { const sq = t.squads[i]; if (stats) stats.units++; if (i && i % n === 0) yield 'team docs'; docs.push((() => {
     const [id, clubName, , place, fam] = t.clubs[sq.c];
     const noClub = id === NO_CLUB;
     const at = noClub ? -1 : (place || '').lastIndexOf(', ');
@@ -56,9 +56,9 @@ export function* teamDocsG(core, vocab, n, onName = null) {
     };
   })()); }
   for (const d of docs) { d.maybe = d.m.map(i => docs[i]); d.maybePrev = d.mp.map(i => docs[i]); }
-  const post = yield* postingsG(TEAM_FIELDS, docs, n);
+  const post = yield* postingsG(TEAM_FIELDS, docs, n, stats);
   // documents passing each filter alone, for a filter's rarity (MF3)
-  const count = function* (key, f) { const m = new Map(); for (const d of docs) { if (d.i && d.i % n === 0) yield 'counts'; for (const k of new Set(f(d))) m.set(k, (m.get(k) || 0) + 1); } return m; };
+  const count = function* (key, f) { const m = new Map(); for (const d of docs) { if (stats) stats.units++; if (d.i && d.i % n === 0) yield 'counts'; for (const k of new Set(f(d))) m.set(k, (m.get(k) || 0) + 1); } return m; };
   const counts = {
     conf: yield* count('conf', d => d.rows.map(r => r.conf)),
     season: yield* count('season', d => d.rows.map(r => r.season)),
@@ -66,7 +66,7 @@ export function* teamDocsG(core, vocab, n, onName = null) {
     born: yield* count('born', d => d.born),
   };
   // lookups, so a place, state or conference reading starts from its candidates, not every squad
-  const by = function* (f) { const m = new Map(); for (const d of docs) { if (d.i && d.i % n === 0) yield 'lookups'; for (const k of new Set(f(d))) if (k != null && k !== '') { if (!m.has(k)) m.set(k, []); m.get(k).push(d.i); } } return m; };
+  const by = function* (f) { const m = new Map(); for (const d of docs) { if (stats) stats.units++; if (d.i && d.i % n === 0) yield 'lookups'; for (const k of new Set(f(d))) if (k != null && k !== '') { if (!m.has(k)) m.set(k, []); m.get(k).push(d.i); } } return m; };
   const lookups = {
     place: yield* by(d => [d.placeGeo]), county: yield* by(d => [d.countyGeo]), state: yield* by(d => [d.club.state]),
     caps: yield* by(d => d.caps), conf: yield* by(d => d.rows.map(r => r.conf)),

@@ -659,7 +659,7 @@ test('keys: Esc clears the text, then closes; Tab goes to the bar\'s links on th
   p.input.value = 'Surf';
   const e1 = p.key('Escape');
   assert.equal(p.input.value, ''); assert.equal(p.pop().hidden, false);
-  assert.match(p.status(), /Teams and events since 2020-21/, 'the tips state');
+  assert.match(p.status(), /Teams, events and games since 2020-21/, 'the tips state');
   p.key('Escape'); assert.equal(p.pop().hidden, true);
   assert.ok(e1.prevented);
   const q = page(); await q.run('Surf');
@@ -842,7 +842,7 @@ test('every judged keystroke draws without error, with a key line, a status and 
   let drawn = 0;
   for (const k of judgedKeystrokes()) {
     p.input.value = k; p.sxRun(k);
-    if (k.trim().length < 2) { assert.match(p.status(), /Teams and events since 2020-21/); continue; }
+    if (k.trim().length < 2) { assert.match(p.status(), /Teams, events and games since 2020-21/); continue; }
     const s = slateOf(k);
     if (!s.sections.length) { assert.equal(p.cells().length, 0, k); assert.match(p.status(), /No results/); continue; }
     drawn++;

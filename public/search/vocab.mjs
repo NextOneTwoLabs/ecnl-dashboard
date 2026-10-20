@@ -1,6 +1,6 @@
 // #163 (#149 phase 1, PR 3): the shared vocabulary every category reads the query through.
 // Built from core.json and places.json (docs/data-api.md, "Search data"); pure.
-import { words, drain } from './match.mjs';
+import { words, drain, sortCounted } from './match.mjs';
 
 // The reviewed alias table (plan v2 MF2, addendum MF7). Each entry names what a word means as a
 // place, and when its plain name-word reading is also built:
@@ -36,7 +36,7 @@ export const placeWords = s => words(s).map(w => CITY_ALIAS[w] || w);
 const cu = (x, y) => (x < y ? -1 : x > y ? 1 : 0);
 export function buildVocab(core, places) { return drain(buildVocabG(core, places, Infinity)); }
 // The vocabulary in steps of at most `n` units (a place, a place name or a county each count one).
-export function* buildVocabG(core, places, n) {
+export function* buildVocabG(core, places, n, stats = null) {
   let units = 0;
   const t = core.teams;
   const seasons = [...core.seasons];
@@ -56,21 +56,24 @@ export function* buildVocabG(core, places, n) {
   // census places by normalised name -> every place of that name (MF2: all kept)
   const placeByName = new Map();
   for (const g in places.places) { const [name, st, county] = places.places[g];
+    if (stats) stats.units++;
     if (++units % n === 0) yield 'vocab:places';
     const k = placeWords(name).join(' ');
     if (!placeByName.has(k)) placeByName.set(k, []);
     placeByName.get(k).push({ geoid: g, name, state: st, county });
   }
   for (const [k, list] of placeByName) {
+    if (stats) stats.units++;
     if (++units % n === 0) yield 'vocab:byname';
     if (ALIASES[k]) continue;
-    list.sort((a, b) => cu(a.geoid, b.geoid));
+    sortCounted(list, stats, (a, b) => cu(a.geoid, b.geoid));
     phrases.push({ type: 'place', value: k, places: list.map(p => p.geoid), counties: [...new Set(list.map(p => p.county).filter(Boolean))],
       label: list.map(p => `${p.name}, ${p.state}`).join(' or '), words: k.split(' ') });
   }
   // counties: "<name> county"; and a bare name with no place but one county of that name (Q6)
   const countyBase = new Map();
   for (const [g, [name, st]] of Object.entries(places.counties)) {
+    if (stats) stats.units++;
     if (++units % n === 0) yield 'vocab:counties';
     const m = /^(.*) County$/.exec(name);
     if (!m) continue;
@@ -79,7 +82,7 @@ export function* buildVocabG(core, places, n) {
     countyBase.get(base).push({ geoid: g, name, state: st });
   }
   for (const [base, list] of countyBase) {
-    const geo = list.map(c => c.geoid).sort();
+    const geo = list.map(c => c.geoid); sortCounted(geo, stats, cu);
     const label = list.map(c => `${c.name}, ${c.state}`).join(' or ');
     phrases.push({ type: 'county', value: base, counties: geo, label, words: [...base.split(' '), 'county'] });
     if (!placeByName.has(base) && !ALIASES[base] && list.length === 1)
@@ -95,7 +98,7 @@ export function* buildVocabG(core, places, n) {
   for (const [k, v] of Object.entries((places.vocab || {}).fieldAliases || {})) phrases.push({ type: 'field', value: v, words: words(k) });
   // longest first, then a stable order
   yield 'vocab:sort';
-  phrases.sort(byLen);
+  sortCounted(phrases, stats, byLen);
   yield 'vocab:first';
   const byFirst = firstIndex(phrases);
   // every word the vocabulary knows (refinement A adds the categories' terms in search.mjs). A field
@@ -130,12 +133,13 @@ function firstIndex(phrases) {
 // squad-row name as it normalises it (`visit`); `finishG` checks the few names left (families, aliases,
 // conference aliases, clubs with no squad) and installs the phrases in one last step. Field-name phrases read
 // Games only (review MF2): `byFirstBase` keeps the vocabulary without them, for Teams and Events.
-export function* fieldNamesG(vocab, n) {
+export function* fieldNamesG(vocab, n, stats = null) {
   const { places, core } = vocab.fieldSource, t = core.teams;
   let units = 0;
   const aliasNames = new Set(Object.values((places.vocab || {}).fieldAliases || {}));
   const cand = new Map(), byTwo = new Map();   // first word -> second word -> the field names' word lists
   for (const key of Object.keys(places.fields || {})) {
+    if (stats) stats.units++;
     if (++units % n === 0) yield 'vocab:fields';
     const name = key.slice(0, key.lastIndexOf('@'));
     if (aliasNames.has(name)) continue;
@@ -163,7 +167,7 @@ export function* fieldNamesG(vocab, n) {
   function* finishG() {
     // every squad row's name was visited by teamDocsG; clubs with no squad, families and aliases were not
     const rest = [...t.clubs.map(c => c[1]), ...(t.families || []).map(f => f[0]), ...Object.keys(ALIASES), ...Object.keys(core.vocab.confAliases || {})];
-    for (const nm of rest) { if (++units % n === 0) yield 'vocab:fields'; if (!seen.has(nm)) visit(nm, words(nm)); }
+    for (const nm of rest) { if (stats) stats.units++; if (++units % n === 0) yield 'vocab:fields'; if (!seen.has(nm)) visit(nm, words(nm)); }
     const dropped = [], fieldPhrases = [], fk = new Map();   // phrase -> its words joined
     for (const [k, { name, w }] of cand) {
       if (inName.has(k)) dropped.push(k);
@@ -173,7 +177,7 @@ export function* fieldNamesG(vocab, n) {
     // indexed, in one last step; byLen with each phrase's text joined once (it would join it on every compare)
     yield 'vocab:fields';
     const keyed = (a, b) => b.words.length - a.words.length || ROLE[a.type] - ROLE[b.type] || cu(fk.get(a), fk.get(b));
-    fieldPhrases.sort(keyed);
+    sortCounted(fieldPhrases, stats, keyed);
     const phrases = vocab.phrases, merged = [], pk = phrases.map(p => p.words.join(' '));
     for (let i = 0, j = 0; i < phrases.length || j < fieldPhrases.length;) {
       const f = fieldPhrases[j], k = f && fk.get(f);
@@ -181,7 +185,7 @@ export function* fieldNamesG(vocab, n) {
       merged.push(takeBase ? phrases[i++] : fieldPhrases[j++]);
     }
     vocab.phrases = merged; vocab.byFirst = firstIndex(merged);
-    vocab.fieldPhrasesDropped = dropped.sort(cu);   // MF5: the field names left out because a name holds them
+    vocab.fieldPhrasesDropped = sortCounted(dropped, stats, cu);   // MF5: the field names left out because a name holds them
     vocab.fieldSource = null;
   }
   return { visit, finishG };

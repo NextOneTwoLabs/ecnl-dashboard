@@ -20,7 +20,7 @@ const MODULES = new URL('public/search/', ROOT);
 const files = readdirSync(MODULES).sort();
 const SEARCH_URL = new URL('search.mjs', MODULES);
 const S = await import(SEARCH_URL);
-const { osa, expand, TermList, Postings, CLASS, ageOk, agePairOf } = await import(new URL('match.mjs', MODULES));
+const { osa, expand, TermList, Postings, CLASS, ageOk, agePairOf, counted, sortCounted, wordsCalled, words } = await import(new URL('match.mjs', MODULES));
 const { readQuery, READING_CAP } = await import(new URL('reader.mjs', MODULES));
 const { ALIASES } = await import(new URL('vocab.mjs', MODULES));
 
@@ -438,8 +438,8 @@ test('budget: the work per keystroke is pinned, its 95th percentile is under the
   assert.ok(max.cost <= KEYSTROKE_BUDGET);
 });
 // Contention (node --test runs files in parallel) only ever adds time, so each figure is the fastest
-// of 3: a keystroke's own repeats, and 3 fresh processes for the cold build (#164). Uncounted work,
-// such as a quadratic sort, slows every repeat and still trips the ceiling.
+// of several: a keystroke's own repeats (3), and fresh processes for the cold build (up to 7, #188). A keystroke's
+// uncounted work, such as a quadratic sort, slows every repeat and still trips the ceiling.
 // The child prints one tagged JSON line; only that line is read, because other output can share
 // stdout (the netguard's exit report under NETGUARD_REPORT=1, as in CI: #164). A child that fails or
 // prints no such line fails the test with its exit code and output, never a NaN.
@@ -455,7 +455,12 @@ export function parseColdBuild(r) {
 }
 // #167 (review of #170, MF1): the child times its main thread's CPU (process.threadCpuUsage), not the wall clock.
 // Other processes on a busy runner add wall time, never this thread's CPU; a real regression (an eager scan, a
-// quadratic sort, a second pass) adds both, so it is still caught. A child without the API fails, never skips.
+// quadratic sort, a second pass) adds both. A child without the API fails, never skips.
+// #188: this clock is a loose net, not the guard. Measured on the real child (626 and 654 samples under a full parallel
+// run): median 159 ms, so the 200 ms cap sits about 40 ms above it, and a slowdown of +80 ms or more is always caught,
+// +60 ms in about 3 runs of 4 or more, +40 ms in about 1 of 20 or fewer. The clock no longer catches a
+// quadratic sort of the phrases: the planted one ran at about 166-178 ms against the 200 ms cap, and the first child
+// under the cap passes. The counted work below fails it every time (sortCompares 12,402 to 180,130).
 function coldBuildMs() {
   const src = `if (typeof process.threadCpuUsage !== 'function') throw new Error('process.threadCpuUsage is missing');
     const c0 = process.threadCpuUsage(); const S = await import(${JSON.stringify(SEARCH_URL.href)});
@@ -472,17 +477,57 @@ test('budget: the cold-build child is read by its tagged line, and a broken chil
   assert.throws(() => parseColdBuild({ status: 1, stdout: '', stderr: 'SyntaxError: boom' }), /exit 1[\s\S]*SyntaxError: boom/);
   assert.throws(() => parseColdBuild({ status: 0, stdout: '71.5netguard: 0 attempts\n', stderr: '' }), /no SEARCH_COLD_BUILD line/);
 });
-test('budget: backstop: no keystroke over 20 ms (wall clock), no cold build over 200 ms of main-thread CPU', () => {
+const COLD_CAP_MS = 200, COLD_TRIES = 7, COLD_PAUSE_MS = 5000;
+test('budget: backstop: no keystroke over 20 ms (wall clock), no cold build over 200 ms of main-thread CPU', async () => {
   assert.equal(typeof process.threadCpuUsage, 'function', 'process.threadCpuUsage (Node 22) is required: the backstop never skips');
   replay();                                  // warm
   const runs = [replay(), replay(), replay()];
   const fastest = runs[0].map((x, i) => ({ p: x.p, ms: Math.min(...runs.map(r => r[i].ms)) }));
   const worst = fastest.reduce((m, x) => (x.ms > m.ms ? x : m));
   assert.ok(worst.ms < 20, `${worst.p}: ${worst.ms.toFixed(2)} ms (fastest of 3)`);
-  const cold = Math.min(coldBuildMs(), coldBuildMs(), coldBuildMs());
-  assert.ok(cold < 200, `cold import and build ${cold.toFixed(1)} ms of main-thread CPU (fastest of 3 fresh processes)`);
-  const s = index.stats;
-  assert.ok(s.terms <= 2 * 518 && s.postings <= 2 * 11531, JSON.stringify(s));
+  // #188: up to 7 fresh processes, and the run ends at the first one under the cap, so a normal run spawns one. A busy
+  // machine slows children started together (the slow stretches last about 10 s), so 3 in a row can all miss; after the
+  // third there is a pause of about 5 s, and a build that is really over the cap misses all 7. The message lists every figure.
+  const colds = [];
+  while (colds.length < COLD_TRIES && !(colds.length && Math.min(...colds) < COLD_CAP_MS)) {
+    if (colds.length === 3) await new Promise(r => setTimeout(r, COLD_PAUSE_MS));
+    colds.push(coldBuildMs());
+  }
+  const cold = Math.min(...colds);
+  assert.ok(cold < COLD_CAP_MS, `cold import and build ${cold.toFixed(1)} ms of main-thread CPU (fastest of ${colds.length} fresh processes: ${colds.map(x => x.toFixed(0)).join(', ')})`);
+});
+// #188 (#171 item 1): the work of the build, counted, is the guard that fails every time. A sort that makes more
+// comparisons, a stage that visits more items, or a pass that normalises more strings changes these numbers whatever the
+// clock says. What stays clock-only, caught at about +80 ms: work inside a comparator, a new loop that has no counter
+// and calls no words(), and a change in the cost of each item (a quadratic dedupe, an array in place of a set).
+// Exact on the frozen fixture, the same for any step size and on Node 20 to 22 (V8's sort has been the same since 2018).
+const RECORDED_BUILD = { units: 24069, sorts: 759, sortRows: 3047, sortCompares: 12402, normalised: 7358, words: 8706 };
+const RECORDED_INDEX_STATS = { teamDocs: 1965, eventDocs: 81, terms: 518, postings: 11531 };
+const buildWork = n => {
+  const stats = { units: 0, sorts: 0, sortRows: 0, sortCompares: 0, normalised: 0, words: 0 };
+  const g = S.startIndex(fresh(), n, { stats });
+  let r; while (!(r = g.next()).done);
+  return { stats, index: r.value };
+};
+test('budget: the build\'s work is pinned: units, sorts, comparator calls, names normalised, words() calls; terms and postings exactly', () => {
+  const { stats, index: built } = buildWork(Infinity);
+  assert.deepEqual(stats, RECORDED_BUILD, `the build's work changed (Node ${process.version}): re-measure, record and explain`);
+  assert.deepEqual(built.stats, RECORDED_INDEX_STATS);
+  assert.equal(JSON.stringify(built.stats), JSON.stringify(index.stats), 'counting changes nothing the build returns');
+  assert.equal(built.vocab.phrases.map(p => p.value).join('|'), index.vocab.phrases.map(p => p.value).join('|'), 'the same phrases in the same order');
+});
+test('budget: the build\'s work counts do not depend on the step size', () => {
+  assert.deepEqual(buildWork(150).stats, RECORDED_BUILD);
+});
+test('budget: counting is off without stats: the comparator is the function itself, and words() counts only its calls', () => {
+  const f = (a, b) => a - b;
+  assert.equal(counted(null, f), f);
+  const st = { sorts: 0, sortRows: 0, sortCompares: 0 };
+  assert.deepEqual(sortCounted([3, 1, 2], st, f), [1, 2, 3]);
+  assert.equal(st.sorts, 1); assert.equal(st.sortRows, 3); assert.ok(st.sortCompares >= 2);
+  assert.deepEqual(sortCounted([3, 1, 2], null, f), [1, 2, 3]);
+  const w0 = wordsCalled(); words('Surf Cup'); words('x');
+  assert.equal(wordsCalled() - w0, 2);
 });
 
 // ---------- #165 (PR 4a): the staged build, the sort counter and the row fields ----------

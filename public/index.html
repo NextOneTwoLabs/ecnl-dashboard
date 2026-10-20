@@ -6802,13 +6802,13 @@
     const sxInputs = () => ['usearchInput', 'usearchSheetInput'].map(id => document.getElementById(id));
     const sxTipChips = () => SX_TIPS.map(t => `<button type="button" class="us-chip" onmousedown="event.preventDefault()" onclick="sxFill(this.textContent)">${esc(t)}</button>`).join('');
     function sxLoadingBody() {
-      return { status: 'Getting search ready… <span class="sx-hint">Teams and events, once per visit</span>',
+      return { status: 'Getting search ready… <span class="sx-hint">Teams, events and games, once per visit</span>',
         lead: `<div class="sx-bar" aria-hidden="true"><i style="width:${sxPct}%"></i></div><div class="us-tipsbox"><p>Type a team or club name, a place, an age group, a conference or an event. For example:</p>${sxTipChips()}</div>` +
           [[58, 34], [46, 41], [64, 28]].map(([x, y]) => `<div class="sx-skel" aria-hidden="true"><i class="b"></i><span><i style="width:${x}%"></i><i style="width:${y}%"></i></span></div>`).join(''),
         live: 'Getting search ready' };
     }
     function sxTipsBody() {
-      return { status: 'Teams and events since 2020-21. Try U15 NorCal or San Diego Fall.',
+      return { status: 'Teams, events and games since 2020-21. Try U15 NorCal or San Diego Fall.',
         lead: `<div class="us-tipsbox"><p>Type a team or club name, a place, an age group, a conference or an event. For example:</p>${sxTipChips()}</div>` };
     }
     function sxReloadNote() {
