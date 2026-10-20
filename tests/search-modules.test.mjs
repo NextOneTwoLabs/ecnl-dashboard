@@ -458,8 +458,9 @@ export function parseColdBuild(r) {
 // quadratic sort, a second pass) adds both. A child without the API fails, never skips.
 // #188: this clock is a loose net, not the guard. Measured on the real child (626 and 654 samples under a full parallel
 // run): median 159 ms, so the 200 ms cap sits about 40 ms above it, and a slowdown of +80 ms or more is always caught,
-// +60 ms in about 3 runs of 4 or more, +40 ms in about 1 of 20 or fewer. A quadratic sort over the 1,779 phrases
-// (190-219 ms) is caught by the clock in only about half of the runs. The counted work below fails it every time.
+// +60 ms in about 3 runs of 4 or more, +40 ms in about 1 of 20 or fewer. The clock no longer catches a
+// quadratic sort of the phrases: the planted one ran at about 166-178 ms against the 200 ms cap, and the first child
+// under the cap passes. The counted work below fails it every time (sortCompares 12,402 to 180,130).
 function coldBuildMs() {
   const src = `if (typeof process.threadCpuUsage !== 'function') throw new Error('process.threadCpuUsage is missing');
     const c0 = process.threadCpuUsage(); const S = await import(${JSON.stringify(SEARCH_URL.href)});
