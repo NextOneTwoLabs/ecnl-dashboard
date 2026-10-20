@@ -301,7 +301,7 @@ anything else is "reused for another age group", with both ages and seasons.
 **`public/data/team-links.json`** holds hand-reviewed overrides, like the showcase
 `teamAliases`: `link` entries (`{"from":"2025-26/54493","to":"2026-27/134153","note":"the
 evidence"}`) and `unlink` entries that forbid a link the rules would make. The SWE declares
-them with evidence; the Reviewer and the owner approve them in a PR. The builder validates
+them with evidence; Kongming and the owner approve them in a PR. The builder validates
 every entry on every build: both team-seasons must be in a conference table, `to` must be in
 the season after `from`, a link must age correctly and carry a `note`, neither end may be
 claimed by two entries, and the target may not already continue another team by its id (unlink
@@ -1196,7 +1196,7 @@ key that is being tried (`key-revoked`). **Purging** (`kv key delete`) removes i
 use it only to clean up.
 
 **Before #93 is merged** (the preview check), your checkout doesn't have the tool yet. The
-tool is one self-contained file, so copy it, pinned to the commit the Reviewer reviewed
+tool is one self-contained file, so copy it, pinned to the commit Kongming reviewed
 (5708d1d), and run it from the temp folder:
 
 ```powershell
@@ -1214,12 +1214,12 @@ place of `<id>`. Only then delete the copy (`Remove-Item "$env:TEMP\ecnl-apikey-
 - `new --label "auditor-93" --ttl 604800`: KV deletes the record after 7 days, so a
   forgotten key expires. **Revoke it after the production check**, with the temp copy if
   it was issued before merge (see above).
-- The owner gives it to the Auditor privately. The Auditor reads it from an environment
+- The owner gives it to Kongming privately. Kongming reads it from an environment
   variable (`ECNL_TEST_KEY`) or a file outside the repository, never uses `curl -v`, HAR or
   Playwright traces with it, and redacts it to `ecnl_live_<id>_…` in reports.
 - **It works on production too:** version previews use production's bindings, so preview and
   production read the same key store.
-- It sits in the Auditor's local transcript, which is why it expires.
+- It sits in Kongming's local transcript, which is why it expires.
 
 ## Deployment and evolution
 

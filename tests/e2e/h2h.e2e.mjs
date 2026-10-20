@@ -88,7 +88,7 @@ test('desktop: typing makes 0 requests; Enter on the lead row opens the head to 
   const m = log.same.length;
   await page.goForward(); await page.waitForTimeout(300); await page.goBack(); await h2hDone(page);
   assert.equal(gamesApi(log).length, g0 + 3, 'Back and Forward make no games request');
-  assert.ok(log.same.length <= 32, `the Auditor's ceiling is 32 same-origin requests a load: ${log.same.length}`);
+  assert.ok(log.same.length <= 32, `the production check's ceiling is 32 same-origin requests a load: ${log.same.length}`);
   assert.deepEqual(errors, []);
   assert.deepEqual(log.answered, []);
   console.log(JSON.stringify({ desktop: { sameOrigin: log.same.length, gamesApi: gamesApi(log).length, aborted: log.aborted.length } }));
@@ -138,7 +138,7 @@ test('phone: from a Matches card, a cold open makes core, places and the games f
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'no horizontal scroll at 390');
   assert.equal(await page.locator('.h2h img').count(), 0);
   const cold = log.same.length;
-  assert.ok(cold <= 32, `the Auditor's ceiling is 32 same-origin requests a load: ${cold}`);
+  assert.ok(cold <= 32, `the production check's ceiling is 32 same-origin requests a load: ${cold}`);
   await page.goto(BASE + '/#tab=teams&season=2026-27&team=55477&name=MVLA&vs=2026-27:1');
   await page.reload();
   await page.waitForSelector('.h2h-note:not([hidden])', { timeout: 20000 });
