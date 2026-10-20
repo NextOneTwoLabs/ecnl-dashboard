@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"10947eed4e20bf97"
+,"build":"3271045e26931e89"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -887,6 +887,7 @@
 ,"499":["wwt soccer park","63026"]
 ,"611":["oak brook park district","60535"]
 ,"622":["indian creek","21032"]
+,"626":["valley christian high school","95111"]
 ,"640":["ed radice sports complex","33626"]
 ,"660":["op training facility","43064"]
 ,"689":["scheels overland park soccer complex","66221"]
@@ -1086,6 +1087,7 @@
 ,"9443":["coppell middle school north","75019"]
 ,"9450":["tequesta trace park","33326"]
 ,"9459":["ge vernova park","29681"]
+,"9483":["bear creek high school","80227"]
 }
 ,"games":[
 [1058623,2411530,40581,127576,134157,null,null,null,null,2735,"Stadium",null,[1,0]]
@@ -4071,7 +4073,7 @@
 ,[1,741400,40610,59553,68973,4,0,null,null,8794,"TBD",null,[1,0]]
 ,[1,741200,40609,48667,68974,2,1,null,null,8794,"TBD",null,[1,0]]
 ,[1,741000,40608,80765,80240,1,1,null,null,8794,"TBD",null,[1,0]]
-,[1,741200,40607,116000,59609,0,4,null,null,8794,"TBD",null,[1,0]]
+,[1,741200,40607,116000,59609,0,5,null,null,8794,"TBD",null,[1,0]]
 ,[1,741200,40606,82159,111849,2,5,null,null,8794,"TBD",null,[1,0]]
 ,[1,751915,40605,111690,131001,0,0,null,null,8794,"Championship Field",null,[1,0]]
 ,[1,1121530,40610,58631,58634,null,null,null,null,386,"HHRP Stadium",null,[1,0]]
@@ -4341,8 +4343,8 @@
 ,[1,1151300,40610,94982,68973,null,null,null,null,855,1,null,[1,0]]
 ,[1,1151100,40609,94985,68974,null,null,null,null,5364,1,null,[1,0]]
 ,[1,1151300,40608,95046,80240,null,null,null,null,5364,1,null,[1,0]]
-,[1,1150900,40607,95047,59609,null,null,null,null,855,1,null,[1,0]]
-,[1,1151100,40606,90652,111849,null,null,null,null,855,1,null,[1,0]]
+,[1,1150900,40607,95047,59609,null,null,null,null,9483,"Turf Field",null,[1,0]]
+,[1,1151100,40606,90652,111849,null,null,null,null,9483,"Turf Field",null,[1,0]]
 ,[1,1150900,40605,132180,131001,null,null,null,null,5364,1,null,[1,0]]
 ,[1,1151330,40610,58634,58541,null,null,null,null,442,"RCSC Grass",null,[1,0]]
 ,[1,1150900,40609,69250,46266,null,null,null,null,442,"RCSC Grass",null,[1,0]]
@@ -6234,10 +6236,10 @@
 ,[1,1081100,40575,132201,112400,null,null,null,null,31,"Trione West",null,[1,0]]
 ,[1,1150900,40580,69035,33438,null,null,null,null,8274,"Football Stadium",null,[1,0]]
 ,[1,1151055,40579,69036,33633,null,null,null,null,8274,"Football Stadium",null,[1,0]]
-,[1,1151250,40578,74987,55477,null,null,null,null,8274,"Football Stadium",null,[1,0]]
+,[1,1151250,40578,74987,55477,null,null,null,null,5014,"Soccer Stadium",null,[1,0]]
 ,[1,1151610,40577,95449,55325,null,null,null,null,8274,"Football Stadium",null,[1,0]]
 ,[1,1151755,40576,115151,84876,null,null,null,null,8274,"Football Stadium",null,[1,0]]
-,[1,1151435,40575,135939,97182,null,null,null,null,8274,"Football Stadium",null,[1,0]]
+,[1,1151040,40575,135939,97182,null,null,null,null,626,1,null,[1,0]]
 ,[1,1151000,40580,60301,31488,null,null,null,null,704,10,null,[1,0]]
 ,[1,1151200,40579,69625,32669,null,null,null,null,704,10,null,[1,0]]
 ,[1,1151000,40578,81189,77003,null,null,null,null,704,9,null,[1,0]]
