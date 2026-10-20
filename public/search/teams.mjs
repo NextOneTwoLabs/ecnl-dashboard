@@ -49,7 +49,7 @@ export function* teamDocsG(core, vocab, n, onName = null) {
       // sort keys, read once (a sort compares them many times)
       sortClub: lc(noClub ? titleText : clubName), sortTitle: lc(titleText), sortName: lc(latest.name), sortU: latest.u || 0,
       i, club, born: sq.b, rows, latest, key: `${rows[0].season}/${rows[0].teamID}`, current: latest.season === vocab.active,
-      x: (sq.x || []).map(([si, tid]) => ({ season: S[si], teamID: tid })),   // #168: alias ids at national events and showcases
+      x: (sq.x || []).map(([si, tid]) => ({ season: S[si], teamID: tid })),   // #168: alias ids at national events and showcases; #179: reviewed orphan ids
       titleText, titleWords: nw(titleText), caps: [...capsSet],
       placeGeo: loc ? loc[0] : null, countyGeo: loc ? loc[1] : null, m: sq.m || [], mp: sq.mp || [],
       fields: [[...title], [...clubF], [...older], [...placeF]],

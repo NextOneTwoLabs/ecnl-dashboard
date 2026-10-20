@@ -214,7 +214,7 @@ test('opening from a ready index fetches exactly the seasons both played (3 for 
   assert.match(h, /h2h-summary/); assert.ok(!/<img/.test(h), 'no image');
   assert.deepEqual([...h.matchAll(/<b>(\d+)<\/b><i>/g)].map(m => +m[1]), [1, 4, 3], 'MVLA v Mustang is 1-4-3');
   assert.match(text(h), /8 meetings played · 2023–24 to 2026–27/);
-  assert.match(text(h), /Games from 2020–21 on: conference seasons, national events and showcases in this archive\. A game counts when both teams have a team page for that season/);
+  assert.match(text(h), /Games from 2020–21 on: conference seasons, national events and showcases in this archive\. A game counts when both teams have a team page for that season, or a reviewed earlier id of the same team, so a few games from before a team’s page begins \(mostly 2020–21\) aren’t included\./, '#179 Q3');
   p.T.fetched.length = 0;
   await p.loadTeamSummary({ name: 'MVLA ECNL G2010/11', teamID: 55477 }); await p.settle();
   assert.deepEqual(p.T.fetched, [], 'reopening makes 0 requests');
@@ -479,7 +479,7 @@ test('#182 N3: a hash that names nothing (#foo, #match=5, an unknown season or t
 });
 
 test('#182 N1: the note names the team from the vs season\'s own games file when it is in memory, never another season\'s; else "Team N" (no request: the squads hold no team without a team page)', async () => {
-  const ID = 46809;   // a team with no squad in 2020-21: "…GU13" in 2020-21, "…GU14" in 2021-22
+  const ID = 50300;   // a team with no squad in 2020-21 (FC Portland's second GU13 team; #179 left it out): "…GU13" in 2020-21, "…GU14" in 2021-22
   const run = async seasons => {
     const p = page({ realTeam: true });
     await p.sxLoad({ activeGames: false });
@@ -491,9 +491,9 @@ test('#182 N1: the note names the team from the vs season\'s own games file when
     assert.equal(p.T.fetched.length, fetched, 'the note asks for nothing');
     return text(p.el('h2hNote').innerHTML);
   };
-  assert.match(await run(['2021-22', '2020-21']), /Concorde Fire Premier ECNL GU13 has no team page for 2020–21/, 'its own season\'s spelling, whichever file loaded first');
-  assert.match(await run(['2021-22']), /Team 46809 has no team page for 2020–21/, 'another season\'s file does not name it');
-  assert.match(await run([]), /Team 46809 has no team page for 2020–21/, 'no file loaded: its id');
+  assert.match(await run(['2021-22', '2020-21']), /FC Portland ECNL GU13 has no team page for 2020–21/, 'its own season\'s spelling, whichever file loaded first');
+  assert.match(await run(['2021-22']), /Team 50300 has no team page for 2020–21/, 'another season\'s file does not name it');
+  assert.match(await run([]), /Team 50300 has no team page for 2020–21/, 'no file loaded: its id');
 });
 
 test('#182 N5: a card\'s link and label carry the directory\'s spelling of a name (the builder\'s " ".join(name.split())), whichever side is A; so does the schedule row\'s', async () => {

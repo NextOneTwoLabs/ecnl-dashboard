@@ -13,6 +13,8 @@ word-to-records map the browser builds from them. Each test fails without the ch
 (e) The pipeline: every path that rebuilds the directory rebuilds the search data from it; a
     failure keeps the old files and fails the run; --dry-run writes nothing; the drift check.
 (f) The frozen fixture (MF6): built from 1c4c3268; its directoryBuild names PR 1's frozen directory.
+(g) Reviewed orphan team ids (#179): every check alone, the checks across entries in any order, the committed
+    list in full, nothing without it, and a planted bad entry failing the drift check with its reason.
 """
 import argparse
 import collections
@@ -141,12 +143,13 @@ class Committed(unittest.TestCase):
         self.assertEqual(core["birthYears"], [2002, 2014])
 
     def test_alias_team_ids(self):
-        """The catalog's teamAliases: 2025-26 Phoenix Spring team 112470 is squad 69910's."""
+        """The catalog's teamAliases: 2025-26 Phoenix Spring team 112470 is squad 69910's. The other squads with `x`
+        are exactly the reviewed orphan ids (#179, OrphanIds), one squad each."""
         core = json.loads(fresh()[0]["core.json"])
         t = core["teams"]
         sq = next(s for s in t["squads"] if any(r[1] == 69910 for r in s["s"]))
         self.assertEqual(sq["x"], [[t["seasons"].index("2025-26"), 112470]])
-        self.assertEqual(sum(1 for s in t["squads"] if "x" in s), 1)
+        self.assertEqual(sum(1 for s in t["squads"] if "x" in s), 1 + len(load(Path(api.PUBLIC_DIR) / "data" / sd.ORPHAN_FILE)["orphans"]))
 
     def test_conference_event_dates_ignore_sentinels_and_dates_outside_the_season(self):
         """MF4: 2020-21 Midwest held a 0001-01-01 row; 2023-24 Southwest held a 2022-10-28 game."""
@@ -660,6 +663,232 @@ class Pipeline(unittest.TestCase):
                 self.assertGreater(nxt, at, n)
                 self.assertNotIn("update_team_directory(sources", f[at + 1:nxt], f"{n}: each directory build has its own")
         self.assertIn("update_search_data(sources", funcs["cmd_clubs"])
+
+
+# ---------- (g) reviewed orphan team ids (#179) ----------
+
+ORPHANS = Path(api.PUBLIC_DIR) / "data" / sd.ORPHAN_FILE
+SEASONS7 = ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26", "2026-27"]
+COMMENT = "https://github.com/NextOneTwoLabs/ecnl-dashboard/issues/179#issuecomment-123"
+
+
+def orphan_world():
+    """A small synthetic archive: squad 0 (club 10, born 2008) has rows 2021-22 and 2022-23 under id 100, and id 100
+    played 2 conference GU13 games and 1 national game in 2020-21 with no row; squad 2 starts in 2026-27; squad 3 is
+    'Club A Green' from 2021-22 under id 700, which played as 'Club A White' in 2020-21."""
+    teams = {"seasons": SEASONS7, "clubs": [[10, "Club A", None, ""], [11, "Club B", None, ""]],
+             "divs": [[0, "GU13", 13, [2008]], [0, "GU14", 14, [2007]], [1, "GU14", 14, [2008]], [5, "G2013", 13, [2013]]],
+             "squads": [
+                 {"c": 0, "b": [2008], "s": [[1, 100, "Club A ECNL GU14", 0, 2, 1, 8], [2, 100, "Club A ECNL G08", 0, 2, 1, 8]]},
+                 {"c": 1, "b": [2008], "s": [[0, 200, "Club B ECNL GU13", 0, 0, 1, 8], [1, 200, "Club B ECNL GU14", 0, 2, 2, 8]]},
+                 {"c": 0, "b": [2013, 2014], "s": [[6, 300, "Club A ECNL G2013/14", 0, 3, 1, 8]]},
+                 {"c": 0, "b": [2008], "s": [[1, 700, "Club A Green ECNL GU14", 0, 2, 3, 8]]},
+             ]}
+    g0 = {"flights": {1: [9, "c", "GU13", "ECNL"], 2: [8, "n", "U13", "Champions League"], 3: [9, "c", "GU14", "ECNL"]},
+          "teams": {100: ["Club A ECNL GU13", 10], 200: ["Club B ECNL GU13", 11], 201: ["Club C RL GU13", 12], 700: ["Club A White ECNL GU13", 10]},
+          "alt": {}, "games": [[1, 100900, 1, 100, 200], [2, 200900, 1, 200, 100], [3, 300900, 2, 100, 201], [4, 110900, 1, 700, 200]]}
+    g5 = {"flights": {4: [7, "c", "G2013", "ECNL"]}, "teams": {300: ["Club A ECNL G13", 10], 999: ["Club Z ECNL G13", 13]},
+          "alt": {}, "games": [[1, 50000, 4, 300, 999]]}
+    return teams, {"2020-21": g0, "2025-26": g5}
+
+
+V = {"season": "2020-21", "teamID": 100, "squad": "2021-22/100", "name": "Club A ECNL GU13", "clubID": 10,
+     "birthYears": [2008], "games": 3, "evidence": "x"}
+W = {"season": "2020-21", "teamID": 700, "squad": "2021-22/700", "name": "Club A White ECNL GU13", "clubID": 10,
+     "birthYears": [2008], "games": 1, "evidence": "x", "renamed": {"from": "club a white", "to": "club a green", "approved": COMMENT}}
+
+
+def reasons_of(errors):
+    """Each error's reasons, as lists (an error is '<file> orphans[n] <key>: <reason>; <reason>; skipped')."""
+    return [e.split(": ", 1)[1].rsplit("; skipped", 1)[0].split("; ") for e in errors]
+
+
+class OrphanIds(unittest.TestCase):
+    """#179: public/data/orphan-team-ids.json, the reviewed orphan team ids. Every check is reached alone on a synthetic
+    archive (exactly its own reason); the checks across entries hold in any file order (MF5); the committed list applies
+    in full; nothing is attached without it; and a planted bad entry fails `--search-data --check` with its reason."""
+
+    def check_alone(self, entries, want, mutate=None, aliases=frozenset()):
+        teams, gdocs = orphan_world()
+        if mutate:
+            mutate(teams, gdocs)
+        out, errors = sd.validate_orphans(entries, teams, gdocs, aliases)
+        got = reasons_of(errors)
+        self.assertEqual(len(got), len(want), errors)
+        for g, w in zip(got, want):
+            self.assertEqual(len(g), len(w), g)
+            for r, prefix in zip(sorted(g), sorted(w)):
+                self.assertTrue(r.startswith(prefix), f"{r!r} is not {prefix!r}")
+        return out
+
+    def test_the_valid_entries_attach_one_key_each(self):
+        self.assertEqual(dict(self.check_alone([V], [])), {0: {(0, 100)}})
+        self.assertEqual(dict(self.check_alone([W], [])), {3: {(0, 700)}}, "a rename with its exact {from, to, approved}")
+
+    def test_every_check_alone_names_its_own_reason(self):
+        def gm(season, i, col, v):
+            return lambda t, g: g[season]["games"][i].__setitem__(col, v)
+        no_conf = lambda t, g: g["2020-21"]["games"].__delitem__(slice(0, 2))
+        cases = [
+            ("no evidence", [dict(V, evidence="  ")], None, ["evidence: none"]),
+            ("teamID a string", [dict(V, teamID="100")], None, ["shape: season, squad and name"]),
+            ("birthYears repeated", [dict(V, birthYears=[2008, 2008])], None, ["shape: season, squad and name"]),
+            ("an unknown key", [dict(V, note=1)], None, ["shape: keys must be"]),
+            ("evidence missing", [{k: v for k, v in V.items() if k != "evidence"}], None, ["shape: keys must be"]),
+            ("a season not in the archive", [dict(V, season="2019-20")], None, ["season: not in the archive"]),
+            ("no game under the id", [dict(V, teamID=555)], None, ["games: no game with"]),
+            ("stale", [V], lambda t, g: t["squads"].append({"c": 0, "b": [2008], "s": [[0, 100, "Club A ECNL GU13", 0, 0, 1, 8]]}), ["stale: TGS now has"]),
+            ("games count", [dict(V, games=2)], None, ["games: the archive has 3"]),
+            ("name field", [dict(V, name="Club A ECNL G13")], None, ["name: TGS calls it"]),
+            ("level", [V], lambda t, g: g["2020-21"]["flights"][2].__setitem__(3, "Regional League"), ["level: "]),
+            ("squad unknown", [dict(V, squad="2022-23/100")], None, ["squad: "]),
+            ("club", [dict(V, clubID=11)], lambda t, g: g["2020-21"]["teams"].__setitem__(100, ["Club A ECNL GU13", 11]), ["club: "]),
+            ("birth year field", [dict(V, birthYears=[2009])], None, ["birth year: the squad's are"]),
+            ("birth year unproven (MF2)", [dict(V, games=1)], no_conf, ["birth year: unproven"]),
+            ("birth year of a conference division", [V], gm("2020-21", 0, 2, 3), ["birth year: a conference division"]),
+            ("regroup", [{"season": "2025-26", "teamID": 300, "squad": "2026-27/300", "name": "Club A ECNL G13", "clubID": 10,
+                          "birthYears": [2013, 2014], "games": 1, "evidence": "x"}], None, ["regroup: "]),
+            ("continuity", [dict(V, squad="2022-23/100")], lambda t, g: t["squads"][0]["s"].pop(0), ["continuity: "]),
+            ("a conference row that season", [dict(V, squad="2020-21/101")],
+             lambda t, g: t["squads"][0]["s"].insert(0, [0, 101, "Club A ECNL GU13", 0, 0, 1, 8]), ["clash: the squad already has"]),
+            ("a rename without renamed", [{k: v for k, v in W.items() if k != "renamed"}], None, ["name: its club part"]),
+            ("renamed: true (MF1)", [dict(W, renamed=True)], None, ["name: 'renamed' must be"]),
+            ("renamed.from wrong", [dict(W, renamed=dict(W["renamed"], **{"from": "club a blue"}))], None, ["name: renamed.from"]),
+            ("renamed.to wrong", [dict(W, renamed=dict(W["renamed"], to="club a navy"))], None, ["name: renamed.to"]),
+            ("renamed.approved not a comment", [dict(W, renamed=dict(W["renamed"], approved="the owner said yes"))], None, ["name: renamed.approved"]),
+            ("renamed not needed", [dict(V, renamed={"from": "club a", "to": "club a", "approved": COMMENT})], None, ["name: renamed is not needed"]),
+        ]
+        for name, entries, mutate, want in cases:
+            with self.subTest(name):
+                self.assertEqual(self.check_alone(entries, [want], mutate), {})
+        with self.subTest("a catalog teamAliases key"):
+            self.check_alone([V], [["clash: a catalog teamAliases key"]], aliases=frozenset({(0, 100)}))
+
+    def test_the_checks_across_entries_hold_in_any_order(self):
+        """MF5: two reviewed ids for one squad in one season both fail, in either order; one (season, id) listed twice fails
+        every copy, so which copy wins never depends on the file."""
+        def world():
+            teams = {"seasons": SEASONS7, "clubs": [[10, "Club A", None, ""], [11, "Club B", None, ""]],
+                     "divs": [[1, "GU14", 14, [2008]]],
+                     "squads": [{"c": 0, "b": [2008], "s": [[0, 800, "Club A ECNL GU13", 0, 0, 1, 8], [2, 100, "Club A ECNL G08", 0, 0, 1, 8]]},
+                                {"c": 1, "b": [2008], "s": [[1, 200, "Club B ECNL GU14", 0, 0, 1, 8]]}]}
+            g = {"flights": {1: [9, "c", "GU14", "ECNL"]}, "alt": {},
+                 "teams": {800: ["Club A ECNL GU14", 10], 100: ["Club A ECNL GU14", 10], 200: ["Club B ECNL GU14", 11]},
+                 "games": [[1, 150900, 1, 800, 200], [2, 151500, 1, 100, 200], [3, 200900, 1, 800, 100]]}
+            return teams, {"2021-22": g}
+        E = lambda t, **kw: dict({"season": "2021-22", "teamID": t, "squad": "2020-21/800", "name": "Club A ECNL GU14", "clubID": 10,
+                                  "birthYears": [2008], "games": 2, "evidence": "x"}, **kw)
+        two = "clash: two reviewed ids for this squad this season (100, 800), one id per squad per season"
+        for name, entries, want in [("800 alone", [E(800)], []), ("100 alone", [E(100)], []),
+                                    ("800 then 100", [E(800), E(100)], [[two], [two]]), ("100 then 800", [E(100), E(800)], [[two], [two]]),
+                                    ("800 twice", [E(800), E(800)], [["clash: listed twice"]] * 2),
+                                    ("800 twice, different squads", [E(800), E(800, squad="2021-22/200")], None)]:
+            with self.subTest(name):
+                out, errors = sd.validate_orphans(entries, *world())
+                if want is None:
+                    self.assertEqual(dict(out), {}, "neither copy is attached")
+                    self.assertTrue(all("clash: listed twice" in r for r in reasons_of(errors)) and len(errors) == 2, errors)
+                else:
+                    self.assertEqual(reasons_of(errors), want)
+                    self.assertEqual(sum(len(v) for v in out.values()), 1 if not want else 0)
+
+    def test_the_level_pattern(self):
+        for s in ["X Pre- ECNL G14", "X PreECNL G14", "X Pre-ECNL G14", "X Pre ECNL G14", "X RL GU15", "X - 06 ECNL/RL (GU16)", "X US Club G14"]:
+            self.assertTrue(sd.ORPHAN_LEVEL.search(s), s)
+        for s in ["Real Colorado ECNL GU13", "Carolina Elite ECNL GU13", "Prelude FC ECNL G08", "Royals ECNL G09"]:
+            self.assertFalse(sd.ORPHAN_LEVEL.search(s), s)
+
+    def test_the_committed_list_applies_in_full(self):
+        """The 16 reviewed ids the owner approved (Q1), with no error, each in its squad's `x` beside the catalog's one
+        alias; none uses `renamed` (Q2: SLSG White -> Green stays out)."""
+        files, errors, _ = fresh()
+        self.assertEqual([e for e in errors if sd.ORPHAN_FILE in e], [])
+        entries = load(ORPHANS)["orphans"]
+        self.assertEqual(len(entries), 16)
+        self.assertFalse(any("renamed" in e for e in entries))
+        self.assertNotIn(46767, [e["teamID"] for e in entries], "Q2: SLSG White is excluded")
+        t = json.loads(files["core.json"])["teams"]
+        S = t["seasons"]
+        x = {(S[k[0]], k[1]): f"{S[sq['s'][0][0]]}/{sq['s'][0][1]}" for sq in t["squads"] for k in sq.get("x", [])}
+        self.assertEqual(x, {**{(e["season"], e["teamID"]): e["squad"] for e in entries}, ("2025-26", 112470): "2023-24/69910"})
+
+    def test_never_automatic(self):
+        """Without the file, `x` is the catalog's one alias: no orphan id is attached by any rule."""
+        with tempfile.TemporaryDirectory() as tmp:
+            shutil.copytree(Path(api.PUBLIC_DIR) / "data", Path(tmp) / "public" / "data")
+            os.remove(Path(tmp) / "public" / "data" / sd.ORPHAN_FILE)
+            files, errors, _ = sd.build(inputs=tmp)
+        t = json.loads(files["core.json"])["teams"]
+        self.assertEqual([sq["x"] for sq in t["squads"] if "x" in sq], [[[t["seasons"].index("2025-26"), 112470]]])
+        self.assertEqual([e for e in errors if sd.ORPHAN_FILE in e], [])
+
+    def run_check(self, entries):
+        """Plant `entries` as the list in a copy of public/data/ and run `python archive.py --search-data --check`."""
+        with tempfile.TemporaryDirectory() as tmp:
+            shutil.copytree(Path(api.PUBLIC_DIR) / "data", Path(tmp) / "public" / "data")
+            (Path(tmp) / "public" / "data" / sd.ORPHAN_FILE).write_text(json.dumps({"schema": 1, "orphans": entries}), encoding="utf-8")
+            real = sd.inputs_dir
+            with patch.object(sd, "inputs_dir", side_effect=lambda base=None: real(base or tmp)), \
+                    contextlib.redirect_stdout(io.StringIO()) as out:
+                code = archive.cmd_search_data(api.load_sources(), check=True)
+        return code, out.getvalue()
+
+    def test_a_planted_bad_entry_fails_the_check_with_its_reason(self):
+        """Every check on the real archive (a planted entry in a temp copy, never the committed list): `--check` exits 1
+        and names the reason; the committed list exits 0."""
+        good = load(ORPHANS)["orphans"]
+        E = {e["teamID"]: e for e in good}
+        ev = "mutant"
+        slsg = dict(season="2020-21", teamID=46767, squad="2021-22/46767", name="SLSG White ECNL GU13", clubID=97, birthYears=[2008], games=14, evidence=ev)
+        dal = dict(E[45786], squad="2021-22/45785")      # Dallas Texans 45786 pointed at NCFC's squad
+        cases = [
+            ("wrong birth year: La Roca 45848 (GU14 in 2020-21, born 2007) for the 2008 squad",
+             [dict(season="2020-21", teamID=45848, squad="2020-21/45847", name="La Roca FC ECNL GU14", clubID=1760, birthYears=[2008], games=10, evidence=ev)],
+             "birth year: a conference division"),
+            ("a reused id onto the wrong squad: 45837 onto the 2006 squad", [dict(E[45837], squad="2020-21/45836", birthYears=[2006])], "birth year: a conference division"),
+            ("birthYears says 2009", [dict(E[45785], birthYears=[2009])], "birth year: the squad's are"),
+            ("unproven: Chicago Inter 69854, national games only",
+             [dict(season="2022-23", teamID=69854, squad="2023-24/69854", name="Chicago Inter Soccer ECNL G06", clubID=2167, birthYears=[2005, 2006], games=2, evidence=ev)],
+             "birth year: unproven"),
+            ("no evidence", [dict(E[45785], evidence=" ")], "evidence: none"),
+            ("an unknown key", [dict(E[45785], note="x")], "shape: keys must be"),
+            ("teamID a string", [dict(E[45785], teamID="45785")], "shape: season, squad and name"),
+            ("stale: 2021-22/45785 has a row", [dict(E[45785], season="2021-22")], "stale: TGS now has a conference row"),
+            ("a catalog alias: 2025-26/112470 for NCFC", [dict(E[45785], season="2025-26", teamID=112470)], "clash: a catalog teamAliases key"),
+            ("listed twice", [E[45785]], "clash: listed twice"),
+            ("two ids for one squad (MF5), NCFC first", [dal], "clash: two reviewed ids for this squad this season (45785, 45786)"),
+            ("games count", [dict(E[45785], games=20)], "games: the archive has 21"),
+            ("name field", [dict(E[45785], name="NCFC ECNL GU13")], "name: TGS calls it"),
+            ("club", [dict(E[45785], clubID=37)], "club: "),
+            ("Pre-ECNL: MVLA 97182", [dict(season="2025-26", teamID=97182, squad="2026-27/97182", name="MVLA Pre-ECNL G14", clubID=294, birthYears=[2013, 2014], games=3, evidence=ev)], "level: "),
+            ("'Pre- ECNL' (N1): Avalanche 127576", [dict(season="2025-26", teamID=127576, squad="2026-27/127576", name="Utah Avalanche - Avalanche 14G Pre- ECNL", clubID=107, birthYears=[2013, 2014], games=3, evidence=ev)], "level: "),
+            ("RL: Legends 4624", [dict(season="2020-21", teamID=4624, squad="2021-22/4624", name="Legends FC RL GU15", clubID=61, birthYears=[2006], games=3, evidence=ev)], "level: "),
+            ("regroup: 46728 onto the 2026-27 squad", [dict(E[46728], squad="2026-27/46728", birthYears=[2009, 2010])], "regroup: "),
+            ("continuity: Concorde Platinum 46806 onto Premier's squad", [dict(E[46806], squad="2021-22/46809")], "continuity: "),
+            ("a second team that season: FC Portland 50300", [dict(season="2020-21", teamID=50300, squad="2020-21/46758", name="FC Portland ECNL GU13", clubID=603, birthYears=[2008], games=10, evidence=ev)], "clash: the squad already has a conference row"),
+            ("a rename without renamed: SLSG 46767", [slsg], "name: its club part"),
+            ("renamed: true", [dict(slsg, renamed=True)], "name: 'renamed' must be"),
+            ("renamed.from wrong", [dict(slsg, renamed={"from": "slsg navy", "to": "slsg green", "approved": COMMENT})], "name: renamed.from"),
+            ("renamed.to wrong", [dict(slsg, renamed={"from": "slsg white", "to": "slsg navy", "approved": COMMENT})], "name: renamed.to"),
+            ("renamed.approved not a comment", [dict(slsg, renamed={"from": "slsg white", "to": "slsg green", "approved": "ok"})], "name: renamed.approved"),
+        ]
+        def plant(planted, append=False):
+            """A planted entry replaces the committed one with its (season, teamID); `append` adds it beside."""
+            keys = {(e["season"], e["teamID"]) for e in planted}
+            return (good if append else [e for e in good if (e["season"], e["teamID"]) not in keys]) + planted
+        for name, planted, reason in cases:
+            with self.subTest(name):
+                code, out = self.run_check(plant(planted, append=name == "listed twice"))
+                self.assertEqual(code, 1, out[-500:])
+                self.assertTrue(any(sd.ORPHAN_FILE in line and reason in line for line in out.splitlines()), out[-800:])
+        with self.subTest("two ids for one squad (MF5), Dallas first: NCFC fails for that reason alone"):
+            code, out = self.run_check([dal] + [e for e in good if e["teamID"] != 45786])
+            line = next(l for l in out.splitlines() if "2020-21/45785" in l)
+            self.assertEqual(code, 1)
+            self.assertIn(": clash: two reviewed ids for this squad this season (45785, 45786), one id per squad per season; skipped", line)
+        with self.subTest("the committed list"):
+            code, out = self.run_check(good)
+            self.assertEqual(code, 0, out[-500:])
 
 
 class Fixture(unittest.TestCase):

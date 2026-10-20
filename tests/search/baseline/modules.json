@@ -6,8 +6,8 @@
       "timeZone": "America/Los_Angeles"
     },
     "engine": "modules",
-    "manifestSha": "14d0ca0bbb0f18363ee6fe330e2759ecad18a4245babacc46cec28f26481335c",
-    "modulesSha": "6a1179f0048425ae00907ed8355982d9b4bda7fadcdc731e297f9c8c6e6f5d69",
+    "manifestSha": "4b001968600b8f5335a87750b34b747abc64fe40adf5f3e94efa7790d2adbdee",
+    "modulesSha": "b184010c47b519813f79b503e595d986d637ce4866528405d9cd3d7c567b9775",
     "queriesSha": "b89503c0c752b6e1d15a64ab87f70b23a8d6b3f7253a6d8f88ddded97be83f8b",
     "recordedBy": "node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules"
   },

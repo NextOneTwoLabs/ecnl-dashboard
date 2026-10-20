@@ -43,7 +43,7 @@ PLACES_SCHEMA = 1         # places.json (#159)
 GAMES_SCHEMA = 1          # games-<season>.json
 BUILD_LEN = 16            # hex digits of sha256 kept as a build id
 # The reviewed inputs under public/data/ (MANIFEST.search.inputs records each one's LF sha256, or null).
-INPUTS = ("field-aliases.json", "zip-fixes.json", "zip-places.json", "zip-place-fixes.json", "city-counties.json")
+INPUTS = ("field-aliases.json", "zip-fixes.json", "zip-places.json", "zip-place-fixes.json", "city-counties.json", "orphan-team-ids.json")
 
 # Row positions in a games file (docs/data-api.md, "Search data"). Trailing nulls are dropped.
 ROW = ("matchID", "when", "flight", "home", "away", "hs", "as", "hpk", "apk", "complex", "number", "flags", "dest")
@@ -559,6 +559,168 @@ def decode_games(doc):
     return out
 
 
+# ---------- reviewed orphan team ids (#179) ----------
+#
+# public/data/orphan-team-ids.json: a team id that has games in a season but no conference row that season (TGS's
+# published table leaves it out), attached to the squad it belongs to as an alias id (`x`), so head to head and search
+# find its games. A reviewed list with evidence per id, never a rule: TGS reuses ids across birth years. Every entry is
+# re-checked here against this build's archive on every build; an entry failing any check is left out and reported with
+# every reason it fails (so no check hides another), which fails the run and `python archive.py --search-data --check`.
+# The checks (docs/data-api.md, "Search data"; plan v2 / v2.1 on #179):
+#   level      no game in a Regional League flight, no TGS name with RL, Pre-ECNL or US Club (another programme)
+#   regroup    never onto a squad that starts in 2026-27 or later from an earlier season (#107 M6: a candidate only)
+#   club       the TGS club on every game is the squad's club, and `clubID` says so
+#   birth year `birthYears` is the squad's; at least one conference game (else unproven), and every conference
+#              division TGS placed the id in that season has the squad's birth year (TGS reuses ids across birth years)
+#   continuity the squad has a row with this id in an adjacent season
+#   clash      the squad has no conference row that season; the key is no catalog teamAliases key; a (season, id) is
+#              listed once; one reviewed id per squad per season (every entry of such a group fails, in any file order)
+#   stale      no squad has a conference row for the key: once TGS publishes it, the entry must be removed (Q7)
+#   name       `name` is TGS's name for it that season, and its club part (team_history.stem) is the squad's, or an
+#              owner-approved `renamed` {from, to, approved} says exactly which rename it is
+#   games      `games` is the archive's count; `evidence` is non-empty
+ORPHAN_FILE = "orphan-team-ids.json"
+ORPHAN_KEYS = {"season", "teamID", "squad", "name", "clubID", "birthYears", "games", "evidence"}
+ORPHAN_OPTIONAL = {"renamed"}
+RENAMED_KEYS = {"from", "to", "approved"}
+ORPHAN_LEVEL = re.compile(r"(\bRL\b|pre\W*ecnl|\bUS Club\b)", re.I)
+APPROVED = re.compile(r"^https://github\.com/NextOneTwoLabs/ecnl-dashboard/issues/\d+#issuecomment-\d+$")
+REGROUP_SEASON = "2026-27"
+
+
+def load_orphans(base=None):
+    """public/data/orphan-team-ids.json (#179): its entries, and an error when it is unreadable or malformed. A
+    missing file is no entries."""
+    path = os.path.join(inputs_dir(base), ORPHAN_FILE)
+    if not os.path.exists(path):
+        return [], []
+    return _load(path, "orphans", ORPHAN_FILE)
+
+
+def _is_int(v):
+    return type(v) is int
+
+
+def orphan_games(doc, t):
+    """[(kind, division, flight name, TGS name, TGS club)] for each game of team id t in one season's games document
+    (as built, or as read from its file)."""
+    out = []
+    for row in doc["games"]:
+        if t in (row[3], row[4]):
+            eid, kind, div, fname = doc["flights"].get(row[2]) or doc["flights"][str(row[2])]
+            nm, cl = doc["alt"].get(f"{t}:{eid}") or doc["teams"].get(t) or doc["teams"][str(t)]
+            out.append((kind, div, fname, nm, cl))
+    return out
+
+
+def orphan_problems(e, teams, gdocs, owner, first, aliases):
+    """Every check entry e fails on its own, as reasons (none: valid). The checks across entries are validate_orphans'."""
+    import team_history
+    stem = team_history.stem
+    if not isinstance(e, dict):
+        return ["shape: not an object"]
+    if set(e) - ORPHAN_KEYS - ORPHAN_OPTIONAL or ORPHAN_KEYS - set(e):
+        return [f"shape: keys must be {sorted(ORPHAN_KEYS)} plus optional 'renamed'"]
+    s, t, by = e["season"], e["teamID"], e["birthYears"]
+    if not (isinstance(s, str) and _is_int(t) and isinstance(e["squad"], str) and isinstance(e["name"], str) and _is_int(e["clubID"])
+            and _is_int(e["games"]) and isinstance(by, list) and by and all(_is_int(y) for y in by) and by == sorted(set(by))):
+        return ["shape: season, squad and name are strings, teamID, clubID and games integers, birthYears sorted distinct integers"]
+    bad = []
+    if not isinstance(e["evidence"], str) or not e["evidence"].strip():
+        bad.append("evidence: none")
+    S, SQ = teams["seasons"], teams["squads"]
+    if s not in S or s not in gdocs:
+        return bad + ["season: not in the archive"]
+    mine = orphan_games(gdocs[s], t)
+    if not mine:
+        return bad + ["games: no game with this team id in this season"]
+    si = S.index(s)
+    if (s, t) in owner:
+        bad.append(f"stale: TGS now has a conference row for it (squad {owner[(s, t)]}), remove this entry")
+    if (si, t) in aliases:
+        bad.append("clash: a catalog teamAliases key")
+    if len(mine) != e["games"]:
+        bad.append(f"games: the archive has {len(mine)}, the entry says {e['games']}")
+    names = {m[3] for m in mine}
+    if e["name"] not in names:
+        bad.append(f"name: TGS calls it {sorted(names)}")
+    if any(ORPHAN_LEVEL.search(m[3]) or "Regional League" in (m[2] or "") for m in mine):
+        bad.append("level: an RL, Pre-ECNL, US Club or Regional League team is not the ECNL squad")
+    i = first.get(e["squad"])
+    if i is None:
+        return bad + [f"squad: {e['squad']!r} is not a squad's first row"]
+    sq = SQ[i]
+    rows = sq["s"]
+    if {m[4] for m in mine} != {e["clubID"]} or teams["clubs"][sq["c"]][0] != e["clubID"]:
+        bad.append("club: not the squad's club on every game")
+    band = {d: set(b) for x, d, _u, b in teams["divs"] if x == si}
+    conf = [m for m in mine if m[0] == "c"]
+    if by != sorted(sq["b"]):
+        bad.append(f"birth year: the squad's are {sorted(sq['b'])}")
+    if not conf:
+        bad.append("birth year: unproven (no conference game, so no division TGS placed it in)")
+    elif any(not band.get(m[1], set()) & set(sq["b"]) for m in conf):
+        bad.append("birth year: a conference division of another birth year")
+    if S[rows[0][0]] >= REGROUP_SEASON > s:
+        bad.append(f"regroup: across the {REGROUP_SEASON} regroup (#107 M6: a candidate, never the squad)")
+    adj = [r for r in rows if r[1] == t and abs(r[0] - si) == 1]
+    if not adj:
+        bad.append("continuity: no row with this id in an adjacent season")
+    if any(r[0] == si for r in rows):
+        bad.append("clash: the squad already has a conference row this season")
+    stems = {stem(r[2]) for r in rows}
+    ren = e.get("renamed")
+    if ren is None:
+        if any(stem(m[3]) not in stems for m in mine):
+            bad.append("name: its club part is not the squad's (an owner-approved rename needs 'renamed')")
+    elif not (isinstance(ren, dict) and set(ren) == RENAMED_KEYS and all(isinstance(v, str) for v in ren.values())):
+        bad.append("name: 'renamed' must be {from, to, approved}")
+    else:
+        if any(stem(m[3]) != ren["from"] for m in mine):
+            bad.append("name: renamed.from is not the club part of every TGS name that season")
+        if not adj or any(stem(r[2]) != ren["to"] for r in adj):
+            bad.append("name: renamed.to is not the club part of the squad's adjacent row with this id")
+        if not APPROVED.match(ren["approved"]):
+            bad.append("name: renamed.approved must link the owner's comment")
+        if all(stem(m[3]) in stems for m in mine):
+            bad.append("name: renamed is not needed (the club part already matches)")
+    return bad
+
+
+def validate_orphans(entries, teams, gdocs, aliases=frozenset()):
+    """-> ({squad index: {(season index, teamID)}}, errors). `teams` is the directory (squads without `x`), `gdocs`
+    this build's games documents by season, `aliases` the catalog's teamAliases keys as (season index, teamID). An
+    entry failing any check is left out, with every reason; the checks across entries see the whole list first, so
+    the result never depends on the file's order."""
+    S, SQ = teams["seasons"], teams["squads"]
+    owner, first = {}, {}
+    for i, sq in enumerate(SQ):
+        first[f"{S[sq['s'][0][0]]}/{sq['s'][0][1]}"] = i
+        for r in sq["s"]:
+            owner[(S[r[0]], r[1])] = i
+    keyed = [(e.get("season"), e.get("teamID"), e.get("squad")) if isinstance(e, dict) else None for e in entries]
+    times = collections.Counter((k[0], k[1]) for k in keyed if k)
+    ids = collections.defaultdict(set)      # MF5: (squad, season) -> the reviewed ids
+    for k in keyed:
+        if k and isinstance(k[0], str) and isinstance(k[2], str) and _is_int(k[1]):
+            ids[(k[2], k[0])].add(k[1])
+    out, errors = collections.defaultdict(set), []
+    for n, e in enumerate(entries):
+        bad = orphan_problems(e, teams, gdocs, owner, first, aliases)
+        k = keyed[n]
+        if k and not any(b.startswith("shape:") for b in bad):
+            if times[(k[0], k[1])] > 1:
+                bad.append("clash: listed twice")
+            if len(ids[(k[2], k[0])]) > 1:
+                bad.append(f"clash: two reviewed ids for this squad this season ({', '.join(map(str, sorted(ids[(k[2], k[0])])))}), "
+                           "one id per squad per season")
+        label = f"{ORPHAN_FILE} orphans[{n}]" + (f" {k[0]}/{k[1]}" if k else "")
+        if bad:
+            errors.append(f"{label}: {'; '.join(bad)}; skipped")
+            continue
+        out[first[e["squad"]]].add((S.index(e["season"]), e["teamID"]))
+    return out, errors
+
 # ---------- core ----------
 
 def strip_build(directory):
@@ -571,12 +733,15 @@ def directory_build(directory):
     return team_directory.build_id(directory)
 
 
-def core_doc(sources, directory, games_by_season, facts, aliases):
+def core_doc(sources, directory, games_by_season, facts, aliases, orphans=(), gdocs=None, errors=None):
+    """The core.json document. `orphans` are orphan-team-ids.json's entries (#179), checked against `gdocs` (this
+    build's games documents by season); an error per entry left out goes to `errors`."""
     seasons = sorted(sources["seasons"])
     teams = strip_build(directory)
     teams = {k: v for k, v in teams.items() if k != "schema"}
     # x: a team id a squad played under at a showcase or national event but not in conference
-    # (the catalog's teamAliases), so its games are found (#158 MF3 nit 2 of the design review).
+    # (the catalog's teamAliases), so its games are found (#158 MF3 nit 2 of the design review);
+    # and (#179) a reviewed orphan id: games in a season TGS's conference table left the id out of.
     first = {}
     for i, sq in enumerate(teams["squads"]):
         for r in sq["s"]:
@@ -589,6 +754,11 @@ def core_doc(sources, directory, games_by_season, facts, aliases):
                     i = first.get((season, conf))
                     if i is not None and str(alias).isdigit():
                         extra[i].add((teams["seasons"].index(season), int(alias)))
+    got, errs = validate_orphans(orphans, teams, gdocs or {}, {k for v in extra.values() for k in v})
+    if errors is not None:
+        errors.extend(errs)
+    for i, keys in got.items():
+        extra[i] |= keys
     squads = []
     for i, sq in enumerate(teams["squads"]):
         if i in extra:
@@ -923,14 +1093,17 @@ def build(sources=None, directory=None, root=None, inputs=None, fixture=False):
             report["status values other than On Time (not kept; report only)"].append(f"{v!r}: {n}")
     by_cid, facts = fields_of({s: g for s, g in games.items()}, fixes, aliases, report)
     files = {}
+    gdocs = {}
+    orphans, orphan_errors = load_orphans(inputs)
     for season in sorted(games):
         doc = games_rows(season, games[season], by_cid)
+        gdocs[season] = doc
         files[f"games-{season}.json"] = with_build(dump_games, doc)
-    files["core.json"] = with_build(dump_core, core_doc(sources, directory, games, facts, aliases))
+    files["core.json"] = with_build(dump_core, core_doc(sources, directory, games, facts, aliases, orphans, gdocs, orphan_errors))
     place_errors = []
     files["places.json"] = with_build(dump_places, places_doc(sources, directory, games, facts, aliases, census,
                                                               place_inputs, report, place_errors))
-    return files, alias_errors + fix_errors + census_errors + place_inputs[3] + place_errors, report
+    return files, alias_errors + fix_errors + census_errors + place_inputs[3] + place_errors + orphan_errors, report
 
 
 def print_report(report, out=None):

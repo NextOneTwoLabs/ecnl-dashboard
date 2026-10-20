@@ -169,7 +169,21 @@ test('the resolver has teeth: each planted mistake is caught on the games it app
 // the judged set's destinationProblem, open exactly the pair it names through the squads (never a candidate or an alias id), carry
 // only conference-row ids (a showcase's own id is mapped to its squad's id that season) and have name= on A. On the committed
 // data, which a refresh moves, the counts are rules (each derived here from the games), never pinned; the exact counts are on the
-// frozen fixture (tests/search-h2h.test.mjs).
+// frozen fixture (tests/search-h2h.test.mjs). #179: a reviewed orphan id (`x`, a season TGS's table left the id out of) has
+// no row in that season, so its side is named by the squad's nearest row (Q4); the rule below is checked on every game link.
+// #179: a side is named by its row in the game's season, else its nearest row (a tie: the game's own id, else the earlier).
+// This mirrors gameH2HHref's tie rule in public/search/games.mjs (#179 N2, N7): change the two together.
+const yr = s => +s.slice(0, 4);
+const nearestRow = (d, season, t) => d.rows.find(r => r.season === season) || d.rows.reduce((b, r) => {
+  const g = x => Math.abs(yr(x.season) - yr(season));
+  return g(r) < g(b) || (g(r) === g(b) && r.teamID === t && b.teamID !== t) ? r : b;
+});
+// A game link (game i of games index G) must name side A and side B by exactly those rows -> a problem or null
+const rowProblem = (href, G, i, ha, hb, sq) => {
+  const p = new URLSearchParams(href.slice(1)), vs = S.parseVs(p.get('vs')), ids = [G.h[i], G.a[i]];
+  const ra = nearestRow(ha, G.season, ids.find(t => sq.get(`${G.season}/${t}`) === ha)), rb = nearestRow(hb, G.season, ids.find(t => sq.get(`${G.season}/${t}`) === hb));
+  return ra.season !== p.get('season') || ra.teamID !== +p.get('team') || rb.season !== vs.season || rb.teamID !== vs.teamID ? 'not that season\'s row, else the nearest' : null;
+};
 test('every head-to-head link (game rows, pairing rows, lead rows) opens the pair it names: 0 wrong destinations, only canonical ids', () => {
   const jix = indexOf(json('archive/search/core.json').teams, src);
   const sq = S.squadAt(index), ctx = { today: '2026-10-20' };
@@ -190,6 +204,7 @@ test('every head-to-head link (game rows, pairing rows, lead rows) opens the pai
     if (!canon(A.doc, p.get('season'), +p.get('team')) || !canon(B.doc, vs.season, vs.teamID)) return `${why}: not a conference id: ${href}`;
     if (A.doc.rows.find(r => r.season === p.get('season') && r.teamID === +p.get('team')).name !== p.get('name')) return `${why}: name= is not A's: ${href}`;
     if (gameKey && !holds(A.doc, B.doc, gameKey)) return `${why}: the head to head lacks the game: ${href}`;
+    if (gameKey) { const [gs, gid] = gameKey.split('/'), G = games.get(gs), w = rowProblem(href, G, G.id.indexOf(+gid), A.doc, B.doc, sq); if (w) return `${why}: ${w}: ${href}`; }
     return null;
   };
   const wrong = [], n = { game: 0, pairing: 0, lead: 0, noLink: 0, games: 0, ok: 0 };
@@ -240,7 +255,7 @@ test('every head-to-head link (game rows, pairing rows, lead rows) opens the pai
   console.log(`# h2h links: ${n.game} game, ${n.pairing} pairing (by orientation; a superset of the rows shown), ${n.lead} lead; 0 wrong`);
 });
 
-test('the h2h link check has teeth: a candidate id, an alias id, a wrong name and a same-squad vs are each caught', () => {
+test('the h2h link check has teeth: a candidate id, an alias id, a wrong name and a same-squad vs are each caught; #179: an orphan id in its own season and the latest row instead of the nearest', () => {
   const jix = indexOf(json('archive/search/core.json').teams, src), sq = S.squadAt(index);
   const G = games.get(active), g = rowsOf(active).find(r => r.h2hHref);
   const href = g.h2hHref, p = new URLSearchParams(href.slice(1));
@@ -250,6 +265,23 @@ test('the h2h link check has teeth: a candidate id, an alias id, a wrong name an
   assert.match(destinationProblem(href.replace(/name=[^&]+/, 'name=Nobody'), jix), /name is not/);
   assert.match(destinationProblem(`${href}&view=season`, jix), /vs= takes no view=/);
   assert.ok(sq.size > 0 && G);
+  // #179: a game of a reviewed orphan id (NCFC Youth 45785 in 2020-21, a season with no row for it): the module names it
+  // by its nearest row (2021-22/45785); the raw orphan id in its own season and the squad's latest row are each caught
+  const O = games.get('2020-21'), i = O.h.findIndex((h, k) => (h === 45785 || O.a[k] === 45785) && sq.get(`2020-21/${h}`) && sq.get(`2020-21/${O.a[k]}`));
+  const ha = sq.get(`2020-21/${O.h[i]}`), hb = sq.get(`2020-21/${O.a[i]}`), row = new GameRow(O, i, { cls: 'exact' });
+  const oh = S.gameH2HHref(O, i, 'h', sq, index.teamAt), q = new URLSearchParams(oh.slice(1));
+  assert.ok(i >= 0 && ha !== hb && row.h2hHref);
+  assert.equal(destinationProblem(oh, jix), null);
+  assert.equal(rowProblem(oh, O, i, ha, hb, sq), null);
+  assert.ok([q.get('season'), q.get('vs').split(':')[0]].includes('2021-22') && /45785/.test(oh), oh);
+  const raw = O.h[i] === 45785 ? oh.replace(/season=2021-22&team=45785/, 'season=2020-21&team=45785') : oh.replace('vs=2021-22:45785', 'vs=2020-21:45785');
+  assert.notEqual(raw, oh);
+  assert.ok(destinationProblem(raw, jix) || rowProblem(raw, O, i, ha, hb, sq), `the raw orphan id in its own season is caught: ${raw}`);
+  const ncfc = sq.get('2021-22/45785'), late = ncfc.latest;
+  const latest = O.h[i] === 45785 ? oh.replace(/season=2021-22&team=45785&name=[^&]+/, `season=${late.season}&team=${late.teamID}&name=${encodeURIComponent(late.name)}`)
+    : oh.replace('vs=2021-22:45785', `vs=${late.season}:${late.teamID}`);
+  assert.notEqual(latest, oh);
+  assert.equal(rowProblem(latest, O, i, ha, hb, sq), 'not that season\'s row, else the nearest', `the latest row instead of the nearest is caught: ${latest}`);
 });
 
 // ---------- #182 N5: the Matches cards' head-to-head links ----------

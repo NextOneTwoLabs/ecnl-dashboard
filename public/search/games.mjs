@@ -447,8 +447,8 @@ function vsGames(index, reader, ctx, opts, cov, stateOf, tday) {
 
 // ---------- #178 (#149 phase 1, PR 6): head to head ----------
 // Computed on the fly from the per-season games indexes search already loads; nothing is pre-built per pair.
-// Pure: "today" comes in. A side is a squad (a team document: its conference rows `rows` and its alias ids at
-// national events and showcases `x`); its earlier teams across the 2026-27 regroup (`maybePrev`) are listed for the
+// Pure: "today" comes in. A side is a squad (a team document: its conference rows `rows` and its alias ids `x`, at
+// national events and showcases, and reviewed orphan ids, #179); its earlier teams across the 2026-27 regroup (`maybePrev`) are listed for the
 // visitor to add, never added or merged here.
 const enc = encodeURIComponent;
 
@@ -567,15 +567,19 @@ export function h2hRow(index, da, db, ctx, base) {
 
 // The one place a game's head-to-head link is made, for game rows and pairing rows alike: both sides must be squads
 // (different ones); an alias id (a showcase's own id) links by the squad's conference id that season. aSide: 'h' | 'a';
-// withMatch adds &match=<matchID> (Q2: a game row's link opens the head to head on that meeting, marked)
+// withMatch adds &match=<matchID> (Q2: a game row's link opens the head to head on that meeting, marked).
+// #179 (Q4): a side with no conference row in the game's season (a reviewed orphan id, games TGS's table left out) is
+// named by its nearest row, so the link opens a team page that exists; on a tie, the row with the game's own id, else
+// the earlier (N2). tests/search-game-links.test.mjs mirrors this rule: change the two together (N7).
 export function gameH2HHref(G, i, aSide, sq, teamAt, withMatch = false) {
   const h = G.h[i], a = G.a[i];
   if (!sq) return null;
   const sh = sq.get(`${G.season}/${h}`), sa = sq.get(`${G.season}/${a}`);   // a side still to be decided has id 0: no squad
   if (!sh || !sa || sh === sa) return null;
-  const own = (d, t) => (d.rows.find(r => r.season === G.season) || { teamID: t }).teamID;
+  const yr = s => +s.slice(0, 4), gap = r => Math.abs(yr(r.season) - yr(G.season));
+  const own = (d, t) => d.rows.find(r => r.season === G.season) || d.rows.reduce((b, r) => (gap(r) < gap(b) || (gap(r) === gap(b) && r.teamID === t && b.teamID !== t) ? r : b));
   const [x, y] = aSide === 'a' ? [own(sa, a), own(sh, h)] : [own(sh, h), own(sa, a)];
-  return h2hHref({ season: G.season, teamID: x, name: teamAt ? teamAt.get(`${G.season}/${x}`) : undefined }, { season: G.season, teamID: y }) + (withMatch ? `&match=${enc(G.id[i])}` : '');
+  return h2hHref({ season: x.season, teamID: x.teamID, name: teamAt ? teamAt.get(`${x.season}/${x.teamID}`) : undefined }, { season: y.season, teamID: y.teamID }) + (withMatch ? `&match=${enc(G.id[i])}` : '');
 }
 
 // A side's candidate earlier teams, as the control lists them: never the other side's own squad; one the other side
