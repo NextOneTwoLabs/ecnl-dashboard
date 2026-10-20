@@ -5,7 +5,7 @@
 // a national event, a showcase) or a day. Pure: "today" comes in through the context.
 import { gameHref, teamHref, teamSeasonHref } from './links.mjs';
 import { searchTeams } from './teams.mjs';
-import { CLASS_RANK } from './match.mjs';
+import { CLASS_RANK, ageOk } from './match.mjs';
 
 export const GAMES_SCHEMA = 1;
 export const NO_DAY = -1e9;
@@ -157,7 +157,7 @@ function daysOf(r, seasons) {
 }
 // Does a squad's season row pass a reading's filters (as teams.mjs anchorOf)?
 function rowPasses(row, r, born, active) {
-  if (r.u && row.u !== r.u) return false;
+  if (!ageOk(row, r)) return false;
   // a birth year: the squad's own (strong), or D11's weak match on an active-season two-year division
   const weak = y => row.season === active && row.years.length === 2 && row.years.includes(y);
   if (r.band ? !(row.years.length === 2 && r.born.every(y => row.years.includes(y))) : r.born.length && !r.born.some(y => born.includes(y) || weak(y))) return false;

@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/search-h2h.test.mjs tests/h2h-page.test.mjs tests/agents.test.mjs tests/match-param.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-pair-check.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/search-h2h.test.mjs tests/h2h-page.test.mjs tests/agents.test.mjs tests/match-param.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -569,6 +569,11 @@ draws them since #165 (below).
 - **Serving:** they are static assets at `/search/*.mjs` (`wrangler.toml`'s `run_worker_first`
   does not cover them), served as `text/javascript`; `proxy_server.py` pins that type locally.
   Node tests import them directly.
+- **Age pairs (#173):** a name such as `GU17/U18` that TGS filed in the GU18/U19 division is found by its own name: for a query that names a
+  team, the typed pair's second age passes when the squad row's own name parses to that pair (`ageOk` in `match.mjs`); a conference table
+  keeps the filed age alone, and a tie goes to the squad that passed through its own pair. `tools/search_pair_check.mjs` is the production
+  check: it runs the modules of `--before-rev` and the modules under test on the same core, places and games files, offline, and asserts
+  rules (only squads filed at their second age differ; 2195 is first). `--fetch <site>` downloads the 13 files it needs (cap 25).
 - **Cost:** `node --import ./tests/netguard/netguard.mjs --expose-gc tools/search_data_size.mjs --index`
   measures `buildIndex`. `tests/search-modules.test.mjs` types every judged query one character
   at a time, pins the work each keystroke does (since #168 with the active season's games, and

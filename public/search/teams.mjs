@@ -1,6 +1,6 @@
 // #163 (#149 phase 1, PR 3): the Teams category. One document per #107 squad, from core.json's
 // teams (the team directory) and places.json's club places. Pure.
-import { postingsG, drain, Postings, nameWords, nameWordsOf, withAliases, initials, capsWords, teamTitle, words, expand, filterScore, CLASS_RANK } from './match.mjs';
+import { postingsG, drain, Postings, nameWords, nameWordsOf, withAliases, initials, capsWords, teamTitle, words, expand, filterScore, CLASS_RANK, ageOk } from './match.mjs';
 import { placeWords, ALIASES } from './vocab.mjs';
 import { teamHref, teamSeasonHref } from './links.mjs';
 
@@ -117,14 +117,14 @@ function anchorOf(d, r, ctx, active) {
   for (let i = d.rows.length - 1; i >= 0; i--) {
     const row = d.rows[i];
     if (seasons && !seasons.includes(row.season)) continue;
-    if (r.u && row.u !== r.u) continue;
+    if (!ageOk(row, r)) continue;
     if (r.band ? !(row.years.length === 2 && r.born.every(y => row.years.includes(y))) : r.born.length && !r.born.some(y => d.born.includes(y))) continue;
     if (r.conf && row.conf !== r.conf) continue;
     return row;
   }
   if (r.born.length && !r.band) {
     const row = d.rows.find(x => x.season === active);
-    if (row && (!seasons || seasons.includes(active)) && (!r.u || row.u === r.u) && (!r.conf || row.conf === r.conf)
+    if (row && (!seasons || seasons.includes(active)) && ageOk(row, r) && (!r.conf || row.conf === r.conf)
         && row.years.length === 2 && r.born.some(y => row.years.includes(y))) { ANCHOR_WEAK = true; return row; }
   }
   return null;
@@ -201,7 +201,7 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
           score += Math.max(placeFilter, ns);
         }
         score += filters;
-        hits.push({ d, anchor, weak, nearby: ph ? !ph.direct : false, score, cls, reading: ri, filterWords: r.filterWords, table,
+        hits.push({ d, anchor, weak, viaPair: r.u2 != null && anchor.u === r.u2, nearby: ph ? !ph.direct : false, score, cls, reading: ri, filterWords: r.filterWords, table,
           whole: d.titleWords.length > 0 && d.titleWords.every(w => nameSet.has(w)), ws, ph, conf: r.conf, seasonTyped: !!r.seasons,
           partialKey: partial ? { matched, cls: bestCls, rarity } : null });
       }
@@ -232,6 +232,8 @@ export function searchTeams(T, side, ctx, vocab, { partial = false, stats = null
 const EXACT = new Map();
 const exactOf = w => { let m = EXACT.get(w); if (!m) { m = new Map([[w, { cls: 'exact', m: 1 }]]); EXACT.set(w, m); } return m; };
 
+// #173: `better` (one squad matched by several readings) has no viaPair step. Two readings that anchor a squad on different rows carry
+// different filter scores, so they never tie there; the tie-break lives in `compare` alone.
 const better = (a, b) => (a.nearby !== b.nearby ? !a.nearby : a.weak !== b.weak ? !a.weak : a.table !== b.table ? a.table : a.score !== b.score ? a.score > b.score : a.reading < b.reading);
 
 // Teams order (design, plus #163 Q3): table rows in table order; direct before nearby (D2); strong
@@ -250,6 +252,9 @@ function compare(a, b, placeOnly, partial) {
   if (a.nearby !== b.nearby) return a.nearby ? 1 : -1;
   if (a.weak !== b.weak) return a.weak ? 1 : -1;
   if (a.score !== b.score) return b.score - a.score;
+  // #173: at equal score, the squad that passed through the pair its own name spells goes first. It sits before the whole-title check
+  // because the row's own name spelled the typed age, which is a typed word too. Never a score bonus: it cannot lift a row over a higher score.
+  if (a.viaPair !== b.viaPair) return a.viaPair ? -1 : 1;
   if (a.whole !== b.whole) return a.whole ? -1 : 1;
   if (A.current !== B.current) return A.current ? -1 : 1;
   const sa = a.anchor.season, sb = b.anchor.season;
