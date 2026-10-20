@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"f9f87dfd434cc88b"
+,"build":"71477ee90827727f"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -1013,6 +1013,7 @@
 ,"4921":["winter park","55344"]
 ,"4956":["moorpark high school","93021"]
 ,"5014":["evergreen valley college","95135"]
+,"5298":["clovis east highschool","93619"]
 ,"5364":["addenbrooke classical","80235"]
 ,"5366":["stargate","80023"]
 ,"5415":["striker park","23059"]
@@ -6272,10 +6273,10 @@
 ,[1,1151400,40575,132201,82861,null,null,null,null,31,"Trione East",null,[1,0]]
 ,[1,1161200,40580,95560,132206,null,null,null,null,7550,1,null,[1,0]]
 ,[1,1161000,40579,64375,132205,null,null,null,null,7550,1,null,[1,0]]
-,[1,1161400,40578,88375,132204,null,null,null,null,7550,1,null,[1,0]]
+,[1,1161400,40578,88375,132204,null,null,null,null,5298,5,null,[1,0]]
 ,[1,1161200,40577,113580,132203,null,null,null,null,7550,2,null,[1,0]]
 ,[1,1161400,40576,114556,132202,null,null,null,null,7550,2,null,[1,0]]
-,[1,1161000,40575,116964,132201,null,null,null,null,7550,2,null,[1,0]]
+,[1,1161000,40575,116964,132201,null,null,null,null,5298,7,null,[1,0]]
 ,[1,1161100,40580,56277,45841,null,null,null,null,1788,"Stadium",null,[1,0]]
 ,[1,1161300,40579,62042,60044,null,null,null,null,1788,"Stadium",null,[1,0]]
 ,[1,1161040,40578,82192,62271,null,null,null,null,1749,"Stadium",null,[1,0]]

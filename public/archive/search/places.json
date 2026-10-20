@@ -1,5 +1,5 @@
 {"schema":1
-,"build":"e80053639a966d28"
+,"build":"b7b150e45b5bc172"
 ,"census":"1f646e5cb9cf65372af12bdc4cb63c5ee8643f13c123ce0ea35746fcdd9919f6"
 ,"vocab":{"fieldAliases":{"60 acres":"60 Acres Park","60 acres park":"60 Acres Park","great park":"Great Park","oc great park":"Great Park","orange county great park":"Great Park","orange county great park sports park":"Great Park","surf cup sports park":"Surf Sports Park","surf sports park":"Surf Sports Park"}}
 ,"counties":{
@@ -1016,7 +1016,7 @@
 ,"cleveland united complex@44039":["Cleveland United Complex",["2023-24"],[1],"3956966","39093"]
 ,"clinton high school@37716":["Clinton High School",["2024-25","2026-27"],[1],"4715580","47001"]
 ,"clovis community college soccer field@93730":["Clovis Community College Soccer Field",["2026-27"],[1],"0627000","06019"]
-,"clovis east highschool@93619":["Clovis East Highschool",["2025-26"],[8],"0614218","06019"]
+,"clovis east highschool@93619":["Clovis East Highschool",["2025-26","2026-27"],[5,7,8],"0614218","06019"]
 ,"clovis high school@93611":["Clovis High School",["2025-26"],[1,2],"0614218","06019"]
 ,"clovis south high school@93737":["Clovis South High School",["2026-27"],[1,2],"0627000","06019"]
 ,"college boulevard activity center@66061":["College Boulevard Activity Center",["2022-23","2023-24"],[1,2],"2052575","20091"]
