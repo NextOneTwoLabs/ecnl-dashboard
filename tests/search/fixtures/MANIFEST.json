@@ -19,8 +19,8 @@
   "logos": "dropped from directory.json (#117)",
   "refreshUpdatedAt": "2026-10-15T22:10:33Z",
   "retired": {
-    "pr": "#172",
-    "reason": "PR 5 (#172) removed the legacy search from index.html; engines/today.js is a frozen copy and baseline/today.json its record"
+    "pr": "#174",
+    "reason": "PR 5 (#174, for #172) removed the legacy search from index.html; engines/today.js is a frozen copy and baseline/today.json its record"
   },
   "schema": 1,
   "search": {
