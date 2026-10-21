@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "_comment": "Reviewed corrections to the census table's places (#159, plan v2 MF2). `fixes` set a field zip's city where the land-area rule picks the wrong place; `aliases` name the census place of a club or event city whose census name differs (consolidated governments). Every placeGeoid must exist in public/data/zip-places.json with that placeName and state; a fix the area rule already gives is redundant. A bad entry is left out, reported, and fails `python archive.py --search-data --check`. Each entry carries its evidence.",
+  "_comment": "Reviewed corrections to the census table's places (#159, plan v2 MF2). `fixes` set a field zip's city where the land-area rule picks the wrong place, or (#162, option a) give it no city with placeGeoid and placeName null. The label rule (#162 MF4): a place label is right if the field lies inside the place, or the place is the field's postal town and has land in the zip; otherwise a fix names the postal-town place when it has land in the zip, else no city. Each fix quotes its land shares from the raw 2020 place file, because zip-places.json keeps only the area rule's place; a fix whose zip no field uses is stale, an error; `aliases` name the census place of a club or event city whose census name differs (consolidated governments). Every placeGeoid must exist in public/data/zip-places.json with that placeName and state; a fix the area rule already gives is redundant. A bad entry is left out, reported, and fails `python archive.py --search-data --check`. Each entry carries its evidence.",
   "fixes": [
     {
       "zip": "92014",
@@ -8,6 +8,62 @@
       "placeName": "Del Mar",
       "state": "CA",
       "evidence": "Surf Sports Park (complexes at 92014) is at the Del Mar Fairgrounds, in the City of Del Mar; the 2022-23 Playoffs (event 2719) were held there, listed at \"Del Mar, CA\". Owner decision D2 and PR 1's P02/P08 treat it as Del Mar, nearby for San Diego. In the census table the land-area rule gives 92014 to San Diego (0666000), because the zip also covers a larger part of the City of San Diego; Del Mar (0618506) is the census place of that name in San Diego County."
+    },
+    {
+      "zip": "06032",
+      "placeGeoid": null,
+      "placeName": null,
+      "state": "CT",
+      "evidence": "Farmington Sports Arena, FSA and Tunxis Meade Park are in Farmington, whose own zip this is (club 431's city-counties.json entry). Farmington is a town (county subdivision), not a census place. In the raw 2020 ZCTA-to-place file (sha256 698a5dad…, as zip-places.json records), the area rule's place Newington CDP (0952210) holds 287,373 m² of the zip's 59,796,370 m² of land (0.48%), and New Britain city (0950370) holds 58,803 m² of the zip's 59,796,370 m² of land (0.10%): slivers of neighbouring towns. The postal town (USPS Cities by ZIP Code) is Farmington, which is not a census place, so the zip gets no city; its county stays Hartford County (09003). Owner decisions Q4 and Q5, #162, 2026-10-21."
+    },
+    {
+      "zip": "01545",
+      "placeGeoid": null,
+      "placeName": null,
+      "state": "MA",
+      "evidence": "St. Johns Fields are St. John's High School's, in Shrewsbury, whose own zip this is; Shrewsbury is a town (county subdivision), not a census place, and the fields are not in Worcester. In the raw 2020 ZCTA-to-place file (sha256 698a5dad…, as zip-places.json records), the area rule's place Worcester city (2582000) holds 51,399 m² of the zip's 53,749,207 m² of land (0.10%). The postal town (USPS Cities by ZIP Code) is Shrewsbury, so the zip gets no city; its county stays Worcester County (25027). Owner decisions Q4 and Q5, #162, 2026-10-21."
+    },
+    {
+      "zip": "19425",
+      "placeGeoid": null,
+      "placeName": null,
+      "state": "PA",
+      "evidence": "Fellowship Field: the postal town (USPS Cities by ZIP Code) is Chester Springs, which is not a census place. In the raw 2020 ZCTA-to-place file (sha256 698a5dad…, as zip-places.json records), the area rule's place Eagle CDP (4220600) holds 797,684 m² of the zip's 69,410,219 m² of land (1.15%); no map check puts the field inside Eagle, so the zip gets no city; its county stays Chester County. Owner decisions Q4 and Q5, #162, 2026-10-21 (no city unless a map shows the field inside the place)."
+    },
+    {
+      "zip": "78669",
+      "placeGeoid": null,
+      "placeName": null,
+      "state": "TX",
+      "evidence": "Bee Creek Sports Complex: the postal town (USPS Cities by ZIP Code) is Spicewood, which is not a census place. In the raw 2020 ZCTA-to-place file (sha256 698a5dad…, as zip-places.json records), the area rule's place Briarcliff village (4810197) holds 4,267,745 m² of the zip's 314,133,964 m² of land (1.36%); no map check puts the complex inside Briarcliff, so the zip gets no city; its county stays Travis County. Owner decisions Q4 and Q5, #162, 2026-10-21 (no city unless a map shows the field inside the place)."
+    },
+    {
+      "zip": "21758",
+      "placeGeoid": null,
+      "placeName": null,
+      "state": "MD",
+      "evidence": "Othello Regional Park: the postal town (USPS Cities by ZIP Code) is Knoxville, Maryland, which is not a census place. In the raw 2020 ZCTA-to-place file (sha256 698a5dad…, as zip-places.json records), the area rule's place Garretts Mill CDP (2431575) holds 1,478,501 m² of the zip's 82,926,333 m² of land (1.78%) (Brunswick city 2410900 holds 1.74%); no map check puts the park inside either, so the zip gets no city; its county stays Frederick County. Owner decisions Q4 and Q5, #162, 2026-10-21 (no city unless a map shows the field inside the place)."
+    },
+    {
+      "zip": "34120",
+      "placeGeoid": null,
+      "placeName": null,
+      "state": "FL",
+      "evidence": "Big Corkscrew Island Regional Park: the postal town (USPS Cities by ZIP Code) is Naples, a census place with no land in this zip. In the raw 2020 ZCTA-to-place file (sha256 698a5dad…, as zip-places.json records), the area rule's place Orangetree CDP (1252162) holds 9,416,639 m² of the zip's 364,701,841 m² of land (2.58%); no map check puts the park inside Orangetree, so the zip gets no city; its county stays Collier County. Owner decisions Q4 and Q5, #162, 2026-10-21 (no city unless a map shows the field inside the place)."
+    },
+    {
+      "zip": "37932",
+      "placeGeoid": "4740000",
+      "placeName": "Knoxville",
+      "state": "TN",
+      "evidence": "Hardin Valley Academy is in Hardin Valley, outside the town of Farragut, and its postal town (USPS Cities by ZIP Code) is Knoxville. In the raw 2020 ZCTA-to-place file (sha256 698a5dad…, as zip-places.json records), the area rule's place Farragut town (4725760) holds 1,944,078 m² of the zip's 75,093,217 m² of land (2.59%), and Knoxville city (4740000) holds 1,746,164 m² of the zip's 75,093,217 m² of land (2.33%): the postal town has land in the zip, so the label rule's branch (ii) gives Knoxville. Owner decisions Q4 and Q5, #162, 2026-10-21."
+    },
+    {
+      "zip": "02360",
+      "placeGeoid": "2554275",
+      "placeName": "Plymouth",
+      "state": "MA",
+      "evidence": "Plymouth North High School is in Plymouth, not in The Pinehills, and its postal town (USPS Cities by ZIP Code) is Plymouth. In the raw 2020 ZCTA-to-place file (sha256 698a5dad…, as zip-places.json records), the area rule's place The Pinehills CDP (2569585) holds 10,565,856 m² of the zip's 249,631,360 m² of land (4.23%), and Plymouth CDP (2554275) holds 5,797,216 m² of the zip's 249,631,360 m² of land (2.32%): the postal town has land in the zip, so the label rule's branch (ii) gives Plymouth CDP (the same branch that keeps Northville right at 48168). Owner decisions Q4 and Q5, #162, 2026-10-21."
     }
   ],
   "aliases": [

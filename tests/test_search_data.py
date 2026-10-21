@@ -910,5 +910,237 @@ class Fixture(unittest.TestCase):
             self.assertEqual(m["inputs"][n], sd.lf_sha(path) if os.path.exists(path) else None, n)
 
 
+# ---------- #169: the alias guards (Q10, Q11) and the 35 reviewed entries ----------
+
+def _game(mid, complex_, zip_, cid, when, venue):
+    return {"matchID": mid, "complex": complex_, "zip": zip_, "complexID": cid, "gameDate": when, "venue": venue}
+
+
+class AliasGuards(unittest.TestCase):
+    """The stale and clash checks on synthetic games; the acceptedClashes key; the report after aliasing."""
+
+    def aliases(self, *entries):
+        out = sd.Aliases()
+        for e in entries:
+            for a in e["aliases"]:
+                out[(a, e["zip"])] = (e["name"], e["label"])
+        out.entries = tuple((f"field-aliases.json fields[{i}]", e) for i, e in enumerate(entries))
+        return out
+
+    def run_fields(self, games, aliases, fixture):
+        seasons = {"2021-22": {g["matchID"]: (g, None, None) for g in games}}
+        report, errors = collections.defaultdict(list), []
+        by_cid, facts = sd.fields_of(seasons, {}, aliases, report, errors, fixture)
+        return by_cid, facts, report, errors
+
+    def test_the_venue_key(self):
+        k = sd.venue_key
+        self.assertEqual(k("Field 3"), k("Rec Plex # 3"), "the RecPlex blind spot of the strict key (review MF1)")
+        self.assertEqual({k("Field #09"), k("Turf Field 9"), k("Field 9")}, {"#9"})
+        self.assertEqual(k(" Stadium  Field "), "stadium field")
+        self.assertEqual(k(None), "")
+        # documented over-match (review N3): sub-fields share their number, a reviewed exception is the way out
+        self.assertEqual(k("Field 1A"), k("Field 1B"))
+        self.assertEqual(k("Field N2 #3"), k("Field S1 #3"))
+
+    def test_shared_start_times_and_clashes(self):
+        e = {"aliases": ["a", "b"]}
+        games = {"a": [(1, "2021-10-16T13:45:00", "#3"), (2, "2021-10-17T09:00:00", "#1"), (5, "2021-10-18T00:00:00", "#1")],
+                 "b": [(3, "2021-10-16T13:45:00", "#3"), (4, "2021-10-17T09:00:00", "#2"), (6, "2021-10-18T00:00:00", "#1")]}
+        shared, clashes = sd.alias_clashes(e, games)
+        self.assertEqual(shared, {"2021-10-16T13:45:00", "2021-10-17T09:00:00"}, "a day with no time is never a start time")
+        self.assertEqual(clashes, {frozenset((1, 3))}, "two fields at one time are no clash")
+        self.assertEqual(sd.alias_clashes(e, {"a": games["a"], "b": []}), (set(), set()), "one name alone: untestable")
+
+    ENTRY = {"name": "RecPlex", "zip": "50266", "label": "RecPlex", "aliases": ["rec plex one", "rec plex two"], "evidence": "e"}
+    CLASH = [_game(270362, "Rec Plex One", "50266", 2906, "2021-10-16T13:45:00", "Field 3"),
+             _game(270361, "Rec Plex Two", "50266", 3228, "2021-10-16T13:45:00", "Rec Plex # 3")]
+
+    def test_an_unreviewed_clash_fails_the_fixture_build_and_is_reported_on_a_live_build(self):
+        _b, _f, report, errors = self.run_fields(self.CLASH, self.aliases(self.ENTRY), fixture=True)
+        self.assertEqual(len(errors), 1, errors)
+        self.assertIn("matches 270361 and 270362", errors[0])
+        _b, _f, report, errors = self.run_fields(self.CLASH, self.aliases(self.ENTRY), fixture=False)
+        self.assertEqual(errors, [], "Q11: report-only on a live build")
+        lines = report["alias entries with an unreviewed clash (report only on live builds, owner decision Q11)"]
+        self.assertEqual(len(lines), 1)
+        self.assertIn("matches 270361 and 270362", lines[0])
+
+    def test_accepted_clashes_clear_exactly_their_pair_and_a_stale_pair_is_an_error(self):
+        e = dict(self.ENTRY, acceptedClashes=[[270362, 270361]])
+        for fixture in (True, False):
+            by_cid, facts, report, errors = self.run_fields(self.CLASH, self.aliases(e), fixture)
+            self.assertEqual(errors, [])
+            self.assertFalse([k for k in report if "unreviewed clash" in k])
+            self.assertEqual(by_cid, {2906: ("RecPlex", "50266"), 3228: ("RecPlex", "50266")}, "one field for both complexes")
+        e = dict(self.ENTRY, acceptedClashes=[[270362, 270361], [270362, 999]])
+        for fixture in (True, False):
+            errors = self.run_fields(self.CLASH, self.aliases(e), fixture)[3]
+            self.assertEqual(len(errors), 1, errors)
+            self.assertIn("acceptedClashes [999, 270362] is not two of its names", errors[0])
+
+    def test_a_stale_entry_is_an_error_on_every_build(self):
+        stale = {"name": "Nowhere Park", "zip": "50266", "label": "Nowhere Park", "aliases": ["nowhere park"], "evidence": "e"}
+        for fixture in (True, False):
+            errors = self.run_fields(self.CLASH, self.aliases(stale), fixture)[3]
+            self.assertEqual(len(errors), 1, errors)
+            self.assertIn("stale: no game at 50266", errors[0])
+
+    def test_the_loader_accepts_and_checks_accepted_clashes(self):
+        good = dict(self.ENTRY, acceptedClashes=[[270362, 270361]])
+        bads = [[], [[1]], [[1, 1]], [["1", 2]], [[1, 2], [2, 1]], "x", [[True, 2]]]
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp) / "public" / "data"
+            d.mkdir(parents=True)
+            entries = [good] + [dict(self.ENTRY, name=f"Bad {i}", aliases=[f"bad {i}"], acceptedClashes=b) for i, b in enumerate(bads)]
+            entries.append(dict(self.ENTRY, name="Extra", aliases=["extra"], extra=1))
+            (d / "field-aliases.json").write_text(json.dumps({"schema": 1, "fields": entries}), encoding="utf-8")
+            aliases, errors = sd.load_aliases(tmp)
+        self.assertEqual(len(errors), len(bads) + 1, errors)
+        self.assertTrue(all("acceptedClashes must be" in e for e in errors[:-1]), errors)
+        self.assertIn("optionally ['acceptedClashes']", errors[-1])
+        self.assertEqual([e["name"] for _w, e in aliases.entries], ["RecPlex"])
+        self.assertEqual(aliases[("rec plex one", "50266")], ("RecPlex", "RecPlex"))
+
+    def test_the_variants_report_counts_the_names_left_after_the_aliases(self):
+        games = self.CLASH + [_game(3, "Other Park", "50266", 77, "2021-10-20T10:00:00", "Field 1")]
+        key = "zips with more than one complex name after the reviewed aliases (alias candidates; never merged automatically)"
+        report = self.run_fields(self.CLASH, self.aliases(), fixture=False)[2]
+        self.assertEqual(report[key], ["50266: rec plex one (1); rec plex two (1)"])
+        e = dict(self.ENTRY, acceptedClashes=[[270362, 270361]])
+        self.assertEqual(self.run_fields(self.CLASH, self.aliases(e), fixture=False)[2][key], [], "merged: no candidate left")
+        self.assertEqual(self.run_fields(games, self.aliases(e), fixture=False)[2][key], ["50266: RecPlex (2); other park (1)"])
+
+    def test_the_drift_check_fails_on_a_stale_alias_entry(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            Fields.write_inputs(self, tmp, aliases=[{"name": "Nowhere Park", "zip": "92618", "label": "Nowhere Park",
+                                                     "aliases": ["nowhere park"], "evidence": "e"}])
+            real = sd.inputs_dir
+            with patch.object(sd, "inputs_dir", side_effect=lambda base=None: real(base or tmp)), \
+                    contextlib.redirect_stdout(io.StringIO()) as out:
+                code = archive.cmd_search_data(api.load_sources(), check=True)
+        self.assertEqual(code, 1)
+        self.assertIn("(Nowhere Park @ 92618): stale: no game at 92618", out.getvalue())
+
+
+MERGED = [   # (zip, field name, {alias: its complex IDs in the frozen fixture}); one per field-aliases.json entry
+    ('92618', 'Great Park', {'orange county great park': [422, 1018, 3075, 3416, 6698], 'oc great park': [80, 2838, 4559, 7083, 7319], 'great park': [2555], 'orange county great park sports park': [3069]}),
+    ('98052', '60 Acres Park', {'60 acres park': [2302, 5901, 8833], '60 acres': []}),
+    ('92014', 'Surf Sports Park', {'surf sports park': [451, 2820, 2824, 2829, 2831, 3731, 4746], 'surf cup sports park': [7471]}),
+    ('98052', 'Grass Lawn Park', {'grass lawn park': [1515], 'grasslawn park': [2859]}),
+    ('01752', 'Forekicks Marlborough', {'forekicks marlborough': [1240], 'forekicks marlboro': [3619]}),
+    ('06032', 'FSA-Farmington Sports Arena', {'fsafarmington sports arena': [374], 'farmington sports arena': [2391]}),
+    ('11722', 'SUSA - Orlin & Cohen Sports Complex', {'susa orlin cohen sports complex': [2254], 'the susa orlin cohen sports complex': [6358]}),
+    ('20901', 'Montgomery Blair High School', {'montgomery blair high school': [4650], 'montgomery blair hs': [1058]}),
+    ('22026', 'Ali Krieger Sports Complex (AKSC)', {'ali krieger sports complex aksc': [1300], 'ali kreeger sports complex': [5732]}),
+    ('45227', 'Seven Hills School', {'seven hills school': [458, 744, 1197], 'the seven hills school': [4466]}),
+    ('48301', 'Brother Rice High School', {'brother rice high school': [3309], 'brother rice hs': [4353]}),
+    ('49506', 'East Grand Rapids High School', {'east grand rapids high school': [3936], 'east grand rapids hs': [3939]}),
+    ('50266', 'MidAmerican Energy Company RecPlex', {'midamerican energy company recplex': [2906, 3429], 'midamerican engery company recplex': [3228]}),
+    ('52722', 'The TBK Bank Sports Complex, LLC', {'the tbk bank sports complex llc': [2627, 2643, 2646], 'tbk bank sports complex llc': [2622]}),
+    ('53217', 'University School of Milwaukee', {'university school milwaukee': [7003], 'university school of milwaukee': [7850]}),
+    ('60126', 'Elmhurst University - Langhorst Field', {'elmhurst university langhorst field': [5835], 'langhorst field at elmhurst university': [4742]}),
+    ('60506', 'Stuart Sports Complex', {'stuarts sports complex': [3013], 'stuart sports complex': [2921, 3389, 3390]}),
+    ('60523', 'Oak Brook Park District - Turf', {'oak brook park district turf': [6790], 'oak brook pd turf': [1699]}),
+    ('61111', 'Mercyhealth Sportscore Two', {'mercyhealth sportscore two': [1805], 'mercy health sportscore 2': [3657, 4661]}),
+    ('63026', 'WWT Soccer Park', {'wwt soccer park': [499, 648, 4550], 'world wide technology soccer park': [3954]}),
+    ('63368', 'Missouri Rush Sports Park', {'missouri rush sports park': [2200, 2644, 2664], 'mo rush sports park': [2575]}),
+    ('68106', "College of St. Mary's", {'college of st marys': [3273], 'college st marys': [3272, 4079]}),
+    ('68136', 'Gretna East High School', {'gretna east high school': [6720], 'gretna east highschool': [6652]}),
+    ('75024', 'Carpenter Park', {'carpenter park': [2562], 'carpenter pak': [2474]}),
+    ('75035', 'Liberty High School', {'liberty high school': [4698], 'liberty hs': [6884]}),
+    ('75070', 'Emerson High School', {'emerson high school': [4275], 'emerson high': [4193]}),
+    ('77080', 'Campbell Road Sports Park', {'campbell road sports park': [634, 2265], 'campbell rd sports park': [1492]}),
+    ('83642', 'Boise Timbers/Thorns Complex', {'boise timbersthorns complex': [3598], 'boise timbers thorns complex': [6786]}),
+    ('85255', 'Bell 94 Sports Complex', {'bell 94 sports complex': [8139], 'bell94 sports complex': [3660]}),
+    ('91789', 'Mt. San Antonio College', {'mt san antonio college': [1660], 'mt sac college': [3643]}),
+    ('92056', 'So Cal Sports Complex', {'so cal sports complex': [2884], 'socal sports complex': [2849, 2866, 3867]}),
+    ('92126', 'Mira Mesa High School', {'miramesa high school': [3876], 'mira mesa high school': [4115]}),
+    ('92336', 'Ralph M. Lewis Sports Complex', {'ralph m lewis sports complex': [2842], 'ralph m lewis sport complex': [3126]}),
+    ('92860', 'Silverlakes Sports Complex', {'silverlakes sports complex': [2833, 2888, 3092, 3489, 7120], 'silver lakes sports complex': [2882]}),
+    ('93010', 'Pleasant Valley Fields', {'pleasant valley fields': [435, 2918, 6482], 'pleasent valley fields': [4597]}),
+    ('97007', 'Mountain View Champions Park', {'mountain view champions park': [1135, 2708, 3667], 'mt view champions park': [2506]}),
+    ('97140', 'Sherwood High School', {'sherwood hs': [6891], 'sherwood high school': [2991]}),
+    ('97229', 'PCC Rock Creek', {'pcc rock creek': [429], 'portland community college rock creek': [3668]}),
+]
+
+
+
+class AliasFixture(unittest.TestCase):
+    """#169 (review MF5): every field-aliases.json entry, pinned on the frozen fixture: removing any one fails its own
+    subtest. Exact counts are the fixture's (1c4c3268); live data gets rules only (Committed, AliasLive)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.places = load(FIXTURES / "search" / "places.json")
+        cls.fields = {}                                   # complexID -> [name, zip], from every games file
+        cls.times = collections.defaultdict(set)          # complexID -> {(date, time)}
+        for f in sorted((FIXTURES / "search").glob("games-*.json")):
+            doc = load(f)
+            cls.fields.update({int(c): v for c, v in doc["fields"].items()})
+            for g in sd.decode_games(doc):
+                if g["field"] and g["date"] and g["time"]:
+                    cls.times[g["field"]["complexID"]].add((g["date"], g["time"]))
+        cls.entries = {(e["zip"], e["name"]): e for e in load(Path(api.PUBLIC_DIR) / "data" / "field-aliases.json")["fields"]}
+
+    def test_the_pinned_list_is_every_entry(self):
+        self.assertEqual(sorted((z, n) for z, n, _a in MERGED), sorted(self.entries), "pin each new entry here, with its complex IDs")
+        self.assertEqual(len(MERGED), 38, "Great Park, 60 Acres Park, Surf Sports Park and the 35 of #169")
+
+    def test_each_entry_is_one_field_on_the_fixture(self):
+        for z, name, by_alias in MERGED:
+            with self.subTest(entry=f"{name} @ {z}"):
+                self.assertIn(f"{name}@{z}", self.places["fields"])
+                self.assertEqual(sorted(by_alias), sorted(self.entries[(z, name)]["aliases"]))
+                for a, cids in by_alias.items():
+                    if a != name:
+                        self.assertNotIn(f"{a}@{z}", self.places["fields"], f"{a!r} is still its own field")
+                    for c in cids:
+                        self.assertEqual(self.fields[c], [name, z], f"complex {c} ({a!r})")
+                self.assertTrue(any(by_alias.values()), "an entry with no complex on the fixture is stale")
+
+    def test_each_entry_states_its_shared_start_times(self):
+        """Review MF1 and N2: the evidence says how many start times its names share on the fixture, and says the clash
+        rule cannot test the entry exactly when that is 0. Counted here from the fixture's own games files."""
+        for z, name, by_alias in MERGED:
+            with self.subTest(entry=f"{name} @ {z}"):
+                ts = [set().union(*(self.times[c] for c in cids)) if cids else set() for cids in by_alias.values()]
+                shared = set()
+                for i in range(len(ts)):
+                    for j in range(i + 1, len(ts)):
+                        shared |= ts[i] & ts[j]
+                ev = self.entries[(z, name)]["evidence"]
+                m = re.search(r"Shared start times: (\d+) on fixture 1c4c3268", ev)
+                self.assertIsNotNone(m, "the evidence must state its shared start times")
+                self.assertEqual(int(m.group(1)), len(shared))
+                self.assertEqual("cannot test" in ev, not shared)
+
+    def test_the_variant_count_after_the_aliases(self):
+        """161 zips on the fixture still hold two or more field names after the reviewed aliases (183 before #169)."""
+        by_zip = collections.Counter(k.rsplit("@", 1)[1] for k in self.places["fields"])
+        self.assertEqual(sum(1 for z, n in by_zip.items() if z and n > 1), 161)
+        self.assertEqual(len(self.places["fields"]), 909, "944 before the 35 entries merged 70 names into 35 fields")
+
+    def test_recplex_is_the_one_reviewed_exception(self):
+        accepted = {(e["zip"], e["name"]): e["acceptedClashes"] for e in self.entries.values() if "acceptedClashes" in e}
+        self.assertEqual(accepted, {("50266", "MidAmerican Energy Company RecPlex"): [[270362, 270361], [270544, 270543]]})
+
+
+class AliasLive(unittest.TestCase):
+    """#169: rules on the committed (live) data; they hold for any number of entries."""
+
+    def test_no_merged_name_is_left_as_its_own_field(self):
+        places = load(SEARCH / "places.json")
+        for e in load(Path(api.PUBLIC_DIR) / "data" / "field-aliases.json")["fields"]:
+            self.assertIn(f"{e['name']}@{e['zip']}", places["fields"], e["name"])
+            for a in e["aliases"]:
+                if a != e["name"]:
+                    self.assertNotIn(f"{a}@{e['zip']}", places["fields"], a)
+
+    def test_the_live_build_has_no_alias_error(self):
+        errors = fresh()[1]
+        self.assertFalse([e for e in errors if e.startswith("field-aliases.json")], errors)
+
+
 if __name__ == "__main__":
     unittest.main()

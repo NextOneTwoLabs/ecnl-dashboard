@@ -57,6 +57,34 @@
       "countyGeoid": "09009",
       "countyName": "New Haven County",
       "evidence": "Bethany is a town (county subdivision), not a census place (club 31). Not a census place. The club's main home field is at zip 06524 (246 home games in the archive), which the census table puts in New Haven County (2020 counties; Connecticut's 2022 planning regions are not in the 2020 files); 06524 is Bethany's own zip."
+    },
+    {
+      "city": "Hamilton",
+      "state": "NJ",
+      "countyGeoid": "34021",
+      "countyName": "Mercer County",
+      "evidence": "Hamilton Township is a county subdivision, not a census place (club 3313, PDA White (Shore)). The 2020 census county-subdivision record \"Hamilton township, Mercer County, New Jersey\" gives Mercer County (owner decision Q2, #162, 2026-10-21; owner decision Q1 chose Mercer). New Jersey's other Hamilton Township is in Atlantic County and is postally Mays Landing (08330); the postal name \"Hamilton, NJ\" belongs to 08610, 08619, 08620, 08690 and 08691, which the census table puts in Mercer County with the CDPs White Horse, Mercerville, Yardville and Hamilton Square. The club's home fields (08873 Somerset, 07724 Monmouth, 08753 Ocean, 08060 Burlington) are deliberately not the evidence."
+    },
+    {
+      "city": "Shelby Twp",
+      "state": "MI",
+      "countyGeoid": "26099",
+      "countyName": "Macomb County",
+      "evidence": "Shelby Charter Township is a county subdivision, not a census place (club 1713, Nationals). The 2020 census county-subdivision record \"Shelby charter township, Macomb County, Michigan\" gives Macomb County (owner decision Q2, #162, 2026-10-21). Its zips 48315, 48316 and 48317 are in Macomb County in the census table. The census place Shelby (2672840) is a village in Oceana County, a different place, and \"Shelby Twp\" never matches it. The club's home fields (48309 Oakland County, 48236 Wayne County) are deliberately not the evidence."
+    },
+    {
+      "city": "Auburn",
+      "state": "MA",
+      "countyGeoid": "25027",
+      "countyName": "Worcester County",
+      "evidence": "Auburn is a town (county subdivision), not a census place (club 94, Scorpions SC). The 2020 census county-subdivision record \"Auburn town, Worcester County, Massachusetts\" gives Worcester County (owner decision Q2, #162, 2026-10-21). Its zip 01501 is in Worcester County, with no census place, in the census table. The club's home fields (02780 Bristol, 02053 Norfolk, 01523 Worcester) are deliberately not the evidence."
+    },
+    {
+      "city": "Baldwin",
+      "state": "MD",
+      "countyGeoid": "24005",
+      "countyName": "Baltimore County",
+      "evidence": "Baldwin is an unincorporated community, neither a census place nor a county subdivision (club 3405, Pipeline SC). USPS \"ZIP Code by City and State\" gives 21013 for Baldwin, MD (owner decision Q2, #162, 2026-10-21), and the census table puts 21013 in Baltimore County (24005), not Baltimore city (24510); its area-rule place is a sliver of Fallston (Harford County), so no place is set. The club's home fields are Mercy High School at 21239 (Baltimore city, 202 home games at 12182be0) and Notre Dame Preparatory School at 21286 (Baltimore County, 43)."
     }
   ]
 }

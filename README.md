@@ -479,9 +479,16 @@ games files wait for PR 4b. The format is in `docs/data-api.md`, "Search data".
   must not be guessed; MF5) and `public/data/orphan-team-ids.json` (#179: team ids with games in a
   season TGS's conference table left them out of, attached to their squads; every entry re-checked
   on every build, see `docs/data-api.md`, "Search data"). A bad entry is left out, reported, and
-  fails the check.
+  fails the check. Since #169 every `field-aliases.json` entry is also checked against the games at
+  its zip: an entry with no game under any of its names is stale (an error); two of its names at one
+  start time on one venue key is a clash, an error on the fixture build and a report line on live
+  builds (owner decision Q11), unless the matchID pair is listed in the entry's `acceptedClashes`
+  (RecPlex at 50266 is the one). The clash rule is a regression guard, not proof: it cannot test a
+  pair of names that never played at the same time, and each entry's evidence says how many start
+  times its names share.
 - **The build report** goes to the run's output only: zips that are not 5 digits, names with
-  more than one zip, and same-zip name variants (alias candidates, never merged automatically).
+  more than one zip, and same-zip name variants counted after the reviewed aliases (alias
+  candidates, never merged automatically; 161 zips since #169), plus live-build alias clashes.
 - **The frozen fixture** in `tests/search/fixtures/search/` is the same build from MANIFEST's
   commit `1c4c3268`, with club logos dropped (#117). It changes only on purpose: a change to
   `search_data.py` or to a reviewed input fails `tests/search-data.test.mjs` until the fixture is
@@ -674,11 +681,23 @@ Bureau, 2020 Census ZCTA to Place and ZCTA to County Relationship Files; public 
   - `public/data/zip-place-fixes.json`: `fixes` set a zip's city (92014 is Del Mar, where the
     land-area rule gives San Diego); `aliases` name the census place of a club city whose spelling
     differs (one today: Liburn, GA, TGS's spelling, is the census place Lilburn).
+    **The label rule** (#162): a field's place label is right if the field lies inside the place, or
+    if the place is the field's postal town and has land in the zip (Northville High School at 48168
+    is labelled Northville this way). Otherwise a fix names the postal-town place when it has land in
+    the zip (37932 is Knoxville, 02360 is Plymouth), else it gives the zip no city with
+    `"placeGeoid": null, "placeName": null` (06032 Farmington, 01545 Shrewsbury, 19425, 78669,
+    21758 and 34120); the field keeps its county. `zip-places.json` keeps only the area rule's place,
+    so each fix quotes its land shares from the raw 2020 place file. A null fix needs a zip in the
+    table whose area rule gives a place, in the fix's state; a fix no field uses is stale, an error.
   - `public/data/city-counties.json`: a club or event city's county. It may also override a census
     place's computed county, but no entry does today: it holds Woodland Hills (a district of Los
     Angeles, not a census place) and 7 club towns that are county subdivisions or unincorporated
     (Westampton NJ, Elma NY, Lancaster MA, St Johns FL, Greenbrae CA, Farmington CT, Bethany CT),
-    each backed by the club's main home field being in its own town's zip.
+    each backed by the club's main home field being in its own town's zip, and since #162 four club
+    cities whose home fields are elsewhere: Hamilton NJ (Mercer), Shelby Twp MI (Macomb) and Auburn MA
+    (Worcester), each from its 2020 census county-subdivision record, and Baldwin MD (Baltimore County,
+    from its USPS zip 21013). "Bay Area, CA" (club 3986) is a region and stays reported, with no entry.
+    An entry no club or event uses is stale, an error.
   - Owner decision Q-E (Fairfax, VA is Fairfax County) needs no entry: the census place Fairfax
     (5126496, class C7) already computes to Fairfax County (51059), and a test pins it. An entry
     would be redundant, which the build rejects; it comes back only if a new table changed that.

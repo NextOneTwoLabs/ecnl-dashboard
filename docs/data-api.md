@@ -561,11 +561,17 @@ or time zone.
     normalised name in its state (a single incorporated place wins over CDPs of the same name),
     else none; two or more and no single winner: none, reported, never a pick;
   - its county: a `city-counties.json` entry (which may override a census place's computed county;
-    today it holds Woodland Hills and 7 club towns that are not census places, and no override), else
+    today it holds Woodland Hills and 11 club towns that are not census places, and no override), else
     the place's computed county, else none, reported. Owner decision Q-E (Fairfax, VA is Fairfax
     County) is met by the computed county of the census place Fairfax (5126496, class C7), 51059,
     pinned by a test; an override would come back only if a new table changed that;
-  - a field zip's city: a `zip-place-fixes.json` fix (92014 is Del Mar), else the census area rule;
+  - a field zip's city: a `zip-place-fixes.json` fix (92014 is Del Mar), else the census area rule.
+    A fix may also give the zip no city (`"placeGeoid": null, "placeName": null`, #162). The label rule:
+    a place label is right if the field lies inside the place, or the place is the field's postal town
+    and has land in the zip; otherwise a fix names the postal-town place when it has land in the zip,
+    else no city. Each fix quotes its land shares from the raw 2020 place file, because the table keeps
+    only the area rule's place. A fix no field uses, and a `city-counties.json` entry no club or event
+    uses, are stale: an error;
   - a field zip's county: the census county file's rule, always;
   - names on both sides: NFKC, lower case, `.` and apostrophes dropped, other punctuation a space,
     `st` = `saint`, `mt` = `mount`.
@@ -655,8 +661,22 @@ archive. A name is NFKC, lower case, punctuation dropped, whitespace collapsed; 
 `field-aliases.json` maps it, at its zip, to a canonical field (Great Park @ 92618 is 12 complex
 ids). Game keys never depend on census data: city and county arrive in `places.json` only (#159). The build
 report (the run's output, never a file) lists rejected zips, names with more than one zip, and
-same-zip name variants, which are alias candidates for a reviewed PR and are never merged
-automatically.
+same-zip name variants counted after the reviewed aliases, which are alias candidates for a reviewed
+PR and are never merged automatically.
+
+**Alias guards** (#169, owner decisions Q10, Q11). Every `field-aliases.json` entry is checked against
+the games at its zip. No game under any of its names: stale, an error on every build. Two games of
+two of its names at one start time (a `gameDate` with a time) on one venue key: a clash. The venue
+key is the last number in the venue text, leading zeros dropped, else the venue's letters, so "Field
+3" and "Rec Plex # 3" are both 3. It over-matches sub-fields: "Field 1A" and "Field 1B" are both 1,
+and "Field N2 #3" and "Field S1 #3" are both 3 (both forms are in the data, at 78660 and 33431).
+A clash is an error on the fixture build and a report line on a live build, so a newly published
+schedule never turns the refresh or CI red; a reviewed pair goes in the entry's optional
+`acceptedClashes` (`[[matchID, matchID], ...]`), and a listed pair that is not such a clash is an
+error. The rule is a guard against regressions, not proof of a merge: it cannot test names that
+never shared a start time, and each entry's evidence states the count on the fixture and on main.
+An alias's words never join the search's known words (`public/search/vocab.mjs`, #169 Q9), so an
+alias such as "oak brook pd turf" cannot switch off the typo match "turf" → Bay Area Surf.
 
 **Reviewed orphan team ids** (#179). Some teams have games in a season whose conference table, as
 TGS published it, leaves them out (2020-21 and 2021-22 GU13 flights, mostly), so their squad

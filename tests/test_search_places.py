@@ -147,6 +147,31 @@ class Order(unittest.TestCase):
         self.assertEqual(len(errors), 6, errors)
 
 
+    # ---- #162 (Q4, option a): a fix may leave a zip with no city ----
+    NULL = {"zip": "90001", "placeGeoid": None, "placeName": None, "state": "CA", "evidence": "e"}
+
+    def test_a_null_fix_leaves_the_zip_with_its_county_only(self):
+        pl, report, errors = resolver(inputs(self.tmp))
+        self.assertEqual(pl.zip("90001", "f"), ["0690001", "06001"], "the area rule's place, without the fix")
+        pl, report, errors = resolver(inputs(tempfile.mkdtemp(dir=self.tmp), fixes=[self.NULL]))
+        self.assertEqual(errors, [])
+        self.assertEqual(pl.zip("90001", "f"), [None, "06001"], "no city; the county still comes from the county file")
+
+    def test_bad_null_fixes_are_errors(self):
+        bad = [dict(self.NULL, placeName="Alpha"),                    # a name with no place
+               dict(self.NULL, placeGeoid="0690001"),                 # a place with no name
+               dict(self.NULL, zip="90002"),                          # the area rule already gives no place: redundant
+               dict(self.NULL, zip="01001", state="MA"),              # the same, in a Q1a state
+               dict(self.NULL, zip="99999"),                          # not in the table
+               dict(self.NULL, state="NV")]                           # not the zip's county's state
+        tmp = inputs(self.tmp, fixes=bad)
+        census, _ = sd.load_census(tmp)
+        fixes, _a, _c, errors = sd.load_place_inputs(census, tmp)
+        self.assertEqual(fixes, {})
+        self.assertEqual(len(errors), len(bad), errors)
+        for want, err in zip(["both be null", "both be null", "redundant", "redundant", "is in zip-places.json", "is not the state"], errors):
+            self.assertIn(want, err)
+
 class Stability(unittest.TestCase):
     """MF3 and the Reviewer's nit 4, on the committed archive with the synthetic table."""
 
@@ -211,6 +236,16 @@ class Stability(unittest.TestCase):
         self.assertIn('+,"0690011":["Twin","CA","06005"]', added)
         self.assertTrue(any(l.startswith('+,"churn test park@90008":[') and l.endswith(',"0690011","06005"]') for l in added), changes)
 
+    def test_stale_place_inputs_are_errors(self):
+        """#162 (Q10): a city-counties.json entry no club or event uses, and a fix whose zip no field uses, are errors."""
+        stale = tempfile.mkdtemp(dir=self.tmp)
+        inputs(stale, fixes=[{"zip": "90001", "placeGeoid": None, "placeName": None, "state": "CA", "evidence": "e"}],
+               cities=[{"city": "Nowhere", "state": "CA", "countyGeoid": "06005", "countyName": "Delta County", "evidence": "e"}])
+        errors = sd.build(directory=self.directory, inputs=stale)[1]
+        self.assertEqual(sorted(e for e in errors if "stale" in e), [
+            "city-counties.json: nowhere, CA is stale: no club or event uses it; remove the entry",
+            "zip-place-fixes.json: the fix for 90001 is stale: no field is at 90001; remove the entry"])
+
     def test_games_files_never_depend_on_census_data(self):
         without = tempfile.mkdtemp(dir=self.tmp)
         inputs(without, table=False)
@@ -235,7 +270,7 @@ class Committed(unittest.TestCase):
 
     def test_the_reviewed_seeds(self):
         fixes = load(DATA / "zip-place-fixes.json")
-        self.assertEqual([f["zip"] for f in fixes["fixes"]], ["92014"])
+        self.assertEqual([f["zip"] for f in fixes["fixes"]], ["92014", "06032", "01545", "19425", "78669", "21758", "34120", "37932", "02360"])
         self.assertEqual([(a["city"], a["state"]) for a in fixes["aliases"]], [("Liburn", "GA")])
         cities = {(c["city"], c["state"]): c["countyGeoid"] for c in load(DATA / "city-counties.json")["cities"]}
         self.assertEqual(cities[("Woodland Hills", "CA")], "06037")
@@ -362,6 +397,71 @@ class RealTable(unittest.TestCase):
 
     def test_the_92014_fix_is_needed(self):
         self.assertEqual(self.table["zips"]["92014"][0], "0666000", "the area rule gives San Diego; the fix gives Del Mar")
+
+
+
+class PlaceFixture(unittest.TestCase):
+    """#162 (review MF5): every city-counties.json and zip-place-fixes.json entry of #162, pinned on the frozen fixture
+    (1c4c3268): removing any one fails its own assert. Live data gets rules only (PlaceLive)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.p = load(HERE / "search" / "fixtures" / "search" / "places.json")
+
+    def zip_of(self, z):
+        return {k: v[3:5] for k, v in self.p["fields"].items() if k.endswith("@" + z)}
+
+    def test_the_four_club_counties(self):
+        for cid, county in ((94, "25027"), (3313, "34021"), (3405, "24005"), (1713, "26099")):
+            with self.subTest(club=cid):
+                self.assertEqual(self.p["clubPlaces"][str(cid)], [None, county])
+        self.assertEqual(self.p["counties"]["24005"], ["Baltimore County", "MD"], "not Baltimore city (24510)")
+        self.assertEqual(self.p["counties"]["34021"], ["Mercer County", "NJ"], "owner decision Q1")
+        self.assertEqual(self.p["clubPlaces"]["3986"], [None, None], "Bay Area, CA: no entry (owner decision Q3)")
+
+    def test_each_place_fix(self):
+        want = {"06032": [None, "09003"], "01545": [None, "25027"], "19425": [None, "42029"], "78669": [None, "48453"],
+                "21758": [None, "24021"], "34120": [None, "12021"], "37932": ["4740000", "47093"], "02360": ["2554275", "25023"]}
+        for z, w in want.items():
+            with self.subTest(zip=z):
+                got = self.zip_of(z)
+                self.assertTrue(got, "the fixture has a field at the zip")
+                self.assertEqual(set(map(tuple, got.values())), {tuple(w)}, got)
+        self.assertEqual(self.p["places"]["4740000"][:2], ["Knoxville", "TN"])
+        self.assertEqual(self.p["places"]["2554275"][:2], ["Plymouth", "MA"])
+
+    def test_the_places_that_leave(self):
+        """Q6 and review N5: each place whose only use was a fixed zip leaves places.json (its county stays)."""
+        for g, name in (("0952210", "Newington"), ("2582000", "Worcester"), ("4220600", "Eagle"), ("4810197", "Briarcliff"),
+                        ("2431575", "Garretts Mill"), ("1252162", "Orangetree"), ("2569585", "The Pinehills")):
+            with self.subTest(place=name):
+                self.assertNotIn(g, self.p["places"])
+        self.assertIn("4725760", self.p["places"], "Farragut stays: Mayor Bob Leonard Park (37934) is in it")
+        self.assertEqual(len(self.p["places"]), 496, "502 before #162: 7 leave, Plymouth CDP joins")
+
+    def test_the_q1a_count(self):
+        q1a = [k for k, v in self.p["fields"].items() if v[3] is None and v[4] and self.p["counties"][v[4]][1] in sd.Q1A_STATES]
+        self.assertEqual(len(q1a), 19, "14 before: 06032's three fields, 01545 and 19425 join (review N5)")
+
+
+class PlaceLive(unittest.TestCase):
+    """#162: rules on the committed data; they hold for any number of entries."""
+
+    def test_every_fix_gives_its_zips_fields_its_place(self):
+        places = load(SEARCH / "places.json")
+        table = load(TABLE)
+        for f in load(DATA / "zip-place-fixes.json")["fixes"]:
+            with self.subTest(zip=f["zip"]):
+                got = {v[3] for k, v in places["fields"].items() if k.endswith("@" + f["zip"])}
+                self.assertEqual(got, {f["placeGeoid"]})
+                if f["placeGeoid"] is None:
+                    self.assertIsNotNone(table["zips"][f["zip"]][0], "a null fix needs an area-rule place")
+
+    def test_every_county_entry_is_used(self):
+        places = load(SEARCH / "places.json")
+        used = {c for _g, c in list(places["clubPlaces"].values()) + list(places["eventPlaces"].values())}
+        for c in load(DATA / "city-counties.json")["cities"]:
+            self.assertIn(c["countyGeoid"], used, c["city"])
 
 
 if __name__ == "__main__":

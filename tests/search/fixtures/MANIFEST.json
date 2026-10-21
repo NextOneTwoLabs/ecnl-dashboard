@@ -24,7 +24,7 @@
   },
   "schema": 1,
   "search": {
-    "builder": "11f5152adb042678f87b629aa31b6b6f9739ff3d190186c3d92001b634c08fd2",
+    "builder": "705a987c6b15403b96c3f66f8ec1a6bb07bb0d54c229d936ed4873ff9e88af5e",
     "commit": "1c4c32686e49a3592ab116d26d37cc620caf7b46",
     "files": {
       "core.json": {
@@ -32,44 +32,44 @@
         "sha256": "1388b10b73b7046203b54bf6d8b7588417780277f5cf071d4c56fe2e4aeb167b"
       },
       "games-2020-21.json": {
-        "bytes": 420609,
-        "sha256": "4adadafd37810c0a6b30b62c146b468ec4c6b398129d9580aa2785676e1e96c6"
+        "bytes": 420660,
+        "sha256": "254528015cfa907af9a6a5053c1081a2fbf8ed4693b9ba0918f5e1d2a2e487df"
       },
       "games-2021-22.json": {
-        "bytes": 521795,
-        "sha256": "1b038fbca1dba9b397faea23b7e84f29c19267d28fdbf2e1ba7a63067b7ef851"
+        "bytes": 521808,
+        "sha256": "9490d9233eed909fc269338f4bd738f857d67c4689d6f1f66ba8275934355088"
       },
       "games-2022-23.json": {
-        "bytes": 497994,
-        "sha256": "c50e08d1c7469c801d8bccf6b232585760149d5f42484f15b1586ed33851b36c"
+        "bytes": 498002,
+        "sha256": "49142f6514952d337f19a2bdf74dbd2ab0090efff15b74ab79c32a88b40f97a4"
       },
       "games-2023-24.json": {
-        "bytes": 506136,
-        "sha256": "16d3203b3fcf8d7badd21b3ca3dcb671eb8e73d6feabaad43d1828b23f565b41"
+        "bytes": 506160,
+        "sha256": "f8b7eebcf33889af5b8752dd593022a4d7b4925596f0c340c5c534bd9d04f432"
       },
       "games-2024-25.json": {
-        "bytes": 463776,
-        "sha256": "366bf01df7c241a754cf9b2d734be69c1219f3ac5095b35c79291136a846a3a4"
+        "bytes": 463799,
+        "sha256": "138e64c16f1a7672c5d704742f6b0c06706dfd62df86a1f2c27b9d513b8c43d9"
       },
       "games-2025-26.json": {
-        "bytes": 523270,
-        "sha256": "c84e811863faced6479b0f2a55d8c92745ed6a76e9a0922ca043eb2412850921"
+        "bytes": 523288,
+        "sha256": "9037d38a021ac1aa67991be3a782859af8781cac02ab919914dfebf4e920e0b2"
       },
       "games-2026-27.json": {
-        "bytes": 499956,
-        "sha256": "73f40f6c55f17501142f2a05792f6a9744473811e32b931693c30595ed4561a2"
+        "bytes": 499973,
+        "sha256": "845962cbf5b90a67f94995b7a980213453ab133a9b43dfc69121569a3bf24e15"
       },
       "places.json": {
-        "bytes": 140036,
-        "sha256": "c979d88ee345f136d1b0ffa5f57590e303b54bb25edb986123563dd861c1a104"
+        "bytes": 139498,
+        "sha256": "ccc3d3733c81c30832781d0e60b47d3fc649b02794ea45277b314372c96688bb"
       }
     },
     "inputs": {
-      "city-counties.json": "104bd8439ce3ec4d6d20be31f22090dab4946d25202065ba87faa90b6cb80a07",
-      "field-aliases.json": "bc0f2bc29f8e6577aab1ed3eca094dbd8716566dcb58caa4c2803dadb4fe6979",
+      "city-counties.json": "893ce73513f642d8afd673ef20bc360a028757eb390d4d2dd222ca66b12e8fa2",
+      "field-aliases.json": "ea0bc50069a64493b5ce6842ef5454e65c9683ad7ad77362d947330cbf4f8fe8",
       "orphan-team-ids.json": "94158e69e67c5b61efc85c7f19c00a0f62858f5327b3da383dbf70931340acbc",
       "zip-fixes.json": "79eeda3924c48c9d203477b55303505597f0fc30edb1fd166205b43e683e3afb",
-      "zip-place-fixes.json": "c5628b4bf1d16ec4263fcabc7fc116e409ab8b63277fd2ce5b3e3b8259f4f270",
+      "zip-place-fixes.json": "212910abc8d903266959ce58db13966af364cf34112ff73e7789e73de0e2497c",
       "zip-places.json": "12a63a2254f29064f6c47bc512ae498f99c5ab260fdfea0d19b0448210c7f235"
     },
     "logos": "dropped from core.json teams (#117); directoryBuild is recomputed over the stripped directory"

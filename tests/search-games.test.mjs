@@ -45,7 +45,9 @@ const fieldRule = ({ core, places }) => {
   const dropped = want.filter(k => joined.some(s => s.includes(` ${k} `))).sort();
   return { kept: want.filter(k => !dropped.includes(k)).sort(), dropped };
 };
-const FIXTURE_COUNT = 900;   // the frozen fixture: tests/search/fixtures/search/
+// the frozen fixture: tests/search/fixtures/search/. 900 before #169; the 35 reviewed aliases merge 70 names into
+// 35 fields whose names are aliases (an alias's name is no field-name phrase): 944 -> 909 fields, 900 -> 831 phrases.
+const FIXTURE_COUNT = 831;
 const FIXTURE_RULE = fieldRule(loadSearchData()), LIVE_RULE = fieldRule(CDATA);
 const phraseNames = ix => ix.vocab.phrases.filter(p => p.fieldName).map(p => p.words.join(' ')).sort();
 
@@ -155,7 +157,8 @@ test('D2, Q7: a place lists its fields, in the place first, then the rest of its
   assert.ok(g.slice(0, firstNear).every(r => r.place === 'San Diego, CA'));
   // MF4: inside each, a field with games in the seasons asked first
   for (const part of [g.slice(0, firstNear), g.slice(firstNear)]) { const k = part.findIndex(r => !r.count); assert.ok(k < 0 || part.slice(k).every(r => !r.count)); }
-  assert.deepEqual(g.slice(0, 3).map(r => [r.label, r.count]), [['Miramesa High School', 9], ['Canyon Crest Academy', 12], ['Scripps Ranch High School', 3]], 'upcoming games first');
+  // #169 (owner decision Q7): Miramesa High School and Mira Mesa High School are one field, labelled with TGS's full spelling
+  assert.deepEqual(g.slice(0, 3).map(r => [r.label, r.count]), [['Mira Mesa High School', 9], ['Canyon Crest Academy', 12], ['Scripps Ranch High School', 3]], 'upcoming games first');
   // nit 3: an age group does not apply to a field (its games are every age group\'s)
   assert.ok(sec(run('San Diego U15'), 'games').filter(r => r.kind === 'field').every(r => r.allAges));
 });
@@ -489,4 +492,47 @@ test('MF2: Dallas Texans Lewisville is its 18 teams first, then Games with the f
   assert.equal(f.rule, 3, 'a field name no team or event holds: Games first (Q4)');
   assert.equal(f.sections[0].name, 'games');
   for (const q of ['Great Park', 'Surf Sports Park', 'Great Park field 15']) assert.equal(run(q, CIX, CCTX).rule, 3, `${q}: a field alias leads, as before`);
+});
+
+// ---------- #169 + #162 (owner decisions Q1-Q11): the reviewed aliases, counties and place fixes ----------
+test('#169 (Q9, review MF3): a field alias\'s words never join the known words, so they cannot switch off a typo match', () => {
+  const plainData = loadSearchData(); plainData.places.vocab = { ...plainData.places.vocab, fieldAliases: {} };
+  const plain = S.buildIndex(plainData); load(plain, plain.vocab.active);
+  assert.deepEqual([...IX.known].sort(), [...plain.known].sort(), 'the 78 alias phrases add no known word');
+  const rows = s => s.sections.filter(x => x.name !== 'games').map(x => [x.name, x.rows.map(r => r.key || r.eventID)]);
+  for (const q of ['turf', 'high', 'arena', 'aksc', 'wide', 'pleasent', 'Bay Arena Surf', 'West Wide Alliance', 'Turf Cup', 'The Wellington School (Turf)']) {
+    assert.deepEqual(rows(run(q)), rows(run(q, plain)), `${q}: Teams and Events as without the aliases`);
+  }
+  assert.equal(sec(run('turf'), 'teams')[0].clubID, 3986, 'turf is still read as a typo of Bay Area Surf');
+  assert.equal(sec(run('Bay Arena Surf'), 'teams')[0].clubID, 3986);
+  assert.ok(sec(run('Bay Arena Surf'), 'games').length > 0, 'Bay Arena Surf keeps its games');
+});
+test('#169: two spellings of one field are one row (D6): Grass Lawn Park @ 98052', () => {
+  for (const q of ['grass lawn park', 'grasslawn park', 'Grass Lawn Park']) {
+    const g = sec(run(q), 'games');
+    assert.deepEqual(g.map(r => [r.kind, r.key, r.place]), [['field', 'Grass Lawn Park@98052', 'Redmond, WA']], q);
+    assert.deepEqual(g[0].seasons, ['2020-21', '2024-25'], 'complex 1515 (2020-21) and complex 2859 (2024-25)');
+  }
+  const red = sec(run('Redmond'), 'games').filter(r => r.kind === 'field');
+  assert.deepEqual(red.filter(r => /grass ?lawn/i.test(r.label)).map(r => r.key), ['Grass Lawn Park@98052']);
+});
+test('#162: the club counties (Q1, Q2) and place fixes (Q4-Q6) on the frozen fixture, with the knock-ons of review N5', () => {
+  const near = (q, club) => sec(run(q), 'teams').some(r => r.clubID === club && r.nearby);
+  for (const [q, club] of [['Mercer County', 3313], ['Macomb County', 1713], ['Worcester County', 94], ['Baltimore County', 3405]]) assert.ok(near(q, club), `${q}: club ${club} under Nearby`);
+  for (const q of ['Newington', 'Newington CT', 'Briarcliff']) assert.equal(run(q).sections.length, 0, `${q}: no field or club is there any more`);
+  const hartford = sec(run('Hartford County'), 'games').filter(r => r.kind === 'field' && /@06032$/.test(r.key));
+  assert.ok(hartford.length && hartford.every(r => r.place === 'Hartford County, CT'), 'the 06032 fields have no city, only their county');
+  assert.ok(hartford.some(r => r.label === 'FSA-Farmington Sports Arena'));
+  const knox = sec(run('Knoxville'), 'games').find(r => r.kind === 'field' && r.key === 'hardin valley academy stadium@37932');
+  assert.ok(knox && knox.place === 'Knoxville, TN' && !knox.nearby, 'Hardin Valley Academy is labelled Knoxville, not Farragut');
+  const ply = sec(run('Plymouth'), 'games').find(r => r.kind === 'field' && r.key === 'plymouth north stadium@02360');
+  assert.ok(ply && ply.place === 'Plymouth, MA' && !ply.nearby, 'Plymouth North is in Plymouth, not The Pinehills');
+  const worc = run('Worcester');
+  const stj = sec(worc, 'games').filter(r => r.kind === 'field' && r.key === 'st johns fields@01545');
+  assert.deepEqual(stj.map(r => [r.place, !!r.nearby]), [['Worcester County, MA', true]], 'St. Johns Fields (Shrewsbury): no city, only Nearby through the county');
+  assert.ok(!sec(worc, 'games').some(r => r.place === 'Worcester, MA'), 'no field is labelled Worcester any more');
+  assert.ok(sec(worc, 'teams').every(r => r.nearby) && near('Worcester', 94), 'Worcester city left: the county answers, Scorpions SC under Nearby');
+  const pine = run('The Pinehills');
+  assert.equal(sec(pine, 'teams')[0].clubID, 26, 'The Pinehills is no place any more: a typo match to Charlotte SA (Pineville), review N5');
+  assert.ok(!sec(pine, 'games').some(r => r.kind === 'field'));
 });
