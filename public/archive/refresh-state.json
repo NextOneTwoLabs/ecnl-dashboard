@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T11:31:13Z",
+  "updatedAt": "2026-10-21T19:12:02Z",
   "activeSeason": "2026-27",
   "runDate": "2026-10-21",
   "sweep": false,
@@ -7,13 +7,13 @@
   "lastSweepDate": "2026-10-21",
   "lastClubSweepDate": "2026-10-01",
   "lastClubSweepAttempt": "2026-10-01",
-  "historyAsOf": "2026-10-21T11:31:13Z",
+  "historyAsOf": "2026-10-21T19:12:02Z",
   "flightsConsidered": 65,
   "flightsRefreshed": 18,
   "standingsRefreshed": 0,
   "requests": 18,
   "failed": 0,
-  "durationSeconds": 10.9,
+  "durationSeconds": 7.5,
   "pendingResultFlights": 14,
   "pendingResultGames": 36
 }
