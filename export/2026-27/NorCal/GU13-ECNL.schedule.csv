@@ -41,7 +41,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-27,10:55 AM,Group Play,Bay Area Surf - ECNL G2013/14,,,Placer United ECNL G2013/14,Ohlone College,Soccer Field,On Time,1094624
 2026-09-27,11:00 AM,Group Play,Santa Rosa United ECNL G2013/14,0,1,Mustang SC ECNL G2013/14,Trione Fields,Trione West,On Time,1094648
 2026-09-27,11:50 AM,Group Play,Stanislaus Surf - ECNL G2013/14,0,4,Marin FC ECNL G2013/14,Mary Grogan Community Park,field 4,On Time,1094654
-2026-09-27,12:00 PM,Group Play,Force (CA) ECNL G2013/14,,,Davis Legacy ECNL G2013/14,Kathleen MacDonald High School,Stadium,On Time,1094630
 2026-09-27,01:00 PM,Group Play,San Juan SC ECNL G2013/14,2,1,MVLA ECNL G2013/14,Tiemann Law Firm Fields at San Juan Soccer Complex,Black Field,On Time,1094642
 2026-09-27,03:00 PM,Group Play,Pleasanton RAGE ECNL G2013/14,4,0,COSC ECNL G2013/14,Val Vista,Field 2,On Time,1094636
 2026-10-03,09:00 AM,Group Play,MVLA ECNL G2013/14,8,0,Pleasanton RAGE ECNL G2013/14,Graham Middle School,Turf,On Time,1094690
@@ -81,6 +80,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-07,03:00 PM,Group Play,Pleasanton RAGE ECNL G2013/14,,,Santa Rosa United ECNL G2013/14,Stanford Sports Complex,East,On Time,1094870
 2026-11-21,09:00 AM,Group Play,Bay Area Surf - ECNL G2013/14,,,Pleasanton RAGE ECNL G2013/14,Willow Glen High School,Football Stadium,On Time,1094876
 2027-02-27,12:00 PM,Group Play,COSC ECNL G2013/14,,,Force (CA) ECNL G2013/14,"San Joaquin Memorial- 1406 N. Fresno St. Fresno, C",field 1,On Time,1094480
+2027-03-13,08:00 AM,Group Play,Force (CA) ECNL G2013/14,,,Davis Legacy ECNL G2013/14,De Anza College,Soccer Field,On Time,1094630
 2027-03-20,TBD,Group Play,Pleasanton RAGE ECNL G2013/14,,,Davis Legacy ECNL G2013/14,,,On Time,1094900
 2027-03-20,TBD,Group Play,Santa Rosa United ECNL G2013/14,,,Bay Area Surf - ECNL G2013/14,,,On Time,1094906
 2027-03-20,09:00 AM,Group Play,Placer United ECNL G2013/14,,,Force (CA) ECNL G2013/14,Placer Valley Soccer Complex,Field 5,On Time,1094894
