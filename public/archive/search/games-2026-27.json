@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"b3b5c9548ce4105e"
+,"build":"1faf8af744ba65a0"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -4077,11 +4077,11 @@
 ,[1,741200,40607,116000,59609,0,5,null,null,8794,"TBD",null,[1,0]]
 ,[1,741200,40606,82159,111849,2,5,null,null,8794,"TBD",null,[1,0]]
 ,[1,751915,40605,111690,131001,0,0,null,null,8794,"Championship Field",null,[1,0]]
-,[1,1121530,40610,58631,58634,null,null,null,null,386,"HHRP Stadium",null,[1,0]]
-,[1,1121530,40609,69251,69250,null,null,null,null,386,"HHRP West",null,[1,0]]
+,[1,1121530,40610,58631,58634,3,0,null,null,386,"HHRP Stadium",null,[1,0]]
+,[1,1121530,40609,69251,69250,7,0,null,null,386,"HHRP West",null,[1,0]]
 ,[1,1121930,40608,81431,81521,null,null,null,null,386,"HHRP Stadium",null,[1,0]]
 ,[1,1121730,40607,95108,95110,null,null,null,null,386,"HHRP Stadium",null,[1,0]]
-,[1,1121730,40606,99152,99153,null,null,null,null,386,"HHRP West",null,[1,0]]
+,[1,1121730,40606,99152,99153,2,0,null,null,386,"HHRP West",null,[1,0]]
 ,[1,1121930,40605,108897,127617,null,null,null,null,386,"HHRP West",null,[1,0]]
 ,[1,811300,40610,110465,132696,3,2,null,null,3192,9,null,[1,0]]
 ,[1,811300,40609,110467,132697,0,4,null,null,3192,10,null,[1,0]]
