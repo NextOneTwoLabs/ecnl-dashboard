@@ -41,7 +41,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-27,09:00 AM,Group Play,Bay Area Surf - ECNL G2009/10,,,Placer United ECNL G2009/10,Ohlone College,Soccer Field,On Time,1094620
 2026-09-27,11:00 AM,Group Play,San Juan SC ECNL G2009/10,0,3,MVLA ECNL G2009/10,Tiemann Law Firm Fields at San Juan Soccer Complex,White Field,On Time,1094638
 2026-09-27,11:00 AM,Group Play,Santa Rosa United ECNL G2009/10,1,10,Mustang SC ECNL G2009/10,Trione Fields,Trione East,On Time,1094644
-2026-09-27,12:00 PM,Group Play,Force (CA) ECNL G2009/10,,,Davis Legacy ECNL G2009/10,Kathleen MacDonald High School,soccer field,On Time,1094626
 2026-09-27,12:00 PM,Group Play,Stanislaus Surf - ECNL G2009/10,2,4,Marin FC ECNL G2009/10,Mary Grogan Community Park,field 1,On Time,1094650
 2026-09-27,05:00 PM,Group Play,Pleasanton RAGE ECNL G2009/10,3,1,COSC ECNL G2009/10,Val Vista,Field 3,On Time,1094632
 2026-10-03,11:00 AM,Group Play,Force (CA) ECNL G2009/10,7,0,Stanislaus Surf - ECNL G2009/10,De Anza College,Soccer Field,On Time,1094668
@@ -80,6 +79,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-07,03:50 PM,Group Play,Bay Area Surf - ECNL G2009/10,,,San Juan SC ECNL G2009/10,Willow Glen High School,Football Stadium,On Time,1094836
 2026-11-07,05:00 PM,Group Play,Pleasanton RAGE ECNL G2009/10,,,Santa Rosa United ECNL G2009/10,Stanford Sports Complex,West,On Time,1094866
 2026-11-21,TBD,Group Play,Bay Area Surf - ECNL G2009/10,,,Pleasanton RAGE ECNL G2009/10,,,On Time,1094872
+2027-03-13,08:00 AM,Group Play,Force (CA) ECNL G2009/10,,,Davis Legacy ECNL G2009/10,De Anza College,Soccer Field,On Time,1094626
 2027-03-20,TBD,Group Play,Pleasanton RAGE ECNL G2009/10,,,Davis Legacy ECNL G2009/10,,,On Time,1094896
 2027-03-20,TBD,Group Play,Santa Rosa United ECNL G2009/10,,,Bay Area Surf - ECNL G2009/10,,,On Time,1094902
 2027-03-20,10:55 AM,Group Play,Stanislaus Surf - ECNL G2009/10,,,San Juan SC ECNL G2009/10,Thomas Downey High School,Field 1,On Time,1094908

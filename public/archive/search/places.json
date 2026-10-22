@@ -1,5 +1,5 @@
 {"schema":1
-,"build":"b7b150e45b5bc172"
+,"build":"b1c3c496ac8eda3c"
 ,"census":"1f646e5cb9cf65372af12bdc4cb63c5ee8643f13c123ce0ea35746fcdd9919f6"
 ,"vocab":{"fieldAliases":{"60 acres":"60 Acres Park","60 acres park":"60 Acres Park","great park":"Great Park","oc great park":"Great Park","orange county great park":"Great Park","orange county great park sports park":"Great Park","surf cup sports park":"Surf Sports Park","surf sports park":"Surf Sports Park"}}
 ,"counties":{
@@ -1434,8 +1434,8 @@
 ,"oak view school@91377":["Oak View School",["2020-21"],[1],"0653116","06111"]
 ,"oakland high school@37130":["Oakland High School",["2020-21","2021-22","2022-23","2023-24","2024-25"],[1],"4751560","47149"]
 ,"oakland university dome@48309":["Oakland University Dome",["2021-22","2022-23"],[1],"2669035","26125"]
-,"oakland university grizz dome@48309":["Oakland University Grizz Dome",["2025-26"],[1],"2669035","26125"]
-,"oakland university upper fields@48309":["Oakland University Upper Fields",["2024-25","2025-26","2026-27"],["North","North field","OU Bubble","South","South Field","Stadium"],"2669035","26125"]
+,"oakland university grizz dome@48309":["Oakland University Grizz Dome",["2025-26","2026-27"],[1],"2669035","26125"]
+,"oakland university upper fields@48309":["Oakland University Upper Fields",["2024-25","2025-26","2026-27"],["North","North field","South","South Field","Stadium"],"2669035","26125"]
 ,"oakland university@48309":["Oakland University",["2020-21"],[1],"2669035","26125"]
 ,"oakmont high school@95661":["Oakmont High School",["2025-26"],["Stadium"],"0662938","06061"]
 ,"ofallon family sportspark@62269":["O'Fallon Family Sportspark",["2021-22"],[6,7],"1755249","17163"]

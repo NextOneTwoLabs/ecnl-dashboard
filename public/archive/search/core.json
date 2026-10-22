@@ -1,6 +1,6 @@
 {"schema":2
-,"build":"3b18715562cd488c"
-,"directoryBuild":"6db150c4f045fbd3"
+,"build":"e4614a6114d433ba"
+,"directoryBuild":"b4abeb7e39829a34"
 ,"activeSeason":"2026-27"
 ,"seasons":["2020-21","2021-22","2022-23","2023-24","2024-25","2025-26","2026-27"]
 ,"birthYears":[2002,2014]
@@ -1078,7 +1078,7 @@
 ,{"b":[2010],"best":3,"c":95,"e":[[2,4,0,"Group 2/4"],[3,6,0,"Group 2/4"],[4,8,0,"Round of 16"],[5,10,0,"Round of 16"]],"m":[1719,1720],"s":[[2,63697,"Charlotte SA ECNL G10",2,28,1,13],[3,63697,"Charlotte SA ECNL G10",2,29,1,13],[4,63697,"Charlotte SA ECNL G10",2,30,3,12],[5,63697,"Charlotte SA ECNL G10",2,31,2,10]]}
 ,{"b":[2010],"c":67,"e":[[5,10,3,"Group 12/18"],[5,12,11,""]],"m":[1743,1744],"s":[[2,64321,"Del Mar Sharks ECNL G10",0,28,4,8],[3,64321,"Del Mar Sharks ECNL G10",0,29,6,8],[4,64321,"Legends FC San Diego ECNL G10",0,30,14,17],[5,64321,"Legends FC San Diego ECNL G10",0,31,12,17]]}
 ,{"b":[2010],"best":3,"c":66,"e":[[2,4,0,"Round of 16"],[2,5,0,"Champion"],[3,6,0,"Round of 16"],[3,7,0,"Champion"],[4,8,0,"Round of 16"],[4,9,0,"Quarterfinals"],[5,10,0,"Round of 16"],[5,12,11,""]],"m":[1815,1816],"s":[[2,64905,"Slammers FC HB Koge ECNL G10",0,28,2,8],[3,64905,"Slammers FC HB Koge ECNL G10",0,29,1,8],[4,64905,"Slammers FC HB Koge ECNL G10",0,30,1,17],[5,64905,"Slammers FC HB Koge ECNL G10",0,31,2,17]],"t":2}
-,{"b":[2010],"best":1,"c":1,"e":[[3,6,0,"Round of 16"],[4,8,0,"Round of 16"],[5,10,7,"Quarterfinals"],[5,12,11,""]],"s":[[2,64956,"SLAMMERS FC ECNL G10",0,28,4,9],[3,64956,"SLAMMERS FC ECNL G10",0,29,1,9],[4,64956,"SLAMMERS FC ECNL G10",0,30,7,17],[5,64956,"SLAMMERS FC ECNL G10",0,31,5,17],[6,64956,"SLAMMERS FC ECNL G2009/10",0,32,13,17]]}
+,{"b":[2010],"best":1,"c":1,"e":[[3,6,0,"Round of 16"],[4,8,0,"Round of 16"],[5,10,7,"Quarterfinals"],[5,12,11,""]],"s":[[2,64956,"SLAMMERS FC ECNL G10",0,28,4,9],[3,64956,"SLAMMERS FC ECNL G10",0,29,1,9],[4,64956,"SLAMMERS FC ECNL G10",0,30,7,17],[5,64956,"SLAMMERS FC ECNL G10",0,31,5,17],[6,64956,"SLAMMERS FC ECNL G2009/10",0,32,14,17]]}
 ,{"b":[2010],"best":1,"c":51,"e":[[4,8,0,"Group 4/4"],[5,10,0,"Quarterfinals"],[5,12,11,""]],"s":[[2,65018,"Ohio Premier ECNL G10",9,28,3,6],[3,65018,"Ohio Premier ECNL G10",9,29,4,6],[4,65018,"Ohio Premier ECNL G10",9,30,3,12],[5,65018,"Ohio Premier ECNL G10",9,31,1,6],[6,65018,"Ohio Premier ECNL G2009/10",9,32,4,6]]}
 ,{"b":[2010],"c":83,"e":[[5,10,3,"Group 18/18"],[5,12,11,""]],"m":[1862,1875],"s":[[2,65042,"Arizona Arsenal ECNL G10",0,28,5,8],[3,65042,"Arizona Arsenal ECNL G10",0,29,8,8],[4,65042,"Arizona Arsenal ECNL G10",0,30,17,17],[5,65042,"Arizona Arsenal ECNL G10",0,31,14,17]]}
 ,{"b":[2010],"best":3,"c":108,"e":[[3,6,0,"Round of 16"],[3,7,0,"Final"],[4,8,0,"Round of 16"],[4,9,0,"Final"],[5,10,0,"Round of 16"],[5,12,11,""]],"m":[1799,1800],"s":[[2,65115,"Legends FC ECNL G10",0,28,5,9],[3,65115,"Legends FC ECNL G10",0,29,2,9],[4,65115,"Legends FC ECNL G10",0,30,3,17],[5,65115,"Legends FC ECNL G10",0,31,3,17]]}
@@ -1121,7 +1121,7 @@
 ,{"b":[2010],"c":125,"e":[[5,10,3,"Group 16/18"],[5,12,11,""]],"s":[[2,68832,"Placer United ECNL G10",7,28,7,10],[3,68832,"Placer United ECNL G10",7,29,6,10],[4,68832,"Placer United ECNL G10",7,30,6,10],[5,68832,"Placer United ECNL G10",7,31,7,11],[6,68832,"Placer United ECNL G2009/10",7,32,4,12]]}
 ,{"b":[2010],"best":1,"c":88,"e":[[4,8,0,"Group 4/4"],[5,10,0,"Round of 32"],[5,12,11,""]],"s":[[2,68845,"LA Breakers FC ECNL G10",0,28,6,9],[3,68845,"LA Breakers FC ECNL G10",0,29,8,9],[4,68845,"LA Breakers FC ECNL G10",0,30,5,17],[5,68845,"LA Breakers FC ECNL G10",0,31,4,17],[6,68845,"LA Breakers FC ECNL G2009/10",0,32,8,17]]}
 ,{"b":[2010],"c":16,"e":[[4,8,7,"Semifinals"],[5,10,3,"Group 2/18"]],"s":[[2,68860,"Washington Premier ECNL G10",5,28,11,14],[3,68860,"Washington Premier ECNL G10",5,29,8,10],[4,68860,"Washington Premier ECNL G10",5,30,4,10],[5,68860,"Washington Premier ECNL G10",5,31,8,10],[6,68860,"Washington Premier ECNL G2009/10",5,32,10,10]]}
-,{"b":[2010],"c":92,"e":[[5,10,7,"Round of 16"],[5,12,11,""]],"s":[[2,68888,"Phoenix Rising ECNL G10",0,28,6,8],[3,68888,"Phoenix Rising ECNL G10",0,29,4,8],[4,68888,"Phoenix Rising ECNL G10",0,30,13,17],[5,68888,"Phoenix Rising ECNL G10",0,31,7,17],[6,68888,"Phoenix Rising FC ECNL G2009/10",0,32,14,17]]}
+,{"b":[2010],"c":92,"e":[[5,10,7,"Round of 16"],[5,12,11,""]],"s":[[2,68888,"Phoenix Rising ECNL G10",0,28,6,8],[3,68888,"Phoenix Rising ECNL G10",0,29,4,8],[4,68888,"Phoenix Rising ECNL G10",0,30,13,17],[5,68888,"Phoenix Rising ECNL G10",0,31,7,17],[6,68888,"Phoenix Rising FC ECNL G2009/10",0,32,13,17]]}
 ,{"b":[2010],"best":0,"c":126,"e":[[4,8,0,"Group 3/4"],[5,12,11,""]],"m":[1703,1704],"s":[[2,68892,"Pateadores ECNL G10",0,28,8,8],[3,68892,"Pateadores ECNL G10",0,29,7,8],[4,68892,"Pateadores ECNL G10",0,30,8,17],[5,68892,"Pateadores ECNL G10",0,31,17,17]]}
 ,{"b":[2009],"c":126,"e":[[4,8,2,"Round of 16"],[5,12,11,""]],"m":[1701,1704],"s":[[2,68893,"Pateadores ECNL G09",0,23,7,8],[3,68893,"Pateadores ECNL G09",0,24,6,8],[4,68893,"Pateadores ECNL G09",0,25,12,17],[5,68893,"Pateadores ECNL G09",0,26,11,17]]}
 ,{"b":[2008],"c":126,"e":[[3,6,6,"Champion"],[4,8,2,"Round of 16"]],"s":[[2,68894,"Pateadores ECNL G08",0,14,7,8],[3,68894,"Pateadores ECNL G08",0,15,6,8],[4,68894,"Pateadores ECNL G08",0,16,12,17],[5,108296,"Pateadores ECNL G08/07",0,21,16,17]],"t":1}
@@ -1268,7 +1268,7 @@
 ,{"b":[2011],"best":1,"c":76,"e":[[4,8,0,"Round of 16"],[5,10,0,"Round of 16"]],"s":[[3,80047,"Sting Austin ECNL G11",6,33,11,16],[4,80047,"Sting Austin ECNL G11",6,34,5,16],[5,80047,"Sting Austin ECNL G11",6,35,3,16]]}
 ,{"b":[2011],"c":31,"e":[[5,10,7,"Semifinals"]],"s":[[3,80240,"Sting Dallas Royal ECNL G11",6,33,10,16],[4,80240,"Sting Royal ECNL G11",6,34,7,16],[5,80240,"Sting Royal ECNL G11",6,35,6,16],[6,80240,"Sting Royal ECNL G2010/11",6,36,4,16]]}
 ,{"b":[2011],"c":35,"s":[[3,80370,"Orlando City ECNL G11",4,33,15,16],[4,80370,"Orlando City ECNL G11",4,34,16,16],[5,80370,"Orlando Pride ECNL G11",4,35,16,16],[6,80370,"Seminole United ECNL G2010/11",4,36,14,16]]}
-,{"b":[2011],"best":1,"c":31,"e":[[3,6,0,"Group 3/4"],[4,8,0,"Group 2/4"],[5,10,10,"Round of 16"]],"s":[[3,80765,"Sting Dallas Black ECNL G11",6,33,3,16],[4,80765,"Sting Black ECNL G11",6,34,1,16],[5,80765,"Sting Black ECNL G11",6,35,7,16],[6,80765,"Sting Black ECNL G2010/11",6,36,9,16]]}
+,{"b":[2011],"best":1,"c":31,"e":[[3,6,0,"Group 3/4"],[4,8,0,"Group 2/4"],[5,10,10,"Round of 16"]],"s":[[3,80765,"Sting Dallas Black ECNL G11",6,33,3,16],[4,80765,"Sting Black ECNL G11",6,34,1,16],[5,80765,"Sting Black ECNL G11",6,35,7,16],[6,80765,"Sting Black ECNL G2010/11",6,36,8,16]]}
 ,{"b":[2011],"best":1,"c":118,"e":[[3,6,0,"Group 4/4"],[4,8,0,"Group 2/4"],[5,10,7,"Quarterfinals"],[5,12,11,""]],"s":[[3,80774,"OK Energy FC ECNL G11",6,33,5,16],[4,80774,"OK Energy FC ECNL G11",6,34,4,16],[5,80774,"OK Energy FC ECNL G11",6,35,5,16],[6,80774,"OK Energy FC ECNL G2010/11",6,36,10,16]]}
 ,{"b":[2011],"c":27,"s":[[3,80895,"NCFC Youth ECNL G11",2,33,12,13],[4,80895,"NCFC Youth ECNL G11",2,34,11,12],[5,80895,"NCFC Youth ECNL G11",2,35,8,10],[6,80895,"NCFC Youth ECNL G2010/11",2,36,9,11]]}
 ,{"b":[2011],"c":114,"e":[[5,12,11,""]],"s":[[3,81104,"DKSC ECNL G11",6,33,14,16],[4,81104,"DKSC ECNL G11",6,34,16,16],[5,81104,"DKSC ECNL G11",6,35,16,16],[6,81104,"DKSC ECNL G2010/11",6,36,14,16]]}
@@ -1280,7 +1280,7 @@
 ,{"b":[2011],"best":3,"c":12,"e":[[3,6,0,"Group 4/4"],[4,8,0,"Round of 16"],[4,9,0,"Semifinals"],[5,10,0,"Final"]],"s":[[3,81340,"Concorde Fire Platinum ECNL G11",4,33,6,16],[4,81340,"Concorde Fire Platinum ECNL G11",4,34,1,16],[5,81340,"Concorde Fire Platinum ECNL G11",4,35,1,16],[6,81340,"Concorde Fire Platinum ECNL G2010/11",4,36,1,16]]}
 ,{"b":[2011],"best":0,"c":12,"e":[[4,8,0,"Group 4/4"],[5,10,7,"Round of 16"]],"s":[[3,81344,"Concorde Fire Premier ECNL G11",4,33,12,16],[4,81344,"Concorde Fire Premier ECNL G11",4,34,4,16],[5,81344,"Concorde Fire Premier ECNL G11",4,35,4,16],[6,81344,"Concorde Fire Premier ECNL G2010/11",4,36,6,16]]}
 ,{"b":[2011],"best":2,"c":101,"e":[[3,6,0,"Group 3/4"],[4,8,0,"Round of 16"],[5,10,0,"Round of 16"]],"s":[[3,81431,"Real Colorado National ECNL G11",6,33,4,16],[4,81431,"Real Colorado National ECNL G11",6,34,3,16],[5,81431,"Real Colorado National ECNL G11",6,35,2,16],[6,81431,"Real Colorado National ECNL G2010/11",6,36,5,16]]}
-,{"b":[2011],"c":101,"s":[[3,81521,"Real Colorado Athletico ECNL G11",6,33,15,16],[4,81521,"Real Colorado Athletico ECNL G11",6,34,14,16],[5,81521,"Real Colorado Athletico ECNL G11",6,35,14,16],[6,81521,"Real Colorado Athletico ECNL G2010/11",6,36,7,16]]}
+,{"b":[2011],"c":101,"s":[[3,81521,"Real Colorado Athletico ECNL G11",6,33,15,16],[4,81521,"Real Colorado Athletico ECNL G11",6,34,14,16],[5,81521,"Real Colorado Athletico ECNL G11",6,35,14,16],[6,81521,"Real Colorado Athletico ECNL G2010/11",6,36,9,16]]}
 ,{"b":[2011],"best":0,"c":16,"e":[[3,6,0,"Group 2/4"],[4,8,0,"Group 4/4"],[5,10,10,"Round of 16"],[5,12,11,""]],"s":[[3,81526,"Washington Premier ECNL G11",5,33,3,10],[4,81526,"Washington Premier ECNL G11",5,34,3,10],[5,81526,"Washington Premier ECNL G11",5,35,6,10],[6,81526,"Washington Premier ECNL G2010/11",5,36,10,10]]}
 ,{"b":[2011],"c":70,"s":[[3,81530,"Charlotte Independence ECNL G11",2,33,10,13],[4,81530,"Charlotte Independence ECNL G11",2,34,10,12]]}
 ,{"b":[2011],"c":13,"m":[1887,1888],"s":[[3,81587,"Dallas Texans ECNL G11",6,33,8,16],[4,81587,"Dallas Texans ECNL G11",6,34,9,16],[5,81587,"Dallas Texans ECNL G11",6,35,11,16]]}
@@ -1875,7 +1875,7 @@
 ,{"b":[2013,2014],"c":34,"s":[[6,132621,"Boise Thorns ECNL G2013/14",5,42,2,10]]}
 ,{"b":[2008,2009],"c":141,"s":[[6,132696,"Lonestar ATX Red ECNL G2008/09",6,27,15,16]]}
 ,{"b":[2009,2010],"c":141,"s":[[6,132697,"Lonestar ATX Red ECNL G2009/10",6,32,9,16]]}
-,{"b":[2010,2011],"c":141,"s":[[6,132699,"Lonestar ATX Red ECNL G2010/11",6,36,8,16]]}
+,{"b":[2010,2011],"c":141,"s":[[6,132699,"Lonestar ATX Red ECNL G2010/11",6,36,7,16]]}
 ,{"b":[2011,2012],"c":141,"s":[[6,132702,"Lonestar ATX Red ECNL G2011/12",6,39,3,16]]}
 ,{"b":[2012,2013],"c":141,"s":[[6,132703,"Lonestar ATX Red ECNL G2012/13",6,41,15,16]]}
 ,{"b":[2013,2014],"c":141,"s":[[6,132704,"Lonestar ATX Red ECNL G2013/14",6,42,8,16]]}
