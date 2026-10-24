@@ -1,6 +1,6 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,Michigan Hawks ECNL G2011/12,Michigan Hawks,134166,10,9,0,1,28,2.8,35,4,31
-2,Nationals SC ECNL G2011/12,Nationals,94349,9,8,0,1,25,2.78,17,1,16
+2,Nationals SC ECNL G2011/12,Nationals,94349,10,9,0,1,28,2.8,23,2,21
 3,St. Louis Scott Gallagher Navy ECNL G2011/12,St. Louis Scott Gallagher,134850,11,8,1,2,26,2.36,21,5,16
 4,Rockford Raptors FC ECNL G2011/12,Rockford Raptors FC,134302,10,7,2,1,22,2.2,19,11,8
 5,Eclipse Select Soccer Club ECNL G2011/12,Eclipse Select Soccer Club,136037,9,5,3,1,16,1.78,19,9,10
@@ -13,5 +13,5 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 12,Sporting Iowa ECNL G2011/12,Sporting Iowa Central,79780,11,2,6,3,9,0.82,9,18,-9
 13,Liverpool FC MI ECNL G2011/12,Liverpool FC-IA Michigan,94483,11,1,6,4,7,0.64,8,23,-15
 14,Chicago Inter ECNL G2011/12,Chicago Inter,127991,9,1,7,1,4,0.44,6,21,-15
-15,FC Wisconsin ECNL G2011/12,FC Wisconsin Girls,79684,9,0,8,1,1,0.11,0,21,-21
+15,FC Wisconsin ECNL G2011/12,FC Wisconsin Girls,79684,10,0,9,1,1,0.1,1,27,-26
 16,MN Thunder Academy ECNL G2011/12,Minnesota Thunder Academy,134412,0,0,0,0,0,0.0,0,0,0

@@ -1,9 +1,9 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,Florida Kraze Krush ECNL G2011/12,Florida Kraze Krush,46056,9,8,1,0,24,2.67,32,11,21
-2,Concorde Fire Platinum ECNL G2011/12,Concorde Fire ,89731,8,5,1,2,17,2.13,26,8,18
-3,Team Boca ECNL G2011/12,Team Boca,131998,8,5,1,2,17,2.13,18,7,11
-4,Concorde Fire Premier ECNL G2011/12,Concorde Fire ,89720,8,5,2,1,16,2.0,26,9,17
-5,Florida Premier FC ECNL G2011/12,Florida Premier FC,89665,8,5,2,1,16,2.0,20,10,10
+2,Team Boca ECNL G2011/12,Team Boca,131998,8,5,1,2,17,2.13,18,7,11
+3,Concorde Fire Premier ECNL G2011/12,Concorde Fire ,89720,9,6,2,1,19,2.11,29,9,20
+4,Florida Premier FC ECNL G2011/12,Florida Premier FC,89665,8,5,2,1,16,2.0,20,10,10
+5,Concorde Fire Platinum ECNL G2011/12,Concorde Fire ,89731,9,5,2,2,17,1.89,26,11,15
 6,Athletic Club Florida ECNL G2011/12,Athletic Club Florida,83371,7,4,2,1,13,1.86,18,6,12
 7,CESA Liberty ECNL G2011/12,Carolina Elite Soccer Academy,78145,8,4,2,2,14,1.75,11,5,6
 8,GSA ECNL G2011/12,Gwinnett Soccer Academy,131499,8,4,4,0,12,1.5,16,15,1
@@ -12,6 +12,6 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 11,Tampa Bay United ECNL G2011/12,Tampa Bay United,69068,8,3,4,1,10,1.25,12,21,-9
 12,United Futbol Academy ECNL G2011/12,United Futbol Academy,81903,7,2,3,2,8,1.14,8,9,-1
 13,Alabama FC ECNL G2011/12,Alabama FC,65968,8,2,4,2,8,1.0,13,19,-6
-14,Atlanta Fire United ECNL G2011/12,Atlanta Fire United,79871,8,1,7,0,3,0.38,10,31,-21
-15,South Carolina United ECNL G2011/12,South Carolina United FC,89551,8,0,7,1,1,0.13,5,22,-17
+14,South Carolina United ECNL G2011/12,South Carolina United FC,89551,9,1,7,1,4,0.44,8,23,-15
+15,Atlanta Fire United ECNL G2011/12,Atlanta Fire United,79871,9,1,8,0,3,0.33,11,34,-23
 16,Sporting SA JAX ECNL G2011/12,Sporting SA,69334,9,0,8,1,1,0.11,1,28,-27

@@ -66,9 +66,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-18,12:30 PM,Group Play,Jacksonville FC ECNL G2008/09,0,2,Concorde Fire Premier ECNL G2008/09,Patton Park,Field 3,On Time,1070180
 2026-10-18,01:00 PM,Group Play,Tampa Bay United ECNL G2008/09,1,4,CESA Liberty ECNL G2008/09,Ed Radice Sports Complex,Field 5,On Time,1070192
 2026-10-18,01:00 PM,Group Play,Team Boca ECNL G2008/09,2,1,United Futbol Academy ECNL G2008/09,PATCH REEF PARK ,Field 2,On Time,1070200
-2026-10-24,11:00 AM,Group Play,GSA ECNL G2008/09,,,Alabama FC ECNL G2008/09,GSA East,#1,On Time,1070204
-2026-10-24,11:00 AM,Group Play,Concorde Fire Platinum ECNL G2008/09,,,Concorde Fire Premier ECNL G2008/09,Georgia Sports Park ,field 3,On Time,1070208
-2026-10-24,11:00 AM,Group Play,United Futbol Academy ECNL G2008/09,,,CESA Liberty ECNL G2008/09,Fowler Park,Field 6,On Time,1070212
+2026-10-24,11:00 AM,Group Play,GSA ECNL G2008/09,1,0,Alabama FC ECNL G2008/09,GSA East,#1,On Time,1070204
+2026-10-24,11:00 AM,Group Play,Concorde Fire Platinum ECNL G2008/09,4,0,Concorde Fire Premier ECNL G2008/09,Georgia Sports Park ,field 3,On Time,1070208
+2026-10-24,11:00 AM,Group Play,United Futbol Academy ECNL G2008/09,1,2,CESA Liberty ECNL G2008/09,Fowler Park,Field 6,On Time,1070212
 2026-10-24,01:00 PM,Group Play,Atlanta Fire United ECNL G2008/09,,,South Carolina United ECNL G2008/09,Scott Hudgens Park,Field 5,On Time,1070216
 2026-10-25,09:00 AM,Group Play,Concorde Fire Platinum ECNL G2008/09,,,Alabama FC ECNL G2008/09,Georgia Sports Park ,field 4,On Time,1070220
 2026-10-25,09:00 AM,Group Play,GSA ECNL G2008/09,,,Concorde Fire Premier ECNL G2008/09,GSA East,#1,On Time,1070224
