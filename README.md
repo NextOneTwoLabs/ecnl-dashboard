@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-pair-check.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/search-h2h.test.mjs tests/h2h-page.test.mjs tests/agents.test.mjs tests/match-param.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-pair-check.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/search-h2h.test.mjs tests/h2h-page.test.mjs tests/agents.test.mjs tests/match-param.test.mjs tests/postseason-rules.test.mjs tests/postseason-places.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -660,7 +660,8 @@ fields and pairings too. Today's team-only panel was removed by PR 5 (#172).
   the place to resume (`saveState` skips it while it is open, and every exit clears it).
   `tests/search-h2h.test.mjs` (the modules, frozen fixture), `tests/h2h-page.test.mjs` (the page) and
   `tests/search-game-links.test.mjs` (every link, three kinds) pin it.
-- **In a browser:** `tests/e2e/h2h.e2e.mjs` (the head to head; run it the same way) and `tests/e2e/search-panel.e2e.mjs` drive Chromium against `python proxy_server.py
+- **In a browser:** `tests/e2e/h2h.e2e.mjs` (the head to head; run it the same way), `tests/e2e/postseason.e2e.mjs`
+  (the postseason places, #194; `SHOTS_DIR` keeps its screenshots) and `tests/e2e/search-panel.e2e.mjs` drive Chromium against `python proxy_server.py
   --offline` on a free port. Every request that is not to that port is aborted and counted, so the
   run makes no request off the machine (club logos and fonts included). It is not in CI (it needs
   Playwright and a browser); run it for a change to the panel and record the result in the PR:

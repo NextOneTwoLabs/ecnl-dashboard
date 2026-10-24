@@ -21,6 +21,7 @@ ROUTES = [
     (re.compile(r"/api/v1/events/([^/]+)/divisions/([^/]+)/flights/([^/]+)/standings"), lambda e, d, f: f"archive/api/Event/get-standings-by-div-and-flight/{d}/{f}/{e}.json"),
     (re.compile(r"/api/v1/events/([^/]+)/flights/([^/]+)/schedule"), lambda e, f: f"archive/api/Event/get-schedules-by-flight/{e}/{f}/0.json"),
     (re.compile(r"/api/v1/seasons/(?P<season>[^/]+)/teams"), lambda s: f"archive/teams/{s}.json"),
+    (re.compile(r"/api/v1/seasons/(?P<season>[^/]+)/postseason"), lambda s: f"data/postseason-{s}.json"),   # #194
     (re.compile(r"/api/v1/clubs"), lambda: "archive/clubs.json"),
     (re.compile(r"/api/v1/teams/([^/]+)/history"), lambda t: f"archive/history/{t}.json"),
     (re.compile(r"/api/v1/teams"), lambda: "archive/directory.json"),   # #114: the team directory
@@ -53,13 +54,13 @@ def resolve_resource(path):
     return 404, None
 
 
-# #82: the twin of cachePolicy in api/data-api.mjs. A closed season's event routes, team index and
-# search games file (#158) (a season earlier than the catalog's refresh.activeSeason) may be kept by the browser for a day;
+# #82: the twin of cachePolicy in api/data-api.mjs. A closed season's event routes, team index,
+# postseason rules (#194) and search games file (#158) (a season earlier than the catalog's refresh.activeSeason) may be kept by the browser for a day;
 # everything else is no-cache. Sessions are off here, which is the Worker's `off` case, so the
 # long header is sent as is. tests/cache-policy.json holds the cases both suites run.
 CLOSED_CACHE = "private, max-age=86400, stale-while-revalidate=86400"
 EVENT_ROUTE = re.compile(r"/api/v1/events/([^/]+)/(?:hierarchy|divisions/[^/]+/flights/[^/]+/standings|flights/[^/]+/schedule)")
-TEAMS_ROUTE = re.compile(r"/api/v1/seasons/([^/]+)/teams")
+TEAMS_ROUTE = re.compile(r"/api/v1/seasons/([^/]+)/(?:teams|postseason)")   # #194: the postseason rules too
 SEARCH_GAMES_ROUTE = re.compile(r"/api/v1/search/games/([^/]+)")   # #158: closed seasons as the team index
 EVENT_LISTS = ("conferences", "national", "showcases")
 _catalog_memo = None   # ((catalog path, mtime_ns, size), facts); only a usable catalog is kept

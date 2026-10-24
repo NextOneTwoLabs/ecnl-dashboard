@@ -1,0 +1,151 @@
+{
+ "_comment": "#194 synthetic (the real tables have no games yet): North 3rd and 4th outrank South 3rd, so both NAC places go North; South 6th has not played.",
+ "synthetic": true,
+ "season": "2026-27",
+ "conference": "Ohio Valley",
+ "division": "GU16",
+ "flights": [
+  {
+   "flightName": "NORTH",
+   "teamStandings": [
+    {
+     "teamID": 9301,
+     "name": "North A ECNL G2010/11",
+     "clubName": "North A",
+     "gp": 4,
+     "standingpoints": 12,
+     "ppg": 3.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9302,
+     "name": "North B ECNL G2010/11",
+     "clubName": "North B",
+     "gp": 4,
+     "standingpoints": 10,
+     "ppg": 2.5,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9303,
+     "name": "North C ECNL G2010/11",
+     "clubName": "North C",
+     "gp": 4,
+     "standingpoints": 8,
+     "ppg": 2.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9304,
+     "name": "North D ECNL G2010/11",
+     "clubName": "North D",
+     "gp": 10,
+     "standingpoints": 19,
+     "ppg": 1.9,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9305,
+     "name": "North E ECNL G2010/11",
+     "clubName": "North E",
+     "gp": 4,
+     "standingpoints": 2,
+     "ppg": 0.5,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9306,
+     "name": "North F ECNL G2010/11",
+     "clubName": "North F",
+     "gp": 5,
+     "standingpoints": 1,
+     "ppg": 0.2,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    }
+   ]
+  },
+  {
+   "flightName": "SOUTH",
+   "teamStandings": [
+    {
+     "teamID": 9311,
+     "name": "South A ECNL G2010/11",
+     "clubName": "South A",
+     "gp": 5,
+     "standingpoints": 14,
+     "ppg": 2.8,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9312,
+     "name": "South B ECNL G2010/11",
+     "clubName": "South B",
+     "gp": 5,
+     "standingpoints": 13,
+     "ppg": 2.6,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9313,
+     "name": "South C ECNL G2010/11",
+     "clubName": "South C",
+     "gp": 5,
+     "standingpoints": 9,
+     "ppg": 1.8,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9314,
+     "name": "South D ECNL G2010/11",
+     "clubName": "South D",
+     "gp": 4,
+     "standingpoints": 4,
+     "ppg": 1.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9315,
+     "name": "South E ECNL G2010/11",
+     "clubName": "South E",
+     "gp": 5,
+     "standingpoints": 4,
+     "ppg": 0.8,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9316,
+     "name": "South F ECNL G2010/11",
+     "clubName": "South F",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    }
+   ]
+  }
+ ]
+}

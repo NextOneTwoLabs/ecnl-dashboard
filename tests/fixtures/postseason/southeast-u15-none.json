@@ -1,0 +1,190 @@
+{
+ "_comment": "#194 synthetic: the season has not started; no places, and the legend says so.",
+ "synthetic": true,
+ "season": "2026-27",
+ "conference": "Southeast",
+ "division": "GU15",
+ "flights": [
+  {
+   "flightName": "ECNL",
+   "teamStandings": [
+    {
+     "teamID": 9600,
+     "name": "SE Team A ECNL G2010/11",
+     "clubName": "SE Team A",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9601,
+     "name": "SE Team B ECNL G2010/11",
+     "clubName": "SE Team B",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9602,
+     "name": "SE Team C ECNL G2010/11",
+     "clubName": "SE Team C",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9603,
+     "name": "SE Team D ECNL G2010/11",
+     "clubName": "SE Team D",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9604,
+     "name": "SE Team E ECNL G2010/11",
+     "clubName": "SE Team E",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9605,
+     "name": "SE Team F ECNL G2010/11",
+     "clubName": "SE Team F",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9606,
+     "name": "SE Team G ECNL G2010/11",
+     "clubName": "SE Team G",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9607,
+     "name": "SE Team H ECNL G2010/11",
+     "clubName": "SE Team H",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9608,
+     "name": "SE Team I ECNL G2010/11",
+     "clubName": "SE Team I",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9609,
+     "name": "SE Team J ECNL G2010/11",
+     "clubName": "SE Team J",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9610,
+     "name": "SE Team K ECNL G2010/11",
+     "clubName": "SE Team K",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9611,
+     "name": "SE Team L ECNL G2010/11",
+     "clubName": "SE Team L",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9612,
+     "name": "SE Team M ECNL G2010/11",
+     "clubName": "SE Team M",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9613,
+     "name": "SE Team N ECNL G2010/11",
+     "clubName": "SE Team N",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9614,
+     "name": "SE Team O ECNL G2010/11",
+     "clubName": "SE Team O",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9615,
+     "name": "SE Team P ECNL G2010/11",
+     "clubName": "SE Team P",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    }
+   ]
+  }
+ ]
+}

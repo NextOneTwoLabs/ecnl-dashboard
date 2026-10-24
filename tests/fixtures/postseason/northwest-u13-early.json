@@ -1,0 +1,91 @@
+{
+ "_comment": "#194 synthetic: 3rd and 5th have not played; Champions League takes the first 3 that have.",
+ "synthetic": true,
+ "season": "2026-27",
+ "conference": "Northwest",
+ "division": "GU13",
+ "flights": [
+  {
+   "flightName": "ECNL",
+   "teamStandings": [
+    {
+     "teamID": 9501,
+     "name": "NW A ECNL G2010/11",
+     "clubName": "NW A",
+     "gp": 2,
+     "standingpoints": 6,
+     "ppg": 3.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9502,
+     "name": "NW B ECNL G2010/11",
+     "clubName": "NW B",
+     "gp": 2,
+     "standingpoints": 4,
+     "ppg": 2.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9503,
+     "name": "NW C ECNL G2010/11",
+     "clubName": "NW C",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9504,
+     "name": "NW D ECNL G2010/11",
+     "clubName": "NW D",
+     "gp": 1,
+     "standingpoints": 1,
+     "ppg": 1.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9505,
+     "name": "NW E ECNL G2010/11",
+     "clubName": "NW E",
+     "gp": 0,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9506,
+     "name": "NW F ECNL G2010/11",
+     "clubName": "NW F",
+     "gp": 2,
+     "standingpoints": 1,
+     "ppg": 0.5,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9507,
+     "name": "NW G ECNL G2010/11",
+     "clubName": "NW G",
+     "gp": 2,
+     "standingpoints": 0,
+     "ppg": 0.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    }
+   ]
+  }
+ ]
+}

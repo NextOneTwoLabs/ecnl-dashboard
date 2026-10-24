@@ -1,0 +1,140 @@
+{
+ "_comment": "#194: New England U14 as published, frozen: CL top 3, the play-in v North Atlantic 4th.",
+ "frozenFrom": "origin/main 404e63dd (data refresh 2026-10-24T10:40Z)",
+ "season": "2026-27",
+ "conference": "New England",
+ "division": "GU14",
+ "flights": [
+  {
+   "flightName": "ECNL",
+   "teamStandings": [
+    {
+     "teamID": 114091,
+     "name": "Connecticut FC United ECNL G2012/13",
+     "clubName": "Connecticut FC",
+     "gp": 1,
+     "wins": 1,
+     "draws": 0,
+     "losses": 0,
+     "standingpoints": 3,
+     "ppg": 3.0,
+     "goalsfor": 3,
+     "goalsagainst": 1,
+     "goaldifferential": 2
+    },
+    {
+     "teamID": 70655,
+     "name": "FC Stars Blue ECNL G2012/13",
+     "clubName": "FC Stars",
+     "gp": 5,
+     "wins": 4,
+     "draws": 0,
+     "losses": 1,
+     "standingpoints": 12,
+     "ppg": 2.4,
+     "goalsfor": 12,
+     "goalsagainst": 4,
+     "goaldifferential": 8
+    },
+    {
+     "teamID": 95340,
+     "name": "SUSA FC ECNL G2012/13",
+     "clubName": "SUSA FC",
+     "gp": 5,
+     "wins": 4,
+     "draws": 0,
+     "losses": 1,
+     "standingpoints": 12,
+     "ppg": 2.4,
+     "goalsfor": 9,
+     "goalsagainst": 1,
+     "goaldifferential": 8
+    },
+    {
+     "teamID": 134371,
+     "name": "Select ECNL G2012/13",
+     "clubName": "Select",
+     "gp": 4,
+     "wins": 3,
+     "draws": 0,
+     "losses": 1,
+     "standingpoints": 9,
+     "ppg": 2.25,
+     "goalsfor": 14,
+     "goalsagainst": 4,
+     "goaldifferential": 10
+    },
+    {
+     "teamID": 82176,
+     "name": "FSA FC ECNL G2012/13",
+     "clubName": "FSA FC",
+     "gp": 3,
+     "wins": 2,
+     "draws": 0,
+     "losses": 1,
+     "standingpoints": 6,
+     "ppg": 2.0,
+     "goalsfor": 3,
+     "goalsagainst": 4,
+     "goaldifferential": -1
+    },
+    {
+     "teamID": 134816,
+     "name": "East Meadow Soccer Club ECNL G2012/13",
+     "clubName": "East Meadow Soccer Club",
+     "gp": 5,
+     "wins": 2,
+     "draws": 1,
+     "losses": 2,
+     "standingpoints": 7,
+     "ppg": 1.4,
+     "goalsfor": 10,
+     "goalsagainst": 8,
+     "goaldifferential": 2
+    },
+    {
+     "teamID": 64207,
+     "name": "World Class FC ECNL G2012/13",
+     "clubName": "World Class FC",
+     "gp": 4,
+     "wins": 1,
+     "draws": 0,
+     "losses": 3,
+     "standingpoints": 3,
+     "ppg": 0.75,
+     "goalsfor": 3,
+     "goalsagainst": 7,
+     "goaldifferential": -4
+    },
+    {
+     "teamID": 94742,
+     "name": "Scorpions SC ECNL G2012/13",
+     "clubName": "Scorpions SC",
+     "gp": 5,
+     "wins": 1,
+     "draws": 0,
+     "losses": 4,
+     "standingpoints": 3,
+     "ppg": 0.6,
+     "goalsfor": 3,
+     "goalsagainst": 16,
+     "goaldifferential": -13
+    },
+    {
+     "teamID": 81913,
+     "name": "FC Stars White ECNL G2012/13",
+     "clubName": "FC Stars",
+     "gp": 6,
+     "wins": 0,
+     "draws": 1,
+     "losses": 5,
+     "standingpoints": 1,
+     "ppg": 0.17,
+     "goalsfor": 3,
+     "goalsagainst": 15,
+     "goaldifferential": -12
+    }
+   ]
+  }
+ ]
+}

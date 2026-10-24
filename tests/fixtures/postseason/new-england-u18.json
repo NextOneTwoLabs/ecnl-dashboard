@@ -1,0 +1,113 @@
+{
+ "_comment": "#194 synthetic (the real table has no games yet): nine teams on distinct PPG.",
+ "synthetic": true,
+ "season": "2026-27",
+ "conference": "New England",
+ "division": "GU18/19",
+ "flights": [
+  {
+   "flightName": "ECNL",
+   "teamStandings": [
+    {
+     "teamID": 9200,
+     "name": "NE Team A ECNL G2010/11",
+     "clubName": "NE Team A",
+     "gp": 4,
+     "standingpoints": 12,
+     "ppg": 3.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9201,
+     "name": "NE Team B ECNL G2010/11",
+     "clubName": "NE Team B",
+     "gp": 4,
+     "standingpoints": 11,
+     "ppg": 2.75,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9202,
+     "name": "NE Team C ECNL G2010/11",
+     "clubName": "NE Team C",
+     "gp": 4,
+     "standingpoints": 10,
+     "ppg": 2.5,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9203,
+     "name": "NE Team D ECNL G2010/11",
+     "clubName": "NE Team D",
+     "gp": 4,
+     "standingpoints": 9,
+     "ppg": 2.25,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9204,
+     "name": "NE Team E ECNL G2010/11",
+     "clubName": "NE Team E",
+     "gp": 4,
+     "standingpoints": 8,
+     "ppg": 2.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9205,
+     "name": "NE Team F ECNL G2010/11",
+     "clubName": "NE Team F",
+     "gp": 4,
+     "standingpoints": 7,
+     "ppg": 1.75,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9206,
+     "name": "NE Team G ECNL G2010/11",
+     "clubName": "NE Team G",
+     "gp": 4,
+     "standingpoints": 6,
+     "ppg": 1.5,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9207,
+     "name": "NE Team H ECNL G2010/11",
+     "clubName": "NE Team H",
+     "gp": 4,
+     "standingpoints": 5,
+     "ppg": 1.25,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9208,
+     "name": "NE Team I ECNL G2010/11",
+     "clubName": "NE Team I",
+     "gp": 4,
+     "standingpoints": 4,
+     "ppg": 1.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    }
+   ]
+  }
+ ]
+}

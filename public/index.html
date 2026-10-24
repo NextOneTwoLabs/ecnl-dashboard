@@ -68,6 +68,12 @@
       --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05);
       --shadow-md: 0 4px 12px rgba(17, 24, 39, 0.08);
       --shadow-lg: 0 8px 24px rgba(17, 24, 39, 0.14);
+      /* #194: postseason places, a tint and its ink (4.5:1 or more on the tint) per tier */
+      --pos-cl-bg: #dcfce7;  --pos-cl-ink: #166534;
+      --pos-pi-bg: #fef3c7;  --pos-pi-ink: #92400e;
+      --pos-nac-bg: #ccfbf1; --pos-nac-ink: #115e59;
+      --pos-sc-bg: #e5e7eb;  --pos-sc-ink: #374151;
+      --pos-rule: #9ca3af;
     }
 
     /* Dark theme */
@@ -96,6 +102,11 @@
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+      --pos-cl-bg: #14532d;  --pos-cl-ink: #bbf7d0;
+      --pos-pi-bg: #713f12;  --pos-pi-ink: #fde68a;
+      --pos-nac-bg: #134e4a; --pos-nac-ink: #99f6e4;
+      --pos-sc-bg: #374151;  --pos-sc-ink: #e5e7eb;
+      --pos-rule: #6b7280;
     }
 
     * {
@@ -1038,6 +1049,44 @@
       color: var(--accent-text);
       font-weight: 700;
     }
+
+    /* #194: postseason places. The tier is a tinted rank pill and a text tag after the name, each on
+       its own background, so a selected row (accent stripe and tint) still shows both. No row bar. */
+    .pos-cl { --pos-bg: var(--pos-cl-bg); --pos-ink: var(--pos-cl-ink); }
+    .pos-pi { --pos-bg: var(--pos-pi-bg); --pos-ink: var(--pos-pi-ink); }
+    .pos-nac { --pos-bg: var(--pos-nac-bg); --pos-ink: var(--pos-nac-ink); }
+    .pos-sc { --pos-bg: var(--pos-sc-bg); --pos-ink: var(--pos-sc-ink); }
+    .rank-num.pos-pill { background: var(--pos-bg); color: var(--pos-ink); font-weight: 700; border-radius: 999px; padding: 1px 4px; min-width: 22px; }
+    .pos-tag {
+      flex: none;
+      background: var(--pos-bg);
+      color: var(--pos-ink);
+      font-size: 10.5px;
+      font-weight: 700;
+      line-height: 16px;
+      padding: 0 6px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .pos-name { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+    .standings-table tr.pos-start > td { border-top: 2px solid var(--pos-rule); }
+    .pos-legend {
+      margin-top: 12px;
+      padding: 12px 16px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md, 10px);
+    }
+    .pos-legend-title { font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+    .pos-legend-list { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 14px; margin-bottom: 4px; }
+    .pos-legend-list li { display: flex; align-items: center; gap: 6px; }
+    .pos-legend p { margin-top: 4px; }
+    @media (max-width: 600px) { .pos-legend-list { flex-direction: column; } }
+    /* On a phone the tag goes under the name, so it never widens the table. */
+    @media (max-width: 768px) { .pos-name { flex-direction: column; align-items: flex-start; gap: 2px; } }
 
     .team-cell {
       display: flex;
@@ -3042,6 +3091,37 @@
           throw e;
         });
       teamIndexMemo[season] = entry;
+      return entry.p;
+    }
+
+    // ========== POSTSEASON PLACES (#194) ==========
+    // The seasons with a reviewed rules file (public/data/postseason-<season>.json, served as
+    // /api/v1/seasons/<season>/postseason). Any other season asks for nothing and shows no places.
+    // tests/postseason-rules.test.mjs checks this list against the files.
+    const POSTSEASON_SEASONS = ['2026-27'];
+    // A season's rules, memoised as getTeamIndex is: a valid file is kept for the session; a 404 or an
+    // unknown schema is kept as null (no places); a refusal (429 or another 4xx) is remembered for a
+    // minute, or until the session comes back; a 503, a network error or bad JSON is forgotten at once,
+    // so the next conference load asks again and one failure never turns places off for the session.
+    // ?live=1 maps no such route, so it shows no places, as it shows no team index (B1).
+    const postseasonMemo = {};
+    function getPostseasonRules(season) {
+      if (LIVE || !POSTSEASON_SEASONS.includes(season)) return Promise.resolve(null);
+      const memo = postseasonMemo[season];
+      const stale = memo && memo.until && (Date.now() >= memo.until || (memo.none && sessionBackAt > memo.at));
+      if (memo && !stale) return memo.p;
+      const entry = { until: 0 };
+      entry.p = fetchJSON(`seasons/${encodeURIComponent(season)}/postseason`)
+        .then(d => (d && d.schema === 1 && d.season === season && d.tiers && d.conferences ? d : null))
+        .catch(e => {
+          if (isMissing(e)) return null;
+          if (postseasonMemo[season] === entry) {
+            if (isRefusal(e)) Object.assign(entry, { at: e.sentAt, until: Date.now() + 60000, none: e.session === 'none' });
+            else delete postseasonMemo[season];
+          }
+          throw e;
+        });
+      postseasonMemo[season] = entry;
       return entry.p;
     }
 
@@ -5629,7 +5709,7 @@
     // the My Teams summary, the playoff group cards and the search results.
     // `extra` columns stay hidden until "More statistics" is expanded.
     const COL = {
-      rank:   { label: '#', sort: 'rank', title: 'Position', width: 44, render: (t, r) => rankHtml(r) },
+      rank:   { label: '#', sort: 'rank', title: 'Position', width: 44, render: (t, r, ctx) => rankHtml(r, ctx && ctx.places ? ctx.places.get(t.teamID) : null, !!(ctx && ctx.places)) },
       star:   { label: '', width: 36, render: t => starButton(t) },
       name:   { label: 'Team', sort: 'name', render: (t, r, ctx) => teamCellHtml(t, ctx) },
       gp:     { label: 'GP', sort: 'gp', num: true, title: 'Games played', render: t => t.gp || 0 },
@@ -5659,20 +5739,166 @@
     } };
     const SHOWCASE_COLS = colSet(['scTeam', 'gp', 'w', 'l', 'd', 'pts'], ['gf', 'ga', 'gd']);
 
-    function rankHtml(rank) {
-      return `<span class="rank-num${rank <= 3 ? ' rank-top' : ''}">${rank}</span>`;
+    // #194: the postseason places a conference age's tables would give if the season ended today.
+    // `flightData` is currentFlightData (one entry per flight; two flights are two divisions). Rules
+    // apply in order, each taking the next N teams that have played (GP > 0) and have no place yet:
+    // in published order for a single table, the top N of each division ('division'), or the next N
+    // across the divisions ('pooled'). Always exactly min(N, eligible) teams per rule: a tie is
+    // written down (`level`, shown in the legend and the row's screen-reader text), never settled
+    // by an extra place. Returns null when the rules have nothing for this conference and age, or
+    // don't fit its tables (a single table where they expect divisions, or the reverse).
+    const POS_CLASS = { CL: 'cl', CL18: 'cl', CLPI: 'pi', NAC: 'nac', SA: 'sc', SB: 'sc' };
+    const POS_ALT = { cupOrPlayIn: 'depending on the League Cup and the play-in', playIn: 'depending on the play-in' };
+    const POS_TIEBREAK = 'From either division, teams level on PPG are ordered by goal difference, then goals for, then goals against ' +
+      "(an order borrowed from the document's rule for ranking group runners-up at the national playoffs), then by table position.";
+    function postseasonPlaces(rules, confName, divisionName, flightData) {
+      const conf = rules && rules.conferences && rules.conferences[confName];
+      const tiers = (rules && rules.tiers) || {};
+      const age = String(divisionName || '').replace(/^G/, '');
+      const list = conf ? (conf.rules || []).filter(r => (r.ages || []).includes(age) && tiers[r.tier]) : [];
+      if (!list.length || !(flightData || []).length) return null;
+      const divided = flightData.length > 1;
+      if (list.some(r => (r.scope === 'division' || r.scope === 'pooled') !== divided)) {
+        console.warn(`#194: the postseason rules for ${confName} ${age} don't fit its ${flightData.length} table(s)`);
+        return null;
+      }
+      const loaded = flightData.filter(fd => !fd.standingsError);
+      if (!loaded.length) return null;
+      const division = new Map();   // teamID -> its division's name ("East"), for the legend
+      const tables = loaded.map(fd => {
+        const n = String((fd.flight && fd.flight.flightName) || '');
+        const teams = ((fd.standings && fd.standings.teamStandings) || []).filter(t => (t.gp || 0) > 0);
+        teams.forEach(t => division.set(t.teamID, n.charAt(0) + n.slice(1).toLowerCase()));
+        return teams;
+      });
+      const pts = t => t.standingpoints || 0, gp = t => t.gp || 0;
+      const ppgCmp = (a, b) => pts(b) * gp(a) - pts(a) * gp(b);   // < 0: a has the higher PPG (exact, no rounding)
+      const fourKeys = (a, b) => ppgCmp(a, b) || (b.goaldifferential || 0) - (a.goaldifferential || 0) ||
+        (b.goalsfor || 0) - (a.goalsfor || 0) || (a.goalsagainst || 0) - (b.goalsagainst || 0);
+      const pooledCmp = (a, b) => fourKeys(a, b) || (a._origRank || 0) - (b._origRank || 0) || a.teamID - b.teamID;
+      const places = new Map(), pairs = [], pooled = [];
+      let missing = false;
+      const put = (t, r, isPooled = false) => places.set(t.teamID, { tier: r.tier, cup: r.or === 'leagueCupWinner',
+        alt: r.alt || null, opponent: r.opponent || null, pooled: isPooled, level: null });
+      if (!divided) {
+        const q = tables[0];
+        let i = 0;
+        for (const r of list) {
+          const take = q.slice(i, i + r.next);
+          take.forEach(t => put(t, r));
+          i += take.length;
+          if (take.length && i < q.length && ppgCmp(q[i - 1], q[i]) === 0) pairs.push([q[i - 1], q[i], 'PPG']);
+        }
+      } else {
+        const left = tables.map(q => q.slice());   // each division's teams without a place, in published order
+        let merged = null;
+        for (const r of list) {
+          if (r.scope === 'division') {
+            for (const q of left) {
+              const take = q.splice(0, r.next);
+              take.forEach(t => put(t, r));
+              if (take.length && q.length && ppgCmp(take[take.length - 1], q[0]) === 0) pairs.push([take[take.length - 1], q[0], 'PPG']);
+            }
+            continue;
+          }
+          // Places from either division need every division's table.
+          if (loaded.length < flightData.length) { missing = true; continue; }
+          if (!merged) {   // a stable merge: each division's own (published) order is kept
+            const heads = left.map(q => q.slice());
+            merged = [];
+            for (;;) {
+              let best = -1;
+              heads.forEach((q, k) => { if (q.length && (best < 0 || pooledCmp(q[0], heads[best][0]) < 0)) best = k; });
+              if (best < 0) break;
+              merged.push(heads[best].shift());
+            }
+          }
+          const take = merged.splice(0, r.next);
+          take.forEach(t => { put(t, r, true); pooled.push({ tier: r.tier, team: t }); });
+          if (take.length && merged.length && fourKeys(take[take.length - 1], merged[0]) === 0) pairs.push([take[take.length - 1], merged[0], 'PPG, GD, GF and GA']);
+        }
+      }
+      const nameOf = t => displayName(t.name, t.clubName);
+      const levels = pairs.map(([a, b, by]) => {
+        for (const [x, y] of [[a, b], [b, a]]) {
+          const p = places.get(x.teamID);
+          if (p && !p.level) p.level = { with: nameOf(y), by };
+        }
+        return { a: nameOf(a), b: nameOf(b), by };
+      });
+      for (const p of places.values()) {
+        const t = tiers[p.tier];
+        p.cls = POS_CLASS[p.tier] || 'sc';
+        p.label = t.short + (p.cup ? '*' : '') + (p.level ? '=' : '');
+        p.text = t.label + (p.opponent ? ` v ${p.opponent}` : '') + (p.cup ? ', unless the League Cup winner takes it' : '') +
+          (p.pooled ? ', next best across both divisions' : '') + (p.alt ? `, or one place higher, ${POS_ALT[p.alt] || ''}` : '') +
+          (!p.level ? '' : p.level.by === 'PPG' ? `. Level on PPG with ${p.level.with}; order as published by TGS`
+            : `. Level on PPG, GD, GF and GA with ${p.level.with}; the document gives no tie-breaker, so the table position decides here`);
+      }
+      return { age, tiers, rules: list, places, levels, missing, divided, source: rules.source || {},
+        played: tables.some(q => q.length), pooled: pooled.map(x => ({ tier: x.tier, name: nameOf(x.team), division: division.get(x.team.teamID) || '' })) };
+    }
+
+    // The tag after a placed team's name: its tier, '*' for a League Cup place, '=' when level with
+    // the next team. Hidden from screen readers, which read the rank cell's sentence instead.
+    function posTagHtml(place) {
+      return place ? `<span class="pos-tag pos-${place.cls}" aria-hidden="true" title="${esc(place.text)}">${esc(place.label)}</span>` : '';
+    }
+
+    // The legend under a conference age's tables: what each tag means, the notes the places need,
+    // every tie in words, and the source document.
+    function postseasonLegend(post) {
+      const box = document.createElement('div');
+      box.className = 'pos-legend';
+      const items = [], seen = new Set();
+      for (const r of post.rules) {
+        const t = post.tiers[r.tier], cup = r.or === 'leagueCupWinner', key = r.tier + (cup ? '*' : '') + (r.opponent || '');
+        if (seen.has(key)) continue;
+        seen.add(key);
+        items.push(`<li><span class="pos-tag pos-${POS_CLASS[r.tier] || 'sc'}">${esc(t.short + (cup ? '*' : ''))}</span> ${esc(t.label +
+          (r.opponent ? ` v ${r.opponent}` : '') + (cup ? ', unless the League Cup winner takes it' : ''))}</li>`);
+      }
+      const notes = [];
+      if (!post.played) notes.push('Places appear once games are played.');
+      const alts = [...new Set(post.rules.map(r => r.alt).filter(Boolean))];
+      for (const a of alts) notes.push(`${post.rules.filter(r => r.alt === a).map(r => post.tiers[r.tier].label).join(', ')}: may be one place higher, ${POS_ALT[a] || ''}.`);
+      for (const r of post.rules.filter(x => x.scope === 'division')) notes.push(`${post.tiers[r.tier].label}: the top ${r.next} in each division.`);
+      for (const r of post.rules.filter(x => x.scope === 'pooled')) {
+        const who = post.pooled.filter(p => p.tier === r.tier).map(p => `${p.name}${p.division ? ` (${p.division})` : ''}`);
+        notes.push(`${post.tiers[r.tier].label}: ${post.rules.some(x => x.scope === 'division' && x.tier === r.tier) ? 'also ' : ''}the next ${r.next} by PPG from either division${who.length ? `: ${who.join(', ')}` : ''}.`);
+      }
+      if (post.rules.some(x => x.scope === 'pooled')) notes.push(POS_TIEBREAK);
+      if (post.missing) notes.push('Places from either division need both tables; they show when both load.');
+      for (const l of post.levels) {
+        notes.push(l.by === 'PPG' ? `= Level on PPG: ${l.a} and ${l.b}. Order as published by TGS.`
+          : `= Level on PPG, GD, GF and GA: ${l.a} and ${l.b}. The document gives no tie-breaker, so the table position decides here.`);
+      }
+      box.innerHTML = `<div class="pos-legend-title">Postseason places if the season ended today (projection, by conference PPG)</div>
+        <ul class="pos-legend-list">${items.join('')}</ul>
+        ${notes.map(n => `<p>${esc(n)}</p>`).join('')}
+        <p class="pos-legend-source">Source: ${esc(post.source.title || 'the ECNL postseason structure')}. A team that has not played has no place.</p>`;
+      return box;
+    }
+
+    // The rank cell. #194: a placed team's number is a tinted pill with its place in words for screen
+    // readers; a table that shows places drops the top-three accent, which would read as a cut line.
+    function rankHtml(rank, place = null, placesShown = false) {
+      if (place) return `<span class="rank-num pos-pill pos-${place.cls}">${rank}</span><span class="sr-only">. Postseason place: ${esc(place.text)}.</span>`;
+      return `<span class="rank-num${rank <= 3 && !placesShown ? ' rank-top' : ''}">${rank}</span>`;
     }
     // Logo + short name; the full API name lives in the title attribute.
     function teamCellHtml(team, ctx = {}) {
       const logo = ctx.logo !== false && team.clublogo
         ? `<img class="team-logo" src="${esc(team.clublogo)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
       const name = `<span class="team-name" title="${esc(team.name)}">${esc(displayName(team.name, team.clubName))}</span>`;
+      const tag = ctx.places ? posTagHtml(ctx.places.get(team.teamID)) : '';   // #194
       // #135 P2: on a wide screen the name opens the team's Overview (the row still selects it).
       if (ctx.link && !isNarrow() && historyAvailable(team.teamID)) {
-        return `<div class="team-cell">${logo}<a class="team-link" href="#tab=teams&season=${encodeURIComponent(currentSeason)}` +
-          `&team=${encodeURIComponent(team.teamID)}&name=${encodeURIComponent(team.name)}">${name}</a></div>`;
+        const link = `<a class="team-link" href="#tab=teams&season=${encodeURIComponent(currentSeason)}` +
+          `&team=${encodeURIComponent(team.teamID)}&name=${encodeURIComponent(team.name)}">${name}</a>`;
+        return `<div class="team-cell">${logo}${tag ? `<span class="pos-name">${link}${tag}</span>` : link}</div>`;
       }
-      return `<div class="team-cell">${logo}${name}</div>`;
+      return `<div class="team-cell">${logo}${tag ? `<span class="pos-name">${name}${tag}</span>` : name}</div>`;
     }
     function gdHtml(t) {
       const gd = t.goaldifferential || 0;
@@ -5698,9 +5924,9 @@
 
     // `rank` is the published position (survives re-sorting); `highlight` marks
     // the selected/followed row; `selectable` rows are focusable and clickable.
-    function standingsRowHtml(team, cols, { rank, highlight = false, selectable = false, ctx = {} } = {}) {
+    function standingsRowHtml(team, cols, { rank, highlight = false, selectable = false, ctx = {}, posStart = false } = {}) {
       const r = rank || team._origRank || 0;
-      const cls = [highlight ? 'team-row-highlight' : '', selectable ? 'team-row' : ''].filter(Boolean).join(' ');
+      const cls = [highlight ? 'team-row-highlight' : '', selectable ? 'team-row' : '', posStart ? 'pos-start' : ''].filter(Boolean).join(' ');
       const attrs = ` data-team-id="${esc(team.teamID)}"` + (cls ? ` class="${cls}"` : '') +
         (selectable ? ' tabindex="0"' : '') + (highlight ? ' aria-current="true"' : '');
       return `<tr${attrs}>` + cols.map(c => {
@@ -5744,7 +5970,7 @@
     // opts: { highlightTeamID, selectable, cols, title, footnote }
     function renderStandingsTable(standings, flightName, flightId, eventId, opts) {
       if (opts != null && typeof opts !== 'object') opts = { highlightTeamID: opts };
-      const { highlightTeamID = null, selectable = false, cols = CONF_COLS, title = null, footnote = true } = opts || {};
+      const { highlightTeamID = null, selectable = false, cols = CONF_COLS, title = null, footnote = true, places = null } = opts || {};
       const teams = standings.teamStandings || standings;
       teams.forEach((t, i) => { if (!t._origRank) t._origRank = i + 1; });
       const hasExtra = cols.some(c => c.extra);
@@ -5778,10 +6004,14 @@
       const tbody = panel.querySelector('tbody');
       // Selectable tables follow the live selection so a re-sort keeps the highlight.
       const highlighted = () => selectable ? selectedTeamID : highlightTeamID;
-      const renderRows = list => {
+      // #194: `places` (postseasonPlaces) tags rows; in table order each new tier starts with a border,
+      // which a re-sort hides (the tags stay with their teams).
+      const tierOf = t => { const p = places && places.get(t.teamID); return p ? p.tier : ''; };
+      const renderRows = (list, ordered = true) => {
         const hl = highlighted();
-        tbody.innerHTML = list.map(t => standingsRowHtml(t, cols, {
-          rank: t._origRank, selectable, highlight: hl != null && t.teamID === hl, ctx: { link: selectable },
+        tbody.innerHTML = list.map((t, i) => standingsRowHtml(t, cols, {
+          rank: t._origRank, selectable, highlight: hl != null && t.teamID === hl, ctx: { link: selectable, places },
+          posStart: !!places && ordered && i > 0 && tierOf(t) !== tierOf(list[i - 1]),
         })).join('');
       };
       renderRows(teams);
@@ -5804,7 +6034,7 @@
           const va = a[sortKey] || 0, vb = b[sortKey] || 0;
           return (sortAsc ? va - vb : vb - va) || a._origRank - b._origRank;
         });
-        renderRows(sorted);
+        renderRows(sorted, sortKey === 'rank' && sortAsc);
       });
 
       const more = panel.querySelector('.more-stats-btn');
@@ -5968,7 +6198,7 @@
     // Conference view. The fetch half fills currentFlightData (standings AND
     // schedule for every flight, so tab switches, the schedule filter and the
     // glance panel are pure re-renders); renderConferenceView paints it.
-    let currentConfMeta = null;   // { conf, division, flights, ageLabel }
+    let currentConfMeta = null;   // { conf, division, flights, ageLabel, confName, postseason }
     let loadToken = 0;            // drops responses from a navigation that was superseded
     let warnedFlightData = null;  // the load whose "couldn't load" notice was last announced (#92)
 
@@ -5994,6 +6224,11 @@
       bindMatch('conf', token);
       currentFlightData = [];
       currentConfMeta = null;
+      // #194: the season's postseason rules load beside the tables, and the tables wait for them (B2),
+      // so the view is painted once, places included: no second paint, no layout shift. That is fine
+      // for one small same-origin file; don't add anything slow to this wait. Matches loads them too,
+      // as Standings <-> Matches is a re-render. A failure only means no places on this load.
+      const postseasonLoad = getPostseasonRules(currentSeason).catch(() => null);
 
       try {
         const hierarchy = await getEventHierarchy(conf.eventId, opts);
@@ -6024,10 +6259,11 @@
           (standings.teamStandings || []).forEach((t, i) => { t._origRank = i + 1; });
           return { flight: f, division, standings, games: games || [], standingsError, gamesError };
         }));
+        const postseason = await postseasonLoad;
         if (token !== loadToken) return;
 
         currentFlightData = results;
-        currentConfMeta = { conf, division, flights, ageLabel };
+        currentConfMeta = { conf, division, flights, ageLabel, confName: currentConference, postseason };
         selectedTeamID = defaultSelection();
         // Waits on the request started above; starts one only for a favourite saved
         // by name alone, which the division check could not place.
@@ -6109,6 +6345,9 @@
       warnedFlightData = currentFlightData;
       if (failed) main.appendChild(loadWarning(failed.standingsError || failed.gamesError, () => loadCurrentView(), announce));
 
+      // #194: the postseason places these tables would give if the season ended today.
+      const post = !isSchedule && currentConfMeta.postseason
+        ? postseasonPlaces(currentConfMeta.postseason, currentConfMeta.confName, currentConfMeta.division.divisionName, currentFlightData) : null;
       currentFlightData.forEach(({ flight, standings, games, standingsError, gamesError }) => {
         const title = multi ? `${flight.flightName} flight` : (isSchedule ? 'Matches' : 'Conference standings');
         if (isSchedule ? gamesError : standingsError) {
@@ -6117,9 +6356,10 @@
           main.appendChild(renderMatchCards(games, { title, filter: scheduleFilter }));
         } else {
           main.appendChild(renderStandingsTable(standings, flight.flightName, flight.flightID, conf.eventId,
-            { selectable: true, highlightTeamID: selectedTeamID, title }));
+            { selectable: true, highlightTeamID: selectedTeamID, title, places: post ? post.places : null }));
         }
       });
+      if (post) main.appendChild(postseasonLegend(post));
       updateGlancePanel();
       if (isSchedule && scheduleFilter === 'all') {
         // Scroll only the content pane (scrollIntoView would also nudge the body).
