@@ -684,7 +684,7 @@ Bureau, 2020 Census ZCTA to Place and ZCTA to County Relationship Files; public 
     **The label rule** (#162): a field's place label is right if the field lies inside the place, or
     if the place is the field's postal town and has land in the zip (Northville High School at 48168
     is labelled Northville this way). Otherwise a fix names the postal-town place when it has land in
-    the zip (37932 is Knoxville, 02360 is Plymouth), else it gives the zip no city with
+    the zip (none yet: 37932 Knoxville and 02360 Plymouth wait for #195), else it gives the zip no city with
     `"placeGeoid": null, "placeName": null` (06032 Farmington, 01545 Shrewsbury, 19425, 78669,
     21758 and 34120); the field keeps its county. `zip-places.json` keeps only the area rule's place,
     so each fix quotes its land shares from the raw 2020 place file. A null fix needs a zip in the
@@ -693,10 +693,9 @@ Bureau, 2020 Census ZCTA to Place and ZCTA to County Relationship Files; public 
     place's computed county, but no entry does today: it holds Woodland Hills (a district of Los
     Angeles, not a census place) and 7 club towns that are county subdivisions or unincorporated
     (Westampton NJ, Elma NY, Lancaster MA, St Johns FL, Greenbrae CA, Farmington CT, Bethany CT),
-    each backed by the club's main home field being in its own town's zip, and since #162 four club
-    cities whose home fields are elsewhere: Hamilton NJ (Mercer), Shelby Twp MI (Macomb) and Auburn MA
-    (Worcester), each from its 2020 census county-subdivision record, and Baldwin MD (Baltimore County,
-    from its USPS zip 21013). "Bay Area, CA" (club 3986) is a region and stays reported, with no entry.
+    each backed by the club's main home field being in its own town's zip. Four club cities whose
+    home fields are elsewhere (Hamilton NJ, Shelby Twp MI, Auburn MA and Baldwin MD) wait for #195, until their
+    records are looked up. "Bay Area, CA" (club 3986) is a region and stays reported, with no entry.
     An entry no club or event uses is stale, an error.
   - Owner decision Q-E (Fairfax, VA is Fairfax County) needs no entry: the census place Fairfax
     (5126496, class C7) already computes to Fairfax County (51059), and a test pins it. An entry

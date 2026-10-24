@@ -270,7 +270,7 @@ class Committed(unittest.TestCase):
 
     def test_the_reviewed_seeds(self):
         fixes = load(DATA / "zip-place-fixes.json")
-        self.assertEqual([f["zip"] for f in fixes["fixes"]], ["92014", "06032", "01545", "19425", "78669", "21758", "34120", "37932", "02360"])
+        self.assertEqual([f["zip"] for f in fixes["fixes"]], ["92014", "06032", "01545", "19425", "78669", "21758", "34120"])
         self.assertEqual([(a["city"], a["state"]) for a in fixes["aliases"]], [("Liburn", "GA")])
         cities = {(c["city"], c["state"]): c["countyGeoid"] for c in load(DATA / "city-counties.json")["cities"]}
         self.assertEqual(cities[("Woodland Hills", "CA")], "06037")
@@ -411,37 +411,42 @@ class PlaceFixture(unittest.TestCase):
     def zip_of(self, z):
         return {k: v[3:5] for k, v in self.p["fields"].items() if k.endswith("@" + z)}
 
-    def test_the_four_club_counties(self):
-        for cid, county in ((94, "25027"), (3313, "34021"), (3405, "24005"), (1713, "26099")):
+    def test_the_four_club_counties_wait_for_195(self):
+        """Review MF1: the four county entries (Auburn MA, Shelby Twp MI, Hamilton NJ, Baldwin MD) moved to #195 until their
+        records are looked up. Until then these clubs have no county, as on main; #195 turns these into counties."""
+        for cid in (94, 3313, 3405, 1713):
             with self.subTest(club=cid):
-                self.assertEqual(self.p["clubPlaces"][str(cid)], [None, county])
-        self.assertEqual(self.p["counties"]["24005"], ["Baltimore County", "MD"], "not Baltimore city (24510)")
-        self.assertEqual(self.p["counties"]["34021"], ["Mercer County", "NJ"], "owner decision Q1")
+                self.assertEqual(self.p["clubPlaces"][str(cid)], [None, None])
         self.assertEqual(self.p["clubPlaces"]["3986"], [None, None], "Bay Area, CA: no entry (owner decision Q3)")
 
     def test_each_place_fix(self):
         want = {"06032": [None, "09003"], "01545": [None, "25027"], "19425": [None, "42029"], "78669": [None, "48453"],
-                "21758": [None, "24021"], "34120": [None, "12021"], "37932": ["4740000", "47093"], "02360": ["2554275", "25023"]}
+                "21758": [None, "24021"], "34120": [None, "12021"]}
         for z, w in want.items():
             with self.subTest(zip=z):
                 got = self.zip_of(z)
                 self.assertTrue(got, "the fixture has a field at the zip")
                 self.assertEqual(set(map(tuple, got.values())), {tuple(w)}, got)
-        self.assertEqual(self.p["places"]["4740000"][:2], ["Knoxville", "TN"])
-        self.assertEqual(self.p["places"]["2554275"][:2], ["Plymouth", "MA"])
+
+    def test_the_two_fixes_waiting_for_195(self):
+        """Review MF1: 37932 -> Knoxville and 02360 -> Plymouth moved to #195. Until then the area rule's labels stay."""
+        self.assertEqual(self.zip_of("37932"), {"hardin valley academy stadium@37932": ["4725760", "47093"]}, "Farragut")
+        self.assertEqual(self.zip_of("02360"), {"plymouth north stadium@02360": ["2569585", "25023"]}, "The Pinehills")
+        self.assertNotIn("2554275", self.p["places"], "Plymouth CDP is not a place here")
 
     def test_the_places_that_leave(self):
         """Q6 and review N5: each place whose only use was a fixed zip leaves places.json (its county stays)."""
         for g, name in (("0952210", "Newington"), ("2582000", "Worcester"), ("4220600", "Eagle"), ("4810197", "Briarcliff"),
-                        ("2431575", "Garretts Mill"), ("1252162", "Orangetree"), ("2569585", "The Pinehills")):
+                        ("2431575", "Garretts Mill"), ("1252162", "Orangetree")):
             with self.subTest(place=name):
                 self.assertNotIn(g, self.p["places"])
         self.assertIn("4725760", self.p["places"], "Farragut stays: Mayor Bob Leonard Park (37934) is in it")
-        self.assertEqual(len(self.p["places"]), 496, "502 before #162: 7 leave, Plymouth CDP joins")
+        self.assertIn("2569585", self.p["places"], "The Pinehills stays: Plymouth North's fix moved to #195")
+        self.assertEqual(len(self.p["places"]), 496, "502 before #162: the 6 above leave, nothing joins")
 
     def test_the_q1a_count(self):
         q1a = [k for k, v in self.p["fields"].items() if v[3] is None and v[4] and self.p["counties"][v[4]][1] in sd.Q1A_STATES]
-        self.assertEqual(len(q1a), 19, "14 before: 06032's three fields, 01545 and 19425 join (review N5)")
+        self.assertEqual(len(q1a), 19, "14 before: 06032's three fields, 01545 and 19425 join (review N5); 37932 and 02360 are not no-city zips")
 
 
 class PlaceLive(unittest.TestCase):

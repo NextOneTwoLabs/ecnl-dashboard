@@ -516,23 +516,22 @@ test('#169: two spellings of one field are one row (D6): Grass Lawn Park @ 98052
   const red = sec(run('Redmond'), 'games').filter(r => r.kind === 'field');
   assert.deepEqual(red.filter(r => /grass ?lawn/i.test(r.label)).map(r => r.key), ['Grass Lawn Park@98052']);
 });
-test('#162: the club counties (Q1, Q2) and place fixes (Q4-Q6) on the frozen fixture, with the knock-ons of review N5', () => {
+test('#162: the place fixes (Q4-Q6) on the frozen fixture, with the knock-ons of review N5; the entries of #195 change nothing', () => {
   const near = (q, club) => sec(run(q), 'teams').some(r => r.clubID === club && r.nearby);
-  for (const [q, club] of [['Mercer County', 3313], ['Macomb County', 1713], ['Worcester County', 94], ['Baltimore County', 3405]]) assert.ok(near(q, club), `${q}: club ${club} under Nearby`);
+  // review MF1: the 4 county entries and the Knoxville and Plymouth fixes moved to #195. Until then these searches are as on main.
+  for (const [q, club] of [['Mercer County', 3313], ['Macomb County', 1713], ['Worcester County', 94], ['Baltimore County', 3405]]) assert.ok(!near(q, club), `${q}: club ${club} has no county yet (#195)`);
+  assert.equal(run('Mercer County').sections.length, 0, 'no club, field or event is in Mercer County yet');
   for (const q of ['Newington', 'Newington CT', 'Briarcliff']) assert.equal(run(q).sections.length, 0, `${q}: no field or club is there any more`);
   const hartford = sec(run('Hartford County'), 'games').filter(r => r.kind === 'field' && /@06032$/.test(r.key));
   assert.ok(hartford.length && hartford.every(r => r.place === 'Hartford County, CT'), 'the 06032 fields have no city, only their county');
   assert.ok(hartford.some(r => r.label === 'FSA-Farmington Sports Arena'));
   const knox = sec(run('Knoxville'), 'games').find(r => r.kind === 'field' && r.key === 'hardin valley academy stadium@37932');
-  assert.ok(knox && knox.place === 'Knoxville, TN' && !knox.nearby, 'Hardin Valley Academy is labelled Knoxville, not Farragut');
-  const ply = sec(run('Plymouth'), 'games').find(r => r.kind === 'field' && r.key === 'plymouth north stadium@02360');
-  assert.ok(ply && ply.place === 'Plymouth, MA' && !ply.nearby, 'Plymouth North is in Plymouth, not The Pinehills');
+  assert.ok(knox && knox.place === 'Farragut, TN' && knox.nearby, 'Hardin Valley Academy is still labelled Farragut (#195)');
+  assert.ok(!sec(run('Plymouth'), 'games').some(r => r.key === 'plymouth north stadium@02360'), 'Plymouth North is still labelled The Pinehills (#195)');
   const worc = run('Worcester');
   const stj = sec(worc, 'games').filter(r => r.kind === 'field' && r.key === 'st johns fields@01545');
   assert.deepEqual(stj.map(r => [r.place, !!r.nearby]), [['Worcester County, MA', true]], 'St. Johns Fields (Shrewsbury): no city, only Nearby through the county');
   assert.ok(!sec(worc, 'games').some(r => r.place === 'Worcester, MA'), 'no field is labelled Worcester any more');
-  assert.ok(sec(worc, 'teams').every(r => r.nearby) && near('Worcester', 94), 'Worcester city left: the county answers, Scorpions SC under Nearby');
-  const pine = run('The Pinehills');
-  assert.equal(sec(pine, 'teams')[0].clubID, 26, 'The Pinehills is no place any more: a typo match to Charlotte SA (Pineville), review N5');
-  assert.ok(!sec(pine, 'games').some(r => r.kind === 'field'));
+  assert.ok(sec(worc, 'teams').every(r => r.nearby) && !near('Worcester', 94), 'Worcester city left: the county answers; Scorpions SC has no county until #195');
+  assert.equal(run('The Pinehills').sections.length, 0, 'The Pinehills stays a place, as on main: an empty slate');
 });

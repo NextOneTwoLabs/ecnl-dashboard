@@ -60,16 +60,16 @@
         "sha256": "845962cbf5b90a67f94995b7a980213453ab133a9b43dfc69121569a3bf24e15"
       },
       "places.json": {
-        "bytes": 139498,
-        "sha256": "ccc3d3733c81c30832781d0e60b47d3fc649b02794ea45277b314372c96688bb"
+        "bytes": 139459,
+        "sha256": "77dbcf3bf65f9922e65cfceb6cb0dbb77890e58b43dddc65d8b2410609694d53"
       }
     },
     "inputs": {
-      "city-counties.json": "893ce73513f642d8afd673ef20bc360a028757eb390d4d2dd222ca66b12e8fa2",
+      "city-counties.json": "104bd8439ce3ec4d6d20be31f22090dab4946d25202065ba87faa90b6cb80a07",
       "field-aliases.json": "ea0bc50069a64493b5ce6842ef5454e65c9683ad7ad77362d947330cbf4f8fe8",
       "orphan-team-ids.json": "94158e69e67c5b61efc85c7f19c00a0f62858f5327b3da383dbf70931340acbc",
       "zip-fixes.json": "79eeda3924c48c9d203477b55303505597f0fc30edb1fd166205b43e683e3afb",
-      "zip-place-fixes.json": "212910abc8d903266959ce58db13966af364cf34112ff73e7789e73de0e2497c",
+      "zip-place-fixes.json": "c3b4b98a11467fc3bf79e82c0c5964ecb07f550a5925abd97675af3160de0053",
       "zip-places.json": "12a63a2254f29064f6c47bc512ae498f99c5ab260fdfea0d19b0448210c7f235"
     },
     "logos": "dropped from core.json teams (#117); directoryBuild is recomputed over the stripped directory"

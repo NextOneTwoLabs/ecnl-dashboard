@@ -502,9 +502,9 @@ test('budget: backstop: no keystroke over 20 ms (wall clock), no cold build over
 // and calls no words(), and a change in the cost of each item (a quadratic dedupe, an array in place of a set).
 // Exact on the frozen fixture, the same for any step size and on Node 20 to 22 (V8's sort has been the same since 2018).
 // #169: the re-frozen fixture has 909 fields (944), 78 field aliases (8) and 496 places (502), and the alias words no
-// longer join `known`: units 24069 -> 24022, sorts 759 -> 753, sortRows 3047 -> 3039, sortCompares 12402 -> 12477,
-// words 8706 -> 8771 (normalised is unchanged).
-const RECORDED_BUILD = { units: 24022, sorts: 753, sortRows: 3039, sortCompares: 12477, normalised: 7358, words: 8771 };
+// longer join `known`: units 24069 -> 24022, sorts 759 -> 753, sortRows 3047 -> 3037, sortCompares 12402 -> 12468,
+// words 8706 -> 8770 (normalised is unchanged).
+const RECORDED_BUILD = { units: 24022, sorts: 753, sortRows: 3037, sortCompares: 12468, normalised: 7358, words: 8770 };
 const RECORDED_INDEX_STATS = { teamDocs: 1965, eventDocs: 81, terms: 518, postings: 11531 };
 const buildWork = n => {
   const stats = { units: 0, sorts: 0, sortRows: 0, sortCompares: 0, normalised: 0, words: 0 };

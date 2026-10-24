@@ -561,7 +561,7 @@ or time zone.
     normalised name in its state (a single incorporated place wins over CDPs of the same name),
     else none; two or more and no single winner: none, reported, never a pick;
   - its county: a `city-counties.json` entry (which may override a census place's computed county;
-    today it holds Woodland Hills and 11 club towns that are not census places, and no override), else
+    today it holds Woodland Hills and 7 club towns that are not census places, and no override), else
     the place's computed county, else none, reported. Owner decision Q-E (Fairfax, VA is Fairfax
     County) is met by the computed county of the census place Fairfax (5126496, class C7), 51059,
     pinned by a test; an override would come back only if a new table changed that;
