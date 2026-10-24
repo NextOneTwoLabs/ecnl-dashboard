@@ -28,9 +28,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-18,12:00 PM,Group Play,Sporting Iowa ECNL G2013/14,0,2,St. Louis Scott Gallagher Navy ECNL G2013/14,Nebraska Multisports Complex,Field 5,On Time,1083795
 2026-10-18,01:00 PM,Group Play,Sporting Blue Valley ECNL G2013/14,2,2,Nationals SC ECNL G2013/14,Scheels Overland Park Soccer Complex,Field 4,On Time,1083789
 2026-10-24,10:45 AM,Group Play,St. Louis Scott Gallagher Green ECNL G2013/14,0,1,Missouri Rush ECNL G2013/14,WWT Soccer Park,Field 3,On Time,1083801
-2026-10-24,02:00 PM,Group Play,Gretna Elite Academy ECNL G2013/14,,,Eclipse Select Soccer Club ECNL G2013/14,HyVee Multiplex,White 2,On Time,1083797
-2026-10-24,02:00 PM,Group Play,Sporting Iowa ECNL G2013/14,,,Chicago Inter ECNL G2013/14,Hy-Vee Multiplex,Green #1,On Time,1083799
-2026-10-24,02:15 PM,Group Play,St. Louis Scott Gallagher Navy ECNL G2013/14,,,Sporting Blue Valley ECNL G2013/14,WWT Soccer Park,Field 2,On Time,1083803
+2026-10-24,02:00 PM,Group Play,Gretna Elite Academy ECNL G2013/14,0,2,Eclipse Select Soccer Club ECNL G2013/14,HyVee Multiplex,White 2,On Time,1083797
+2026-10-24,02:00 PM,Group Play,Sporting Iowa ECNL G2013/14,2,2,Chicago Inter ECNL G2013/14,Hy-Vee Multiplex,Green #1,On Time,1083799
+2026-10-24,02:15 PM,Group Play,St. Louis Scott Gallagher Navy ECNL G2013/14,6,1,Sporting Blue Valley ECNL G2013/14,WWT Soccer Park,Field 2,On Time,1083803
 2026-10-25,08:00 AM,Group Play,Sporting Iowa ECNL G2013/14,,,Eclipse Select Soccer Club ECNL G2013/14,Hy-Vee Multiplex,Green #1,On Time,1083805
 2026-10-25,08:00 AM,Group Play,Gretna Elite Academy ECNL G2013/14,,,Chicago Inter ECNL G2013/14,HyVee Multiplex,White 1,On Time,1083807
 2026-10-25,09:00 AM,Group Play,Missouri Rush ECNL G2013/14,,,Sporting Blue Valley ECNL G2013/14,Missouri Rush Sports Park,Field 3,On Time,1083811
