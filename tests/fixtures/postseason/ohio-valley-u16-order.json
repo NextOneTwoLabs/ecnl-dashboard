@@ -1,0 +1,151 @@
+{
+ "_comment": "#194 Q13/B3 synthetic: the order of the places from either division after PPG. After the top 2 of each division: North C (2.25) first; then North D and South C are level on 2.00 and North D's goal difference (+5 v +2) takes the place (South C has more goals for, 8 v 7, so only GD decides it) against South C's better table position (3rd v 4th); then North E and South C are level on 2.00 and on goal difference (+2), and North E's goals for (9 v 8) takes it against table position (3rd v 5th). Goal difference decides both cuts, so neither is marked level (=). Goals against can't decide alone: GD = GF - GA in every archived row, so equal GD and GF mean equal GA.",
+ "synthetic": true,
+ "season": "2026-27",
+ "conference": "Ohio Valley",
+ "division": "GU16",
+ "flights": [
+  {
+   "flightName": "NORTH",
+   "teamStandings": [
+    {
+     "teamID": 9701,
+     "name": "North A ECNL G2010/11",
+     "clubName": "North A",
+     "gp": 4,
+     "standingpoints": 12,
+     "ppg": 3.0,
+     "goaldifferential": 8,
+     "goalsfor": 10,
+     "goalsagainst": 2
+    },
+    {
+     "teamID": 9702,
+     "name": "North B ECNL G2010/11",
+     "clubName": "North B",
+     "gp": 4,
+     "standingpoints": 10,
+     "ppg": 2.5,
+     "goaldifferential": 5,
+     "goalsfor": 7,
+     "goalsagainst": 2
+    },
+    {
+     "teamID": 9703,
+     "name": "North C ECNL G2010/11",
+     "clubName": "North C",
+     "gp": 4,
+     "standingpoints": 9,
+     "ppg": 2.25,
+     "goaldifferential": 4,
+     "goalsfor": 6,
+     "goalsagainst": 2
+    },
+    {
+     "teamID": 9704,
+     "name": "North D ECNL G2010/11",
+     "clubName": "North D",
+     "gp": 4,
+     "standingpoints": 8,
+     "ppg": 2.0,
+     "goaldifferential": 5,
+     "goalsfor": 7,
+     "goalsagainst": 2
+    },
+    {
+     "teamID": 9705,
+     "name": "North E ECNL G2010/11",
+     "clubName": "North E",
+     "gp": 5,
+     "standingpoints": 10,
+     "ppg": 2.0,
+     "goaldifferential": 2,
+     "goalsfor": 9,
+     "goalsagainst": 7
+    },
+    {
+     "teamID": 9706,
+     "name": "North F ECNL G2010/11",
+     "clubName": "North F",
+     "gp": 4,
+     "standingpoints": 2,
+     "ppg": 0.5,
+     "goaldifferential": -6,
+     "goalsfor": 1,
+     "goalsagainst": 7
+    }
+   ]
+  },
+  {
+   "flightName": "SOUTH",
+   "teamStandings": [
+    {
+     "teamID": 9711,
+     "name": "South A ECNL G2010/11",
+     "clubName": "South A",
+     "gp": 4,
+     "standingpoints": 12,
+     "ppg": 3.0,
+     "goaldifferential": 6,
+     "goalsfor": 8,
+     "goalsagainst": 2
+    },
+    {
+     "teamID": 9712,
+     "name": "South B ECNL G2010/11",
+     "clubName": "South B",
+     "gp": 4,
+     "standingpoints": 11,
+     "ppg": 2.75,
+     "goaldifferential": 4,
+     "goalsfor": 6,
+     "goalsagainst": 2
+    },
+    {
+     "teamID": 9713,
+     "name": "South C ECNL G2010/11",
+     "clubName": "South C",
+     "gp": 3,
+     "standingpoints": 6,
+     "ppg": 2.0,
+     "goaldifferential": 2,
+     "goalsfor": 8,
+     "goalsagainst": 6
+    },
+    {
+     "teamID": 9714,
+     "name": "South D ECNL G2010/11",
+     "clubName": "South D",
+     "gp": 4,
+     "standingpoints": 4,
+     "ppg": 1.0,
+     "goaldifferential": -2,
+     "goalsfor": 3,
+     "goalsagainst": 5
+    },
+    {
+     "teamID": 9715,
+     "name": "South E ECNL G2010/11",
+     "clubName": "South E",
+     "gp": 4,
+     "standingpoints": 3,
+     "ppg": 0.75,
+     "goaldifferential": -4,
+     "goalsfor": 2,
+     "goalsagainst": 6
+    },
+    {
+     "teamID": 9716,
+     "name": "South F ECNL G2010/11",
+     "clubName": "South F",
+     "gp": 4,
+     "standingpoints": 1,
+     "ppg": 0.25,
+     "goaldifferential": -7,
+     "goalsfor": 1,
+     "goalsagainst": 8
+    }
+   ]
+  }
+ ]
+}

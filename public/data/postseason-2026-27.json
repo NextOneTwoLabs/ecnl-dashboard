@@ -1,0 +1,139 @@
+{
+  "_comment": [
+    "#194: the 2026-27 postseason places each conference's standings show, transcribed from the owner's document",
+    "'2026-27 ECNL Girls Post-Season Structure' (Google Drive file below). Reviewed data: change it only from that document,",
+    "and keep `doc` as the document's own line (its PDF text drops dashes and opening brackets: 'U13U14' is U13-U14).",
+    "Rules apply in order for each age: each takes the `next` N teams not yet placed that have played (GP > 0).",
+    "`scope`: 'table' (default, the published table), 'division' (the top N of each division table) or 'pooled'",
+    "(the next N across all divisions together). `printed`: the place(s) the document prints, checked by",
+    "tests/postseason-rules.test.mjs; with `alt` the document prints two places and the walk lands on the later one.",
+    "`or: leagueCupWinner`: the League Cup winner can take this place. `opponent`: the conference a play-in is against.",
+    "Served as /api/v1/seasons/2026-27/postseason. The page's POSTSEASON_SEASONS lists the seasons that have a file."
+  ],
+  "schema": 1,
+  "season": "2026-27",
+  "source": {
+    "title": "2026-27 ECNL Girls Post-Season Structure",
+    "driveFileId": "1ARExfNYRV3zn9Vr23rN6y9zqVr9jjSkW",
+    "issue": 194
+  },
+  "tiers": {
+    "CL": { "label": "Champions League", "short": "CL", "ages": ["U13", "U14", "U15", "U16", "U17"] },
+    "CLPI": { "label": "Champions League play-in", "short": "PI", "ages": ["U13", "U14", "U15", "U16", "U17"] },
+    "CL18": { "label": "U18/19 Champions League, starts with a play-in game for the National Finals", "short": "CL", "ages": ["U18/19"] },
+    "NAC": { "label": "North American Cup", "short": "NAC", "ages": ["U15", "U16", "U17"] },
+    "SA": { "label": "Showcase Cup A", "short": "SA", "ages": ["U16", "U17"] },
+    "SB": { "label": "Showcase Cup B", "short": "SB", "ages": ["U16", "U17"] }
+  },
+  "conferences": {
+    "Mid-Atlantic": {
+      "docName": "Mid-Atlantic",
+      "rules": [
+        { "ages": ["U13", "U14"], "tier": "CL", "next": 4, "printed": [1, 2, 3, 4], "doc": "Top 4 Teams in the Conference U13U14 based on PPG from Conference games only" },
+        { "ages": ["U15", "U16", "U17"], "tier": "CL", "next": 3, "printed": [1, 2, 3], "doc": "Top 3 Teams in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U15", "U16", "U17"], "tier": "CL", "next": 1, "or": "leagueCupWinner", "printed": [4], "doc": "U15U17 League Cup Winner or the 4th best team in the Conference based on PPG from Conference games only" },
+        { "ages": ["U18/19"], "tier": "CL18", "next": 2, "printed": [1, 2], "doc": "Top 2 Teams in the Conference U18/19 based on PPG from Conference games only will compete in a Play-in game for a place in the U18/19 National Finals" },
+        { "ages": ["U15", "U16", "U17"], "tier": "NAC", "next": 2, "printed": [5, 6], "doc": "Next 2 Teams 5th & 6th place) in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SA", "next": 1, "printed": [7], "doc": "Next Team 7th place) in the Conference U16U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SB", "next": 1, "printed": [8], "doc": "Next Team 8th place) in the Conference U16U17 based on PPG from Conference games only" }
+      ]
+    },
+    "Midwest": {
+      "docName": "Midwest",
+      "rules": [
+        { "ages": ["U13", "U14"], "tier": "CL", "next": 2, "scope": "division", "doc": "Top 2 Teams in each division of the Conference U13 & U14 qualify for the Champions League based on PPG from Conference games only" },
+        { "ages": ["U13", "U14"], "tier": "CL", "next": 2, "scope": "pooled", "doc": "Next best 2 Teams from either division in Conference U13U14 based on PPG from Conference games only" },
+        { "ages": ["U15", "U16", "U17"], "tier": "CL", "next": 6, "printed": [1, 2, 3, 4, 5, 6], "doc": "Top 6 Teams in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U18/19"], "tier": "CL18", "next": 2, "printed": [1, 2], "doc": "Top 2 Teams in the Conference U18/19 based on PPG from Conference games only will compete in a Play-in game for a place in the U18/19 National Finals" },
+        { "ages": ["U15", "U16", "U17"], "tier": "NAC", "next": 2, "printed": [7, 8], "doc": "Next 2 Teams 7th & 8th place) in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SA", "next": 2, "printed": [9, 10], "doc": "Next 2 Teams 9th & 10th place) in the Conference U16U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SB", "next": 1, "printed": [11], "doc": "Next Team 11th place) in the Conference U16U17 based on PPG from Conference games only" }
+      ]
+    },
+    "North Atlantic": {
+      "docName": "North Atlantic",
+      "rules": [
+        { "ages": ["U13", "U14"], "tier": "CL", "next": 3, "printed": [1, 2, 3], "doc": "Top 3 Teams in the Conference U13U14 based on PPG from Conference games only" },
+        { "ages": ["U13", "U14"], "tier": "CLPI", "next": 1, "opponent": "New England", "printed": [4], "doc": "4th best team in Conference U13U14 based on PPG from Conference games only will compete in a Play-in game vs. the 4th best team in the New England Conference for a place in the U13U14 ECNL Postseason" },
+        { "ages": ["U15", "U16", "U17"], "tier": "CL", "next": 2, "printed": [1, 2], "doc": "Top 2 Teams in the Conference U13U14 based on PPG from Conference games only", "docNote": "Printed as U13U14; read as U15-U17, the only reading that gives the document's 48 Champions League places (#194 Q3)." },
+        { "ages": ["U15", "U16", "U17"], "tier": "CL", "next": 1, "or": "leagueCupWinner", "printed": [3], "doc": "U15U17 League Cup Winner or the 3rd best team in the Conference based on PPG from Conference games only" },
+        { "ages": ["U15", "U16", "U17"], "tier": "CLPI", "next": 1, "opponent": "New England", "doc": "Next best team in Conference U15U17 based on PPG from Conference games only will compete in a Play-in game vs. the 4th best team in the New England Conference for a place in the U15U17 ECNL Postseason" },
+        { "ages": ["U18/19"], "tier": "CL18", "next": 1, "printed": [1], "doc": "Top team in the Conference U18/19 based on PPG from Conference games only will compete in a Play-in game vs. the top team in the New England Conference for a place in the U18/19 National Finals" },
+        { "ages": ["U15", "U16", "U17"], "tier": "NAC", "next": 1, "printed": [4, 5], "alt": "cupOrPlayIn", "doc": "Next Team 4th or 5th place) in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SA", "next": 1, "printed": [5, 6], "alt": "cupOrPlayIn", "doc": "Next Team 5th or 6th place) in the Conference U16U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SB", "next": 1, "printed": [6, 7], "alt": "cupOrPlayIn", "doc": "Next Team 6th or 7th place) in the Conference U16U17 based on PPG from Conference games only" }
+      ]
+    },
+    "New England": {
+      "docName": "New England",
+      "rules": [
+        { "ages": ["U13", "U14", "U15", "U16", "U17"], "tier": "CL", "next": 3, "printed": [1, 2, 3], "doc": "Top 3 Teams in the Conference U13U17 based on PPG from Conference games only" },
+        { "ages": ["U13", "U14", "U15", "U16", "U17"], "tier": "CLPI", "next": 1, "opponent": "North Atlantic", "printed": [4], "doc": "4th best team in Conference U13U17 based on PPG from Conference games only will compete in a Play-in game vs. the top team in the North Atlantic Conference for a place in the U13U17 ECNL Postseason" },
+        { "ages": ["U18/19"], "tier": "CL18", "next": 1, "printed": [1], "doc": "Top team in the Conference U18/19 based on PPG from Conference games only will compete in a Play-in game vs. the Top team in the North Atlantic Conference for a place in the U18/19 National Finals" },
+        { "ages": ["U15", "U16", "U17"], "tier": "NAC", "next": 1, "printed": [4, 5], "alt": "playIn", "doc": "Next Team 4th or 5th place) in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SA", "next": 1, "printed": [5, 6], "alt": "playIn", "doc": "Next Team 5th or 6th place) in the Conference U16U17 based on PPG from Conference games only" }
+      ]
+    },
+    "NorCal": {
+      "docName": "Northern California",
+      "rules": [
+        { "ages": ["U13", "U14", "U15", "U16", "U17"], "tier": "CL", "next": 4, "printed": [1, 2, 3, 4], "doc": "Top 4 Teams in the Conference U13U17 based on PPG from Conference games only" },
+        { "ages": ["U18/19"], "tier": "CL18", "next": 1, "printed": [1], "doc": "Top team in the Conference U18/19 based on PPG from Conference games only will compete in a Play-in game vs. the top team in the Northwest Conference for a place in the U18/19 National Finals" },
+        { "ages": ["U15", "U16", "U17"], "tier": "NAC", "next": 1, "printed": [5], "doc": "Next Team 5th place) in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SA", "next": 1, "printed": [6], "doc": "Next Team 6th place) in the Conference U16U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SB", "next": 1, "printed": [7], "doc": "Next Team 7th place) in the Conference U16U17 based on PPG from Conference games only" }
+      ]
+    },
+    "Northwest": {
+      "docName": "Northwest",
+      "rules": [
+        { "ages": ["U13", "U14", "U15", "U16", "U17"], "tier": "CL", "next": 3, "printed": [1, 2, 3], "doc": "Top 3 Teams in the Conference U13U17 based on PPG from Conference games only" },
+        { "ages": ["U18/19"], "tier": "CL18", "next": 1, "printed": [1], "doc": "Top team in the Conference U18/19 based on PPG from Conference games only will compete in a Play-in game vs. the top team in the NorCal Conference for a place in the U18/19 National Finals" },
+        { "ages": ["U15", "U16", "U17"], "tier": "NAC", "next": 1, "printed": [4], "doc": "Next Team 4th place) in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SA", "next": 2, "printed": [5, 6], "doc": "Next 2 Teams 5th & 6th place) in the Conference U16U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SB", "next": 1, "printed": [7], "doc": "Next Team 7th place) in the Conference U16U17 based on PPG from Conference games only" }
+      ]
+    },
+    "Ohio Valley": {
+      "docName": "Ohio Valley",
+      "rules": [
+        { "ages": ["U13", "U14"], "tier": "CL", "next": 4, "printed": [1, 2, 3, 4], "doc": "Top 4 Teams in the Conference U13 & U14 qualify for the Champions League based on PPG from Conference games only" },
+        { "ages": ["U15", "U16", "U17"], "tier": "CL", "next": 2, "scope": "division", "doc": "Top 2 Teams in each division of the Conference U15U17 qualify for the Champions League based on PPG from Conference games only" },
+        { "ages": ["U18/19"], "tier": "CL18", "next": 2, "printed": [1, 2], "doc": "Top 2 Teams in the Conference U18/19 based on PPG from Conference games only will compete in a Play-in game for a place in the U18/19 National Finals" },
+        { "ages": ["U15", "U16", "U17"], "tier": "NAC", "next": 2, "scope": "pooled", "printed": [5, 6], "doc": "Next 2 Teams 5th & 6th place) in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SA", "next": 2, "scope": "pooled", "printed": [7, 8], "doc": "Next 2 Teams 7th & 8th place) in the Conference U16U17 based on PPG from Conference games only" }
+      ]
+    },
+    "Southeast": {
+      "docName": "Southeast",
+      "rules": [
+        { "ages": ["U13", "U14", "U15", "U16", "U17"], "tier": "CL", "next": 5, "printed": [1, 2, 3, 4, 5], "doc": "Top 5 Teams in the Conference U13U17 based on PPG from Conference games only" },
+        { "ages": ["U18/19"], "tier": "CL18", "next": 2, "printed": [1, 2], "doc": "Top 2 Teams in the Conference U18/19 based on PPG from Conference games only will compete in a Play-in game for a place in the U18/19 National Finals in" },
+        { "ages": ["U15", "U16", "U17"], "tier": "NAC", "next": 2, "printed": [6, 7], "doc": "Next 2 Teams 6th & 7th place) in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SA", "next": 2, "printed": [8, 9], "doc": "Next 2 Teams 8th & 9th place) in the Conference U16U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SB", "next": 1, "printed": [10], "doc": "Next Team 10th place) in the Conference U16U17 based on PPG from Conference games only" }
+      ]
+    },
+    "Southwest": {
+      "docName": "Southwest",
+      "rules": [
+        { "ages": ["U13", "U14", "U15", "U16", "U17"], "tier": "CL", "next": 8, "printed": [1, 2, 3, 4, 5, 6, 7, 8], "doc": "Top 8 Teams in the Conference U13U17 based on PPG from Conference games only" },
+        { "ages": ["U18/19"], "tier": "CL18", "next": 2, "printed": [1, 2], "doc": "Top 2 Teams in the Conference U18/19 based on PPG from Conference games only will compete in a Play-in game for a place in the U18/19 National Finals" },
+        { "ages": ["U15", "U16", "U17"], "tier": "NAC", "next": 2, "printed": [9, 10], "doc": "Next 2 Teams 9th & 10th place) U15U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SA", "next": 2, "printed": [11, 12], "doc": "Next 2 Teams 11th & 12th place) U16U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SB", "next": 1, "printed": [13], "doc": "Next Team 13th place) in the Conference U16U17 based on PPG from Conference games only" }
+      ]
+    },
+    "Texas": {
+      "docName": "Texas",
+      "rules": [
+        { "ages": ["U13", "U14", "U15", "U16", "U17"], "tier": "CL", "next": 6, "printed": [1, 2, 3, 4, 5, 6], "doc": "Top 6 Teams in the Conference U13U17 based on PPG from Conference games only" },
+        { "ages": ["U13", "U14", "U15", "U16", "U17"], "tier": "CL", "next": 1, "or": "leagueCupWinner", "printed": [7], "doc": "U13U17 League Cup Winner or the 7th best team in the Conference based on PPG from Conference games only" },
+        { "ages": ["U18/19"], "tier": "CL18", "next": 2, "printed": [1, 2], "doc": "Top 2 Teams in the Conference U18/19 based on PPG from Conference games only will compete in a Play-in game for a place in the U18/19 National Finals in St. Louis, MO - June, 2026" },
+        { "ages": ["U15", "U16", "U17"], "tier": "NAC", "next": 2, "printed": [8, 9], "doc": "Next 2 Teams 8th and 9th place) in the Conference U15U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SA", "next": 2, "printed": [10, 11], "doc": "Next 2 Teams 10th & 11th place) in the Conference U16U17 based on PPG from Conference games only" },
+        { "ages": ["U16", "U17"], "tier": "SB", "next": 1, "printed": [12], "doc": "Next Teams 12th place) in the Conference U16U17 based on PPG from Conference games only" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+ "_comment": "#194 synthetic (the real table has no games yet): ten teams on distinct PPG.",
+ "synthetic": true,
+ "season": "2026-27",
+ "conference": "North Atlantic",
+ "division": "GU16",
+ "flights": [
+  {
+   "flightName": "ECNL",
+   "teamStandings": [
+    {
+     "teamID": 9100,
+     "name": "NA Team A ECNL G2010/11",
+     "clubName": "NA Team A",
+     "gp": 5,
+     "standingpoints": 15,
+     "ppg": 3.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9101,
+     "name": "NA Team B ECNL G2010/11",
+     "clubName": "NA Team B",
+     "gp": 5,
+     "standingpoints": 14,
+     "ppg": 2.8,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9102,
+     "name": "NA Team C ECNL G2010/11",
+     "clubName": "NA Team C",
+     "gp": 5,
+     "standingpoints": 13,
+     "ppg": 2.6,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9103,
+     "name": "NA Team D ECNL G2010/11",
+     "clubName": "NA Team D",
+     "gp": 5,
+     "standingpoints": 12,
+     "ppg": 2.4,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9104,
+     "name": "NA Team E ECNL G2010/11",
+     "clubName": "NA Team E",
+     "gp": 5,
+     "standingpoints": 11,
+     "ppg": 2.2,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9105,
+     "name": "NA Team F ECNL G2010/11",
+     "clubName": "NA Team F",
+     "gp": 5,
+     "standingpoints": 10,
+     "ppg": 2.0,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9106,
+     "name": "NA Team G ECNL G2010/11",
+     "clubName": "NA Team G",
+     "gp": 5,
+     "standingpoints": 9,
+     "ppg": 1.8,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9107,
+     "name": "NA Team H ECNL G2010/11",
+     "clubName": "NA Team H",
+     "gp": 5,
+     "standingpoints": 8,
+     "ppg": 1.6,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9108,
+     "name": "NA Team I ECNL G2010/11",
+     "clubName": "NA Team I",
+     "gp": 5,
+     "standingpoints": 7,
+     "ppg": 1.4,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    },
+    {
+     "teamID": 9109,
+     "name": "NA Team J ECNL G2010/11",
+     "clubName": "NA Team J",
+     "gp": 5,
+     "standingpoints": 6,
+     "ppg": 1.2,
+     "goaldifferential": 0,
+     "goalsfor": 0,
+     "goalsagainst": 0
+    }
+   ]
+  }
+ ]
+}

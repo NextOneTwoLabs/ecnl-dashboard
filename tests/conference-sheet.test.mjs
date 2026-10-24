@@ -262,6 +262,7 @@ function page({ narrow = true, dialog = true, live = false, follow = null } = {}
       return JSON.parse(readFileSync(file, 'utf8'));
     },
     eventContext: () => ({ kind: 'conference' }), isMissing: e => !!e && e.status === 404, retryText: e => String(e),
+    getPostseasonRules: async () => null,   // #194: no postseason places here (tests/postseason-places.test.mjs has them)
     clearTeamFilter() {}, updateViewTabsUI() {}, saveFavorites() {}, buildFavoritesList() {}, openFavoritesTab() {},
     selectAgeGroup: a => conf.selected.push(['age', a]), selectConference: c => conf.selected.push(['conf', c]),
     focusTeamSearch: () => conf.selected.push(['search']), toggleSidebar() {}, isPhone: () => narrow,
