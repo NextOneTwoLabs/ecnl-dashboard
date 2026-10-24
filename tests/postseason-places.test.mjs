@@ -64,6 +64,8 @@ const EXPECT = {
   'new-england-u18': [['CL', '', '', '', '', '', '', '', '']],
   'ohio-valley-u16': [['CL', 'CL', 'NAC', 'NAC', '', ''], ['CL', 'CL', 'SA', 'SA', '', '']],
   'midwest-u13-tie': [['CL', 'CL', 'CL', '', ''], ['CL', 'CL', 'CL=', '', '']],
+  // Q13: North D beats South C on GD and North E beats it on GF, both against table position; no '=' (N3).
+  'ohio-valley-u16-order': [['CL', 'CL', 'NAC', 'NAC', 'SA', ''], ['CL', 'CL', 'SA', '', '', '']],
   'northwest-u13-early': [['CL', 'CL', '', 'CL', '', '', '']],
   'southeast-u15-none': [Array(16).fill('')],
 };
@@ -98,6 +100,18 @@ test('the rank cell: unchanged without places; no top-three accent in a table th
   assert.equal(page.rankHtml(4), '<span class="rank-num">4</span>');
   assert.equal(page.rankHtml(2, null, true), '<span class="rank-num">2</span>');
   assert.equal(page.posTagHtml(null), '');
+});
+
+test('from either division, a PPG tie is settled by GD, then GF, ahead of table position, and is not marked level (Q13, B3)', () => {
+  const { post } = placesOf(fixture('ohio-valley-u16-order'));
+  assert.deepEqual(post.pooled.map(p => `${p.tier} ${p.name} (${p.division})`),
+    ['NAC North C (North)', 'NAC North D (North)', 'SA North E (North)', 'SA South C (South)']);
+  assert.deepEqual(post.levels, [], 'GD decides the NAC/SA cut (North D +5, North E +2, both 2.00): no level');
+  assert.ok([...post.places.values()].every(p => !p.level && !p.label.includes('=')), 'no = anywhere');
+  const legend = page.postseasonLegend(post).innerHTML;
+  assert.match(legend, /North American Cup: the next 2 by PPG from either division: North C \(North\), North D \(North\)\./);
+  assert.match(legend, /Showcase Cup A: the next 2 by PPG from either division: North E \(North\), South C \(South\)\./);
+  assert.doesNotMatch(legend, /Level on/);
 });
 
 test('a full pooled tie still gives exactly N places, decided by table position, both written as level (MF3)', () => {
