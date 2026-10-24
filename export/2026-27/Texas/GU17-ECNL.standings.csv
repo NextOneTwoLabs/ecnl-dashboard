@@ -1,7 +1,7 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,SOLAR SC ECNL G2009/10,Solar SC,66050,6,5,0,1,16,2.67,19,2,17
 2,Colorado Storm ECNL G2009/10,Colorado Storm,69485,11,8,0,3,27,2.45,27,9,18
-3,Real Colorado National ECNL G2009/10,Real Colorado,69251,11,8,3,0,24,2.18,26,10,16
+3,Real Colorado National ECNL G2009/10,Real Colorado,69251,12,9,3,0,27,2.25,33,10,23
 4,Sting Black ECNL G2009/10,Sting Soccer Club,48667,6,4,1,1,13,2.17,15,7,8
 5,AHFC ECNL G2009/10,Albion Hurricanes FC,59340,8,5,1,2,17,2.13,15,6,9
 6,FC Westlake ECNL G2009/10,FC Westlake ,131276,8,4,3,1,13,1.63,9,11,-2
@@ -12,6 +12,6 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 11,Dallas Texans ECNL G2009/10,Dallas Texans,134485,7,2,5,0,6,0.86,9,21,-12
 12,OK Energy FC ECNL G2009/10,Oklahoma Energy FC,61013,6,1,4,1,4,0.67,7,13,-6
 13,Colorado Rush ECNL G2009/10,Colorado Rush,94985,6,1,5,0,3,0.5,4,13,-9
-14,Real Colorado Athletico ECNL G2009/10,Real Colorado,69250,6,1,5,0,3,0.5,4,14,-10
+14,Real Colorado Athletico ECNL G2009/10,Real Colorado,69250,7,1,6,0,3,0.43,4,21,-17
 15,West Side Alliance ECNL G2009/10,West Side Alliance SC,110467,6,0,5,1,1,0.17,3,19,-16
 16,DKSC ECNL G2009/10,DKSC,68923,6,0,6,0,0,0.0,3,26,-23
