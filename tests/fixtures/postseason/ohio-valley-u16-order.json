@@ -1,5 +1,5 @@
 {
- "_comment": "#194 Q13/B3 synthetic: the order of the places from either division after PPG. After the top 2 of each division: North C (2.25) first; then North D and South C are level on 2.00 and North D's goal difference (+5 v +2) takes the place against South C's better table position (3rd v 4th); then North E and South C are level on 2.00 and on goal difference (+2), and North E's goals for (9 v 6) takes it against table position (3rd v 5th). Goal difference decides both cuts, so neither is marked level (=). Goals against can't decide alone: GD = GF - GA in every archived row, so equal GD and GF mean equal GA.",
+ "_comment": "#194 Q13/B3 synthetic: the order of the places from either division after PPG. After the top 2 of each division: North C (2.25) first; then North D and South C are level on 2.00 and North D's goal difference (+5 v +2) takes the place (South C has more goals for, 8 v 7, so only GD decides it) against South C's better table position (3rd v 4th); then North E and South C are level on 2.00 and on goal difference (+2), and North E's goals for (9 v 8) takes it against table position (3rd v 5th). Goal difference decides both cuts, so neither is marked level (=). Goals against can't decide alone: GD = GF - GA in every archived row, so equal GD and GF mean equal GA.",
  "synthetic": true,
  "season": "2026-27",
  "conference": "Ohio Valley",
@@ -109,8 +109,8 @@
      "standingpoints": 6,
      "ppg": 2.0,
      "goaldifferential": 2,
-     "goalsfor": 6,
-     "goalsagainst": 4
+     "goalsfor": 8,
+     "goalsagainst": 6
     },
     {
      "teamID": 9714,
