@@ -67,6 +67,7 @@ STATES = {
     "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming",
 }
 ALIAS_KEYS = {"name", "zip", "label", "aliases", "evidence"}
+ALIAS_OPTIONAL = {"acceptedClashes"}   # #169 (Q11): reviewed matchID pairs the clash guard accepts
 FIX_KEYS = {"raw", "zip", "evidence"}
 PLACE_FIX_KEYS = {"zip", "placeGeoid", "placeName", "state", "evidence"}
 PLACE_ALIAS_KEYS = {"city", "state", "placeGeoid", "placeName", "evidence"}
@@ -164,20 +165,45 @@ def _load(path, key, label):
     return doc[key], []
 
 
+class Aliases(dict):
+    """{(alias, zip): (name, label)}, plus `entries`: [(where, entry)] for the entries kept, which the
+    build re-checks against the games (#169: stale entries, clashes, acceptedClashes)."""
+    entries = ()
+
+
+def _pairs_ok(v):
+    """acceptedClashes: a non-empty list of distinct [matchID, matchID] pairs of two different integers."""
+    if not isinstance(v, list) or not v:
+        return False
+    seen = set()
+    for p in v:
+        if not (isinstance(p, list) and len(p) == 2 and all(_is_int(x) for x in p) and p[0] != p[1]):
+            return False
+        k = frozenset(p)
+        if k in seen:
+            return False
+        seen.add(k)
+    return True
+
+
 def load_aliases(base=None):
     """public/data/field-aliases.json (#158 Q3): {(alias, zip): (name, label)}, and an error per
     entry left out. Each entry is {name, zip, label, aliases, evidence}: a canonical field name
     used once per zip, a 5-digit zip, a display label, aliases already in norm_name form, never
-    one alias for two fields at one zip, and evidence."""
+    one alias for two fields at one zip, and evidence. #169 (Q11): an entry may also carry
+    `acceptedClashes`, reviewed [matchID, matchID] pairs that fields_of checks against the games."""
     entries, errors = _load(os.path.join(inputs_dir(base), "field-aliases.json"), "fields", "field-aliases.json")
-    out, names = {}, set()
+    out, names = Aliases(), set()
+    kept = []
     for i, e in enumerate(entries):
         label = f"field-aliases.json fields[{i}]"
         why = None
         if not isinstance(e, dict):
             why = "not an object"
-        elif set(e) - ALIAS_KEYS or ALIAS_KEYS - set(e):
-            why = f"keys must be {sorted(ALIAS_KEYS)}"
+        elif ALIAS_KEYS - set(e) or set(e) - ALIAS_KEYS - ALIAS_OPTIONAL:
+            why = f"keys must be {sorted(ALIAS_KEYS)}, and optionally {sorted(ALIAS_OPTIONAL)}"
+        elif "acceptedClashes" in e and not _pairs_ok(e["acceptedClashes"]):
+            why = "acceptedClashes must be a non-empty list of distinct [matchID, matchID] pairs"
         elif not all(isinstance(e[k], str) and e[k].strip() for k in ("name", "label", "evidence")):
             why = "name, label and evidence must be non-empty text"
         elif not re.fullmatch(r"\d{5}", e["zip"] if isinstance(e["zip"], str) else ""):
@@ -192,8 +218,10 @@ def load_aliases(base=None):
             errors.append(f"{label}: {why}; skipped")
             continue
         names.add((e["name"], e["zip"]))
+        kept.append((label, e))
         for a in e["aliases"]:
             out[(a, e["zip"])] = (e["name"], e["label"])
+    out.entries = tuple(kept)
     return out, errors
 
 
@@ -388,11 +416,77 @@ def _add(out, flights_of, season, g, flight, dest, report):
     out[season][mid] = (g, flight, dest)
 
 
-def fields_of(games_by_season, fixes, aliases, report):
+def venue_key(venue):
+    """#169 (MF1): the venue a clash compares: the last number in the venue text, leading zeros
+    dropped ("Field #09", "Turf Field 9" and "Rec Plex # 9" are all "9"), else the venue's letters
+    ("Stadium"). It over-matches sub-fields: "Field 1A" and "Field 1B" are both "1", and "Field N2 #3"
+    and "Field S1 #3" are both "3" (both forms appear in the data); such a pair is a reviewed exception."""
+    t = " ".join(str(venue or "").lower().split())
+    nums = re.findall(r"\d+", t)
+    if nums:
+        return "#" + (nums[-1].lstrip("0") or "0")
+    return re.sub(r"[^a-z]+", " ", t).strip()
+
+
+def alias_clashes(entry, games):
+    """#169 (MF1, Q11): for one alias entry, the games of each of its names at its zip, as
+    {alias: [(matchID, gameDate, venue_key)]}, -> (shared start times, clashes). A start time is a
+    gameDate with a time (not T00:00:00) that two of its names both use; a clash is two games of two
+    different names at one start time with one venue key, as a frozenset of the two matchIDs. A pair
+    of names that never shares a start time cannot be tested: the guard proves nothing about it."""
+    times = {a: {w for _m, w, _k in games.get(a, ()) if w and not w.endswith("T00:00:00")} for a in entry["aliases"]}
+    shared = set()
+    names = list(entry["aliases"])
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            shared |= times[a] & times[b]
+    slots = collections.defaultdict(list)
+    for a in names:
+        for m, w, k in games.get(a, ()):
+            if w in shared and k:
+                slots[(w, k)].append((a, m))
+    clashes = set()
+    for found in slots.values():
+        for i, (a, m) in enumerate(found):
+            for b, n in found[i + 1:]:
+                if a != b:
+                    clashes.add(frozenset((m, n)))
+    return shared, clashes
+
+
+def check_alias_entries(aliases, games, report, errors, fixture):
+    """#169 (Q10, Q11): every kept field-aliases.json entry against the games at its zip. A stale
+    entry (no game at its zip under any of its names) and an acceptedClashes pair that is not a clash
+    of two of its names are errors on every build. An unreviewed clash is an error on the fixture
+    build (frozen data: it never turns red by itself) and a report line on a live build, so a newly
+    published schedule never turns the refresh or every PR's check red (owner decision Q11)."""
+    for where, e in getattr(aliases, "entries", ()):
+        z = e["zip"]
+        mine = {a: games.get((a, z), []) for a in e["aliases"]}
+        if not any(mine.values()):
+            errors.append(f"{where} ({e['name']} @ {z}): stale: no game at {z} under any of its names; remove the entry")
+            continue
+        _shared, clashes = alias_clashes(e, mine)
+        accepted = {frozenset(p) for p in e.get("acceptedClashes", ())}
+        for p in sorted(accepted - clashes, key=sorted):
+            errors.append(f"{where} ({e['name']} @ {z}): acceptedClashes {sorted(p)} is not two of its names at one start time "
+                          "and one venue key; remove the pair")
+        for p in sorted(clashes - accepted, key=sorted):
+            msg = (f"{where} ({e['name']} @ {z}): matches {sorted(p)[0]} and {sorted(p)[1]} put two of its names at one start time "
+                   "on one venue key; review it, then list the pair in acceptedClashes or remove the entry")
+            if fixture:
+                errors.append(msg)
+            else:
+                report["alias entries with an unreviewed clash (report only on live builds, owner decision Q11)"].append(msg)
+
+
+def fields_of(games_by_season, fixes, aliases, report, errors=None, fixture=False):
     """complexID -> (field name, zip) and per-field facts (#158 MF5, D6/D6a). Zip: strip, ZIP+4,
     the fix list, then, for a game with no zip, the zip of its normalised name when that name has
     exactly one valid zip in the archive. Name: the reviewed alias for (name, zip), else the
-    normalised name. A complexID with two field keys is a BuildError (MF7)."""
+    normalised name. A complexID with two field keys is a BuildError (MF7). #169: every alias entry
+    is checked against the games (check_alias_entries), and the same-zip variants report counts the
+    names left after the reviewed aliases."""
     name_zips = collections.defaultdict(set)
     rows = []
     for season in sorted(games_by_season):
@@ -410,12 +504,14 @@ def fields_of(games_by_season, fixes, aliases, report):
             report["names with more than one valid zip (no zip is inferred for them)"].append(f"{n}: {', '.join(sorted(name_zips[n]))}")
     by_cid, facts = {}, {}
     variants = collections.defaultdict(collections.Counter)
+    named = collections.defaultdict(list)          # (norm name, zip) -> [(matchID, gameDate, venue key)]
     for season, mid, g, n, z, fixed in rows:
         if not n:
             continue
         cid = g.get("complexID")
         if not z and not fixed and len(name_zips[n]) == 1:
             z = next(iter(name_zips[n]))
+        named[(n, z)].append((mid, g.get("gameDate") or "", venue_key(g.get("venue"))))
         canon, label = aliases.get((n, z), (n, None))
         key = (canon, z)
         if cid is None:
@@ -429,11 +525,12 @@ def fields_of(games_by_season, fixes, aliases, report):
         if num is not None:
             f["numbers"].add(num)
         f["spellings"][" ".join(str(g.get("complex")).split())] += 1
-        variants[z][n] += 1
+        variants[z][canon] += 1
     for z in sorted(variants):
         if z and len(variants[z]) > 1:
-            report["zips with more than one complex name (alias candidates; never merged automatically)"].append(
+            report["zips with more than one complex name after the reviewed aliases (alias candidates; never merged automatically)"].append(
                 f"{z}: " + "; ".join(f"{n} ({c})" for n, c in sorted(variants[z].items())))
+    check_alias_entries(aliases, named, report, errors if errors is not None else [], fixture)
     return by_cid, facts
 
 
@@ -894,14 +991,14 @@ def _read_doc(path, label, keys):
     return {k: doc[k] for k in keys}, []
 
 
-def _entries(entries, where, keys, errors):
+def _entries(entries, where, keys, errors, nullable=()):
     good = []
     for i, e in enumerate(entries):
         at = f"{where}[{i}]"
         if not isinstance(e, dict) or set(e) != keys:
             errors.append(f"{at}: keys must be {sorted(keys)}; skipped")
-        elif not all(isinstance(e[k], str) and e[k].strip() for k in keys):
-            errors.append(f"{at}: every value must be non-empty text; skipped")
+        elif not all((isinstance(e[k], str) and e[k].strip()) or (k in nullable and e[k] is None) for k in keys):
+            errors.append(f"{at}: every value must be non-empty text{' (or null: ' + ', '.join(nullable) + ')' if nullable else ''}; skipped")
         else:
             good.append((at, e))
     return good
@@ -909,20 +1006,33 @@ def _entries(entries, where, keys, errors):
 
 def load_place_inputs(census, base=None):
     """The reviewed census corrections, checked against the table when it is committed:
-    (zip fixes {zip: placeGeoid}, aliases {(city, ST): placeGeoid}, county overrides
-    {(city, ST): countyGeoid}, errors). Without the table the entries are taken as written."""
+    (zip fixes {zip: placeGeoid or None}, aliases {(city, ST): placeGeoid}, county overrides
+    {(city, ST): countyGeoid}, errors). Without the table the entries are taken as written.
+    #162 (Q4, option a): a fix with "placeGeoid": null and "placeName": null leaves the zip with no
+    city (its county still comes from the table): the zip must be in the table, the area rule must
+    give it a place (else the fix is redundant), and the state must be the zip's county's state."""
     d = inputs_dir(base)
     fixes, aliases, counties = {}, {}, {}
     places = (census or {}).get("places") or {}
     cnty = (census or {}).get("counties") or {}
     zips = (census or {}).get("zips") or {}
     doc, errors = _read_doc(os.path.join(d, "zip-place-fixes.json"), "zip-place-fixes.json", ("fixes", "aliases"))
-    for at, e in _entries(doc.get("fixes", []), "zip-place-fixes.json fixes", PLACE_FIX_KEYS, errors):
+    for at, e in _entries(doc.get("fixes", []), "zip-place-fixes.json fixes", PLACE_FIX_KEYS, errors, nullable=("placeGeoid", "placeName")):
         why = None
         if not re.fullmatch(r"\d{5}", e["zip"]):
             why = "zip must be 5 digits"
         elif e["zip"] in fixes:
             why = "zip already fixed"
+        elif (e["placeGeoid"] is None) != (e["placeName"] is None):
+            why = "placeGeoid and placeName must both be null (no city) or both be set"
+        elif e["placeGeoid"] is None:
+            row = zips.get(e["zip"]) if census else None
+            if census and row is None:
+                why = "a null fix needs a zip that is in zip-places.json"
+            elif census and row[0] is None:
+                why = "redundant: the area rule already gives this zip no place"
+            elif census and (cnty.get(row[1]) or [None, None])[1] != e["state"]:
+                why = f"state {e['state']} is not the state of the zip's county in zip-places.json"
         elif census and places.get(e["placeGeoid"], [None, None])[:2] != [e["placeName"], e["state"]]:
             why = f"place {e['placeGeoid']} is not {e['placeName']}, {e['state']} in zip-places.json"
         elif census and (zips.get(e["zip"]) or [None])[0] == e["placeGeoid"]:
@@ -1037,8 +1147,12 @@ def places_doc(sources, directory, games_by_season, facts, aliases, census, plac
             for _name, ev in sorted((sources["seasons"][season].get(kind) or {}).items()):
                 if isinstance(ev, dict) and ev.get("eventId") and ev.get("location"):
                     event_places[ev["eventId"]] = pl.city(ev["location"], f"event {ev['eventId']}")
+    # #162 (Q10): a reviewed entry nothing uses is stale, and an error on every build
     for key in sorted(set(county_overrides) - pl.used_county):
-        report["city-counties.json entries no club or event uses"].append(f"{key[0]}, {key[1]}")
+        errors.append(f"city-counties.json: {key[0]}, {key[1]} is stale: no club or event uses it; remove the entry")
+    field_zips = {k.rsplit("@", 1)[1] for k in fields}
+    for z in sorted(set(fixes) - field_zips):
+        errors.append(f"zip-place-fixes.json: the fix for {z} is stale: no field is at {z}; remove the entry")
     used = [v[3:5] for v in fields.values()] + list(club_places.values()) + list(event_places.values())
     if census:
         places = {g: [census["places"][g][0], census["places"][g][1], pl.place_county.get(g, census["places"][g][2])]
@@ -1091,7 +1205,8 @@ def build(sources=None, directory=None, root=None, inputs=None, fixture=False):
     for v, n in sorted(statuses.items(), key=lambda x: str(x[0])):
         if v not in ("On Time", None):
             report["status values other than On Time (not kept; report only)"].append(f"{v!r}: {n}")
-    by_cid, facts = fields_of({s: g for s, g in games.items()}, fixes, aliases, report)
+    alias_check_errors = []
+    by_cid, facts = fields_of({s: g for s, g in games.items()}, fixes, aliases, report, alias_check_errors, fixture)
     files = {}
     gdocs = {}
     orphans, orphan_errors = load_orphans(inputs)
@@ -1103,7 +1218,7 @@ def build(sources=None, directory=None, root=None, inputs=None, fixture=False):
     place_errors = []
     files["places.json"] = with_build(dump_places, places_doc(sources, directory, games, facts, aliases, census,
                                                               place_inputs, report, place_errors))
-    return files, alias_errors + fix_errors + census_errors + place_inputs[3] + place_errors + orphan_errors, report
+    return files, alias_errors + alias_check_errors + fix_errors + census_errors + place_inputs[3] + place_errors + orphan_errors, report
 
 
 def print_report(report, out=None):

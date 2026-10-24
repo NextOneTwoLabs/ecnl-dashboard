@@ -7,7 +7,7 @@
     },
     "engine": "today",
     "engineSha": "1a54fe54edcd6407d9225f19413d38a937a589d7920d0e329b0deb6e9c7f1fe0",
-    "manifestSha": "4b001968600b8f5335a87750b34b747abc64fe40adf5f3e94efa7790d2adbdee",
+    "manifestSha": "65dec01c8dd1c8d54d8734cc61353936c0164c69765c61f766bc9cab9583fb7b",
     "queriesSha": "b89503c0c752b6e1d15a64ab87f70b23a8d6b3f7253a6d8f88ddded97be83f8b",
     "recordedBy": "node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record today"
   },

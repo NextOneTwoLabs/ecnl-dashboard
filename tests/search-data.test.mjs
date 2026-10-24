@@ -182,20 +182,23 @@ test('fixture: every closed-season game PR 1 cites has the same facts, and every
   assert.equal(gp.filter(g => g.number === 15).length, 57);
 });
 
-// #159: the census inputs and the places.json split changed only core and places.json; every frozen
-// games file keeps the bytes #160 recorded, so game keys never depend on census data.
-const GAMES_160 = {
-  'games-2020-21.json': '4adadafd37810c0a6b30b62c146b468ec4c6b398129d9580aa2785676e1e96c6',
-  'games-2021-22.json': '1b038fbca1dba9b397faea23b7e84f29c19267d28fdbf2e1ba7a63067b7ef851',
-  'games-2022-23.json': 'c50e08d1c7469c801d8bccf6b232585760149d5f42484f15b1586ed33851b36c',
-  'games-2023-24.json': '16d3203b3fcf8d7badd21b3ca3dcb671eb8e73d6feabaad43d1828b23f565b41',
-  'games-2024-25.json': '366bf01df7c241a754cf9b2d734be69c1219f3ac5095b35c79291136a846a3a4',
-  'games-2025-26.json': 'c84e811863faced6479b0f2a55d8c92745ed6a76e9a0922ca043eb2412850921',
-  'games-2026-27.json': '73f40f6c55f17501142f2a05792f6a9744473811e32b931693c30595ed4561a2'
+// #159: the census inputs and the places.json split changed only core and places.json. #169: the 35 reviewed
+// field aliases do reach the games files, on purpose: each file's `fields` table maps both spellings' complex
+// IDs to the merged field (Grass Lawn Park's 1515 and 2859). The #162 census entries (counties and place fixes)
+// still never do; tests/test_search_places.py test_games_files_never_depend_on_census_data proves that part by
+// building with and without the census table. Each file's bytes since #169:
+const GAMES_169 = {
+  'games-2020-21.json': '254528015cfa907af9a6a5053c1081a2fbf8ed4693b9ba0918f5e1d2a2e487df',
+  'games-2021-22.json': '9490d9233eed909fc269338f4bd738f857d67c4689d6f1f66ba8275934355088',
+  'games-2022-23.json': '49142f6514952d337f19a2bdf74dbd2ab0090efff15b74ab79c32a88b40f97a4',
+  'games-2023-24.json': 'f8b7eebcf33889af5b8752dd593022a4d7b4925596f0c340c5c534bd9d04f432',
+  'games-2024-25.json': '138e64c16f1a7672c5d704742f6b0c06706dfd62df86a1f2c27b9d513b8c43d9',
+  'games-2025-26.json': '9037d38a021ac1aa67991be3a782859af8781cac02ab919914dfebf4e920e0b2',
+  'games-2026-27.json': '845962cbf5b90a67f94995b7a980213453ab133a9b43dfc69121569a3bf24e15'
 };
 
-test('fixture: the seven games files are byte-identical to #160\'s (census data never reaches them)', () => {
-  for (const [n, want] of Object.entries(GAMES_160)) assert.equal(manifest.search.files[n].sha256, want, n);
+test('fixture: the seven games files are byte-identical to #169\'s (aliases reach their fields tables; census data never does)', () => {
+  for (const [n, want] of Object.entries(GAMES_169)) assert.equal(manifest.search.files[n].sha256, want, n);
 });
 
 test('places.json: every place, county and club place reference resolves (committed and frozen)', () => {

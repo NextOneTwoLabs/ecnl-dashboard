@@ -6,8 +6,8 @@
       "timeZone": "America/Los_Angeles"
     },
     "engine": "modules",
-    "manifestSha": "4b001968600b8f5335a87750b34b747abc64fe40adf5f3e94efa7790d2adbdee",
-    "modulesSha": "916397524395c436e520f76427d1821b7c85f0dac2b9761b7bd873978a565cda",
+    "manifestSha": "65dec01c8dd1c8d54d8734cc61353936c0164c69765c61f766bc9cab9583fb7b",
+    "modulesSha": "7f3910e4732f5fa0763354aa123227383dae79d18a930fcf33d930512f878d2f",
     "queriesSha": "b89503c0c752b6e1d15a64ab87f70b23a8d6b3f7253a6d8f88ddded97be83f8b",
     "recordedBy": "node --import ./tests/netguard/netguard.mjs tests/search/freeze.mjs --record modules"
   },
@@ -213,7 +213,7 @@
       },
       "counts": {
         "events": 7,
-        "games": 834,
+        "games": 830,
         "teams": 60
       },
       "enter": "team:2026-27/39582",
@@ -233,7 +233,7 @@
         "games": [
           "field:burroughs park@77375",
           "field:sting national training center@75006",
-          "field:campbell road sports park@77080",
+          "field:Campbell Road Sports Park@77080",
           "field:clark east field@75023",
           "field:burger activity center@78745",
           "field:st andrews episcopal school@78735"
@@ -275,7 +275,7 @@
       },
       "counts": {
         "events": 1,
-        "games": 234,
+        "games": 230,
         "teams": 16
       },
       "enter": "conference:2026-27/Texas/GU15",
@@ -292,7 +292,7 @@
         "games": [
           "field:burroughs park@77375",
           "field:sting national training center@75006",
-          "field:campbell road sports park@77080",
+          "field:Campbell Road Sports Park@77080",
           "field:clark east field@75023",
           "field:burger activity center@78745",
           "field:st andrews episcopal school@78735"
@@ -1760,7 +1760,7 @@
       },
       "counts": {
         "events": 2,
-        "games": 119,
+        "games": 117,
         "teams": 18
       },
       "enter": "team:2026-27/132458",
@@ -1774,7 +1774,7 @@
           "event:2022-23/2719"
         ],
         "games": [
-          "field:miramesa high school@92126",
+          "field:Mira Mesa High School@92126",
           "field:canyon crest academy@92130",
           "field:scripps ranch high school@92131",
           "field:torrey pines high school@92130",
@@ -1820,7 +1820,7 @@
       },
       "counts": {
         "events": 3,
-        "games": 33,
+        "games": 32,
         "teams": 24
       },
       "enter": "event:2025-26/4251",
@@ -1837,10 +1837,10 @@
         "games": [
           "field:marymoor park@98052",
           "field:60 Acres Park@98052",
+          "field:Grass Lawn Park@98052",
           "field:redmond high school@98052",
-          "field:grass lawn park@98052",
-          "field:grasslawn park@98052",
-          "field:preston park athletic fields@98027"
+          "field:preston park athletic fields@98027",
+          "field:ingraham high school@98133"
         ],
         "teams": [
           "team:2021-22/60436",
@@ -1878,7 +1878,7 @@
         "useful": "pass"
       },
       "counts": {
-        "games": 21,
+        "games": 20,
         "teams": 18
       },
       "enter": "team:2021-22/55512",
@@ -1933,7 +1933,7 @@
         "useful": "pass"
       },
       "counts": {
-        "games": 21,
+        "games": 20,
         "teams": 18
       },
       "enter": "team:2021-22/55512",
@@ -2050,7 +2050,7 @@
       },
       "counts": {
         "events": 1,
-        "games": 121,
+        "games": 120,
         "teams": 18
       },
       "enter": "team:2021-22/59771",
@@ -2068,7 +2068,7 @@
           "field:bell road sports complex@85251",
           "field:arizona athletic grounds@85212",
           "field:scottsdale sports complex@85255",
-          "field:desert sky@85212"
+          "field:Bell 94 Sports Complex@85255"
         ],
         "teams": [
           "team:2021-22/59771",
@@ -2107,7 +2107,7 @@
       },
       "counts": {
         "events": 2,
-        "games": 119,
+        "games": 117,
         "teams": 18
       },
       "enter": "team:2026-27/131727",
@@ -2122,7 +2122,7 @@
         ],
         "games": [
           "field:Surf Sports Park@92014",
-          "field:miramesa high school@92126",
+          "field:Mira Mesa High School@92126",
           "field:canyon crest academy@92130",
           "field:monte vista high school@91977",
           "field:el cajon valley high school@92021",

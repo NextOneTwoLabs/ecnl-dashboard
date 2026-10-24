@@ -501,7 +501,10 @@ test('budget: backstop: no keystroke over 20 ms (wall clock), no cold build over
 // clock says. What stays clock-only, caught at about +80 ms: work inside a comparator, a new loop that has no counter
 // and calls no words(), and a change in the cost of each item (a quadratic dedupe, an array in place of a set).
 // Exact on the frozen fixture, the same for any step size and on Node 20 to 22 (V8's sort has been the same since 2018).
-const RECORDED_BUILD = { units: 24069, sorts: 759, sortRows: 3047, sortCompares: 12402, normalised: 7358, words: 8706 };
+// #169: the re-frozen fixture has 909 fields (944), 78 field aliases (8) and 496 places (502), and the alias words no
+// longer join `known`: units 24069 -> 24022, sorts 759 -> 753, sortRows 3047 -> 3037, sortCompares 12402 -> 12468,
+// words 8706 -> 8770 (normalised is unchanged).
+const RECORDED_BUILD = { units: 24022, sorts: 753, sortRows: 3037, sortCompares: 12468, normalised: 7358, words: 8770 };
 const RECORDED_INDEX_STATS = { teamDocs: 1965, eventDocs: 81, terms: 518, postings: 11531 };
 const buildWork = n => {
   const stats = { units: 0, sorts: 0, sortRows: 0, sortCompares: 0, normalised: 0, words: 0 };
@@ -591,7 +594,8 @@ test('#165: each step does at most n units: the yields per stage follow n, and t
 // yields before the last step, on the frozen fixture: 460 and 158 before #168. The field names' phrases add
 // vocab:fields: 944 fields, then the 147 clubs, families and aliases no squad row names (every squad-row name is
 // checked as teamDocsG reads it, review of #170 MF1), then one last step: 482 and 166 (596 and 205 at 3c3ba1b3).
-const STEPS_50 = 482, STEPS_150 = 166;
+// #169: 909 fields since the 35 reviewed aliases (944 before): 481 and 165.
+const STEPS_50 = 481, STEPS_150 = 165;
 test('#165 (Reviewer point 2): an unknown schema throws SearchDataError from the first next(), not from startIndex()', () => {
   const a = fresh(); a.core.schema = 3;
   const g = S.startIndex(a);

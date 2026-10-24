@@ -103,9 +103,11 @@ export function* buildVocabG(core, places, n, stats = null) {
   const byFirst = firstIndex(phrases);
   // every word the vocabulary knows (refinement A adds the categories' terms in search.mjs). A field
   // name's words are games-only (#168 MF5): they never join it, so they cannot switch off a team's or an
-  // event's typo match ("mary" of Mary Grogan Community Park).
+  // event's typo match ("mary" of Mary Grogan Community Park). #169 (owner decision Q9): the same holds for
+  // the field aliases: their phrases still read as fields, but their words never join `known` ("turf" of an
+  // alias would switch off the typo match turf -> surf of Bay Area Surf).
   yield 'vocab:known';
-  const known = new Set([...phrases.flatMap(p => p.words), ...Object.keys(KIND_WORDS)]);
+  const known = new Set([...phrases.filter(p => p.type !== 'field').flatMap(p => p.words), ...Object.keys(KIND_WORDS)]);
   const vocab = {
     seasons, active, birthYears: [byLo, byHi], divs, states, phrases, byFirst, byFirstBase: byFirst, known, placeByName,
     places: places.places, counties: places.counties, fields: places.fields || {}, clubPlaces: places.clubPlaces || {}, eventPlaces: places.eventPlaces || {},

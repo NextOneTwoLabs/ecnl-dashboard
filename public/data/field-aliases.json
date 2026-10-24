@@ -1,27 +1,273 @@
 {
   "schema": 1,
-  "_comment": "Reviewed field aliases for the search data files (#158, owner decision Q3; D6, D6a). A field is a name plus a zip: each entry merges the complex names listed in `aliases` (in search_data.norm_name form) at that zip into one field called `name`, shown as `label`. Aliases apply only at their zip. search_data.py validates every entry; a bad one is left out, reported, and fails `python archive.py --search-data --check`. Same-zip candidates are listed in the build report and are never merged automatically.",
+  "_comment": "Reviewed field aliases for the search data files (#158, owner decision Q3; D6, D6a). A field is a name plus a zip: each entry merges the complex names listed in `aliases` (in search_data.norm_name form) at that zip into one field called `name`, shown as `label`. Aliases apply only at their zip. search_data.py validates every entry; a bad one is left out, reported, and fails `python archive.py --search-data --check`. Same-zip candidates (counted after these aliases) are listed in the build report and are never merged automatically. #169: each entry's evidence states its shared start times on the fixture and on main; an entry with no game at its zip is stale, an error; two of its names at one start time on one venue key is a clash: an error on the fixture build, report-only on live builds (owner decision Q11), unless the matchID pair is listed in the optional acceptedClashes, which must still be such a clash.",
   "fields": [
     {
       "name": "Great Park",
       "zip": "92618",
       "label": "Orange County Great Park",
       "aliases": ["orange county great park", "oc great park", "great park", "orange county great park sports park"],
-      "evidence": "Owner decisions D6 and D6a (#156): the 12 complex IDs 80, 422, 1018, 2555, 2838, 3069, 3075, 3416, 4559, 6698, 7083 and 7319 all sit at 92618 under these four names; 3069 (Orange County Great Park Sports Park) plays on Field 17, which the other Great Park IDs also use."
+      "evidence": "Owner decisions D6 and D6a (#156): the 12 complex IDs 80, 422, 1018, 2555, 2838, 3069, 3075, 3416, 4559, 6698, 7083 and 7319 all sit at 92618 under these four names; 3069 (Orange County Great Park Sports Park) plays on Field 17, which the other Great Park IDs also use. Shared start times: 34 on fixture 1c4c3268 and 34 on main 12182be0, with no two games at one start time on one venue key."
     },
     {
       "name": "60 Acres Park",
       "zip": "98052",
       "label": "60 Acres Park",
       "aliases": ["60 acres park", "60 acres"],
-      "evidence": "Owner decision D6 (#156): \"60 Acres\" is 60 Acres Park at 98052 (complexes 2302, 5901 and 8833)."
+      "evidence": "Owner decision D6 (#156): \"60 Acres\" is 60 Acres Park at 98052 (complexes 2302, 5901 and 8833). Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
     },
     {
       "name": "Surf Sports Park",
       "zip": "92014",
       "label": "Surf Sports Park",
       "aliases": ["surf sports park", "surf cup sports park"],
-      "evidence": "Owner decision Q3 (#158): Surf Cup Sports Park is the same park as Surf Sports Park, renamed; both are at 92014 (1,359 and 165 games on main 88eb9097)."
+      "evidence": "Owner decision Q3 (#158): Surf Cup Sports Park is the same park as Surf Sports Park, renamed; both are at 92014 (1,359 and 165 games on main 88eb9097). Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Grass Lawn Park",
+      "zip": "98052",
+      "label": "Grass Lawn Park",
+      "aliases": ["grass lawn park", "grasslawn park"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 98052, \"Grass Lawn Park\" (8 games, complex 1515, 2020-21, fields 1, 2) and \"Grasslawn Park\" (2 games, complex 2859, 2024-25, field 1) differ only by spacing (#169). Home club: Crossfire Premier. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Forekicks Marlborough",
+      "zip": "01752",
+      "label": "Forekicks Marlborough",
+      "aliases": ["forekicks marlborough", "forekicks marlboro"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 01752, \"Forekicks Marlborough\" (4 games, complex 1240, 2021-22 to 2023-24, fields 8, 9) and \"Forekicks Marlboro\" (1 game, complex 3619, 2021-22, field 8) differ only by Marlboro is the short spelling of Marlborough. Home clubs: Scorpions SC, FC Stars. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "FSA-Farmington Sports Arena",
+      "zip": "06032",
+      "label": "FSA-Farmington Sports Arena",
+      "aliases": ["fsafarmington sports arena", "farmington sports arena"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 06032, \"FSA-Farmington Sports Arena\" (308 games, complex 374, 2020-21 to 2026-27, fields 1, 13, 2, 5, 6, 7) and \"Farmington Sports Arena\" (2 games, complex 2391, 2020-21, field 7) differ only by FSA is the initials of Farmington Sports Arena, prefixed. Home clubs: FSA FC, FC Stars. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "SUSA - Orlin & Cohen Sports Complex",
+      "zip": "11722",
+      "label": "SUSA - Orlin & Cohen Sports Complex",
+      "aliases": ["susa orlin cohen sports complex", "the susa orlin cohen sports complex"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 11722, \"SUSA - Orlin & Cohen Sports Complex\" (188 games, complex 2254, 2020-21 to 2023-24, fields 1, 2, 3, 4) and \"The SUSA Orlin & Cohen Sports Complex\" (75 games, complex 6358, 2024-25 to 2026-27, fields 2, field 2A) differ only by article. Home club: SUSA FC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Montgomery Blair High School",
+      "zip": "20901",
+      "label": "Montgomery Blair High School",
+      "aliases": ["montgomery blair high school", "montgomery blair hs"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 20901, \"Montgomery Blair High School\" (12 games, complex 4650, 2022-23 to 2024-25, field 1) and \"Montgomery Blair HS\" (3 games, complex 1058, 2023-24, field Stadium Field) differ only by hs = high school. Home club: Bethesda SC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Ali Krieger Sports Complex (AKSC)",
+      "zip": "22026",
+      "label": "Ali Krieger Sports Complex (AKSC)",
+      "aliases": ["ali krieger sports complex aksc", "ali kreeger sports complex"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 22026, \"Ali Krieger Sports Complex (AKSC)\" (107 games, complex 1300, 2020-21 to 2026-27, fields 7, 8) and \"Ali Kreeger Sports Complex\" (3 games, complex 5732, 2023-24, field 7) differ only by typo (Kreeger) and a trailing acronym of its own words. Home clubs: Virginia Development Academy, Fairfax Virginia Union. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Seven Hills School",
+      "zip": "45227",
+      "label": "Seven Hills School",
+      "aliases": ["seven hills school", "the seven hills school"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 45227, \"Seven Hills School\" (204 games, complexes 458, 744, 1197, 2020-21 to 2026-27, fields Lower Field, Seven Hills Lower #1, Upper Field) and \"The Seven Hills School\" (4 games, complex 4466, 2022-23, field #2 - Lower) differ only by article. Home clubs: Ohio Elite Soccer Academy, Cleveland Force SC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Brother Rice High School",
+      "zip": "48301",
+      "label": "Brother Rice High School",
+      "aliases": ["brother rice high school", "brother rice hs"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 48301, \"Brother Rice High School\" (11 games, complex 3309, 2021-22 to 2024-25, field 1) and \"Brother Rice H.S.\" (5 games, complex 4353, 2022-23 to 2023-24, field 1) differ only by hs = high school. Home clubs: Liverpool FC-IA Michigan, Midwest United FC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "East Grand Rapids High School",
+      "zip": "49506",
+      "label": "East Grand Rapids High School",
+      "aliases": ["east grand rapids high school", "east grand rapids hs"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 49506, \"East Grand Rapids High School\" (2 games, complex 3936, 2022-23, field 1) and \"East Grand Rapids H.S.\" (1 game, complex 3939, 2022-23, field 1) differ only by hs = high school. Home clubs: Liverpool FC-IA Michigan, Midwest United FC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "MidAmerican Energy Company RecPlex",
+      "zip": "50266",
+      "label": "MidAmerican Energy Company RecPlex",
+      "aliases": ["midamerican energy company recplex", "midamerican engery company recplex"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 50266, \"MidAmerican Energy Company RecPlex\" (63 games, complexes 2906, 3429, 2021-22 to 2022-23, fields 1, 2, 3, Fieldhouse, Indoor) and \"MidAmerican Engery Company RecPlex\" (22 games, complex 3228, 2021-22 to 2022-23, fields Rec Plex # 3, Rec Plex #1, Rec Plex #2) differ only by typo (engery). Home clubs: Sporting Iowa Central, Gretna Elite Academy. Shared start times: 14 on fixture 1c4c3268 and 14 on main 12182be0; 2 of them put a game of each name on one venue key (2021-10-16T13:45:00 \"Field 3\" (match 270362) against \"Rec Plex # 3\" (match 270361); 2021-10-16T17:15:00 \"Field 3\" (match 270544) against \"Rec Plex # 3\" (match 270543)): two numbering schemes in one RecPlex, \"Field N\" at complex 2906 and \"Rec Plex # N\" at complex 3228, not one field twice, so the pairs are listed in acceptedClashes (owner decision Q11).",
+      "acceptedClashes": [[270362, 270361], [270544, 270543]]
+    },
+    {
+      "name": "The TBK Bank Sports Complex, LLC",
+      "zip": "52722",
+      "label": "The TBK Bank Sports Complex, LLC",
+      "aliases": ["the tbk bank sports complex llc", "tbk bank sports complex llc"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 52722, \"The TBK Bank Sports Complex, LLC\" (57 games, complexes 2627, 2643, 2646, 2020-21, fields 1, 2, 3, 4, 7, 8) and \"TBK Bank Sports Complex, LLC\" (3 games, complex 2622, 2020-21, fields 7, 8) differ only by article. Home clubs: St. Louis Scott Gallagher, Michigan Hawks. Shared start times: 1 on fixture 1c4c3268 and 1 on main 12182be0, with no two games at one start time on one venue key."
+    },
+    {
+      "name": "University School of Milwaukee",
+      "zip": "53217",
+      "label": "University School of Milwaukee",
+      "aliases": ["university school milwaukee", "university school of milwaukee"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 53217, \"University School Milwaukee\" (18 games, complex 7003, 2024-25 to 2026-27, field Stadium) and \"University School of Milwaukee\" (2 games, complex 7850, 2025-26, field Stadium Field) differ only by 'of' dropped. Home clubs: FC Wisconsin Girls, Rockford Raptors FC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Elmhurst University - Langhorst Field",
+      "zip": "60126",
+      "label": "Elmhurst University - Langhorst Field",
+      "aliases": ["elmhurst university langhorst field", "langhorst field at elmhurst university"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 60126, \"Elmhurst University - Langhorst Field\" (8 games, complex 5835, 2024-25, field 1) and \"Langhorst Field at Elmhurst University\" (4 games, complex 4742, 2022-23 to 2025-26, field 1) differ only by same words, order around 'at'. Home club: Eclipse Select Soccer Club. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Stuart Sports Complex",
+      "zip": "60506",
+      "label": "Stuart Sports Complex",
+      "aliases": ["stuarts sports complex", "stuart sports complex"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 60506, \"Stuarts Sports Complex\" (19 games, complex 3013, 2020-21, fields 10, 20, 21, 22) and \"Stuart Sports Complex\" (12 games, complexes 2921, 3389, 3390, 2020-21 to 2023-24, fields 1, 10, 27, 29) differ only by possessive s. Home clubs: Eclipse Select Soccer Club, Michigan Hawks. Shared start times: 2 on fixture 1c4c3268 and 2 on main 12182be0, with no two games at one start time on one venue key."
+    },
+    {
+      "name": "Oak Brook Park District - Turf",
+      "zip": "60523",
+      "label": "Oak Brook Park District - Turf",
+      "aliases": ["oak brook park district turf", "oak brook pd turf"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 60523, \"Oak Brook Park District - Turf\" (2 games, complex 6790, 2024-25, field Turf Field) and \"Oak Brook PD Turf\" (2 games, complex 1699, 2020-21, field 1) differ only by pd = park district. Home clubs: FC Wisconsin Girls, Eclipse Select Soccer Club. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Mercyhealth Sportscore Two",
+      "zip": "61111",
+      "label": "Mercyhealth Sportscore Two",
+      "aliases": ["mercyhealth sportscore two", "mercy health sportscore 2"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 61111, \"Mercyhealth Sportscore Two\" (194 games, complex 1805, 2022-23 to 2026-27, fields 205, 206, 209, 218, 231, 233) and \"Mercy Health Sportscore 2\" (14 games, complexes 3657, 4661, 2023-24 to 2026-27, fields 1, 2, 209) differ only by spacing and 2 = two. Home clubs: Rockford Raptors FC, FC Wisconsin Girls. Shared start times: 3 on fixture 1c4c3268 and 3 on main 12182be0, with no two games at one start time on one venue key."
+    },
+    {
+      "name": "WWT Soccer Park",
+      "zip": "63026",
+      "label": "WWT Soccer Park",
+      "aliases": ["wwt soccer park", "world wide technology soccer park"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 63026, \"WWT Soccer Park\" (300 games, complexes 499, 648, 4550, 2020-21 to 2026-27, fields 1, 2, 3, 5, 6) and \"World Wide Technology Soccer Park\" (52 games, complex 3954, 2022-23 to 2023-24, fields 1, 2, 3, 5, 6) differ only by WWT is the initials of World Wide Technology. Home club: St. Louis Scott Gallagher. Shared start times: 30 on fixture 1c4c3268 and 30 on main 12182be0, with no two games at one start time on one venue key."
+    },
+    {
+      "name": "Missouri Rush Sports Park",
+      "zip": "63368",
+      "label": "Missouri Rush Sports Park",
+      "aliases": ["missouri rush sports park", "mo rush sports park"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 63368, \"Missouri Rush Sports Park\" (59 games, complexes 2200, 2644, 2664, 2020-21 to 2026-27, fields 1, 2, 3, 4) and \"MO RUSH Sports Park\" (24 games, complex 2575, 2020-21, fields 1, 2, 3, 4) differ only by MO = Missouri. Home clubs: Missouri Rush, St. Louis Scott Gallagher. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "College of St. Mary's",
+      "zip": "68106",
+      "label": "College of St. Mary's",
+      "aliases": ["college of st marys", "college st marys"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 68106, \"College of St. Mary's\" (1 game, complex 3273, 2021-22, field 1) and \"College St. Marys\" (8 games, complexes 3272, 4079, 2021-22 to 2022-23, fields 1, CSM) differ only by 'of' dropped. Home clubs: Sporting Iowa Central, St. Louis Scott Gallagher. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Gretna East High School",
+      "zip": "68136",
+      "label": "Gretna East High School",
+      "aliases": ["gretna east high school", "gretna east highschool"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 68136, \"Gretna East High School\" (14 games, complex 6720, 2024-25 to 2025-26, fields 1, 2) and \"Gretna East Highschool\" (2 games, complex 6652, 2024-25, field G. East 1) differ only by spacing. Home clubs: Nationals, Liverpool FC-IA Michigan. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Carpenter Park",
+      "zip": "75024",
+      "label": "Carpenter Park",
+      "aliases": ["carpenter park", "carpenter pak"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 75024, \"Carpenter Park\" (19 games, complex 2562, 2020-21 to 2022-23, fields Field A, Field B, Field C, Field D) and \"Carpenter Pak\" (18 games, complex 2474, 2020-21, fields Field A, Field C, Field D) differ only by typo (pak). Home club: Sting Soccer Club. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Liberty High School",
+      "zip": "75035",
+      "label": "Liberty High School",
+      "aliases": ["liberty high school", "liberty hs"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 75035, \"Liberty High School\" (8 games, complex 4698, 2022-23, field Turf) and \"Liberty HS\" (3 games, complex 6884, 2026-27, field 1) differ only by hs = high school. Home clubs: Sting Soccer Club, Dallas Texans. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Emerson High School",
+      "zip": "75070",
+      "label": "Emerson High School",
+      "aliases": ["emerson high school", "emerson high"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 75070, \"Emerson High School\" (2 games, complex 4275, 2022-23, field 1) and \"Emerson high\" (2 games, complex 4193, 2023-24, field 1) differ only by 'school' dropped from 'high school'. Home clubs: Sting Soccer Club, Solar SC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Campbell Road Sports Park",
+      "zip": "77080",
+      "label": "Campbell Road Sports Park",
+      "aliases": ["campbell road sports park", "campbell rd sports park"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 77080, \"Campbell Road Sports Park\" (332 games, complexes 634, 2265, 2020-21 to 2026-27, fields 1, 2, 3, 4, 5) and \"Campbell Rd Sports Park\" (6 games, complex 1492, 2020-21, field TBD) differ only by rd = road. Home clubs: Albion Hurricanes FC, Challenge SC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Boise Timbers/Thorns Complex",
+      "zip": "83642",
+      "label": "Boise Timbers/Thorns Complex",
+      "aliases": ["boise timbersthorns complex", "boise timbers thorns complex"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 83642, \"Boise Timbers/Thorns Complex\" (18 games, complex 3598, 2021-22, fields 1, 2, 3, 4) and \"Boise Timbers | Thorns Complex\" (12 games, complex 6786, 2024-25, fields 1, 2) differ only by spacing (Timbers|Thorns). Home clubs: Portland Thorns FC, Seattle United. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Bell 94 Sports Complex",
+      "zip": "85255",
+      "label": "Bell 94 Sports Complex",
+      "aliases": ["bell 94 sports complex", "bell94 sports complex"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 85255, \"Bell 94 Sports Complex\" (86 games, complex 8139, 2025-26, fields 11, 12, 13, 14, 15, 16) and \"Bell94 Sports Complex\" (12 games, complex 3660, 2021-22 to 2023-24, fields 15, 16) differ only by spacing. Home clubs: Phoenix Rising FC, San Juan Soccer Club. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Mt. San Antonio College",
+      "zip": "91789",
+      "label": "Mt. San Antonio College",
+      "aliases": ["mt san antonio college", "mt sac college"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 91789, \"Mt. San Antonio College\" (59 games, complex 1660, 2021-22 to 2023-24, fields 1, 2) and \"Mt. Sac College\" (5 games, complex 3643, 2021-22, fields 1, 2) differ only by Mt. SAC is the initials of San Antonio College. Home clubs: Sporting California USA, Slammers FC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "So Cal Sports Complex",
+      "zip": "92056",
+      "label": "So Cal Sports Complex",
+      "aliases": ["so cal sports complex", "socal sports complex"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 92056, \"So Cal Sports Complex\" (27 games, complex 2884, 2020-21, fields 12, 13, 15, 22) and \"SoCal Sports Complex\" (26 games, complexes 2849, 2866, 3867, 2020-21 to 2021-22, fields 1, 17, 18, 19, 2, 20) differ only by spacing. Home clubs: San Diego Surf Soccer Club, Legends FC - Del Mar. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Mira Mesa High School",
+      "zip": "92126",
+      "label": "Mira Mesa High School",
+      "aliases": ["miramesa high school", "mira mesa high school"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 92126, \"Miramesa High School\" (51 games, complex 3876, 2024-25 to 2026-27, fields Field 1 - Stadium, Field 2 - Upper) and \"Mira Mesa High School\" (3 games, complex 4115, 2022-23, field 1) differ only by spacing. Home clubs: Legends FC - Del Mar, Rebels Soccer Club. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Ralph M. Lewis Sports Complex",
+      "zip": "92336",
+      "label": "Ralph M. Lewis Sports Complex",
+      "aliases": ["ralph m lewis sports complex", "ralph m lewis sport complex"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 92336, \"Ralph M. Lewis Sports Complex\" (48 games, complex 2842, 2020-21 to 2024-25, fields 1, 2, 5, 6) and \"Ralph M Lewis Sport Complex\" (5 games, complex 3126, 2020-21, field 6) differ only by plural. Home clubs: Sporting California USA, LAFC So Cal. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Silverlakes Sports Complex",
+      "zip": "92860",
+      "label": "Silverlakes Sports Complex",
+      "aliases": ["silverlakes sports complex", "silver lakes sports complex"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 92860, \"Silverlakes Sports Complex\" (159 games, complexes 2833, 2888, 3092, 3489, 7120, 2020-21 to 2025-26, fields 1, 10, 11, 12, 13, 14) and \"Silver Lakes Sports Complex\" (38 games, complex 2882, 2021-22 to 2023-24, fields 1, 23, 24, 3, 4) differ only by spacing. Home clubs: Pateadores Soccer Club, LAFC So Cal. Shared start times: 9 on fixture 1c4c3268 and 9 on main 12182be0, with no two games at one start time on one venue key."
+    },
+    {
+      "name": "Pleasant Valley Fields",
+      "zip": "93010",
+      "label": "Pleasant Valley Fields",
+      "aliases": ["pleasant valley fields", "pleasent valley fields"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 93010, \"Pleasant Valley Fields\" (293 games, complexes 435, 2918, 6482, 2020-21 to 2026-27, fields 1, 11, 13, 14, 19, 2) and \"Pleasent Valley Fields\" (6 games, complex 4597, 2022-23, fields 1, 2, 3, 4) differ only by typo (pleasent). Home clubs: Eagles SC, LAFC So Cal. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Mountain View Champions Park",
+      "zip": "97007",
+      "label": "Mountain View Champions Park",
+      "aliases": ["mountain view champions park", "mt view champions park"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 97007, \"Mountain View Champions Park\" (233 games, complexes 1135, 2708, 3667, 2020-21 to 2025-26, fields 2, 3) and \"Mt View Champions Park\" (48 games, complex 2506, 2020-21 to 2025-26, fields 2, 3) differ only by mt = mountain. Home clubs: Oregon Surf SC, Portland Thorns FC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "Sherwood High School",
+      "zip": "97140",
+      "label": "Sherwood High School",
+      "aliases": ["sherwood hs", "sherwood high school"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 97140, \"Sherwood HS\" (54 games, complex 6891, 2024-25 to 2025-26, fields Sherwood HS Lower Turf Field, Sherwood HS Stadium Field, Sherwood HS Upper Turf Field) and \"Sherwood High School\" (3 games, complex 2991, 2020-21, field Upper) differ only by hs = high school. Home clubs: Portland Thorns FC, Oregon Surf SC. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
+    },
+    {
+      "name": "PCC Rock Creek",
+      "zip": "97229",
+      "label": "PCC Rock Creek",
+      "aliases": ["pcc rock creek", "portland community college rock creek"],
+      "evidence": "#169 (owner decision Q7, 2026-10-21): at 97229, \"PCC Rock Creek\" (42 games, complex 429, 2020-21 to 2025-26, fields 1, 2) and \"Portland Community College Rock Creek\" (12 games, complex 3668, 2021-22, fields 1, 2) differ only by PCC is the initials of Portland Community College. Home clubs: Oregon Surf SC, Boise Timbers | Thorns. Shared start times: 0 on fixture 1c4c3268 and 0 on main 12182be0: never played at the same time, so the clash rule cannot test this entry."
     }
   ]
 }
