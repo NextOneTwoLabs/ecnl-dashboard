@@ -8,6 +8,7 @@ export function assetPath(resource) {
     case 'standings': return `/archive/api/Event/get-standings-by-div-and-flight/${division}/${flight}/${event}.json`;
     case 'schedule': return `/archive/api/Event/get-schedules-by-flight/${event}/${flight}/0.json`;
     case 'teams': return `/archive/teams/${season}.json`;
+    case 'postseason': return `/data/postseason-${season}.json`;   // #194
     case 'clubs': return '/archive/clubs.json';
     case 'history': return `/archive/history/${team}.json`;
     case 'directory': return '/archive/directory.json';

@@ -29,6 +29,8 @@
     ["/api/v1/events/4263/divisions/22407/flights/40551/standings", "no-cache"],
     ["/api/v1/events/4263/flights/40551/schedule", "no-cache"],
     ["/api/v1/seasons/2026-27/teams", "no-cache"],
+    ["/api/v1/seasons/2026-27/postseason", "no-cache"],
+    ["/api/v1/seasons/2026-27/postseason", "no-cache", "HEAD"],
     ["/api/v1/catalog", "no-cache"],
     ["/api/v1/status", "no-cache"],
     ["/api/v1/clubs", "no-cache"],
@@ -49,6 +51,8 @@
     ["/api/v1/seasons/2030-31/teams", "no-store"],
     ["/api/v1/events/0/hierarchy", "no-store"],
     ["/api/v1/seasons/2026-99/teams", "no-store"],
+    ["/api/v1/seasons/2026-28/postseason", "no-store"],
+    ["/api/v1/seasons/2026-27/postseason", "no-store", "POST"],
     ["/api/v1/events/3157/hierarchy", "no-store", "POST"]
   ],
   "catalogs": {
@@ -73,6 +77,8 @@
       "/api/v1/seasons/2025-26/teams",
       "/api/v1/seasons/2026-27/teams",
       "/api/v1/seasons/2027-28/teams",
+      "/api/v1/seasons/2025-26/postseason",
+      "/api/v1/seasons/2026-27/postseason",
       "/api/v1/clubs",
       "/api/v1/teams",
       "/api/v1/status",
@@ -86,12 +92,12 @@
     "cases": [
       { "name": "as published", "closed": [
         "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/events/3928/divisions/1/flights/2/standings",
-        "/api/v1/events/4041/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams",
+        "/api/v1/events/4041/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams", "/api/v1/seasons/2025-26/postseason",
         "/api/v1/search/games/2024-25", "/api/v1/search/games/2025-26"] },
       { "name": "rollover: activeSeason 2027-28", "activeSeason": "2027-28", "closed": [
         "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/events/3928/divisions/1/flights/2/standings",
-        "/api/v1/events/4041/hierarchy", "/api/v1/events/4263/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams",
-        "/api/v1/seasons/2026-27/teams", "/api/v1/search/games/2024-25", "/api/v1/search/games/2025-26", "/api/v1/search/games/2026-27"] },
+        "/api/v1/events/4041/hierarchy", "/api/v1/events/4263/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams", "/api/v1/seasons/2025-26/postseason",
+        "/api/v1/seasons/2026-27/teams", "/api/v1/seasons/2026-27/postseason", "/api/v1/search/games/2024-25", "/api/v1/search/games/2025-26", "/api/v1/search/games/2026-27"] },
       { "name": "padded activeSeason (trailing space)", "activeSeason": "2026-27 ", "closed": [] },
       { "name": "padded activeSeason (leading space)", "activeSeason": " 2026-27", "closed": [] },
       { "name": "malformed activeSeason", "activeSeason": "zzz", "closed": [] },
@@ -115,12 +121,12 @@
         },
         "2025-26 ": { "conferences": { "Padded season key": { "eventId": 7777 } } }
       }, "closed": [
-        "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams",
+        "/api/v1/events/3157/hierarchy", "/api/v1/events/3975/flights/34425/schedule", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams", "/api/v1/seasons/2025-26/postseason",
         "/api/v1/search/games/2024-25", "/api/v1/search/games/2025-26"] },
       { "name": "an event listed in an active and a closed season", "seasons": {
         "2026-27": { "conferences": { "Active": { "eventId": 4263 } } },
         "2024-25": { "conferences": { "Mid-Atlantic": { "eventId": 3157 }, "Also active": { "eventId": "4263" } } }
-      }, "closed": ["/api/v1/events/3157/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams",
+      }, "closed": ["/api/v1/events/3157/hierarchy", "/api/v1/seasons/2024-25/teams", "/api/v1/seasons/2025-26/teams", "/api/v1/seasons/2025-26/postseason",
         "/api/v1/search/games/2024-25", "/api/v1/search/games/2025-26"] }
     ]
   }

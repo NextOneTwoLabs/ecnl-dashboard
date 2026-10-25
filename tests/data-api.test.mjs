@@ -245,7 +245,7 @@ test('club places: validators forwarded to its asset path; 304 and HEAD have no 
 });
 
 test('a season without an index is a JSON 404, never HTML', async () => {
-  for (const path of ['/api/v1/seasons/2030-31/teams', '/api/v1/seasons/2099-00/teams']) {
+  for (const path of ['/api/v1/seasons/2030-31/teams', '/api/v1/seasons/2099-00/teams', '/api/v1/seasons/2025-26/postseason']) {   // #194: no rules file for 2025-26
     for (const method of ['GET', 'HEAD']) {
       const response = await dataApi(request(path, { method }), env);
       assert.equal(response.status, 404, path);

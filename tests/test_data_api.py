@@ -247,7 +247,7 @@ class ApiTests(unittest.TestCase):
                 self.assertEqual(conditional['ETag'], headers['ETag'])
         self.assertEqual(self.request(path, headers={'If-None-Match': '"different"', 'If-Modified-Since': headers['Last-Modified']})[0], 200)
         self.assertEqual(self.request('/api/v1/events/999999999/hierarchy')[0], 404)
-        for missing in ('/api/v1/seasons/2030-31/teams', '/api/v1/seasons/2099-00/teams'):
+        for missing in ('/api/v1/seasons/2030-31/teams', '/api/v1/seasons/2099-00/teams', '/api/v1/seasons/2025-26/postseason'):   # #194: no rules file for 2025-26
             for method in ('GET', 'HEAD'):
                 status, headers, body = self.request(missing, method)
                 self.assertEqual(status, 404, missing)

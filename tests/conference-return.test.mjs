@@ -86,6 +86,7 @@ function page() {
     getAgeLabel: d => d.replace(/^G/, ''), sortAgeGroups: x => x, seasonLabel: s => s, esc: s => String(s),
     buildAgeGroupTabs: () => { calls.ageTabs++; }, buildConferenceList() {}, buildBreadcrumb() {}, updateViewTabsUI() {},
     clearTeamFilter() {}, loadClubPlaces: async () => {}, favoriteInDivision: () => false, clubPlaces: null,
+    getPostseasonRules: async () => null,   // #194: no postseason places here (tests/postseason-places.test.mjs has them)
     defaultSelection: () => null, renderConferenceView: () => { el('standingsContainer').innerHTML = 'TABLE'; },
     isMissing: () => false, retryText: e => String(e), closeSidebarIfMobile() {},
     openFavoritesTab: () => hooks.openFavorites(), loadPlayoffsPanel: async () => { el('standingsContainer').innerHTML = 'PLAYOFFS'; el('contentTitle').textContent = 'Playoffs'; },

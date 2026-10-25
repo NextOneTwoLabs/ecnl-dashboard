@@ -21,6 +21,7 @@ lock.
 | `/api/v1/events/{eventId}/divisions/{divisionId}/flights/{flightId}/standings` | Standings envelope with every group block |
 | `/api/v1/events/{eventId}/flights/{flightId}/schedule` | Schedule envelope, all clubs in that flight |
 | `/api/v1/seasons/{season}/teams` | Team index for one season (derived; see below): `public/archive/teams/{season}.json` |
+| `/api/v1/seasons/{season}/postseason` | The season's postseason places rules (#194; reviewed data, see below): `public/data/postseason-{season}.json` |
 | `/api/v1/clubs` | Club places, every season (derived; see below): `public/archive/clubs.json` |
 | `/api/v1/teams/{teamId}/history` | One team's squad history across every season and event (derived; see below): `public/archive/history/{teamId}.json` |
 | `/api/v1/teams` | The team directory: every team (club and age group) in one file, for team search (derived; see below): `public/archive/directory.json` |
@@ -138,6 +139,27 @@ A refused index therefore never starts the scan, and a team lookup stops there
 instead of going on through the other seasons. A lookup that does scan (no
 index) stops at a failure other than a 404 in the same way once that season's scan
 is done, rather than answering "Couldn't find …". `?live=1` never uses the index.
+
+### Postseason rules (`/api/v1/seasons/{season}/postseason`)
+
+The places each conference's standings give in that season's postseason (#194), transcribed by hand
+from the owner's copy of the ECNL's "Post-Season Structure" document and reviewed; not derived from
+TGS, and never written by the refresh. Only 2026-27 has a file; another season answers 404, and the
+page asks only for the seasons in its `POSTSEASON_SEASONS` list. Schema 1:
+
+- `tiers`: `CL` (Champions League, U13-U17), `CLPI` (its North Atlantic v New England play-in),
+  `CL18` (U18/19 Champions League, which starts with a play-in game), `NAC` (North American Cup,
+  U15-U17), `SA` and `SB` (Showcase Cup A and B, U16-U17); each with a `label`, a `short` tag and its `ages`.
+- `conferences.{name}.rules`: in order for each age, each rule takes the `next` N teams that have
+  played and have no place yet: down the published table, or with `scope: "division"` the top N of
+  each division, or with `scope: "pooled"` the next N from either division (ordered by PPG, then goal
+  difference, goals for and goals against, an order borrowed from the document's rule for ranking
+  group runners-up, then table position). `or: "leagueCupWinner"`, `alt`, `opponent`, `printed`
+  (the document's place numbers) and `doc` (its own line) record what the document says.
+
+The page shows them as a projection ("if the season ended today"), by conference PPG.
+`tests/postseason-rules.test.mjs` checks the file against the document's national field sizes and
+printed places and against the archived tables; `tests/postseason-places.test.mjs` runs the page's code.
 
 ### Club places (`/api/v1/clubs`)
 
@@ -773,7 +795,7 @@ decision on #159); it grows about 11 KB gzipped a season, whichever file holds t
 
 | Answer (200 or 304) | `Cache-Control` |
 | --- | --- |
-| `hierarchy`, `standings` and `schedule` of an event whose catalog season is earlier than `refresh.activeSeason`; `seasons/{s}/teams` and `search/games/{s}` (#158) with `s` earlier than it | `private, max-age=86400, stale-while-revalidate=86400` |
+| `hierarchy`, `standings` and `schedule` of an event whose catalog season is earlier than `refresh.activeSeason`; `seasons/{s}/teams`, `seasons/{s}/postseason` (#194) and `search/games/{s}` (#158) with `s` earlier than it | `private, max-age=86400, stale-while-revalidate=86400` |
 | the active season; a future one (registered before the rollover); an event the catalog doesn't list; `catalog`, `status`, `clubs`, `teams/{id}/history`, `teams` (the directory, #114), `search/core` (#158), `search/places` (#159) | `no-cache`, as before |
 | every error, 429 and other refusal | `no-store`, as before |
 

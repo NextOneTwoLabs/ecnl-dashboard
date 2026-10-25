@@ -1,0 +1,129 @@
+{
+ "_comment": "#194 synthetic: after the top 2 of each division, West 3rd (2.50) takes one pooled place; West 4th (8 pts in 4) and East 3rd (12 in 6) are level on PPG, GD, GF and GA for the other. East 3rd is higher in its own table, so it takes the place: exactly 2 pooled places, both marked level.",
+ "synthetic": true,
+ "season": "2026-27",
+ "conference": "Midwest",
+ "division": "GU13",
+ "flights": [
+  {
+   "flightName": "WEST",
+   "teamStandings": [
+    {
+     "teamID": 9401,
+     "name": "West A ECNL G2010/11",
+     "clubName": "West A",
+     "gp": 6,
+     "standingpoints": 18,
+     "ppg": 3.0,
+     "goaldifferential": 10,
+     "goalsfor": 12,
+     "goalsagainst": 2
+    },
+    {
+     "teamID": 9402,
+     "name": "West B ECNL G2010/11",
+     "clubName": "West B",
+     "gp": 6,
+     "standingpoints": 16,
+     "ppg": 2.67,
+     "goaldifferential": 8,
+     "goalsfor": 10,
+     "goalsagainst": 2
+    },
+    {
+     "teamID": 9403,
+     "name": "West C ECNL G2010/11",
+     "clubName": "West C",
+     "gp": 6,
+     "standingpoints": 15,
+     "ppg": 2.5,
+     "goaldifferential": 6,
+     "goalsfor": 9,
+     "goalsagainst": 3
+    },
+    {
+     "teamID": 9404,
+     "name": "West D ECNL G2010/11",
+     "clubName": "West D",
+     "gp": 4,
+     "standingpoints": 8,
+     "ppg": 2.0,
+     "goaldifferential": 5,
+     "goalsfor": 10,
+     "goalsagainst": 5
+    },
+    {
+     "teamID": 9405,
+     "name": "West E ECNL G2010/11",
+     "clubName": "West E",
+     "gp": 6,
+     "standingpoints": 3,
+     "ppg": 0.5,
+     "goaldifferential": -5,
+     "goalsfor": 2,
+     "goalsagainst": 7
+    }
+   ]
+  },
+  {
+   "flightName": "EAST",
+   "teamStandings": [
+    {
+     "teamID": 9411,
+     "name": "East A ECNL G2010/11",
+     "clubName": "East A",
+     "gp": 6,
+     "standingpoints": 17,
+     "ppg": 2.83,
+     "goaldifferential": 9,
+     "goalsfor": 11,
+     "goalsagainst": 2
+    },
+    {
+     "teamID": 9412,
+     "name": "East B ECNL G2010/11",
+     "clubName": "East B",
+     "gp": 6,
+     "standingpoints": 14,
+     "ppg": 2.33,
+     "goaldifferential": 7,
+     "goalsfor": 9,
+     "goalsagainst": 2
+    },
+    {
+     "teamID": 9413,
+     "name": "East C ECNL G2010/11",
+     "clubName": "East C",
+     "gp": 6,
+     "standingpoints": 12,
+     "ppg": 2.0,
+     "goaldifferential": 5,
+     "goalsfor": 10,
+     "goalsagainst": 5
+    },
+    {
+     "teamID": 9414,
+     "name": "East D ECNL G2010/11",
+     "clubName": "East D",
+     "gp": 6,
+     "standingpoints": 6,
+     "ppg": 1.0,
+     "goaldifferential": -1,
+     "goalsfor": 5,
+     "goalsagainst": 6
+    },
+    {
+     "teamID": 9415,
+     "name": "East E ECNL G2010/11",
+     "clubName": "East E",
+     "gp": 6,
+     "standingpoints": 1,
+     "ppg": 0.17,
+     "goaldifferential": -9,
+     "goalsfor": 1,
+     "goalsagainst": 10
+    }
+   ]
+  }
+ ]
+}

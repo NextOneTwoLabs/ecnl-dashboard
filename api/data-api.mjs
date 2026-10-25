@@ -7,6 +7,8 @@ const routes = [
   [/^\/api\/v1\/events\/([^/]+)\/divisions\/([^/]+)\/flights\/([^/]+)\/standings$/, 'standings', ['event', 'division', 'flight']],
   [/^\/api\/v1\/events\/([^/]+)\/flights\/([^/]+)\/schedule$/, 'schedule', ['event', 'flight']],
   [/^\/api\/v1\/seasons\/([^/]+)\/teams$/, 'teams', ['season']],
+  // #194: a season's postseason places rules (public/data/postseason-<season>.json), a reviewed data file.
+  [/^\/api\/v1\/seasons\/([^/]+)\/postseason$/, 'postseason', ['season']],
   [/^\/api\/v1\/clubs$/, 'clubs', []],
   [/^\/api\/v1\/teams\/([^/]+)\/history$/, 'history', ['team']],
   // #114: every team in one file (the team directory). Its own kind, never 'teams' (the
@@ -40,13 +42,14 @@ export function resolveResource(path) {
 // #82: a closed season (earlier than the catalog's refresh.activeSeason) is never fetched by
 // the refresh again, so its event routes and its team index may be kept by the visitor's
 // browser for a day, and shown once more while a newer copy is fetched. `private`: never by a
-// shared cache. A closed season's search games file (#158) likewise. Everything else (the active
+// shared cache. A closed season's search games file (#158) and postseason rules (#194) likewise. Everything else (the active
 // season, a future or unknown one, the catalog, status, clubs, history, the directory, search
 // core) stays no-cache. See docs/data-api.md, "HTTP behavior".
 export const CLOSED_CACHE = 'private, max-age=86400, stale-while-revalidate=86400';
 const EVENT_KINDS = ['hierarchy', 'standings', 'schedule'];
-// Kinds keyed by a season in the path: the team index and the search games file (#158).
-const SEASON_KINDS = ['teams', 'search-games'];
+// Kinds keyed by a season in the path: the team index, the search games file (#158) and the
+// postseason rules (#194: no-cache while the season is active, so a corrected file shows at once).
+const SEASON_KINDS = ['teams', 'search-games', 'postseason'];
 const EVENT_LISTS = ['conferences', 'national', 'showcases'];
 const isObject = value => !!value && typeof value === 'object' && !Array.isArray(value);
 // A catalog event id: a positive safe integer, or a canonical decimal string (as in a URL).
