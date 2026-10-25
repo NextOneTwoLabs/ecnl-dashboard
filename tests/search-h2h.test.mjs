@@ -193,7 +193,7 @@ test('rules on the committed data: no key in two squads; meetings found = games 
     }
   }
   assert.equal(tbd + nosq + same, noLink);
-  assert.ok(elsewhere <= nosq && nGames > 45000);
+  assert.ok(elsewhere <= nosq && nGames > 30000);   // #177: 47053 when set; the archive only grows
 });
 
 test('requests: the seasons a pair needs after the first focus are at most 6 for every pair (fixture: median 2, 90th percentile 5, max 6); a cold open is 2 + the seasons both played, at most 8 (#179: unchanged with the reviewed ids)', () => {

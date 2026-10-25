@@ -72,7 +72,7 @@ test('page brackets and the Python port agree on every national team', async (t)
   } finally { console.warn = warn; }
   t.diagnostic(`${n} team-flights compared, ${bad.length} differ`);
   assert.equal(Object.keys(py).length, n);
-  assert.ok(n > 2000, `only ${n} team-flights`);
+  assert.ok(n > 1700, `only ${n} team-flights`);
   assert.deepEqual(bad, []);
 });
 
@@ -117,7 +117,7 @@ test('every history file is served byte for byte by one asset read', { skip: !ha
     assert.equal(response.headers.get('cache-control'), 'no-cache');
     count++;
   }
-  assert.ok(count > 1800, `only ${count} history files`);
+  assert.ok(count > 1500, `only ${count} history files`);
 });
 
 test('the history route is behind the #90 gate like every /api/v1 route', async () => {

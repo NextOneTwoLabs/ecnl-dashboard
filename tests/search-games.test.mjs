@@ -86,7 +86,8 @@ test('Q4, MF5: every field name of 2 words or more reads as a field, except a na
   assert.equal(IX.vocab.phrases.filter(p => p.fieldName).length, FIXTURE_COUNT);
   assert.deepEqual(IX.vocab.fieldPhrasesDropped, ['fc dallas', 'oklahoma celtic', 'pda south'], 'the report: FC Dallas is in "FC Dallas Youth" and its teams\' names');
   assert.deepEqual(phraseNames(IX), FIXTURE_RULE.kept);
-  assert.ok(LIVE_RULE.kept.length > 800 && LIVE_RULE.dropped.length > 0, 'the rule keeps most names and drops some');
+  // #177: a share of the live names, not a count (a refresh moves the count): 834 of 837 kept when set, floor 95%
+  assert.ok(LIVE_RULE.kept.length > 0 && LIVE_RULE.dropped.length > 0 && LIVE_RULE.kept.length / (LIVE_RULE.kept.length + LIVE_RULE.dropped.length) >= 0.95, 'the rule keeps most names and drops some');
   assert.deepEqual(phraseNames(CIX), LIVE_RULE.kept, 'committed data: exactly the names the rule keeps');
   assert.deepEqual([...v.fieldPhrasesDropped].sort(), LIVE_RULE.dropped, 'committed data: exactly the names the rule drops');
   for (const d of ['fc dallas', 'pda south']) assert.ok(LIVE_RULE.dropped.includes(d), `${d}: a club's name never reads as a field`);
@@ -97,6 +98,28 @@ test('Q4, MF5: every field name of 2 words or more reads as a field, except a na
   const s = run('FC Dallas', CIX, CCTX);
   assert.deepEqual(s.sections.map(x => x.name), ['teams', 'games'], 'MF5: FC Dallas leads with Teams');
   assert.equal(s.enter.kind, 'team'); assert.equal(s.enter.club, 'FC Dallas Youth');
+});
+
+// #177 (N2 of the review of #176): the names `finishG` checks last (clubs with no squad, families, conference aliases) were
+// never the only holder of a dropped field name in any dataset, so a mutant that skipped them survived. A copy of the
+// frozen fixture with one field held only by each, and controls that nothing holds.
+test('#177 N2: a field name held only by a club with no squad, a family or a conference alias is dropped; names nothing holds, or only part of one, are kept', () => {
+  const d = loadSearchData(), t = d.core.teams, f = d.places.fields, proto = f['1849 park@78660'];
+  t.clubs.push([990001, 'Zephyr Hollow United', null, '']);       // no squad row has this name
+  t.families.push(['Quill Meadow Rovers', 2357]);
+  d.core.vocab.confAliases['brindle ford league'] = 'NorCal';
+  for (const [n, zip] of [['Zephyr Hollow', '99001'], ['Quill Meadow', '99002'], ['Brindle Ford', '99003'], ['Marlow Quay', '99004'], ['Zephyr Holl Quay', '99005']]) f[`${n.toLowerCase()}@${zip}`] = [n, ...proto.slice(1, 3), proto[3], proto[4]];
+  const squadNames = new Set(t.squads.flatMap(sq => sq.s.map(r => normWords(r[2]).join(' '))));
+  for (const n of ['zephyr hollow', 'quill meadow', 'brindle ford']) assert.ok(![...squadNames].some(x => ` ${x} `.includes(` ${n} `)), `${n}: no squad row holds it, so only the last-checked names can drop it`);
+  const want = fieldRule(d), v = S.buildIndex(d).vocab;
+  assert.deepEqual(want.dropped.filter(k => /zephyr|quill|brindle|marlow/.test(k)), ['brindle ford', 'quill meadow', 'zephyr hollow']);
+  assert.deepEqual(phraseNames({ vocab: v }), want.kept, 'the phrases are the names the rule keeps');
+  assert.deepEqual([...v.fieldPhrasesDropped].sort(), want.dropped, 'and the dropped list is the rule\'s');
+  const kept = phraseNames({ vocab: v });
+  assert.ok(kept.includes('marlow quay') && kept.includes('zephyr holl quay'), 'no holder; a part of a held name is no holder (whole words)');
+});
+test('#177 N2: no alias key is a name of 2 words or more, so the alias names the last-checked branch reads can never hold a field name; the day one does, add a case to the test above', () => {
+  assert.deepEqual(Object.keys(ALIASES).filter(k => normWords(k).length >= 2), [], 'a multi-word alias can hold a field name: add it to the synthetic case above');
 });
 test('#167 (review of #170, MF1): the field names\' phrases are built with the index, each name checked as the team documents read it', () => {
   const ix = S.buildIndex(committed());
@@ -303,7 +326,8 @@ test('game rows carry what the page draws: date, time, sides (as the event spell
 // ---------- the slate ----------
 test('MF3: under rule 5 Games comes after every section, and Teams and Events (order, rows, enter) are as without games: every 2-5-letter club prefix', () => {
   let n = 0, games = 0;
-  for (const q of [...clubPrefixes(CDATA.core), 'St', 'St.', 'North', 'West']) {
+  const prefixes = [...clubPrefixes(CDATA.core), 'St', 'St.', 'North', 'West'];
+  for (const q of prefixes) {
     const a = run(q, CIX, CCTX), b = run(q, CIX, CCTX, { games: false });
     if (a.rule === 4) continue;
     const names = a.sections.map(x => x.name);
@@ -311,7 +335,8 @@ test('MF3: under rule 5 Games comes after every section, and Teams and Events (o
     if (a.rule === 5) { if (names.includes('games')) { games++; assert.equal(names.at(-1), 'games', q); } assert.equal(a.enter && (a.enter.key || a.enter.eventID), b.enter && (b.enter.key || b.enter.eventID), `${q}: enter`); }
     n++;
   }
-  assert.ok(n > 300 && games > 300, `${n} prefixes, ${games} with games`);
+  // #177: shares (92.3% of the prefixes run, 91.7% of those with games when set); floors 80% and 80%
+  assert.ok(n >= 0.8 * prefixes.length && games >= 0.8 * n, `${n} of ${prefixes.length} prefixes, ${games} with games`);
   assert.equal(run('St', CIX, CCTX).enter.title.startsWith('Stanislaus'), true, 'St: Stanislaus Surf, as on main');
 });
 test('MF4: a place query leads with Games only when a field in the place has games in the seasons asked; Enter is never an empty field', () => {
@@ -326,7 +351,8 @@ test('MF4: a place query leads with Games only when a field in the place has gam
     if (s.sections[0] && s.sections[0].name === 'games' && s.sections.length > 1) { lead++; const r = s.sections[0].rows[0]; assert.ok(r.kind === 'field' && !r.nearby && r.count > 0, `${q}: Games leads on ${r.label}`); }
     if (s.enter && s.enter.kind === 'field') assert.ok(s.enter.count > 0, `${q}: enter is an empty field`);
   }
-  assert.ok(n > 300 && lead > 0, `${n} place queries, ${lead} led by Games`);
+  // #177: shares (96.5% of the queries are rule 4, 11.2% of those led by Games when set); floors 75% (doubled places: 84%) and 3% (doubled places and no California fields: 4.7%)
+  assert.ok(n >= 0.75 * qs.size && lead >= 0.03 * n, `${n} of ${qs.size} place queries, ${lead} led by Games`);
   for (const q of ['Naperville', 'Tulsa', 'Lake Forest', 'Orange']) assert.equal(run(q, CIX, CCTX).sections[0].name, 'teams', q);
   assert.deepEqual(run('Redmond', CIX, CCTX).sections.map(x => x.name), ['events', 'games', 'teams'], 'P03');
   assert.equal(run('Weston', CIX, CCTX).sections[0].name, 'games');
@@ -350,7 +376,9 @@ test('build point 2: a place whose fields match every word shows no partial gues
     assert.equal(b.empty && b.empty.reason, 'no-full-match', `${q}: only partial guesses go`);
     assert.ok(sec(a, 'games').some(r => r.kind === 'field') && !a.sections.some(x => x.partialOnly), q);
   }
-  assert.ok(changed > 0 && changed < 60, `${changed} place queries change`);
+  // #177: a ceiling as a share of the places (4.9% when set), so more places cannot break it: at most 10%
+  const nPlaces = placeNames(CDATA.places).length;
+  assert.ok(changed > 0 && changed <= 0.1 * nPlaces, `${changed} of ${nPlaces} place queries change`);
 });
 test('the best match is never a game, and there is none when Games leads; Enter waits while a games-first query\'s season is pending', () => {
   for (const q of keystrokes(doc)) { const s = run(q); if (s.best) assert.notEqual(s.best.section, 'games', q); if (s.sections[0] && s.sections[0].name === 'games') assert.equal(s.best, null, q); }
@@ -394,9 +422,13 @@ const LATER_SET = (() => {
   const flipped = base.filter(q => { const a = ref.get(q).full, b = run(q, bare, loadingCtx); return a.empty && a.empty.reason === 'no-match' && b.empty && b.empty.reason === 'games-loading'; });
   return { all: base, flipped, ref };
 })();
+// #177: a place name never defers (it reads no Teams or Events), so the shares of queries that defer or reuse are taken of the
+// queries that are not place names: more places (a refresh adding census places) cannot lower them. 1535 of 2208 when set.
+const PLACE_QS = new Set(placeNames(CDATA.places)), NONPLACE = LATER_SET.all.filter(q => !PLACE_QS.has(q)).length;
 
 test('#167 S1, MF1: completeGames(search(q, later)) is search(q), rows in full (getters too), on the review set, every judged keystroke and the named queries; a deferred season is ready, never loading', () => {
   const { all, flipped } = LATER_SET;
+  // #177 (C1): the absolute floor stays: 73 when set, and it held at 73 while the set grew from 2072 to 2208 queries
   assert.ok(flipped.length >= 60, `${flipped.length} queries a games-less search would call loading`);
   for (const q of ['ml', 'Sacra', 'San de', 'U1', 'playoffs 2025-', 'showcase 202', 'Legends Del Ma']) assert.ok(flipped.includes(q), q);
   let deferred = 0;
@@ -412,7 +444,8 @@ test('#167 S1, MF1: completeGames(search(q, later)) is search(q), rows in full (
     assert.equal(S.completeGames(CIX, done, CCTX), done, 'a settled slate is returned as it is');
   }
   for (const q of flipped) assert.equal(run(q, CIX, CCTX, { games: 'later' }).empty.reason, 'no-match', `${q}: MF1`);
-  assert.ok(deferred > 900, `${deferred} deferred`);
+  // #177: a share of the queries that are not place names (67.2% when set); the old floor of 900 was 58.6% of them
+  assert.ok(deferred >= 0.58 * NONPLACE, `${deferred} of ${NONPLACE} non-place queries deferred`);
 });
 
 test('#167 S1: later defers only under rules 1 and 5 with Teams or Events results; never under rules 2, 3, 4, on vs, on a partial slate (Surf Cup) or with nothing found', () => {
@@ -429,7 +462,9 @@ test('#167 S1: later defers only under rules 1 and 5 with Teams or Events result
       if (partial) seen.partial++;
     }
   }
-  assert.ok(seen[2] > 10 && seen[3] > 30 && seen[4] > 300 && seen.partial > 10, JSON.stringify(seen));
+  // #177: shares of the set (2208 when set: 1.45%, 8.3%, 33.1%, 5.5%); floors 0.7% (it must survive three times the places), 4%, 28%, 3%
+  const total = LATER_SET.all.length;
+  assert.ok(seen[2] >= 0.007 * total && seen[3] >= 0.04 * total && seen[4] >= 0.28 * total && seen.partial >= 0.03 * total, `${JSON.stringify(seen)} of ${total}`);
   { const c = run('colorado academy', CIX, CCTX, { games: 'later' }); assert.ok(c.rule === 5 && c.sections[0].name === 'teams' && !c.gamesPending, 'a field name read beside Teams rows: rule 5, and its Games is searched at once'); }
   for (const q of ['U15 NorCal vs U15 Texas', 'NorCal U15 vs Mustang']) { const l = run(q, CIX, CCTX, { games: 'later' }); assert.ok(l.rule === 1 && !l.gamesPending, `${q}: a vs query under rule 1 is searched at once`); }
   const sc = run('Surf Cup', CIX, CCTX, { games: 'later' });
@@ -444,7 +479,8 @@ test('#167 MF3: Games from the Teams search already made equals a search of each
     assert.equal(textHash(y), text, q);
     if (a.teamSearches < b.teamSearches) { reused++; assert.equal(a.teamSearches, 1, q); }
   }
-  assert.ok(reused > 900, `${reused} queries spared a second team search`);
+  // #177: a share of the queries that are not place names (62.7% when set); the old floor of 900 was 58.6% of them
+  assert.ok(reused >= 0.53 * NONPLACE, `${reused} of ${NONPLACE} non-place queries spared a second team search`);
 });
 
 // ---------- #167 (review of #170, MF2): a field name never takes words away from Teams and Events ----------
@@ -470,7 +506,8 @@ test('MF2: Teams and Events read every field name (alone, with 2011, with U15) a
   }
   assert.ok(partialOnly > 0 && partialOnly < n, `${partialOnly} partial-only without the field names`);
   assert.equal(n, 3 * LIVE_RULE.kept.length);
-  assert.ok(field > 2000, `${field} with the field in Games (Q4)`);
+  // #177: a share of the names run (97.6% when set; the count fell 8% between the #176 review and then with no refresh)
+  assert.ok(field >= 0.9 * n, `${field} of ${n} with the field in Games (Q4)`);
 });
 
 test('MF2: Dallas Texans Lewisville is its 18 teams first, then Games with the field; colorado academy keeps the place Colorado; a field name with no team leads with Games', () => {
