@@ -1,6 +1,6 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,Slammers FC HB Koge ECNL G2012/13,Slammers FC,133596,5,5,0,0,15,3.0,33,1,32
-2,So Cal Blues ECNL G2012/13,So Cal Blues,135886,2,2,0,0,6,3.0,4,0,4
+2,So Cal Blues ECNL G2012/13,So Cal Blues,135886,3,3,0,0,9,3.0,6,0,6
 3,Beach Futbol Club (CA) ECNL G2012/13,Beach Futbol Club,131924,4,3,0,1,10,2.5,14,5,9
 4,Legends FC (CA) ECNL G2012/13,Legends FC (CA),133029,5,4,1,0,12,2.4,16,3,13
 5,San Diego Surf ECNL G2012/13,San Diego Surf Soccer Club,132462,2,1,0,1,4,2.0,3,2,1
@@ -12,7 +12,7 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 11,Eagles SC ECNL G2012/13,Eagles SC,64010,3,1,2,0,3,1.0,5,9,-4
 12,Rebels SC ECNL G2012/13,Rebels Soccer Club,90410,4,1,2,1,4,1.0,5,11,-6
 13,Utah Royals FC-AZ ECNL G2012/13,Utah Royals FC - AZ,90258,6,1,3,2,5,0.83,9,12,-3
-14,LV Heat Surf ECNL G2012/13,LV Heat Surf SC ,100065,6,1,4,1,4,0.67,4,13,-9
-15,LA Breakers FC ECNL G2012/13,LA Breakers FC,79075,5,1,4,0,3,0.6,4,12,-8
+14,LA Breakers FC ECNL G2012/13,LA Breakers FC,79075,5,1,4,0,3,0.6,4,12,-8
+15,LV Heat Surf ECNL G2012/13,LV Heat Surf SC ,100065,7,1,5,1,4,0.57,4,15,-11
 16,Legends FC Del Mar ECNL G2012/13,Legends FC - Del Mar,131709,5,0,3,2,2,0.4,5,13,-8
 17,Sporting California USA ECNL G2012/13,Sporting California USA,134082,4,0,3,1,1,0.25,1,15,-14
