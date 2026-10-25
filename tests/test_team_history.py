@@ -18,6 +18,7 @@
 import argparse
 import contextlib
 import copy
+import datetime
 import functools
 import gzip
 import io
@@ -637,6 +638,12 @@ class Refresh(unittest.TestCase):
         games = json.loads(api.read_archive(sched_path)[0])
         g = next(g for g in games["data"] if g.get("hometeamscore") is None and g.get("hometeamID") and g.get("awayteamID"))
         home, away = g["hometeamID"], g["awayteamID"]
+        # #199: `form` is the last five PLAYED games in date order, so the result shows last only if the game is the latest.
+        # The first unscored game with both teams can be an old one (a 2026-10-17 game never scored, with later games played
+        # since), so the test dates its game the day after the flight's last game instead of relying on the live schedule.
+        last_day = max(x["gameDate"][:10] for x in games["data"] if x.get("gameDate"))
+        g["gameDate"] = (datetime.date.fromisoformat(last_day) + datetime.timedelta(days=1)).isoformat() + "T10:00:00"
+        g["gameTime"] = "10:00:00"
         g["hometeamscore"], g["awayteamscore"] = 2, 1
         table = json.loads(api.read_archive(stand_path)[0])
         for t in (table["data"] if isinstance(table["data"], list) else [table["data"]])[0]["teamStandings"]:
@@ -674,6 +681,8 @@ class Refresh(unittest.TestCase):
         mine = json.loads(after[f"{home}.json"])
         r = next(r for sq in mine["squads"] for r in sq["seasons"] if r["season"] == self.ACTIVE and r["teamID"] == home)
         self.assertEqual(r["form"][-1], "W")
+        # the new result itself is the last game behind `form`: its date, the opponent, and the 2-1 as the home team saw it
+        self.assertEqual(r["last"][-1], {"date": g["gameDate"][:10], "home": True, "opp": " ".join(g["awayTeam"].split()), "oppID": away, "gf": 2, "ga": 1})
 
     def test_a_failed_history_build_keeps_the_files_and_fails_the_run(self):
         read = api.read_archive
