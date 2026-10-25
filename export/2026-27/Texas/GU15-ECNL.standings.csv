@@ -1,17 +1,17 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,SOLAR SC ECNL G2011/12,Solar SC,59566,6,6,0,0,18,3.0,24,1,23
 2,FC Westlake ECNL G2011/12,FC Westlake ,131273,9,7,1,1,22,2.44,27,9,18
-3,Sting Royal ECNL G2011/12,Sting Soccer Club,59609,7,5,1,1,16,2.29,19,8,11
+3,Sting Royal ECNL G2011/12,Sting Soccer Club,59609,8,6,1,1,19,2.38,25,8,17
 4,Lonestar ATX Red ECNL G2011/12,Lonestar ATX,132702,9,6,2,1,19,2.11,22,11,11
 5,Challenge SC ECNL G2011/12,Challenge SC,129341,8,5,2,1,16,2.0,19,9,10
 6,Real Colorado National ECNL G2011/12,Real Colorado,95108,12,7,3,2,23,1.92,30,19,11
 7,FC Dallas Youth ECNL G2011/12,FC Dallas Youth,94652,6,3,1,2,11,1.83,14,7,7
-8,DKSC ECNL G2011/12,DKSC,81105,7,4,3,0,12,1.71,7,17,-10
-9,OK Energy FC ECNL G2011/12,Oklahoma Energy FC,94440,7,3,2,2,11,1.57,21,12,9
+8,DKSC ECNL G2011/12,DKSC,81105,8,4,3,1,13,1.63,11,21,-10
+9,OK Energy FC ECNL G2011/12,Oklahoma Energy FC,94440,8,3,2,3,12,1.5,25,16,9
 10,Colorado Storm ECNL G2011/12,Colorado Storm,71847,11,4,6,1,13,1.18,9,12,-3
-11,Sting Black ECNL G2011/12,Sting Soccer Club,116000,7,2,3,2,8,1.14,7,15,-8
-12,Albion Hurricanes FC ECNL G2011/12,Albion Hurricanes FC,81918,8,3,5,0,9,1.13,12,15,-3
+11,Albion Hurricanes FC ECNL G2011/12,Albion Hurricanes FC,81918,8,3,5,0,9,1.13,12,15,-3
+12,Sting Black ECNL G2011/12,Sting Soccer Club,116000,8,2,4,2,8,1.0,7,16,-9
 13,Colorado Rush ECNL G2011/12,Colorado Rush,95047,7,1,6,0,3,0.43,4,22,-18
-14,Dallas Texans ECNL G2011/12,Dallas Texans,134488,7,0,6,1,1,0.14,1,11,-10
-15,West Side Alliance ECNL G2011/12,West Side Alliance SC,111175,7,0,7,0,0,0.0,2,21,-19
-16,Real Colorado Athletico ECNL G2011/12,Real Colorado,95110,8,0,8,0,0,0.0,4,33,-29
+14,West Side Alliance ECNL G2011/12,West Side Alliance SC,111175,8,1,7,0,3,0.38,3,21,-18
+15,Dallas Texans ECNL G2011/12,Dallas Texans,134488,7,0,6,1,1,0.14,1,11,-10
+16,Real Colorado Athletico ECNL G2011/12,Real Colorado,95110,9,0,9,0,0,0.0,4,39,-35
