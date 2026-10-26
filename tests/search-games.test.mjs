@@ -49,6 +49,11 @@ const fieldRule = ({ core, places }) => {
 // 35 fields whose names are aliases (an alias's name is no field-name phrase): 944 -> 909 fields, 900 -> 831 phrases.
 const FIXTURE_COUNT = 831;
 const FIXTURE_RULE = fieldRule(loadSearchData()), LIVE_RULE = fieldRule(CDATA);
+// #197: the kept fixture names that readQuery does not read as a field (stop words, a kind word or a digit in the name)
+const FIELD_QUIRK = ['academy of holy angels', 'academy of the new church anc', 'allen high school track and field stadium', 'college of marin',
+  'colorado school of mines stermole stadium', 'east meadow field of dreams', 'johnson and wales university scotts miraclegro', 'our lady of mercy',
+  'reach 11 sports complex', 'sarah hegarty field 2', 'the academy of the holy cross', 'the calverton school', 'the masters college',
+  'the parks at texas star', 'the pine school', 'the plex', 'the wellington school turf', 'town and country', 'toyota of lewisville railroad park', 'university of dallas'];
 const phraseNames = ix => ix.vocab.phrases.filter(p => p.fieldName).map(p => p.words.join(' ')).sort();
 
 // ---------- the staged games build ----------
@@ -90,14 +95,23 @@ test('Q4, MF5: every field name of 2 words or more reads as a field, except a na
   assert.ok(LIVE_RULE.kept.length > 0 && LIVE_RULE.dropped.length > 0 && LIVE_RULE.kept.length / (LIVE_RULE.kept.length + LIVE_RULE.dropped.length) >= 0.95, 'the rule keeps most names and drops some');
   assert.deepEqual(phraseNames(CIX), LIVE_RULE.kept, 'committed data: exactly the names the rule keeps');
   assert.deepEqual([...v.fieldPhrasesDropped].sort(), LIVE_RULE.dropped, 'committed data: exactly the names the rule drops');
-  for (const d of ['fc dallas', 'pda south']) assert.ok(LIVE_RULE.dropped.includes(d), `${d}: a club's name never reads as a field`);
   for (const p of v.phrases.filter(x => x.fieldName)) assert.ok(p.words.length >= 2, p.value);
-  const field = (q, ix = CIX) => readQuery(ix.vocab, q).sides[0].field;
+  // #197: the named examples run on the frozen fixture (the committed data held the same rows when they were written);
+  // the committed data keeps the rule: a dropped name never reads as a field (exact), a kept name does (a share)
+  const field = (q, ix = IX) => readQuery(ix.vocab, q).sides[0].field;
+  for (const d of ['fc dallas', 'pda south']) assert.ok(FIXTURE_RULE.dropped.includes(d), `${d}: a club's name never reads as a field`);
   assert.equal(field('Canyon Crest Academy'), true);
   for (const q of ['surf', 'Surf Cup', 'Canyon Crest', 'Grogan', 'Stadium', 'FC Dallas', 'PDA South', 'PDA']) assert.equal(field(q), false, `${q}: a part, or a club's name, never a field`);
-  const s = run('FC Dallas', CIX, CCTX);
+  const s = run('FC Dallas');
   assert.deepEqual(s.sections.map(x => x.name), ['teams', 'games'], 'MF5: FC Dallas leads with Teams');
   assert.equal(s.enter.kind, 'team'); assert.equal(s.enter.club, 'FC Dallas Youth');
+  // the rule on both data sets: no dropped name reads as a field. A kept name reads as a field, but 20 of the fixture's 831
+  // do not (an existing quirk of the reader: stop words, a kind word or a digit in the name; not fixed here): pinned exactly
+  // on the fixture, and a share (97.6% when set) on the committed data, which a refresh may add to
+  for (const [ix, rule, what] of [[IX, FIXTURE_RULE, 'fixture'], [CIX, LIVE_RULE, 'committed data']]) for (const k of rule.dropped) assert.equal(field(k, ix), false, `${what}: ${k} is held by a name, so it reads as no field`);
+  assert.deepEqual(FIXTURE_RULE.kept.filter(k => !field(k)), FIELD_QUIRK, 'the fixture: the kept names the reader does not read as a field');
+  const unread = LIVE_RULE.kept.filter(k => !field(k, CIX));
+  assert.ok(unread.length <= 0.05 * LIVE_RULE.kept.length, `${unread.length} of ${LIVE_RULE.kept.length} kept names do not read as a field: ${unread.join(', ')}`);
 });
 
 // #177 (N2 of the review of #176): the names `finishG` checks last (clubs with no squad, families, conference aliases) were
@@ -337,7 +351,7 @@ test('MF3: under rule 5 Games comes after every section, and Teams and Events (o
   }
   // #177: shares (92.3% of the prefixes run, 91.7% of those with games when set); floors 80% and 80%
   assert.ok(n >= 0.8 * prefixes.length && games >= 0.8 * n, `${n} of ${prefixes.length} prefixes, ${games} with games`);
-  assert.equal(run('St', CIX, CCTX).enter.title.startsWith('Stanislaus'), true, 'St: Stanislaus Surf, as on main');
+  assert.equal(run('St').enter.title.startsWith('Stanislaus'), true, 'St: Stanislaus Surf, as on main (#197: the frozen fixture)');
 });
 test('MF4: a place query leads with Games only when a field in the place has games in the seasons asked; Enter is never an empty field', () => {
   let lead = 0, n = 0;
@@ -353,14 +367,15 @@ test('MF4: a place query leads with Games only when a field in the place has gam
   }
   // #177: shares (96.5% of the queries are rule 4, 11.2% of those led by Games when set); floors 75% (doubled places: 84%) and 3% (doubled places and no California fields: 4.7%)
   assert.ok(n >= 0.75 * qs.size && lead >= 0.03 * n, `${n} of ${qs.size} place queries, ${lead} led by Games`);
-  for (const q of ['Naperville', 'Tulsa', 'Lake Forest', 'Orange']) assert.equal(run(q, CIX, CCTX).sections[0].name, 'teams', q);
-  assert.deepEqual(run('Redmond', CIX, CCTX).sections.map(x => x.name), ['events', 'games', 'teams'], 'P03');
-  assert.equal(run('Weston', CIX, CCTX).sections[0].name, 'games');
-  const f = run('Farmington', CIX, CCTX);
+  // #197: the named places on the frozen fixture
+  for (const q of ['Naperville', 'Tulsa', 'Lake Forest', 'Orange']) assert.equal(run(q).sections[0].name, 'teams', q);
+  assert.deepEqual(run('Redmond').sections.map(x => x.name), ['events', 'games', 'teams'], 'P03');
+  assert.equal(run('Weston').sections[0].name, 'games');
+  const f = run('Farmington');
   assert.deepEqual([f.sections.map(x => x.name), f.enter, f.empty], [['games'], null, null], 'Farmington: honest coverage, no false Enter target');
 });
 test('build point 2: a place whose fields match every word shows no partial guesses (San Francisco, on main: San Diego Fall, San Diego Surf, San Juan SC, all partial)', () => {
-  const s = run('San Francisco', CIX, CCTX), old = run('San Francisco', CIX, CCTX, { games: false });
+  const s = run('San Francisco'), old = run('San Francisco', IX, CTX, { games: false });   // #197: the frozen fixture
   assert.equal(old.empty.reason, 'no-full-match', 'without games: partial guesses');
   assert.ok(old.sections.every(x => x.partialOnly) && sec(old, 'teams').some(r => /San Diego Surf/.test(r.club)));
   assert.deepEqual(s.sections.map(x => x.name), ['games']);
@@ -430,7 +445,9 @@ test('#167 S1, MF1: completeGames(search(q, later)) is search(q), rows in full (
   const { all, flipped } = LATER_SET;
   // #177 (C1): the absolute floor stays: 73 when set, and it held at 73 while the set grew from 2072 to 2208 queries
   assert.ok(flipped.length >= 60, `${flipped.length} queries a games-less search would call loading`);
-  for (const q of ['ml', 'Sacra', 'San de', 'U1', 'playoffs 2025-', 'showcase 202', 'Legends Del Ma']) assert.ok(flipped.includes(q), q);
+  // #197: the seven the Reviewer named flip on the frozen fixture (a bare index reports the active season loading), not by name in the live set
+  const FB = S.buildIndex(loadSearchData()), fbCtx = { ...CTX, gamesLoading: [FB.vocab.active] };
+  for (const q of ['ml', 'Sacra', 'San de', 'U1', 'playoffs 2025-', 'showcase 202', 'Legends Del Ma']) assert.deepEqual([run(q).empty && run(q).empty.reason, run(q, FB, fbCtx).empty && run(q, FB, fbCtx).empty.reason], ['no-match', 'games-loading'], q);
   let deferred = 0;
   for (const q of all) {
     const want = LATER_SET.ref.get(q).text, st = {}, l = run(q, CIX, CCTX, { games: 'later', stats: st });
@@ -465,9 +482,10 @@ test('#167 S1: later defers only under rules 1 and 5 with Teams or Events result
   // #177: shares of the set (2208 when set: 1.45%, 8.3%, 33.1%, 5.5%); floors 0.7% (it must survive three times the places), 4%, 28%, 3%
   const total = LATER_SET.all.length;
   assert.ok(seen[2] >= 0.007 * total && seen[3] >= 0.04 * total && seen[4] >= 0.28 * total && seen.partial >= 0.03 * total, `${JSON.stringify(seen)} of ${total}`);
-  { const c = run('colorado academy', CIX, CCTX, { games: 'later' }); assert.ok(c.rule === 5 && c.sections[0].name === 'teams' && !c.gamesPending, 'a field name read beside Teams rows: rule 5, and its Games is searched at once'); }
-  for (const q of ['U15 NorCal vs U15 Texas', 'NorCal U15 vs Mustang']) { const l = run(q, CIX, CCTX, { games: 'later' }); assert.ok(l.rule === 1 && !l.gamesPending, `${q}: a vs query under rule 1 is searched at once`); }
-  const sc = run('Surf Cup', CIX, CCTX, { games: 'later' });
+  { const c = run('colorado academy', IX, CTX, { games: 'later' });   // #197: the three named queries run on the frozen fixture
+     assert.ok(c.rule === 5 && c.sections[0].name === 'teams' && !c.gamesPending, 'a field name read beside Teams rows: rule 5, and its Games is searched at once'); }
+  for (const q of ['U15 NorCal vs U15 Texas', 'NorCal U15 vs Mustang']) { const l = run(q, IX, CTX, { games: 'later' }); assert.ok(l.rule === 1 && !l.gamesPending, `${q}: a vs query under rule 1 is searched at once`); }
+  const sc = run('Surf Cup', IX, CTX, { games: 'later' });
   assert.ok(!sc.gamesPending && sc.sections.every(x => x.rows.every(r => r.partial || x.name === 'games')), 'build point 1: partial rows never feed Games');
 });
 
@@ -511,24 +529,23 @@ test('MF2: Teams and Events read every field name (alone, with 2011, with U15) a
 });
 
 test('MF2: Dallas Texans Lewisville is its 18 teams first, then Games with the field; colorado academy keeps the place Colorado; a field name with no team leads with Games', () => {
-  const d = run('Dallas Texans Lewisville', CIX, CCTX);
-  assert.equal(sec(run('Dallas Texans Lewisville'), 'teams').length, 18, 'frozen fixture: the live count moves with every refresh');
-  assert.ok(sec(d, 'teams').length > 0, 'committed data: Teams first');
+  // #197: every example runs on the frozen fixture (the committed data's counts move with every refresh)
+  const d = run('Dallas Texans Lewisville');
+  assert.equal(sec(d, 'teams').length, 18);
   assert.deepEqual(d.sections.map(x => x.name), ['teams', 'games']);
   assert.equal(d.rule, 5, 'Teams found every word: the field does not lead (rule 3 does not apply)');
   assert.ok(sec(d, 'games').some(r => r.kind === 'field' && /Dallas Texans Lewisville/i.test(r.name || r.field?.name || r.key)), 'Games holds the field');
   assert.equal(d.enter.section, 'teams');
-  assert.equal(sec(run('Dallas Texans Lewisville 2011'), 'teams').length, 3, 'frozen fixture');
-  assert.equal(sec(run('dallas texans lewisville u15'), 'teams').length, 1, 'frozen fixture');
-  const c = run('colorado academy', CIX, CCTX), ct = sec(c, 'teams');
-  assert.equal(sec(run('colorado academy'), 'teams').length, 5, 'frozen fixture');
-  assert.ok(ct.length > 0, 'committed data: Teams rows');
+  assert.equal(sec(run('Dallas Texans Lewisville 2011'), 'teams').length, 3);
+  assert.equal(sec(run('dallas texans lewisville u15'), 'teams').length, 1);
+  const c = run('colorado academy'), ct = sec(c, 'teams');
+  assert.equal(ct.length, 5);
   assert.ok(ct.every(r => (r.namedPlace || []).join(' ') === 'colorado'), 'the state Colorado, as on main');
   assert.equal(c.rule, 5);
-  const f = run('Canyon Crest Academy', CIX, CCTX);
+  const f = run('Canyon Crest Academy');
   assert.equal(f.rule, 3, 'a field name no team or event holds: Games first (Q4)');
   assert.equal(f.sections[0].name, 'games');
-  for (const q of ['Great Park', 'Surf Sports Park', 'Great Park field 15']) assert.equal(run(q, CIX, CCTX).rule, 3, `${q}: a field alias leads, as before`);
+  for (const q of ['Great Park', 'Surf Sports Park', 'Great Park field 15']) assert.equal(run(q).rule, 3, `${q}: a field alias leads, as before`);
 });
 
 // ---------- #169 + #162 (owner decisions Q1-Q11): the reviewed aliases, counties and place fixes ----------

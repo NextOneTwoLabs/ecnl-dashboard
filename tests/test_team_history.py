@@ -629,22 +629,39 @@ class Refresh(unittest.TestCase):
         return code, out.getvalue(), overlay
 
     def test_a_refresh_touching_one_flight_rebuilds_exactly_its_teams_files(self):
-        # NorCal GU16 (MVLA's 2026-27 flight): one unplayed game gets a 2-1 result, and the
-        # standings rows of its two teams change. Upstream answers everything else unchanged.
-        mvla = api.read_json_file(self.index)
-        row = next(t for t in mvla["teams"] if t["teamID"] == 55477)
-        sched_path = api.p_schedule(row["eventID"], row["flightID"])
-        stand_path = api.p_standings(row["divisionID"], row["flightID"], row["eventID"])
-        games = json.loads(api.read_archive(sched_path)[0])
-        g = next(g for g in games["data"] if g.get("hometeamscore") is None and g.get("hometeamID") and g.get("awayteamID"))
-        home, away = g["hometeamID"], g["awayteamID"]
-        # #199: `form` is the last five PLAYED games in date order, so the result shows last only if the game is the latest.
-        # The first unscored game with both teams can be an old one (a 2026-10-17 game never scored, with later games played
-        # since), so the test dates its game the day after the flight's last game instead of relying on the live schedule.
+        # #197: one flight of the active season gets a new 2-1 game, and the standings rows of its two teams change.
+        # Upstream answers everything else unchanged. Nothing here names a team or relies on the live schedule's content: the
+        # flight is the first (sorted) with two indexed teams in its archived standings, the game is injected, and its
+        # names come from the index rows.
+        flights = {}
+        for t in api.read_json_file(self.index)["teams"]:
+            flights.setdefault((t["eventID"], t["divisionID"], t["flightID"]), []).append(t)
+        for event, division, flight in sorted(flights):
+            sched_path, stand_path = api.p_schedule(event, flight), api.p_standings(division, flight, event)
+            sched_raw, stand_raw = api.read_archive(sched_path)[0], api.read_archive(stand_path)[0]
+            if sched_raw is None or stand_raw is None:
+                continue
+            tab = json.loads(stand_raw)["data"]
+            ids = {x["teamID"] for x in (tab if isinstance(tab, list) else [tab])[0]["teamStandings"]}
+            pair = [t for t in sorted(flights[(event, division, flight)], key=lambda t: t["teamID"]) if t["teamID"] in ids]
+            if len(pair) >= 2 and json.loads(sched_raw)["data"]:
+                break
+        else:
+            self.fail("no flight of the active season has two indexed teams in its archived standings")
+        hrow, arow = pair[:2]
+        games = json.loads(sched_raw)
+        home, away = hrow["teamID"], arow["teamID"]
+        # #199: `form` is the last five PLAYED games in date order, so the result shows last only if the game is the latest:
+        # the new game is dated the day after the flight's last game, played or not.
         last_day = max(x["gameDate"][:10] for x in games["data"] if x.get("gameDate"))
-        g["gameDate"] = (datetime.date.fromisoformat(last_day) + datetime.timedelta(days=1)).isoformat() + "T10:00:00"
-        g["gameTime"] = "10:00:00"
+        g = copy.deepcopy(games["data"][0])
+        g.update(matchID=max(x["matchID"] for x in games["data"]) + 1, gamenumber=None, hometeamID=home, awayteamID=away,
+                 homeTeam=hrow["name"], awayTeam=arow["name"], homeTeamClubID=hrow["clubID"], awayTeamClubID=arow["clubID"],
+                 homeTeamClub=hrow["clubName"], awayTeamClub=arow["clubName"], homeClubLogo=hrow["clublogo"], awayClubLogo=arow["clublogo"],
+                 hometeamPKscore=None, awayteamPKscore=None,
+                 gameDate=(datetime.date.fromisoformat(last_day) + datetime.timedelta(days=1)).isoformat() + "T10:00:00", gameTime="10:00:00")
         g["hometeamscore"], g["awayteamscore"] = 2, 1
+        games["data"].append(g)
         table = json.loads(api.read_archive(stand_path)[0])
         for t in (table["data"] if isinstance(table["data"], list) else [table["data"]])[0]["teamStandings"]:
             if t["teamID"] in (home, away):
