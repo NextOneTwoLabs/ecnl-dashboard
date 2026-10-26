@@ -138,7 +138,7 @@ test('every game of every season links to the view that draws it: 0 wrong destin
   assert.deepEqual(wrong.slice(0, 20), [], `${wrong.length} wrong of ${n}`);
   for (const [s, want] of Object.entries(CLOSED)) assert.deepEqual(counts[s], Object.fromEntries(Object.entries(want).map(([k, v]) => [String(k), v])), `${s}: games by dest code`);
   // the active season grows with each refresh: its games are all checked above, and it holds some
-  assert.ok(Object.values(counts[active]).reduce((x, y) => x + y, 0) > 1000 && n > 45000, `${n} games`);
+  assert.ok(Object.values(counts[active]).reduce((x, y) => x + y, 0) > 1000 && n > 30000, `${n} games`);   // #177: 47053 when set
   // no link only for a side still to be decided ("Winner Game 13 v Winner Game 14")
   assert.ok(noLink.length > 0 && noLink.every(g => !g.home.teamID || !g.away.teamID), `${noLink.length} games with no link, each with a TBD side`);
   // diagnostics: #155's cross-flight games (listed in their division's Matches view all the same) and the
