@@ -16,7 +16,9 @@ import proxy_server
 import data_api
 
 ROOT = Path(proxy_server.SERVE_DIR)
-HISTORY_DATA = (ROOT / 'archive/history/55477.json').exists()
+# #201: any history file, not one team's: a team can leave the active season, and a missing file must not switch the tests off.
+HISTORY_IDS = sorted(int(p.stem) for p in (ROOT / 'archive/history').glob('*.json') if p.stem.isdigit())
+HISTORY_DATA = bool(HISTORY_IDS)
 
 
 def route_cases():
@@ -278,13 +280,22 @@ class ApiTests(unittest.TestCase):
 
     @unittest.skipUnless(HISTORY_DATA, 'the team-history data (#107) is not in this checkout')
     def test_history_etag_and_304(self):
-        history = '/api/v1/teams/55477/history'
-        status, headers, body = self.request(history)
-        self.assertEqual((status, headers['Cache-Control'], body), (200, 'no-cache', (ROOT / 'archive/history/55477.json').read_bytes()))
-        self.assertEqual(headers['ETag'], '"' + hashlib.sha256(body).hexdigest() + '"')
-        for method in ('GET', 'HEAD'):
-            status, conditional, body = self.request(history, method, {'If-None-Match': headers['ETag']})
-            self.assertEqual((status, body, conditional['ETag']), (304, b'', headers['ETag']))
+        # #201: the smallest and the largest id present, so no named team (one can leave the archive).
+        for tid in sorted({HISTORY_IDS[0], HISTORY_IDS[-1]}):
+            history = f'/api/v1/teams/{tid}/history'
+            status, headers, body = self.request(history)
+            self.assertEqual((status, headers['Cache-Control'], body), (200, 'no-cache', (ROOT / f'archive/history/{tid}.json').read_bytes()), tid)
+            self.assertEqual(headers['ETag'], '"' + hashlib.sha256(body).hexdigest() + '"')
+            for method in ('GET', 'HEAD'):
+                status, conditional, body = self.request(history, method, {'If-None-Match': headers['ETag']})
+                self.assertEqual((status, body, conditional['ETag']), (304, b'', headers['ETag']), (tid, method))
+
+    def test_a_history_200_route_case_runs_when_history_is_present(self):
+        # #201: a case whose team has left the archive is skipped one by one; this keeps that from losing the whole route.
+        if not HISTORY_DATA:
+            self.skipTest('the team-history data (#107) is not in this checkout')
+        self.assertTrue([p for p, e in route_cases() if e == 200 and re.fullmatch(r'/api/v1/teams/\d+/history', p)],
+                        'every history 200 case in tests/routes.json was skipped')
 
     def test_search_data_bodies_equal_their_files(self):
         """#158, #159: each search data route serves its own file, byte for byte, with its sha256 as ETag."""

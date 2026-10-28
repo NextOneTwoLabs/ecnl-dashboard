@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "activeSeason": "2026-27",
+  "commit": "f3d754213cc646c6173ecc44fac2e60d67edde27",
+  "picks": {
+    "CUR": 21001,
+    "OLD": 1153,
+    "OLDER": 21001,
+    "GP0": 4298,
+    "both maybe and maybePrev": 96995,
+    "maybePrev and 2 or more seasons": 96994
+  },
+  "files": {
+    "archive/api/Event/get-schedules-by-flight/3165/24128/0.json": {
+      "bytes": 151198,
+      "sha256": "24448b4819d1f50fffbe128acf3f5cf6902ce7948e3c971549531091707c70d6"
+    },
+    "archive/api/Event/get-schedules-by-flight/3925/32621/0.json": {
+      "bytes": 49964,
+      "sha256": "2c871f6941c9c6bebf0199040224a35d9b06c05a0e6d2698c3685b32c4fbcc7b"
+    },
+    "archive/api/Event/get-schedules-by-flight/3925/32623/0.json": {
+      "bytes": 49458,
+      "sha256": "4eff01f0b9a8cc31d7939afabaf3990353f23a6bce28d4fa7ac6f960c3131d06"
+    },
+    "archive/api/Event/get-schedules-by-flight/4269/40592/0.json": {
+      "bytes": 75209,
+      "sha256": "fc59882c4c976a4630dbdf7b306708e9ead5bfa42c3316fc480b11068d52b1c8"
+    },
+    "archive/api/Event/get-schedules-by-flight/4271/40603/0.json": {
+      "bytes": 151628,
+      "sha256": "69bb63675384d837f1fa1c306388947fc62cccdd0142d0a459172d00811ec442"
+    },
+    "archive/clubs.json": {
+      "bytes": 5812,
+      "sha256": "b93cdc76382213a94a85746cc7cfe5936ca6c0fd4fbbeddc77d0a5b8b9467f88"
+    },
+    "archive/history/1153.json": {
+      "bytes": 6155,
+      "sha256": "be82516fca4dd2356b70c8d4ba028009f3a5c5732028404776435d9a731c8d73"
+    },
+    "archive/history/21001.json": {
+      "bytes": 5414,
+      "sha256": "6c87efffca6d6372f1a8bff94ac67d32eb15f53500834c3b5dcd14a77066f041"
+    },
+    "archive/history/4298.json": {
+      "bytes": 6682,
+      "sha256": "bd84f84d1167ef731f05269e84aae7ba874d141b504d58dc3e2e66f0cba1f9c3"
+    },
+    "archive/history/96994.json": {
+      "bytes": 2399,
+      "sha256": "6467980baebfdd2c66fb6201cd7dd7d2b5be1f354b1d890b9f32adf631421be8"
+    },
+    "archive/history/96995.json": {
+      "bytes": 3051,
+      "sha256": "e1e418ccbfc6c5189bc3ae40f436b7211635b5b1327d8d0d0b167b58273a7d09"
+    }
+  },
+  "sources": "tests/search/fixtures/sources.json (guarded by its own MANIFEST)"
+}

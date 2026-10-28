@@ -7,7 +7,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -103,7 +103,8 @@ test('the history route: ids validated like every route, validators forwarded, J
 });
 
 // The history files are committed separately from the code (#107): without them this is skipped.
-const hasHistory = existsSync(new URL('archive/history/55477.json', root));
+// #201: any history file, not one team's: a team can leave the active season, and a missing file must not switch the tests off.
+const hasHistory = existsSync(new URL('archive/history/', root)) && readdirSync(new URL('archive/history/', root)).some(f => /^\d+\.json$/.test(f));
 test('every history file is served byte for byte by one asset read', { skip: !hasHistory && 'no team-history data in this checkout' }, async () => {
   let count = 0;
   for (const file of await readdir(new URL('archive/history/', root))) {

@@ -252,10 +252,12 @@ class Games(unittest.TestCase):
             g = games.get(mid)
             if g is None:      # a later refresh may have resolved them; the fixture keeps them
                 continue
-            self.assertIsNone(g["date"])
-            self.assertTrue(g["flags"] & sd.F_UNDATED)
+            # #201: a refresh that scores a leg gives it a date, so on live data the rule is that the date and the flag agree
+            # (a builder that flags a leg without removing its date, or the reverse, still fails here).
+            self.assertEqual(g["date"] is None, bool(g["flags"] & sd.F_UNDATED), mid)
         fixture = {g["matchID"]: g for f in (FIXTURES / "search").glob("games-2026-27.json") for g in sd.decode_games(load(f))}
-        for mid in (1133108, 1133109, 1133110):
+        for mid in (1133108, 1133109, 1133110):   # the exact facts, on the frozen fixture
+            self.assertIsNone(fixture[mid]["date"], mid)
             self.assertTrue(fixture[mid]["flags"] & sd.F_UNDATED, mid)
 
     def test_dates_encode_and_decode(self):
@@ -446,15 +448,17 @@ class Stability(unittest.TestCase):
 
     def changed_score(self, extra=None):
         """A build with one active-season score set (and optionally a game appended after it). The
-        game already has a kick-off time, so no borrowed-date leg can change with it."""
+        game already has a kick-off time, so no borrowed-date leg can change with it. #201: any such game
+        will do, scored or not (at the end of the season none is left unscored); the new score differs from its own."""
         active = api.load_sources()["refresh"]["activeSeason"]
         games = decoded(fresh()[0], active)
         mid, g = next((m, x) for m, x in sorted(games.items()) if x["kind"] == "c" and x["time"]
-                      and x["home"]["teamID"] and x["away"]["teamID"] and x["score"] == [None, None])
+                      and x["home"]["teamID"] and x["away"]["teamID"])
         path = api.p_schedule(g["eventID"], g["flightID"])
+        home, away = (7, 0) if g["score"] != [7, 0] else (8, 0)
 
         def edit(doc):
-            rows = [dict(r, hometeamscore=7, awayteamscore=0) if r["matchID"] == mid else r for r in doc["data"]]
+            rows = [dict(r, hometeamscore=home, awayteamscore=away) if r["matchID"] == mid else r for r in doc["data"]]
             if extra:
                 rows.append(dict(next(r for r in rows if r["matchID"] == mid), matchID=extra))
             return dict(doc, data=rows)

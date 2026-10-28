@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-pair-check.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/search-h2h.test.mjs tests/h2h-page.test.mjs tests/agents.test.mjs tests/match-param.test.mjs tests/postseason-rules.test.mjs tests/postseason-places.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/history-fixture.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-pair-check.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/search-h2h.test.mjs tests/h2h-page.test.mjs tests/agents.test.mjs tests/match-param.test.mjs tests/postseason-rules.test.mjs tests/postseason-places.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -767,6 +767,13 @@ Overview tab.
   committed files differ from a fresh build (`--team-history --check`). What happens when the
   data changes, a build fails, or a past season is corrected:
   [When the data changes](docs/data-api.md#when-the-data-changes).
+- **Tests that pick a team by a season state (#201).** The few picks that cannot outlive the season (a squad in progress
+  with pending dated games, a squad at 0 games, an older-link squad, and the two `maybe` picks that match 3 and 4 files) run on
+  a small frozen copy, `tests/fixtures/history/` (5 history files and the schedules their newest rows open, with a MANIFEST of
+  sha256 checksums over LF text; the season catalog is `tests/search/fixtures/sources.json`). It is made by
+  `node --import ./tests/netguard/netguard.mjs tests/fixtures/history/freeze.mjs --freeze --commit <sha>`, which reads
+  committed files only, and changes only in a reviewed PR; `tests/history-fixture.test.mjs` fails on a file that differs from
+  its MANIFEST. Every other test reads the live files as a rule (no named team, no first match that a refresh can remove).
 - **Not in this phase:** RL, guest and showcase-only teams (no conference table, so no
   history and no link), and following a squad in My Teams. (Team search, #114, now opens Overview.)
 

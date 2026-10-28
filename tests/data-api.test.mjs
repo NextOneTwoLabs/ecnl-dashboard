@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { resolveResource, dataApi, CLOSED_CACHE, resetCatalogMemo } from '../api/data-api.mjs';
 import { assetPath } from '../api/archive-reader.mjs';
 import worker from '../worker.js';
@@ -15,6 +15,13 @@ const cases = JSON.parse(await readFile(new URL('./routes.json', import.meta.url
   if (!m || status !== 200 || existsSync(new URL(`archive/history/${m[1]}.json`, root))) return true;
   console.log(`skipped (no history data): ${path}`);
   return false;
+});
+// #201: a route case whose team has left the archive is skipped above, one by one. This keeps the skip from becoming a silent
+// loss of the whole history route: with any history file present, at least one history 200 case runs.
+const anyHistory = existsSync(new URL('archive/history/', root)) && readdirSync(new URL('archive/history/', root)).some(f => /^\d+\.json$/.test(f));
+test('#201: with history files present, at least one history 200 route case runs', () => {
+  if (!anyHistory) return;
+  assert.ok(cases.some(([path, status]) => status === 200 && /^\/api\/v1\/teams\/\d+\/history$/.test(path)), 'every history 200 case in tests/routes.json was skipped');
 });
 const env = { ASSETS: { async fetch(req) {
   try { return new Response(await readFile(new URL(new URL(req.url).pathname.slice(1), root)), { headers: { 'content-type': 'application/json', etag: '"fixture"' } }); }

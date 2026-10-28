@@ -16,6 +16,7 @@
 (f) Privacy: only the allow-listed team-level fields are written.
 """
 import argparse
+import collections
 import contextlib
 import copy
 import datetime
@@ -272,9 +273,14 @@ class Built(unittest.TestCase):
                 hits = [x for x in sched if (x.get("gameDate") or "")[:10] == g["date"] and r["teamID"] in (x.get("hometeamID"), x.get("awayteamID"))
                         and th.played(x) and (g["oppID"] is None or g["oppID"] in (x.get("hometeamID"), x.get("awayteamID")))]
                 self.assertTrue(hits, (r["season"], r["teamID"], g["date"]))
-                x = hits[0]
+                # #201: a same-date, same-pair double-header has two games, so compare the multiset of scores of this date and
+                # opponent in `last` with the archived games' (a sub-multiset: `last` may stop between the two), not the first hit.
+                sides = lambda x: (x["hometeamscore"], x["awayteamscore"]) if x.get("hometeamID") == r["teamID"] else (x["awayteamscore"], x["hometeamscore"])
+                mine = collections.Counter((h["gf"], h["ga"]) for h in last if h["date"] == g["date"] and h["oppID"] == g["oppID"])
+                self.assertFalse(mine - collections.Counter(sides(x) for x in hits), (r["season"], r["teamID"], g["date"]))
+                x = next(x for x in hits if sides(x) == (g["gf"], g["ga"])
+                         and (g["home"] is None or (x.get("hometeamID") == r["teamID"]) == g["home"]))
                 home = x.get("hometeamID") == r["teamID"]
-                self.assertEqual((g["gf"], g["ga"]), (x["hometeamscore"], x["awayteamscore"]) if home else (x["awayteamscore"], x["hometeamscore"]))
                 # Home or away is TGS's; it is unknown only with the opponent (all three, or none).
                 self.assertEqual(g["home"] is None, g["opp"] is None)
                 self.assertEqual(g["home"] is None, g["oppID"] is None)
@@ -352,25 +358,29 @@ class Built(unittest.TestCase):
         self.assertFalse(any(e["reached"] == "Round of 18" for sq in self.squads for e in sq["postseason"]))
 
     def test_mvla_g2011(self):
-        (sq,) = self.files[55477]
+        # #201: the closed seasons (through CLOSED) are pinned exactly; a row after them (the open season, or the next ones) is a
+        # rule, so neither a refresh, the end of the season nor a rollover changes this test, and the squad is found by its
+        # first season, not by the team's file holding one squad.
+        CLOSED = "2025-26"
+        sq = self.squad_of("2023-24", 55477)
         self.assertEqual(sq["birthYears"], [2011])
-        self.assertEqual([(r["season"], r["teamID"], r["link"]) for r in sq["seasons"]],
-                         [("2023-24", 55477, "start"), ("2024-25", 55477, "id"), ("2025-26", 55477, "id"), ("2026-27", 55477, "id")])
-        # #151: only completed seasons have a final rank; the in-progress one moves with every refresh.
-        self.assertEqual([(r["rank"], r["of"]) for r in sq["seasons"] if not r.get("inProgress")], [(1, 10), (3, 10), (1, 11)])
-        (live,) = [r for r in sq["seasons"] if r.get("inProgress")]
-        self.assertEqual(live["season"], "2026-27")
-        self.assertEqual(live["of"], 12)
-        self.assertTrue(1 <= live["rank"] <= live["of"], live["rank"])
-        done = [r for r in sq["seasons"] if not r.get("inProgress")]
-        self.assertEqual([sum(r[k] for r in done) for k in ("gp", "w", "d", "l", "gf", "ga")], [56, 47, 4, 5, 197, 29])
-        # Postseason and showcases of the in-progress season can still appear; pin completed seasons only.
-        post = [e for e in sq["postseason"] if e["season"] != live["season"]]
+        closed = [r for r in sq["seasons"] if r["season"] <= CLOSED]
+        self.assertEqual([(r["season"], r["teamID"], r["link"]) for r in closed],
+                         [("2023-24", 55477, "start"), ("2024-25", 55477, "id"), ("2025-26", 55477, "id")])
+        # #151: only completed seasons have a final rank; a later row moves with every refresh.
+        self.assertEqual([(r["rank"], r["of"]) for r in closed], [(1, 10), (3, 10), (1, 11)])
+        for r in sq["seasons"]:
+            if r["season"] > CLOSED:
+                self.assertEqual((r["teamID"], r["link"]), (55477, "id"), r["season"])
+                self.assertTrue(1 <= r["rank"] <= r["of"], (r["season"], r["rank"]))
+        self.assertEqual([sum(r[k] for r in closed) for k in ("gp", "w", "d", "l", "gf", "ga")], [56, 47, 4, 5, 197, 29])
+        # Post-season and showcases of a later season can still appear; pin the closed seasons only.
+        post = [e for e in sq["postseason"] if e["season"] <= CLOSED]
         self.assertEqual([(e["season"], e["reached"], e["group"] and e["group"]["pos"], e.get("fromTable", False)) for e in post],
                          [("2023-24", None, 4, False), ("2024-25", None, 3, True), ("2025-26", "Round of 16", None, False)])
-        self.assertEqual([e["stage"] for e in sq["showcases"] if e["season"] != live["season"]], ["San Diego Fall", "Phoenix Spring"])
+        self.assertEqual([e["stage"] for e in sq["showcases"] if e["season"] <= CLOSED], ["San Diego Fall", "Phoenix Spring"])
         best = sq["postseason"][sq["best"]]
-        if best["season"] != live["season"]:   # a live-season entry may legitimately outrank 2025-26
+        if best["season"] <= CLOSED:   # a later entry may legitimately outrank 2025-26
             self.assertEqual(best["reached"], "Round of 16")
 
     def test_a_reused_id_keeps_its_squads_apart(self):
@@ -423,7 +433,7 @@ class Overrides(unittest.TestCase):
             ({"from": "2025-26/54493", "to": "2026-27/134153"}, "needs a 'note'"),
             ({"from": "2024-25/54493", "to": "2026-27/134153", "note": "x"}, "season after"),
             ({"from": "2025-26/54493", "to": "2026-27/999999999", "note": "x"}, "not in any conference table"),
-            ({"from": "2025-26/54493", "to": "2026-27/55477", "note": "x"}, "by its TGS id"),   # MVLA's, by id
+            ({"from": "2024-25/54493", "to": "2025-26/55477", "note": "x"}, "by its TGS id"),   # MVLA's, by id (a closed-season pair, #201)
             ({"from": "2024-25/54493", "to": "2025-26/64467", "note": "x"}, "does not age"),    # G2011 -> G2012
             ({"from": "54493", "to": "2026-27/134153", "note": "x"}, "SEASON/TEAMID"),
         ]
@@ -444,10 +454,11 @@ class Overrides(unittest.TestCase):
         self.assertEqual((nxt, maybe), want)
 
     def test_unlink_splits_a_squad(self):
-        nxt, _maybe, errors = links_of(self.rows, {"unlink": [{"from": "2024-25/55477", "to": "2025-26/55477", "note": "test"}]})
+        # #201: closed seasons only (2023-24 -> 2024-25 unlinked; the link after it, 2024-25 -> 2025-26, stays).
+        nxt, _maybe, errors = links_of(self.rows, {"unlink": [{"from": "2023-24/55477", "to": "2024-25/55477", "note": "test"}]})
         self.assertEqual(errors, [])
-        self.assertNotIn(("2024-25", 55477), nxt)
-        self.assertEqual(nxt[("2025-26", 55477)][0], ("2026-27", 55477))
+        self.assertNotIn(("2023-24", 55477), nxt)
+        self.assertEqual(nxt[("2024-25", 55477)][0], ("2025-26", 55477))
 
     def test_swapped_sister_sides_can_be_relinked(self):
         # The id rule would follow each id; two manual links re-point both (the Sting pattern).
@@ -576,7 +587,7 @@ class Writing(unittest.TestCase):
 class Refresh(unittest.TestCase):
     """The refresh keeps the histories current in the same run (#107), and survives a failure."""
 
-    ACTIVE = "2026-27"
+    ACTIVE = api.load_sources()["refresh"]["activeSeason"]   # #201: not a literal; a rollover moves it
 
     def setUp(self):
         self.sources = api.load_sources()
