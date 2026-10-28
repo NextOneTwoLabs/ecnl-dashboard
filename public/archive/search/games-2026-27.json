@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"91c7dd202ada5853"
+,"build":"7263a67b98a04743"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -1011,6 +1011,7 @@
 ,"4593":["legacy center sports complex","48116"]
 ,"4661":["Mercyhealth Sportscore Two","61111"]
 ,"4694":["long beach city college liberal arts campus","90806"]
+,"4707":["california lutheran university","91360"]
 ,"4763":["frisco high school","75034"]
 ,"4802":["ukrainian american sports center","19454"]
 ,"4817":["cfc park","06524"]
@@ -1080,6 +1081,7 @@
 ,"8541":["clark east field","75023"]
 ,"8576":["el cajon valley high school","92021"]
 ,"8591":["carver high school","02330"]
+,"8633":["st bonaventure stadium","93003"]
 ,"8771":["dragon stadium","76092"]
 ,"8794":["sting national training center","75006"]
 ,"8825":["june shelton school","75252"]
@@ -4402,7 +4404,7 @@
 ,[1,1161100,40608,110468,80765,0,4,null,null,3192,10,null,[1,0]]
 ,[1,1161100,40607,111175,116000,1,0,null,null,3192,9,null,[1,0]]
 ,[1,1160900,40606,78763,82159,0,2,null,null,3192,10,null,[1,0]]
-,[1,1160900,40605,129323,111690,null,null,null,null,3192,9,null,[1,0]]
+,[1,1160900,40605,129323,111690,2,2,null,null,3192,9,null,[1,0]]
 ,[1,1291330,40610,58631,59850,null,null,null,null,442,"RCSC Grass",null,[1,0]]
 ,[1,1291115,40609,69251,69485,null,null,null,null,442,"RCSC Grass",null,[1,0]]
 ,[1,1290900,40608,81431,72334,null,null,null,null,442,"RCSC Grass",null,[1,0]]
@@ -5391,12 +5393,12 @@
 ,[1,1221300,40601,134084,81125,null,null,null,null,2566,2,null,[1,0]]
 ,[1,1221100,40600,134082,99201,null,null,null,null,2566,1,null,[1,0]]
 ,[1,1221300,40599,134070,121185,null,null,null,null,2566,1,null,[1,0]]
-,[1,1230900,40604,6122,59771,null,null,null,null,435,14,null,[1,0]]
-,[1,1231300,40603,5544,68888,null,null,null,null,435,19,null,[1,0]]
-,[1,1231100,40602,62045,62249,null,null,null,null,435,14,null,[1,0]]
-,[1,1231100,40601,25917,81125,null,null,null,null,435,19,null,[1,0]]
-,[1,1231300,40600,64010,99201,null,null,null,null,435,14,null,[1,0]]
-,[1,1230900,40599,63947,121185,null,null,null,null,435,19,null,[1,0]]
+,[1,1231100,40604,6122,59771,null,null,null,null,8633,1,null,[1,0]]
+,[1,1230900,40603,5544,68888,null,null,null,null,8633,1,null,[1,0]]
+,[1,1231300,40602,62045,62249,null,null,null,null,8633,1,null,[1,0]]
+,[1,1231210,40601,25917,81125,null,null,null,null,4707,"Stadium Field",null,[1,0]]
+,[1,1231020,40600,64010,99201,null,null,null,null,4707,"Stadium Field",null,[1,0]]
+,[1,1230830,40599,63947,121185,null,null,null,null,4707,"Stadium Field",null,[1,0]]
 ,[1,1290900,40604,133707,133009,null,null,null,null,92,"Stadium",null,[1,0]]
 ,[1,1291100,40603,133709,133022,null,null,null,null,92,"Stadium",null,[1,0]]
 ,[1,1291300,40602,133711,133024,null,null,null,null,92,"Stadium",null,[1,0]]
@@ -6347,7 +6349,7 @@
 ,[1,1221300,40575,132201,111781,null,null,null,null,31,"Trione East",null,[1,0]]
 ,[1,1220900,40580,62306,39256,null,null,null,null,7207,"MJC West",null,[1,0]]
 ,[1,1221055,40579,68540,44309,null,null,null,null,9098,1,null,[1,0]]
-,[1,1221250,40578,82857,44313,null,null,null,null,9098,1,null,[1,0]]
+,[1,1221100,40578,82857,44313,null,null,null,null,7207,"MJC West",null,[1,0]]
 ,[1,1221500,40577,82858,63606,null,null,null,null,7207,"MJC West",null,[1,0]]
 ,[1,1221620,40576,82859,44316,null,null,null,null,9098,1,null,[1,0]]
 ,[1,1221800,40575,82861,55311,null,null,null,null,9098,1,null,[1,0]]
