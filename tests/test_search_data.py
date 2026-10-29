@@ -561,7 +561,8 @@ class Pipeline(unittest.TestCase):
     def test_team_history_writes_the_directory_then_the_search_data(self):
         code, out = self.run_in_sandbox(lambda: archive.cmd_team_history(api.load_sources()))
         self.assertEqual(code, 0, out)
-        self.assertLess(out.index("Team directory:"), out.index("Search data: 9 files"))
+        # #203: as many files as the pipeline builds (one games file per season with games, core, places), not a literal
+        self.assertLess(out.index("Team directory:"), out.index(f"Search data: {len(fresh()[0])} files"))
         for n, b in fresh()[0].items():
             self.assertEqual(Path(self.search, n).read_bytes(), b, n)
         self.assertEqual(load(os.path.join(self.search, "core.json"))["directoryBuild"],

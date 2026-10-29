@@ -157,14 +157,28 @@ class ApiTests(unittest.TestCase):
     def test_cache_policy_archive_rows(self):
         closed = self.POLICY['closed']
         self.assertEqual(data_api.CLOSED_CACHE, closed)
-        rows = 0
-        with patch.object(proxy_server.ProxyHandler, 'log_message'):
+        rows = history_rows = 0
+        # #203: the catalog is the frozen one (tests/search/fixtures/sources.json: the active season is 2026-27 for good) and the
+        # files are the live archive's, so the rollover cannot move which rows are "active". The live catalog has its own rule test
+        # (test_all_archive_parity).
+        root = Path(tempfile.mkdtemp(prefix='cache-policy-archive-'))
+        self.addCleanup(shutil.rmtree, root, ignore_errors=True)
+        (root / 'data').mkdir()
+        shutil.copy(Path(__file__).parent / 'search/fixtures/sources.json', root / 'data/sources.json')
+        self.assertEqual(json.loads((root / 'data/sources.json').read_bytes())['refresh']['activeSeason'], self.POLICY['catalogs']['catalog']['refresh']['activeSeason'],
+                         'tests/search/fixtures/sources.json was re-frozen for another season: the "no-cache" rows of tests/cache-policy.json name 2026-27')
+        (root / 'archive').symlink_to(ROOT / 'archive', target_is_directory=True)
+        for f in (ROOT / 'data').iterdir():
+            if f.name != 'sources.json':
+                (root / 'data' / f.name).symlink_to(f)
+        with patch.object(proxy_server.ProxyHandler, 'log_message'), patch.object(proxy_server, 'SERVE_DIR', str(root)):
             for path, expected, *method in self.POLICY['archive']:
                 method = method[0] if method else 'GET'
                 history = re.fullmatch(r'/api/v1/teams/(\d+)/history', path)
                 if history and not (ROOT / f'archive/history/{history[1]}.json').exists():
                     print(f'skipped (no history data): {path}')
                     continue
+                history_rows += bool(history)
                 policy = closed if expected == 'closed' else expected
                 status, headers, _ = self.request(path, method)
                 self.assertEqual(headers['Cache-Control'], policy, (method, path))
@@ -177,6 +191,8 @@ class ApiTests(unittest.TestCase):
                         self.assertEqual((again, conditional['Cache-Control'], body), (304, policy, b''), (verb, path))
                 rows += 1
         self.assertGreaterEqual(rows, 24)
+        if HISTORY_IDS:   # #203: with history files present, at least one history row ran
+            self.assertGreater(history_rows, 0, 'every history row of tests/cache-policy.json was skipped')
 
     def _case_root(self, case, paths):
         """A throwaway root holding the case's catalog (as tests/data-api.test.mjs builds it) and
@@ -256,7 +272,7 @@ class ApiTests(unittest.TestCase):
                 self.assertIn('application/json', headers['Content-Type'])
                 self.assertEqual(headers['Cache-Control'], 'no-store')
                 self.assertEqual(body, b'' if method == 'HEAD' else b'{"ok":false,"error":"Not found"}')
-        teams = '/api/v1/seasons/2026-27/teams'
+        teams = '/api/v1/seasons/%s/teams' % json.loads((ROOT / 'data/sources.json').read_bytes())['refresh']['activeSeason']   # #203: the live active season
         status, headers, _ = self.request(teams)
         self.assertEqual((status, headers['Cache-Control']), (200, 'no-cache'))
         for method in ('GET', 'HEAD'):

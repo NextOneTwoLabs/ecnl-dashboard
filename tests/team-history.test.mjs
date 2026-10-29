@@ -207,10 +207,11 @@ const words = new Function(block('    function historyYears(', 'function history
 
 // The "One TGS id, N squads" note (#107 re-check): a carry only when the same id is in the same
 // age group a season later at the 2026-27 regroup; otherwise the age groups say what happened.
-test('page history: the "One TGS id" note follows the age groups', { skip: !hasHistory && 'no team-history data in this checkout' }, async () => {
+test('page history: the "One TGS id" note follows the age groups', async () => {
   const splitNotes = new Function('seasonLabel', block('    function historySplitNotes(') + '\nreturn historySplitNotes;')(s => s.replace('-', '–'));
   const age = r => `U${r.u}`;
-  const notes = async id => splitNotes((await json(`archive/history/${id}.json`)).squads, id, age);
+  // #203: the eight named files are the frozen copy's (tests/fixtures/history/): a team TGS withdraws from 2026-27 cannot change them.
+  const notes = async id => splitNotes(JSON.parse(readFileSync(new URL(`fixtures/history/archive/history/${id}.json`, import.meta.url), 'utf8')).squads, id, age);
   const carry = /kept it in the same age group/;
   // Not carries: a different age group across the regroup, or no 2025-26 row at all.
   assert.deepEqual(await notes(34961), ['In 2026–27 TGS reused it for another age group (U18 in 2025–26, U13 in 2026–27).']);
