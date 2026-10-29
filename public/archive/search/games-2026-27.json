@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"8e689b6fd4ff53bb"
+,"build":"a952c2240b4b31ae"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -527,9 +527,9 @@
 ,"120529":["United Futbol Academy ECNL G2013/14",3407]
 ,"121185":["Phoenix Rising FC ECNL G2013/14",1141]
 ,"126188":["Davis Legacy ECNL G2013/14",1425]
-,"126631":["Pateadores Soccer Club ECNL G2013/14",186]
+,"126631":["Pateadores ECNL G2013/14",186]
 ,"126712":["LV Heat Surf ECNL G2013/14",57]
-,"126748":["Pateadores Soccer Club ECNL G2012/13",186]
+,"126748":["Pateadores ECNL G2012/13",186]
 ,"127576":["Avalanche ECNL G2013/14",107]
 ,"127617":["Real Colorado Athletico ECNL G2013/14",81]
 ,"127664":["Atlanta Fire United ECNL G2013/14",14]
@@ -580,10 +580,10 @@
 ,"130286":["NCFC Youth NC Courage ECNL G2010/11",22]
 ,"130287":["NCFC Youth NC Courage ECNL G2011/12",22]
 ,"130288":["NCFC Youth NC Courage ECNL G2012/13",22]
-,"130900":["Pateadores Soccer Club ECNL G2008/09",186]
-,"130972":["Pateadores Soccer Club ECNL G2011/12",186]
-,"130974":["Pateadores Soccer Club ECNL G2010/11",186]
-,"130975":["Pateadores Soccer Club ECNL G2009/10",186]
+,"130900":["Pateadores ECNL G2008/09",186]
+,"130972":["Pateadores ECNL G2011/12",186]
+,"130974":["Pateadores ECNL G2010/11",186]
+,"130975":["Pateadores ECNL G2009/10",186]
 ,"131001":["Sting Royal ECNL G2013/14",36]
 ,"131271":["FC Westlake ECNL G2013/14",3234]
 ,"131272":["FC Westlake ECNL G2012/13",3234]
@@ -4381,7 +4381,7 @@
 ,[1,1151100,40606,80828,82159,0,4,null,null,2213,"ESC 5",null,[1,0]]
 ,[1,1150900,40605,94445,111690,3,1,null,null,2213,"ESC 4",null,[1,0]]
 ,[1,1151300,40610,110465,47082,1,2,null,null,3192,9,null,[1,0]]
-,[1,1151500,40609,110467,68923,null,null,null,null,3192,10,null,[1,0]]
+,[1,1151500,40609,110467,68923,5,0,null,null,3192,10,null,[1,0]]
 ,[1,1151300,40608,110468,81104,1,1,null,null,3192,10,null,[1,0]]
 ,[1,1151100,40607,111175,81105,0,1,null,null,3192,9,null,[1,0]]
 ,[1,1151100,40606,78763,114045,0,4,null,null,3192,10,null,[1,0]]

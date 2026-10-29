@@ -1,6 +1,6 @@
 {"schema":2
-,"build":"7695b9ed361bdb6c"
-,"directoryBuild":"d700aacbf869e04c"
+,"build":"47818d824328d4c2"
+,"directoryBuild":"06bc1c1f40863ca9"
 ,"activeSeason":"2026-27"
 ,"seasons":["2020-21","2021-22","2022-23","2023-24","2024-25","2025-26","2026-27"]
 ,"birthYears":[2002,2014]
@@ -1143,7 +1143,7 @@
 ,{"b":[2010],"best":0,"c":116,"e":[[3,6,0,"Group 4/4"]],"s":[[2,69186,"Liverpool FC IA Michigan ECNL G10",8,28,7,15],[3,69186,"Liverpool FC IA Michigan ECNL G10",8,29,4,15],[4,69186,"Liverpool FC IA Michigan ECNL G10",8,30,12,16],[5,69186,"Liverpool FC IA Michigan ECNL G10",8,31,15,16],[6,69186,"Liverpool FC MI ECNL G2009/10",8,32,16,16]]}
 ,{"b":[2010],"c":27,"s":[[2,69196,"NCFC Youth ECNL G10",2,28,11,13],[3,69196,"NCFC Youth ECNL G10",2,29,10,13],[4,69196,"NCFC Youth ECNL G10",2,30,7,12],[5,69196,"NCFC Youth ECNL G10",2,31,10,10],[6,69196,"NCFC Youth ECNL G2009/10",2,32,11,11]]}
 ,{"b":[2010],"c":40,"m":[1542,1565],"s":[[2,69224,"NC Fusion - ECNL G10",2,28,9,13],[3,69224,"NC Fusion ECNL G10",2,29,7,13],[4,69224,"NC Fusion ECNL G10",2,30,12,12],[5,69224,"NC Fusion ECNL G10",2,31,9,10]]}
-,{"b":[2010],"best":0,"c":101,"e":[[2,4,0,"Group 3/4"]],"s":[[2,69250,"Real Colorado Athletico ECNL G10",5,28,2,14],[3,69250,"Real Colorado Athletico ECNL G10",6,29,14,16],[4,69250,"Real Colorado Athletico ECNL G10",6,30,11,16],[5,69250,"Real Colorado Athletico ECNL G10",6,31,14,16],[6,69250,"Real Colorado Athletico ECNL G2009/10",6,32,14,16]]}
+,{"b":[2010],"best":0,"c":101,"e":[[2,4,0,"Group 3/4"]],"s":[[2,69250,"Real Colorado Athletico ECNL G10",5,28,2,14],[3,69250,"Real Colorado Athletico ECNL G10",6,29,14,16],[4,69250,"Real Colorado Athletico ECNL G10",6,30,11,16],[5,69250,"Real Colorado Athletico ECNL G10",6,31,14,16],[6,69250,"Real Colorado Athletico ECNL G2009/10",6,32,15,16]]}
 ,{"b":[2010],"best":4,"c":101,"e":[[2,4,0,"Round of 16"],[2,5,0,"Quarterfinals"],[3,6,0,"Round of 16"],[4,8,0,"Round of 16"],[5,10,0,"Champion"]],"s":[[2,69251,"Real Colorado National ECNL G10",5,28,3,14],[3,69251,"Real Colorado National ECNL G10",6,29,2,16],[4,69251,"Real Colorado National ECNL G10",6,30,2,16],[5,69251,"Real Colorado National ECNL G10",6,31,1,16],[6,69251,"Real Colorado National ECNL G2009/10",6,32,4,16]],"t":1}
 ,{"b":[2010],"best":1,"c":13,"e":[[2,4,0,"Group 3/4"],[3,6,0,"Round of 16"],[5,10,3,"Group 11/18"]],"m":[1886,1887],"s":[[2,69269,"Dallas Texans ECNL G10",6,28,2,12],[3,69269,"Dallas Texans ECNL G10",6,29,4,16],[4,69269,"Dallas Texans ECNL G10",6,30,10,16],[5,69269,"Dallas Texans ECNL G10",6,31,12,16]]}
 ,{"b":[2004,2005],"c":127,"s":[[2,69288,"FL Premier FC ECNL G05/04",4,11,14,16]]}
@@ -1432,7 +1432,7 @@
 ,{"b":[2006,2007],"c":132,"s":[[4,94978,"Colorado Rush ECNL G07/06",6,4,4,16]]}
 ,{"b":[2008],"best":0,"c":132,"e":[[4,8,0,"Group 3/4"]],"s":[[4,94980,"Colorado Rush ECNL G08",6,16,6,16],[5,94980,"Colorado Rush Academy Blue ECNL G08/07",6,21,5,16]]}
 ,{"b":[2009],"c":132,"e":[[4,8,7,"Quarterfinals"],[5,10,10,"Quarterfinals"],[5,12,11,""]],"s":[[4,94982,"Colorado Rush ECNL G09",6,25,8,16],[5,94982,"Colorado Rush Blue ECNL G09",6,26,11,16],[6,94982,"Colorado Rush ECNL G2008/09",6,27,8,16]]}
-,{"b":[2010],"c":132,"e":[[5,12,11,""]],"s":[[4,94985,"Colorado Rush ECNL G10",6,30,16,16],[5,94985,"Colorado Rush Academy Blue ECNL G10",6,31,13,16],[6,94985,"Colorado Rush ECNL G2009/10",6,32,13,16]]}
+,{"b":[2010],"c":132,"e":[[5,12,11,""]],"s":[[4,94985,"Colorado Rush ECNL G10",6,30,16,16],[5,94985,"Colorado Rush Academy Blue ECNL G10",6,31,13,16],[6,94985,"Colorado Rush ECNL G2009/10",6,32,14,16]]}
 ,{"b":[2011],"best":0,"c":131,"e":[[4,8,0,"Round of 16"],[5,10,7,"Champion"],[5,12,11,""]],"m":[1871,1872],"s":[[4,95005,"South Shore Select ECNL G11",3,34,2,9],[5,95005,"Select ECNL G11",3,35,3,9]],"t":1}
 ,{"b":[2010],"c":131,"e":[[4,8,7,"Round of 16"],[5,10,10,"Round of 16"],[5,12,11,""]],"m":[1872,1873],"s":[[4,95006,"South Shore Select ECNL G10",3,30,4,9],[5,95006,"Select ECNL G10",3,31,5,9]]}
 ,{"b":[2009],"best":0,"c":131,"e":[[5,10,0,"Round of 32"],[5,12,11,""]],"m":[1873,1874],"s":[[4,95007,"South Shore Select ECNL G09",3,25,7,9],[5,95007,"Select ECNL G09",3,26,2,9]]}
@@ -1561,7 +1561,7 @@
 ,{"b":[2013],"c":97,"m":[1577,1628],"s":[[5,110326,"Pipeline SC ECNL G13",1,40,10,10]]}
 ,{"b":[2007,2008],"c":134,"s":[[5,110464,"West Side Alliance ECNL G08/07",6,21,14,16]]}
 ,{"b":[2009],"c":134,"s":[[5,110465,"West Side Alliance ECNL G09",6,26,10,16],[6,110465,"West Side Alliance ECNL G2008/09",6,27,15,16]]}
-,{"b":[2010],"c":134,"s":[[5,110467,"West Side Alliance ECNL G10",6,31,16,16],[6,110467,"West Side Alliance ECNL G2009/10",6,32,15,16]]}
+,{"b":[2010],"c":134,"s":[[5,110467,"West Side Alliance ECNL G10",6,31,16,16],[6,110467,"West Side Alliance ECNL G2009/10",6,32,13,16]]}
 ,{"b":[2011],"c":134,"s":[[5,110468,"West Side Alliance ECNL G11",6,35,10,16],[6,110468,"West Side Alliance ECNL G2010/11",6,36,16,16]]}
 ,{"b":[2013],"c":71,"e":[[5,11,13,""]],"s":[[5,110984,"Davis Legacy ECNL G13",7,40,7,11],[6,110984,"Davis Legacy ECNL G2012/13",7,41,10,12]]}
 ,{"b":[2012],"c":134,"s":[[5,111175,"West Side Alliance ECNL G12",6,38,11,16],[6,111175,"West Side Alliance ECNL G2011/12",6,39,14,16]]}
