@@ -8,7 +8,8 @@
 // by scanning the history files and the schedules, and every expectation is computed from them.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { dataset, pickFrom, mineIn, squadFor, newest, linkSeason, unplayed, day, realDate } from './fixtures/history/picks.mjs';
 
 const root = new URL('../public/', import.meta.url);
 const html = readFileSync(process.env.ECNL_TEST_HTML || new URL('index.html', root), 'utf8').replace(/\r\n/g, '\n');
@@ -26,38 +27,26 @@ const re = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const deferred = () => { let resolve, reject; const promise = new Promise((y, n) => { resolve = y; reject = n; }); return { promise, resolve, reject }; };
 
 // ---------- the data ----------
-const SOURCES = read('data/sources.json');
-const SEASONS = SOURCES.seasons;
-const OPEN = SOURCES.refresh.activeSeason;
-const CLUBS = read('archive/clubs.json');
-const HIST = new URL('archive/history/', root);
-const FILES = existsSync(HIST) ? readdirSync(HIST).filter(f => f.endsWith('.json')).map(f => JSON.parse(readFileSync(new URL(f, HIST), 'utf8'))) : [];
+// Two data sets (#201). The picks that depend on a point in the season (CUR: a squad in progress with pending dated games;
+// GP0: a squad at 0 games) or on one season being open run on the frozen copy in tests/fixtures/history/ with the catalog of
+// tests/search/fixtures/sources.json (OPEN is then 2026-27 for good), so a refresh, the end of the season or a rollover cannot
+// switch them off. The two "every file" tests (H1, H2) are rules and run on the live archive and the live catalog.
+const FXDIR = new URL('fixtures/history/', import.meta.url);
+const FX = dataset(FXDIR, new URL('search/fixtures/sources.json', import.meta.url));
+const MANIFEST = JSON.parse(readFileSync(new URL('MANIFEST.json', FXDIR), 'utf8'));
+const LIVE_DATA = dataset(root, new URL('data/sources.json', root));
+const { SOURCES, SEASONS, OPEN, CLUBS, scheduleOf } = FX;
+const FILES = LIVE_DATA.files;
 const missingHistory = !FILES.length && 'no team-history data in this checkout';
-const scheduleFile = (e, f) => new URL(`archive/api/Event/get-schedules-by-flight/${e}/${f}/0.json`, root);
-const scheduleOf = (e, f) => existsSync(scheduleFile(e, f)) ? (JSON.parse(readFileSync(scheduleFile(e, f), 'utf8')).data || []) : null;
 const label = s => s.replace('-', '–');
 const short = r => String(r.name).replace(/\s*[-–]?\s*ECNL\b.*$/i, '').trim() || r.clubName;
-const placeOf = clubID => { const p = clubID != null && Number(clubID) !== 7 && CLUBS.clubs[clubID]; return p && p.city && p.state ? `${p.city}, ${p.state}` : ''; };
-// The squad the page shows for a link to `season` (as renderTeamHistory picks it), and its newest row.
-const mineIn = (q, id) => q.seasons.filter(r => String(r.teamID) === String(id));
-function squadFor(doc, season) {
-  const latest = q => (mineIn(q, doc.teamID).slice(-1)[0] || { season: '' }).season;
-  return doc.squads.find(q => mineIn(q, doc.teamID).some(r => r.season === season))
-    || doc.squads.slice().sort((a, b) => latest(b).localeCompare(latest(a)))[0];
-}
-const newest = (doc, season) => { const q = squadFor(doc, season); return q.seasons[q.seasons.length - 1]; };
-const linkSeason = doc => (mineIn(doc.squads[0], doc.teamID).slice(-1)[0] || doc.squads[0].seasons.slice(-1)[0]).season;
-const unplayed = g => g.hometeamscore == null || g.awayteamscore == null;
-const day = g => (g.gameDate || '').slice(0, 10);
-const realDate = g => !g.dateUnconfirmed && day(g) >= '1900';
-// A current squad with an unplayed, dated game ahead in its schedule; an archived squad; a link
-// whose season is older than its squad's newest row; a squad that has played no games.
-const CUR = FILES.find(d => d.squads.length === 1 && (r => r.season === OPEN && r.inProgress && r.gp > 0 && Array.isArray(r.last) && r.form && r.last.length === r.form.length
-  && new Set((scheduleOf(r.eventID, r.flightID) || []).filter(g => (g.hometeamID === r.teamID || g.awayteamID === r.teamID) && unplayed(g) && realDate(g)).map(day)).size >= 2)(newest(d, linkSeason(d))));
-const OLD = FILES.find(d => d.squads.length === 1 && (r => r.season < OPEN && d.squads[0].seasons.length >= 3)(newest(d, linkSeason(d))));
-const OLDER = FILES.find(d => d.squads.length === 1 && newest(d, OPEN).season === OPEN && mineIn(d.squads[0], d.teamID).some(r => r.season < OPEN));
-const GP0 = FILES.find(d => d.squads.length === 1 && (r => r.season === OPEN && r.gp === 0)(newest(d, OPEN)));
-const skip = missingHistory || (!CUR && 'no current-season squad with dated pending fixtures in committed archive');
+const placeIn = clubs => clubID => { const p = clubID != null && Number(clubID) !== 7 && clubs.clubs[clubID]; return p && p.city && p.state ? `${p.city}, ${p.state}` : ''; };
+const placeOf = placeIn(CLUBS);
+const CUR = pickFrom(FX, MANIFEST, 'CUR');
+const OLD = pickFrom(FX, MANIFEST, 'OLD');
+const OLDER = pickFrom(FX, MANIFEST, 'OLDER');
+const GP0 = pickFrom(FX, MANIFEST, 'GP0');
+const skip = false;
 
 // ---------- a small fake DOM (as tests/conference-sheet.test.mjs) ----------
 function makeDom() {
@@ -172,7 +161,8 @@ const SIDEBAR = [
   block('    // ========== LANDING (#135 P1a)', 'async function renderTeamsIndex('),
 ].join('\n');
 
-function page({ today = '2026-10-02', holdSchedule = null, schedule = null, favorites: follow = [] } = {}) {
+function page({ today = '2026-10-02', holdSchedule = null, schedule = null, favorites: follow = [], data = FX } = {}) {
+  const { SOURCES, SEASONS, OPEN, CLUBS, scheduleOf } = data;
   const dom = makeDom();
   const { document, El } = dom;
   const calls = [], spy = { sidebar: [], openFav: 0, ageTabs: [], confList: [], loadStandings: 0, history: [] };
@@ -223,7 +213,8 @@ const glanceHtml = (p, el) => el ? el.innerHTML : '';
 const panelsOf = c => c.querySelector('.hist-stack').kids.map(k => k.className);
 
 test('H1: the identity header: the squad and its birth years, then its newest name, age group, conference and place (every file)', { skip: missingHistory }, () => {
-  const p = page();
+  const p = page({ data: LIVE_DATA });
+  const placeOf = placeIn(LIVE_DATA.CLUBS), OPEN = LIVE_DATA.OPEN;
   p.setPlaces();   // as loadTeamHistory loads them before it renders
   for (const doc of FILES) {
     const season = linkSeason(doc), sq = squadFor(doc, season), r = newest(doc, season);
@@ -238,7 +229,8 @@ test('H1: the identity header: the squad and its birth years, then its newest na
 });
 
 test('H2: the scope line, and a next-match slot only for the open season (every file)', { skip: missingHistory }, () => {
-  const p = page();
+  const p = page({ data: LIVE_DATA });
+  const OPEN = LIVE_DATA.OPEN;
   for (const doc of FILES) {
     const season = linkSeason(doc), r = newest(doc, season);
     const o = p.render(doc, season);

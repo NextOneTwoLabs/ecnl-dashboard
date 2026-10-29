@@ -7,9 +7,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { dataset, pickFrom } from './fixtures/history/picks.mjs';
 
 const ACTIVE_SEASON = JSON.parse(readFileSync(new URL('../public/data/sources.json', import.meta.url), 'utf8')).refresh.activeSeason;
-const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const html = readFileSync(process.env.ECNL_TEST_HTML || new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const block = (head, last = head, close = '\n    }\n') => {
   const start = html.indexOf('\n' + head) + 1;
   const from = html.indexOf(last, start);
@@ -40,6 +41,13 @@ function pick(what, pred) {
   assert.ok(file, `no history file has ${what} (fixture precondition)`);
   return file;
 }
+
+// #201: the two picks that match only 3 and 4 live files run on the frozen copy in tests/fixtures/history/ (a refresh can
+// resolve a "maybe" link and leave none); every other pick stays on the live files, where it matches 63 to 1034.
+const FXDIR = new URL('./fixtures/history/', import.meta.url);
+const FROZEN = dataset(FXDIR, new URL('./search/fixtures/sources.json', import.meta.url));
+const MANIFEST = JSON.parse(readFileSync(new URL('MANIFEST.json', FXDIR), 'utf8'));
+const frozen = name => pickFrom(FROZEN, MANIFEST, name);
 
 // Render a history document as the page does for its squad's latest season, into a fake DOM:
 // the panels in order (class and HTML), the season rows and cards, and the aside.
@@ -135,7 +143,7 @@ test('#127: a "moved from" pill names the season before, not the row above it', 
 
 test('#127: "What happened next" sits just above the table, "Earlier seasons" just below it', { skip }, () => {
   const next = 'What happened next is not confirmed', prev = 'Earlier seasons not confirmed';
-  const both = render(pick('both maybe and maybePrev', q => q.maybe?.length && q.maybePrev?.length));
+  const both = render(frozen('both maybe and maybePrev'));
   const table = both.at('flight-title">Season by season<');
   assert.equal(both.at(next), table - 1);
   assert.equal(both.at(prev), table + 1);
@@ -148,7 +156,7 @@ test('#127: "What happened next" sits just above the table, "Earlier seasons" ju
 });
 
 test('#127: "Earlier seasons not confirmed" still reads the oldest season (review S5)', { skip }, () => {
-  const doc = clone(pick('maybePrev and 2 or more seasons', q => q.maybePrev?.length && q.seasons.length >= 2));
+  const doc = clone(frozen('maybePrev and 2 or more seasons'));
   const s = doc.squads[0].seasons;
   // The oldest and the newest rows differ, both ways, so reading the wrong end shows.
   for (const oldestRegroup of [true, false]) {
