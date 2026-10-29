@@ -285,14 +285,15 @@ test('the h2h link check has teeth: a candidate id, an alias id, a wrong name an
 });
 
 // ---------- #182 N5: the Matches cards' head-to-head links ----------
-// The page's own h2hCardHref (and h2hClean), sliced from index.html, makes the link for every game of every conference
-// division whose two sides are both in the division's standings (the cards' own rule, h2hCardLinker). Each must pass the
+// The page's own h2hCardLinker and h2hCardHref (and h2hClean), sliced from index.html, make the link for every game of every
+// conference division whose two sides are both in the division's standings (the cards' own rule), given that division's standings
+// as currentFlightData. name= comes from those standings, not the schedule row (#205: TGS can spell a team differently in the two). Each must pass the
 // judged set's destinationProblem (name= is the directory's spelling of A, vs= is another squad), name A and B in the
 // right order, carry match= and the season. A is the home side, and then the away side (the selected team). On the
 // committed data, which a refresh moves, a rule and a floor, never a pinned count.
 test('every Matches-card head-to-head link opens the pair it names: name= is the directory\'s spelling, match= is the game, either side as A', () => {
   const lineOf = head => { const a = html.indexOf('\n' + head) + 1, b = html.indexOf('\n', a); assert.ok(a > 0 && b > a, `${head} not found in index.html`); return html.slice(a, b); };
-  const card = new Function(`let LIVE = false, selectedTeamID = null, currentSeason = null;\n${lineOf('    const h2hClean = ')}\n${block('    function h2hCardHref(')}\nreturn { href: h2hCardHref, set(s, t) { currentSeason = s; selectedTeamID = t; } };`)();
+  const card = new Function(`let LIVE = false, selectedTeamID = null, currentSeason = null, currentFlightData = [];\n${lineOf('    const h2hClean = ')}\n${block('    function h2hCardHref(')}\n${block('    function h2hCardLinker(')}\nreturn { linker: h2hCardLinker, set(s, t, fd) { currentSeason = s; selectedTeamID = t; currentFlightData = fd; } };`)();
   const jix = indexOf(json('archive/search/core.json').teams, src);
   const problem = (href, g, season, a, b) => {
     const bad = destinationProblem(href, jix);
@@ -307,13 +308,14 @@ test('every Matches-card head-to-head link opens the pair it names: name= is the
   for (const [season, se] of Object.entries(src.seasons)) for (const [conf, c] of Object.entries(se.conferences || {})) {
     for (const div of hier(c.eventId).girlsDivAndFlightList || []) {
       const fl = div.flightList || [], ids = new Set(fl.flatMap(f => standingTeams(div, f, c.eventId).map(t => t.teamID)));
+      const fd = fl.map(f => ({ standings: { teamStandings: standingTeams(div, f, c.eventId) } }));   // what the page holds as currentFlightData
       for (const f of fl) for (const g of sched(c.eventId, f.flightID, true)) {
         if (!g.hometeamID || !g.awayteamID || g.hometeamID === g.awayteamID || !ids.has(g.hometeamID) || !ids.has(g.awayteamID)) continue;
         for (const away of [false, true]) {
-          card.set(season, away ? g.awayteamID : null);
-          const l = card.href(g);
+          card.set(season, away ? g.awayteamID : null, fd);
+          const l = card.linker()(g);
           if (!l) { wrong.push(`${season} ${g.matchID}: no link`); continue; }
-          n++; first = first || { l, g, season };
+          n++; first = first || { l, g, season, fd, away };
           const [a, b] = away ? [g.awayteamID, g.hometeamID] : [g.hometeamID, g.awayteamID], why = problem(l.href, g, season, a, b);
           if (why) wrong.push(`${season} ${conf} ${g.matchID} ${away ? 'away' : 'home'}: ${why}`);
           if (/ {2}|\s(?=\s|$)/.test(l.label)) wrong.push(`${season} ${g.matchID}: the label has stray spaces: ${l.label}`);
@@ -324,10 +326,21 @@ test('every Matches-card head-to-head link opens the pair it names: name= is the
   assert.deepEqual(wrong.slice(0, 20), [], `${wrong.length} wrong of ${n}`);
   assert.ok(n > 30000, `${n} card links`);
   // teeth: the resolver catches a spelling the directory doesn't have, a wrong game and a wrong pair
-  const { l, g, season } = first, a = +new URLSearchParams(l.href.slice(1)).get('team'), b = +new URLSearchParams(l.href.slice(1)).get('vs').split(':')[1];
+  const { l, g, season, fd } = first, a = +new URLSearchParams(l.href.slice(1)).get('team'), b = +new URLSearchParams(l.href.slice(1)).get('vs').split(':')[1];
   assert.equal(problem(l.href, g, season, a, b), null);
   assert.match(problem(l.href.replace(/(&name=[^&]+)/, '$1%20'), g, season, a, b), /name is not/);
   assert.match(problem(l.href.replace(/match=\d+/, 'match=1'), g, season, a, b), /match= is not the game/);
   assert.match(problem(l.href.replace(/vs=[^&]+/, `vs=${season}:${a}`), g, season, a, b), /same squad/);
+  // #205, teeth that do not depend on the data: a schedule row that spells the two teams differently from the directory
+  // still gives the directory's spelling in name= (the label keeps the card's own), and the old behaviour (name= taken from the
+  // schedule row) is caught on that very game
+  const ren = { ...g, homeTeam: `${g.homeTeam}  Renamed`, awayTeam: ` Renamed ${g.awayTeam}` }, tidy = x => x.trim().replace(/\s+/g, ' ');
+  for (const away of [false, true]) {   // through the page's own h2hCardLinker, home as A and then away as A
+    card.set(season, away ? ren.awayteamID : null, fd);
+    const lr = card.linker()(ren), [x, y, xn] = away ? [ren.awayteamID, ren.hometeamID, tidy(ren.awayTeam)] : [ren.hometeamID, ren.awayteamID, tidy(ren.homeTeam)];
+    assert.equal(problem(lr.href, ren, season, x, y), null, `a renamed schedule row still links with the directory spelling (${away ? 'away' : 'home'} as A)`);
+    assert.equal(lr.label, `Head to head: ${xn} against ${tidy(away ? ren.homeTeam : ren.awayTeam)}`, 'the label keeps the card\'s schedule spelling');
+    assert.match(problem(lr.href.replace(/name=[^&]+/, `name=${encodeURIComponent(xn)}`), ren, season, x, y), /name is not/, `the old source of name= (the schedule row) is caught (${away ? 'away' : 'home'} as A)`);
+  }
   console.log(`# ${n} Matches-card head-to-head links, 0 wrong`);
 });
