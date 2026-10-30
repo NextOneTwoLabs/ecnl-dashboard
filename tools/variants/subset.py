@@ -5,7 +5,7 @@
 <logdir> holds the logs written by `variants.py run`, named <variant>-old-node.txt, <variant>-new-node.txt, <variant>-old-py.txt and
 <variant>-new-py.txt. For each variant it prints the red and skipped test names of both, and checks that the new list is a subset of the
 old one and that a test which is new (its name is not in the old run) is green. A name that exists only in some runs because of the
-catalog (a per-season test) is in both the old and the new run and is not mistaken for a new test. Exit status 1 when a check fails.
+catalog (a per-season test) is in both the old and the new run and is not mistaken for a new test. A variant needs both its old and its new log for each suite it has (one without the other is a failure), a log must contain test lines, and at least one comparison must be made: with nothing to compare it prints `SUBSET CHECK: FAIL (no comparison made)`. Exit status 1 when a check fails.
 Reads the logs only; writes nothing."""
 import re, sys, os
 def node(path):
@@ -30,12 +30,24 @@ if len(sys.argv) < 3:
     raise SystemExit(__doc__)
 S = sys.argv[1]
 ok = True
+compared = 0
+problems = []
 for v in sys.argv[2:]:
     print(f'=== {v}')
+    made = 0
     for kind, fn, tail in (('Node', node, 'node'), ('Python', py, 'py')):
         fo, fn_ = f'{S}/{v}-old-{tail}.txt', f'{S}/{v}-new-{tail}.txt'
-        if not (os.path.exists(fo) and os.path.exists(fn_)): print(f'  {kind}: (no old run)'); continue
+        have = [os.path.exists(fo), os.path.exists(fn_)]
+        if not any(have): print(f'  {kind}: (no logs)'); continue
+        if not all(have):
+            msg = f'{v}: {kind} has only its {"old" if have[0] else "new"} log ({fo if have[0] else fn_}); the other is missing'
+            print('  ' + msg); problems.append(msg); ok = False; continue
         ob, oa, os_ = fn(fo); nb, na, ns = fn(fn_)
+        empty = [p for p, a in ((fo, oa), (fn_, na)) if not a]
+        if empty:   # a log with no test lines in it (truncated, or not the runner's output) compares nothing
+            msg = f'{v}: {kind}: no tests found in {", ".join(empty)}'
+            print('  ' + msg); problems.append(msg); ok = False; continue
+        made += 1; compared += 1
         new_only = na - oa
         extra = nb - ob                       # red/skipped now, not before
         bad_new_only = new_only & nb
@@ -52,5 +64,11 @@ for v in sys.argv[2:]:
             print(f'    still red/skipped in new ({len(left)}):')
             for n in left: print('      *', n[:120])
         if new_only: print('    tests new in this PR:', sorted(new_only))
-print('SUBSET CHECK:', 'PASS' if ok else 'FAIL')
+    if not made and not any(p.startswith(v + ':') for p in problems):
+        problems.append(f'{v}: no logs found in {S}'); ok = False
+if compared == 0 and ok:
+    print('SUBSET CHECK: FAIL (no comparison made)')
+    sys.exit(1)
+for p in problems: print('PROBLEM:', p)
+print('SUBSET CHECK:', f'PASS ({compared} comparison{"s" if compared != 1 else ""})' if ok else 'FAIL')
 sys.exit(0 if ok else 1)

@@ -11,6 +11,7 @@
 //   double-header  two unplayed games of one pair on one date in one flight are both scored
 //   late-add       two teams (cloned from 134153 and 46817, or the first two teams of --teams) are added with new ids and unplayed games
 //
+// It prints one JSON line with `changed`, the number of files it changed, and exits 1 when that is 0 (e.g. `rename --teams` for a team no schedule spells).
 // <copy-dir> must be a directory outside this checkout: the script refuses this checkout's root and any path inside it, and a directory that
 // has no public/data/sources.json. Offline: it only reads and writes files under <copy-dir>.
 import { readFileSync, writeFileSync, readdirSync, existsSync, unlinkSync, realpathSync } from 'node:fs';
@@ -27,7 +28,13 @@ export function target(arg) {
 }
 
 const J = p => JSON.parse(readFileSync(p, 'utf8'));
-const W = (p, o) => { try { unlinkSync(p); } catch {} writeFileSync(p, JSON.stringify(o)); };   // unlink first: files may be hard links
+let changed = 0;   // files whose content differs after the variant (a variant that changes none did nothing)
+const W = (p, o) => {   // unlink first: files may be hard links
+  const next = JSON.stringify(o); let same = false;
+  try { same = JSON.stringify(J(p)) === next; } catch {}
+  if (same) return;
+  changed++; try { unlinkSync(p); } catch {} writeFileSync(p, next);
+};
 const ZERO = ['wins', 'losses', 'draws', 'gp', 'totalgames', 'standingpoints', 'goalsfor', 'goalsagainst', 'goaldifferential', 'ppg', 'winpercent'];
 
 export function run(root, variant, teams = []) {
@@ -86,7 +93,7 @@ export function run(root, variant, teams = []) {
     const id = teams[0] || 55477, NAME = (idx.teams.find(t => t.teamID === id) || {}).name;
     if (!NAME) throw new Error(`team ${id} is not in the ${OPEN} index`);
     const NEW = 'Renamed SC ECNL G2010/11';
-    for (const [, , p] of scheduleFiles()) { const s = readFileSync(p, 'utf8'); if (s.includes(NAME)) { unlinkSync(p); writeFileSync(p, s.split(NAME).join(NEW)); } }   // the schedules spell it the new way
+    for (const [, , p] of scheduleFiles()) { const s = readFileSync(p, 'utf8'); if (s.includes(NAME)) { unlinkSync(p); writeFileSync(p, s.split(NAME).join(NEW)); changed++; } }   // the schedules spell it the new way
     info.was = NAME; info.now = NEW;
   } else if (variant === 'double-header') {
     const key = g => (g.gameDate || '').slice(0, 10) + '|' + [g.hometeamID, g.awayteamID].sort().join('-');
@@ -128,11 +135,14 @@ export function run(root, variant, teams = []) {
     W(A + `teams/${OPEN}.json`, idx);
     info.added = sources.length;
   } else throw new Error(`unknown variant ${variant}`);
+  info.changed = changed;
   return info;
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === realpathSync(process.argv[1])) {
   const [dir, variant, ...rest] = process.argv.slice(2);
   const teams = rest.includes('--teams') ? rest[rest.indexOf('--teams') + 1].split(',').map(Number) : [];
-  console.log(JSON.stringify(run(target(dir), variant, teams)));
+  const info = run(target(dir), variant, teams);
+  console.log(JSON.stringify(info));
+  if (!info.changed) { console.error(`${variant} changed 0 files: nothing in ${dir} matched (a team id that is not in a schedule, or nothing left to change?)`); process.exit(1); }
 }
