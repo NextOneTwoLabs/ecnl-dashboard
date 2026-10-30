@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"8a48a100db1de65e"
+,"build":"d79240937c3439fb"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -5220,10 +5220,10 @@
 ,[1,880900,40601,131923,134384,1,0,null,null,986,"Stadium",null,[1,0]]
 ,[1,881100,40600,131924,134386,3,0,null,null,986,"Athletic Field",null,[1,0]]
 ,[1,881300,40599,131925,134387,3,0,null,null,986,"Stadium",null,[1,0]]
-,[1,941100,40604,131920,133009,null,null,null,null,986,"Stadium",null,[1,0]]
-,[1,940900,40603,131921,133022,null,null,null,null,986,"Athletic Field",null,[1,0]]
-,[1,941300,40602,131922,133024,null,null,null,null,986,"Athletic Field",null,[1,0]]
-,[1,940900,40601,131923,133027,null,null,null,null,986,"Stadium",null,[1,0]]
+,[1,1441100,40604,131920,133009,null,null,null,null,986,"Stadium",null,[1,0]]
+,[1,1440900,40603,131921,133022,null,null,null,null,986,"Athletic Field",null,[1,0]]
+,[1,1441300,40602,131922,133024,null,null,null,null,986,"Athletic Field",null,[1,0]]
+,[1,1441445,40601,131923,133027,null,null,null,null,986,"Stadium",null,[1,0]]
 ,[1,941100,40600,131924,133029,null,null,null,null,986,"Athletic Field",null,[1,0]]
 ,[1,941300,40599,131925,133032,null,null,null,null,986,"Stadium",null,[1,0]]
 ,[1,1301445,40604,6122,134098,null,null,null,null,435,19,null,[1,0]]
@@ -6368,7 +6368,7 @@
 ,[1,1290900,40575,135939,111781,null,null,null,null,8274,"Football Stadium",null,[1,0]]
 ,[1,1291400,40580,95560,60301,null,null,null,null,7550,1,null,[1,0]]
 ,[1,1291200,40579,64375,69625,null,null,null,null,7550,1,null,[1,0]]
-,[1,1291000,40578,88375,81189,null,null,null,null,7550,1,null,[1,0]]
+,[1,1291000,40578,88375,81189,null,null,null,null,8115,1,null,[1,0]]
 ,[1,1291400,40577,113580,90732,null,null,null,null,7550,2,null,[1,0]]
 ,[1,1291200,40576,114556,110984,null,null,null,null,7550,2,null,[1,0]]
 ,[1,1291000,40575,116964,126188,null,null,null,null,7550,2,null,[1,0]]

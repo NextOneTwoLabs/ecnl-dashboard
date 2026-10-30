@@ -23,7 +23,6 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-09-27,01:00 PM,Group Play,LAFC So Cal ECNL G2010/11,1,1,Eagles SC ECNL G2010/11,Oak Park High School,Stadium,On Time,1085435
 2026-09-27,01:00 PM,Group Play,Beach Futbol Club (CA) ECNL G2010/11,2,0,Arizona Arsenal ECNL G2010/11,El Camino College,Athletic Field,On Time,1085465
 2026-10-03,11:00 AM,Group Play,Utah Royals FC-AZ ECNL G2010/11,0,3,LAFC So Cal ECNL G2010/11,Bell Road Sports Complex,Field 15,On Time,1085507
-2026-10-03,01:00 PM,Group Play,Beach Futbol Club (CA) ECNL G2010/11,,,Legends FC (CA) ECNL G2010/11,El Camino College,Athletic Field,On Time,1085471
 2026-10-04,10:00 AM,Group Play,Phoenix Rising FC ECNL G2010/11,2,0,LAFC So Cal ECNL G2010/11,PRFC Youth Soccer Facility,Field 2,On Time,1085513
 2026-10-04,12:30 PM,Group Play,LV Heat Surf ECNL G2010/11,0,3,SLAMMERS FC ECNL G2010/11,Heritage Park Sports Complex,Field 6,On Time,1085663
 2026-10-07,06:00 PM,Group Play,Arizona Arsenal ECNL G2010/11,0,7,Phoenix Rising FC ECNL G2010/11,Arizona Athletic Grounds,Field 9,On Time,1085351
@@ -64,6 +63,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-21,02:00 PM,Group Play,LV Heat Surf ECNL G2010/11,,,Sporting California USA ECNL G2010/11,Heritage Park Sports Complex,Field 11,On Time,1085735
 2026-11-21,03:15 PM,Group Play,Legends FC Del Mar ECNL G2010/11,,,Pateadores ECNL G2010/11,Miramesa High School ,Field 1 - Stadium,On Time,1085729
 2026-11-22,TBD,Group Play,Phoenix Rising FC ECNL G2010/11,,,San Diego Surf ECNL G2010/11,,,On Time,1085753
+2026-11-22,01:00 PM,Group Play,Beach Futbol Club (CA) ECNL G2010/11,,,Legends FC (CA) ECNL G2010/11,El Camino College,Athletic Field,On Time,1085471
 2027-03-13,09:00 AM,Group Play,LAFC So Cal ECNL G2010/11,,,Rebels SC ECNL G2010/11,Oak Park High School,Stadium,On Time,1085393
 2027-03-20,TBD,Group Play,Beach Futbol Club (CA) ECNL G2010/11,,,Eagles SC ECNL G2010/11,,,On Time,1085759
 2027-03-20,TBD,Group Play,LAFC So Cal ECNL G2010/11,,,Arizona Arsenal ECNL G2010/11,,,On Time,1085771
