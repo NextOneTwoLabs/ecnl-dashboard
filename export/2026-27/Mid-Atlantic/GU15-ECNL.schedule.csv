@@ -32,8 +32,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-25,01:00 PM,Group Play,South Carolina Surf ECNL G2011/12,2,1,Beach FC (VA) ECNL G2011/12,Shea Family Fields,Field 2,On Time,1121332
 2026-10-25,01:00 PM,Group Play,Charlotte SA ECNL G2011/12,1,0,Fairfax Virginia Union ECNL G2011/12,Orthocarolina Complex,Field 5,On Time,1121336
 2026-10-25,01:00 PM,Group Play,NCFC Youth NC Courage ECNL G2011/12,3,1,VDA ECNL G2011/12,WRAL ,Field 5,On Time,1121340
-2026-10-31,08:00 AM,Group Play,Beach FC (VA) ECNL G2011/12,,,Wilmington Hammerheads ECNL G2011/12,Hampton Roads Soccer Complex,Field 16,On Time,1121348
-2026-10-31,01:00 PM,Group Play,South Carolina Surf ECNL G2011/12,,,NC Fusion ECNL G2011/12,Shea Family Fields,Field 3,On Time,1121352
+2026-10-31,08:00 AM,Group Play,Beach FC (VA) ECNL G2011/12,1,4,Wilmington Hammerheads ECNL G2011/12,Hampton Roads Soccer Complex,Field 16,On Time,1121348
+2026-10-31,01:00 PM,Group Play,South Carolina Surf ECNL G2011/12,0,3,NC Fusion ECNL G2011/12,Shea Family Fields,Field 3,On Time,1121352
 2026-11-01,11:00 AM,Group Play,NCFC Youth NC Courage ECNL G2011/12,,,Charlotte SA ECNL G2011/12,WRAL ,Field 6,On Time,1121356
 2026-11-07,09:00 AM,Group Play,VDA ECNL G2011/12,,,Fairfax Virginia Union ECNL G2011/12,Howison Park,Field 3,On Time,1121360
 2026-11-07,11:00 AM,Group Play,Wilmington Hammerheads ECNL G2011/12,,,NC Fusion ECNL G2011/12,NCINO Sports Park,Field 7,On Time,1121364
