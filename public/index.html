@@ -7439,21 +7439,24 @@
     const h2hSeasonsOf = d => [...new Set([...d.rows.map(r => r.season), ...d.x.map(x => x.season)])].sort();
     const h2hInitials = n => String(n).replace(/\b(ECNL|RL|SC|FC|G\d.*)\b/g, '').split(/\s+/).filter(w => /^[A-Za-z]/.test(w)).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
     const h2hShort = d => displayName(d.latest.name, d.club.name);
-    const h2hClean = n => String(n || '').replace(/\s+/g, ' ').trim();   // the builder's spelling of a name, " ".join(name.split()), so name= matches the directory's (#182 N5). It differs from Python's split() only on \x1c-\x1f and \x85 (Python only) and \ufeff (JS only); none occurs in the data
+    const h2hClean = n => String(n || '').replace(/\s+/g, ' ').trim();   // the builder's spelling of a name, " ".join(name.split()), so name= matches the directory's (#182 N5): name= is the standings' name through this (#205), the card's label is the schedule's name through it. It differs from Python's split() only on \x1c-\x1f and \x85 (Python only) and \ufeff (JS only); none occurs in the data
     const h2hTeamLink = d => `#tab=teams&season=${encodeURIComponent(d.latest.season)}&team=${d.latest.teamID}&name=${encodeURIComponent(d.latest.name)}`;
-    // Where a game's head to head is opened from a Matches card: side A is the selected team when it plays, else the home side
-    function h2hCardHref(g) {
+    // Where a game's head to head is opened from a Matches card: side A is the selected team when it plays, else the home side.
+    // name= is the standings' spelling of A (names: teamID -> name, which is the directory's), as TGS can spell a team one way in
+    // a schedule and another in the standings (#205); the schedule's spelling only if the map has none. The label keeps the card's own (schedule) spelling
+    function h2hCardHref(g, names) {
       if (LIVE || !g.hometeamID || !g.awayteamID || g.hometeamID === g.awayteamID) return null;
       const away = !!selectedTeamID && g.awayteamID === selectedTeamID, e = encodeURIComponent;
       const [a, b, an, bn] = away ? [g.awayteamID, g.hometeamID, h2hClean(g.awayTeam), h2hClean(g.homeTeam)] : [g.hometeamID, g.awayteamID, h2hClean(g.homeTeam), h2hClean(g.awayTeam)];
-      return { href: `#tab=teams&season=${e(currentSeason)}&team=${e(a)}&name=${e(an)}&vs=${e(currentSeason)}:${e(b)}&match=${e(g.matchID)}`, label: `Head to head: ${an} against ${bn}` };
+      return { href: `#tab=teams&season=${e(currentSeason)}&team=${e(a)}&name=${e((names && names.get(a)) || an)}&vs=${e(currentSeason)}:${e(b)}&match=${e(g.matchID)}`, label: `Head to head: ${an} against ${bn}` };
     }
     // The cards' link maker: only a game whose two sides are both in the division's standings (a side outside them
     // is a side with no squad), which the Matches view already holds: no request
     function h2hCardLinker() {
       if (LIVE) return null;
-      const ids = new Set(currentFlightData.flatMap(fd => ((fd.standings && fd.standings.teamStandings) || []).map(t => t.teamID)));
-      return g => (ids.has(g.hometeamID) && ids.has(g.awayteamID) ? h2hCardHref(g) : null);
+      const names = new Map();
+      for (const fd of currentFlightData) for (const t of (fd.standings && fd.standings.teamStandings) || []) names.set(t.teamID, h2hClean(t.name));
+      return g => (names.has(g.hometeamID) && names.has(g.awayteamID) ? h2hCardHref(g, names) : null);
     }
     // H2H under each score of the team's own schedule, once the season's team index is in memory (0 requests when it
     // is: deep links, search links, showcases; else 1 per season per session). A refused index: no links.

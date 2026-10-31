@@ -1,9 +1,9 @@
 date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchID
 2026-12-12,TBD,Group Play,PacNW SC ECNL G2010/11,,,Eastside FC ECNL G2010/11,,,On Time,1058644
-2026-12-12,TBD,Group Play,Portland Thorns ECNL G2010/11,,,Oregon Surf ECNL G2010/11,,,On Time,1058645
 2026-12-12,TBD,Group Play,XF ECNL G2010/11,,,Boise Thorns ECNL G2010/11,,,On Time,1058648
 2026-12-12,09:00 AM,Group Play,Washington Premier ECNL G2010/11,,,Avalanche ECNL G2010/11,WPFC Field Complex,Field 4,On Time,1058647
 2026-12-12,11:30 AM,Group Play,Seattle United ECNL G2010/11,,,La Roca FC ECNL G2010/11,TBD,Field TBD,On Time,1058646
+2026-12-12,02:00 PM,Group Play,Portland Thorns ECNL G2010/11,,,Oregon Surf ECNL G2010/11,Tualatin High School,Stadium Turf,On Time,1058645
 2026-12-13,TBD,Group Play,XF ECNL G2010/11,,,Boise Thorns ECNL G2010/11,,,On Time,1058670
 2026-12-13,09:00 AM,Group Play,Washington Premier ECNL G2010/11,,,La Roca FC ECNL G2010/11,WPFC Field Complex,Field 3,On Time,1058669
 2026-12-13,11:30 AM,Group Play,Seattle United ECNL G2010/11,,,Avalanche ECNL G2010/11,TBD,Field TBD,On Time,1058668
@@ -54,9 +54,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-03-13,09:00 AM,Group Play,Washington Premier ECNL G2010/11,,,PacNW SC ECNL G2010/11,WPFC Field Complex,Field 4,On Time,1058942
 2027-03-13,09:30 AM,Group Play,Seattle United ECNL G2010/11,,,Oregon Surf ECNL G2010/11,TBD,Field 2,On Time,1058940
 2027-03-13,12:15 PM,Group Play,La Roca FC ECNL G2010/11,,,XF ECNL G2010/11,La Roca Park,Field 1,On Time,1058938
-2027-03-14,TBD,Group Play,Oregon Surf ECNL G2010/11,,,Eastside FC ECNL G2010/11,,,On Time,1058963
 2027-03-14,10:00 AM,Group Play,La Roca FC ECNL G2010/11,,,Boise Thorns ECNL G2010/11,La Roca Park,Field 1,On Time,1058962
 2027-03-14,11:15 AM,Group Play,Avalanche ECNL G2010/11,,,XF ECNL G2010/11,St. Joseph Catholic High School,Turf Field,On Time,1058964
+2027-03-14,12:00 PM,Group Play,Oregon Surf ECNL G2010/11,,,Eastside FC ECNL G2010/11,Mountain View Champions Park,Field 3,On Time,1058963
 2027-03-20,TBD,Group Play,Boise Thorns ECNL G2010/11,,,Oregon Surf ECNL G2010/11,,,On Time,1058983
 2027-03-20,TBD,Group Play,PacNW SC ECNL G2010/11,,,Seattle United ECNL G2010/11,,,On Time,1058986
 2027-03-20,11:00 AM,Group Play,Eastside FC ECNL G2010/11,,,XF ECNL G2010/11,PRESTON PARK ATHLETIC FIELDS,Field 1,On Time,1058984

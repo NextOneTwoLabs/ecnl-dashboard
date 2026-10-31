@@ -43,7 +43,7 @@ def tree(root):
     write(root / "public/data/sources.json", {"refresh": {"activeSeason": "2026-27"}, "seasons": {"2026-27": {"conferences": {"A": {"eventId": 1}}}}})
     write(root / "public/archive/teams/2026-27.json", {"schema": 1, "season": "2026-27", "teams": teams})
     write(root / "public/archive/api/Event/get-standings-by-div-and-flight/10/20/1.json", {"data": [{"teamStandings": [dict(t) for t in teams]}]})
-    games = [game(1, 1, 2, 1, (1, 0)), game(2, 3, 4, 1), game(3, 5, 6, 2), game(4, 3, 4, 8), game(5, 3, 4, 8), game(6, 55477, 7, 9), game(7, 8, 9, 10), game(8, 1, 10, 11)]
+    games = [game(1, 1, 2, 1, (1, 0)), game(2, 3, 4, 1), game(3, 5, 6, 2), game(4, 3, 4, 8), game(5, 3, 4, 8), dict(game(6, 55477, 7, 9), hometeamName="MVLA ECNL G2010/11"), game(7, 8, 9, 10), game(8, 1, 10, 11)]
     write(root / "public/archive/api/Event/get-schedules-by-flight/1/20/0.json", {"data": games})
     return root
 
@@ -142,6 +142,7 @@ class Shapes(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stderr)
         text = (self.root / SCHEDULE).read_text(encoding="utf-8")
         self.assertNotIn("MVLA", text)
+        self.assertEqual(json.loads(r.stdout.splitlines()[0])["changed"], 1)
         self.assertEqual({t["name"] for t in read(self.root, INDEX)["teams"] if t["teamID"] == 55477}, {"MVLA ECNL G2010/11"})
 
     def test_double_header_scores_the_two_games_of_one_pair_on_one_date(self):
@@ -159,6 +160,16 @@ class Shapes(unittest.TestCase):
         self.assertEqual(len(games), 2)   # team 1 has two games (one played): both come back unplayed
         self.assertTrue(all(g["hometeamscore"] is None and g["matchID"] > 3_000_000 for g in games))
         self.assertTrue(all(g["gameDate"] > "2026-11-14" for g in games))
+
+    def test_a_simulation_that_changes_no_file_exits_1_and_says_so(self):
+        r = sim(self.root, "rename", "--teams", "1")   # team 1 is in the index but no schedule spells its name
+        self.assertEqual(r.returncode, 1)
+        self.assertEqual(json.loads(r.stdout.splitlines()[0])["changed"], 0)
+        self.assertIn("changed 0 files", r.stderr)
+        r = sim(self.root, "remove", "--teams", "99999")
+        self.assertEqual(r.returncode, 1)
+        r = sim(self.root, "remove", "--teams", "55477")
+        self.assertEqual((r.returncode, json.loads(r.stdout.splitlines()[0])["changed"] > 0), (0, True))
 
     def test_an_unknown_variant_fails(self):
         self.assertNotEqual(sim(self.root, "nonsense").returncode, 0)
@@ -186,6 +197,64 @@ class Subset(unittest.TestCase):
             self.assertEqual(r.returncode, 1)
             self.assertIn("SUBSET CHECK: FAIL", r.stdout)
             self.assertIn("NEW red/skipped not in old", r.stdout)
+
+    def subset(self, d, *variants):
+        return run(sys.executable, TOOL / "subset.py", d, *variants)
+
+    def test_a_run_that_compared_nothing_fails_instead_of_passing(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = self.subset(d, "v")   # no logs at all
+            self.assertEqual(r.returncode, 1, r.stdout)
+            self.assertNotIn("SUBSET CHECK: PASS", r.stdout)
+            self.assertIn("FAIL", r.stdout)
+            (Path(d) / "v-old-node.txt").write_text("", encoding="utf-8")   # logs with no test lines in them
+            (Path(d) / "v-new-node.txt").write_text("nothing here\n", encoding="utf-8")
+            r = self.subset(d, "v")
+            self.assertEqual(r.returncode, 1, r.stdout)
+            self.assertNotIn("SUBSET CHECK: PASS", r.stdout)
+            self.assertIn("no tests found", r.stdout)
+
+    def test_a_variant_with_only_one_of_its_two_logs_fails(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.logs(d, "ok 1 - a\nnot ok 2 - b\nok 3 - c\n")
+            self.assertEqual(self.subset(d, "v").returncode, 0)
+            (Path(d) / "v-new-py.txt").unlink()
+            r = self.subset(d, "v")
+            self.assertEqual(r.returncode, 1, r.stdout)
+            self.assertIn("has only its old log", r.stdout)
+            self.assertNotIn("SUBSET CHECK: PASS", r.stdout)
+            (Path(d) / "v-old-py.txt").unlink()
+            (Path(d) / "v-new-py.txt").write_text(self.PY_OLD, encoding="utf-8")
+            r = self.subset(d, "v")
+            self.assertEqual(r.returncode, 1, r.stdout)
+            self.assertIn("has only its new log", r.stdout)
+
+    def test_one_variant_with_logs_does_not_cover_another_without(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.logs(d, "ok 1 - a\nok 2 - b\nok 3 - c\n")
+            r = self.subset(d, "v", "w")
+            self.assertEqual(r.returncode, 1, r.stdout)
+            self.assertIn("w: no logs found", r.stdout)
+
+    def test_real_runner_output_is_read(self):
+        """The logs in tests/fixtures/variants/ are the output of `node --test` and of `python -m unittest -v` on a green, a red and a skipped test."""
+        fx = ROOT / "tests/fixtures/variants"
+        with tempfile.TemporaryDirectory() as d:
+            for suite, name in (("node", "runner-node.txt"), ("py", "runner-py.txt")):
+                text = (fx / name).read_text(encoding="utf-8")
+                (Path(d) / f"v-old-{suite}.txt").write_text(text, encoding="utf-8")
+                (Path(d) / f"v-new-{suite}.txt").write_text(text, encoding="utf-8")
+            r = self.subset(d, "v")
+            self.assertEqual(r.returncode, 0, r.stdout)
+            self.assertIn("SUBSET CHECK: PASS (2 comparisons)", r.stdout)
+            for needle in ("red one", "skipped one", "test_s.C.test_red", "test_s.C.test_skipped"):
+                self.assertIn(needle, r.stdout)
+            self.assertNotIn("green one", r.stdout)
+            # the same red tests are found by name: a new red test on top of them fails
+            (Path(d) / "v-new-node.txt").write_text((fx / "runner-node.txt").read_text(encoding="utf-8") + "not ok 4 - fresh red\n", encoding="utf-8")
+            r = self.subset(d, "v")
+            self.assertEqual(r.returncode, 1, r.stdout)
+            self.assertIn("fresh red", r.stdout)
 
 
 if __name__ == "__main__":

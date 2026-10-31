@@ -797,8 +797,12 @@ python tools/variants/variants.py build rollover3 ../variant-rollover3          
 python tools/variants/variants.py build season-end ../variant-old --tests-from origin/main   # the same data with the tests of a git ref
 python tools/variants/variants.py run ../variant-rollover3 ../rollover3-new-node.txt node
 python tools/variants/variants.py run ../variant-rollover3 ../rollover3-new-py.txt py
-python tools/variants/subset.py ../logs rollover3 season-end                # <variant>-old|new-node|py.txt: new red/skipped is a subset of old
+python tools/variants/subset.py ../logs rollover3 season-end                # new red/skipped is a subset of old
 ```
+
+`run` writes the log it is given; `subset.py <logdir> <variant>...` reads `<logdir>/<variant>-old-node.txt`, `<variant>-new-node.txt`, `<variant>-old-py.txt` and
+`<variant>-new-py.txt` (the `<variant>-old|new-node|py.txt` files). It exits 1 when it compared nothing, when a log has no test lines, or when a variant has only one of
+the two logs of a suite. A simulation prints the number of files it changed and exits 1 when that is 0.
 
 Variants: `base`, `refresh`, `season-end`, `double-header`, `remove` and `nofile` (`--teams ids`), `withdraw-many`, `rename`, `late-add`
 and `rollover3`. The copy is outside the repository (the repo root, any path inside it and any path above it are refused, and the
