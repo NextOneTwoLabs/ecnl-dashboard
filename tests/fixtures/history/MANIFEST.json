@@ -2,6 +2,7 @@
   "schema": 1,
   "activeSeason": "2026-27",
   "commit": "f3d754213cc646c6173ecc44fac2e60d67edde27",
+  "notesCommit": "779190f0",
   "picks": {
     "CUR": 21001,
     "OLD": 1153,
@@ -10,6 +11,16 @@
     "both maybe and maybePrev": 96995,
     "maybePrev and 2 or more seasons": 96994
   },
+  "notes": [
+    12596,
+    19409,
+    34961,
+    46765,
+    46817,
+    46961,
+    82349,
+    94620
+  ],
   "files": {
     "archive/api/Event/get-schedules-by-flight/3165/24128/0.json": {
       "bytes": 151198,
@@ -39,13 +50,45 @@
       "bytes": 6155,
       "sha256": "be82516fca4dd2356b70c8d4ba028009f3a5c5732028404776435d9a731c8d73"
     },
+    "archive/history/12596.json": {
+      "bytes": 5231,
+      "sha256": "bd67b411c40e370075c7056129ee438ddbc0fb4bfb603f272e299b53f33f661d"
+    },
+    "archive/history/19409.json": {
+      "bytes": 6426,
+      "sha256": "d38c35afe2c1a05c7b32e9cc490d739a227e94fb90c32382b4c6e30d0b07a51c"
+    },
     "archive/history/21001.json": {
       "bytes": 5414,
       "sha256": "6c87efffca6d6372f1a8bff94ac67d32eb15f53500834c3b5dcd14a77066f041"
     },
+    "archive/history/34961.json": {
+      "bytes": 8175,
+      "sha256": "37f547c729c4f8773b36b5443285aba3bec326faae3c304bb21ea162873434b8"
+    },
     "archive/history/4298.json": {
       "bytes": 6682,
       "sha256": "bd84f84d1167ef731f05269e84aae7ba874d141b504d58dc3e2e66f0cba1f9c3"
+    },
+    "archive/history/46765.json": {
+      "bytes": 8211,
+      "sha256": "3aa8a26b5a19690d662c1566e811eb7982d37a313815aaf16bd8466e982c9888"
+    },
+    "archive/history/46817.json": {
+      "bytes": 16308,
+      "sha256": "9822d5121321a60e65500a5ea703f64f2d3421da2a3534bec505e335df3390e3"
+    },
+    "archive/history/46961.json": {
+      "bytes": 13655,
+      "sha256": "32f3bcf598f3c9da0303ba18a84ca0e110b791a80b8c909a8ff3e3f4179ac025"
+    },
+    "archive/history/82349.json": {
+      "bytes": 3616,
+      "sha256": "9543d2be1da14f990929801eb3822e426b5813c0003295aa482f17ff85af4b81"
+    },
+    "archive/history/94620.json": {
+      "bytes": 4101,
+      "sha256": "35cccb3f6da7e3a7fad53a2d0fb707f3f4ca09342d2019111ed6a079658674b6"
     },
     "archive/history/96994.json": {
       "bytes": 2399,

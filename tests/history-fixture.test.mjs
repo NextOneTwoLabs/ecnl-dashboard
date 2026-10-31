@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { dataset, allPicks, PICK_NAMES, pickFrom } from './fixtures/history/picks.mjs';
+import { dataset, allPicks, PICK_NAMES, NOTES, NOTES_WITH_REGROUP, pickFrom } from './fixtures/history/picks.mjs';
 
 const DIR = new URL('./fixtures/history/', import.meta.url);
 const MANIFEST = JSON.parse(readFileSync(new URL('MANIFEST.json', DIR), 'utf8'));
@@ -24,6 +24,7 @@ test('#201: every fixture file matches the MANIFEST, and none is added or missin
     assert.equal(Buffer.byteLength(lf(text)), want.bytes, `${rel}: bytes`);
   }
   assert.ok(Object.keys(MANIFEST.files).length >= 8 && Object.keys(MANIFEST.files).length <= 40, 'a small fixture');
+  assert.deepEqual(MANIFEST.notes, NOTES, 'the named files of the note test are the ones picks.mjs names (#203)');
 });
 
 test('#201: each pick is a frozen file that has its property, on the catalog it was frozen for', () => {
@@ -31,16 +32,26 @@ test('#201: each pick is a frozen file that has its property, on the catalog it 
   assert.equal(data.OPEN, MANIFEST.activeSeason, 'the search fixture catalog and this fixture agree on the open season');
   assert.deepEqual(Object.keys(MANIFEST.picks).sort(), [...PICK_NAMES].sort());
   for (const name of PICK_NAMES) assert.ok(pickFrom(data, MANIFEST, name), name);
-  assert.equal(data.files.length, new Set(Object.values(MANIFEST.picks)).size, 'no history file that is not a pick');
+  assert.equal(data.files.length, new Set([...Object.values(MANIFEST.picks), ...NOTES]).size, 'no history file that is neither a pick nor a named file (#203)');
 });
 
 test('#201: the schedule each frozen squad opens with is frozen too (a pick never reads a missing file)', () => {
   const data = dataset(DIR, SEARCH_SOURCES);
-  for (const doc of data.files) for (const sq of doc.squads) {
+  for (const doc of data.files.filter(d => !NOTES.includes(d.teamID) || Object.values(MANIFEST.picks).includes(d.teamID))) for (const sq of doc.squads) {
     const r = sq.seasons[sq.seasons.length - 1];
     assert.ok(data.scheduleOf(r.eventID, r.flightID), `${doc.teamID} ${r.season}: schedule ${r.eventID}/${r.flightID}`);
   }
   // The control for the predicates: a doc that has none of the properties is refused by pickFrom.
   const picks = allPicks(data);
   assert.ok(!picks.GP0(data.files.find(d => d.teamID === MANIFEST.picks.CUR)), 'CUR is not at 0 games');
+});
+
+test('#203: the named files of the "One TGS id" note test are frozen, and those that read a 2026-27 row still have one', () => {
+  const data = dataset(DIR, SEARCH_SOURCES);
+  for (const id of NOTES) {
+    const doc = data.files.find(d => d.teamID === id);
+    assert.ok(doc, `${id} is frozen`);
+    const has = doc.squads.some(q => q.seasons.some(r => r.season === MANIFEST.activeSeason && String(r.teamID) === String(id)));
+    assert.equal(has, NOTES_WITH_REGROUP.includes(id), `${id}: a ${MANIFEST.activeSeason} row exactly when picks.mjs says so`);
+  }
 });

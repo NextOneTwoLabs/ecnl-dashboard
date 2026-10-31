@@ -37,6 +37,12 @@ export function dataset(base, sourcesUrl) {
   };
 }
 
+// ---------- the named history files (#203) ----------
+// The "One TGS id" note test (team-history.test.mjs) names eight teams: five whose note reads their 2026-27 row (a team TGS withdraws
+// from the season would lose it) and three closed-season reuses. They are frozen with the picks, each as its whole history file.
+export const NOTES = [12596, 19409, 34961, 46765, 46817, 46961, 82349, 94620];
+export const NOTES_WITH_REGROUP = [34961, 46765, 46817, 82349, 94620];   // each has a row in the first school-year season, 2026-27
+
 // ---------- the picks ----------
 // Header (team-overview-header.test.mjs): a current squad with an unplayed, dated game ahead in its schedule; an archived
 // squad; a link whose season is older than its squad's newest row; a squad that has played no games.

@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "activeSeason": "2026-27",
+  "commit": "779190f0",
+  "pick": {
+    "conference": "Mid-Atlantic",
+    "eventId": 4263,
+    "divisionId": 22407,
+    "flightId": 40551,
+    "age": "GU13",
+    "teams": 11
+  },
+  "files": {
+    "archive/api/Event/get-event-schedule-or-standings/4263.json": {
+      "bytes": 1128,
+      "sha256": "dd787ec79cc157a021065f0660f079801c6ad75f05d9fc3df51fcaf27814f8bc"
+    },
+    "archive/api/Event/get-standings-by-div-and-flight/22407/40551/4263.json": {
+      "bytes": 6371,
+      "sha256": "4b221a843460b00cf0d498f5ca04205c54cd475f8aaef0f24f91e6c74bb021d2"
+    },
+    "archive/api/Event/get-schedules-by-flight/4263/40551/0.json": {
+      "bytes": 122265,
+      "sha256": "edb2f52a484b36c441b2dfdc8a74e1775a0ad9afd96d4669d461147ce5307909"
+    }
+  },
+  "sources": "tests/search/fixtures/sources.json",
+  "clubs": "tests/fixtures/history/archive/clubs.json"
+}

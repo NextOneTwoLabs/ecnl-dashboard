@@ -57,6 +57,25 @@ def built():
     return th.build()
 
 
+# #203: the exact regroup cases (Michigan Hawks G2011, De Anza, NC Fusion, CESA's reused id, the override pairs) run on frozen season rows
+# (tests/fixtures/regroup/rows.json: every season of the five clubs, made by freeze.py, checksummed by tests/test_regroup_fixture.py),
+# so a team TGS withdraws or adds late cannot change them. The live archive keeps the rules beside them (no ids named).
+FROZEN_ROWS = json.loads((Path(__file__).parent / "fixtures/regroup/rows.json").read_text(encoding="utf-8"))
+
+
+@functools.lru_cache(maxsize=None)
+def frozen_built():
+    """th.build() on the frozen rows: no postseason or showcase events, no manual links."""
+    with patch.object(th, "season_rows", return_value=copy.deepcopy(FROZEN_ROWS)), \
+            patch.object(th, "national_and_showcases", return_value=({}, {})), \
+            patch.object(th, "load_links", return_value=({}, [])):
+        return th.build()
+
+
+def frozen_squad_of(season, tid):
+    return next(sq for sq in th.by_team(frozen_built()[0])[tid] if any(r["season"] == season for r in sq["seasons"] if r["teamID"] == tid))
+
+
 _SEED = []
 
 
@@ -177,7 +196,7 @@ class Built(unittest.TestCase):
     def test_the_regroup_offers_club_teams_another_side_lists_by_name(self):
         # Review: De Anza Force G12 (94620) kept its id in the same age group; the club's team one
         # age group up is another predecessor's name candidate, and is offered here too.
-        sq = self.squad_of("2025-26", 94620)
+        sq = frozen_squad_of("2025-26", 94620)   # #203: frozen rows (a team withdrawn or added late would change a live list)
         self.assertEqual([(m["teamID"], m["division"]) for m in sq["maybe"]], [(69022, "GU15"), (94620, "GU14")])
 
     def test_best_finish_ties_go_to_the_better_group_place(self):
@@ -199,22 +218,35 @@ class Built(unittest.TestCase):
     def test_the_regroup_offers_both_age_groups(self):
         # M6: every 2026-27 row carries the regroup note; an id TGS kept in the same age group
         # is offered, next to the club's team one age group up, never merged.
+        # #203: the live part is a rule (no count, no ids): the season before the regroup is found, not counted from the end.
         for r in self.rows[th.REGROUP]:
             self.assertTrue(r.get("regroup"))
-        prev = sorted(self.rows)[-2]
+        seasons = sorted(self.rows)
+        prev = seasons[seasons.index(th.REGROUP) - 1]
         carried = [(r, self.byk[(th.REGROUP, r["teamID"])]) for r in self.rows[prev]
                    if not th.ends(r) and (th.REGROUP, r["teamID"]) in self.byk and th.ages_on(r, self.byk[(th.REGROUP, r["teamID"])])
                    and self.byk[(th.REGROUP, r["teamID"])]["u"] == r["u"]]
-        self.assertEqual(len(carried), 66)
+        self.assertGreater(len(carried), 0, "no id was kept in its age group: the filter above found nothing")
         _nxt, maybe, _ = links_of(self.rows)
         for r, n in carried:
             self.assertIn((th.REGROUP, n["teamID"]), maybe[(prev, r["teamID"])], r["name"])
+        # Some previous-season row is offered two age groups, both in the regroup season, and each one it ages into.
+        both = [(k, v) for k, v in maybe.items() if k[0] == prev and len({self.byk[c]["division"] for c in v}) >= 2]
+        self.assertGreater(len(both), 0, "no row is offered both age groups")
+        for k, offered in both:
+            for c in offered:
+                self.assertEqual(c[0], th.REGROUP)
+                self.assertTrue(th.ages_on(self.byk[k], self.byk[c]), (k, c))
+        # The exact cases, on frozen rows (#203).
+        squads, _stats, rows, _errors = frozen_built()
+        fbyk = {(r["season"], r["teamID"]): r for s in rows.values() for r in s}
         # NC Fusion kept every id in its age slot: its G11 could be either 2026-27 side.
-        fusion = next(r for r in self.rows[prev] if r["name"] == "NC Fusion ECNL G11")
-        self.assertEqual(sorted(self.byk[c]["name"] for c in maybe[(prev, fusion["teamID"])]),
+        fmaybe = links_of(rows)[1]
+        fusion = next(r for r in rows[prev] if r["name"] == "NC Fusion ECNL G11")
+        self.assertEqual(sorted(fbyk[c]["name"] for c in fmaybe[(prev, fusion["teamID"])]),
                          ["NC Fusion ECNL G2010/11", "NC Fusion ECNL G2011/12"])
         # Michigan Hawks G2011 (54493, a new id in 2026-27): both age groups offered.
-        hawks = self.squad_of("2025-26", 54493)
+        hawks = frozen_squad_of("2025-26", 54493)
         self.assertEqual([(m["teamID"], m["division"]) for m in hawks["maybe"]], [(134153, "GU16"), (134166, "GU15")])
 
     # ---------- (c) ----------
@@ -386,13 +418,20 @@ class Built(unittest.TestCase):
     def test_a_reused_id_keeps_its_squads_apart(self):
         # CESA's GU13 id: the 2008s in 2020-21, the 2009s from 2021-22, and in 2026-27 the
         # id stayed in its age slot (G2009/10), so that season starts a squad of its own (M6).
-        self.assertEqual([sq["birthYears"] for sq in self.files[46817]], [[2008], [2009], [2009, 2010]])
-        self.assertIn(46817, [p["teamID"] for p in self.files[46817][2]["maybePrev"]])
+        # #203: on frozen rows (a team withdrawn from 2026-27 would drop the third squad).
+        files = th.by_team(frozen_built()[0])
+        self.assertEqual([sq["birthYears"] for sq in files[46817]], [[2008], [2009], [2009, 2010]])
+        self.assertIn(46817, [p["teamID"] for p in files[46817][2]["maybePrev"]])
 
     def test_a_squad_new_in_the_regroup_has_two_birth_years(self):
         # S2: "born 2010/11" for a squad that starts in a two-year group.
-        (sq,) = [sq for sq in self.files[134153] if sq["seasons"][0]["season"] == th.REGROUP]
+        # #203: the exact case on frozen rows; the rule on the live squads: every squad that starts in the regroup season has two years.
+        (sq,) = [sq for sq in th.by_team(frozen_built()[0])[134153] if sq["seasons"][0]["season"] == th.REGROUP]
         self.assertEqual(sq["birthYears"], [2010, 2011])
+        starts = [sq for sq in self.squads if sq["seasons"][0]["season"] == th.REGROUP]
+        self.assertGreater(len(starts), 0)
+        for sq in starts:
+            self.assertEqual(len(sq["birthYears"]), 2, sq["seasons"][0]["name"])
 
     # ---------- (f) ----------
 
@@ -420,35 +459,36 @@ class Overrides(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.rows = built()[2]
+        cls.frozen = frozen_built()[2]   # #203: the pairs that name 2026-27 teams run on frozen rows
 
     def test_a_manual_link_joins_across_the_regroup(self):
-        nxt, maybe, errors = links_of(self.rows, {"link": [{"from": "2025-26/54493", "to": "2026-27/134153", "note": "test"}]})
+        nxt, maybe, errors = links_of(self.frozen, {"link": [{"from": "2025-26/54493", "to": "2026-27/134153", "note": "test"}]})
         self.assertEqual(errors, [])
         self.assertEqual(nxt[("2025-26", 54493)], (("2026-27", 134153), "manual"))
         self.assertNotIn(("2025-26", 54493), maybe)
 
     def test_a_bad_entry_fails_and_changes_nothing(self):
-        want = links_of(self.rows)[:2]
-        bad = [
-            ({"from": "2025-26/54493", "to": "2026-27/134153"}, "needs a 'note'"),
-            ({"from": "2024-25/54493", "to": "2026-27/134153", "note": "x"}, "season after"),
-            ({"from": "2025-26/54493", "to": "2026-27/999999999", "note": "x"}, "not in any conference table"),
-            ({"from": "2024-25/54493", "to": "2025-26/55477", "note": "x"}, "by its TGS id"),   # MVLA's, by id (a closed-season pair, #201)
-            ({"from": "2024-25/54493", "to": "2025-26/64467", "note": "x"}, "does not age"),    # G2011 -> G2012
-            ({"from": "54493", "to": "2026-27/134153", "note": "x"}, "SEASON/TEAMID"),
+        bad = [   # (entry, why, rows): the rows the pair is in; closed-season pairs run on the live rows, 2026-27 ones on the frozen rows (#203)
+            ({"from": "2025-26/54493", "to": "2026-27/134153"}, "needs a 'note'", self.frozen),
+            ({"from": "2024-25/54493", "to": "2026-27/134153", "note": "x"}, "season after", self.frozen),
+            ({"from": "2025-26/54493", "to": "2026-27/999999999", "note": "x"}, "not in any conference table", self.frozen),
+            ({"from": "2024-25/54493", "to": "2025-26/55477", "note": "x"}, "by its TGS id", self.rows),   # MVLA's, by id (a closed-season pair, #201)
+            ({"from": "2024-25/54493", "to": "2025-26/64467", "note": "x"}, "does not age", self.rows),    # G2011 -> G2012
+            ({"from": "54493", "to": "2026-27/134153", "note": "x"}, "SEASON/TEAMID", self.frozen),
         ]
-        for entry, why in bad:
+        for entry, why, rows in bad:
             with self.subTest(why=why):
-                nxt, maybe, errors = links_of(self.rows, {"link": [entry]})
+                want = links_of(rows)[:2]
+                nxt, maybe, errors = links_of(rows, {"link": [entry]})
                 self.assertEqual(len(errors), 1)
                 self.assertIn(why, errors[0])
                 self.assertEqual((nxt, maybe), want)
 
     def test_a_double_claim_applies_neither(self):
-        want = links_of(self.rows)[:2]
+        want = links_of(self.frozen)[:2]
         two = {"link": [{"from": "2025-26/54493", "to": "2026-27/134153", "note": "a"},
                         {"from": "2025-26/79687", "to": "2026-27/134153", "note": "b"}]}
-        nxt, maybe, errors = links_of(self.rows, two)
+        nxt, maybe, errors = links_of(self.frozen, two)
         self.assertEqual(len(errors), 2)
         self.assertTrue(all("more than one link entry" in e for e in errors))
         self.assertEqual((nxt, maybe), want)
