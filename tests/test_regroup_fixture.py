@@ -58,7 +58,8 @@ class Fixture(unittest.TestCase):
         # `inProgress` is on a row only while its squad has games to play, so it comes and goes with the season (the season-end variant has none).
         optional = {"inProgress"}
         self.assertEqual(fixture_keys - optional, live_keys - optional, "the builder's row fields changed: re-run tests/fixtures/regroup/freeze.py")
-        self.assertEqual(sorted(ROWS), sorted(live), "the seasons changed: re-run tests/fixtures/regroup/freeze.py")
+        # A season the archive adds (the rollover registers the next one) leaves the fixture's rows true; one it loses does not.
+        self.assertLessEqual(set(ROWS), set(live), "a season of the fixture left the archive: re-run tests/fixtures/regroup/freeze.py")
 
     def test_the_builder_runs_on_it_without_errors(self):
         with patch.object(th, "season_rows", return_value=copy.deepcopy(ROWS)), \
