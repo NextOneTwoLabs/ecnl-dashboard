@@ -46,7 +46,6 @@ const CUR = pickFrom(FX, MANIFEST, 'CUR');
 const OLD = pickFrom(FX, MANIFEST, 'OLD');
 const OLDER = pickFrom(FX, MANIFEST, 'OLDER');
 const GP0 = pickFrom(FX, MANIFEST, 'GP0');
-const skip = false;
 
 // ---------- a small fake DOM (as tests/conference-sheet.test.mjs) ----------
 function makeDom() {
@@ -242,7 +241,7 @@ test('H2: the scope line, and a next-match slot only for the open season (every 
   }
 });
 
-test('H3: the glance figures are the newest row of the squad, even when the link names an older season; 0 games: no position', { skip: skip || (!(OLDER && GP0) && 'archive has no older-link or zero-games fixture') }, () => {
+test('H3: the glance figures are the newest row of the squad, even when the link names an older season; 0 games: no position', () => {
   assert.ok(CUR && OLDER && GP0, 'fixtures (precondition)');
   const p = page();
   for (const [doc, season] of [[CUR, linkSeason(CUR)], [OLDER, mineIn(OLDER.squads[0], OLDER.teamID).find(r => r.season < OPEN).season]]) {
@@ -260,7 +259,7 @@ test('H3: the glance figures are the newest row of the squad, even when the link
   assert.ok(o.card.innerHTML.includes('No games yet · '));
 });
 
-test('H4: #64: the next match is dated today or later; past unplayed games are "not reported"; the views agree', { skip }, async () => {
+test('H4: #64: the next match is dated today or later; past unplayed games are "not reported"; the views agree', async () => {
   const r = newest(CUR, linkSeason(CUR));
   const mine = (scheduleOf(r.eventID, r.flightID) || []).filter(g => g.hometeamID === r.teamID || g.awayteamID === r.teamID);
   const ahead = mine.filter(g => unplayed(g) && realDate(g)).sort((a, b) => day(a).localeCompare(day(b)));
@@ -311,7 +310,7 @@ test('H4: #64: the next match is dated today or later; past unplayed games are "
   assert.equal(p.computeTeamSummary(r.teamID, [], ahead, 5, false).next, null);
 });
 
-test('H5: a next match that answers after the page moved on writes nothing into the old slot', { skip }, async () => {
+test('H5: a next match that answers after the page moved on writes nothing into the old slot', async () => {
   const hold = deferred();
   const p = page({ holdSchedule: hold });
   const o = p.render(CUR, linkSeason(CUR));
@@ -322,7 +321,7 @@ test('H5: a next match that answers after the page moved on writes nothing into 
   assert.equal(o.slot.writes, before, 'the detached old slot node is not written');
 });
 
-test('H6: a refused schedule says "try again" with a Try again that asks once; a 404 says no fixtures', { skip }, async () => {
+test('H6: a refused schedule says "try again" with a Try again that asks once; a 404 says no fixtures', async () => {
   let n = 0;
   const nextGames = scheduleOf(CUR_ROW.eventID, CUR_ROW.flightID);
   const p = page({ schedule: () => { if (++n === 1) throw Object.assign(new Error('429'), { status: 429 }); return { data: nextGames }; } });
@@ -343,7 +342,7 @@ test('H6: a refused schedule says "try again" with a Try again that asks once; a
   assert.doesNotMatch(o2.slot.innerHTML, /<button/);
 });
 
-test('H7 (record): the header Follow carries the record the old aside did (#111), and only one Follow is on the page', { skip }, () => {
+test('H7 (record): the header Follow carries the record the old aside did (#111), and only one Follow is on the page', () => {
   const p = page();
   const o = p.render(CUR, linkSeason(CUR));
   const r = newest(CUR, linkSeason(CUR));
@@ -355,7 +354,7 @@ test('H7 (record): the header Follow carries the record the old aside did (#111)
   assert.ok(!o.aside.innerHTML.includes('star-btn'), 'no second Follow in the aside');
 });
 
-test('H8: "How these seasons are linked" is a closed disclosure; the notes on the seasons stay in place', { skip }, () => {
+test('H8: "How these seasons are linked" is a closed disclosure; the notes on the seasons stay in place', () => {
   const p = page();
   const o = p.render(CUR, linkSeason(CUR));
   const d = o.aside.querySelector('details.ov-linked');
@@ -369,7 +368,7 @@ test('H8: "How these seasons are linked" is a closed disclosure; the notes on th
   }
 });
 
-test('H9: the actions: the season tab, the standings and the newest event, each a link the page reads back', { skip }, () => {
+test('H9: the actions: the season tab, the standings and the newest event, each a link the page reads back', () => {
   const p = page();
   for (const doc of [CUR, OLD]) {
     const o = p.render(doc, linkSeason(doc)), r = newest(doc, linkSeason(doc));
@@ -394,7 +393,7 @@ test('H9: the actions: the season tab, the standings and the newest event, each 
   }
 });
 
-test('H12: requests: a current squad asks for its schedule once; an archived squad asks for nothing', { skip }, async () => {
+test('H12: requests: a current squad asks for its schedule once; an archived squad asks for nothing', async () => {
   const p = page();
   p.render(CUR, linkSeason(CUR));
   await p.flush();
@@ -549,7 +548,7 @@ test('H4 callers: closed conference card and actual season page suppress next ma
   })();
 });
 
-test('H10: an unfollowed team sits under Conferences: that panel and tab, My Teams not expanded; a followed team keeps My Teams', { skip }, async () => {
+test('H10: an unfollowed team sits under Conferences: that panel and tab, My Teams not expanded; a followed team keeps My Teams', async () => {
   const p = sidebar();
   p.setAges(OPEN);
   await p.open(CUR_ROW);
@@ -572,7 +571,7 @@ test('H10: an unfollowed team sits under Conferences: that panel and tab, My Tea
   assert.equal(q.chrome().fav, 'flex');
 });
 
-test('H10 (M2): a team from another season loads that season\'s age groups (no request) and highlights its own', { skip }, async () => {
+test('H10 (M2): a team from another season loads that season\'s age groups (no request) and highlights its own', async () => {
   const p = sidebar();
   p.setAges(OPEN);
   p.setSeason(OLD_ROW.season);
@@ -591,7 +590,7 @@ test('H10 (M3): the season tab calls the same helper, so &view=season and ?live=
   assert.match(block('    function renderTeamHistory('), /showTeamInSidebar\(season, here\.conference, here\.division\)/);
 });
 
-test('H10 (M4): leaving clears the preview; My Teams opens from a preview; My Teams\' empty state drops a late team page', { skip }, async () => {
+test('H10 (M4): leaving clears the preview; My Teams opens from a preview; My Teams\' empty state drops a late team page', async () => {
   const p = sidebar();
   p.setAges(OPEN);
   await p.open(CUR_ROW);
@@ -619,7 +618,7 @@ test('H10 (M4): leaving clears the preview; My Teams opens from a preview; My Te
   assert.equal(p.preview(), null, 'choosing an age leaves team preview');
 });
 
-test('H7 (M5, re-review M1): Unfollow on the page keeps it, as a preview, with Conferences\' sidebar and no "My Teams" crumb', { skip }, async () => {
+test('H7 (M5, re-review M1): Unfollow on the page keeps it, as a preview, with Conferences\' sidebar and no "My Teams" crumb', async () => {
   for (const followedFirst of [false, true]) {
     const p = sidebar();
     p.setAges(OPEN);
@@ -646,7 +645,7 @@ test('H7 (M5, re-review M1): Unfollow on the page keeps it, as a preview, with C
   }
 });
 
-test('H11: the Follow slot is emptied by every tab switch (Overview → Playoffs) and on the landing page; crumbs; CSS', { skip }, async () => {
+test('H11: the Follow slot is emptied by every tab switch (Overview → Playoffs) and on the landing page; crumbs; CSS', async () => {
   const p = sidebar();
   p.setAges(OPEN);
   await p.open(CUR_ROW);
@@ -669,7 +668,7 @@ test('H11: the Follow slot is emptied by every tab switch (Overview → Playoffs
   assert.match(html, /<div class="title-row"><h1 class="content-title" id="contentTitle" tabindex="-1">Select a conference<\/h1><div class="title-actions" id="titleActions" hidden><\/div><\/div>/);
 });
 
-test('Interplay with #142 (1): a preview reached from the Teams index shows the age groups and the conference list', { skip }, async () => {
+test('Interplay with #142 (1): a preview reached from the Teams index shows the age groups and the conference list', async () => {
   const p = sidebar();
   p.setAges(OPEN);
   p.el('conferencesPanel').classList.add('on-index');   // the index hid them
@@ -678,7 +677,7 @@ test('Interplay with #142 (1): a preview reached from the Teams index shows the 
   assert.equal(p.chrome().conf, '');
 });
 
-test('Interplay with #142 (2): the landing page empties the Follow slot and the preview; a late next match paints nothing', { skip }, async () => {
+test('Interplay with #142 (2): the landing page empties the Follow slot and the preview; a late next match paints nothing', async () => {
   const p = sidebar();
   p.setAges(OPEN);
   await p.open(CUR_ROW);
@@ -691,7 +690,7 @@ test('Interplay with #142 (2): the landing page empties the Follow slot and the 
   assert.ok(p.token() > t, '#142 bumps the team token (H5 shows a bumped token writes nothing)');
 });
 
-test('Interplay with #142 (3): #142\'s saved team page reopens a P3 preview as a preview', { skip }, async () => {
+test('Interplay with #142 (3): #142\'s saved team page reopens a P3 preview as a preview', async () => {
   const p = sidebar();
   p.setAges(OPEN);
   await p.open(CUR_ROW);

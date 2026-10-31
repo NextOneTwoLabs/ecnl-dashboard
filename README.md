@@ -80,7 +80,7 @@ always read the local archive, even when the server is not in offline mode.
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
-  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/history-fixture.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-pair-check.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/search-h2h.test.mjs tests/h2h-page.test.mjs tests/agents.test.mjs tests/match-param.test.mjs tests/postseason-rules.test.mjs tests/postseason-places.test.mjs  # Node 22+, and Python for team-history
+  node --import ./tests/netguard/netguard.mjs --test tests/data-api.test.mjs tests/session.test.mjs tests/apikey.test.mjs tests/apikey-tool.test.mjs tests/netguard.test.mjs tests/page-refusals.test.mjs tests/showcase-refusals.test.mjs tests/team-history.test.mjs tests/team-page.test.mjs tests/conference-return.test.mjs tests/team-view.test.mjs tests/stale-loads.test.mjs tests/team-overview.test.mjs tests/form-chips.test.mjs tests/star-contrast.test.mjs tests/conference-sheet.test.mjs tests/landing-route.test.mjs tests/team-overview-header.test.mjs tests/history-fixture.test.mjs tests/conference-fixture.test.mjs tests/next-fixture-regression.test.mjs tests/search-judged.test.mjs tests/search-data.test.mjs tests/search-modules.test.mjs tests/search-pair-check.test.mjs tests/search-panel.test.mjs tests/search-games.test.mjs tests/search-game-links.test.mjs tests/search-h2h.test.mjs tests/h2h-page.test.mjs tests/agents.test.mjs tests/match-param.test.mjs tests/postseason-rules.test.mjs tests/postseason-places.test.mjs  # Node 22+, and Python for team-history
 PYTHONPATH=tests/netguard HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 \
   python -m unittest discover -s tests -p 'test_*.py'
 python reconstruct.py --check
@@ -774,6 +774,16 @@ Overview tab.
   `node --import ./tests/netguard/netguard.mjs tests/fixtures/history/freeze.mjs --freeze --commit <sha>`, which reads
   committed files only, and changes only in a reviewed PR; `tests/history-fixture.test.mjs` fails on a file that differs from
   its MANIFEST. Every other test reads the live files as a rule (no named team, no first match that a refresh can remove).
+- **Tests that name a season, a conference or a team of the live index (#203).** Four more things are frozen or made rules, so that
+  neither a refresh, a team TGS withdraws or adds late, nor the season rollover can turn `main` red or switch a test off:
+  the shared cache-policy archive rows run on the frozen catalog (`tests/search/fixtures/sources.json`) with the live files;
+  the conference-sheet tests run on `tests/fixtures/conference/` (the hierarchy, one standings file and one schedule of one
+  conference, found by `pick.mjs`, made by `freeze.mjs`, checked by `tests/conference-fixture.test.mjs`; the clubs are the
+  history fixture's); the exact regroup and override cases of `tests/test_team_history.py` run on
+  `tests/fixtures/regroup/rows.json` (the season rows of the five clubs they name, made by
+  `PYTHONPATH=tests/netguard python tests/fixtures/regroup/freeze.py --freeze --commit <sha>`, checked by
+  `tests/test_regroup_fixture.py`, which also fails when the builder's row fields change); and the eight history files of the
+  "One TGS id" note test are part of `tests/fixtures/history/`. The live archive keeps the rules beside them (no counts, no ids).
 - **Not in this phase:** RL, guest and showcase-only teams (no conference table, so no
   history and no link), and following a squad in My Teams. (Team search, #114, now opens Overview.)
 

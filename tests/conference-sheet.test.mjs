@@ -9,9 +9,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
+import { findFix, files } from './fixtures/conference/pick.mjs';
 
 const root = new URL('../public/', import.meta.url);
-const html = readFileSync(new URL('index.html', root), 'utf8').replace(/\r\n/g, '\n');
+const html = readFileSync(process.env.ECNL_TEST_HTML || new URL('index.html', root), 'utf8').replace(/\r\n/g, '\n');
 const block = (head, last = head, close = '\n    }\n') => {
   const start = html.indexOf('\n' + head) + 1;
   const from = html.indexOf(last, start);
@@ -25,7 +26,6 @@ const between = (from, to) => {
   assert.ok(a > 0 && b > a, `${from.trim()} … ${to.trim()} in index.html`);
   return html.slice(a, b);
 };
-const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const re = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -60,50 +60,28 @@ const CODE = [
 const CHIP_TIPS = between('    (function chipTips() {', '    // ========== KEYBOARD NAV ==========');
 
 // ---------- the fixture, found in the data ----------
-const SOURCES = read('data/sources.json');
+// #203: the conference runs on a frozen copy (tests/fixtures/conference/: the hierarchy, one standings file and one schedule, with the
+// MANIFEST and tests/conference-fixture.test.mjs that check it), the catalog of tests/search/fixtures/sources.json (the open season is
+// 2026-27 for good) and the clubs of tests/fixtures/history/. Found on the live archive, the pick is a property of one point in the
+// season and the rollover empties it, which skipped these tests without a sign. A missing fixture is a failure, not a skip.
+const FXROOT = new URL('fixtures/conference/', import.meta.url);
+const SOURCES = JSON.parse(readFileSync(new URL('search/fixtures/sources.json', import.meta.url), 'utf8'));
 const SEASON = SOURCES.refresh.activeSeason;
 const SEASONS = SOURCES.seasons;
-const archive = p => new URL(`archive/api/Event/${p}`, root);
-const hierarchyFile = e => archive(`get-event-schedule-or-standings/${e}.json`);
-const standingsFile = (e, d, f) => archive(`get-standings-by-div-and-flight/${d}/${f}/${e}.json`);
-const scheduleFile = (e, f) => archive(`get-schedules-by-flight/${e}/${f}/0.json`);
-const teamsOf = (e, d, f) => {
-  if (!existsSync(standingsFile(e, d, f))) return [];
-  const data = JSON.parse(readFileSync(standingsFile(e, d, f), 'utf8')).data;
-  const blocks = Array.isArray(data) ? data : data ? [data] : [];
-  return blocks.reduce((a, b) => ((b && b.teamStandings || []).length > a.length ? b.teamStandings : a), []);
-};
-// The first conference (in the registry's order) with a one-flight, one-block girls division of
-// at least six teams, a published schedule, and played games for the sixth team.
-const FIX = (() => {
-  for (const [conf, { eventId }] of Object.entries(SEASONS[SEASON].conferences)) {
-    if (!existsSync(hierarchyFile(eventId))) continue;
-    const h = JSON.parse(readFileSync(hierarchyFile(eventId), 'utf8')).data;
-    for (const d of h.girlsDivAndFlightList || []) {
-      const flights = d.flightList || [];
-      if (flights.length !== 1) continue;
-      const f = flights[0];
-      const raw = existsSync(standingsFile(eventId, d.divisionID, f.flightID)) ? JSON.parse(readFileSync(standingsFile(eventId, d.divisionID, f.flightID), 'utf8')).data : null;
-      if (Array.isArray(raw) && raw.filter(b => b && (b.teamStandings || []).length).length > 1) continue;   // merged blocks: another test's
-      const teams = teamsOf(eventId, d.divisionID, f.flightID);
-      if (teams.length < 6 || !existsSync(scheduleFile(eventId, f.flightID))) continue;
-      const games = JSON.parse(readFileSync(scheduleFile(eventId, f.flightID), 'utf8')).data || [];
-      const six = teams[5];
-      if (!games.some(g => (g.hometeamID === six.teamID || g.awayteamID === six.teamID) && g.hometeamscore != null)) continue;
-      return { conf, eventId, age: d.divisionName, teams };
-    }
-  }
-  return null;
-})();
-const skip = !FIX && 'no one-flight division with six teams and played games in this checkout';
-const CLUBS = read('archive/clubs.json');
+const { hierarchyFile, standingsFile, scheduleFile } = files(FXROOT);
+// The first conference (in the registry's order) with a one-flight, one-block girls division of at least six teams, a published
+// schedule, and played games for the sixth team: found by pick.mjs, here on the frozen files.
+const FIX = findFix(FXROOT, SEASONS, SEASON);
+assert.ok(FIX, 'tests/fixtures/conference/ has no conference with the property of the pick (re-run its freeze.mjs)');
+const CLUBS_FILE = new URL('fixtures/history/archive/clubs.json', import.meta.url);
+const CLUBS = JSON.parse(readFileSync(CLUBS_FILE, 'utf8'));
 const placeOf = t => {
   const p = t && t.clubID != null && Number(t.clubID) !== 7 && CLUBS.clubs[t.clubID];   // 7: TGS's "No Club Selection"
   return p && p.city && p.state ? `${p.city}, ${p.state}` : '';
 };
 const short = t => String(t.name).replace(/\s*[-–]?\s*ECNL\b.*$/i, '').trim() || t.clubName || t.name;
-const HASH = FIX ? `#season=${SEASON}&age=${encodeURIComponent(FIX.age)}&conf=${encodeURIComponent(FIX.conf)}` : '';
-const TEAM = FIX && FIX.teams[5];
+const HASH = `#season=${SEASON}&age=${encodeURIComponent(FIX.age)}&conf=${encodeURIComponent(FIX.conf)}`;
+const TEAM = FIX.teams[5];
 const deferred = () => { let resolve; const promise = new Promise(y => { resolve = y; }); return { promise, resolve }; };
 
 // ---------- a small fake DOM ----------
@@ -246,7 +224,7 @@ function page({ narrow = true, dialog = true, live = false, follow = null } = {}
     if ((m = path.match(/^events\/(\d+)\/hierarchy$/))) return hierarchyFile(m[1]);
     if ((m = path.match(/^events\/(\d+)\/divisions\/(\d+)\/flights\/(\d+)\/standings$/))) return standingsFile(m[1], m[2], m[3]);
     if ((m = path.match(/^events\/(\d+)\/flights\/(\d+)\/schedule$/))) return scheduleFile(m[1], m[2]);
-    if (path === 'clubs') return new URL('archive/clubs.json', root);
+    if (path === 'clubs') return CLUBS_FILE;
     throw new Error(`unexpected request ${path}`);
   };
   let api;
@@ -315,7 +293,7 @@ function page({ narrow = true, dialog = true, live = false, follow = null } = {}
 const sheetHtml = p => p.el('teamSheetContent').innerHTML;
 const namedIn = (p, t) => new RegExp(`id="teamSheetName">${re(esc(short(t)))} ·</span>`).test(sheetHtml(p));
 
-test('T1: a row chosen on a narrow screen opens a modal sheet with that team, named for it, focus on Close', { skip }, async () => {
+test('T1: a row chosen on a narrow screen opens a modal sheet with that team, named for it, focus on Close', async () => {
   const p = page({ narrow: true });
   await p.open();
   assert.equal(p.dom.top.classList.contains('no-dialog'), false);
@@ -335,7 +313,7 @@ test('T1: a row chosen on a narrow screen opens a modal sheet with that team, na
   assert.equal(p.dom.top.classList.contains('sheet-open'), true);
 });
 
-test('T2: a load never opens the sheet: a &team= link, a followed team, a selection that is not the viewer\'s', { skip }, async () => {
+test('T2: a load never opens the sheet: a &team= link, a followed team, a selection that is not the viewer\'s', async () => {
   const deep = page({ narrow: true });
   await deep.open(`${HASH}&team=${TEAM.teamID}`);
   assert.equal(deep.selected(), TEAM.teamID, 'the link selects the team');
@@ -349,7 +327,7 @@ test('T2: a load never opens the sheet: a &team= link, a followed team, a select
   assert.equal(followed.sheet.open, false);
 });
 
-test('T3: closing returns focus to what opened it (found again if the table was redrawn); the team stays selected', { skip }, async () => {
+test('T3: closing returns focus to what opened it (found again if the table was redrawn); the team stays selected', async () => {
   const p = page({ narrow: true });
   await p.open();
   const hides = [];
@@ -381,7 +359,7 @@ test('T3: closing returns focus to what opened it (found again if the table was 
   assert.equal(p.active(), fresh, 'the row as it is now, not the detached one');
 });
 
-test('T4: a new view or tab closes the sheet, and focus goes to the page title (S5)', { skip }, async () => {
+test('T4: a new view or tab closes the sheet, and focus goes to the page title (S5)', async () => {
   const p = page({ narrow: true });
   await p.open();
   p.choose(TEAM.teamID);
@@ -399,7 +377,7 @@ test('T4: a new view or tab closes the sheet, and focus goes to the page title (
   assert.match(block('    function switchTab('), /if \(typeof closeTeamSheet === 'function'\) closeTeamSheet\('title'\);/, 'the page\'s switchTab does the same');
 });
 
-test('T5: Follow in the sheet follows the team in the sheet and in the table, keeps the sheet open, asks for nothing', { skip }, async () => {
+test('T5: Follow in the sheet follows the team in the sheet and in the table, keeps the sheet open, asks for nothing', async () => {
   const p = page({ narrow: true });
   await p.open();
   p.choose(TEAM.teamID);
@@ -416,7 +394,7 @@ test('T5: Follow in the sheet follows the team in the sheet and in the table, ke
   assert.deepEqual(req(), []);
 });
 
-test('T6: the club place arriving redraws the sheet, focus staying on the same control (S1); a stale team is not drawn', { skip }, async () => {
+test('T6: the club place arriving redraws the sheet, focus staying on the same control (S1); a stale team is not drawn', async () => {
   for (const [what, pick] of [['Follow', d => d.querySelector('.star-btn')], ['Team overview', d => d.querySelectorAll('a.glance-link').at(-1)]]) {
     const p = page({ narrow: true });
     p.hold.clubs = deferred();
@@ -450,7 +428,7 @@ test('T6: the club place arriving redraws the sheet, focus staying on the same c
   assert.equal(p.calls.filter(c => c === 'clubs').length, 1, 'one request for the places');
 });
 
-test('T7: on a wide screen a row selects in the side card and opens no sheet; names link to the Overview', { skip }, async () => {
+test('T7: on a wide screen a row selects in the side card and opens no sheet; names link to the Overview', async () => {
   const p = page({ narrow: false });
   await p.open();
   assert.equal(p.sheetMode(), false);
@@ -475,7 +453,7 @@ test('T7: on a wide screen a row selects in the side card and opens no sheet; na
   assert.ok(!FIX.teams.some(t => /<a /.test(p.teamCellHtml(t, {}))));
 });
 
-test('T8: crossing 1025 px redraws from memory; an open sheet gives way to the side card, focus on the row (S5)', { skip }, async () => {
+test('T8: crossing 1025 px redraws from memory; an open sheet gives way to the side card, focus on the row (S5)', async () => {
   const p = page({ narrow: true });
   await p.open();
   p.choose(TEAM.teamID);
@@ -504,7 +482,7 @@ test('T9: rows and match names select with { user: true } (click, Enter, Space);
   assert.doesNotMatch(block('    async function loadCurrentView('), /user: true/);
 });
 
-test('T9b (R28): a match name acts on Enter and Space only; Tab passes through and opens nothing', { skip }, async () => {
+test('T9b (R28): a match name acts on Enter and Space only; Tab passes through and opens nothing', async () => {
   const p = page({ narrow: true });
   await p.open();
   const name = new p.dom.El('span', { class: 'match-team', 'data-team-id': String(TEAM.teamID), role: 'button', tabindex: '0' });
@@ -523,7 +501,7 @@ test('T9b (R28): a match name acts on Enter and Space only; Tab passes through a
   }
 });
 
-test('T10: requests: a narrow &team= link reads no club places (S6); the sheet reads them once', { skip }, async () => {
+test('T10: requests: a narrow &team= link reads no club places (S6); the sheet reads them once', async () => {
   const per = ['hierarchy', 'standings', 'schedule'];
   const kinds = cs => cs.map(c => (c === 'clubs' ? 'clubs' : per.find(k => c.endsWith(k))));
   const narrow = page({ narrow: true });
@@ -578,7 +556,7 @@ test('T11: CSS and markup: only the conference card hides, targets per decision 
   assert.match(dialog[0], /aria-labelledby="teamSheetName teamSheetTitle"/);
 });
 
-test('T12 (M2): the context bar is #breadcrumb\'s content, so no other tab keeps it; Change says if the drawer is open (S7)', { skip }, async () => {
+test('T12 (M2): the context bar is #breadcrumb\'s content, so no other tab keeps it; Change says if the drawer is open (S7)', async () => {
   assert.doesNotMatch(html, /getElementById\('breadcrumb'\)\.className/, 'no class is left on #breadcrumb');
   assert.doesNotMatch(html.slice(0, html.indexOf('</style>')), /ctx[\w-]*[^{}]*content-subtitle/, 'no rule hides the subtitle');
   const p = page({ narrow: true });
@@ -603,7 +581,7 @@ test('T12 (M2): the context bar is #breadcrumb\'s content, so no other tab keeps
   assert.ok(block('    function renderStandingsTable(').includes("' · Select a row for details · a name opens its Overview' : ' · Select a team for details'"));
 });
 
-test('T13: names are escaped in the bar, the link and the sheet\'s label, and encoded in the href', { skip }, async () => {
+test('T13: names are escaped in the bar, the link and the sheet\'s label, and encoded in the href', async () => {
   const p = page({ narrow: true });
   await p.open();
   const hostile = 'A & <b>"C"</b>';
@@ -621,7 +599,7 @@ test('T13: names are escaped in the bar, the link and the sheet\'s label, and en
   assert.ok(sheetHtml(p).includes(`id="teamSheetName">${esc(hostile)} ·</span>`), 'the sheet\'s label is escaped');
 });
 
-test('T14 (SC1): crossing 1025 px keeps the sort, an open "How ranking works", and focus', { skip }, async () => {
+test('T14 (SC1): crossing 1025 px keeps the sort, an open "How ranking works", and focus', async () => {
   for (const start of [false, true]) {
     const p = page({ narrow: start });
     await p.open();
@@ -652,7 +630,7 @@ test('T14 (SC1): crossing 1025 px keeps the sort, an open "How ranking works", a
   assert.equal(p.render.sorts, sorts);
 });
 
-test('T14b (SC-a): focus in the side card, blurred as the window narrows, comes back on the team\'s row', { skip }, async () => {
+test('T14b (SC-a): focus in the side card, blurred as the window narrows, comes back on the team\'s row', async () => {
   const p = page({ narrow: false });
   await p.open();
   p.choose(TEAM.teamID);
@@ -679,7 +657,7 @@ test('T14b (SC-a): focus in the side card, blurred as the window narrows, comes 
   assert.equal(q.active(), q.dom.body, 'the old row does not take focus back');
 });
 
-test('M3: while the sheet is open the page\'s shortcuts do nothing (ArrowDown would change the conference)', { skip }, async () => {
+test('M3: while the sheet is open the page\'s shortcuts do nothing (ArrowDown would change the conference)', async () => {
   const p = page({ narrow: true });
   await p.open();
   p.choose(TEAM.teamID);
@@ -712,7 +690,7 @@ test('M4: a #128 tooltip for a chip in the open sheet is drawn inside the dialog
   assert.equal(tip.parentNode, document.body, 'outside a sheet it is the page\'s again');
 });
 
-test('S4: without showModal the card stays above the table and nothing opens', { skip }, async () => {
+test('S4: without showModal the card stays above the table and nothing opens', async () => {
   const p = page({ narrow: true, dialog: false });
   await p.open(`${HASH}&team=${TEAM.teamID}`);
   assert.equal(p.dom.top.classList.contains('no-dialog'), true, 'html.no-dialog keeps the card (CSS)');

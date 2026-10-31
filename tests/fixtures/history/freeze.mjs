@@ -7,10 +7,11 @@
 // that file and, for every squad of it, the schedule of the flight of the squad's newest season, plus archive/clubs.json,
 // all as LF text. MANIFEST.json records the pick -> team id, the active season and the sha256 of every file (over LF text,
 // so a CRLF checkout hashes the same). The season catalog is not copied: the tests read tests/search/fixtures/sources.json,
-// which has its own MANIFEST entry. Re-freezing is a reviewed PR.
+// which has its own MANIFEST entry. #203: it also copies the eight whole history files NOTES names in picks.mjs (the "One TGS id" note
+// test), without schedules. Re-freezing is a reviewed PR.
 import { mkdirSync, rmSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { dataset, allPicks, PICK_NAMES, squadFor } from './picks.mjs';
+import { dataset, allPicks, PICK_NAMES, NOTES, NOTES_WITH_REGROUP, squadFor } from './picks.mjs';
 
 const args = process.argv.slice(2);
 const commit = args.includes('--commit') ? args[args.indexOf('--commit') + 1] : null;
@@ -42,6 +43,13 @@ for (const [id, doc] of [...docs].sort((a, b) => a[0] - b[0])) {
     if (existsSync(new URL(rel, ROOT))) out.set(rel, lf(readFileSync(new URL(rel, ROOT), 'utf8')));
   }
 }
+// #203: the eight named history files of the "One TGS id" note test (no schedules: that test reads only the history files).
+for (const id of NOTES) {
+  const doc = live.files.find(d => d.teamID === id);
+  if (!doc) throw new Error(`no live history file for the named team ${id}`);
+  if (NOTES_WITH_REGROUP.includes(id) && !doc.squads.some(q => q.seasons.some(r => r.season === live.OPEN))) throw new Error(`${id} has no ${live.OPEN} row`);
+  out.set(`archive/history/${id}.json`, lf(readFileSync(new URL(`archive/history/${id}.json`, ROOT), 'utf8')));
+}
 out.set('archive/clubs.json', lf(readFileSync(new URL('archive/clubs.json', ROOT), 'utf8')));
 
 rmSync(new URL('archive/', HERE), { recursive: true, force: true });
@@ -51,6 +59,6 @@ for (const [rel, text] of [...out].sort((a, b) => a[0].localeCompare(b[0]))) {
   writeFileSync(new URL(rel, HERE), text);
   files[rel] = { bytes: Buffer.byteLength(text), sha256: sha(text) };
 }
-const manifest = { schema: 1, activeSeason: live.OPEN, commit, picks, files, sources: 'tests/search/fixtures/sources.json (guarded by its own MANIFEST)' };
+const manifest = { schema: 1, activeSeason: live.OPEN, commit, picks, notes: NOTES, files, sources: 'tests/search/fixtures/sources.json (guarded by its own MANIFEST)' };
 writeFileSync(new URL('MANIFEST.json', HERE), JSON.stringify(manifest, null, 2) + '\n');
 console.log(`froze ${docs.size} history files, ${Object.keys(files).length} files in all, picks ${JSON.stringify(picks)}`);

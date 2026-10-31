@@ -92,15 +92,29 @@ test('each archived resource is returned byte-for-byte with its cache policy: on
 
 // #82: tests/cache-policy.json, shared with tests/test_data_api.py.
 const policyCases = JSON.parse(await readFile(new URL('./cache-policy.json', import.meta.url)));
+// #203: the shared archive rows run on the frozen catalog (tests/search/fixtures/sources.json: the active season is 2026-27 for good,
+// guarded by its own MANIFEST) with the live files, so the rollover cannot move which rows are "active". The live catalog keeps its
+// own rule test above (each archived resource gets the policy the live catalog gives it).
+const FROZEN_CATALOG = await readFile(new URL('./search/fixtures/sources.json', import.meta.url));
+test('#203: the frozen catalog is the season the shared cache rows name', () => {
+  assert.equal(JSON.parse(FROZEN_CATALOG).refresh.activeSeason, policyCases.catalogs.catalog.refresh.activeSeason,
+    'tests/search/fixtures/sources.json was re-frozen for another season: the "no-cache" rows of tests/cache-policy.json name 2026-27');
+});
+const frozenEnv = { ASSETS: { fetch(req) {
+  return new URL(req.url).pathname === '/data/sources.json'
+    ? Promise.resolve(new Response(FROZEN_CATALOG, { headers: { 'content-type': 'application/json', etag: '"fixture"' } }))
+    : env.ASSETS.fetch(req);
+} } };
 const policyOf = expected => expected === 'closed' ? policyCases.closed : expected;
 
 test('cache policy: the shared archive rows, directly and through the Worker with sessions off', async () => {
   assert.equal(CLOSED_CACHE, policyCases.closed);
-  let rows = 0;
+  let rows = 0, historyRows = 0;
   for (const [path, expected, method = 'GET'] of policyCases.archive) {
     const history = /^\/api\/v1\/teams\/(\d+)\/history$/.exec(path);
     if (history && !existsSync(new URL(`archive/history/${history[1]}.json`, root))) { console.log(`skipped (no history data): ${path}`); continue; }
-    for (const [label, fetchIt] of [['dataApi', r => dataApi(r, env)], ['worker (off)', r => worker.fetch(r, env)]]) {
+    if (history) historyRows++;
+    for (const [label, fetchIt] of [['dataApi', r => dataApi(r, frozenEnv)], ['worker (off)', r => worker.fetch(r, frozenEnv)]]) {
       resetCatalogMemo();
       const response = await fetchIt(request(path, { method }));
       assert.equal(response.headers.get('cache-control'), policyOf(expected), `${label} ${method} ${path}`);
@@ -111,6 +125,9 @@ test('cache policy: the shared archive rows, directly and through the Worker wit
     rows++;
   }
   assert.ok(rows >= 24);
+  // #203: a row whose team has left the archive is skipped above, one by one; with history files present at least one history row runs.
+  const anyHistory = existsSync(new URL('archive/history/', root)) && readdirSync(new URL('archive/history/', root)).some(f => /^\d+\.json$/.test(f));
+  if (anyHistory) assert.ok(historyRows > 0, 'every history row of tests/cache-policy.json was skipped');
 });
 
 // A stand-in for ASSETS that serves `text` as the catalog (or a 404, or HTML) and stub data elsewhere.
@@ -224,10 +241,10 @@ test('team index: validators forwarded to its asset path; 304 and HEAD have no b
   for (const method of ['GET', 'HEAD']) {
     resetCatalogMemo();
     // #82: the catalog is served too, so the policy comes from it, not from the fail-safe path.
-    const response = await dataApi(request('/api/v1/seasons/2026-27/teams', { method, headers: { 'if-none-match': '"fixture"' } }), { ASSETS: { fetch(req) {
+    const response = await dataApi(request(`/api/v1/seasons/${ACTIVE}/teams`, { method, headers: { 'if-none-match': '"fixture"' } }), { ASSETS: { fetch(req) {
       if (new URL(req.url).pathname === '/data/sources.json') return env.ASSETS.fetch(req);
       assert.equal(req.method, method);
-      assert.equal(new URL(req.url).pathname, '/archive/teams/2026-27.json');
+      assert.equal(new URL(req.url).pathname, `/archive/teams/${ACTIVE}.json`);   // #203: the live active season, not a literal
       assert.equal(req.headers.get('if-none-match'), '"fixture"');
       return new Response(null, { status: 304, headers: { etag: '"fixture"' } });
     } } });
