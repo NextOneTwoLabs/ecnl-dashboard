@@ -1,13 +1,13 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,MVLA ECNL G2009/10,MVLA,33633,12,11,1,0,33,2.75,65,6,59
-2,Force (CA) ECNL G2009/10,Force,60044,10,8,0,2,26,2.6,41,6,35
+2,Force (CA) ECNL G2009/10,Force,60044,11,9,0,2,29,2.64,45,8,37
 3,Bay Area Surf - ECNL G2009/10,Bay Area Surf,69036,9,7,2,0,21,2.33,30,7,23
-4,Placer United ECNL G2009/10,Placer United Soccer Club,68832,11,7,2,2,23,2.09,22,12,10
+4,Placer United ECNL G2009/10,Placer United Soccer Club,68832,12,8,2,2,26,2.17,25,13,12
 5,Mustang SC ECNL G2009/10,Mustang Soccer,83526,11,7,3,1,22,2.0,43,10,33
-6,San Juan SC ECNL G2009/10,San Juan Soccer Club,32669,11,6,3,2,20,1.82,30,13,17
-7,Pleasanton RAGE ECNL G2009/10,Pleasanton Rage,44309,11,5,5,1,16,1.45,23,24,-1
-8,COSC ECNL G2009/10,California Odyssey Soccer Club,64375,12,4,6,2,14,1.17,29,35,-6
-9,Davis Legacy ECNL G2009/10,Davis Legacy Soccer Club,69625,11,4,7,0,12,1.09,20,27,-7
+6,San Juan SC ECNL G2009/10,San Juan Soccer Club,32669,12,7,3,2,23,1.92,35,13,22
+7,Pleasanton RAGE ECNL G2009/10,Pleasanton Rage,44309,12,5,5,2,17,1.42,23,24,-1
+8,COSC ECNL G2009/10,California Odyssey Soccer Club,64375,13,4,7,2,14,1.08,31,39,-8
+9,Davis Legacy ECNL G2009/10,Davis Legacy Soccer Club,69625,12,4,8,0,12,1.0,21,30,-9
 10,Marin FC ECNL G2009/10,Marin FC,62042,13,2,11,0,6,0.46,14,79,-65
-11,Stanislaus Surf - ECNL G2009/10,Stanislaus Surf Soccer Club,68540,12,1,11,0,3,0.25,14,64,-50
-12,Santa Rosa United ECNL G2009/10,Santa Rosa United Soccer,132205,11,0,11,0,0,0.0,8,56,-48
+11,Stanislaus Surf - ECNL G2009/10,Stanislaus Surf Soccer Club,68540,13,1,11,1,4,0.31,14,64,-50
+12,Santa Rosa United ECNL G2009/10,Santa Rosa United Soccer,132205,12,0,12,0,0,0.0,8,61,-53

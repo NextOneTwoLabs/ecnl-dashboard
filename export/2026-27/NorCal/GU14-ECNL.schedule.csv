@@ -69,10 +69,10 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-25,02:00 PM,Group Play,COSC ECNL G2012/13,2,3,Santa Rosa United ECNL G2012/13,Clovis East Highschool,Field 7,On Time,1094767
 2026-10-31,TBD,Group Play,Bay Area Surf - ECNL G2012/13,,,Mustang SC ECNL G2012/13,,,On Time,1094803
 2026-10-31,09:00 AM,Group Play,Marin FC ECNL G2012/13,2,2,MVLA ECNL G2012/13,Terra Linda High School,Stadium,On Time,1094815
-2026-10-31,11:00 AM,Group Play,Stanislaus Surf - ECNL G2012/13,,,Pleasanton RAGE ECNL G2012/13,River Islands Soccer Complex,Field 1,On Time,1094833
-2026-10-31,12:00 PM,Group Play,Force (CA) ECNL G2012/13,,,COSC ECNL G2012/13,Kathleen MacDonald High School,Stadium,On Time,1094809
-2026-10-31,01:00 PM,Group Play,Santa Rosa United ECNL G2012/13,,,San Juan SC ECNL G2012/13,Trione Fields,Trione West,On Time,1094827
-2026-10-31,02:00 PM,Group Play,Placer United ECNL G2012/13,,,Davis Legacy ECNL G2012/13,Whitney High School,Stadium,On Time,1094821
+2026-10-31,11:00 AM,Group Play,Stanislaus Surf - ECNL G2012/13,1,0,Pleasanton RAGE ECNL G2012/13,River Islands Soccer Complex,Field 1,On Time,1094833
+2026-10-31,12:00 PM,Group Play,Force (CA) ECNL G2012/13,2,2,COSC ECNL G2012/13,Kathleen MacDonald High School,Stadium,On Time,1094809
+2026-10-31,01:00 PM,Group Play,Santa Rosa United ECNL G2012/13,1,3,San Juan SC ECNL G2012/13,Trione Fields,Trione West,On Time,1094827
+2026-10-31,02:00 PM,Group Play,Placer United ECNL G2012/13,3,0,Davis Legacy ECNL G2012/13,Whitney High School,Stadium,On Time,1094821
 2026-11-07,10:00 AM,Group Play,Placer United ECNL G2012/13,,,Stanislaus Surf - ECNL G2012/13,Placer Valley Soccer Complex,Field 6,On Time,1094863
 2026-11-07,10:30 AM,Group Play,MVLA ECNL G2012/13,,,Force (CA) ECNL G2012/13,Graham Middle School,Turf,On Time,1094857
 2026-11-07,10:35 AM,Group Play,Bay Area Surf - ECNL G2012/13,,,San Juan SC ECNL G2012/13,Willow Glen High School,Football Stadium,On Time,1094839

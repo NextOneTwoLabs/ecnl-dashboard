@@ -67,11 +67,11 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-10-25,11:00 AM,Group Play,Pleasanton RAGE ECNL G2011/12,0,5,Bay Area Surf - ECNL G2011/12,Val Vista,Field 2,On Time,1094784
 2026-10-25,12:00 PM,Group Play,COSC ECNL G2011/12,4,1,Santa Rosa United ECNL G2011/12,Clovis East Highschool,Field 7,On Time,1094766
 2026-10-25,02:30 PM,Group Play,Marin FC ECNL G2011/12,1,0,Force (CA) ECNL G2011/12,College of Marin,Stadium,On Time,1094772
-2026-10-31,11:00 AM,Group Play,Santa Rosa United ECNL G2011/12,,,San Juan SC ECNL G2011/12,Trione Fields,Trione West,On Time,1094826
-2026-10-31,12:40 PM,Group Play,Bay Area Surf - ECNL G2011/12,,,Mustang SC ECNL G2011/12,Willow Glen High School,Football Stadium,On Time,1094802
-2026-10-31,12:50 PM,Group Play,Marin FC ECNL G2011/12,,,MVLA ECNL G2011/12,College of Marin,Stadium,On Time,1094814
-2026-10-31,02:00 PM,Group Play,Force (CA) ECNL G2011/12,,,COSC ECNL G2011/12,Kathleen MacDonald High School,Stadium,On Time,1094808
-2026-10-31,02:00 PM,Group Play,Placer United ECNL G2011/12,,,Davis Legacy ECNL G2011/12,Mahany Park,Field 1,On Time,1094820
+2026-10-31,11:00 AM,Group Play,Santa Rosa United ECNL G2011/12,1,5,San Juan SC ECNL G2011/12,Trione Fields,Trione West,On Time,1094826
+2026-10-31,12:40 PM,Group Play,Bay Area Surf - ECNL G2011/12,1,3,Mustang SC ECNL G2011/12,Willow Glen High School,Football Stadium,On Time,1094802
+2026-10-31,12:50 PM,Group Play,Marin FC ECNL G2011/12,0,1,MVLA ECNL G2011/12,College of Marin,Stadium,On Time,1094814
+2026-10-31,02:00 PM,Group Play,Force (CA) ECNL G2011/12,0,1,COSC ECNL G2011/12,Kathleen MacDonald High School,Stadium,On Time,1094808
+2026-10-31,02:00 PM,Group Play,Placer United ECNL G2011/12,5,1,Davis Legacy ECNL G2011/12,Mahany Park,Field 1,On Time,1094820
 2026-10-31,03:00 PM,Group Play,Stanislaus Surf - ECNL G2011/12,,,Pleasanton RAGE ECNL G2011/12,Modesto Junior College,MJC West,On Time,1094832
 2026-11-07,10:00 AM,Group Play,Placer United ECNL G2011/12,,,Stanislaus Surf - ECNL G2011/12,Placer Valley Soccer Complex,Field 5,On Time,1094862
 2026-11-07,11:00 AM,Group Play,Mustang SC ECNL G2011/12,,,Marin FC ECNL G2011/12,Provident Field @ MSC, Lower,On Time,1094850
