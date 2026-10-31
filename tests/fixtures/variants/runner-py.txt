@@ -1,0 +1,17 @@
+test_green (test_s.C.test_green) ... ok
+test_red (test_s.C.test_red) ... FAIL
+test_skipped (test_s.C.test_skipped) ... skipped 'gone'
+
+======================================================================
+FAIL: test_red (test_s.C.test_red)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-ecnl-dashboard/69acec1c-f186-59d6-b868-391aa0ebae21/scratchpad/samp/test_s.py", line 4, in test_red
+    def test_red(self): self.assertEqual(1, 2)
+                        ~~~~~~~~~~~~~~~~^^^^^^
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (failures=1, skipped=1)

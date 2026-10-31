@@ -777,6 +777,30 @@ Overview tab.
 - **Not in this phase:** RL, guest and showcase-only teams (no conference table, so no
   history and no link), and following a squad in My Teams. (Team search, #114, now opens Overview.)
 
+## Refresh-proof variants (#203)
+
+A change that claims "neither a data refresh nor the season rollover can turn `main` red or skip a test" is proved by running the
+whole Node and Python suites on copies of the checkout that look like the future. `tools/variants/` builds them, offline:
+
+```
+python tools/variants/variants.py build rollover3 ../variant-rollover3                 # season end, then 2027-28 registered, ages up one
+python tools/variants/variants.py build season-end ../variant-old --tests-from origin/main   # the same data with the tests of a git ref
+python tools/variants/variants.py run ../variant-rollover3 ../rollover3-new-node.txt node
+python tools/variants/variants.py run ../variant-rollover3 ../rollover3-new-py.txt py
+python tools/variants/subset.py ../logs rollover3 season-end                # new red/skipped is a subset of old
+```
+
+`run` writes the log it is given; `subset.py <logdir> <variant>...` reads `<logdir>/<variant>-old-node.txt`, `<variant>-new-node.txt`, `<variant>-old-py.txt` and
+`<variant>-new-py.txt` (the `<variant>-old|new-node|py.txt` files). It exits 1 when it compared nothing, when a log has no test lines, or when a variant has only one of
+the two logs of a suite. A simulation prints the number of files it changed and exits 1 when that is 0.
+
+Variants: `base`, `refresh`, `season-end`, `double-header`, `remove` and `nofile` (`--teams ids`), `withdraw-many`, `rename`, `late-add`
+and `rollover3`. The copy is outside the repository (the repo root, any path inside it and any path above it are refused, and the
+target must be empty), is rebuilt with `archive.py --team-index --all`, `--team-history` and `--search-data`, and is a git repository
+(two tests need one). Everything runs under the network guard with a dead proxy on `127.0.0.1:9`. Pass bar: 0 red and 0 skipped on every
+variant, or every remaining item named; the new tests' red or skipped list a subset of the old tests'; a test new in the change green on every
+variant. Skips are counted, not only reds: a property that vanishes switches a test off without a sign.
+
 ## Feedback
 
 The **Send feedback** panel at the foot of the sidebar posts JSON to `POST /api/feedback`, handled
@@ -866,6 +890,7 @@ cover the sibling site's `/api/*`, since the rule has no hostname field) or move
 | `api/session.mjs` | Session cookie, rate limits and counts for `/api/v1/*` (see `docs/data-api.md`, "Sessions and rate limits") |
 | `api/apikey.mjs` | API keys for direct use of `/api/v1/*`: format, hash check, key-in-URL check, cached KV lookup (see `docs/data-api.md`, "API keys") |
 | `tools/apikey.mjs` | The owner's key tool: issues a key, prints the wrangler commands to store, list, show, revoke or purge its record (self-contained, no network) |
+| `tools/variants/` | The refresh-proof bar (#203): `variants.py` builds a copy of the checkout as a data refresh, the end of the season, a team withdrawn or added late, a rename or the 2027-28 rollover would leave it (outside the repo, offline under the network guard, rebuilt with the repo's own builders) and runs the whole Node or Python suite on it; `subset.py` checks that the red or skipped tests of the new tests are a subset of the old ones. It never edits a checkout and refuses the repo root and any path inside it (`tests/test_variants_tool.py`). See "Refresh-proof variants" below |
 | `wrangler.toml` | Cloudflare Workers config: the `public/` assets, the `FEEDBACK` and `API_KEYS` KV bindings, the four rate limiters and the `API_EVENTS` Analytics Engine dataset |
 | `.gitattributes` | Pins the image assets (`*.svg`, `*.png`) as binary, so the files copied from the entrance site stay byte-identical across checkouts instead of being line-ending converted |
 | `.github/workflows/refresh.yml` | The scheduled refresh — asks for every 2 h, measured at 3 to 5½ |
