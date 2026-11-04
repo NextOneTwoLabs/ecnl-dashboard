@@ -40,9 +40,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-02-28,01:00 PM,Group Play,Eastside FC ECNL G2010/11,,,Oregon Surf ECNL G2010/11,PRESTON PARK ATHLETIC FIELDS,Field 1,On Time,1058849
 2027-03-06,TBD,Group Play,Boise Thorns ECNL G2010/11,,,Washington Premier ECNL G2010/11,,,On Time,1058872
 2027-03-06,TBD,Group Play,Oregon Surf ECNL G2010/11,,,La Roca FC ECNL G2010/11,,,On Time,1058873
-2027-03-06,TBD,Group Play,Oregon Surf ECNL G2010/11,,,Avalanche ECNL G2010/11,,,On Time,1058874
 2027-03-06,TBD,Group Play,Portland Thorns ECNL G2010/11,,,La Roca FC ECNL G2010/11,,,On Time,1058875
 2027-03-06,TBD,Group Play,Portland Thorns ECNL G2010/11,,,Avalanche ECNL G2010/11,,,On Time,1058876
+2027-03-06,02:00 PM,Group Play,Oregon Surf ECNL G2010/11,,,Avalanche ECNL G2010/11,Mountain View Champions Park,Field 3,On Time,1058874
 2027-03-07,TBD,Group Play,Boise Thorns ECNL G2010/11,,,Eastside FC ECNL G2010/11,,,On Time,1058905
 2027-03-07,TBD,Group Play,Oregon Surf ECNL G2010/11,,,La Roca FC ECNL G2010/11,,,On Time,1058906
 2027-03-07,TBD,Group Play,Oregon Surf ECNL G2010/11,,,Avalanche ECNL G2010/11,,,On Time,1058907
@@ -86,10 +86,10 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-04-24,TBD,Group Play,Portland Thorns ECNL G2010/11,,,XF ECNL G2010/11,,,On Time,1059135
 2027-04-24,TBD,Group Play,Avalanche ECNL G2010/11,,,PacNW SC ECNL G2010/11,,,On Time,1059136
 2027-04-24,11:15 AM,Group Play,La Roca FC ECNL G2010/11,,,Washington Premier ECNL G2010/11,La Roca Park,Field 2,On Time,1059133
-2027-04-25,TBD,Group Play,Oregon Surf ECNL G2010/11,,,XF ECNL G2010/11,,,On Time,1059158
 2027-04-25,TBD,Group Play,Portland Thorns ECNL G2010/11,,,Seattle United ECNL G2010/11,,,On Time,1059159
 2027-04-25,11:15 AM,Group Play,La Roca FC ECNL G2010/11,,,PacNW SC ECNL G2010/11,La Roca Park,Field 1,On Time,1059157
 2027-04-25,01:30 PM,Group Play,Avalanche ECNL G2010/11,,,Washington Premier ECNL G2010/11,St. Joseph Catholic High School,Turf Field,On Time,1059160
+2027-04-25,02:00 PM,Group Play,Oregon Surf ECNL G2010/11,,,XF ECNL G2010/11,Mountain View Champions Park,Field 3,On Time,1059158
 2027-05-01,TBD,Group Play,Boise Thorns ECNL G2010/11,,,La Roca FC ECNL G2010/11,,,On Time,1059184
 2027-05-01,TBD,Group Play,Boise Thorns ECNL G2010/11,,,Avalanche ECNL G2010/11,,,On Time,1059185
 2027-05-01,TBD,Group Play,Avalanche ECNL G2010/11,,,XF ECNL G2010/11,,,On Time,1059186
