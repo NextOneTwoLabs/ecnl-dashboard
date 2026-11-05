@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"18743659eef91adb"
+,"build":"f0fd5f19bf5142e9"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -1042,6 +1042,7 @@
 ,"5888":["arroyo park","92660"]
 ,"5946":["independence high school","75035"]
 ,"5947":["heritage high school","75035"]
+,"5992":["reata sports complex","85260"]
 ,"6194":["stanford sports complex","94566"]
 ,"6195":["ncino sports park","28401"]
 ,"6227":["san joaquin memorial 1406 n fresno st fresno c","93703"]
@@ -5505,12 +5506,12 @@
 ,[1,1401800,40601,134384,85099,null,null,null,null,5660,8,null,[1,0]]
 ,[1,1640800,40600,134386,90258,null,null,null,null,164,2,null,[1,0]]
 ,[1,1641000,40599,134387,90259,null,null,null,null,164,2,null,[1,0]]
-,[1,1449999,40604,59771,132458,null,null,null,null,null,null,null,[1,0]]
-,[1,1449999,40603,68888,132459,null,null,null,null,null,null,null,[1,0]]
-,[1,1449999,40602,62249,132460,null,null,null,null,null,null,null,[1,0]]
-,[1,1449999,40601,81125,132461,null,null,null,null,null,null,null,[1,0]]
-,[1,1449999,40600,99201,132462,null,null,null,null,null,null,null,[1,0]]
-,[1,1449999,40599,121185,132463,null,null,null,null,null,null,null,[1,0]]
+,[1,1441300,40604,59771,132458,null,null,null,null,5992,18,null,[1,0]]
+,[1,1441100,40603,68888,132459,null,null,null,null,5992,18,null,[1,0]]
+,[1,1440900,40602,62249,132460,null,null,null,null,5992,19,null,[1,0]]
+,[1,1440900,40601,81125,132461,null,null,null,null,5992,18,null,[1,0]]
+,[1,1441100,40600,99201,132462,null,null,null,null,5992,19,null,[1,0]]
+,[1,1441300,40599,121185,132463,null,null,null,null,5992,19,null,[1,0]]
 ,[1,2629999,40604,131920,6122,null,null,null,null,null,null,null,[1,0]]
 ,[1,2629999,40603,131921,5544,null,null,null,null,null,null,null,[1,0]]
 ,[1,2629999,40602,131922,62045,null,null,null,null,null,null,null,[1,0]]
