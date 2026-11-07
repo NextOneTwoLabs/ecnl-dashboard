@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"09a3de0d15fb4fdb"
+,"build":"87a0cacda62e0793"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -1088,7 +1088,6 @@
 ,"8274":["willow glen high school","95125"]
 ,"8278":["st andrews episcopal school","78735"]
 ,"8295":["michigan stars sports complex","48095"]
-,"8419":["clark intermediate school","93612"]
 ,"8487":["slsg world wide soccer park","63026"]
 ,"8541":["clark east field","75023"]
 ,"8576":["el cajon valley high school","92021"]
@@ -6374,7 +6373,7 @@
 ,[1,1291400,40580,95560,60301,null,null,null,null,8115,1,null,[1,0]]
 ,[1,1291200,40579,64375,69625,null,null,null,null,8115,1,null,[1,0]]
 ,[1,1291000,40578,88375,81189,null,null,null,null,8115,1,null,[1,0]]
-,[1,1291400,40577,113580,90732,null,null,null,null,8419,"Stadium Field",null,[1,0]]
+,[1,1291500,40577,113580,90732,null,null,null,null,6227,1,null,[1,0]]
 ,[1,1291300,40576,114556,110984,null,null,null,null,6227,1,null,[1,0]]
 ,[1,1291100,40575,116964,126188,null,null,null,null,6227,1,null,[1,0]]
 ,[1,1291300,40580,31328,56277,null,null,null,null,27,"Upper",null,[1,0]]
