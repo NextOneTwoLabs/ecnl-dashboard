@@ -1,9 +1,9 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,SOLAR SC ECNL G2012/13,Solar SC,59794,6,6,0,0,18,3.0,21,7,14
-2,FC Dallas Youth ECNL G2012/13,FC Dallas Youth,115991,7,6,0,1,19,2.71,24,4,20
-3,Sting Royal ECNL G2012/13,Sting Soccer Club,111849,8,7,1,0,21,2.63,19,9,10
-4,Sting Black ECNL G2012/13,Sting Soccer Club,82159,6,5,1,0,15,2.5,14,8,6
-5,FC Westlake ECNL G2012/13,FC Westlake ,131272,9,6,3,0,18,2.0,21,14,7
+2,FC Dallas Youth ECNL G2012/13,FC Dallas Youth,115991,8,7,0,1,22,2.75,26,5,21
+3,Sting Black ECNL G2012/13,Sting Soccer Club,82159,6,5,1,0,15,2.5,14,8,6
+4,Sting Royal ECNL G2012/13,Sting Soccer Club,111849,9,7,2,0,21,2.33,20,11,9
+5,FC Westlake ECNL G2012/13,FC Westlake ,131272,10,7,3,0,21,2.1,23,15,8
 6,DKSC ECNL G2012/13,DKSC,114045,6,4,2,0,12,2.0,14,7,7
 7,Real Colorado National ECNL G2012/13,Real Colorado,99152,12,6,4,2,20,1.67,29,19,10
 8,Challenge SC ECNL G2012/13,Challenge SC,129342,6,3,2,1,10,1.67,8,7,1
@@ -13,5 +13,5 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 12,Dallas Texans ECNL G2012/13,Dallas Texans,134489,7,1,4,2,5,0.71,6,11,-5
 13,Albion Hurricanes FC ECNL G2012/13,Albion Hurricanes FC,71431,6,0,2,4,4,0.67,3,13,-10
 14,West Side Alliance ECNL G2012/13,West Side Alliance SC,78763,8,1,6,1,4,0.5,3,20,-17
-15,Lonestar ATX Red ECNL G2012/13,Lonestar ATX,132703,9,1,7,1,4,0.44,12,23,-11
+15,Lonestar ATX Red ECNL G2012/13,Lonestar ATX,132703,10,1,8,1,4,0.4,13,25,-12
 16,Real Colorado Athletico ECNL G2012/13,Real Colorado,99153,9,0,8,1,1,0.11,4,26,-22
