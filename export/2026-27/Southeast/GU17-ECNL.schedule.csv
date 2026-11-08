@@ -77,8 +77,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-07,11:00 AM,Group Play,Concorde Fire Premier ECNL G2009/10,0,1,Atlanta Fire United ECNL G2009/10,Georgia Sports Park ,field 4,On Time,1070239
 2026-11-07,01:00 PM,Group Play,Alabama FC ECNL G2009/10,2,2,United Futbol Academy ECNL G2009/10,Dunnavant Valley Fields (DVF),Field # 5,On Time,1070235
 2026-11-07,01:00 PM,Group Play,CESA Liberty ECNL G2009/10,0,3,GSA ECNL G2009/10,Mesa Soccer Complex,Field 4,On Time,1070243
-2026-11-08,09:00 AM,Group Play,Concorde Fire Premier ECNL G2009/10,,,United Futbol Academy ECNL G2009/10,Georgia Sports Park ,field 3,On Time,1070255
-2026-11-08,09:00 AM,Group Play,South Carolina United ECNL G2009/10,,,GSA ECNL G2009/10,Southeastern Freight Lines Complex,Field 2,On Time,1070263
+2026-11-08,09:00 AM,Group Play,Concorde Fire Premier ECNL G2009/10,1,2,United Futbol Academy ECNL G2009/10,Georgia Sports Park ,field 3,On Time,1070255
+2026-11-08,09:00 AM,Group Play,South Carolina United ECNL G2009/10,3,7,GSA ECNL G2009/10,Southeastern Freight Lines Complex,Field 2,On Time,1070263
 2026-11-08,01:00 PM,Group Play,Alabama FC ECNL G2009/10,,,Atlanta Fire United ECNL G2009/10,Dunnavant Valley Fields (DVF),Field # 5,On Time,1070251
 2026-11-08,01:00 PM,Group Play,CESA Liberty ECNL G2009/10,,,Concorde Fire Platinum ECNL G2009/10,Mesa Soccer Complex,Field 3,On Time,1070259
 2026-11-21,09:00 AM,Group Play,South Carolina United ECNL G2009/10,,,Concorde Fire Premier ECNL G2009/10,Southeastern Freight Lines Complex,Field 2,On Time,1070271
