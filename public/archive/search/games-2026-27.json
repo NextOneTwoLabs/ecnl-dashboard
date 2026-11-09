@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"f1541ed5870ef56f"
+,"build":"473b7197327e2b22"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -6150,7 +6150,7 @@
 ,[1,871200,40575,106267,55311,5,0,null,null,7554,6,null,[1,0]]
 ,[1,1301055,40580,69035,68831,0,0,null,null,8274,"Football Stadium",null,[1,0]]
 ,[1,1300900,40579,69036,68832,2,0,null,null,8274,"Football Stadium",null,[1,0]]
-,[1,1301755,40578,74987,81251,null,null,null,null,8274,"Football Stadium",null,[1,0]]
+,[1,1301755,40578,74987,81251,1,0,null,null,8274,"Football Stadium",null,[1,0]]
 ,[1,1301435,40577,95449,68030,1,0,null,null,8274,"Football Stadium",null,[1,0]]
 ,[1,1301250,40576,115151,106265,2,2,null,null,8274,"Football Stadium",null,[1,0]]
 ,[1,1301620,40575,135939,106267,2,1,null,null,8274,"Football Stadium",null,[1,0]]
