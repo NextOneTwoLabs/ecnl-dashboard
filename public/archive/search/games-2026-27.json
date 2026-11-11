@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"e2b11b9207f0de66"
+,"build":"86d22944731a4315"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -5234,7 +5234,7 @@
 ,[1,1301700,40604,6122,134098,5,2,null,null,435,19,null,[1,0]]
 ,[1,1301500,40603,5544,134094,4,0,null,null,435,19,null,[1,0]]
 ,[1,1301500,40602,62045,134089,4,1,null,null,435,14,null,[1,0]]
-,[1,1301700,40601,25917,134084,null,null,null,null,435,13,null,[1,0]]
+,[1,1301700,40601,25917,134084,2,1,null,null,435,13,null,[1,0]]
 ,[1,1301700,40600,64010,134082,6,2,null,null,435,14,null,[1,0]]
 ,[1,1301500,40599,63947,134070,0,1,null,null,435,13,null,[1,0]]
 ,[1,2970830,40604,131727,135784,null,null,null,null,3874,"STADIUM",null,[1,0]]
@@ -5897,12 +5897,12 @@
 ,[1,3259999,40601,135889,25917,null,null,null,null,null,null,null,[1,0]]
 ,[1,3259999,40600,135886,64010,null,null,null,null,null,null,null,[1,0]]
 ,[1,3259999,40599,135883,63947,null,null,null,null,null,null,null,[1,0]]
-,[1,3259999,40604,56530,131920,null,null,null,null,null,null,null,[1,0]]
-,[1,3259999,40603,62330,131921,null,null,null,null,null,null,null,[1,0]]
-,[1,3259999,40602,77350,131922,null,null,null,null,null,null,null,[1,0]]
-,[1,3259999,40601,85099,131923,null,null,null,null,null,null,null,[1,0]]
-,[1,3259999,40600,90258,131924,null,null,null,null,null,null,null,[1,0]]
-,[1,3259999,40599,90259,131925,null,null,null,null,null,null,null,[1,0]]
+,[1,3259999,40604,134098,131920,null,null,null,null,null,null,null,[1,0]]
+,[1,3259999,40603,134094,131921,null,null,null,null,null,null,null,[1,0]]
+,[1,3259999,40602,134089,131922,null,null,null,null,null,null,null,[1,0]]
+,[1,3259999,40601,134084,131923,null,null,null,null,null,null,null,[1,0]]
+,[1,3259999,40600,134082,131924,null,null,null,null,null,null,null,[1,0]]
+,[1,3259999,40599,134070,131925,null,null,null,null,null,null,null,[1,0]]
 ,[8227,521000,40580,60301,31328,1,0,null,null,704,12,null,[1,0]]
 ,[1,521000,40579,69625,83526,0,4,null,null,704,11,null,[1,0]]
 ,[1,521200,40578,81189,31529,1,1,null,null,704,12,null,[1,0]]
