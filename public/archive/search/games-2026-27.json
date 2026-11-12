@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"52ac0269e6dd64d6"
+,"build":"4103b76cedc58303"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -2936,10 +2936,10 @@
 ,[1,1441300,40596,65585,81344,null,null,null,null,9459,"Stadium",null,[1,0]]
 ,[1,1441500,40597,46817,68797,null,null,null,null,9459,"Stadium",null,[1,0]]
 ,[1,1441100,40598,27972,59236,null,null,null,null,9459,"Stadium",null,[1,0]]
-,[1,1449999,40595,81903,89731,null,null,null,null,null,null,null,[1,0]]
-,[1,1449999,40596,78164,81340,null,null,null,null,null,null,null,[1,0]]
-,[1,1449999,40597,59536,68802,null,null,null,null,null,null,null,[1,0]]
-,[1,1449999,40598,45834,59255,null,null,null,null,null,null,null,[1,0]]
+,[1,1441500,40595,81903,89731,null,null,null,null,2176,7,null,[1,0]]
+,[1,1441700,40596,78164,81340,null,null,null,null,2176,6,null,[1,0]]
+,[1,1441900,40597,59536,68802,null,null,null,null,2176,6,null,[1,0]]
+,[1,1441900,40598,45834,59255,null,null,null,null,2176,7,null,[1,0]]
 ,[1,1440900,40595,131499,79871,null,null,null,null,6277,"#1",null,[1,0]]
 ,[1,1440900,40596,131498,79893,null,null,null,null,6277,"#3",null,[1,0]]
 ,[1,1441100,40597,131497,67127,null,null,null,null,6277,"#3",null,[1,0]]
@@ -4017,7 +4017,7 @@
 ,[1,3049999,40592,4298,60137,null,null,null,null,null,null,null,[1,0]]
 ,[1,3059999,40592,47038,60137,null,null,null,null,null,null,null,[1,0]]
 ,[1,3051400,40592,4298,108207,null,null,null,null,1056,"Indoor",null,[1,0]]
-,[1,3119999,40592,46997,133007,null,null,null,null,null,null,null,[1,0]]
+,[1,1721300,40592,133007,46997,null,null,null,null,2232,2,null,[1,0]]
 ,[1,601330,40610,59850,58634,3,2,null,null,3728,"Middle Turf",null,[1,0]]
 ,[1,601330,40609,69485,69250,2,0,null,null,3728,"West Turf",null,[1,0]]
 ,[1,601115,40608,72334,81521,2,0,null,null,3728,"West Turf",null,[1,0]]
