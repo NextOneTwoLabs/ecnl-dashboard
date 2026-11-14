@@ -5,8 +5,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-12-12,12:00 PM,Group Play,Seattle United ECNL G2009/10,,,La Roca FC ECNL G 2009/10,Ingraham High School,North,On Time,1058651
 2026-12-12,01:00 PM,Group Play,XF ECNL G2009/10,,,Boise Thorns ECNL G2009/10,Marymoor Park,Field 2,On Time,1058653
 2026-12-13,TBD,Group Play,Washington Premier ECNL G2009/10,,,La Roca FC ECNL G 2009/10,,,On Time,1058672
-2026-12-13,09:30 AM,Group Play,Seattle United ECNL G2009/10,,,Avalanche ECNL G2009/10,TBD,Field TBD,On Time,1058671
 2026-12-13,11:00 AM,Group Play,XF ECNL G2009/10,,,Boise Thorns ECNL G2009/10,Marymoor Park,Field 2,On Time,1058673
+2026-12-13,01:00 PM,Group Play,Seattle United ECNL G2009/10,,,Avalanche ECNL G2009/10,Magnuson Park,Field 7,On Time,1058671
 2027-01-16,TBD,Group Play,Oregon Surf ECNL G2009/10,,,Boise Thorns ECNL G2009/10,,,On Time,1058685
 2027-01-16,TBD,Group Play,PacNW SC ECNL G2009/10,,,Portland Thorns ECNL G2009/10,,,On Time,1058686
 2027-01-17,TBD,Group Play,PacNW SC ECNL G2009/10,,,Oregon Surf ECNL G2009/10,,,On Time,1058701
@@ -50,8 +50,8 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-03-07,TBD,Group Play,Portland Thorns ECNL G2009/10,,,Avalanche ECNL G2009/10,,,On Time,1058915
 2027-03-07,TBD,Group Play,XF ECNL G2009/10,,,Seattle United ECNL G2009/10,,,On Time,1058916
 2027-03-13,TBD,Group Play,Portland Thorns ECNL G2009/10,,,Eastside FC ECNL G2009/10,,,On Time,1058944
-2027-03-13,TBD,Group Play,Avalanche ECNL G2009/10,,,Boise Thorns ECNL G2009/10,,,On Time,1058946
 2027-03-13,07:30 AM,Group Play,Seattle United ECNL G2009/10,,,Oregon Surf ECNL G2009/10,TBD,Field TBD,On Time,1058945
+2027-03-13,09:00 AM,Group Play,Avalanche ECNL G2009/10,,,Boise Thorns ECNL G2009/10,St. Joseph Catholic High School,Turf Field,On Time,1058946
 2027-03-13,11:00 AM,Group Play,Washington Premier ECNL G2009/10,,,PacNW SC ECNL G2009/10,WPFC Field Complex,Field 3,On Time,1058947
 2027-03-13,02:30 PM,Group Play,La Roca FC ECNL G 2009/10,,,XF ECNL G2009/10,La Roca Park,Field 1,On Time,1058943
 2027-03-14,09:00 AM,Group Play,Avalanche ECNL G2009/10,,,XF ECNL G2009/10,St. Joseph Catholic High School,Turf Field,On Time,1058967
