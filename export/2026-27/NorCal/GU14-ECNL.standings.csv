@@ -2,7 +2,7 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,San Juan SC ECNL G2012/13,San Juan Soccer Club,103791,14,12,1,1,37,2.64,65,15,50
 2,Mustang SC ECNL G2012/13,Mustang Soccer,104961,13,9,2,2,29,2.23,31,11,20
 3,Bay Area Surf - ECNL G2012/13,Bay Area Surf,115151,11,7,1,3,24,2.18,31,19,12
-4,MVLA ECNL G2012/13,MVLA,84876,13,8,3,2,26,2.0,40,18,22
+4,MVLA ECNL G2012/13,MVLA,84876,14,9,3,2,29,2.07,47,18,29
 5,Placer United ECNL G2012/13,Placer United Soccer Club,106265,14,6,3,5,23,1.64,28,20,8
 6,Santa Rosa United ECNL G2012/13,Santa Rosa United Soccer,132202,14,7,5,2,23,1.64,21,18,3
 7,Marin FC ECNL G2012/13,Marin FC,82675,14,6,5,3,21,1.5,21,29,-8
@@ -10,4 +10,4 @@ rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 9,COSC ECNL G2012/13,California Odyssey Soccer Club,114556,14,3,10,1,10,0.71,23,33,-10
 10,Pleasanton RAGE ECNL G2012/13,Pleasanton Rage,44316,13,2,9,2,8,0.62,11,31,-20
 11,Davis Legacy ECNL G2012/13,Davis Legacy Soccer Club,110984,13,2,11,0,6,0.46,14,33,-19
-12,Force (CA) ECNL G2012/13,Force,94620,11,0,10,1,1,0.09,5,46,-41
+12,Force (CA) ECNL G2012/13,Force,94620,12,0,11,1,1,0.08,5,53,-48
