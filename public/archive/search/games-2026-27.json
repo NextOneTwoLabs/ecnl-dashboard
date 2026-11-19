@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"02c078b749b361a6"
+,"build":"ec5687ce675e017e"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -1117,6 +1117,8 @@
 ,"9450":["tequesta trace park","33326"]
 ,"9459":["ge vernova park","29681"]
 ,"9483":["bear creek high school","80227"]
+,"9514":["plano isd clark central","75023"]
+,"9515":["plano isd clark west","75023"]
 ,"9519":["hf exteriors complex the woods","63376"]
 }
 ,"games":[
@@ -4504,10 +4506,10 @@
 ,[1,1430900,40605,129343,96490,null,null,null,null,346,2,null,[1,0]]
 ,[1,1431300,40610,134483,59502,null,null,null,null,5946,1,null,[1,0]]
 ,[1,1431100,40609,134485,61013,null,null,null,null,5946,1,null,[1,0]]
-,[1,1430900,40608,134487,80774,null,null,null,null,5946,1,null,[1,0]]
-,[1,1431300,40607,134488,94440,null,null,null,null,5947,1,null,[1,0]]
-,[1,1431100,40606,134489,80828,null,null,null,null,5947,1,null,[1,0]]
-,[1,1430900,40605,134490,94445,null,null,null,null,5947,1,null,[1,0]]
+,[1,1430900,40608,134487,80774,null,null,null,null,9515,1,null,[1,0]]
+,[1,1431300,40607,134488,94440,null,null,null,null,9514,1,null,[1,0]]
+,[1,1431100,40606,134489,80828,null,null,null,null,9514,1,null,[1,0]]
+,[1,1430900,40605,134490,94445,null,null,null,null,9514,1,null,[1,0]]
 ,[1,1441300,40610,39582,58541,null,null,null,null,2265,1,null,[1,0]]
 ,[1,1441100,40609,59340,46266,null,null,null,null,2265,1,null,[1,0]]
 ,[1,1441500,40608,40463,63889,null,null,null,null,2265,1,null,[1,0]]
