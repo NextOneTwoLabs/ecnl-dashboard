@@ -1,6 +1,6 @@
 {"schema":2
-,"build":"c9a11a79d9ca13ff"
-,"directoryBuild":"e84f1c32e5dcabe6"
+,"build":"bf0dfb797ed9e1cc"
+,"directoryBuild":"fc4e6a253833fe28"
 ,"activeSeason":"2026-27"
 ,"seasons":["2020-21","2021-22","2022-23","2023-24","2024-25","2025-26","2026-27"]
 ,"birthYears":[2002,2014]
@@ -926,7 +926,7 @@
 ,{"b":[2008],"c":115,"e":[[3,6,2,"Round of 16"],[4,8,7,"Final"]],"s":[[1,56526,"Utah Royals FC-AZ ECNL GU14",0,13,6,9],[2,56526,"Utah Royals FC-AZ ECNL G08",0,14,6,9],[3,56526,"Utah Royals FC-AZ ECNL G08",0,15,5,9],[4,56526,"Utah Royals FC-AZ ECNL G08",0,16,9,17],[5,56527,"Utah Royals FC-AZ ECNL G07/08",0,21,6,17]]}
 ,{"b":[2007],"c":115,"e":[[2,4,6,"Champion"],[3,6,6,"Champion"]],"s":[[1,56527,"Utah Royals FC-AZ ECNL GU15",0,1,7,9],[2,56527,"Utah Royals FC-AZ ECNL G07",0,2,6,9],[3,56527,"Utah Royals FC-AZ ECNL G07",0,3,7,9],[4,56527,"Utah Royals FC-AZ ECNL G07/06",0,4,7,17]],"t":2}
 ,{"b":[2006],"c":115,"s":[[1,56528,"Utah Royals FC-AZ ECNL GU16",0,18,8,9],[2,56528,"Utah Royals FC-AZ ECNL G06",0,19,9,9],[3,56528,"Utah Royals FC-AZ ECNL G06/05",0,20,6,9]]}
-,{"b":[2009],"best":2,"c":115,"e":[[3,6,0,"Round of 16"],[4,8,0,"Round of 16"],[4,9,0,"Quarterfinals"],[5,10,3,"Group 7/14"],[5,12,11,""]],"s":[[1,56530,"Utah Royals FC-AZ ECNL GU13",0,22,4,9],[2,56530,"Utah Royals FC-AZ ECNL G09",0,23,5,9],[3,56530,"Utah Royals FC-AZ ECNL G09",0,24,2,9],[4,56530,"Utah Royals FC-AZ ECNL G09",0,25,6,17],[5,56530,"Utah Royals FC-AZ ECNL G09",0,26,10,17],[6,56530,"Utah Royals FC AZ ECNL G2008/09",0,27,4,17]]}
+,{"b":[2009],"best":2,"c":115,"e":[[3,6,0,"Round of 16"],[4,8,0,"Round of 16"],[4,9,0,"Quarterfinals"],[5,10,3,"Group 7/14"],[5,12,11,""]],"s":[[1,56530,"Utah Royals FC-AZ ECNL GU13",0,22,4,9],[2,56530,"Utah Royals FC-AZ ECNL G09",0,23,5,9],[3,56530,"Utah Royals FC-AZ ECNL G09",0,24,2,9],[4,56530,"Utah Royals FC-AZ ECNL G09",0,25,6,17],[5,56530,"Utah Royals FC-AZ ECNL G09",0,26,10,17],[6,56530,"Utah Royals FC AZ ECNL G2008/09",0,27,8,17]]}
 ,{"b":[2003,2004],"c":115,"s":[[1,56531,"Utah Royals FC-AZ ECNL GU18/U19",0,7,3,9]]}
 ,{"b":[2005],"best":1,"c":115,"e":[[1,2,0,"Group 2/4"],[2,4,0,"Quarterfinals"]],"s":[[1,56707,"Utah Royals FC-AZ ECNL GU17",0,10,2,9],[2,56707,"Utah Royals FC-AZ ECNL G05/04",0,11,2,9]]}
 ,{"b":[2009],"best":1,"c":69,"e":[[1,2,0,"Group 3/4"],[2,4,0,"Round of 16"],[3,6,0,"Group 4/4"],[4,8,0,"Group 4/4"],[5,10,10,"Round of 16"],[5,12,11,""]],"m":[1527,1546],"s":[[1,56728,"Seattle United ECNL GU13",5,22,2,9],[2,56728,"Seattle United ECNL G09",5,23,3,14],[3,56728,"Seattle United ECNL G09",5,24,1,10],[4,56728,"Seattle United ECNL G09",5,25,3,10],[5,56728,"Seattle United ECNL G09",5,26,4,10]]}
@@ -1243,7 +1243,7 @@
 ,{"b":[2011],"c":42,"e":[[5,10,10,"Semifinals"],[5,11,13,""],[5,12,11,""]],"s":[[3,77003,"San Juan SC ECNL G11",7,33,4,10],[4,77003,"San Juan SC ECNL G11",7,34,4,10],[5,77003,"San Juan SC ECNL G11",7,35,5,11],[6,77003,"San Juan SC ECNL G2010/11",7,36,8,12]]}
 ,{"b":[2011],"best":3,"c":103,"e":[[3,6,0,"Round of 16"],[3,7,0,"Champion"],[4,8,0,"Round of 16"],[4,9,0,"Champion"],[5,10,0,"Round of 32"],[5,11,13,""],[5,12,11,""]],"m":[1779,1780],"s":[[3,77020,"San Diego Surf ECNL G11",0,33,2,8],[4,77020,"San Diego Surf ECNL G11",0,34,3,17],[5,77020,"San Diego Surf ECNL G11",0,35,2,17]],"t":2}
 ,{"b":[2011],"c":83,"e":[[5,11,13,""],[5,12,11,""]],"m":[1875,1876],"s":[[3,77284,"Arizona Arsenal ECNL G11",0,33,6,8],[4,77284,"Arizona Arsenal ECNL G11",0,34,15,17],[5,77284,"Arizona Arsenal ECNL G11",0,35,16,17]]}
-,{"b":[2011],"c":115,"e":[[5,11,13,""],[5,12,11,""]],"s":[[3,77350,"Utah Royals FC-AZ ECNL G11",0,33,5,9],[4,77350,"Utah Royals FC-AZ ECNL G11",0,34,11,17],[5,77350,"Utah Royals FC-AZ ECNL G11",0,35,11,17],[6,77350,"Utah Royals FC-AZ ECNL G2010/11",0,36,11,17]]}
+,{"b":[2011],"c":115,"e":[[5,11,13,""],[5,12,11,""]],"s":[[3,77350,"Utah Royals FC-AZ ECNL G11",0,33,5,9],[4,77350,"Utah Royals FC-AZ ECNL G11",0,34,11,17],[5,77350,"Utah Royals FC-AZ ECNL G11",0,35,11,17],[6,77350,"Utah Royals FC-AZ ECNL G2010/11",0,36,12,17]]}
 ,{"b":[2011],"best":0,"c":110,"e":[[4,8,0,"Group 3/4"],[5,10,10,"Semifinals"],[5,11,13,""],[5,12,11,""]],"m":[1755,1756],"s":[[3,77421,"Beach FC ECNL G11",0,33,4,9],[4,77421,"Beach FC ECNL G11",0,34,4,17],[5,77421,"Beach FC (CA) ECNL G11",0,35,8,17]]}
 ,{"b":[2011],"c":43,"e":[[5,11,13,""],[5,12,11,""]],"m":[1770,1771],"s":[[3,77797,"Santa Rosa United ECNL G11",7,33,10,10],[4,77797,"Santa Rosa United ECNL G11",7,34,9,10],[5,77797,"Santa Rosa United ECNL G11",7,35,10,11]]}
 ,{"b":[2011],"c":89,"m":[1900,1901],"s":[[3,78045,"Wilmington Hammerheads ECNL G11",2,33,13,13],[4,78045,"Wilmington Hammerheads ECNL G11",2,34,12,12],[5,78045,"Wilmington Hammerheads ECNL G11",2,35,10,10]]}
@@ -1286,7 +1286,7 @@
 ,{"b":[2011],"c":13,"m":[1887,1888],"s":[[3,81587,"Dallas Texans ECNL G11",6,33,8,16],[4,81587,"Dallas Texans ECNL G11",6,34,9,16],[5,81587,"Dallas Texans ECNL G11",6,35,11,16]]}
 ,{"b":[2011],"best":2,"c":46,"e":[[3,6,0,"Round of 16"],[4,8,0,"Group 2/4"],[5,10,0,"Round of 16"]],"m":[1826,1827],"s":[[3,81703,"Richmond United ECNL G11",2,33,5,13],[4,81703,"Richmond United ECNL G11",2,34,3,12],[5,81703,"Richmond United ECNL G11",2,35,2,10]]}
 ,{"b":[2011],"c":26,"e":[[5,10,10,"Quarterfinals"]],"s":[[3,81762,"Alabama FC ECNL G11",4,33,8,16],[4,81762,"Alabama FC ECNL G11",4,34,10,16],[5,81762,"Alabama FC ECNL G11",4,35,7,16],[6,81762,"Alabama FC ECNL G2010/11",4,36,6,16]]}
-,{"b":[2011],"c":9,"e":[[5,11,13,""],[5,12,11,""]],"s":[[3,81798,"Rebels SC ECNL G11",0,33,8,8],[4,81798,"Rebels SC ECNL G11",0,34,17,17],[5,81798,"Rebels SC ECNL G11",0,35,15,17],[6,81798,"Rebels SC ECNL G2010/11",0,36,15,17]]}
+,{"b":[2011],"c":9,"e":[[5,11,13,""],[5,12,11,""]],"s":[[3,81798,"Rebels SC ECNL G11",0,33,8,8],[4,81798,"Rebels SC ECNL G11",0,34,17,17],[5,81798,"Rebels SC ECNL G11",0,35,15,17],[6,81798,"Rebels SC ECNL G2010/11",0,36,16,17]]}
 ,{"b":[2011],"best":1,"c":96,"e":[[3,6,0,"Group 3/4"],[4,8,0,"Group 2/4"],[5,10,7,"Quarterfinals"]],"s":[[3,81852,"NC Courage ECNL G11",2,33,4,13],[4,81852,"NC Courage ECNL G11",2,34,2,12],[5,81852,"NC Courage ECNL G11",2,35,4,10]]}
 ,{"b":[2011],"best":2,"c":15,"e":[[3,6,0,"Group 2/4"],[4,8,0,"Round of 16"],[4,9,0,"Quarterfinals"],[5,10,0,"Round of 16"]],"s":[[3,81882,"Solar SC ECNL G11",6,33,1,16],[4,81882,"Solar SC ECNL G11",6,34,2,16],[5,81882,"SOLAR SC ECNL G11",6,35,1,16],[6,81882,"SOLAR SC ECNL G2010/11",6,36,3,16]]}
 ,{"b":[2011],"c":24,"m":[1583],"s":[[3,81918,"Albion Hurricanes FC ECNL G11",6,33,9,16],[4,81918,"Albion Hurricanes FC ECNL G11",6,34,8,16],[5,81918,"Albion Hurricanes FC ECNL G11",6,35,15,16]]}
@@ -1832,7 +1832,7 @@
 ,{"b":[2013,2014],"c":67,"mp":[1433],"s":[[6,131706,"Legends FC Del Mar ECNL G2013/14",0,42,9,17]]}
 ,{"b":[2012,2013],"c":67,"mp":[1300,1433],"s":[[6,131709,"Legends FC Del Mar ECNL G2012/13",0,41,16,17]]}
 ,{"b":[2011,2012],"c":67,"mp":[1175,1300],"s":[[6,131712,"Legends FC Del Mar ECNL G2011/12",0,39,14,17]]}
-,{"b":[2010,2011],"c":67,"mp":[987,1175],"s":[[6,131715,"Legends FC Del Mar ECNL G2010/11",0,36,12,17]]}
+,{"b":[2010,2011],"c":67,"mp":[987,1175],"s":[[6,131715,"Legends FC Del Mar ECNL G2010/11",0,36,11,17]]}
 ,{"b":[2009,2010],"c":67,"mp":[823,987],"s":[[6,131719,"Legends FC Del Mar ECNL G2009/10",0,32,7,17]]}
 ,{"b":[2008,2009],"c":67,"mp":[823],"s":[[6,131727,"Legends FC Del Mar ECNL G2008/09",0,27,6,17]]}
 ,{"b":[2013,2014],"c":77,"mp":[1478],"s":[[6,131784,"Gretna Elite Academy ECNL G2013/14",8,42,8,8]]}
@@ -1950,7 +1950,7 @@
 ,{"b":[2011,2012],"c":120,"mp":[1209,1309],"s":[[6,134238,"Arlington Soccer Association ECNL G2011/12",2,39,5,11]]}
 ,{"b":[2012,2013],"c":120,"mp":[1309,1506],"s":[[6,134239,"Arlington Soccer Association ECNL G2012/13",2,41,2,11]]}
 ,{"b":[2013,2014],"c":120,"mp":[1506],"s":[[6,134240,"Arlington Soccer Association ECNL G2013/14",2,42,4,11]]}
-,{"b":[2008,2009],"c":83,"mp":[845],"s":[[6,134275,"Arizona Arsenal ECNL G2008/09",0,27,8,17]]}
+,{"b":[2008,2009],"c":83,"mp":[845],"s":[[6,134275,"Arizona Arsenal ECNL G2008/09",0,27,4,17]]}
 ,{"b":[2009,2010],"c":83,"mp":[845,991],"s":[[6,134278,"Arizona Arsenal ECNL G2009/10",0,32,16,17]]}
 ,{"b":[2013,2014],"c":121,"mp":[1428],"s":[[6,134300,"Rockford Raptors FC ECNL G2013/14",8,42,6,8]]}
 ,{"b":[2012,2013],"c":121,"mp":[1352,1428],"s":[[6,134301,"Rockford Raptors FC ECNL G2012/13",8,41,4,8]]}
@@ -1964,7 +1964,7 @@
 ,{"b":[2010,2011],"c":131,"mp":[1344,1345],"s":[[6,134373,"Select ECNL G2010/11",3,36,7,9]]}
 ,{"b":[2009,2010],"c":131,"mp":[1345,1346],"s":[[6,134374,"Select ECNL G2009/10",3,32,7,9]]}
 ,{"b":[2008,2009],"c":131,"mp":[1346],"s":[[6,134375,"Select ECNL G2008/09",3,27,7,9]]}
-,{"b":[2010,2011],"c":83,"mp":[991,1153],"s":[[6,134383,"Arizona Arsenal ECNL G2010/11",0,36,16,17]]}
+,{"b":[2010,2011],"c":83,"mp":[991,1153],"s":[[6,134383,"Arizona Arsenal ECNL G2010/11",0,36,15,17]]}
 ,{"b":[2011,2012],"c":83,"mp":[1153,1286],"s":[[6,134384,"Arizona Arsenal ECNL G2011/12",0,39,12,17]]}
 ,{"b":[2012,2013],"c":83,"mp":[1286,1425],"s":[[6,134386,"Arizona Arsenal ECNL G2012/13",0,41,11,17]]}
 ,{"b":[2013,2014],"c":83,"mp":[1425],"s":[[6,134387,"Arizona Arsenal ECNL G2013/14",0,42,13,17]]}

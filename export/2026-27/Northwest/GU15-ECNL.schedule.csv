@@ -4,9 +4,9 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-12-12,10:00 AM,Group Play,Portland Thorns ECNL G2011/12,,,Oregon Surf ECNL G2011/12,Tualatin High School,Stadium Turf,On Time,1058640
 2026-12-12,11:30 AM,Group Play,XF ECNL G2011/12,,,Boise Thorns ECNL G2011/12,Grasslawn Park,Field 1,On Time,1058643
 2026-12-12,12:00 PM,Group Play,Seattle United ECNL G2011/12,,,La Roca FC ECNL G2011/12,Ingraham High School,Stadium,On Time,1058641
-2026-12-13,09:00 AM,Group Play,Washington Premier ECNL G2011/12,,,La Roca FC ECNL G2011/12,WPFC Field Complex,Field 4,On Time,1058666
 2026-12-13,09:00 AM,Group Play,XF ECNL G2011/12,,,Boise Thorns ECNL G2011/12,Marymoor Park,Field 3,On Time,1058667
 2026-12-13,11:00 AM,Group Play,Seattle United ECNL G2011/12,,,Avalanche ECNL G2011/12,Magnuson Park,Field 6,On Time,1058665
+2026-12-13,01:00 PM,Group Play,Washington Premier ECNL G2011/12,,,La Roca FC ECNL G2011/12,WPFC Field Complex,Field 3,On Time,1058666
 2027-01-16,TBD,Group Play,Oregon Surf ECNL G2011/12,,,Boise Thorns ECNL G2011/12,,,On Time,1058681
 2027-01-16,TBD,Group Play,PacNW SC ECNL G2011/12,,,Portland Thorns ECNL G2011/12,,,On Time,1058682
 2027-01-17,TBD,Group Play,PacNW SC ECNL G2011/12,,,Oregon Surf ECNL G2011/12,,,On Time,1058695
@@ -44,11 +44,11 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-03-06,TBD,Group Play,Portland Thorns ECNL G2011/12,,,Avalanche ECNL G2011/12,,,On Time,1058871
 2027-03-06,12:00 PM,Group Play,Oregon Surf ECNL G2011/12,,,Avalanche ECNL G2011/12,Mountain View Champions Park,Field 3,On Time,1058869
 2027-03-07,TBD,Group Play,Boise Thorns ECNL G2011/12,,,Eastside FC ECNL G2011/12,,,On Time,1058899
-2027-03-07,TBD,Group Play,Oregon Surf ECNL G2011/12,,,La Roca FC ECNL G2011/12,,,On Time,1058900
 2027-03-07,TBD,Group Play,Oregon Surf ECNL G2011/12,,,Avalanche ECNL G2011/12,,,On Time,1058901
 2027-03-07,TBD,Group Play,Portland Thorns ECNL G2011/12,,,La Roca FC ECNL G2011/12,,,On Time,1058902
 2027-03-07,TBD,Group Play,Portland Thorns ECNL G2011/12,,,Avalanche ECNL G2011/12,,,On Time,1058903
 2027-03-07,TBD,Group Play,XF ECNL G2011/12,,,Seattle United ECNL G2011/12,,,On Time,1058904
+2027-03-07,12:00 PM,Group Play,Oregon Surf ECNL G2011/12,,,La Roca FC ECNL G2011/12,Mountain View Champions Park,Field 3,On Time,1058900
 2027-03-13,TBD,Group Play,Portland Thorns ECNL G2011/12,,,Eastside FC ECNL G2011/12,,,On Time,1058934
 2027-03-13,09:00 AM,Group Play,Washington Premier ECNL G2011/12,,,PacNW SC ECNL G2011/12,WPFC Field Complex,Field 3,On Time,1058937
 2027-03-13,09:30 AM,Group Play,Seattle United ECNL G2011/12,,,Oregon Surf ECNL G2011/12,TBD,Field TBD,On Time,1058935

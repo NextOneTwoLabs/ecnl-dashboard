@@ -4,7 +4,7 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-12-12,12:00 PM,Group Play,Portland Thorns ECNL G2009/10,,,Oregon Surf ECNL G2009/10,Tualatin High School,Stadium Turf,On Time,1058650
 2026-12-12,12:00 PM,Group Play,Seattle United ECNL G2009/10,,,La Roca FC ECNL G 2009/10,Ingraham High School,North,On Time,1058651
 2026-12-12,01:00 PM,Group Play,XF ECNL G2009/10,,,Boise Thorns ECNL G2009/10,Marymoor Park,Field 2,On Time,1058653
-2026-12-13,TBD,Group Play,Washington Premier ECNL G2009/10,,,La Roca FC ECNL G 2009/10,,,On Time,1058672
+2026-12-13,09:00 AM,Group Play,Washington Premier ECNL G2009/10,,,La Roca FC ECNL G 2009/10,WPFC Field Complex,Field 3,On Time,1058672
 2026-12-13,11:00 AM,Group Play,XF ECNL G2009/10,,,Boise Thorns ECNL G2009/10,Marymoor Park,Field 2,On Time,1058673
 2026-12-13,01:00 PM,Group Play,Seattle United ECNL G2009/10,,,Avalanche ECNL G2009/10,Magnuson Park,Field 7,On Time,1058671
 2027-01-16,TBD,Group Play,Oregon Surf ECNL G2009/10,,,Boise Thorns ECNL G2009/10,,,On Time,1058685
@@ -44,11 +44,11 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2027-03-06,TBD,Group Play,Portland Thorns ECNL G2009/10,,,Avalanche ECNL G2009/10,,,On Time,1058881
 2027-03-06,12:00 PM,Group Play,Oregon Surf ECNL G2009/10,,,Avalanche ECNL G2009/10,Mountain View Champions Park,Field 2,On Time,1058879
 2027-03-07,TBD,Group Play,Boise Thorns ECNL G2009/10,,,Eastside FC ECNL G2009/10,,,On Time,1058911
-2027-03-07,TBD,Group Play,Oregon Surf ECNL G2009/10,,,La Roca FC ECNL G 2009/10,,,On Time,1058912
 2027-03-07,TBD,Group Play,Oregon Surf ECNL G2009/10,,,Avalanche ECNL G2009/10,,,On Time,1058913
 2027-03-07,TBD,Group Play,Portland Thorns ECNL G2009/10,,,La Roca FC ECNL G 2009/10,,,On Time,1058914
 2027-03-07,TBD,Group Play,Portland Thorns ECNL G2009/10,,,Avalanche ECNL G2009/10,,,On Time,1058915
 2027-03-07,TBD,Group Play,XF ECNL G2009/10,,,Seattle United ECNL G2009/10,,,On Time,1058916
+2027-03-07,12:00 PM,Group Play,Oregon Surf ECNL G2009/10,,,La Roca FC ECNL G 2009/10,Mountain View Champions Park,Field 2,On Time,1058912
 2027-03-13,TBD,Group Play,Portland Thorns ECNL G2009/10,,,Eastside FC ECNL G2009/10,,,On Time,1058944
 2027-03-13,07:30 AM,Group Play,Seattle United ECNL G2009/10,,,Oregon Surf ECNL G2009/10,TBD,Field TBD,On Time,1058945
 2027-03-13,09:00 AM,Group Play,Avalanche ECNL G2009/10,,,Boise Thorns ECNL G2009/10,St. Joseph Catholic High School,Turf Field,On Time,1058946
