@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"41a9a7f6e20b0b76"
+,"build":"785898cdcd47b240"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -1071,6 +1071,7 @@
 ,"6696":["shea family fields","29429"]
 ,"6698":["Great Park","92618"]
 ,"6711":["redmond recreational complex turf field","60106"]
+,"6730":["davis legacy","95618"]
 ,"6799":["pda main complex","08873"]
 ,"6865":["tualatin high school","97062"]
 ,"6882":["sycamore park soccer","94526"]
@@ -2146,7 +2147,7 @@
 ,[1,1430900,40559,114380,134850,null,null,null,null,2200,3,null,[1,0]]
 ,[1,1430900,40560,114379,134854,null,null,null,null,2200,4,null,[1,0]]
 ,[1,1431100,40561,114378,134858,null,null,null,null,2200,4,null,[1,0]]
-,[1,1421800,40562,114377,134859,null,null,null,null,5457,1,null,[1,0]]
+,[1,1421800,40562,114377,134859,1,2,null,null,5457,1,null,[1,0]]
 ,[1,1441230,40559,127991,134412,null,null,null,null,4071,2,null,[1,0]]
 ,[1,1441230,40560,127911,134413,null,null,null,null,4071,1,null,[1,0]]
 ,[1,1441045,40561,127910,134414,null,null,null,null,4071,1,null,[1,0]]
@@ -4510,8 +4511,8 @@
 ,[1,1431300,40607,134488,94440,null,null,null,null,9514,1,null,[1,0]]
 ,[1,1431100,40606,134489,80828,null,null,null,null,9514,1,null,[1,0]]
 ,[1,1430900,40605,134490,94445,null,null,null,null,9514,1,null,[1,0]]
-,[1,1441300,40610,39582,58541,null,null,null,null,2265,1,null,[1,0]]
-,[1,1441100,40609,59340,46266,null,null,null,null,2265,1,null,[1,0]]
+,[1,1441200,40610,39582,58541,null,null,null,null,2265,1,null,[1,0]]
+,[1,1441015,40609,59340,46266,null,null,null,null,2265,1,null,[1,0]]
 ,[1,1441345,40608,40463,63889,null,null,null,null,2265,1,null,[1,0]]
 ,[1,1441015,40607,81918,94652,null,null,null,null,2265,2,null,[1,0]]
 ,[1,1440830,40606,71431,115991,null,null,null,null,2265,2,null,[1,0]]
@@ -5472,8 +5473,8 @@
 ,[1,1431100,40603,134278,132459,null,null,null,null,4228,1,null,[1,0]]
 ,[1,1431300,40602,134383,132460,null,null,null,null,4228,2,null,[1,0]]
 ,[1,1430900,40601,134384,132461,null,null,null,null,4228,2,null,[1,0]]
-,[1,1431000,40600,134386,132462,null,null,null,null,4228,2,null,[1,0]]
-,[1,1430800,40599,134387,132463,null,null,null,null,4228,1,null,[1,0]]
+,[1,1431100,40600,134386,132462,null,null,null,null,4228,2,null,[1,0]]
+,[1,1430900,40599,134387,132463,null,null,null,null,4228,1,null,[1,0]]
 ,[1,1431100,40604,131920,26385,null,null,null,null,4694,2,null,[1,0]]
 ,[1,1431100,40603,131921,21001,null,null,null,null,4694,1,null,[1,0]]
 ,[1,1430900,40602,131922,81798,null,null,null,null,4694,1,null,[1,0]]
@@ -6410,10 +6411,10 @@
 ,[1,1291700,40577,63606,132203,1,0,null,null,6194,"East",null,[1,0]]
 ,[1,1291500,40576,44316,132202,0,1,null,null,6194,"West",null,[1,0]]
 ,[1,1291500,40575,55311,132201,2,0,null,null,6194,"East",null,[1,0]]
-,[1,1439999,40580,69035,39256,null,null,null,null,null,null,null,[1,0]]
-,[1,1439999,40579,69036,44309,null,null,null,null,null,null,null,[1,0]]
-,[1,1439999,40578,74987,44313,null,null,null,null,null,null,null,[1,0]]
-,[1,1431300,40577,95449,63606,null,null,null,null,8274,"Football Stadium",null,[1,0]]
+,[1,1431030,40580,69035,39256,null,null,null,null,6730,8,null,[1,0]]
+,[1,1431410,40579,69036,44309,null,null,null,null,704,8,null,[1,0]]
+,[1,1431220,40578,74987,44313,null,null,null,null,704,8,null,[1,0]]
+,[1,1431100,40577,95449,63606,null,null,null,null,8274,"Football Stadium",null,[1,0]]
 ,[1,1439999,40576,115151,44316,null,null,null,null,null,null,null,[1,0]]
 ,[1,1430900,40575,135939,55311,null,null,null,null,8274,"Football Stadium",null,[1,0]]
 ,[1,2621000,40580,95560,56277,null,null,null,null,7550,1,null,[1,0]]
