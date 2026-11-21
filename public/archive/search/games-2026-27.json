@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"785898cdcd47b240"
+,"build":"5fca823453fd1836"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -906,6 +906,7 @@
 ,"986":["el camino college","90506"]
 ,"1017":["cfc park","06524"]
 ,"1036":["southeastern freight lines complex","29203"]
+,"1045":["playfields park","95618"]
 ,"1056":["montour junction sports complex","15108"]
 ,"1062":["silverlakes complex","92860"]
 ,"1070":["highmark stadium","15219"]
@@ -1071,7 +1072,6 @@
 ,"6696":["shea family fields","29429"]
 ,"6698":["Great Park","92618"]
 ,"6711":["redmond recreational complex turf field","60106"]
-,"6730":["davis legacy","95618"]
 ,"6799":["pda main complex","08873"]
 ,"6865":["tualatin high school","97062"]
 ,"6882":["sycamore park soccer","94526"]
@@ -6411,9 +6411,9 @@
 ,[1,1291700,40577,63606,132203,1,0,null,null,6194,"East",null,[1,0]]
 ,[1,1291500,40576,44316,132202,0,1,null,null,6194,"West",null,[1,0]]
 ,[1,1291500,40575,55311,132201,2,0,null,null,6194,"East",null,[1,0]]
-,[1,1431030,40580,69035,39256,null,null,null,null,6730,8,null,[1,0]]
-,[1,1431410,40579,69036,44309,null,null,null,null,704,8,null,[1,0]]
-,[1,1431220,40578,74987,44313,null,null,null,null,704,8,null,[1,0]]
+,[1,1431050,40580,69035,39256,null,null,null,null,1045,1,null,[1,0]]
+,[1,1430900,40579,69036,44309,null,null,null,null,1045,1,null,[1,0]]
+,[1,1431240,40578,74987,44313,null,null,null,null,1045,1,null,[1,0]]
 ,[1,1431100,40577,95449,63606,null,null,null,null,8274,"Football Stadium",null,[1,0]]
 ,[1,1439999,40576,115151,44316,null,null,null,null,null,null,null,[1,0]]
 ,[1,1430900,40575,135939,55311,null,null,null,null,8274,"Football Stadium",null,[1,0]]
