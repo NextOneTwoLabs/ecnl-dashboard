@@ -72,10 +72,10 @@ date,time,type,homeTeam,homeScore,awayScore,awayTeam,complex,venue,status,matchI
 2026-11-08,11:00 AM,Group Play,FC Westlake ECNL G2012/13,1,2,FC Dallas Youth ECNL G2012/13,Westlake High School Stadium - Chaparral Stadium,Field 1,On Time,1073863
 2026-11-08,11:15 AM,Group Play,Real Colorado Athletico ECNL G2012/13,0,0,Dallas Texans ECNL G2012/13,Real Colorado Soccer Complex,RCSC 1,On Time,1073851
 2026-11-08,01:00 PM,Group Play,Lonestar ATX Red ECNL G2012/13,0,1,Sting Royal ECNL G2012/13,Burger Activity Center,Field 2,On Time,1073857
-2026-11-21,09:00 AM,Group Play,Albion Hurricanes FC ECNL G2012/13,,,Sting Royal ECNL G2012/13,Campbell Road Sports Park,Field 2,On Time,1073875
-2026-11-21,11:00 AM,Group Play,Challenge SC ECNL G2012/13,,,FC Dallas Youth ECNL G2012/13,Burroughs Park,Field 2,On Time,1073881
-2026-11-21,11:00 AM,Group Play,Dallas Texans ECNL G2012/13,,,OK Energy FC ECNL G2012/13,Plano ISD Clark Central,Field 1,On Time,1073887
-2026-11-21,01:00 PM,Group Play,SOLAR SC ECNL G2012/13,,,Sting Black ECNL G2012/13,Carroll Senior High School,Field 1,On Time,1073905
+2026-11-21,09:00 AM,Group Play,Albion Hurricanes FC ECNL G2012/13,0,1,Sting Royal ECNL G2012/13,Campbell Road Sports Park,Field 2,On Time,1073875
+2026-11-21,11:00 AM,Group Play,Challenge SC ECNL G2012/13,1,0,FC Dallas Youth ECNL G2012/13,Burroughs Park,Field 2,On Time,1073881
+2026-11-21,11:00 AM,Group Play,Dallas Texans ECNL G2012/13,0,2,OK Energy FC ECNL G2012/13,Plano ISD Clark Central,Field 1,On Time,1073887
+2026-11-21,01:00 PM,Group Play,SOLAR SC ECNL G2012/13,5,1,Sting Black ECNL G2012/13,Carroll Senior High School,Field 1,On Time,1073905
 2026-11-22,08:30 AM,Group Play,Albion Hurricanes FC ECNL G2012/13,,,FC Dallas Youth ECNL G2012/13,Campbell Road Sports Park,Field 2,On Time,1073893
 2026-11-22,11:00 AM,Group Play,Challenge SC ECNL G2012/13,,,Sting Royal ECNL G2012/13,Burroughs Park,Field 2,On Time,1073899
 2026-12-05,11:00 AM,Group Play,OK Energy FC ECNL G2012/13,,,SOLAR SC ECNL G2012/13,North Oklahoma City FC,NOKC Red 4,On Time,1073911
