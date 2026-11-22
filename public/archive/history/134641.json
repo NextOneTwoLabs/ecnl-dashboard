@@ -1,6 +1,6 @@
 {"schema":1,"teamID":134641,"squads":[
 {"clubID":1693,"clubName":"FC Alliance TN","birthYears":[2010,2011],"seasons":[
-{"season":"2026-27","teamID":134641,"name":"FC Alliance TN ECNL G2010/11","clubID":1693,"clubName":"FC Alliance TN","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/Sierra_Goller_c027bcfa9c764581ae73ada2824fb4c0.png","conference":"Ohio Valley","eventID":4269,"divisionID":22446,"division":"GU16","flightID":41863,"flightName":"SOUTH","u":16,"birthYears":[2010,2011],"rank":2,"of":6,"gp":1,"w":1,"d":0,"l":0,"pts":3,"gf":2,"ga":0,"gd":2,"ppg":3.0,"form":"","games":14,"played":0,"inProgress":true,"regroup":true,"link":"start"}
+{"season":"2026-27","teamID":134641,"name":"FC Alliance TN ECNL G2010/11","clubID":1693,"clubName":"FC Alliance TN","logo":"https://s3.amazonaws.com/images.totalglobalsports.com/PlayerImage/Sierra_Goller_c027bcfa9c764581ae73ada2824fb4c0.png","conference":"Ohio Valley","eventID":4269,"divisionID":22446,"division":"GU16","flightID":41863,"flightName":"SOUTH","u":16,"birthYears":[2010,2011],"rank":3,"of":6,"gp":2,"w":1,"d":0,"l":1,"pts":3,"gf":2,"ga":3,"gd":-1,"ppg":1.5,"form":"","games":14,"played":0,"inProgress":true,"regroup":true,"link":"start"}
 ],"postseason":[],"showcases":[],"maybePrev":[
 {"season":"2025-26","teamID":59429,"name":"FC Alliance ECNL G11","division":"G2011","conference":"Ohio Valley"},
 {"season":"2025-26","teamID":59430,"name":"FC Alliance ECNL G10","division":"G2010","conference":"Ohio Valley"}

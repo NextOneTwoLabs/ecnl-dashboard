@@ -1,13 +1,13 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
-1,FC Dallas Youth ECNL G2013/14,FC Dallas Youth,96490,10,9,0,1,28,2.8,38,5,33
+1,FC Dallas Youth ECNL G2013/14,FC Dallas Youth,96490,11,10,0,1,31,2.82,42,5,37
 2,Real Colorado National ECNL G2013/14,Real Colorado,108897,13,11,2,0,33,2.54,29,5,24
 3,FC Westlake ECNL G2013/14,FC Westlake ,131271,11,6,2,3,21,1.91,23,12,11
 4,SOLAR SC ECNL G2013/14,Solar SC,69973,9,5,2,2,17,1.89,30,13,17
-5,Sting Royal ECNL G2013/14,Sting Soccer Club,131001,11,5,2,4,19,1.73,13,8,5
-6,Albion Hurricanes FC ECNL G2013/14,Albion Hurricanes FC,69768,7,3,2,2,11,1.57,10,8,2
-7,OK Energy FC ECNL G2013/14,Oklahoma Energy FC,94445,9,4,3,2,14,1.56,19,12,7
-8,DKSC ECNL G2013/14,DKSC,131839,6,2,1,3,9,1.5,9,4,5
-9,Challenge SC ECNL G2013/14,Challenge SC,129343,7,3,3,1,10,1.43,17,10,7
+5,Sting Royal ECNL G2013/14,Sting Soccer Club,131001,12,5,2,5,20,1.67,14,9,5
+6,OK Energy FC ECNL G2013/14,Oklahoma Energy FC,94445,9,4,3,2,14,1.56,19,12,7
+7,DKSC ECNL G2013/14,DKSC,131839,6,2,1,3,9,1.5,9,4,5
+8,Challenge SC ECNL G2013/14,Challenge SC,129343,8,3,3,2,11,1.38,18,11,7
+9,Albion Hurricanes FC ECNL G2013/14,Albion Hurricanes FC,69768,8,3,3,2,11,1.38,10,12,-2
 10,Sting Black ECNL G2013/14,Sting Soccer Club,111690,7,2,2,3,9,1.29,10,11,-1
 11,Lonestar ATX Red ECNL G2013/14,Lonestar ATX,132704,11,4,5,2,14,1.27,15,26,-11
 12,Colorado Storm ECNL G2013/14,Colorado Storm,132370,12,4,7,1,13,1.08,17,24,-7

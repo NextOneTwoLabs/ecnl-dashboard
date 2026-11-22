@@ -1,7 +1,7 @@
 rank,team,club,teamID,gp,w,l,d,pts,ppg,gf,ga,gd
 1,Ohio Premier ECNL G2011/12,Ohio Premier,71333,1,1,0,0,3,3.0,7,1,6
-2,Pittsburgh Riverhounds ECNL G2011/12,Pittsburgh Riverhounds,69761,1,0,0,1,1,1.0,1,1,0
-3,WNY Flash ECNL G2011/12,WNY Flash Academy,61753,1,0,0,1,1,1.0,1,1,0
+2,Pittsburgh Riverhounds ECNL G2011/12,Pittsburgh Riverhounds,69761,2,0,0,2,2,1.0,1,1,0
+3,WNY Flash ECNL G2011/12,WNY Flash Academy,61753,2,0,1,1,1,0.5,4,5,-1
 4,Cleveland Force SC ECNL G2011/12,Cleveland Force SC,60141,0,0,0,0,0,0.0,0,0,0
 5,Internationals SC ECNL G2011/2012,Internationals SC,61433,0,0,0,0,0,0.0,0,0,0
 6,GTFC Impact ECNL G2011/12,GTFC Impact,108211,1,0,1,0,0,0.0,1,7,-6
