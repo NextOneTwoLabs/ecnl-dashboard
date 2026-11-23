@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"a00a99df88a13986"
+,"build":"5699a8406c593d01"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -886,6 +886,7 @@
 ,"486":["ustc","19335"]
 ,"497":["wpfc field complex","98371"]
 ,"499":["WWT Soccer Park","63026"]
+,"607":["evolution sportsplex dome","48326"]
 ,"611":["oak brook park district","60535"]
 ,"622":["indian creek","21032"]
 ,"626":["valley christian high school","95111"]
@@ -1022,7 +1023,6 @@
 ,"4441":["paragon star soccer complex","64086"]
 ,"4551":["whitney high school","95765"]
 ,"4568":["norton high school","02766"]
-,"4593":["legacy center sports complex","48116"]
 ,"4661":["Mercyhealth Sportscore Two","61111"]
 ,"4694":["long beach city college liberal arts campus","90806"]
 ,"4707":["california lutheran university","91360"]
@@ -1121,6 +1121,7 @@
 ,"9514":["plano isd clark central","75023"]
 ,"9515":["plano isd clark west","75023"]
 ,"9519":["hf exteriors complex the woods","63376"]
+,"9527":["mercyhealth sportscore complexes","61111"]
 }
 ,"games":[
 [1058623,2411530,40581,127576,134157,null,null,null,null,2735,"Stadium",null,[1,0]]
@@ -2156,10 +2157,10 @@
 ,[1,1571400,40560,134153,134413,null,null,null,null,1314,"St. Joe's Dome",null,[1,0]]
 ,[1,1571200,40561,134136,134414,null,null,null,null,1314,"St. Joe's Dome",null,[1,0]]
 ,[1,1571000,40562,134109,134415,null,null,null,null,1314,"St. Joe's Dome",null,[1,0]]
-,[1,1581350,40559,134170,134412,null,null,null,null,4593,"Indoor",null,[1,0]]
-,[1,1581200,40560,134158,134413,null,null,null,null,4593,"Indoor",null,[1,0]]
-,[1,1581000,40561,134142,134414,null,null,null,null,4593,"Indoor",null,[1,0]]
-,[1,1580800,40562,134120,134415,null,null,null,null,4593,"Indoor",null,[1,0]]
+,[1,1581300,40559,134170,134412,null,null,null,null,607,1,null,[1,0]]
+,[1,1581110,40560,134158,134413,null,null,null,null,607,1,null,[1,0]]
+,[1,1580920,40561,134142,134414,null,null,null,null,607,1,null,[1,0]]
+,[1,1580730,40562,134120,134415,null,null,null,null,607,1,null,[1,0]]
 ,[1,1649999,40559,131581,79780,null,null,null,null,null,null,null,[1,0]]
 ,[1,1649999,40560,131582,69510,null,null,null,null,null,null,null,[1,0]]
 ,[1,1649999,40561,131583,59750,null,null,null,null,null,null,null,[1,0]]
@@ -2198,10 +2199,10 @@
 ,[1,2131400,40559,134166,94349,null,null,null,null,1314,"St. Joe's Dome",null,[1,0]]
 ,[1,2131200,40560,134153,94348,null,null,null,null,1314,"St. Joe's Dome",null,[1,0]]
 ,[1,1991000,40561,134136,94342,null,null,null,null,1314,"St. Joe's Dome",null,[1,0]]
-,[1,2009999,40559,114380,134412,null,null,null,null,null,null,null,[1,0]]
-,[1,2009999,40560,114379,134413,null,null,null,null,null,null,null,[1,0]]
-,[1,2009999,40561,114378,134414,null,null,null,null,null,null,null,[1,0]]
-,[1,2009999,40562,114377,134415,null,null,null,null,null,null,null,[1,0]]
+,[1,2000800,40559,114380,134412,null,null,null,null,9527,1,null,[1,0]]
+,[1,2000945,40560,114379,134413,null,null,null,null,9527,1,null,[1,0]]
+,[1,2001130,40561,114378,134414,null,null,null,null,9527,1,null,[1,0]]
+,[1,2001330,40562,114377,134415,null,null,null,null,9527,1,null,[1,0]]
 ,[1,2061245,40559,134412,79780,null,null,null,null,4921,"Fieldhouse",null,[1,0]]
 ,[1,731130,40563,82242,134369,1,4,null,null,371,1,null,[1,0]]
 ,[1,731500,40564,81913,134371,0,6,null,null,371,1,null,[1,0]]
@@ -4913,8 +4914,8 @@
 ,[1,1300900,41607,104671,134301,1,1,null,null,3311,"Stadium",null,[1,0]]
 ,[1,1361300,41606,131346,134409,null,null,null,null,3311,"Stadium",null,[1,0]]
 ,[1,1361100,41607,104671,134411,null,null,null,null,3311,"Auxiliary",null,[1,0]]
-,[1,1370800,41606,115320,134409,null,null,null,null,3277,1,null,[1,0]]
-,[1,1370800,41607,115103,134411,null,null,null,null,8295,1,null,[1,0]]
+,[1,2131200,41606,115320,134409,null,null,null,null,3277,1,null,[1,0]]
+,[1,2131330,41607,115103,134411,null,null,null,null,3277,1,null,[1,0]]
 ,[1,1431715,41606,136035,134409,2,0,null,null,611,"Turf",null,[1,0]]
 ,[1,1431545,41607,136036,134411,3,0,null,null,611,"Turf",null,[1,0]]
 ,[1,1439999,41606,127995,134300,3,1,null,null,null,null,null,[1,0]]
