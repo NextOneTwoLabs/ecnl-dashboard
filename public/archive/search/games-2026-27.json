@@ -1,7 +1,7 @@
 {"schema":1
 ,"season":"2026-27"
 ,"base":"2026-07-01"
-,"build":"5699a8406c593d01"
+,"build":"1c1bce488796173f"
 ,"flights":{
 "40551":[4263,"c","GU13","ECNL"]
 ,"40552":[4263,"c","GU14","ECNL"]
@@ -924,6 +924,7 @@
 ,"1472":["hardin valley academy stadium","37932"]
 ,"1520":["dicks sporting goods park","80022"]
 ,"1591":["wt woodson high school","22031"]
+,"1680":["craig ranch soccer complex","75070"]
 ,"1688":["flash fields","14059"]
 ,"1728":["nob hill soccer park","33322"]
 ,"1743":["preston park athletic fields","98027"]
@@ -1103,7 +1104,6 @@
 ,"8633":["st bonaventure stadium","93003"]
 ,"8771":["dragon stadium","76092"]
 ,"8794":["sting national training center","75006"]
-,"8825":["june shelton school","75252"]
 ,"8946":["pinnacle bank soccer complex gretna soccer compl","68028"]
 ,"9043":["tiemann law firm fields at san juan soccer complex","95670"]
 ,"9098":["thomas downey high school","95355"]
@@ -1122,6 +1122,7 @@
 ,"9515":["plano isd clark west","75023"]
 ,"9519":["hf exteriors complex the woods","63376"]
 ,"9527":["mercyhealth sportscore complexes","61111"]
+,"9538":["the highlands school","75062"]
 }
 ,"games":[
 [1058623,2411530,40581,127576,134157,null,null,null,null,2735,"Stadium",null,[1,0]]
@@ -4496,7 +4497,7 @@
 ,[1,2061100,40605,94445,129323,null,null,null,null,2214,"NOKC Red 3",null,[1,0]]
 ,[1,1431500,40610,39582,68973,1,1,null,null,2265,1,null,[1,0]]
 ,[1,1431100,40609,59340,68974,3,1,null,null,2265,1,null,[1,0]]
-,[1,1431300,40608,40463,80240,null,null,null,null,2265,1,null,[1,0]]
+,[1,1431300,40608,40463,80240,1,2,null,null,2265,1,null,[1,0]]
 ,[1,1431100,40607,81918,59609,1,3,null,null,2265,2,null,[1,0]]
 ,[1,1430900,40606,71431,111849,0,1,null,null,2265,2,null,[1,0]]
 ,[1,1430900,40605,69768,131001,2,0,null,null,2265,1,null,[1,0]]
@@ -4632,7 +4633,7 @@
 ,[1,2901300,40607,116000,94652,null,null,null,null,8794,"Field A",null,[1,0]]
 ,[1,2901100,40606,82159,115991,null,null,null,null,8794,"Field A",null,[1,0]]
 ,[1,2900900,40605,111690,96490,null,null,null,null,8794,"Field A",null,[1,0]]
-,[1,1571000,40610,47082,68973,null,null,null,null,8825,1,null,[1,0]]
+,[1,1571000,40610,47082,68973,null,null,null,null,9538,1,null,[1,0]]
 ,[1,2901300,40609,68923,68974,null,null,null,null,8541,1,null,[1,0]]
 ,[1,2901100,40608,81104,80240,null,null,null,null,8541,2,null,[1,0]]
 ,[1,2900900,40607,81105,59609,null,null,null,null,8541,2,null,[1,0]]
@@ -4650,7 +4651,7 @@
 ,[1,2910900,40607,131273,129341,null,null,null,null,2414,1,null,[1,0]]
 ,[1,2910900,40606,131272,129342,null,null,null,null,2413,"Field 1 & 2",null,[1,0]]
 ,[1,2911100,40605,131271,129343,null,null,null,null,2414,1,null,[1,0]]
-,[1,2919999,40610,47082,58541,null,null,null,null,null,null,null,[1,0]]
+,[1,1491000,40610,47082,58541,null,null,null,null,1680,9,null,[1,0]]
 ,[1,2911100,40609,68923,46266,null,null,null,null,8541,2,null,[1,0]]
 ,[1,2910900,40608,81104,63889,null,null,null,null,8541,2,null,[1,0]]
 ,[1,2911300,40607,81105,94652,null,null,null,null,8541,1,null,[1,0]]
@@ -4662,7 +4663,7 @@
 ,[1,2971300,40607,94652,134488,null,null,null,null,480,10,null,[1,0]]
 ,[1,2971100,40606,115991,134489,null,null,null,null,480,12,null,[1,0]]
 ,[1,2970900,40605,96490,134490,null,null,null,null,480,10,null,[1,0]]
-,[1,2979999,40610,68973,59562,null,null,null,null,null,null,null,[1,0]]
+,[1,1611900,40610,68973,59562,null,null,null,null,8794,"Championship Field",null,[1,0]]
 ,[1,2971300,40609,68974,66050,null,null,null,null,8794,"TBD",null,[1,0]]
 ,[1,2971100,40608,80240,81882,null,null,null,null,8794,"TBD",null,[1,0]]
 ,[1,2971100,40607,59609,59566,null,null,null,null,8794,"TBD",null,[1,0]]
@@ -5487,7 +5488,7 @@
 ,[1,2861900,40602,133711,135892,null,null,null,null,3492,"Stadium",null,[1,0]]
 ,[1,1431445,40601,133713,135889,0,3,null,null,92,"Stadium",null,[1,0]]
 ,[1,1431630,40600,133714,135886,2,0,null,null,92,"Stadium",null,[1,0]]
-,[1,1431815,40599,133715,135883,null,null,null,null,92,"Stadium",null,[1,0]]
+,[1,1431815,40599,133715,135883,1,0,null,null,92,"Stadium",null,[1,0]]
 ,[1,1430900,40604,133009,55512,4,3,null,null,1062,1,null,[1,0]]
 ,[1,1430900,40603,133022,68845,2,0,null,null,1062,2,null,[1,0]]
 ,[1,1431100,40602,133024,82166,3,0,null,null,1062,1,null,[1,0]]
@@ -5507,7 +5508,7 @@
 ,[1,1431600,40600,100065,134082,4,4,null,null,385,11,null,[1,0]]
 ,[1,1431200,40599,126712,134070,1,0,null,null,385,10,null,[1,0]]
 ,[1,1431715,40604,42498,6122,2,0,null,null,3442,"Turf Field",null,[1,0]]
-,[1,1431515,40603,64956,5544,2,0,null,null,3442,"Turf Field",null,[1,0]]
+,[1,1431515,40603,64956,5544,0,2,null,null,3442,"Turf Field",null,[1,0]]
 ,[1,1431330,40602,61426,62045,2,1,null,null,3442,"Turf Field",null,[1,0]]
 ,[1,1431145,40601,89212,25917,0,1,null,null,3442,"Turf Field",null,[1,0]]
 ,[1,1431000,40600,100497,64010,0,1,null,null,3442,"Turf Field",null,[1,0]]
